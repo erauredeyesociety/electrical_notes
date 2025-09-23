@@ -1,32 +1,32 @@
-# Hugo configuration file
-title: Research Projects
+title: Electrical Notes
 baseURL: "https://erauredeyesociety.github.io/electrical_notes/"
 
+# import hextra as module
 module:
   imports:
     - path: github.com/imfing/hextra
-  mounts:
-    - source: layouts
-      target: layouts
-    - source: static
-      target: static
 
 markup:
   # allow raw html
   goldmark:
     renderer:
       unsafe: true
-      
-
+  
   # enable hextra syntax highlight
   highlight:
     noClasses: false
 
+  # MathJax configuration for math rendering
+  math:
+    enable: true
+    # Use MathJax v3
+    mathjax:
+      enable: true
+      # You might need to specify the path if not using CDN
+      url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+
 menu:
   main:
-#    - name: Research
-#      pageRef: /research
-#      weight: 1
     - name: About
       pageRef: /about
       weight: 2

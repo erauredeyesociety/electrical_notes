@@ -1,5 +1,5 @@
 ---
-title: Research Project Navigation
+title: Class Notes Navigation
 toc: false
 ---
 
@@ -11,4 +11,4 @@ toc: false
 
 ## About This Site
 
-For more information, visit [this page](/research/about).
+For more information, visit [this page](/electrical_notes/about).
