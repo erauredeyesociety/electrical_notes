@@ -170,20 +170,19 @@ $$
 
 ```mermaid
 flowchart TD
-    A[Time-Domain Function f(t)] --> B[Laplace Transform F(s)]
-    B --> C[S-Domain Circuit or Differential Equation]
-    C --> D[Apply Initial Conditions]
-    D --> E[Solve Algebraic Equation for Output V(s) / I(s)]
-    E --> F[Partial Fraction Expansion / Simplify F(s)]
-    F --> G[Inverse Laplace Transform f(t)]
-    G --> H{Response Type}
-    H --> H1[Zero-State Response (ZSR)]
-    H --> H2[Zero-Input Response (ZIR)]
-    H1 --> I[Combine ZIR + ZSR]
+    A["Time-Domain Function f(t)"] --> B["Laplace Transform F(s)"]
+    B --> C["S-Domain Circuit or Differential Equation"]
+    C --> D["Apply Initial Conditions"]
+    D --> E["Solve Algebraic Equation for Output V(s) / I(s)"]
+    E --> F["Partial Fraction Expansion / Simplify F(s)"]
+    F --> G["Inverse Laplace Transform f(t)"]
+    G --> H{"Response Type"}
+    H --> H1["Zero-State Response (ZSR)"]
+    H --> H2["Zero-Input Response (ZIR)"]
+    H1 --> I["Combine ZIR + ZSR"]
     H2 --> I
-    I --> J[Final Time-Domain Solution f(t)]
-    J --> K{Initial / Final Values?}
-    K --> L[Initial Value: f(0^+) = lim(s→∞) sF(s)]
-    K --> M[Final Value: f(∞) = lim(s→0) sF(s)]
-
+    I --> J["Final Time-Domain Solution f(t)"]
+    J --> K{"Initial / Final Values?"}
+    K --> L["Initial Value: f(0+) = lim(s->∞) sF(s)"]
+    K --> M["Final Value: f(∞) = lim(s->0) sF(s)"]
 ```
