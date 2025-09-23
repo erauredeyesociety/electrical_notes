@@ -1,0 +1,294 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Research Projects – About EE 300</title><link>https://erauredeyesociety.github.io/electrical_notes/ee_300/</link><description>Recent content in About EE 300 on Research Projects</description><generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="https://erauredeyesociety.github.io/electrical_notes/ee_300/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://erauredeyesociety.github.io/electrical_notes/ee_300/exam_1_roadmap_chat/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://erauredeyesociety.github.io/electrical_notes/ee_300/exam_1_roadmap_chat/</guid><description>
+&lt;h1&gt;Comprehensive Circuit Analysis with Laplace Transform Roadmap (With Equations)&lt;/h1&gt;&lt;hr&gt;
+&lt;h2&gt;I. Laplace Transform (LT) Fundamentals and Properties&lt;span class="hx:absolute hx:-mt-20" id="i-laplace-transform-lt-fundamentals-and-properties"&gt;&lt;/span&gt;
+&lt;a href="#i-laplace-transform-lt-fundamentals-and-properties" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Use in the Course&lt;span class="hx:absolute hx:-mt-20" id="use-in-the-course"&gt;&lt;/span&gt;
+&lt;a href="#use-in-the-course" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Converts differential equations (time-domain) into algebraic equations (s-domain).&lt;/li&gt;
+&lt;li&gt;Simplifies circuit and system analysis.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Subtopics to Familiarize&lt;span class="hx:absolute hx:-mt-20" id="subtopics-to-familiarize"&gt;&lt;/span&gt;
+&lt;a href="#subtopics-to-familiarize" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Definition:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+F(s) = \mathcal{L}{f(t)} = \int_0^\infty f(t)e^{-st} dt
+$$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Poles &amp;amp; zeros, s-plane concepts&lt;/li&gt;
+&lt;li&gt;Relationship to Fourier transform (transient vs. steady-state)&lt;/li&gt;
+&lt;li&gt;Six key properties (linearity, time/frequency shifts, differentiation, integration, multiply-by-t)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Common LT Transforms&lt;span class="hx:absolute hx:-mt-20" id="common-lt-transforms"&gt;&lt;/span&gt;
+&lt;a href="#common-lt-transforms" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;$$
+\begin{aligned}
+\mathcal{L}{1} &amp;amp;= \frac{1}{s}, &amp;amp; s&amp;gt;0 \
+\mathcal{L}{e^{at}} &amp;amp;= \frac{1}{s-a}, &amp;amp; s&amp;gt;a \
+\mathcal{L}{\cos(\omega t)} &amp;amp;= \frac{s}{s^2+\omega^2} \
+\mathcal{L}{\sin(\omega t)} &amp;amp;= \frac{\omega}{s^2+\omega^2} \
+\mathcal{L}{t^n} &amp;amp;= \frac{n!}{s^{n+1}}, &amp;amp; n = 0,1,2,&amp;hellip;
+\end{aligned}
+$$&lt;/p&gt;
+&lt;h3&gt;Six Key Properties&lt;span class="hx:absolute hx:-mt-20" id="six-key-properties"&gt;&lt;/span&gt;
+&lt;a href="#six-key-properties" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Linearity:&lt;/strong&gt; $\mathcal{L}{af(t)+bg(t)} = aF(s)+bG(s)$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Frequency shift:&lt;/strong&gt; $\mathcal{L}{e^{at}f(t)} = F(s-a)$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Time shift (delay by T):&lt;/strong&gt; $\mathcal{L}{f(t-T)u(t-T)} = e^{-sT}F(s)$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Differentiation:&lt;/strong&gt;
+$\mathcal{L}{f&amp;rsquo;(t)} = sF(s)-f(0^-)$
+$\mathcal{L}{f^{(n)}(t)} = s^n F(s)-s^{n-1}f(0^-)-&amp;hellip;-f^{(n-1)}(0^-)$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Integration:&lt;/strong&gt; $\mathcal{L}{\int_0^t f(\tau)d\tau} = \frac{1}{s} F(s)$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multiply by t:&lt;/strong&gt; $\mathcal{L}{t f(t)} = -\frac{dF(s)}{ds}$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Step-by-Step Methodology&lt;span class="hx:absolute hx:-mt-20" id="step-by-step-methodology"&gt;&lt;/span&gt;
+&lt;a href="#step-by-step-methodology" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;Break function into additive terms (linearity).&lt;/li&gt;
+&lt;li&gt;Apply known transforms or LT properties.&lt;/li&gt;
+&lt;li&gt;Handle exponentials, derivatives, or delays explicitly.&lt;/li&gt;
+&lt;li&gt;Express final result as $F(s)$.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2&gt;II. Inverse Laplace Transform (ILT)&lt;span class="hx:absolute hx:-mt-20" id="ii-inverse-laplace-transform-ilt"&gt;&lt;/span&gt;
+&lt;a href="#ii-inverse-laplace-transform-ilt" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Use in the Course&lt;span class="hx:absolute hx:-mt-20" id="use-in-the-course-1"&gt;&lt;/span&gt;
+&lt;a href="#use-in-the-course-1" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Converts $s$-domain solutions back to time-domain.&lt;/li&gt;
+&lt;li&gt;Uses Partial Fraction Expansion (PFE) for rational functions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Subtopics to Familiarize&lt;span class="hx:absolute hx:-mt-20" id="subtopics-to-familiarize-1"&gt;&lt;/span&gt;
+&lt;a href="#subtopics-to-familiarize-1" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;PRF vs IRF (proper vs improper)&lt;/li&gt;
+&lt;li&gt;Partial fraction expansion (PFE)&lt;/li&gt;
+&lt;li&gt;Poles &amp;amp; residues&lt;/li&gt;
+&lt;li&gt;Cover-up method for distinct real poles&lt;/li&gt;
+&lt;li&gt;Complex conjugate poles → sinusoidal response&lt;/li&gt;
+&lt;li&gt;Multiple-order poles → t^n * e^{pt} terms&lt;/li&gt;
+&lt;li&gt;Delay property: $\mathcal{L}^{-1}{F(s)e^{-sT}} = f(t-T)u(t-T)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Step-by-Step Methodology&lt;span class="hx:absolute hx:-mt-20" id="step-by-step-methodology-1"&gt;&lt;/span&gt;
+&lt;a href="#step-by-step-methodology-1" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Handle IRF via long division: $F(s) = Q(s) + R(s)/D(s)$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Factor denominator, identify all poles&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Calculate residues $k_i$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Apply ILT:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Distinct real poles: $f(t)=\sum k_i e^{p_i t}u(t)$&lt;/li&gt;
+&lt;li&gt;Complex poles: $f(t)=2|k| e^{\alpha t} \cos(\beta t+\angle k) u(t)$&lt;/li&gt;
+&lt;li&gt;Repeated poles: $f(t)=\frac{t^{m-1}}{(m-1)!} e^{pt} u(t)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Include delay terms: $f(t-T) u(t-T)$&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2&gt;III. Laplace Transform for Differential Equations &amp;amp; Circuit Analysis&lt;span class="hx:absolute hx:-mt-20" id="iii-laplace-transform-for-differential-equations--circuit-analysis"&gt;&lt;/span&gt;
+&lt;a href="#iii-laplace-transform-for-differential-equations--circuit-analysis" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Use in the Course&lt;span class="hx:absolute hx:-mt-20" id="use-in-the-course-2"&gt;&lt;/span&gt;
+&lt;a href="#use-in-the-course-2" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Transform circuit differential equations into algebraic equations&lt;/li&gt;
+&lt;li&gt;Includes initial conditions via s-domain equivalents&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;S-Domain Models&lt;span class="hx:absolute hx:-mt-20" id="s-domain-models"&gt;&lt;/span&gt;
+&lt;a href="#s-domain-models" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;$$
+\begin{aligned}
+Z_R &amp;amp;= R \
+Z_L &amp;amp;= sL, &amp;amp; \text{with } i(0^-) \to \text{voltage source } L i(0^-) \text{ in series} \
+Z_C &amp;amp;= \frac{1}{sC}, &amp;amp; v(0^-) \to \text{current source } Cv(0^-)s \text{ or } v(0^-)/s
+\end{aligned}
+$$&lt;/p&gt;
+&lt;h3&gt;Zero-Input and Zero-State Response&lt;span class="hx:absolute hx:-mt-20" id="zero-input-and-zero-state-response"&gt;&lt;/span&gt;
+&lt;a href="#zero-input-and-zero-state-response" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;$$
+y(t) = y_{ZIR}(t) + y_{ZSR}(t)
+$$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ZIR:&lt;/strong&gt; Response due to initial energy (no external input)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ZSR:&lt;/strong&gt; Response due to external input (zero initial conditions)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Differential Equation → S-Domain Example&lt;span class="hx:absolute hx:-mt-20" id="differential-equation--s-domain-example"&gt;&lt;/span&gt;
+&lt;a href="#differential-equation--s-domain-example" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;$$
+L \frac{di}{dt} + Ri = v(t)
+$$&lt;/p&gt;
+&lt;p&gt;$$
+(sL+R) I(s) - L i(0^-) = V(s)
+$$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Solve for $I(s)$, then apply ILT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Step-by-Step Methodology&lt;span class="hx:absolute hx:-mt-20" id="step-by-step-methodology-2"&gt;&lt;/span&gt;
+&lt;a href="#step-by-step-methodology-2" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;Derive differential equation, note t&amp;lt;0 response (initial voltage/current).&lt;/li&gt;
+&lt;li&gt;Transform equation or circuit to s-domain.&lt;/li&gt;
+&lt;li&gt;Apply initial conditions.&lt;/li&gt;
+&lt;li&gt;Solve algebraic equation in s-domain.&lt;/li&gt;
+&lt;li&gt;Apply PFE + ILT to get time-domain response.&lt;/li&gt;
+&lt;li&gt;Combine ZIR + ZSR for full solution.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2&gt;IV. Initial and Final Value Properties (IVP/FVP)&lt;span class="hx:absolute hx:-mt-20" id="iv-initial-and-final-value-properties-ivpfvp"&gt;&lt;/span&gt;
+&lt;a href="#iv-initial-and-final-value-properties-ivpfvp" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Use in the Course&lt;span class="hx:absolute hx:-mt-20" id="use-in-the-course-3"&gt;&lt;/span&gt;
+&lt;a href="#use-in-the-course-3" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Quickly compute starting and steady-state values without full ILT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Formulas&lt;span class="hx:absolute hx:-mt-20" id="formulas"&gt;&lt;/span&gt;
+&lt;a href="#formulas" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Initial Value Theorem (IVT):&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+f(0^+) = \lim_{s\to\infty} s F(s), \quad F(s) \text{ PRF only}
+$$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Final Value Theorem (FVT):&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+f(\infty) = \lim_{s\to 0} s F(s), \quad \text{if all poles of } sF(s) \text{ lie in } \Re(s)&amp;lt;0
+$$&lt;/p&gt;
+&lt;h3&gt;Step-by-Step Methodology&lt;span class="hx:absolute hx:-mt-20" id="step-by-step-methodology-3"&gt;&lt;/span&gt;
+&lt;a href="#step-by-step-methodology-3" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;Form $sF(s)$&lt;/li&gt;
+&lt;li&gt;Apply IVT: $\lim_{s\to\infty} sF(s)$&lt;/li&gt;
+&lt;li&gt;Check poles of $sF(s)$ for FVT applicability&lt;/li&gt;
+&lt;li&gt;Apply FVT: $\lim_{s\to 0} sF(s)$ if valid&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;pre class="mermaid hx:mt-6"&gt;
+flowchart TD
+A[Time-Domain Function f(t)] --&amp;gt; B[Laplace Transform F(s)]
+B --&amp;gt; C[S-Domain Circuit or Differential Equation]
+C --&amp;gt; D[Apply Initial Conditions]
+D --&amp;gt; E[Solve Algebraic Equation for Output V(s) / I(s)]
+E --&amp;gt; F[Partial Fraction Expansion / Simplify F(s)]
+F --&amp;gt; G[Inverse Laplace Transform f(t)]
+G --&amp;gt; H{Response Type}
+H --&amp;gt; H1[Zero-State Response (ZSR)]
+H --&amp;gt; H2[Zero-Input Response (ZIR)]
+H1 --&amp;gt; I[Combine ZIR + ZSR]
+H2 --&amp;gt; I
+I --&amp;gt; J[Final Time-Domain Solution f(t)]
+J --&amp;gt; K{Initial / Final Values?}
+K --&amp;gt; L[Initial Value: f(0^+) = lim(s→∞) sF(s)]
+K --&amp;gt; M[Final Value: f(∞) = lim(s→0) sF(s)]
+&lt;/pre&gt;</description></item><item><title/><link>https://erauredeyesociety.github.io/electrical_notes/ee_300/exam_1_roadmap_notebooklm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://erauredeyesociety.github.io/electrical_notes/ee_300/exam_1_roadmap_notebooklm/</guid><description>
+&lt;h2&gt;High-Level Topics for Test Preparation&lt;span class="hx:absolute hx:-mt-20" id="high-level-topics-for-test-preparation"&gt;&lt;/span&gt;
+&lt;a href="#high-level-topics-for-test-preparation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The topics you need to understand revolve around the core processes of applying the Laplace Transform (LT) to solve differential equations and analyze circuits: &lt;strong&gt;Transformation&lt;/strong&gt; ($\mathcal{L}$), &lt;strong&gt;Property Application&lt;/strong&gt;, &lt;strong&gt;Inverse Transformation&lt;/strong&gt; ($\mathcal{L}^{-1}$), and &lt;strong&gt;Specialized Analysis&lt;/strong&gt; (Circuits and Value Properties).&lt;/p&gt;
+&lt;h3&gt;I. Laplace Transform (LT) Fundamentals and Properties&lt;span class="hx:absolute hx:-mt-20" id="i-laplace-transform-lt-fundamentals-and-properties"&gt;&lt;/span&gt;
+&lt;a href="#i-laplace-transform-lt-fundamentals-and-properties" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;h4&gt;Use in the Course&lt;span class="hx:absolute hx:-mt-20" id="use-in-the-course"&gt;&lt;/span&gt;
+&lt;a href="#use-in-the-course" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;The Laplace Transform is a powerful tool used in Electrical Engineering that converts equations from the &amp;ldquo;time domain&amp;rdquo; into the equivalent equation in the &lt;strong&gt;Complex S-Domain&lt;/strong&gt; (or phase-domain). This conversion is critical because it changes differential equations (which are generally hard to solve) into linear equations or partial fraction expressions, simplifying the analysis of complex circuit networks. Understanding LT properties is essential for efficient circuit analysis and design.&lt;/p&gt;
+&lt;h4&gt;Example Problems to Look At&lt;span class="hx:absolute hx:-mt-20" id="example-problems-to-look-at"&gt;&lt;/span&gt;
+&lt;a href="#example-problems-to-look-at" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;Calculating $F(s) = \mathcal{L}{f(t)}$ for various basic time-domain functions such as exponential/decaying waveforms, unit ramp, and short-duration pulses.&lt;/li&gt;
+&lt;li&gt;Using the linearity property to find the LT of a sum of exponentials.&lt;/li&gt;
+&lt;li&gt;Applying the differentiation property to find the LT of derivatives, often using the initial condition $f(0)$.&lt;/li&gt;
+&lt;li&gt;Using the delay property to find the LT of time-delayed signals, which results in terms involving $e^{-sT}$.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Subtopics to Familiarize Yourself With&lt;span class="hx:absolute hx:-mt-20" id="subtopics-to-familiarize-yourself-with"&gt;&lt;/span&gt;
+&lt;a href="#subtopics-to-familiarize-yourself-with" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Definitions:&lt;/strong&gt; $F(s) = \mathcal{L}{f(t)}$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;S-Plane Concepts:&lt;/strong&gt; Understanding poles and zeros, and their graphical representation in the pole-zero diagram.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Relationship to Fourier Transform:&lt;/strong&gt; LT is more suitable for analyzing dynamic systems with transient behavior, while Fourier is suited for stationary signals.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The Six Key Properties:&lt;/strong&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Linearity&lt;/strong&gt; (scaling and addition).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multiply by $e^{-at}$&lt;/strong&gt; (frequency domain translation).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Delay Property&lt;/strong&gt; (time domain translation).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Differentiation Property&lt;/strong&gt; (introduces $sF(s)$ and initial conditions).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Integration Property&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multiply-by-$t$ Property&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Step-by-Step Methodology: Applying LT (General)&lt;span class="hx:absolute hx:-mt-20" id="step-by-step-methodology-applying-lt-general"&gt;&lt;/span&gt;
+&lt;a href="#step-by-step-methodology-applying-lt-general" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Break Down the Function:&lt;/strong&gt; If the time-domain function $f(t)$ is a sum of terms, use the &lt;strong&gt;Linearity Property&lt;/strong&gt; to transform each term independently.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Apply Standard Transforms/Properties:&lt;/strong&gt; Transform basic functions using known inventory transforms, or apply specific properties:
+&lt;ul&gt;
+&lt;li&gt;If $f(t)$ is multiplied by $e^{-\alpha t}$, replace $s$ with $s+\alpha$ in $F(s)$ (Multiply by $e^{-at}$ property).&lt;/li&gt;
+&lt;li&gt;If $f(t)$ is delayed by $T$, multiply $F(s)$ by $e^{-sT}$ (Delay property).&lt;/li&gt;
+&lt;li&gt;If you are transforming a differential equation, use the &lt;strong&gt;Differentiation Property&lt;/strong&gt;: $L{df/dt} = sF(s) - f(0)$.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;II. Inverse Laplace Transform (Inverse LT)&lt;span class="hx:absolute hx:-mt-20" id="ii-inverse-laplace-transform-inverse-lt"&gt;&lt;/span&gt;
+&lt;a href="#ii-inverse-laplace-transform-inverse-lt" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;h4&gt;Use in the Course&lt;span class="hx:absolute hx:-mt-20" id="use-in-the-course-1"&gt;&lt;/span&gt;
+&lt;a href="#use-in-the-course-1" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;The Inverse Laplace Transform ($\mathcal{L}^{-1}$) is the necessary final step for obtaining the time-domain waveform, $f(t)$, after solving the equation in the $s$-domain. The process uses the concept of &lt;strong&gt;Partial Fraction Expansion (PFE)&lt;/strong&gt;, which is typically applied to rational functions.&lt;/p&gt;
+&lt;h4&gt;Example Problems to Look At&lt;span class="hx:absolute hx:-mt-20" id="example-problems-to-look-at-1"&gt;&lt;/span&gt;
+&lt;a href="#example-problems-to-look-at-1" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;Inverse transforming a &lt;strong&gt;Proper Rational Function (PRF)&lt;/strong&gt; (where the numerator order is less than the denominator order) with &lt;strong&gt;distinct real poles&lt;/strong&gt; to obtain a sum of exponentials using the cover-up method.&lt;/li&gt;
+&lt;li&gt;Inverse transforming $F(s)$ with &lt;strong&gt;complex-conjugate poles&lt;/strong&gt;, which results in sinusoidal responses, potentially with an exponential envelope.&lt;/li&gt;
+&lt;li&gt;Inverse transforming $F(s)$ with &lt;strong&gt;multiple-order poles&lt;/strong&gt; (higher than 1st order).&lt;/li&gt;
+&lt;li&gt;Handling &lt;strong&gt;Improper Rational Functions (IRF)&lt;/strong&gt; (numerator order $\ge$ denominator order) using long division.&lt;/li&gt;
+&lt;li&gt;Inverse transforming terms involving &lt;strong&gt;$e^{-sT}$&lt;/strong&gt; to find delayed time-domain functions $f(t-T)u(t-T)$.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Subtopics to Familiarize Yourself With&lt;span class="hx:absolute hx:-mt-20" id="subtopics-to-familiarize-yourself-with-1"&gt;&lt;/span&gt;
+&lt;a href="#subtopics-to-familiarize-yourself-with-1" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;PRF vs. IRF:&lt;/strong&gt; Understanding the difference based on the order of the numerator and denominator polynomials.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;PFE:&lt;/strong&gt; How to express $F(s)$ as a sum of simpler terms.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Poles and Residues:&lt;/strong&gt; Recognizing that pole locations $p_i$ determine the rate of the exponential, and residues $k_i$ determine the weight/amplitude.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cover-up Method:&lt;/strong&gt; The standard technique for finding residues $k_i$ for distinct real poles.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Special Cases:&lt;/strong&gt; Dealing with complex-conjugate poles (resulting in $2|k|\cos(\beta t + \angle k)$), and methods for multiple-order poles (matching coefficients, $n$-to-1-order-poles).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Step-by-Step Methodology: Inverse LT using PFE&lt;span class="hx:absolute hx:-mt-20" id="step-by-step-methodology-inverse-lt-using-pfe"&gt;&lt;/span&gt;
+&lt;a href="#step-by-step-methodology-inverse-lt-using-pfe" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Handle Improper Functions (If Applicable):&lt;/strong&gt; If $F(s)$ is an IRF, perform &lt;strong&gt;long division&lt;/strong&gt; to rewrite $F(s)$ as a polynomial plus a PRF.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Factor and Set Up PFE:&lt;/strong&gt; Factor the denominator of the PRF to find all poles ($p_i$). Write the resulting PRF in its PFE form, ensuring that you include all necessary terms for complex and multiple-order poles.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Calculate Residues ($k_i$):&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Distinct Real Poles:&lt;/strong&gt; Use the &lt;strong&gt;cover-up method&lt;/strong&gt; to find each residue $k_i$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Complex Conjugate Poles:&lt;/strong&gt; Use the cover-up method for one complex pole. The inverse LT is then derived from the magnitude $|k|$ and angle $\angle k$ of the residue: $f(t) = 2|k|\cos(\beta t + \angle k)$ multiplied by the exponential envelope.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multiple-Order Poles:&lt;/strong&gt; Use the cover-up method for the highest order term, and use methods like &lt;strong&gt;matching coefficients&lt;/strong&gt; to find lower-order residues.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Inverse Transform:&lt;/strong&gt; Convert each PFE term back into the time domain $f(t)$. Remember that terms derived from the polynomial part of an IRF correspond to impulse functions.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Handle Delayed Signals:&lt;/strong&gt; If $F(s)$ contains terms multiplied by $e^{-sT}$, apply the delay property: $L^{-1}{F(s)e^{-sT}} = f(t-T)u(t-T)$.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;III. Laplace Transform for Differential Equations and Circuit Analysis&lt;span class="hx:absolute hx:-mt-20" id="iii-laplace-transform-for-differential-equations-and-circuit-analysis"&gt;&lt;/span&gt;
+&lt;a href="#iii-laplace-transform-for-differential-equations-and-circuit-analysis" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;h4&gt;Use in the Course&lt;span class="hx:absolute hx:-mt-20" id="use-in-the-course-2"&gt;&lt;/span&gt;
+&lt;a href="#use-in-the-course-2" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;LT is applied to solve circuits modeled by differential equations, converting these equations into linear equations in the $s$-domain that are easier to solve. This method integrates initial conditions directly into the $s$-domain circuit model using s-domain device characteristics.&lt;/p&gt;
+&lt;h4&gt;Example Problems to Look At&lt;span class="hx:absolute hx:-mt-20" id="example-problems-to-look-at-2"&gt;&lt;/span&gt;
+&lt;a href="#example-problems-to-look-at-2" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;Solving &lt;strong&gt;RL Circuits&lt;/strong&gt; or &lt;strong&gt;RC circuits&lt;/strong&gt; subjected to sudden changes (like switches closing) with step inputs or exponential inputs.&lt;/li&gt;
+&lt;li&gt;Analyzing circuits using KCL (Kirchhoff’s Current Law) or node methods in the $s$-domain, accounting for initial conditions of capacitors and inductors.&lt;/li&gt;
+&lt;li&gt;Determining the &lt;strong&gt;Zero-Input Response (ZIR)&lt;/strong&gt; (response when the input source is zero, driven only by initial energy) and the &lt;strong&gt;Zero-State Response (ZSR)&lt;/strong&gt; (response when the initial state is zero, driven only by input).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Subtopics to Familiarize Yourself With&lt;span class="hx:absolute hx:-mt-20" id="subtopics-to-familiarize-yourself-with-2"&gt;&lt;/span&gt;
+&lt;a href="#subtopics-to-familiarize-yourself-with-2" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;S-Domain Device Models:&lt;/strong&gt; Transforming resistors ($R$), capacitors ($1/sC$), and inductors ($sL$) into impedance components in the $s$-domain.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Initial Condition Sources:&lt;/strong&gt; Understanding how initial voltage on a capacitor $V_c(0)$ is represented by a voltage source $V_c(0)/s$ in series with $1/sC$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ZIR/ZSR:&lt;/strong&gt; Total response is the sum of the ZIR (response due to initial voltage/current) and the ZSR (response due to external input).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Step-by-Step Methodology: Solving Circuits using LT&lt;span class="hx:absolute hx:-mt-20" id="step-by-step-methodology-solving-circuits-using-lt"&gt;&lt;/span&gt;
+&lt;a href="#step-by-step-methodology-solving-circuits-using-lt" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;This process involves six steps for a complete solution:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Derive Differential Equation and Find $t&amp;lt;0$ Response:&lt;/strong&gt; Derive the differential equation for the circuit for $t \ge 0$. Use circuit knowledge (physical insight/classical techniques) to determine the output (e.g., initial current $i(0)$, initial voltage $v(0)$) for $t &amp;lt; 0$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transform to S-Domain:&lt;/strong&gt; Convert the differential equation (or draw the $s$-domain equivalent circuit using impedances and initial condition sources) and the $t \ge 0$ input into the $s$-domain.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Apply Initial Conditions:&lt;/strong&gt; Plug initial values (like $i(0)$ or $v(0)$) into the $s$-domain equation, often using the Differentiation Property or initial condition sources.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Solve for Output in S-Domain:&lt;/strong&gt; Solve the resulting linear equation (or use circuit analysis methods like KCL/Node Analysis/Cramer&amp;rsquo;s rule) to find the output variable, $V(s)$ or $I(s)$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Inverse Transform:&lt;/strong&gt; Use the PFE and Inverse LT techniques (Section II) to convert $V(s)$ or $I(s)$ back to the time-domain waveform $f(t)$ for $t \ge 0$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Complete Solution:&lt;/strong&gt; Combine the $t &amp;lt; 0$ and $t \ge 0$ waveforms for the complete solution.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;IV. Initial and Final Value Properties (IVP/FVP)&lt;span class="hx:absolute hx:-mt-20" id="iv-initial-and-final-value-properties-ivpfvp"&gt;&lt;/span&gt;
+&lt;a href="#iv-initial-and-final-value-properties-ivpfvp" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;h4&gt;Use in the Course&lt;span class="hx:absolute hx:-mt-20" id="use-in-the-course-3"&gt;&lt;/span&gt;
+&lt;a href="#use-in-the-course-3" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;The Initial and Final Value Properties allow you to find the initial value $f(0)$ and the final value $f(\infty)$ directly from the Laplace Transform $F(s)$ without performing the full Inverse LT. This is useful for quickly checking the transient start and steady-state end points of a system response.&lt;/p&gt;
+&lt;h4&gt;Example Problems to Look At&lt;span class="hx:absolute hx:-mt-20" id="example-problems-to-look-at-3"&gt;&lt;/span&gt;
+&lt;a href="#example-problems-to-look-at-3" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;Calculating $f(0)$ and $f(\infty)$ for standard PRFs.&lt;/li&gt;
+&lt;li&gt;Identifying functions where FVP is &lt;strong&gt;not applicable&lt;/strong&gt; (where $sF(s)$ has poles on $s \ge 0$).&lt;/li&gt;
+&lt;li&gt;Identifying functions where IVP is not applicable (Improper Rational Functions, which have infinite initial values).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Subtopics to Familiarize Yourself With&lt;span class="hx:absolute hx:-mt-20" id="subtopics-to-familiarize-yourself-with-3"&gt;&lt;/span&gt;
+&lt;a href="#subtopics-to-familiarize-yourself-with-3" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;IVP Formula:&lt;/strong&gt; $f(0) = \lim_{s \to \infty} sF(s)$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;FVP Formula:&lt;/strong&gt; $f(\infty) = \lim_{s \to 0} sF(s)$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Conditions:&lt;/strong&gt; For IVP, $F(s)$ must be a PRF to ensure a finite result. For FVP, $sF(s)$ must have no poles on the right half-plane ($s \ge 0$).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Step-by-Step Methodology: Applying IVP and FVP&lt;span class="hx:absolute hx:-mt-20" id="step-by-step-methodology-applying-ivp-and-fvp"&gt;&lt;/span&gt;
+&lt;a href="#step-by-step-methodology-applying-ivp-and-fvp" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Formulate $sF(s)$:&lt;/strong&gt; Set up the expression $s$ multiplied by the given Laplace Transform $F(s)$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Calculate Initial Value:&lt;/strong&gt; Find the limit of $sF(s)$ as $s$ approaches infinity: $\lim_{s \to \infty} sF(s)$. (Ensure $F(s)$ is a PRF for a finite initial value).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Check FVP Applicability:&lt;/strong&gt; Determine the poles of $sF(s)$. If any poles are on the $s \ge 0$ axis (including at $s=0$ or in the right half-plane), FVP is not applicable.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Calculate Final Value (If Applicable):&lt;/strong&gt; If the condition in step 3 is met, find the limit of $sF(s)$ as $s$ approaches zero: $\lim_{s \to 0} sF(s)$.&lt;/li&gt;
+&lt;/ol&gt;</description></item></channel></rss>
