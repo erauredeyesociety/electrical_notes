@@ -1,3 +1,13 @@
+---
+title: Laplace Transform Roadmap NotebookLM
+type: docs
+prev: ee_300/exam_1_roadmap_chat
+next: ee_300/exam_1_roadmap_notebookLM
+sidebar:
+  open: true
+math: true
+---
+
 ## High-Level Topics for Test Preparation
 
 The topics you need to understand revolve around the core processes of applying the Laplace Transform (LT) to solve differential equations and analyze circuits: **Transformation** ($\mathcal{L}$), **Property Application**, **Inverse Transformation** ($\mathcal{L}^{-1}$), and **Specialized Analysis** (Circuits and Value Properties).

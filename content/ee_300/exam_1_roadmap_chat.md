@@ -1,5 +1,11 @@
-# Comprehensive Circuit Analysis with Laplace Transform Roadmap (With Equations)
-
+---
+title: Comprehensive Circuit Analysis with Laplace Transform Roadmap (With Equations)
+type: docs
+prev: ee_300/
+next: ee_300/exam_1_roadmap_notebookLM
+sidebar:
+  open: true
+math: true
 ---
 
 ## I. Laplace Transform (LT) Fundamentals and Properties
