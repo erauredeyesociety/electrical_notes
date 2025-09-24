@@ -5,14 +5,14 @@ module:
   imports:
     - path: github.com/imfing/hextra
 
-# Hextra requires this exact passthrough configuration for LaTeX
+# Updated configuration for standard LaTeX math delimiters
 markup:
   goldmark:
     extensions:
       passthrough:
         delimiters:
-          block: [['\[', '\]'], ["$$", "$$"]]
-          inline: [['\(', '\)']]
+          block: [["$$", "$$"], ["\\[", "\\]"]]
+          inline: [["$", "$"], ["\\(", "\\)"]]
         enable: true
     renderer:
       unsafe: true
@@ -48,6 +48,6 @@ params:
     enable: true
     base: "https://github.com/erauredeyesociety/electrical_notes/edit/main/content"
   
-  # Use KaTeX (default) - no additional config needed for basic setup
+  # Use KaTeX for math rendering
   math:
-    engine: katex  # This is the default, can be omitted
+    engine: katex

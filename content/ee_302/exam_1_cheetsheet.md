@@ -8,7 +8,7 @@ sidebar:
 math: true
 ---
 
-* The most common type of diode, typically has a forward voltage \(0.6\text{-}7\text{V}\), so make this assumption
+* The most common type of diode, typically has a forward voltage $0.6\text{-}7\text{V}$, so make this assumption
 
 
 <!-- Vega Scripts -->
@@ -108,7 +108,7 @@ vegaEmbed('#vis', spec);
 
 **Following the ideal diode graph**, if you get a positive voltage you must check that your current is not negative, otherwise your guess is wrong. 
 
-* In an ideal diode, if \(I_d\) is positive, then the voltage is zero and the diode is on. If \(V_d\) is negative and the current is zero, then we say the diode is off.
+* In an ideal diode, if $I_d$ is positive, then the voltage is zero and the diode is on. If $V_d$ is negative and the current is zero, then we say the diode is off.
 
 * If a diode is supposed to be on, check that the current is greater than zero. If the current is 0, it can be either on or off, so you have to check the voltage.
 
@@ -122,12 +122,12 @@ vegaEmbed('#vis', spec);
 
 ### Step-by-Step Methodology: Ideal Diode Analysis
 
-1. **Assume diode states:** For \(n\) diodes, consider \(2^n\) possible ON/OFF combinations
+1. **Assume diode states:** For $n$ diodes, consider $2^n$ possible ON/OFF combinations
 2. **Replace diodes:** ON → short circuit, OFF → open circuit
-3. **Analyze linear circuit:** Calculate \(I_D\) and \(V_D\) for each diode
+3. **Analyze linear circuit:** Calculate $I_D$ and $V_D$ for each diode
 4. **Check constraints:**
-   - ON diodes: \(I_D > 0\)
-   - OFF diodes: \(V_D < 0\)
+   - ON diodes: $I_D > 0$
+   - OFF diodes: $V_D < 0$
 5. **Validate or iterate:** If constraints satisfied, solution found; otherwise try different states
 
 ### Step-by-Step Methodology: Load-Line Analysis
@@ -143,5 +143,5 @@ vegaEmbed('#vis', spec);
 1. **Identify breakpoints:** Determine input voltages where diodes change state
 2. **Analyze regions:** Consider each operating region separately
 3. **Apply circuit laws:** Use KVL/KCL for each diode state
-4. **Construct transfer characteristic:** Plot \(V_o\) vs \(V_{in}\)
+4. **Construct transfer characteristic:** Plot $V_o$ vs $V_{in}$
 5. **Verify operation:** Check diode states are consistent with assumptions
