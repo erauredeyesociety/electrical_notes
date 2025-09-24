@@ -1,1 +1,74 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Electrical Notes – Ee_302s</title><link>https://erauredeyesociety.github.io/electrical_notes/ee_302/</link><description>Recent content in Ee_302s on Electrical Notes</description><generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="https://erauredeyesociety.github.io/electrical_notes/ee_302/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Electrical Notes – Ee_302s</title><link>https://erauredeyesociety.github.io/electrical_notes/ee_302/</link><description>Recent content in Ee_302s on Electrical Notes</description><generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="https://erauredeyesociety.github.io/electrical_notes/ee_302/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://erauredeyesociety.github.io/electrical_notes/ee_302/sample_vega_graph/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://erauredeyesociety.github.io/electrical_notes/ee_302/sample_vega_graph/</guid><description>
+&lt;p&gt;The following is a sample vega script that wil render a basic graph with two black lines. This gives the illusion of a graph with the normal 4 quadrants with (0,0) being at the center becuase I cannot change where the axis starts in vega.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://vega.github.io/vega-lite/docs/axis.html#example-using-axis-minextent-to-align-multi-view-plots"target="_blank" rel="noopener"&gt;Vega Graph Axis Documentation&lt;/a&gt;&lt;/p&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/vega@5"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/vega-lite@5"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/vega-embed@6"&gt;&lt;/script&gt;
+&lt;div id="vis"&gt;&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+var spec = {
+"$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+"width": 400,
+"height": 400,
+"layer": [
+{
+"data": {
+"values": [
+{"x": -10, "x2": 10, "y": 0}
+]
+},
+"mark": {
+"type": "rule",
+"color": "black",
+"strokeWidth": 2
+},
+"encoding": {
+"x": {"field": "x", "type": "quantitative"},
+"x2": {"field": "x2"},
+"y": {"field": "y", "type": "quantitative"}
+}
+},
+{
+"data": {
+"values": [
+{"y": -10, "y2": 10, "x": 0}
+]
+},
+"mark": {
+"type": "rule",
+"color": "black",
+"strokeWidth": 2
+},
+"encoding": {
+"y": {"field": "y", "type": "quantitative"},
+"y2": {"field": "y2"},
+"x": {"field": "x", "type": "quantitative"}
+}
+}
+],
+"encoding": {
+"x": {
+"type": "quantitative",
+"scale": {"domain": [-10, 10]},
+"axis": {
+"grid": true,
+"domain": false,
+"ticks": false,
+"labelFontSize": 12
+}
+},
+"y": {
+"type": "quantitative",
+"scale": {"domain": [-10, 10]},
+"axis": {
+"grid": true,
+"domain": false,
+"ticks": false,
+"labelFontSize": 12
+}
+}
+}
+}
+;
+vegaEmbed('#vis', spec);
+&lt;/script&gt;</description></item></channel></rss>
