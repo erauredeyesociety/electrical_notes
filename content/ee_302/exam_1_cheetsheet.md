@@ -106,7 +106,7 @@ var spec = {
 vegaEmbed('#vis', spec);
 </script>
 
-**Following the ideal diode graph**, if you get a positive voltage or negative current, then your guess is wrong. 
+**Following the ideal diode graph**, if you get a positive voltage you must check that your current is not negative, otherwise your guess is wrong. 
 
 * In an ideal diode, if \(I_d\) is positive, then the voltage is zero and the diode is on. If \(V_d\) is negative and the current is zero, then we say the diode is off.
 
