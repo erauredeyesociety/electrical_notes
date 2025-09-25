@@ -5,9 +5,9 @@ find . -type f -name "*.md" | while read -r file; do
     if [[ -s "$file" ]]; then
         echo "Fixing Unicode symbols in $file ..."
         sed -i -E \
-            -e 's/≈/\\approx/g' \
-            -e 's/≥/\\geq/g' \
-            -e 's/≤/\\leq/g' \
+            -e 's/[≈∼]/\\approx/g' \
+            -e 's/[≥⩾]/\\geq/g' \
+            -e 's/[≤⩽]/\\leq/g' \
             -e 's/±/\\pm/g' \
             "$file"
         echo "Fixed Unicode symbols in $file"

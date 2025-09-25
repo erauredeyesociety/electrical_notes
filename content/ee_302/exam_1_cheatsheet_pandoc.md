@@ -12,7 +12,7 @@ math: true
 
 * The most common type of diode, typically has a forward voltage $0.6\text{-}0.7\text{V}$, so make this assumption
 
-![ideal diode](imgs/ideal_diode.png){ width=0.45\linewidth }
+![ideal diode](imgs/ideal_diode.png)
 
 **Following the ideal diode graph**, if you get a positive voltage you must check that your current is not negative, otherwise your guess is wrong. 
 

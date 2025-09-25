@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam 1 Cheat Sheet Comprehensive</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <!-- Vega Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #34495e;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        h4 {
+            color: #2980b9;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        .methodology {
+            background: #ecf0f1;
+            border-left: 5px solid #e74c3c;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .methodology h3 {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            margin: -15px -15px 15px -15px;
+            padding: 10px 15px;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .formula {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .reference {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .chart-container {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        strong {
+            color: #2c3e50;
+        }
+        code {
+            background: #f1f2f6;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Exam 1 Cheat Sheet Comprehensive</h1>
+
+        <h3>Diode Fundamentals</h3>
+        
+        <p>The most common type of diode, typically has a forward voltage $0.6\text{-}0.7\text{V}$, so make this assumption</p>
+
+        <div class="chart-container">
+            <div id="vis"></div>
+        </div>
+
+        <p><strong>Following the ideal diode graph</strong>, if you get a positive voltage you must check that your current is not negative, otherwise your guess is wrong.</p>
+
+        <ul>
+            <li>In an ideal diode, if $I_d$ is positive, then the voltage is zero and the diode is on. If $V_d$ is negative and the current is zero, then we say the diode is off.</li>
+            <li>If a diode is supposed to be on, check that the current is greater than zero. If the current is 0, it can be either on or off, so you have to check the voltage.</li>
+            <li>If you have a current greater than 0, and a voltage greater than 0, then thats fine, because you can't have current flow without voltage. To confirm that a diode is off, you need a negative voltage. If the voltage is positive, then the diode can't be off.</li>
+        </ul>
+
+        <h4>Diode Bias</h4>
+        <p>The triangle points in the direction of the bias of the diode. The anode (positive) must have a greater voltage than the cathode (negative) so that the voltage drop does not go against the diode (current flowing against diode bias). Voltage drop being in the reverse direction of a diode bias will result in the diode being off.</p>
+
+        <ul>
+            <li>Positive side of diode is the base of the triangle, negative side is the tip of the triangle. Current only goes through a diode one way, positive to negative. If it goes negative to positive, the current becomes 0 through the diode or current stops. If current flows in the same direction of where the diode is pointing, it is on, otherwise if the current is flowing against the diode, it is off.</li>
+            <li><strong>When Would You See 0 V Output?</strong>
+                <ul>
+                    <li>If the diode is reverse biased, so it's blocking all current</li>
+                    <li>If the input voltage is below the forward threshold (e.g. 0.5 V < 0.7 V)</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Zener Diode</h4>
+        <ul>
+            <li>A regular diode allows current to flow only in the forward direction and blocks it in reverse, typically used for rectification. A <strong>Zener diode</strong> behaves like a regular diode in forward bias but is designed to conduct in reverse once a specific Zener voltage is reached, making it ideal for voltage regulation and circuit protection.</li>
+            <li>In a basic circuit diagram, the Zener voltage (e.g. 5V, 10V) is typically labeled next to the Zener diode symbol to indicate the voltage at which it will start conducting in reverse bias.</li>
+            <li>When a Zener diode is connected in reverse (cathode to positive), and the voltage across it exceeds the Zener voltage, it clamps the voltage across itself to approximately the Zener voltage, and conducts enough current to maintain that voltage (assuming a current-limiting resistor is present).
+                <ul>
+                    <li>This only works in reverse bias</li>
+                    <li>You must use a current-limiting resistor in series, or the diode can burn out</li>
+                    <li>The Zener voltage is not perfectly exact — it may vary slightly (e.g., 5.1 V ± 5%)</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Voltage Divider</h4>
+        <p>The larger the resistor, the greater the voltage drop across it. The voltage divider principle applies specifically to components that are part of a single, closed series loop, not to two components in series but on different loops.</p>
+
+        <div class="reference">
+            <h4>Summary</h4>
+            <ol>
+                <li>A pn-junction diode is a two-terminal device that conducts current easily in one direction (from anode to cathode), but not in the opposite direction. The volt–ampere characteristic has three regions: forward bias, reverse bias, and reverse breakdown.</li>
+                <li>The Shockley equation relates current and voltage in a pn-junction diode.</li>
+                <li>Nonlinear circuits, such as those containing a diode, can be analyzed by using the load-line technique.</li>
+                <li>Zener diodes are intended to be operated in the reverse-breakdown region as constant-voltage references.</li>
+                <li>Voltage regulators are circuits that produce a nearly constant output voltage while operating from a variable source.</li>
+                <li>The ideal-diode model is a short circuit (on) if current flows in the forward direction and an open circuit (off) if voltage is applied in the reverse direction.</li>
+                <li>In the method of assumed states, we assume a state for each diode (on or off), analyze the circuit, and check to see if the assumed states are consistent with the current directions and voltage polarities. This process is repeated until a valid set of states is found.</li>
+                <li>In a piecewise-linear model for a nonlinear device, the volt–ampere characteristic is approximated by straight-line segments. On each segment, the device is modeled as a voltage source in series with a resistance.</li>
+                <li>Rectifier circuits can be used to charge batteries and to convert ac voltages into constant dc voltages. Half-wave rectifiers conduct current only for one polarity of the ac input, whereas full-wave circuits conduct for both polarities.</li>
+                <li>Wave-shaping circuits change the waveform of an input signal and deliver the modified waveform to the output terminals. Clipper circuits remove that portion of the input waveform above (or below) a given level. Clamp circuits add or subtract a dc voltage, so that the positive (or negative) peaks have a specified voltage.</li>
+                <li>The small-signal (incremental) equivalent circuit of a diode consists of a resistance. The value of the resistance depends on the operating point (Q point).</li>
+                <li>Dc sources and coupling capacitors are replaced by short circuits in small-signal ac equivalent circuits. Diodes are replaced with their dynamic resistances</li>
+            </ol>
+        </div>
+
+        <div class="methodology">
+            <h3>Step-by-Step Methodology: Ideal Diode Analysis</h3>
+            
+            <p>The ideal diode model treats the diode as a perfect conductor (short circuit) in the forward direction and an open circuit in the reverse direction, assuming the forward voltage drop and reverse current are negligible.</p>
+
+            <ol>
+                <li><strong>Assume Diode States:</strong> Assume a state for each diode, either <strong>ON</strong> or <strong>OFF</strong>.
+                    <ul>
+                        <li>For $n$ diodes, consider $2^n$ possible combinations of diode states. Try to guess with your best judgment, considering the source direction.</li>
+                    </ul>
+                </li>
+                <li><strong>Replace Diodes:</strong> Redraw the circuit by replacing the assumed diode states with their linear equivalents:
+                    <ul>
+                        <li><strong>ON</strong> diodes → Short circuit ($V_D = 0$).</li>
+                        <li><strong>OFF</strong> diodes → Open circuit ($I_D = 0$).</li>
+                    </ul>
+                </li>
+                <li><strong>Analyze Circuit:</strong> Analyze the resulting linear circuit using techniques like Kirchhoff's laws and Ohm's law to determine the following for each diode:
+                    <ul>
+                        <li>Current ($I_D$) through the diodes assumed to be <strong>ON</strong>.</li>
+                        <li>Voltage ($V_D$) across the diodes assumed to be <strong>OFF</strong>.</li>
+                    </ul>
+                </li>
+                <li><strong>Check Constraints:</strong> Check to see if the calculated results are consistent with the assumed state for each diode:
+                    <ul>
+                        <li>For <strong>ON</strong> diodes: Current must flow in the forward direction ($I_D > 0$).</li>
+                        <li>For <strong>OFF</strong> diodes: The voltage must be reverse biased ($V_D < 0$), or positive at the cathode.</li>
+                    </ul>
+                </li>
+                <li><strong>Validate or Iterate:</strong>
+                    <ul>
+                        <li>If the results are consistent with the assumed states, the analysis is finished.</li>
+                        <li>Otherwise, return to step 1 and choose a different combination of diode states.</li>
+                        <li><em>Note:</em> In general, you cannot decide on the state of a particular diode until a combination works for all the diodes in the circuit.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="methodology">
+            <h3>Step-by-Step Methodology: Load-Line Method</h3>
+            
+            <p>The load-line analysis technique is a graphical method used to analyze nonlinear circuits, such as those involving diodes or BJT amplifiers.</p>
+
+            <ol>
+                <li><strong>Simplify the Circuit:</strong> If the circuit contains multiple linear elements connected to the nonlinear device (the load), replace the network external to the nonlinear device with its Thévenin equivalent circuit ($V_{TH}$ and $R_{TH}$).</li>
+                <li><strong>Apply KVL (Derive Load Line Equation):</strong> Apply Kirchhoff's Voltage Law (KVL) to the simplified circuit loop containing the nonlinear device. This yields a linear equation (the load line equation) relating the device voltage ($v_D$) and device current ($i_D$).
+                    <div class="formula"><em>Notable Equation (Example Diode Circuit):</em> $V_{SS} = R i_D + v_D$</div>
+                </li>
+                <li><strong>Plot the Load Line:</strong> Plot this linear KVL equation on the same set of axes used for the nonlinear device's experimentally obtained volt–ampere characteristic.
+                    <ul>
+                        <li>Determine two points to plot the straight line:
+                            <ul>
+                                <li>The voltage axis intercept (where $i_D = 0$): $v_D = V_{SS}$</li>
+                                <li>The current axis intercept (where $v_D = 0$): $i_D = \frac{V_{SS}}{R}$</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>Determine the Operating Point (Q-Point):</strong> The <strong>operating point</strong> is the intersection of the load line and the device characteristic curve. This point represents the simultaneous solution of the circuit.</li>
+                <li><strong>Read Results:</strong> Read the quiescent voltage ($V_{DQ}$) and current ($I_{DQ}$) at the operating point from the plot.</li>
+            </ol>
+        </div>
+
+        <div class="methodology">
+            <h3>Step-by-Step Methodology: Rectifier Circuits</h3>
+            
+            <p>Rectifiers convert AC power into DC power, forming the basis for electronic power supplies.</p>
+
+            <ol>
+                <li><strong>Determine Diode Conduction Cycles:</strong> Based on the rectifier configuration (half-wave, full-wave bridge, or center-tapped), determine which diodes conduct current during the positive and negative half-cycles of the AC source voltage, $v_s(t)$</li>
+                <li><strong>Analyze Forward Bias:</strong> When the source voltage causes a diode to be forward biased:
+                    <ul>
+                        <li>For an <strong>Ideal Diode</strong>: The output voltage across the load ($v_o(t)$) equals the source voltage.</li>
+                        <li>For an <strong>Actual Diode</strong>: The output voltage is typically reduced by the forward voltage drop, $V_f \approx 0.7$ V.</li>
+                    </ul>
+                </li>
+                <li><strong>Analyze Reverse Bias:</strong> When the source voltage causes the diodes to be reverse biased:
+                    <ul>
+                        <li>For a resistive load, current flow stops, and $v_o(t)$ drops to zero (for half-wave).</li>
+                    </ul>
+                </li>
+                <li><strong>Calculate Peak Inverse Voltage (PIV):</strong> Determine the maximum reverse voltage that appears across the non-conducting diodes.
+                    <ul>
+                        <li>For a half-wave rectifier with a resistive load, PIV = $V_m$ (peak source voltage).</li>
+                        <li>For a full-wave center-tapped rectifier, PIV ≈ $2V_m$</li>
+                    </ul>
+                </li>
+                <li><strong>Analyze Circuits with Smoothing Capacitors (If Applicable):</strong> If a capacitor ($C$) is placed in parallel with the load to smooth the voltage (reducing ripple $V_r$), calculate the required capacitance or the average load voltage.
+                    <div class="formula">
+                        <em>Notable Equation (Average Load Voltage with Capacitor):</em> $V_L \cong V_m - \frac{V_r}{2}$<br>
+                        <em>Notable Equation (Capacitance for Half-Wave Rectifier):</em> $C \cong \frac{I_L T}{V_r}$<br>
+                        <em>Notable Equation (Capacitance for Full-Wave Rectifier):</em> $C = \frac{I_L T}{2 V_r}$<br>
+                        <small>Where $I_L$ is the average load current, $T$ is the period, and $V_r$ is the peak-to-peak ripple voltage.</small>
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+        <div class="methodology">
+            <h3>Step-by-Step Methodology: Clipper Circuits</h3>
+            
+            <p>Clipper circuits are wave-shaping circuits that limit the output waveform by removing the portion of the input voltage that falls above or below a specified level.</p>
+
+            <h4>For Output Waveform Analysis:</h4>
+            <ol>
+                <li><strong>Identify Amplitude and Frequency for initial output wave form</strong>
+                    <ul>
+                        <li>Chart basic wave form using full amplitude and frequency from original function</li>
+                    </ul>
+                </li>
+                <li><strong>Identify Clipping Levels (Breakpoints):</strong> Determine the critical input voltage levels ($V_{in}$) where the diodes change state (turn ON, OFF, or enter Zener breakdown).
+                    <ul>
+                        <li>Account for the diode forward voltage drop (e.g., $0.6$ V or $0.7$ V) or the Zener breakdown voltage ($V_Z$).</li>
+                    </ul>
+                </li>
+                <li><strong>Define Operating Regions:</strong> Analyze the circuit across different ranges of $V_{in}$ corresponding to the possible combinations of diode states.
+                    <ul>
+                        <li>Typically, analyze the negative cycle and positive cycle of $V_{in}$ separately.</li>
+                    </ul>
+                </li>
+                <li><strong>Analyze Linear Regions:</strong> For each defined operating region, treat the diodes as linear elements (short circuit, open circuit, or voltage source/resistor combination, depending on the diode model used).</li>
+                <li><strong>Calculate Output Voltage ($V_{out}$):</strong> Use KVL, KCL, and Ohm's law to determine the relationship between $V_{out}$ and $V_{in}$ for each region.
+                    <ul>
+                        <li>In regions where diodes are OFF, the slope of the transfer characteristic ($V_{out}$ vs. $V_{in}$) is often 1, meaning $V_{out} = V_{in}$</li>
+                        <li>In regions where diodes are ON (clipping), $V_{out}$ is generally limited to a constant voltage determined by the limiting elements (batteries, Zener diodes, and forward drops).</li>
+                    </ul>
+                </li>
+                <li><strong>Sketch Results:</strong> Sketch the transfer characteristics ($V_{out}$ versus $V_{in}$) or the output waveform ($v_o(t)$) for a given input waveform $v_{in}(t)$</li>
+            </ol>
+
+            <h4>For Transfer Characteristic Analysis:</h4>
+            <ol>
+                <li><strong>Set Up Axes:</strong> Plot $V_{out}$ vs $V_{in}$ with appropriate scales</li>
+                <li><strong>Find Breakpoints:</strong> Identify critical voltages where diodes change state</li>
+                <li><strong>Determine Slopes:</strong>
+                    <ul>
+                        <li>Slope = 1 when no diodes are conducting (output follows input)</li>
+                        <li>Slope = 0 when diodes are clipping (output is constant)</li>
+                    </ul>
+                </li>
+                <li><strong>Draw Piecewise Linear Segments:</strong> Connect breakpoints with appropriate slopes</li>
+                <li><strong>Verify Consistency:</strong> Check that diode states match the calculated voltages and currents</li>
+            </ol>
+        </div>
+
+        <div class="methodology">
+            <h3>Step-by-Step Methodology: Clamp Circuits</h3>
+            
+            <p>Clamp circuits add a DC component to an AC input waveform so that the positive or negative peaks are forced to take a specified value.</p>
+
+            <ol>
+                <li><strong>Identify Clamping Level:</strong> Determine the voltage to which peaks will be clamped (consider battery voltage and diode forward drop)</li>
+                <li><strong>Determine Clamping Direction:</strong>
+                    <ul>
+                        <li>Positive peaks clamped: Diode anode connected to clamping voltage</li>
+                        <li>Negative peaks clamped: Diode cathode connected to clamping voltage</li>
+                    </ul>
+                </li>
+                <li><strong>Assume Large Capacitance:</strong> Voltage across capacitor remains approximately constant during each cycle</li>
+                <li><strong>Apply Superposition:</strong> $v_o(t) = v_{in}(t) - V_C$ where $V_C$ is the DC voltage across the capacitor</li>
+                <li><strong>Find Steady-State Capacitor Voltage:</strong> The capacitor charges to a value that forces the appropriate peak to the clamping level</li>
+                <li><strong>Sketch Output:</strong> The output waveform is the input shifted vertically by the capacitor voltage</li>
+            </ol>
+        </div>
+
+        <h3>Additional Key Formulas and Concepts</h3>
+
+        <div class="two-column">
+            <div>
+                <div class="formula">
+                    <strong>Peak Inverse Voltage (PIV):</strong><br>
+                    • Half-wave rectifier with resistive load: PIV = $V_m$<br>
+                    • Half-wave rectifier with smoothing capacitor: PIV ≈ $2V_m$<br>
+                    • Full-wave center-tapped rectifier: PIV ≈ $2V_m$<br>
+                    • Full-wave bridge rectifier: PIV = $V_m$
+                </div>
+
+                <div class="formula">
+                    <strong>Small-Signal Dynamic Resistance:</strong><br>
+                    • $r_d = \frac{nV_T}{I_{DQ}}$ where $V_T = 0.026$ V at 300K, $n = 1$ for silicon diodes<br>
+                    • At room temperature for $n = 1$: $r_d = \frac{26 \text{ mV}}{I_{DQ}}$
+                </div>
+            </div>
+            
+            <div>
+                <div class="formula">
+                    <strong>Smoothing Capacitor Design:</strong><br>
+                    • Average load voltage: $V_L \cong V_m - \frac{V_r}{2}$<br>
+                    • Half-wave rectifier capacitance: $C \cong \frac{I_L T}{V_r}$<br>
+                    • Full-wave rectifier capacitance: $C = \frac{I_L T}{2V_r}$<br>
+                    <small>Where $I_L$ = average load current, $T$ = period, $V_r$ = peak-to-peak ripple voltage</small>
+                </div>
+
+                <div class="formula">
+                    <strong>Load Line Slope:</strong><br>
+                    • Slope = $-\frac{1}{R}$ where $R$ is the total series resistance<br>
+                    • Load lines with different source voltages but same resistance are parallel
+                </div>
+            </div>
+        </div>
+
+        <div class="warning">
+            <h4>Common Exam Mistakes to Avoid:</h4>
+            <ol>
+                <li><strong>Forgetting diode forward voltage drop</strong> - Always account for 0.6-0.7V drop in practical diodes</li>
+                <li><strong>Wrong PIV calculation</strong> - Remember PIV increases with smoothing capacitors</li>
+                <li><strong>Incorrect load line intercepts</strong> - Check your math: $i_D = 0 \rightarrow v_D = V_{SS}$, $v_D = 0 \rightarrow i_D = \frac{V_{SS}}{R}$</li>
+                <li><strong>Assuming wrong diode states</strong> - Must check ALL diodes in circuit for consistency</li>
+                <li><strong>Transfer characteristic slopes</strong> - Slope = 1 when diodes OFF, Slope = 0 when clipping occurs</li>
+            </ol>
+        </div>
+
+        <div class="reference">
+            <h4>Quick Reference Values:</h4>
+            <ul>
+                <li>Silicon diode forward drop: 0.6-0.7V</li>
+                <li>$V_T$ at room temperature: 26 mV</li>
+                <li>Zener voltage tolerance: typically ±5%</li>
+            </ul>
+        </div>
+
+        <h4>Circuit Analysis Shortcuts:</h4>
+
+        <div class="two-column">
+            <div>
+                <h5>For Load-Line Method:</h5>
+                <ul>
+                    <li>If one intercept is off the page, pick a convenient point on the visible area</li>
+                    <li>Load lines with same R are parallel</li>
+                    <li>Steeper load line (smaller R) → higher operating current</li>
+                </ul>
+
+                <h5>For Rectifiers:</h5>
+                <ul>
+                    <li>Half-wave: output for half the cycle only</li>
+                    <li>Full-wave: output for full cycle, requires 2 diodes minimum</li>
+                    <li>With capacitor: output stays near peak value with small ripple</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h5>For Clippers:</h5>
+                <ul>
+                    <li>Battery + diode in series sets clipping level</li>
+                    <li>Diode orientation determines which peaks are clipped</li>
+                    <li>Multiple diodes can create multiple clipping levels</li>
+                </ul>
+
+                <h5>For Ideal Diode Analysis:</h5>
+                <ul>
+                    <li>Start with most obvious diode states (follow source polarity)</li>
+                    <li>If ANY diode fails its constraint, try new combination</li>
+                    <li>For $n$ diodes, maximum $2^n$ combinations possible</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="formula">
+            <strong>Piecewise-Linear Model Quick Setup:</strong><br>
+            • Voltage axis intercept = $V_a$<br>
+            • Slope = $\frac{1}{R_a}$<br>
+            • Model: $R_a$ in series with $V_a$ source
+        </div>
+
+        <h3>Circuit Design from Specifications (Reverse Engineering)</h3>
+
+        <p><em>Based on textbook principles for analyzing circuits containing nonlinear elements and wave-shaping circuits.</em></p>
+
+        <h4>Given Transfer Characteristic → Design Clipper Circuit:</h4>
+        <ol>
+            <li><strong>Identify clipping levels</strong> from horizontal segments of the characteristic</li>
+            <li><strong>Determine slopes</strong> of each segment:
+                <ul>
+                    <li>Slope = 1: No diodes conducting, $v_o = v_{in}$</li>
+                    <li>Slope = 0: Diodes clipping, output held constant</li>
+                </ul>
+            </li>
+            <li><strong>Calculate required battery voltages:</strong>
+                <ul>
+                    <li>For clipping at level $V_c$: Battery voltage = $V_c + V_f$ (where $V_f$ = 0.6-0.7V)</li>
+                    <li>Account for diode forward voltage drop in all calculations</li>
+                </ul>
+            </li>
+            <li><strong>Determine diode orientations based on clipping direction:</strong>
+                <ul>
+                    <li><strong>Upper clipping</strong> (positive peaks removed): Diode anode to output, cathode to positive voltage source</li>
+                    <li><strong>Lower clipping</strong> (negative peaks removed): Diode cathode to output, anode to negative voltage source</li>
+                </ul>
+            </li>
+            <li><strong>Select current-limiting resistor:</strong> Choose $R$ large enough to limit diode current to safe levels (typically few mA), but small enough that reverse leakage current doesn't cause significant voltage drop</li>
+        </ol>
+
+        <h4>Given Output Waveform → Design Circuit:</h4>
+        <ol>
+            <li><strong>Overlay input and output waveforms</strong> to identify the modification type</li>
+            <li><strong>Measure critical levels</strong> from waveform plots</li>
+            <li><strong>Classify the circuit type:</strong>
+                <ul>
+                    <li><strong>Clipping:</strong> Portions of waveform removed, creating flat tops/bottoms with sharp transitions</li>
+                    <li><strong>Clamping:</strong> Entire waveform shifted vertically, maintaining original shape but different DC level</li>
+                    <li><strong>Rectification:</strong> AC converted to pulsating DC, with portions of negative cycles removed or inverted</li>
+                </ul>
+            </li>
+            <li><strong>Apply appropriate design methodology</strong> based on classification</li>
+            <li><strong>Verify design using load-line analysis or assumed states method</strong></li>
+        </ol>
+
+        <h4>Given Rectifier Specifications → Design Circuit:</h4>
+        
+        <p><em>Based on textbook rectifier analysis principles:</em></p>
+
+        <ol>
+            <li><strong>Determine rectifier configuration:</strong>
+                <ul>
+                    <li><strong>Half-wave:</strong> Simple, 1 diode, but inefficient (conducts only half the time)</li>
+                    <li><strong>Full-wave center-tap:</strong> 2 diodes, requires transformer with center tap, PIV = 2$V_m$</li>
+                    <li><strong>Full-wave bridge:</strong> 4 diodes, no center tap needed, most common, PIV = $V_m$</li>
+                </ul>
+            </li>
+            <li><strong>Calculate peak source voltage required:</strong>
+                <ul>
+                    <li>For resistive load: $V_m = V_{load(desired)} + V_f$</li>
+                    <li>For capacitive filtering: $V_m = V_{load(avg)} + \frac{V_r}{2} + V_f$</li>
+                </ul>
+            </li>
+            <li><strong>Design smoothing capacitor (if required):</strong>
+                <ul>
+                    <li><strong>Half-wave:</strong> $C = \frac{I_L T}{V_r}$ where $T$ = full period</li>
+                    <li><strong>Full-wave:</strong> $C = \frac{I_L T}{2V_r}$ where $T$ = full period</li>
+                    <li>Choose standard capacitor value ≥ calculated value</li>
+                </ul>
+            </li>
+            <li><strong>Select diodes with appropriate PIV rating:</strong>
+                <ul>
+                    <li>PIV rating must exceed maximum reverse voltage by safety margin</li>
+                    <li><strong>Half-wave with capacitor:</strong> PIV ≈ 2$V_m$</li>
+                    <li><strong>Full-wave bridge:</strong> PIV = $V_m$</li>
+                    <li><strong>Full-wave center-tap:</strong> PIV = 2$V_m$</li>
+                </ul>
+            </li>
+            <li><strong>Add current limiting for battery charging applications:</strong>
+                <ul>
+                    <li>Series resistance to limit peak charging current</li>
+                    <li>Consider that current flows only when source > battery voltage</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>Essential Circuit Patterns to Memorize</h3>
+
+        <div class="two-column">
+            <div>
+                <div class="reference">
+                    <h4>Basic Clipper Configurations:</h4>
+                    <ul>
+                        <li><strong>Upper clipper:</strong> Diode cathode to positive voltage source</li>
+                        <li><strong>Lower clipper:</strong> Diode anode to negative voltage source</li>
+                        <li><strong>Dual clipper:</strong> Both upper and lower clippers in same circuit</li>
+                        <li><strong>Zener clipper:</strong> Zener diode provides both upper and lower clipping</li>
+                    </ul>
+                </div>
+
+                <div class="reference">
+                    <h4>Load Line Construction:</h4>
+                    <ul>
+                        <li><strong>Two-point method:</strong> Find voltage and current intercepts</li>
+                        <li><strong>Alternative points:</strong> If intercept is off-page, use $v_D = 2V, i_D = \frac{V_{SS} - 2V}{R}$</li>
+                        <li><strong>Multiple loads:</strong> Each different R value creates new load line slope</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div>
+                <div class="reference">
+                    <h4>Rectifier Configurations:</h4>
+                    <ul>
+                        <li><strong>Half-wave:</strong> 1 diode, simple but inefficient</li>
+                        <li><strong>Full-wave center-tap:</strong> 2 diodes, requires center-tapped transformer</li>
+                        <li><strong>Full-wave bridge:</strong> 4 diodes, no center-tap needed, most common</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        var spec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "width": 400,
+            "height": 400,
+            "layer": [
+                // --- Horizontal Axis Line ---
+                {
+                    "data": {
+                        "values": [{"x": -10, "x2": 10, "y": 0}]
+                    },
+                    "mark": {
+                        "type": "rule",
+                        "color": "black",
+                        "strokeWidth": 2
+                    },
+                    "encoding": {
+                        "x": {"field": "x", "type": "quantitative"},
+                        "x2": {"field": "x2"},
+                        "y": {"field": "y", "type": "quantitative"}
+                    }
+                },
+                // --- Vertical Axis Line ---
+                {
+                    "data": {
+                        "values": [{"y": -10, "y2": 10, "x": 0}]
+                    },
+                    "mark": {
+                        "type": "rule",
+                        "color": "black",
+                        "strokeWidth": 2
+                    },
+                    "encoding": {
+                        "y": {"field": "y", "type": "quantitative"},
+                        "y2": {"field": "y2"},
+                        "x": {"field": "x", "type": "quantitative"}
+                    }
+                },
+                // --- Ideal Diode Curve (Piecewise Line) ---
+                {
+                    "data": {
+                        "values": [
+                            {"Voltage": -10, "Current": 0},
+                            {"Voltage": 0, "Current": 0},
+                            {"Voltage": 0, "Current": 10}
+                        ]
+                    },
+                    "mark": {
+                        "type": "line",
+                        "point": true,
+                        "color": "red"
+                    },
+                    "encoding": {
+                        "x": {"field": "Voltage", "type": "quantitative"},
+                        "y": {"field": "Current", "type": "quantitative"}
+                    }
+                }
+            ],
+            // --- Shared Axis Config ---
+            "encoding": {
+                "x": {
+                    "type": "quantitative",
+                    "scale": {"domain": [-10, 10]},
+                    "axis": {
+                        "title": "Voltage (V)",
+                        "grid": true,
+                        "domain": false,
+                        "ticks": false,
+                        "labelFontSize": 12
+                    }
+                },
+                "y": {
+                    "type": "quantitative",
+                    "scale": {"domain": [-10, 10]},
+                    "axis": {
+                        "title": "Current (I)",
+                        "grid": true,
+                        "domain": false,
+                        "ticks": false,
+                        "labelFontSize": 12
+                    }
+                }
+            }
+        };
+        vegaEmbed('#vis', spec);
+    </script>
+
+</body>
+</html>

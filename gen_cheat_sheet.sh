@@ -35,6 +35,8 @@ while true; do
         --pdf-engine=xelatex \
         -V fontsize=${FONT}pt \
         -V geometry:margin=${MARGIN}in \
+        --variable graphics=true \
+        --variable image-scale=0.7
         -V geometry:landscape \
         -V twocolumn \
         -V columnsep=0.2in \
