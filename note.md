@@ -38,7 +38,7 @@ dev@DB-78GB094:~/electrical_notes$
 
 converting markdown files to PDFs, controlling margins and font size (cheat sheet printing)
 
-⚠️ Limitation: Pandoc won’t execute your <script> Vega chart — you’ll need to replace it with a static PNG/SVG. You can export the chart from Vega (in your browser, right-click → save as PNG/SVG) and embed in the Markdown as:
+Limitation: Pandoc won’t execute your <script> Vega chart — you’ll need to replace it with a static PNG/SVG. You can export the chart from Vega (in your browser, right-click → save as PNG/SVG) and embed in the Markdown as:
 
 ![Ideal Diode Curve](diode_curve.png)
 

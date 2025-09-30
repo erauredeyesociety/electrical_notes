@@ -29,7 +29,7 @@ math: true
 #### Ideal Diode Model
 $$
 \begin{cases}
-V_D = 0, & I_D \geq 0 \text{ (ON state)} \\
+V_D = 0, & I_D $\geq$ 0 \text{ (ON state)} \\
 I_D = 0, & V_D < 0 \text{ (OFF state)}
 \end{cases}
 $$
@@ -47,7 +47,7 @@ Where $V_{D0}$ is the forward voltage drop and $r_d$ is the dynamic resistance.
 #### Zener Diode Model
 $$
 \begin{cases}
-V_D = V_Z, & I_D < 0 \text{ and } |V_D| \geq V_Z \\
+V_D = V_Z, & I_D < 0 \text{ and } |V_D| $\geq$ V_Z \\
 I_D = 0, & |V_D| < V_Z
 \end{cases}
 $$
@@ -240,7 +240,7 @@ Where $f$ is the ripple frequency and $C$ is the filter capacitance.
 $$
 V_o = \begin{cases}
 V_{in} - V_D, & V_{in} > V_{ref} + V_D \\
-V_{ref}, & V_{in} \leq V_{ref} + V_D
+V_{ref}, & V_{in} $\leq$ V_{ref} + V_D
 \end{cases}
 $$
 
@@ -248,7 +248,7 @@ $$
 $$
 V_o = \begin{cases}
 V_{ref} + V_D, & V_{in} > V_{ref} + V_D \\
-V_{in}, & V_{in} \leq V_{ref} + V_D
+V_{in}, & V_{in} $\leq$ V_{ref} + V_D
 \end{cases}
 $$
 

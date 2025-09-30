@@ -57,7 +57,7 @@ Where $V_\gamma$ is the threshold (\approx0.7 V for silicon) and $R_D$ is the di
 
 * **Zener Diode (Reverse Breakdown)**:
 $$
-V_Z \approx \text{constant (e.g., } 5.1 \, \text{V)} \quad \text{for } I_Z \geq I_{Z,\text{min}}
+V_Z \approx \text{constant (e.g., } 5.1 \, \text{V)} \quad \text{for } I_Z $\geq$ I_{Z,\text{min}}
 $$
 
 ---
@@ -184,7 +184,7 @@ $$
 V_o =
 \begin{cases}
 0, & V_{in} > V_\gamma \quad (\text{positive clip}) \\
-V_{in}, & V_{in} \leq V_\gamma
+V_{in}, & V_{in} $\leq$ V_\gamma
 \end{cases}
 $$
 
