@@ -1,0 +1,1 @@
+would you please divide this documentation up into modular smaller files respective to each high level topic and methodology, such as how to convert to s domain and get a differential equation, then the full process to go from time domain to s domain to diffeq to laplace. then the inverse of thos processes and more?

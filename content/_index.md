@@ -8,6 +8,8 @@ toc: false
 
   {{< card link="ee_302" title="EE302 - Electronic Devices and Circuits" icon="book-open" >}}
 
+  {{< card link="cs_420" title="CS420 - Operating Systems" icon="book-open" >}}
+
   {{< card link="about" title="About" icon="user" >}}
 {{< /cards >}}
 

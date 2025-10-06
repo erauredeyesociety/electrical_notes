@@ -33,7 +33,7 @@ math: true
  * When a Zener diode is connected in reverse (cathode to positive), and the voltage across it exceeds the Zener voltage, it clamps the voltage across itself to approximately the Zener voltage, and conducts enough current to maintain that voltage (assuming a current-limiting resistor is present).
     * This only works in reverse bias
     * You must use a current-limiting resistor in series, or the diode can burn out
-    * The Zener voltage is not perfectly exact — it may vary slightly (e.g., 5.1 V $\pm$ 5%)
+    * The Zener voltage is not perfectly exact — it may vary slightly (e.g., 5.1 V \pm 5%)
 
 **Voltage Divider** - The larger the resistor, the greater the voltage drop across it. The voltage divider principle applies specifically to components that are part of a single, closed series loop, not to two components in series but on different loops.
 
@@ -231,7 +231,7 @@ Clamp circuits add a DC component to an AC input waveform so that the positive o
 **Quick Reference Values:**
 * Silicon diode forward drop: 0.6-0.7V
 * $V_T$ at room temperature: 26 mV
-* Zener voltage tolerance: typically $\pm$5%
+* Zener voltage tolerance: typically \pm5%
 
 **Circuit Analysis Shortcuts:**
 
@@ -305,7 +305,7 @@ Based on textbook principles for analyzing circuits containing nonlinear element
 3. **Design smoothing capacitor (if required):**
    * **Half-wave**: $C = \frac{I_L T}{V_r}$ where $T$ = full period
    * **Full-wave**: $C = \frac{I_L T}{2V_r}$ where $T$ = full period
-   * Choose standard capacitor value $\geq$ calculated value
+   * Choose standard capacitor value \geq calculated value
 
 4. **Select diodes with appropriate PIV rating:**
    * PIV rating must exceed maximum reverse voltage by safety margin

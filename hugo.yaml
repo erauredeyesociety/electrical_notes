@@ -51,3 +51,6 @@ params:
   # Use KaTeX for math rendering
   math:
     engine: katex
+
+ignoreFiles:
+  - "content/.*\\.html$"  # Only ignore HTML in content directory

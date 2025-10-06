@@ -92,7 +92,7 @@ Convert $F(s)$ back to $f(t)$ using **Partial Fraction Expansion (PFE)**.
 
 ### Terminology
 - **PRF (Proper Rational Function)**: Order of numerator < order of denominator
-- **IRF (Improper Rational Function)**: Order of numerator $\geq$ order of denominator
+- **IRF (Improper Rational Function)**: Order of numerator \geq order of denominator
 
 ### General Form After PFE
 $$F(s) = \frac{k_1}{s-p_1} + \frac{k_2}{s-p_2} + \cdots + \frac{k_n}{s-p_n}$$
@@ -233,7 +233,7 @@ And so on with higher derivatives.
 
 ### Case 4: Improper Rational Functions (IRF)
 
-**If numerator order $\geq$ denominator order**:
+**If numerator order \geq denominator order**:
 
 1. **Perform long division** first
 2. Write as: $F(s) = Q(s) + \frac{R(s)}{D(s)}$
@@ -412,7 +412,7 @@ Solution:
 
 **Steps**:
 1. **Draw circuit for $t < 0$**: Find initial conditions $i_L(0^-), v_C(0^-)$
-2. **Draw s-domain circuit for $t $\geq$ 0$**:
+2. **Draw s-domain circuit for $t \geq 0$**:
    - Replace $R$ with $R$
    - Replace $L$ with $sL$ and series voltage source $Li(0^-)$
    - Replace $C$ with $\frac{1}{sC}$ and series voltage source $\frac{v(0^-)}{s}$
@@ -426,7 +426,7 @@ Solution:
 
 Given: $R = 10\Omega$, $L = 1H$, $i_L(0^-) = 0.5A$, step input $v_s(t) = 5u(t)V$
 
-Find: $i_L(t)$ for $t $\geq$ 0$
+Find: $i_L(t)$ for $t \geq 0$
 
 Solution:
 1. Initial condition: $i_L(0^-) = 0.5A$
