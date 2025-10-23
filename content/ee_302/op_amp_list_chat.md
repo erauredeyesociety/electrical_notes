@@ -15,7 +15,7 @@ An operational amplifier (op-amp) is a high-gain differential amplifier that amp
 ### Fundamental Analysis Principle: Summing-Point Constraint
 
 Due to infinite open-loop gain and negative feedback:
-- **v+ ≈ v-** (differential input voltage ≈ 0)
+- **v+ \approx v-** (differential input voltage \approx 0)
 - **i+ = i- = 0** (no current flows into input terminals)
 
 ### General Output Equation
@@ -87,7 +87,7 @@ $$Z_{in} \approx \infty$$ (very high, typically MΩ range)
 $$Z_{out} \approx 0$$
 
 ### Characteristics
-- Always has gain ≥ 1
+- Always has gain \geq 1
 - Very high input impedance
 - No phase inversion
 - Ideal for buffering high-impedance sources
@@ -390,7 +390,7 @@ Where gm is transconductance (typically adjustable)
 Output voltage is limited by supply voltages:
 $$V_{EE} < v_o < V_{CC}$$
 
-Typically: vo(max) ≈ VCC - 1V to 2V (depending on op-amp type)
+Typically: vo(max) \approx VCC - 1V to 2V (depending on op-amp type)
 
 ### Slew Rate
 Maximum rate of change of output voltage:

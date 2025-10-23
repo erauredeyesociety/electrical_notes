@@ -24,7 +24,7 @@ graph TD
 
 ### Problem Statement
 
-Find the voltage across the capacitor v_C(t) for t ≥ 0.
+Find the voltage across the capacitor v_C(t) for t \geq 0.
 
 **Given:**
 - v_s(t) = 10u(t) V
@@ -43,7 +43,7 @@ v_s(t) = 10u(t) V ----[R=100Ω]----[C=10µF]---- ground
 **Component transformations:**
 1. Voltage source: v_s(t) = 10u(t) → V_s(s) = 10/s V
 2. Resistor: R = 100Ω → R = 100Ω (unchanged)
-3. Capacitor: C = 10µF = 10×10⁻⁶ F → Z_C = 1/(sC) = 1/(s·10×10⁻⁶) = 10⁶/(10s) = 10⁵/s Ω
+3. Capacitor: C = 10µF = 10\times10-⁶ F → Z_C = 1/(sC) = 1/(s·10\times10-⁶) = 10⁶/(10s) = 10⁵/s Ω
 
 **s-Domain circuit (no initial conditions yet):**
 ```
@@ -99,7 +99,7 @@ And then inverse transformed to find v_C(t).
 
 ### Problem Statement
 
-Find the current i(t) for t ≥ 0.
+Find the current i(t) for t \geq 0.
 
 **Given:**
 - v_s(t) = 5e^(-2t)u(t) V
@@ -188,7 +188,7 @@ This would be solved using partial fractions, then inverse transformed to find i
 
 ### Problem Statement
 
-Find the voltage v(t) across all elements for t ≥ 0.
+Find the voltage v(t) across all elements for t \geq 0.
 
 **Given:**
 - i_s(t) = 4u(t) A

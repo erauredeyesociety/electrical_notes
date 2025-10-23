@@ -33,7 +33,7 @@ These rules convert s-domain terms back to time-domain:
 | s³V(s) | d³v(t)/dt³ | Third derivative |
 | V(s)/s | ∫v(t)dt | Integration |
 | Constant C | Constant C | Unchanged |
-| V_s(s) | v_s(t) = ℒ⁻¹{V_s(s)} | Inverse transform source |
+| V_s(s) | v_s(t) = ℒ-¹{V_s(s)} | Inverse transform source |
 
 **Important:** Initial conditions are assumed to be handled separately (they appear as additional terms in s-domain).
 

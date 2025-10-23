@@ -80,7 +80,7 @@ Where:
    - Determine the **natural response** modes
    - Each pole creates an exponential term in the output
    - Real pole at s = -α → term like: k·e^(-αt)
-   - Complex poles at s = -α ± jω_d → damped sinusoid: k·e^(-αt)·cos(ω_d·t + φ)
+   - Complex poles at s = -α \pm jω_d → damped sinusoid: k·e^(-αt)·cos(ω_d·t + φ)
 
 3. **In differential equations:**
    - Poles come from the **OUTPUT side** (left side) of the ODE
@@ -370,10 +370,10 @@ If D(s) = s² + 4s + 13
 Then: s² + 4s + 13 = 0
 
 Using quadratic formula:
-s = (-4 ± √(16 - 52)) / 2
-s = (-4 ± √(-36)) / 2
-s = (-4 ± j6) / 2
-s = -2 ± j3
+s = (-4 \pm √(16 - 52)) / 2
+s = (-4 \pm √(-36)) / 2
+s = (-4 \pm j6) / 2
+s = -2 \pm j3
 
 Poles: s = -2 + j3, s = -2 - j3 (complex conjugate pair)
 ```
@@ -422,12 +422,12 @@ flowchart TD
    - Time response: k·e^(+αt) → growing exponential
    - **UNSTABLE**
 
-3. **Complex conjugate pair (s = -α ± jω_d)**
+3. **Complex conjugate pair (s = -α \pm jω_d)**
    - Time response: k·e^(-αt)·cos(ω_d·t + φ)
    - Damped oscillation if α > 0
    - Growing oscillation if α < 0 (unstable)
 
-4. **Imaginary poles (s = ±jω_0)**
+4. **Imaginary poles (s = \pmjω_0)**
    - Time response: k·cos(ω_0·t + φ)
    - Sustained oscillation (marginally stable)
 
@@ -632,7 +632,7 @@ v_out(t) = k_0·e^(p_0·t) + k_1·e^(p_1·t) + k_2·e^(p_2·t) + ...
 
 ### Special Cases
 
-**Complex Conjugate Poles (s = -α ± jω_d):**
+**Complex Conjugate Poles (s = -α \pm jω_d):**
 
 If k and k* are conjugate residues:
 ```

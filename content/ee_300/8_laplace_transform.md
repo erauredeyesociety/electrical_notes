@@ -29,9 +29,9 @@ $$\mathcal{L}\left\{\frac{df(t)}{dt}\right\} = sF(s) - f(0^-)$$
 
 Where:
 - F(s) = Laplace transform of f(t)
-- f(0⁻) = initial value at t = 0⁻
+- f(0-) = initial value at t = 0-
 
-**For t > 0 problems with f(0⁻) = f(0⁺):**
+**For t > 0 problems with f(0-) = f(0+):**
 $$\mathcal{L}\left\{\frac{df(t)}{dt}\right\} = sF(s) - f(0)$$
 
 ### Differentiation Property (Second Derivative)

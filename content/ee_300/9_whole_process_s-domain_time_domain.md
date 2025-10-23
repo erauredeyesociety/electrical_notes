@@ -25,7 +25,7 @@ graph TD
 
 ### Problem Statement
 
-Find the voltage across the capacitor v_C(t) for t ≥ 0.
+Find the voltage across the capacitor v_C(t) for t \geq 0.
 
 **Given:**
 - v_s(t) = 10u(t) V
@@ -66,7 +66,7 @@ $$v_s(t) = 10^{-3}\frac{dv_C(t)}{dt} + v_C(t)$$
 Rearrange to standard form:
 $$10^{-3}\frac{dv_C(t)}{dt} + v_C(t) = v_s(t)$$
 
-Divide by 10⁻³:
+Divide by 10-³:
 $$\frac{dv_C(t)}{dt} + 1000v_C(t) = 1000v_s(t)$$
 
 For v_s(t) = 10u(t):
@@ -106,7 +106,7 @@ $$V_C(s) = \frac{10000}{s(s+1000)}$$
 
 ### Problem Statement
 
-Find the current i(t) for t ≥ 0.
+Find the current i(t) for t \geq 0.
 
 **Given:**
 - v_s(t) = 20u(t) V
@@ -186,7 +186,7 @@ This is simple: $i(t) = 2u(t)$ A
 
 ### Problem Statement
 
-Find the voltage v(t) across the parallel combination for t ≥ 0.
+Find the voltage v(t) across the parallel combination for t \geq 0.
 
 **Given:**
 - i_s(t) = 2u(t) A
@@ -260,7 +260,7 @@ $$V(s) = \frac{8}{s(s+1)}$$
 
 ### Problem Statement
 
-Find the current i(t) for t ≥ 0.
+Find the current i(t) for t \geq 0.
 
 **Given:**
 - v_s(t) = 10u(t) V

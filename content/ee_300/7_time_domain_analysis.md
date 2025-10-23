@@ -112,7 +112,7 @@ $$v_s(t) = 10^{-3}\frac{dv_C(t)}{dt} + v_C(t)$$
 
 $$10^{-3}\frac{dv_C(t)}{dt} + v_C(t) = v_s(t)$$
 
-Divide by 10⁻³:
+Divide by 10-³:
 $$\frac{dv_C(t)}{dt} + 1000v_C(t) = 1000v_s(t)$$
 
 For v_s(t) = 10u(t):

@@ -47,7 +47,7 @@ An **operational amplifier (op-amp)** is a high-gain differential amplifier desi
 - **Noninverting Input (+)**: Positive input terminal
 - **Inverting Input (-)**: Negative input terminal
 - **Output**: Amplified signal output
-- **Power Supplies**: Typically dual supplies (±15V, ±12V, or ±5V), though omitted in circuit diagrams for clarity
+- **Power Supplies**: Typically dual supplies (\pm15V, \pm12V, or \pm5V), though omitted in circuit diagrams for clarity
 
 ### 1.3 Basic Operating Principle
 
@@ -601,8 +601,8 @@ $$A_v|_{\text{dB}} = 20\log_{10}|A_v|$$
 **Key Relationships:**
 - **Unity gain** (gain = 1): 0 dB
 - **Half-power point** (gain = 0.707): -3 dB
-- **Decade increase** (gain ×10): +20 dB
-- **Double gain** (gain ×2): +6 dB
+- **Decade increase** (gain \times10): +20 dB
+- **Double gain** (gain \times2): +6 dB
 
 **Advantages of dB:**
 - Multiplication becomes addition: $A_{total} = A_1 \times A_2$ → $A_{dB} = A_{1,dB} + A_{2,dB}$
@@ -855,7 +855,7 @@ Uses two op-amps for precision full-wave rectification without center-tapped tra
 ```
 v₁ ---|+)|\
          | \
-         |  >---- vₒ (±Vsat)
+         |  >---- vₒ (\pmVsat)
          | /
 v₂ ---|-)/ 
 ```
@@ -1082,8 +1082,8 @@ $f_c = \frac{1}{2\pi RC}$
 | Slew rate | SR | 0.5 | V/μs |
 | Gain-bandwidth product | GBW | 1 | MHz |
 | CMRR | — | 90 | dB |
-| Power supply voltage | $V_{CC}, V_{EE}$ | ±15 | V |
-| Output voltage swing | $V_{o(max)}$ | ±14 | V |
+| Power supply voltage | $V_{CC}, V_{EE}$ | \pm15 | V |
+| Output voltage swing | $V_{o(max)}$ | \pm14 | V |
 | Quiescent current | $I_Q$ | 1.7 | mA |
 
 ### 11.3 Typical Op-Amp Families
@@ -1146,7 +1146,7 @@ $f_c = \frac{1}{2\pi RC}$
 **Common ratios for gain:**
 - Gain of 2: $R_2/R_1 = 1$ (10k/10k for noninverting)
 - Gain of 5: $R_2/R_1 = 4$ (82k/22k = 3.73, close to 4)
-- Gain of 10: $R_2/R_1 = 9$ (100k/11k ≈ 9)
+- Gain of 10: $R_2/R_1 = 9$ (100k/11k \approx 9)
 - Gain of 11: $R_2/R_1 = 10$ (100k/10k)
 
 ### 11.8 Decibel Reference Table
@@ -1170,7 +1170,7 @@ $f_c = \frac{1}{2\pi RC}$
 4. Required: $-5 = -\frac{R_2}{10k}$
 5. Therefore: $R_2 = 50k\Omega$ ✓
 6. Check bandwidth: If $f_t = 1MHz$, then $f_{CL} = \frac{1MHz}{5} = 200kHz$ ✓
-7. Check saturation: For ±15V supplies, $V_{o,max} = \pm 14V$, so $V_{in,max} = \frac{14V}{5} = 2.8V$ ✓
+7. Check saturation: For \pm15V supplies, $V_{o,max} = \pm 14V$, so $V_{in,max} = \frac{14V}{5} = 2.8V$ ✓
 
 **Final Design:**
 - $R_1 = 10k\Omega$
