@@ -122,7 +122,7 @@ The Network Function $H(s)$ is the ratio of output to input in the S-domain, ass
 | Network Function | $H(s) = V_{out}(s)/V_{in}(s)$ or $I_{out}(s)/I_{in}(s)$ (ZSR ratio) |
 | Poles | $D(s) = 0$ (Roots of denominator) |
 | Zeros | $N(s) = 0$ (Roots of numerator) |
-| Pole-Zero Plot | Plot poles (×) and zeros (○) in complex S-plane |
+| Pole-Zero Plot | Plot poles (\times) and zeros (○) in complex S-plane |
 
 ---
 
@@ -332,8 +332,8 @@ The frequency response $H(j\omega)$ describes how a circuit responds to sinusoid
    - For first-order low-pass: $\alpha$ occurs where $|H(j\omega)| = |H(j0)|/\sqrt{2}$ (–3 dB point)
    - For first-order high-pass: $\alpha$ occurs where phase $= 45°$
 3. **Verify Roll-off Rate:** 
-   - First-order: ±20 dB/decade
-   - Second-order: ±40 dB/decade
+   - First-order: \pm20 dB/decade
+   - Second-order: \pm40 dB/decade
 
 #### Process: Design Circuit for Specified Frequency Response
 
@@ -371,7 +371,7 @@ Network design is the realization of a given $H(s)$ (transfer function) using av
 1. **Observe H(s) Expression:** Determine the highest order of $s$ in the numerator and denominator, and check if a gain is needed (e.g., if the magnitude of the numerator coefficients is larger than the corresponding denominator coefficients)
 2. **Normalize/Rearrange:** Divide the highest order of $s$ for every term in the numerator and denominator to form impedances. Rearrange the expression to match a known prototype (e.g., voltage divider, Op Amp configuration)
 3. **Determine Topology (Prototype):** Choose the basic circuit type:
-   - **Voltage Divider:** Useful if numerator order $\leq$ denominator order and low gain is required
+   - **Voltage Divider:** Useful if numerator order \leq denominator order and low gain is required
    - **Op Amp Circuits (Inverting/Non-Inverting):** Necessary if gain is needed or if high-order impedance needs to be formed by cascading (using buffers). Non-inverting configuration is chosen for positive gain
    - **Cascade Low-Order Circuits:** Use Op Amps as buffers (voltage followers) to isolate sections and multiply transfer functions ($H(s) = H_1(s) \cdot H_2(s) \dots$)
 4. **Assign Components:** Replace impedances (Z) with R, $sL$, or $1/sC$ as needed. Use capacitors over inductors where possible, as inductors are heavy and expensive
@@ -679,7 +679,7 @@ The location of poles and zeros in the S-plane directly determines the circuit's
 #### Process: Design First-Order Filter from Bode Plot Specifications
 
 1. **Read DC Gain (Low-Frequency):** For low-pass, read $|H(j0)|$ from low-frequency asymptote. For high-pass, read $|H(j\infty)|$ from high-frequency asymptote. Convert from dB: $K = 10^{(\text{dB}/20)}$
-2. **Identify Cutoff Frequency:** Find frequency where magnitude drops by 3 dB from passband (or where phase = ±45°). This is $\alpha$ or $\omega_c$
+2. **Identify Cutoff Frequency:** Find frequency where magnitude drops by 3 dB from passband (or where phase = \pm45°). This is $\alpha$ or $\omega_c$
 3. **Determine Phase Shift:** Read phase at frequency of interest from phase plot
 4. **Write $H(s)$:**
    - Low-pass: $H(s) = K\alpha/(s + \alpha)$
@@ -701,7 +701,7 @@ The location of poles and zeros in the S-plane directly determines the circuit's
 | Linear to dB | $\text{dB} = 20\log_{10}\|H\|$ |
 | –3 dB Point | $\|H(j\omega_c)\| = \|H_{max}\|/\sqrt{2}$ (cutoff frequency) |
 | Phase at Cutoff | $\angle H(j\alpha) = \pm 45°$ (first-order) |
-| Roll-off Rate | ±20 dB/decade (first-order), ±40 dB/decade (second-order) |
+| Roll-off Rate | \pm20 dB/decade (first-order), \pm40 dB/decade (second-order) |
 
 ---
 
@@ -724,7 +724,7 @@ Components must have practical, commercially available values. Standard resistor
 1. **Design with Arbitrary Values:** Complete initial design without worrying about standard values
 2. **Apply Scaling:** Use frequency and impedance scaling to move components into realizable ranges
 3. **Round to Standard Values:** Select nearest E12, E24, or E96 values
-4. **Verify Performance:** Check that rounded values still meet specifications (poles, zeros, gain within ±10% if required)
+4. **Verify Performance:** Check that rounded values still meet specifications (poles, zeros, gain within \pm10% if required)
 5. **Avoid Extreme Values:** Stay within practical ranges:
    - Resistors: 10 Ω to 10 MΩ
    - Capacitors: 1 pF to 1000 μF
@@ -734,7 +734,7 @@ Components must have practical, commercially available values. Standard resistor
 
 | Check List | Theory / Equations |
 |:-----------|:-------------------|
-| Standard Series | E12 (±10%), E24 (±5%), E96 (±1%) |
+| Standard Series | E12 (\pm10%), E24 (\pm5%), E96 (\pm1%) |
 | Practical R Range | 10 Ω to 10 MΩ |
 | Practical C Range | 1 pF to 1000 μF |
 | Prefer Capacitors | Avoid inductors when possible |
@@ -753,7 +753,7 @@ Components must have practical, commercially available values. Standard resistor
 | $t$ | $1/s^2$ | Ramp |
 | $t^n$ | $n!/s^{n+1}$ | Polynomial |
 | $e^{at}$ | $1/(s-a)$ | Exponential |
-| $te^{at}$ | $1/(s-a)^2$ | Time × exponential |
+| $te^{at}$ | $1/(s-a)^2$ | Time \times exponential |
 | $\cos(\omega t)$ | $s/(s^2 + \omega^2)$ | Cosine |
 | $\sin(\omega t)$ | $\omega/(s^2 + \omega^2)$ | Sine |
 | $e^{at}\cos(\omega t)$ | $(s-a)/[(s-a)^2 + \omega^2]$ | Damped cosine |
