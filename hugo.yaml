@@ -19,6 +19,10 @@ markup:
   highlight:
     noClasses: false
 
+# Add summary configuration to prevent index out of range errors
+summaryLength: 70  # Default is 70 words
+hasCJKLanguage: false  # Set to true if using Chinese/Japanese/Korean
+
 menu:
   main:
     - name: About

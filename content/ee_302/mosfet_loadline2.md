@@ -23,7 +23,7 @@
 
 **Voltage Divider Bias:**
 ```
-VG = VDD × R2/(R1 + R2)
+VG = VDD \times R2/(R1 + R2)
 ```
 
 **Fixed Bias:**
@@ -73,7 +73,7 @@ C = (Kn/2)(VG - Vth)²
 ```
 
 ```
-iD = [-B ± √(B² - 4AC)] / (2A)
+iD = [-B \pm √(B² - 4AC)] / (2A)
 ```
 
 ---
@@ -107,7 +107,7 @@ VDSQ = VDD - IDQ(RD + RS)
 
 **Check:**
 ```
-VDSQ ≥ (vGSQ - Vth)  ✓ = Saturation (good for amplifiers)
+VDSQ \geq (vGSQ - Vth)  ✓ = Saturation (good for amplifiers)
                      ✗ = Triode (recalculate!)
 ```
 
@@ -146,7 +146,7 @@ iD = (VDD - vDS)/(RD + RS)
 
 **If RS is bypassed by capacitor:**
 ```
-Rac = RD || RL = (RD × RL)/(RD + RL)
+Rac = RD || RL = (RD \times RL)/(RD + RL)
 ```
 
 **If no external load:**
@@ -174,7 +174,7 @@ Include RS in small-signal analysis (different gain formula)
 
 **Point 2:** Choose iD = 0
 ```
-vDS = VDSQ + IDQ × Rac
+vDS = VDSQ + IDQ \times Rac
 Coordinates: (VDSQ + IDQ·Rac, 0)
 ```
 
@@ -206,7 +206,7 @@ gm = √(2·Kn·IDQ)
 
 **Common-source with RS bypassed:**
 ```
-Av = -gm × Rac = -gm(RD || RL)
+Av = -gm \times Rac = -gm(RD || RL)
 ```
 
 **Common-source with RS NOT bypassed:**
@@ -240,7 +240,7 @@ Max swing = min(Δv(cutoff), Δv(triode))
 
 **Peak-to-peak swing:**
 ```
-vpp ≈ 2 × (smaller distance)
+vpp \approx 2 \times (smaller distance)
 ```
 
 ---
@@ -256,7 +256,7 @@ vpp ≈ 2 × (smaller distance)
 | **AC load resistance** | Rac = RD‖RL |
 | **Transconductance** | gm = Kn(vGS-Vth) |
 | **Voltage gain** | Av = -gm·Rac |
-| **Saturation check** | vDS ≥ vGS - Vth |
+| **Saturation check** | vDS \geq vGS - Vth |
 
 ---
 
@@ -318,7 +318,7 @@ Before submitting answer, verify:
 2. **Find IDQ** (solve: iD = (Kn/2)(VG-iD·RS-Vth)²)
 3. **Find vGSQ** (= VG - IDQ·RS)
 4. **Find VDSQ** (= VDD - IDQ(RD+RS))
-5. **Check saturation** (VDSQ ≥ vGSQ-Vth)
+5. **Check saturation** (VDSQ \geq vGSQ-Vth)
 6. **DC load line** (plot (VDD,0) and (0,VDD/(RD+RS)))
 7. **Find Rac** (= RD‖RL if RS bypassed)
 8. **AC load line** (through Q-point, slope -1/Rac)
@@ -334,14 +334,14 @@ Before submitting answer, verify:
 ```mermaid
 flowchart TD
     A[START] --> B{Do I have vGS?}
-    B -->|YES| C[Use: iD = Kn/2 × vGS-Vth²]
+    B -->|YES| C[Use: iD = Kn/2 \times vGS-Vth²]
     B -->|NO| D[Find VG Step 2A]
-    D --> E[Solve quadratic:<br/>vGS = VG - iD·RS<br/>iD = Kn/2 × vGS-Vth²]
+    D --> E[Solve quadratic:<br/>vGS = VG - iD·RS<br/>iD = Kn/2 \times vGS-Vth²]
     C --> F[Now I have: IDQ]
     E --> F
     F --> G[Find vGSQ: VG - IDQ·RS]
     G --> H[Find VDSQ: VDD - IDQRD+RS]
-    H --> I{Verify:<br/>VDSQ ≥ vGSQ - Vth?}
+    H --> I{Verify:<br/>VDSQ \geq vGSQ - Vth?}
     I -->|YES| J[Continue to AC Analysis]
     I -->|NO| K[MOSFET in triode!<br/>Recalculate]
 ```

@@ -356,8 +356,8 @@ $$S_x^y = \frac{\partial y/y}{\partial x/x} = \frac{x}{y}\frac{\partial y}{\part
 ### Temperature and Aging Effects
 
 **Component Drifts:**
-- Resistors: ±100-500 ppm/°C
-- Capacitors: Ceramic: high variation, Film: ±50-200 ppm/°C
+- Resistors: \pm100-500 ppm/°C
+- Capacitors: Ceramic: high variation, Film: \pm50-200 ppm/°C
 - Active components: Op-amp gain-bandwidth product variations
 
 **Design for Robustness:**
@@ -371,11 +371,11 @@ $$S_x^y = \frac{\partial y/y}{\partial x/x} = \frac{x}{y}\frac{\partial y}{\part
 
 **Gain-Bandwidth Product:**
 $$GBW \geq 100 \cdot f_c \cdot Q \cdot K$$
-- **Example:** For $f_c = 10$ kHz, $Q = 5$, $K = 10$: GBW ≥ 50 MHz
+- **Example:** For $f_c = 10$ kHz, $Q = 5$, $K = 10$: GBW \geq 50 MHz
 
 **Slew Rate:**
 $$SR \geq 2\pi f_{max} V_{peak}$$
-- **Example:** For 20 kHz sine wave at 10V peak: SR ≥ 1.26 V/μs
+- **Example:** For 20 kHz sine wave at 10V peak: SR \geq 1.26 V/μs
 
 **Other Considerations:**
 - Input impedance (affects loading)

@@ -28,7 +28,7 @@ The intersection of the load line with the device characteristics gives the oper
 
 ### Cutoff Region
 - **Condition**: vGS < Vth (threshold voltage)
-- **Characteristic**: iD ≈ 0
+- **Characteristic**: iD \approx 0
 - **Use**: Switch OFF state
 
 ### Triode (Linear/Ohmic) Region
@@ -38,7 +38,7 @@ The intersection of the load line with the device characteristics gives the oper
 - **Use**: Switch ON state, analog switches
 
 ### Saturation (Active) Region
-- **Condition**: vGS > Vth AND vDS ≥ (vGS - Vth)
+- **Condition**: vGS > Vth AND vDS \geq (vGS - Vth)
 - **Equation**: iD = (Kn/2)(vGS - Vth)² (1 + λvDS)
 - **Characteristic**: iD is relatively independent of vDS
 - **Use**: Amplifiers (most common for analog circuits)
@@ -116,7 +116,7 @@ Slope = -1/(RD || RL)
 
 Where RD || RL means RD in parallel with RL:
 ```
-RD || RL = (RD × RL)/(RD + RL)
+RD || RL = (RD \times RL)/(RD + RL)
 ```
 
 **AC load line passes through Q-point** with slope steeper than DC load line (if RL is present).
@@ -206,7 +206,7 @@ The AC load line differs from the DC load line when:
 
 **Step 2: Determine AC Load Resistance**
 ```
-Rac = RD || RL = (RD × RL)/(RD + RL)
+Rac = RD || RL = (RD \times RL)/(RD + RL)
 ```
 
 If only RD is present (no external load):
@@ -250,7 +250,7 @@ Given: Q-point at (10V, 4mA), RD = 2kΩ, RL = 3kΩ, RS bypassed
 
 **AC Load Resistance:**
 ```
-Rac = (2kΩ × 3kΩ)/(2kΩ + 3kΩ) = 6kΩ/5kΩ = 1.2kΩ
+Rac = (2kΩ \times 3kΩ)/(2kΩ + 3kΩ) = 6kΩ/5kΩ = 1.2kΩ
 ```
 
 **AC Load Line Slope:**
@@ -283,8 +283,8 @@ Plot: (0V, 12.33mA) and (10V, 4mA)
 
 **For Voltage-Divider Bias:**
 ```
-VG = VDD × (R2/(R1 + R2))
-VS = iD × RS
+VG = VDD \times (R2/(R1 + R2))
+VS = iD \times RS
 vGS = VG - VS
 ```
 
@@ -295,7 +295,7 @@ vGS = VGG (if separate gate supply)
 
 **For Self-Bias:**
 ```
-vGS = -iD × RS (for n-channel with source resistor)
+vGS = -iD \times RS (for n-channel with source resistor)
 ```
 
 **Step 3: Determine Drain Current (iD)**
@@ -333,7 +333,7 @@ vDS = VDD - iD(RD + RS)
 
 Check that MOSFET is in saturation:
 ```
-vDS ≥ (vGS - Vth)
+vDS \geq (vGS - Vth)
 ```
 
 If not satisfied, MOSFET is in triode region—recalculate using triode equations.
@@ -371,7 +371,7 @@ Often ro >> RD, so it's approximated as infinite.
 
 **For common-source with bypassed RS:**
 ```
-Av = -gm(RD || RL || ro) ≈ -gm(RD || RL)
+Av = -gm(RD || RL || ro) \approx -gm(RD || RL)
 ```
 
 **For common-source without bypass:**
@@ -406,8 +406,8 @@ The Q-point (quiescent point or operating point) determines:
 
 **For maximum output swing:**
 - Place Q-point at the center of the DC load line
-- IDQ ≈ VDD/[2(RD + RS)]
-- VDSQ ≈ VDD/2
+- IDQ \approx VDD/[2(RD + RS)]
+- VDSQ \approx VDD/2
 
 **For low distortion:**
 - Ensure sufficient distance from cutoff (vGS > Vth)
@@ -436,7 +436,7 @@ For voltage-divider bias with RS:
 
 **Step 1:** Calculate VG
 ```
-VG = VDD × R2/(R1 + R2)
+VG = VDD \times R2/(R1 + R2)
 ```
 
 **Step 2:** Set up equations
@@ -457,7 +457,7 @@ Expand and rearrange into standard quadratic form:
 
 **Step 4:** Use quadratic formula
 ```
-iD = {[1 + Kn·RS(VG - Vth)] ± √{[1 + Kn·RS(VG - Vth)]² - 2Kn·RS²(VG - Vth)²}} / (Kn·RS²)
+iD = {[1 + Kn·RS(VG - Vth)] \pm √{[1 + Kn·RS(VG - Vth)]² - 2Kn·RS²(VG - Vth)²}} / (Kn·RS²)
 ```
 
 Choose the physically meaningful solution (positive, reasonable value).
@@ -522,7 +522,7 @@ vDS = VDD - iD·RD
 **Circuit:**
 - RG from gate to ground
 - RS from source to ground
-- Gate current ≈ 0, so VG ≈ 0
+- Gate current \approx 0, so VG \approx 0
 
 **DC Analysis:**
 ```
@@ -577,19 +577,19 @@ vDS = VDD = 15V
 ```
 IDQ = (Kn/2)(vGS - Vth)²
 IDQ = (0.5 mA/V²/2)(4V - 2V)²
-IDQ = 0.25 × 4 = 1 mA
+IDQ = 0.25 \times 4 = 1 mA
 ```
 
 ```
 VDSQ = VDD - IDQ(RD + RS)
-VDSQ = 15V - 1mA × 4kΩ
+VDSQ = 15V - 1mA \times 4kΩ
 VDSQ = 15V - 4V = 11V
 ```
 
 **c) Operating Region Check:**
 ```
 vGS - Vth = 4V - 2V = 2V
-vDS = 11V ≥ 2V ✓
+vDS = 11V \geq 2V ✓
 ```
 
 MOSFET is in saturation (correct for amplifier operation).
@@ -617,8 +617,8 @@ d) Plot DC load line and Q-point
 
 **a) Gate Voltage:**
 ```
-VG = VDD × R2/(R1 + R2)
-VG = 20V × 50kΩ/150kΩ
+VG = VDD \times R2/(R1 + R2)
+VG = 20V \times 50kΩ/150kΩ
 VG = 6.67V
 ```
 
@@ -640,9 +640,9 @@ iD = 13.365 - 10.34iD + 2iD²
 
 Quadratic formula:
 ```
-iD = [11.34 ± √(128.6 - 106.9)]/4
-iD = [11.34 ± √21.7]/4
-iD = [11.34 ± 4.66]/4
+iD = [11.34 \pm √(128.6 - 106.9)]/4
+iD = [11.34 \pm √21.7]/4
+iD = [11.34 \pm 4.66]/4
 ```
 
 Two solutions: iD = 4.0 mA or iD = 1.67 mA
@@ -659,7 +659,7 @@ vGSQ = 3.33V
 **c) Drain-Source Voltage:**
 ```
 VDSQ = VDD - IDQ(RD + RS)
-VDSQ = 20V - 1.67mA × 6kΩ
+VDSQ = 20V - 1.67mA \times 6kΩ
 VDSQ = 20V - 10V = 10V
 ```
 
@@ -691,7 +691,7 @@ e) Maximum output voltage swing
 
 **a) AC Load Resistance:**
 ```
-Rac = RD || RL = (4kΩ × 8kΩ)/(4kΩ + 8kΩ)
+Rac = RD || RL = (4kΩ \times 8kΩ)/(4kΩ + 8kΩ)
 Rac = 32kΩ²/12kΩ = 2.67kΩ
 ```
 
@@ -705,20 +705,20 @@ iD - 1.67mA = -0.375(vDS - 10V)
 ```
 
 Points for plotting:
-- At vDS = 0: iD = 1.67 + 0.375 × 10 = 5.42 mA
+- At vDS = 0: iD = 1.67 + 0.375 \times 10 = 5.42 mA
 - At iD = 0: vDS = 10 + 1.67/0.375 = 14.45V
 
 **c) Transconductance:**
 ```
 gm = Kn(vGSQ - Vth)
-gm = 1 mA/V² × (3.33V - 1.5V)
+gm = 1 mA/V² \times (3.33V - 1.5V)
 gm = 1.83 mA/V
 ```
 
 **d) Voltage Gain:**
 ```
-Av = -gm × Rac
-Av = -1.83 mA/V × 2.67kΩ
+Av = -gm \times Rac
+Av = -1.83 mA/V \times 2.67kΩ
 Av = -4.88
 ```
 
@@ -731,8 +731,8 @@ From Q-point (10V, 1.67mA):
 
 Limiting factor: cutoff at 4.45V
 
-Maximum peak swing ≈ 4.45V
-Maximum peak-to-peak swing ≈ 8.9V
+Maximum peak swing \approx 4.45V
+Maximum peak-to-peak swing \approx 8.9V
 
 ---
 
@@ -744,7 +744,7 @@ Maximum peak-to-peak swing ≈ 8.9V
 - ☐ Determine vGS from bias circuit
 - ☐ Calculate IDQ using MOSFET equation
 - ☐ Calculate VDSQ using KVL
-- ☐ Verify saturation region: vDS ≥ (vGS - Vth)
+- ☐ Verify saturation region: vDS \geq (vGS - Vth)
 - ☐ Plot Q-point on load line
 
 **AC Analysis:**
@@ -774,6 +774,6 @@ Maximum peak-to-peak swing ≈ 8.9V
 | Voltage gain (CS, bypassed) | Av = -gm(RD ‖ RL) |
 | Gate voltage (divider) | VG = VDD·R2/(R1 + R2) |
 | Drain-source voltage | vDS = VDD - iD(RD + RS) |
-| Saturation condition | vDS ≥ (vGS - Vth) |
+| Saturation condition | vDS \geq (vGS - Vth) |
 
 Good luck on your quiz!
