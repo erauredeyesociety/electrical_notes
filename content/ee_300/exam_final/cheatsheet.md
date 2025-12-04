@@ -104,7 +104,7 @@ weight: 1
 
 **Bandpass (Cascade):**
 - $H_{BP}(s) = H_{LP}(s) \times H_{HP}(s)$
-- LP with $\omega_{c2}$ (upper) × HP with $\omega_{c1}$ (lower)
+- LP with $\omega_{c2}$ (upper) \times HP with $\omega_{c1}$ (lower)
 - $\omega_0 = \sqrt{\omega_{c1} \omega_{c2}}$
 - $BW = \omega_{c2} - \omega_{c1}$
 
@@ -179,7 +179,7 @@ weight: 1
 1. Find all poles/zeros
 2. Order by frequency
 3. Start with DC/HF asymptote
-4. At each break: change slope by ±20 or ±40 dB/dec
+4. At each break: change slope by \pm20 or \pm40 dB/dec
 5. Poles: decrease slope
 6. Zeros: increase slope
 

@@ -36,36 +36,36 @@ while true; do
         -V fontsize=${FONT}pt \
         -V geometry:margin=${MARGIN}in \
         --variable graphics=true \
-        --variable image-scale=0.7
+        --variable image-scale=0.7 \
         -V geometry:landscape \
         -V twocolumn \
         -V columnsep=0.2in \
         -V linkcolor=blue \
-        -V header-includes="\usepackage{titlesec}\titlespacing*{\section}{0pt}{2pt}{2pt}" \
+        -V header-includes="\usepackage{titlesec}\titlespacing*{\section}{0pt}{2pt}{2pt}\newcommand{\pmV}{\pm V}" \
         --from markdown+yaml_metadata_block+tex_math_dollars
 
     # Check if PDF was created
     if [[ ! -f "$OUTPUT" ]]; then
-        echo "Error: PDF was not created. Check LaTeX log for issues."
-        exit 1
-    fi
-    
-    # Check number of pages
-    if ! command -v pdfinfo &> /dev/null; then
-        echo "pdfinfo command not found. Install poppler-utils."
-        exit 1
-    fi
+        echo "Error producing PDF."
+        # Continue trying with smaller settings rather than exit
+    else
+        # Check number of pages
+        if ! command -v pdfinfo &> /dev/null; then
+            echo "pdfinfo command not found. Install poppler-utils."
+            exit 1
+        fi
 
-    PAGES=$(pdfinfo "$OUTPUT" | grep Pages | awk '{print $2}')
-    echo "Generated PDF has $PAGES page(s)"
+        PAGES=$(pdfinfo "$OUTPUT" | grep Pages | awk '{print $2}')
+        echo "Generated PDF has $PAGES page(s)"
 
-    if [[ "$PAGES" -le 2 ]]; then
-        echo "Success! PDF fits on 2 pages."
-        break
+        if [[ "$PAGES" -le 2 ]]; then
+            echo "Success! PDF fits on 2 pages."
+            break
+        fi
+
+        # Delete oversized PDF
+        rm -f "$OUTPUT"
     fi
-
-    # Delete oversized PDF
-    rm -f "$OUTPUT"
 
     # Reduce font/margin
     FONT=$(echo "$FONT - $FONT_STEP" | bc)
