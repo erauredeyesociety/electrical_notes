@@ -176,6 +176,27 @@ STM32CubeMX() {
 
 ---
 
+### Issue: Missing `_mp_main.c` in file linking causes `undefined reference to 'mp_main'`
+
+**Symptom:** Build fails with linker error: `undefined reference to 'mp_main'`. The `main.c` hook calls `mp_main()` but the linker can't find its definition.
+
+**Cause:** The `_mp_main.c` file (which defines `mp_main()` and dispatches to `mp_app()` or `mp_unity()`) was not linked into `lib_src` in CubeIDE. This file lives in the project's `src/` folder alongside the app source file and is easy to overlook.
+
+**Solution:** Link the missing file into `lib_src`:
+
+1. Right-click `lib_src` folder
+2. **New → File → Advanced → Link to file in the file system**
+3. Browse to `/opt/proj_mp/{project_name}/src/_mp_main.c`
+4. Click **Finish**
+5. Rebuild (**Ctrl+B**)
+
+**Prevention:** When listing files to link in `lib_src`, always include ALL `.c` files from `src/` — not just the app file. Check for `_mp_main.c` which is the dispatcher between app and test modes.
+
+**Date discovered:** 2026-02-07
+**Affected labs/projects:** Lab 02 (ce5d_debug_fib), potentially any project with `src/_mp_main.c`
+
+---
+
 ## Template for New Issues
 
 ```markdown

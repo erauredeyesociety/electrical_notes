@@ -31,6 +31,7 @@
 | [report-template.md](./report-template.md) | Official 4-section report template |
 | [report_generation_guide.md](./report_generation_guide.md) | LLM guide for generating reports |
 | [known_issues.md](./known_issues.md) | **Documented issues and solutions - CHECK FIRST when stuck** |
+| [known_base_projects.md](./known_base_projects.md) | **Base project documentation - CHECK when analyzing a new lab/project** |
 | [findings/](./findings/) | Detailed technical findings and research |
 | [SYSTEM_ANALYSIS.md](./SYSTEM_ANALYSIS.md) | Environment and toolchain setup |
 | [analysis_prompt.md](./analysis_prompt.md) | Prompt template for starting new labs/projects |
@@ -51,8 +52,8 @@
 │   │   ├── lab01_procedure.md             # Procedure document
 │   │   ├── lab01_findings.md              # Findings/artifacts tracking
 │   │   ├── lab01_report.md                # Generated report (for submission)
-│   │   ├── *.c                            # Code artifacts
-│   │   ├── *.png                          # Screenshot artifacts (A1, A2, etc.)
+│   │   ├── a1a.c, a2b.c, ...             # Code snippet artifact files (match IDs)
+│   │   ├── a1a.png, a2a.png, ...         # Screenshot artifact files (match IDs)
 │   │   ├── *.pdf                          # Original lab PDF
 │   │   └── *.jpg                          # Supplementary images
 │   ├── lab02/                             # Lab 02 documentation
@@ -70,7 +71,8 @@
    - Procedure documents
    - Findings documents
    - Original PDFs and reference images
-   - NO code, NO CubeIDE projects
+   - Artifact files: code snippet `.c` files and screenshot `.png` files (named by artifact ID)
+   - NO full CubeIDE projects (those live in `/opt/proj_mp/`)
 
 2. **Project folders** (`/opt/proj_mp/`) contain:
    - Actual CubeIDE/CubeMX projects
@@ -178,6 +180,8 @@ This table provides:
 - **Explicit artifact rows** that stand out visually
 - **No confusion** about when to capture artifacts
 
+> **Incremental testing:** Each `→ ARTIFACT` row represents a build-test-screenshot cycle where ONLY the current task should be implemented. The student should build, run tests, and capture the screenshot at that point — showing the current test passing while later tests may still fail. Do NOT implement all tasks at once and then take screenshots retroactively.
+
 ### Artifact Tracking - Shared Responsibility
 
 **IMPORTANT:** Both the human AND the LLM must track artifacts throughout the workflow:
@@ -211,6 +215,47 @@ When creating procedure documents, identify artifacts by looking for:
 3. **Document expected output** - What should each artifact show?
 
 4. **Mirror in findings document** - Every artifact in procedure must appear in `lab{XX}_findings.md`
+
+5. **Always treat artifacts as separate items** - Each artifact listed in the manual is a distinct deliverable. Never combine, merge, or suggest reusing artifacts — even if two artifacts appear to capture the same output. Follow the manual to the letter.
+
+6. **Incremental implementation** - When a manual specifies taking a screenshot after passing a test, the student must implement ONLY that task, build, run, and capture the screenshot before moving to the next task. Screenshots should show progressive results (e.g., 1 pass/2 fail, then 2 pass/1 fail, then 3 pass/0 fail). This proves each task was completed individually.
+
+### Artifact File Storage
+
+Every artifact — both screenshots and code snippets — must be saved as an individual file in the lab/project documentation directory. This ensures all artifacts are self-contained, portable, and directly referenced by the findings and report documents.
+
+**Naming Convention:** Files are named by their artifact ID from the manual, lowercased:
+
+| Artifact Type | File Pattern | Example                |
+| ------------- | ------------ | ---------------------- |
+| Screenshot    | `{id}.png`   | `a1a.png`, `a2a.png`   |
+| Code snippet  | `{id}.c`     | `a1b.c`, `a2b.c`       |
+
+**Rules:**
+
+1. Use the artifact IDs exactly as assigned in the findings document (e.g., A1a → `a1a.png`, A1b → `a1b.c`)
+2. Code snippet `.c` files contain ONLY the relevant function(s) — they are incomplete snippets, not full compilable files
+3. Screenshot `.png` files are saved by the human during artifact capture
+4. The LLM saves code snippet `.c` files at the same time it populates the findings/report
+5. Both the report (`*_report.md`) and findings (`*_findings.md`) reference these files using relative paths (e.g., `./a1a.png`, `./a1b.c`)
+
+**Example directory after completion:**
+
+```
+proj01/
+├── proj01_procedure.md
+├── proj01_findings.md
+├── proj01_report.md
+├── a1a.png          # Screenshot: test_mp_swap PASSED (1 pass, 2 fail)
+├── a1b.c            # Code snippet: mp_swap function
+├── a2a.png          # Screenshot: test_mp_partial_sum PASSED (2 pass, 1 fail)
+├── a2b.c            # Code snippet: mp_partial_sum function
+├── a3a_a4a.png      # Screenshot: all tests PASSED (3 pass, 0 fail)
+├── a3b.c            # Code snippet: mp_reverse_str function
+├── a4b.c            # Code snippet: test_mp_reverse_str function
+├── ci4u-proj.zip    # Cleaned project archive
+└── *.pdf            # Original manual
+```
 
 ---
 
@@ -648,6 +693,17 @@ After completing a lab/project, generate a concise report following the 4-sectio
 1. Edit source file → CLAUDE CODE
 2. Rebuild → HUMAN
 3. Test → HUMAN
+
+### Pattern: Shared Base Project (e.g., ca4b_cls_projs)
+
+Some projects use a shared base project with pre-configured build infrastructure. The lab/project manual PDF will identify the base project. Check [known_base_projects.md](./known_base_projects.md) for details.
+
+1. Place source files in designated folders → CLAUDE CODE
+2. Link `.c` files in CubeIDE's source folder → HUMAN
+3. Select build configuration → HUMAN
+4. Build and test → HUMAN
+
+Key difference: No CubeMX step. Build configs, include paths, and Renode scripts are pre-configured.
 
 ---
 

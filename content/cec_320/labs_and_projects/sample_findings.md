@@ -18,6 +18,12 @@ HOW TO ADAPT THIS TEMPLATE:
    - Count the actual artifacts required in the lab/project manual
    - Add or remove artifact sections as needed
    - Each artifact gets its own section with the same structure
+   - IMPORTANT: Each artifact in the manual is a SEPARATE deliverable.
+     Never combine or merge artifacts, even if two artifacts appear to
+     capture the same output. Follow the manual to the letter.
+   - Each artifact screenshot should show INCREMENTAL progress — only the
+     current task implemented, with subsequent tests still failing. This
+     proves work was done one task at a time.
 
 2. ARTIFACT TYPES:
    - Screenshots: Use the "Screenshot Artifact" section format
@@ -29,11 +35,19 @@ HOW TO ADAPT THIS TEMPLATE:
    - Common submissions: PDF report, ZIP of project folder
    - Note the exact naming convention from the manual
 
-4. REMOVE ALL LLM INSTRUCTION COMMENTS:
+4. ARTIFACT FILE STORAGE:
+   - Every artifact must also exist as an individual file in the lab/project folder
+   - Screenshots: saved as {id}.png (e.g., a1a.png, a2a.png) by the human
+   - Code snippets: saved as {id}.c (e.g., a1b.c, a2b.c) by the LLM
+   - Code snippet .c files are incomplete snippets — just the relevant function(s)
+   - The LLM creates code snippet files when populating the findings/report
+   - See LAB_PROJECT_ANALYSIS_PROCEDURE.md → "Artifact File Storage" for full details
+
+5. REMOVE ALL LLM INSTRUCTION COMMENTS:
    - Delete all <!-- comment --> blocks when creating the actual findings doc
    - The final document should be clean for the student to fill in
 
-5. PLACEHOLDERS:
+6. PLACEHOLDERS:
    - Replace {XX} with the lab/project number (e.g., 01, 02)
    - Replace {Title} with the actual lab/project title
    - Replace {Course} with the course code

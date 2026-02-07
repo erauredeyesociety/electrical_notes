@@ -81,6 +81,15 @@ As artifacts are captured:
    *Code Snippet 1: Task 3 implementation - name greeting with tilde-to-space conversion*
    ```
 
+### Phase 2b: Save Artifact Files
+
+Every artifact must exist as an individual file in the lab/project documentation folder:
+
+- **Screenshots** (`{id}.png`): Saved by the human during artifact capture
+- **Code snippets** (`{id}.c`): Saved by the LLM when populating the findings/report — these are incomplete snippet files containing only the relevant function(s)
+
+The report and findings documents reference these files with relative paths (e.g., `./a1a.png`, `./a1b.c`). See [LAB_PROJECT_ANALYSIS_PROCEDURE.md](./LAB_PROJECT_ANALYSIS_PROCEDURE.md) → "Artifact File Storage" for naming conventions and full details.
+
 ### Phase 3: Fill Sections After Completion
 
 After all tasks are complete:

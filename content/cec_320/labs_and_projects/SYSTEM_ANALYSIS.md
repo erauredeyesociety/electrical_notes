@@ -181,6 +181,8 @@ export NVM_DIR="$HOME/.nvm"
 
 9. **Analysis Workflow:** See `LAB_PROJECT_ANALYSIS_PROCEDURE.md` for how to analyze labs/projects.
 
+10. **Base Projects:** Some labs/projects use shared base projects with pre-configured build infrastructure. See [known_base_projects.md](./known_base_projects.md) for documented base projects and their setup.
+
 ---
 
 ## Quick Reference Commands
@@ -221,5 +223,6 @@ This may require `sudo` for certain operations or ownership changes.
 
 | Date | Changes |
 |------|---------|
+| 2026-02-07 | Added reference to known_base_projects.md for shared base project documentation |
 | 2026-02-04 | Fixed STM32CubeMX launcher: changed from PATH export to shell function (launcher uses relative JAR path) |
 | 2026-02-04 | Initial system analysis document created |

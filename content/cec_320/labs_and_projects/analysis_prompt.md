@@ -47,6 +47,11 @@ Please analyze the lab/project manual I'm providing and generate documentation.
    - Artifact reference format
    - 4-section template explanation
 
+6. **Known Base Projects:** `~/electrical_notes/content/cec_320/labs_and_projects/known_base_projects.md`
+   - Documents base projects that labs/projects build upon
+   - Check if the manual references a known base project
+   - Contains structure, build configs, and setup notes for each base project
+
 ## Input Materials
 
 - **Manual location:** ~/electrical_notes/content/cec_320/labs_and_projects/
@@ -235,6 +240,7 @@ Additional context: {your notes}
 | Analysis procedure | `~/electrical_notes/content/cec_320/labs_and_projects/LAB_PROJECT_ANALYSIS_PROCEDURE.md` |
 | System analysis | `~/electrical_notes/content/cec_320/labs_and_projects/SYSTEM_ANALYSIS.md` |
 | **Known issues** | `~/electrical_notes/content/cec_320/labs_and_projects/known_issues.md` |
+| **Known base projects** | `~/electrical_notes/content/cec_320/labs_and_projects/known_base_projects.md` |
 | **Findings folder** | `~/electrical_notes/content/cec_320/labs_and_projects/findings/` |
 | Report guide | `~/electrical_notes/content/cec_320/labs_and_projects/report_generation_guide.md` |
 | Findings template | `~/electrical_notes/content/cec_320/labs_and_projects/sample_findings.md` |
