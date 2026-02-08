@@ -197,6 +197,30 @@ STM32CubeMX() {
 
 ---
 
+## Debugging
+
+### Issue: Debug launches wrong project (wrong .elf)
+
+**Symptom:** Clicking the Debug button (bug icon) launches a debug session for a different project than expected. The GDB console shows a path to the wrong project, e.g.:
+
+```
+Temporary breakpoint 5, main ()
+    at /opt/proj_mp/cb4a_str_case_cvt/cb4a_str_case_cvt_g431n32/Src/main.c:75
+```
+
+**Cause:** CubeIDE's Debug button re-launches the **last-used debug configuration**, not the currently selected project. If you previously debugged a different project, clicking the bug icon will debug that old project again.
+
+**Solution (recommended):** Right-click the correct project in Project Explorer → **Debug As → STM32 C/C++ Application**. This always launches the debug configuration for the selected project.
+
+**Alternative:** Click the **dropdown arrow** next to the Debug button → **Debug Configurations...** → select the correct configuration under **STM32 C/C++ Application** → click **Debug**.
+
+**Prevention:** Always use right-click → Debug As when switching between projects. The plain Debug button is only reliable when working with a single project.
+
+**Date discovered:** 2026-02-07
+**Affected labs/projects:** Any workspace with multiple STM32 projects
+
+---
+
 ## Template for New Issues
 
 ```markdown

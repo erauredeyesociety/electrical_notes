@@ -15,13 +15,13 @@
 
 | ID | Type | Description | Required For | File | Status |
 |----|------|-------------|--------------|------|--------|
-| A1 | Screenshot | Halted program at BP1 | DT 2 (5 pts) | `a1.png` | [ ] |
-| A2 | Screenshot | `N[]` values in Variables view at BP2 | DT 3 (8 pts) | `a2.png` | [ ] |
-| A3 | Screenshot | `fibonacci_arr1` in Expression view at BP3 | DT 4 (8 pts) | `a3.png` | [ ] |
-| A4 | Screenshot | Full printed output (both arrays) at BP4 | PT 2 / DT output | `a4.png` | [ ] |
-| A5 | Screenshot | Memory view of global arrays | DT 5 (8 pts) | `a5.png` | [ ] |
-| A6 | Screenshot | Corrected output after bug fix | DT 6 (6 pts) | `a6.png` | [ ] |
-| C1 | Code | `ce5d_debug_fib_app.c` (completed) | PT 1 + PT 2 + DT 6 | `c1.c` | [ ] |
+| A1 | Screenshot | Halted program at BP1 | DT 2 (5 pts) | `a1.png` | [x] |
+| A2 | Screenshot | `N[]` values in Variables view at BP2 | DT 3 (8 pts) | `a2.png` | [x] |
+| A3 | Screenshot | `fibonacci_arr1` in Expression view at BP3 | DT 4 (8 pts) | `a3.png` | [x] |
+| A4 | Screenshot | Full printed output (both arrays) at BP4 | PT 2 / DT output | `a4.png` | [x] |
+| A5 | Screenshot | Memory view of global arrays | DT 5 (8 pts) | `a5.png` | [x] |
+| A6 | Screenshot | Corrected output after bug fix | DT 6 (6 pts) | `a6.png` | [x] |
+| C1 | Code | `ce5d_debug_fib_app.c` (completed) | PT 1 + PT 2 + DT 6 | `c1.c` | [x] |
 
 ---
 
@@ -167,7 +167,35 @@
 **Code:**
 
 ```c
-// To be populated with final code after all tasks complete
+static uint32_t fibonacci_arr1[11], fibonacci_arr2[14]; // DT 6: fixed from [10],[13]
+
+static int mp_update_fib_array(uint32_t *fib_arr, int N) {
+    int ret_val = 0;
+    if (N < 0) {
+        ret_val = -1;
+    } else if (N == 0) {
+        fib_arr[0] = 0;
+    } else if (N == 1) {
+        fib_arr[0] = 0;
+        fib_arr[1] = 1;
+    } else if (N <= 20) {
+        // PT 1: Fibonacci computation
+        fib_arr[0] = 0;
+        fib_arr[1] = 1;
+        int i = 2;
+        while (i <= N) {
+            fib_arr[i] = fib_arr[i-1] + fib_arr[i-2];
+            i = i + 1;
+        }
+    } else {
+        ret_val = -2;
+    }
+    return ret_val;
+}
+
+// PT 2: For-loop print code (same pattern in both loops)
+        mp_bin_num_2_n_bit_vrbs_bin_str(bin_str, dec_int, 8);
+        printf(result_info, i, dec_int, bin_str, dec_int);
 ```
 
 **Notes:**

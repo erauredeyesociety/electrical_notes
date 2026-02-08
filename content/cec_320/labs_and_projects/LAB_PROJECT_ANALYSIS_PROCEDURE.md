@@ -54,6 +54,7 @@
 │   │   ├── lab01_report.md                # Generated report (for submission)
 │   │   ├── a1a.c, a2b.c, ...             # Code snippet artifact files (match IDs)
 │   │   ├── a1a.png, a2a.png, ...         # Screenshot artifact files (match IDs)
+│   │   ├── *-proj-submission.zip           # Cleaned project ZIP for submission
 │   │   ├── *.pdf                          # Original lab PDF
 │   │   └── *.jpg                          # Supplementary images
 │   ├── lab02/                             # Lab 02 documentation
@@ -72,6 +73,7 @@
    - Findings documents
    - Original PDFs and reference images
    - Artifact files: code snippet `.c` files and screenshot `.png` files (named by artifact ID)
+   - **Submission ZIP:** Cleaned project archive (e.g., `cc4d-proj-submission.zip`) for submission
    - NO full CubeIDE projects (those live in `/opt/proj_mp/`)
 
 2. **Project folders** (`/opt/proj_mp/`) contain:
