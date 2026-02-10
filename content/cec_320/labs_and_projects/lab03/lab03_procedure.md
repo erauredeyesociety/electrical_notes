@@ -176,7 +176,7 @@ Use **New → File → Advanced → Link to file in the file system** for each f
 
 **Step 4: Add hook function to main.c**
 
-In each project's `Src/main.c`, find `/* USER CODE BEGIN 2 */` and add:
+In each project's `Application/User/main.c` (or `Src/main.c` depending on CubeIDE version), find `/* USER CODE BEGIN 2 */` and add:
 ```c
 /* USER CODE BEGIN 2 */
 void mp_main(void);
