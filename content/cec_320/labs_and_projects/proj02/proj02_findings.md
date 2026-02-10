@@ -2,7 +2,7 @@
 
 **Course:** CEC 320 / MP-DE4U
 **Student:** ____________________
-**Date:** ____________________
+**Date:** 2026-02-10
 
 > **Related Documents:**
 > - Procedure: [proj02_procedure.md](./proj02_procedure.md)
@@ -14,12 +14,13 @@
 
 | ID | Type | Description | Required For | Status |
 |----|------|-------------|--------------|--------|
-| A1 | Screenshot | Tests 1,2 PASS after PT 1 | Incremental verification | [ ] |
-| A2 | Screenshot | Tests 1-7 PASS after PT 2 | Incremental verification | [ ] |
-| A3 | Screenshot | All 8 tests PASS after PT 3 | **Submission** (10 pts) | [ ] |
-| C1 | Code | `mp_mock_write_idr()` function | PT 1 (15 pts) | [ ] |
-| C2 | Code | `mp_mock_odr_update_with_bsrr()` function | PT 2 (45 pts) | [ ] |
-| C3 | Code | `test_mp_gpio_toggle_pins_func()` function | PT 3 (25 pts) | [ ] |
+| A1 | Screenshot | Tests 1,2 PASS after PT 1 (4 failures) | Incremental verification | [x] |
+| A3 | Screenshot | All 8 tests PASS after PT 3 | **Submission** (10 pts) | [x] |
+| C1 | Code | `mp_mock_write_idr()` function | PT 1 (15 pts) | [x] |
+| C2 | Code | `mp_mock_odr_update_with_bsrr()` function | PT 2 (45 pts) | [x] |
+| C3 | Code | `test_mp_gpio_toggle_pins_func()` function | PT 3 (25 pts) | [x] |
+
+**Note:** A2 (after PT 2) was skipped — the weak empty Test 8 stub passes vacuously with no assertions, making the output identical to A3 (8 Tests 0 Failures). A2 was incremental verification only, not required for submission.
 
 ---
 
@@ -32,38 +33,9 @@
 **What to capture:**
 - UART2 window in Renode showing Unity test output
 - Tests 1 (test_read_idr_via_hal_func) and 2 (test_read_idr_directly) PASS
-- Remaining tests may FAIL (expected at this stage)
+- 4 failures from tests requiring PT 2 implementation
 
-**Screenshot:**
-```
-[Paste screenshot or drag image file here]
-```
-
-**File saved to:** ____________________
-
-**Notes:**
-
-
----
-
-### A2: Tests 1-7 PASS After PT 2
-
-**Required for:** PT 2 — Mocking the updating of ODR using BSRR (45 pts) — incremental verification
-
-**What to capture:**
-- UART2 window in Renode showing Unity test output
-- Tests 1-7 all PASS
-- Test 8 (test_mp_gpio_toggle_pins_func) may still FAIL
-
-**Screenshot:**
-```
-[Paste screenshot or drag image file here]
-```
-
-**File saved to:** ____________________
-
-**Notes:**
-
+**File saved to:** [a1.png](./a1.png)
 
 ---
 
@@ -76,15 +48,7 @@
 - ALL 8 tests PASS
 - Summary line: "8 Tests 0 Failures 0 Ignored"
 
-**Screenshot:**
-```
-[Paste screenshot or drag image file here]
-```
-
-**File saved to:** ____________________
-
-**Notes:**
-
+**File saved to:** [a3.png](./a3.png)
 
 ---
 
@@ -98,11 +62,12 @@
 
 **Code:**
 ```c
-// To be filled after implementation
+void mp_mock_write_idr(GPIO_TypeDef *GPIOx, uint32_t idr) {
+    GPIOx->IDR = idr;
+}
 ```
 
-**Notes:**
-
+**Artifact file:** [c1.c](./c1.c)
 
 ---
 
@@ -114,11 +79,16 @@
 
 **Code:**
 ```c
-// To be filled after implementation
+void mp_mock_odr_update_with_bsrr(GPIO_TypeDef *GPIOx) {
+    if (GPIOx->BSRR != 0) {
+        GPIOx->ODR |= (GPIOx->BSRR & 0xFFFF);
+        GPIOx->ODR &= ~(GPIOx->BSRR >> 16);
+        GPIOx->BSRR = 0;
+    }
+}
 ```
 
-**Notes:**
-
+**Artifact file:** [c2.c](./c2.c)
 
 ---
 
@@ -130,11 +100,16 @@
 
 **Code:**
 ```c
-// To be filled after implementation
+void test_mp_gpio_toggle_pins_func(void) {
+    uint32_t act, exp = 0xABCD, odr = 0xAB3D;
+    GPIOx->ODR = odr;
+    mp_GPIO_TogglePinS(GPIOx, (15U<<4));
+    act = mp_mock_read_odr(GPIOx);
+    TEST_ASSERT_EQUAL_UINT32(exp, act);
+}
 ```
 
-**Notes:**
-
+**Artifact file:** [c3.c](./c3.c)
 
 ---
 
@@ -145,10 +120,10 @@
 **Filename:** `de4u-report-lastname-firstname.pdf`
 
 **Required contents:**
-- [ ] C1: `mp_mock_write_idr()` code
-- [ ] C2: `mp_mock_odr_update_with_bsrr()` code
-- [ ] C3: `test_mp_gpio_toggle_pins_func()` code
-- [ ] A3: Screenshot of all 8 tests passing
+- [x] C1: `mp_mock_write_idr()` code
+- [x] C2: `mp_mock_odr_update_with_bsrr()` code
+- [x] C3: `test_mp_gpio_toggle_pins_func()` code
+- [x] A3: Screenshot of all 8 tests passing
 
 ### Project ZIP
 
@@ -183,9 +158,8 @@ zip -r de4u-lastname-firstname.zip ca4b_cls_projs/
 
 ### Issues Encountered
 
+- A2 screenshot (after PT 2) was indistinguishable from A3 because the weak empty Test 8 stub has no assertions, so Unity counts it as a pass. Both show "8 Tests 0 Failures."
 
 ### Solutions Applied
 
-
-### Questions for TA/Instructor
-
+- Skipped A2 as it was incremental verification only. A1 (4 failures) and A3 (0 failures) sufficiently demonstrate incremental progress.

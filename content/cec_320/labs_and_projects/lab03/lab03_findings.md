@@ -15,13 +15,13 @@
 
 | ID | Type | Description | Required For | File | Status |
 |----|------|-------------|--------------|------|--------|
-| A1 | Screenshot | Both MPB outputs side by side | MT3 (5 pts) | `a1.png` | [ ] |
-| A2 | Screenshot | First 15 elements of `message` in Expressions view | DT1 (15 pts) | `a2.png` | [ ] |
-| A3 | Screenshot | Hover over `message` before and after mp_strcpy | DT2 (5 pts) | `a3.png` | [ ] |
-| A4 | Screenshot | Memory word-based view (Col 4) | DT3 (30 pts) | `a4.png` | [ ] |
-| A5 | Screenshot | Memory halfword-based view (Col 2) | DT3 (30 pts) | `a5.png` | [ ] |
-| A6 | Screenshot | Memory byte-based view (Col 1) | DT3 (30 pts) | `a6.png` | [ ] |
-| C1 | Code | Corrected `ci1s_ptr_funs_index.c` | DT1 / Submission | `c1.c` | [ ] |
+| A1 | Screenshot | Both MPB outputs side by side | MT3 (5 pts) | `a1.png` | [x] |
+| A2 | Screenshot | First 15 elements of `message` in Expressions view | DT1 (15 pts) | `a2.png` | [x] |
+| A3 | Screenshot | Hover over `message` before and after mp_strcpy | DT2 (5 pts) | `a3.png` | [x] |
+| A4 | Screenshot | Memory word-based view (Col 4) | DT3 (30 pts) | `a4.png` | [x] |
+| A5 | Screenshot | Memory halfword-based view (Col 2) | DT3 (30 pts) | `a5.png` | [x] |
+| A6 | Screenshot | Memory byte-based view (Col 1) | DT3 (30 pts) | `a6.png` | [x] |
+| C1 | Code | Corrected `ci1s_ptr_funs_index.c` | DT1 / Submission | `c1.c` | [x] |
 
 ---
 
@@ -164,10 +164,21 @@
 **Code:**
 
 ```c
-// To be populated with corrected code after bug fix
+#include "ci1s_ptr_funs.h"
+
+void mp_strcpy(char *dst, char *src) {
+    int i = 0;
+    char ch = src[i];
+    while (ch) {
+        dst[i] = ch;
+        i++;
+        ch = src[i];
+    }
+    dst[i] = '\0';
+}
 ```
 
-**Notes:**
+**Notes:** Fixed by using a single `i++` per iteration instead of double post-increment. Added explicit null terminator.
 
 ---
 
@@ -179,13 +190,13 @@
 
 **Required contents:**
 
-- [ ] A1: Both MPB outputs side by side
-- [ ] A2: Expressions view — first 15 elements of `message`
-- [ ] A3: Hover values before and after mp_strcpy
-- [ ] A4: Word-based memory view + Little Endian explanation
-- [ ] A5: Halfword-based memory view + Little Endian explanation
-- [ ] A6: Byte-based memory view + Little Endian explanation
-- [ ] Corrected `ci1s_ptr_funs_index.c` code
+- [x] A1: Both MPB outputs side by side
+- [x] A2: Expressions view — first 15 elements of `message`
+- [x] A3: Hover values before and after mp_strcpy
+- [x] A4: Word-based memory view + Little Endian explanation
+- [x] A5: Halfword-based memory view + Little Endian explanation
+- [x] A6: Byte-based memory view + Little Endian explanation
+- [x] Corrected `ci1s_ptr_funs_index.c` code
 
 ### Project ZIP
 
@@ -225,8 +236,13 @@ zip -r ci5d-proj-lastname-firstname.zip ci5d_more_cubeide/
 
 ### Issues Encountered
 
-(Document any issues here. Also update [known_issues.md](../known_issues.md) if applicable.)
+- **Include path depth error:** Both `.cproject` files had `../../../../lib` (4 levels up) instead of `../../../lib` (3 levels). This is a recurring issue — see [known_issues.md](../known_issues.md).
+- **main.c location:** Found at `Application/User/main.c` rather than `Src/main.c` depending on CubeIDE version.
 
 ### Solutions Applied
+
+- Fixed `.cproject` include paths with sed replacement in both F412 and G431 project files
+- Deleted Debug build folders to force clean rebuild after `.cproject` changes
+- Updated procedure to note `Application/User/main.c` as alternative location
 
 ### Questions for TA/Instructor
