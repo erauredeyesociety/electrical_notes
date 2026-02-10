@@ -22,7 +22,7 @@ Discuss how the procedure was different for you. Did you have to modify anything
 
  
 
-Code Snippets and Screenshots
+Artifacts - Code Snippets and Screenshots
 
 Only include in the report the snippets of source code that you have added, modified, or commented on. When you take screenshots, try not to have dark backgrounds, we may have to print out the reports and we don’t want to waste too much ink. Include the file name where the code is from. For the code part, use Currier New, size 12, single spacing. 
 

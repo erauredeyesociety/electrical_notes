@@ -22,7 +22,7 @@ This issue and solution are documented in [known_issues.md](../known_issues.md) 
 
 ---
 
-## Code Snippets and Screenshots
+## Artifacts -Code Snippets and Screenshots
 
 ### Artifact A1: Initial UART Output
 
