@@ -221,6 +221,44 @@ Temporary breakpoint 5, main ()
 
 ---
 
+## CubeIDE Navigation
+
+### Issue: Project Explorer disappeared (accidentally detached and closed)
+
+**Symptom:** Right-clicked in Project Explorer and selected **Detach**, turning it into a floating window. Then closed the floating window. The Project Explorer is now completely gone from the IDE.
+
+**Cause:** "Detach" undocks a view into a floating window. Closing that floating window removes the view entirely from the current perspective.
+
+**Solution:** **Window → Show View → Project Explorer** from the menu bar. This restores it as a docked panel.
+
+**If not in the list:** **Window → Show View → Other...** → type "Project Explorer" in the filter → select it → **Open**
+
+**To reset the entire layout:** **Window → Perspective → Reset Perspective** restores all panels to their default positions.
+
+**Date discovered:** 2026-02-26
+**Affected labs/projects:** Any CubeIDE session
+
+---
+
+### Issue: Accidentally used "Go Into" in Project Explorer
+
+**Symptom:** Right-clicked a folder in CubeIDE's Project Explorer and selected **Go Into**. The Project Explorer now only shows the contents of that one folder — the rest of the project tree is hidden.
+
+**Cause:** "Go Into" is an Eclipse feature that zooms the Project Explorer into a subfolder, hiding everything else. It's easy to trigger accidentally from the right-click context menu.
+
+**Solution:**
+1. Look at the **Project Explorer toolbar** (small icons at the top of the explorer pane)
+2. Click the **Back arrow** (←) to go back one level
+3. Or click the **Up arrow** (↑) to go to the parent
+4. Or right-click in the Project Explorer → **Go Home** to return to the full workspace root
+
+**Alternative:** The keyboard shortcut **Alt+Left** may also navigate back.
+
+**Date discovered:** 2026-02-26
+**Affected labs/projects:** Any CubeIDE project
+
+---
+
 ## Template for New Issues
 
 ```markdown
