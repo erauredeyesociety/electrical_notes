@@ -85,6 +85,10 @@
     Reg &= ~(FIELD_MASK << SHIFT);     // Step 1: clear
     Reg |= (NEW_VALUE << SHIFT);       // Step 2: set
 
+> Always parenthesize: (Reg & mask) == value, NOT Reg & mask == value
+> Always use U suffix: (1U << N), not (1 << N)
+> Cast before multiply: (int32_t)a * (int32_t)b for wide results
+
 > **HW3 P5 example:** "Toggle Pin5 and Pin7 of ODR — what mask?"
 > → mask = (1U << 5) | (1U << 7) = 0x0020 | 0x0080 = **0x00A0**
 > → Usage: `GPIOx->ODR ^= 0x00A0;`
@@ -112,6 +116,53 @@ Each hex digit = 4 bits. Digit H₁ (second from right) sits at bits 7:4, so SHI
 > **HW3 P8e example:** Complement H₁ → `A ^= (0xFU << 4);`
 > **HW3 P8f example:** Shift right by one digit → `A >>= 4;`
 
+
+## 1.5b Digit Rearrangement (Shifts + Extraction)
+
+Sometimes you need to move digits to different positions, not just modify them in place. This requires combining shifts with extraction and placement.
+
+**Extract a single digit from position k:**
+
+    digit = (A >> (4*k)) & 0xF;
+
+**Place a digit at position k in a result:**
+
+    result |= (digit << (4*k));
+
+**Shift all digits left by one position:**
+
+    A <<= 4;    // H3 H2 H1 H0 → H2 H1 H0 0  (H3 lost in 16-bit)
+
+**Shift all digits right by one position:**
+
+    A >>= 4;    // H3 H2 H1 H0 → 0 H3 H2 H1  (H0 lost)
+
+**General approach for any rearrangement:**
+1. Extract any digits that move to non-obvious positions or need special treatment
+2. Shift the bulk if most digits move the same direction
+3. Clear positions that need new values
+4. OR in extracted or constant digits at their new positions
+
+> **Quiz P2b:** `0xH3H2H1H0 → 0xH2H1H03`
+> → Shift left by 4, then force bottom digit to 3:
+> `A = (A << 4) | 0x3U;`
+
+> **Quiz P2c:** `0xH3H2H1H0 → 0x7H3H2H1`
+> → Shift right by 4, then force top digit to 7:
+> `A = (A >> 4) | (0x7U << 12);`
+
+> **Quiz P2d:** `0xH3H2H1H0 → 0xH0_H̄3_H2_H1`
+> → Extract H0 and H3, shift bulk right, complement H3, place both:
+>
+>     uint16_t h0 = A & 0xF;
+>     uint16_t h3c = ((A >> 12) & 0xF) ^ 0xF;
+>     A = ((A >> 4) & 0x00FF) | (h3c << 8) | (h0 << 12);
+
+> **Quiz P2e:** `0xH3H2H1H0 → 0xF_H0_H3_H2`
+> → Extract H0, shift right by 8, place H0 at digit 2, force top to F:
+>
+>     uint16_t h0 = A & 0xF;
+>     A = (A >> 8) | (h0 << 8) | (0xFU << 12);
 
 ## 1.6 Shift Operation Pitfall (uint8_t)
 
@@ -159,6 +210,31 @@ C promotes uint8_t to int (32-bit) before arithmetic.
 > **HW4 P1 example:** GPIO_PIN_1 = (1U << 1) = 0x0002
 > → Key pressed (bit 1 = 1): IDR & 0x0002 = 0x0002, equals GPIO_PIN_1 → **true**
 > → Key released (bit 1 = 0): IDR & 0x0002 = 0x0000, not equal → **false**
+
+
+**Checking a specific bit in a full hex IDR value:**
+
+To find if bit K is set in a hex value, locate the nibble containing that bit and convert it to binary.
+
+    Bit 0–3   → nibble H0 (rightmost digit)
+    Bit 4–7   → nibble H1
+    Bit 8–11  → nibble H2
+    Bit 12–15 → nibble H3
+
+**Hex-to-binary quick reference:**
+
+    0=0000  1=0001  2=0010  3=0011
+    4=0100  5=0101  6=0110  7=0111
+    8=1000  9=1001  A=1010  B=1011
+    C=1100  D=1101  E=1110  F=1111
+
+> **Quiz P4 example:** GPIO_PIN_4 = 0x0010. Bit 4 is in nibble H1.
+>
+> IDR = 0x7777 → H1 = 7 = 0b0111 → bit 4 (LSB of H1) = 1
+> → IDR & 0x0010 = **0x0010** → equals GPIO_PIN_4 → **state = true**
+>
+> IDR = 0x8888 → H1 = 8 = 0b1000 → bit 4 (LSB of H1) = 0
+> → IDR & 0x0010 = **0x0000** → not equal → **state = false**
 
 
 ## 2.3 PSR Exception Number ↔ IRQn
@@ -271,6 +347,26 @@ Each 32-bit register covers 32 IRQns (Lctr 8 §8.6.2):
 > PN range to NOT preempt: PPN ≥ 1 → **PN 4–15**
 
 
+
+> **Quiz P5 example:** 5 implemented bits, 2 preempt bits (n=2), 3 sub-priority bits (m=3).
+>
+> Key differences from HW4: m=3 instead of 2, so PN = (PPN << 3) + SPN,
+> IP = PN << 3 (not << 4), and each PPN level spans 8 PN values (not 4).
+>
+>     Max PPN = 3, Max SPN = 7, Max PN = (3 << 3) + 7 = 31
+>
+> Given NVIC_SetPriority(IRQn3, 12):
+>
+>     PPN = 12 >> 3 = 1
+>     SPN = 12 & 0x7 = 4
+>     Check: (1 << 3) + 4 = 12 ✓
+>     IP[IRQn3] = 12 << 3 = 96 = 0x60
+>
+> PN range to preempt IRQn3 (PPN < 1 → PPN = 0): **PN 0–7**
+> PN range to NOT preempt (PPN ≥ 1): **PN 8–31**
+
+
+
 ## 2.8 EXTICR Configuration (Lctr 9 §9.4.2)
 
 **EXTICR register layout:** four 4-bit fields per register
@@ -312,6 +408,34 @@ Each 32-bit register covers 32 IRQns (Lctr 8 §8.6.2):
 2. Split into S (bit 31), E (bits 30:23), F (bits 22:0)
 3. Compute F_R = F × 2^(−23)
 4. Compute f = (−1)^S × (1 + F_R) × 2^(E − 127)
+
+**Encoding steps** (real → hex):
+
+1. **Sign:** S = 0 if f ≥ 0, S = 1 if f < 0. Work with |f| from here.
+2. **Normalize:** Express |f| as 1.fraction × 2^exp
+   - If |f| ≥ 2: divide by 2 repeatedly (exp increments) until 1 ≤ value < 2
+   - If |f| < 1: multiply by 2 repeatedly (exp decrements) until 1 ≤ value < 2
+3. **Exponent field:** E = exp + 127. Convert to 8-bit binary.
+4. **Fraction field:** Take the part after "1." and convert to 23-bit binary:
+   - Repeatedly multiply the fractional part by 2
+   - If result ≥ 1: bit is 1 (subtract 1); if < 1: bit is 0
+   - Continue for 23 bits
+5. **Assemble:** Pack [S (1 bit)][E (8 bits)][F (23 bits)] → 32-bit hex
+
+> **Example:** Encode −4.75
+>
+> S = 1 (negative). Work with 4.75.
+> 4.75 in binary: 100.11 → normalize: 1.0011 × 2^2 → exp = 2
+> E = 2 + 127 = 129 = 0b10000001
+> Fraction after "1." is .0011:
+>     0.1875 × 2 = 0.375 → 0
+>     0.375 × 2 = 0.75 → 0
+>     0.75 × 2 = 1.5 → 1 (remainder 0.5)
+>     0.5 × 2 = 1.0 → 1 (remainder 0)
+>     rest = 0s
+>     F = 00110000000000000000000
+> Assembled: 1 | 10000001 | 00110000000000000000000
+> Hex: **0xC0980000**
 
 **Special values:**
 - E=0, F=0 → ±0
