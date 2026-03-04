@@ -14,10 +14,10 @@
 
 | ID | Type | Description | Required For | Status |
 |----|------|-------------|--------------|--------|
-| A1 | Screenshot | PuTTY output WITHOUT Fnc6 (CH1 all 0s) | Submission (10 pts) | [ ] |
-| A2 | Screenshot | PuTTY output WITH Fnc6 (CH1 all 1s) | Submission (10 pts) | [ ] |
-| A3 | Text/Code | Description of uint8_t sample packing | Submission (10 pts) | [ ] |
-| C1 | Code | Modified `de5d_logic_analyzer_fns.c` | Submission (10 pts) | [ ] |
+| A1 | Screenshot | PuTTY output WITHOUT Fnc6 (CH1 all 0s) | Submission (10 pts) | [x] |
+| A2 | Screenshot | PuTTY output WITH Fnc6 (CH1 all 1s) | Submission (10 pts) | [x] |
+| A3 | Text/Code | Description of uint8_t sample packing | Submission (10 pts) | [x] |
+| C1 | Code | Modified `de5d_logic_analyzer_fns.c` | Submission (10 pts) | [x] |
 
 ---
 
@@ -41,7 +41,7 @@ CH2: 11111111111100000000000000000000011111111111111111
 CH3: 00000000000001111111111111111111100000000000000000
 ```
 
-**File saved to:** ____________________
+**File saved to:** `lab04/a1.png`
 
 ---
 
@@ -62,7 +62,7 @@ CH2: 11111111111100000000000000000000011111111111111111
 CH3: 00000000000001111111111111111111100000000000000000
 ```
 
-**File saved to:** ____________________
+**File saved to:** `lab04/a2.png`
 
 ---
 
@@ -73,14 +73,16 @@ CH3: 00000000000001111111111111111111100000000000000000
 **Required for:** Section 4.3.2.2 — "provide a description about how you performed the saving of the samples" (part of 40 pts)
 
 **Description:**
-```
-[To be filled — explain the bitwise packing approach:
-- CH1 (PA0) → Bit 0: extracted via (GPIOA->IDR >> Pin0_pos) & 1
-- CH2 (PA10) → Bit 1: extracted via (GPIOA->ODR >> Pin10_pos) & 1
-- CH3 (PB8) → Bit 2: extracted via (GPIOB->ODR >> Pin8_pos) & 1
-- Packed: logic_samples[i] = (bit2 << 2) | (bit1 << 1) | bit0
-- Each uint8_t stores 3 channel states, using only bits [2:0]]
-```
+
+Each sample captures 3 logic analyzer channels and packs them into a single `uint8_t` using bitwise operations. The 3 channels are read from GPIO registers and stored in bits [2:0]:
+
+- **Bit 0 — CH1 (PA0):** Read from `GPIOA->IDR` (Input Data Register) since PA0 is configured as an input. Extracted via `(GPIOA->IDR >> Pin0_pos) & 1` where `Pin0_pos = 0`.
+- **Bit 1 — CH2 (PA10):** Read from `GPIOA->ODR` (Output Data Register) since PA10 is an output driving LED1. Extracted via `(GPIOA->ODR >> Pin10_pos) & 1` where `Pin10_pos = 10`.
+- **Bit 2 — CH3 (PB8):** Read from `GPIOB->ODR` since PB8 is an output driving LED4. Extracted via `(GPIOB->ODR >> Pin8_pos) & 1` where `Pin8_pos = 8`.
+
+The three bits are packed into one byte: `logic_samples[i] = (bit2 << 2) | (bit1 << 1) | bit0`
+
+This stores 3 channel states per `uint8_t`, using only the 3 least significant bits. Bits [7:3] remain 0. During printing, each channel is unpacked by shifting and masking: `(logic_samples[j] >> ch) & 1`.
 
 ---
 
@@ -97,10 +99,7 @@ CH3: 00000000000001111111111111111111100000000000000000
 2. `mp_read_logic_samples()` — samples 3 channels into uint8_t array
 3. `mp_print_logic_samples()` — prints channel data as binary strings
 
-**Code:**
-```c
-// To be filled after implementation
-```
+**Code:** See [c1.c](./c1.c) for the complete file.
 
 **Artifact file:** [c1.c](./c1.c)
 
@@ -113,10 +112,10 @@ CH3: 00000000000001111111111111111111100000000000000000
 **Filename:** `de5d-report-lastname-firstname.pdf`
 
 **Required contents:**
-- [ ] A1: Screenshot without Fnc6
-- [ ] A2: Screenshot with Fnc6
-- [ ] A3: Description of uint8_t sample packing
-- [ ] C1: Modified `de5d_logic_analyzer_fns.c` code
+- [x] A1: Screenshot without Fnc6 — `a1.png`
+- [x] A2: Screenshot with Fnc6 — `a2.png`
+- [x] A3: Description of uint8_t sample packing — see findings
+- [x] C1: Modified `de5d_logic_analyzer_fns.c` code — `c1.c`
 
 ### Project ZIP
 
@@ -152,10 +151,31 @@ zip -r de5d-proj-lastname-firstname.zip de5d_logic_analyzer/
 
 ### Issues Encountered
 
-- Reference project `de2f_direct_gpio_reg_access` not found on system — needs to be obtained from instructor
+- Reference project `de2f_direct_gpio_reg_access` not found on system — resolved by obtaining zip from instructor
+- CubeMX naming issue: During "Save As", project was accidentally saved as `de2f_direct_gpio_reg_access_g431n32` instead of `de5d_logic_analyzer_g431n32`. Cosmetic only — build and functionality unaffected, but internal folder/references use the old name.
+- Fnc6 confusion: "Fnc6" refers to a **physical hardware connection**, not the F6 keyboard key
+  - On the game controller board: a physical button labeled Fnc6
+  - Without the game controller: bridge **Pins 12 and 13** on the analog (right-side) connector of the Nucleo-32
+  - Pin 12 = A0 = PA0 (input pin) = 4th from bottom; Pin 13 = AREF (~3.3V) = 3rd from bottom
+  - ("Nth from bottom" counts the bottom-most pin as 1st: bottom=1st, +3V3=2nd, AREF=3rd, A0=4th)
+  - Bridging pulls PA0 high → CH1 reads all 1s
+- CN3/CN4 label swap on G431KB: The NUCLEO-G431KB is the only Nucleo-32 board where ST swapped the CN3/CN4 connector labels vs other boards (L432KC, F303K8). Physical pin positions are identical.
 
 ### Solutions Applied
 
+- Obtained `de2f_direct_gpio_reg_access.zip` from instructor, extracted .ioc and used it for CubeMX project creation
+- Copied `lib/` files (mp_supported_mcu.h, mp_uart_redirect.c/.h) from `cc1s_uart_redirect` project since reference zip didn't include lib/
+- Created [nucleo32_pinout_reference.md](../nucleo32_pinout_reference.md) documenting full header pinout for future reference
+
+### Fnc6 Bridge Procedure (for A2 artifact)
+
+1. **Bridge pins 12 and 13** on the right-side header (analog connector) using a jumper wire, paperclip, or ballpoint pen tip
+2. These are the **3rd and 4th pins from the bottom** on the right side (bottom-most pin = 1st)
+3. **Hold the bridge** in place
+4. Type `s` in PuTTY and press Enter
+5. Keep bridging during entire sampling period (~5 seconds)
+6. Release after output appears
+7. CH1 should show all 1s
 
 ### Questions for TA/Instructor
 
