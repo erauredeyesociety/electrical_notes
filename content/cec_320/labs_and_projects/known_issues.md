@@ -259,6 +259,42 @@ Temporary breakpoint 5, main ()
 
 ---
 
+## CubeIDE Build Configurations
+
+### Reference: Creating a New Build Configuration (e.g., Unity)
+
+This is not an issue — it's a reference for creating custom build configurations in CubeIDE, which is needed for labs/projects that use separate Unity (test) and App (debug) builds.
+
+**Steps to create a new build configuration:**
+
+1. Right-click the project in Project Explorer → hover **Build Configurations** → click **Manage...**
+2. Click **New...** → enter name (e.g., `Unity`) → select **Copy settings from: `Debug`** → **OK**
+3. Close the dialog. Select the new config from the **hammer dropdown** (a new build output folder appears, e.g., `Unity/`)
+4. To add preprocessor defines (e.g., `UNIT_TEST`):
+   - Right-click project → **Properties → C/C++ Build → Settings → MCU GCC Compiler → Preprocessor → Define symbols**
+   - Click **Add** (+) → enter the symbol (e.g., `UNIT_TEST`) → **OK**
+   - Click **Apply and Close**
+5. Build: **Ctrl+B**
+
+**Key notes:**
+
+- Each build config produces output in its own folder (e.g., `Debug/`, `Unity/`, `Release/`)
+- The hammer dropdown selects which config to build; the active config name appears next to the hammer
+- Include paths and linked files are shared across configs by default (if "Add to all configurations" was checked)
+- Preprocessor defines are per-config — only add `UNIT_TEST` to the Unity config, not Debug
+
+**Running on real board:**
+
+- **Run As → STM32 C/C++ Application** flashes and runs (no debugger attached)
+- **Debug As → STM32 C/C++ Application** flashes and stops at `main()` for stepping
+- Both use the **.elf** from the currently active build config
+- Use a serial terminal (Putty, minicom) on `/dev/ttyACM0` at 115200 baud for UART output
+
+**Date documented:** 2026-03-05
+**Affected labs/projects:** Lab 05, any standalone CubeMX project needing Unity builds
+
+---
+
 ## Template for New Issues
 
 ```markdown
