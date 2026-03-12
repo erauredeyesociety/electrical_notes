@@ -1,7 +1,6 @@
 void mp_hp_ieee754_encoding(float f, hp_IEEE754Field_TypeDef *pField) {
     const double hp_float_max = pow(2.0, bias+1) - pow(2.0, bias-n_frac);
     const double hp_float_min_norm = pow(2.0, (1-bias));
-
     // Determine pField->sign
     if (f < 0) {
         pField->sign = 1;
@@ -9,9 +8,7 @@ void mp_hp_ieee754_encoding(float f, hp_IEEE754Field_TypeDef *pField) {
     } else {
         pField->sign = 0;
     }
-
     double fabs_val = (double)f;
-
     // The following will be executed only if f is not bigger than the max.
     if (fabs_val > hp_float_max) {
         // Too big: represent as infinity (exponent all 1s, fraction 0)
@@ -19,7 +16,6 @@ void mp_hp_ieee754_encoding(float f, hp_IEEE754Field_TypeDef *pField) {
         pField->fraction = 0;
         return;
     }
-
     // Determine pField->exponent and pField->fraction
     if (fabs_val >= hp_float_min_norm) {
         // Normal number
@@ -32,13 +28,10 @@ void mp_hp_ieee754_encoding(float f, hp_IEEE754Field_TypeDef *pField) {
         pField->exponent = 0;
         pField->fraction = (uint16_t)(fabs_val / pow(2.0, 1 - bias) * pow(2.0, n_frac) + 0.5);
     }
-
     return;
 }
-
 float mp_hp_ieee754_decoding(hp_IEEE754Field_TypeDef field) {
     float decoded = 0.0;
-
     if (field.exponent == ((1 << n_expt) - 1)) {
         // Exponent all 1s: infinity or NaN
         if (field.fraction == 0) {
@@ -54,10 +47,8 @@ float mp_hp_ieee754_decoding(hp_IEEE754Field_TypeDef field) {
         decoded = (float)((1.0 + (double)field.fraction / pow(2.0, n_frac))
                           * pow(2.0, field.exponent - bias));
     }
-
     if (field.sign) {
         decoded = -decoded;
     }
-
     return decoded;
 }
