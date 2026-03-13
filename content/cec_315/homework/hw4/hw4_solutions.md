@@ -6,7 +6,7 @@
 
 ### Part (a): $x(t) = 3e^{-5t}u(t)$
 
-Using the one-sided exponential pair $e^{-at}u(t) \leftrightarrow \frac{1}{a+j\omega}$ with linearity:
+Using the one-sided exponential pair $e^{-at}u(t) \leftrightarrow \frac{1}{a+j\omega}$ with linearity:e
 
 $$X(j\omega) = 3 \cdot \frac{1}{5 + j\omega} = \frac{3}{5 + j\omega}$$
 
