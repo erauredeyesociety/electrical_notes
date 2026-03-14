@@ -1,5 +1,5 @@
 # CEC 315 Homework 4 Solutions (Lectures 12–15)
-
+ 
 ---
 
 ## Problem 1: CT Fourier Transform — Basic Pairs
@@ -388,20 +388,44 @@ $$t_r \approx \frac{1.8}{\omega_n} = \frac{1.8}{20} = 0.09 \text{ s}$$
 
 ### Part (d): Bode Plot Asymptotes
 
-**Magnitude asymptotes:**
-- For $\omega \ll 20$: $|H|_{\text{dB}} \approx 0$ dB (flat)
-- For $\omega \gg 20$: slope = $-40$ dB/decade
-- Asymptotes break at $\omega = \omega_n = 20$ rad/s
-- Near $\omega_n$: resonance peak of ~6.3 dB above the 0 dB asymptote
+**i. Low-frequency asymptote:**
 
-**Phase asymptotes:**
-- For $\omega \ll 20$: $\angle H \approx 0°$
-- At $\omega = 20$: $\angle H = -90°$ (exact, regardless of $\zeta$)
-- For $\omega \gg 20$: $\angle H \to -180°$
-- Transition is sharper for lower $\zeta$
+For $\omega \ll \omega_n$, the $(j\omega)^2$ and $2\zeta\omega_n(j\omega)$ terms in the denominator are negligible compared to $\omega_n^2$:
 
-**Bode plot sketch notes:**
-- The resonance peak makes the actual magnitude curve exceed the flat 0 dB asymptote near $\omega_n$
-- With $\zeta = 0.25$, the peak is prominent (~6.3 dB)
-- The phase transition through $-90°$ at $\omega_n$ is relatively sharp
-- High-frequency rolloff is -40 dB/decade (two poles)
+$$H(j\omega) \approx \frac{\omega_n^2}{\omega_n^2} = 1 \quad \Rightarrow \quad \boxed{|H|_{\text{dB}} \approx 0 \text{ dB (flat)}}$$
+
+**ii. High-frequency asymptotic slope:**
+
+For $\omega \gg \omega_n$, the $(j\omega)^2$ term dominates the denominator:
+
+$$H(j\omega) \approx \frac{\omega_n^2}{(j\omega)^2} = -\frac{\omega_n^2}{\omega^2}$$
+
+$$|H|_{\text{dB}} \approx 20\log_{10}\!\left(\frac{\omega_n^2}{\omega^2}\right) = 20\log_{10}(\omega_n^2) - 40\log_{10}(\omega)$$
+
+Each factor-of-10 increase in $\omega$ decreases the magnitude by 40 dB:
+
+$$\boxed{\text{Slope} = -40 \text{ dB/decade}}$$
+
+This is expected — two poles contribute $-20$ dB/decade each.
+
+**iii. Asymptote intersection frequency:**
+
+The low-frequency asymptote is the horizontal line $|H|_{\text{dB}} = 0$ dB. The high-frequency asymptote is the line $|H|_{\text{dB}} = -40\log_{10}(\omega/\omega_n)$. Setting the high-frequency asymptote equal to 0 dB:
+
+$$-40\log_{10}(\omega/\omega_n) = 0 \quad \Rightarrow \quad \omega/\omega_n = 1$$
+
+$$\boxed{\omega = \omega_n = 20 \text{ rad/s}}$$
+
+The two straight-line asymptotes meet at the natural frequency, which serves as the corner (break) frequency of the second-order Bode plot.
+
+**iv. Actual curve exceedance at $\omega = \omega_n$:**
+
+From Part (b), the actual magnitude at $\omega = \omega_n$ is:
+
+$$|H(j\omega_n)| = \frac{1}{2\zeta} = \frac{1}{2(0.25)} = 2 \quad \Rightarrow \quad |H|_{\text{dB}} = 20\log_{10}(2) \approx 6.02 \text{ dB}$$
+
+The asymptote at $\omega = \omega_n$ is 0 dB (the intersection point). Therefore:
+
+$$\boxed{\text{Exceedance} = 6.02 - 0 = 6.02 \text{ dB}}$$
+
+This resonance peak is a direct consequence of the low damping ratio ($\zeta = 0.25$). In general, the exceedance at $\omega_n$ is $-20\log_{10}(2\zeta)$ dB — smaller $\zeta$ produces a taller peak. For $\zeta \geq 1/\sqrt{2} \approx 0.707$, the actual curve no longer exceeds the asymptote.
