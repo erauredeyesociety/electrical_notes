@@ -1,0 +1,551 @@
+--- Page 1 ---
+GNC Enabling Technologies for Space Vehicles
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+•
+Introduction
+•
+GNC-enabling Actuators
+o
+Integrated Units
+o
+Reaction Wheels
+o
+Magnetorquers
+o
+Thrusters
+•
+GNC-enabling Sensors
+o
+Star Trackers
+o
+Magnetometers
+o
+Sun Sensors
+o
+Horizon Sensors
+o
+Inertial Sensing
+•
+GPS Receivers
+•
+Deep Space Navigation
+•
+Atomic Clocks
+•
+LiDAR
+Outline
+Pointing Control - NASA Science
+
+
+--- Page 3 ---
+•
+Components of GNC for 
+o
+Position 
+o
+Attitude / Pointing control
+o
+Control System
+•
+Position
+o
+Determines position of the spacecraft 
+•
+Orbital Earth-centered inertial (ECI) frame 
+•
+Deep space – International Celestial Reference 
+Frame (ICRF)
+•
+Areas beyond cislunar space
+•
+Attitude and spin rate
+o
+GNC requires an understanding of the space 
+vehicle’s attitude and the rate at which it is 
+turning about its axes.
+•
+Actuators
+o
+Change attitude of aircraft and adjust velocities of 
+space vehicle
+Introduction
+
+
+--- Page 4 ---
+Types of Satellites and their Scale
+A Basic Guide to Nanosatellites | Alén Space
+
+
+--- Page 5 ---
+Example: Europa Clipper
+Figure 3 | Europa Clipper Mission Design, Mission Plan, and 
+Navigation | Space Science Reviews | Springer Nature Link
+
+
+--- Page 6 ---
+•
+Integrate multiple attitude and navigational components
+•
+Typical components include:
+o
+Reaction Wheel
+o
+Magnetometer
+o
+Magnetic torquers
+o
+Fine and coarse sun sensors
+o
+GPS
+o
+Star trackers
+•
+Processors and software needed for:
+o
+Attitude determination
+o
+Control
+Integrated Units
+
+
+--- Page 7 ---
+•
+Enables 3-axis precision pointing
+o Stores torque and moment by the wheel spinning causing counter-rotation of space 
+vehicle because of conservation of momentum
+o Produces torque and momentum
+•
+How it works?  To counter a rotation along one of the spacecraft’s axes, the 
+reaction wheel…
+o Spins counter to rotation along the wheel’s axes is aligned with the axes of the 
+rotation.
+o Reduces angular velocity to zero
+•
+Common configuration is three-axes with the units orthogonally placed.
+•
+Issue: High failure rate:
+o Larger space vehicles can include three backup wheels.
+o Smaller, SWAP limited, vehicles typically use a four-wheel configuration providing one 
+backup-wheel (often misaligned with other wheels)
+•
+If the counter rotation of the reaction wheel becomes saturated:
+o Torque in opposing direction causes wheel rotation to slow, which allows it to store 
+additional momentum and torque.
+•
+External actuation (e.g. thruster or magnetic torquer)
+Reaction Wheel
+
+
+--- Page 8 ---
+Reaction wheel demonstration
+
+
+--- Page 9 ---
+Provide control torque motion in the plan 
+perpendicular to the local external 
+magnetic field and magnetic dipole.
+o Magnetometer needed to measure local 
+electric field.
+Alternative to using thruster to desaturate 
+spinning wheel for larger satellite systems.
+Types:
+o Air coils
+o Torquer bars/rods
+Typically, space vehicle will have three 
+magnetic torquers orthogonal to one 
+another along the x, y, and z axis.
+For interplanetary travel, they are less 
+useful due to a lack of a local external 
+magnetic field.
+Magnetorquers
+ISIS Magnetorquer board (iMTQ) - CubeSatShop.com
+𝑇= 𝑀𝑥𝐵 
+      Where,
+             T is the torque vector (N.m)
+             M is the magnetic dipole field (𝐴. 𝑚2)
+                  m=N.I.A (N turns, I current, A coil area
+             B is the external magnetic field (Tesla).
+
+
+--- Page 10 ---
+• Enables
+o Attitude
+o Translational control
+• Expendable fuel source
+• Not typically used for 
+SmallSats and smaller 
+spacecraft
+o Magnetorquer
+• Provides large external 
+torque
+o Quick reactions
+o wheel desaturation
+o Spin Stabilization
+•
+Proximity operations
+• Higher precision for
+• Translational 
+• Attitude controls
+• Attitude control thrusters may 
+provide the best solution.
+Thrusters
+File:LM RCS thruster module.jpg - Wikimedia Commons
+
+
+--- Page 11 ---
+•
+Miniaturized INS
+o
+Angular drift
+o
+Susceptibility to External Electromagnetic Interference 
+(EMI)
+o
+Coarse navigation and poor attitude sensing
+•
+Navigation accuracy
+o
+Vulnerability to latency between communication nodes 
+and data links.
+o
+Fix
+•
+Data Fusion
+•
+Fast-response data links (e.g. laser communication links)
+o
+Low-altitude flight challenges
+•
+Complex environment
+•
+GPS-denied environments
+•
+Resolution
+•
+Optical stereo vision
+•
+Star Tracking
+Small Satellite Challenges
+
+
+--- Page 12 ---
+•
+Detect and measure local magnetic field.
+•
+Provides real-time 2-axis attitude 
+•
+Modeled magnetic field needed to compare with measured 
+field.
+•
+With a time-history of magnetometer data, Kalman filters 
+and similar algorithms can provide
+o
+Magnetometer only, it can provide
+•
+Attitude
+•
+Rotational rates
+•
+Local magnetic field knowledge needed to determine the 
+control of magnetic torquers.
+•
+Challenges
+o
+Need to avoid interference from local magnetic field 
+sources such as magnetic torquers and reaction wheels.
+•
+Placement on boom.
+o
+May require on-orbit recalibration
+Magnetometers
+MAG │ GOES-R Series
+
+
+--- Page 13 ---
+•
+Enables attitude estimation based on the direction of the Sun
+o
+Measured with respect to spacecraft's body reference system.
+o
+3-axis attitude requires an additional reference
+•
+Nadir vector
+•
+Useful for fault detection and recovery
+•
+Error in readings
+o
+Sunlight glinting off other space craft
+o
+Albedo (diffuse reflection sunlight / solar energy) of the earth or moon.
+Sun Sensors
+
+
+--- Page 14 ---
+•
+Cosine Detectors (aka photocells) aka Coarse Sun Sensors
+o
+Current generated by cell is proportional to the cosine of the angle between the sensor boresight and 
+the sun.
+o
+Multiple may be needed to cover full sky.
+•
+Different locations around spacecraft
+o
+Advantages
+•
+Inexpensive
+•
+Low mass
+o
+Disadvantages
+•
+Sensitive to albedo effects
+•
+Few degree accuracy
+•
+Requires ADC (analog to digital converter)
+•
+Albedo – measurement of reflectivity
+o
+Earth Albedo averages 30%, but varies dramatically based on surface conditions (e.g. snow/ice vs. 
+forests)
+o
+LEO spacecraft have reduced accuracy up to 10 degrees (coarse sun sensor)
+o
+Glint of sun off of horizon or other spacecraft can impact some sun sensors’ performance
+Types of sun sensors
+Cosine Sun Sensor | Bradford Space
+
+
+--- Page 15 ---
+•
+Quadrant detectors
+o
+Sunlight enters window with 2x2 array of photo diodes
+o
+Current output is a function of the sun's location within the boresight
+o
+Also sensitive to Albedo effect
+•
+Digital Sun Sensors
+o
+Narrow slit with photo diodes behind a "geometric coded bit mask."
+o
+Mask enables the light to form different measurements based upon the 
+sun's angle
+o
+Amplified and thresholded signals are then used to derive the sun's angle 
+with respect to the sensor
+•
+Sun Cameras
+o
+Determine sun position through camera image
+o
+Optics must be carefully considered due to the bright sunlight.
+o
+Finds centroid of sun in image.
+o
+Multiple apertures can increase accuracy
+o
+Advantages
+•
+High accuracy
+•
+Albedo rejection
+More Sun Sensor Types
+
+
+--- Page 16 ---
+•
+Determine the space vehicle’s attitude.
+o Compare positions of celestial bodies relative to an 
+image
+o 50-60 navigational stars identified by astronomers
+•
+Components:
+o Optical Assembly
+o Imaging Sensor
+o Processing Unit and software
+•
+Process for navigation
+o Image capture
+o Star Identification
+o Attitude Calculation
+o Continuous update
+•
+Hybrid navigation systems combine star 
+trackers, gyroscopes, and accelerometers.
+•
+Benefits:
+o High precision (arcsecond-level) attitude 
+determination
+o Enables precise spacecraft pointing
+o Onboard, real-time navigation
+o Applicable across many applications including:
+•
+Deep space exploration
+•
+Communication satellite pointing
+•
+Large and small satellite systems
+•
+Remote sensing
+Star Trackers
+
+
+--- Page 17 ---
+•
+Types
+o
+Infrared Horizon Crossing Indicators 
+(HCI)
+o
+Thermopile sensor
+•
+Compares temperature difference 
+between the poles and equator.
+•
+Determines
+o
+Horizon over several measurements
+o
+Nadir vector
+•
+Enables attitude determination and 
+guidance
+Horizon Sensors
+
+
+--- Page 18 ---
+•
+Elements
+o
+Gyroscopes
+•
+Angular velocity
+o
+Accelerometers
+•
+Measure velocity change
+•
+Packaging
+o
+Single Instrument
+•
+Singly packaged gyro
+•
+Singly packaged accelerometer
+o
+Inertial Reference Unity
+•
+Package with 3 orthogonal 
+gyros and 3 accelerometers.
+Inertial Sensors
+𝜃𝑎𝑥𝑖𝑠𝑡= 𝜃0 + න
+0
+2
+𝜔𝑎𝑥𝑖𝑠𝑡𝑑𝑡
+Where,
+ 𝜃𝑡 is current angle
+ 𝜃0 is initial angle
+ 𝜔𝑡 is the angular velocity from gyroscope
+
+
+--- Page 19 ---
+•
+Types of Gyros
+o
+Fiber Optic Gyros (FOGs) – exploits the Sagnac Effect
+•
+Superior performance with higher SWAP requirements
+•
+SWAP - Size Weight and Power
+o
+Ring laser gyroscopes
+o
+MEMS gyros
+•
+More susceptible to radiation
+•
+Single event upsets
+•
+Radiation hardened components are new
+•
+Gyro/Accelerometer stability characterized based on 
+o
+Bias stability
+o
+Angle random walk
+o
+Dynamic range
+o
+Output resolution
+•
+Sensor fusion needed to mitigate gyroscope drift
+o
+Accelerometer – corrects roll and pitch drift given “down” reference
+o
+Magnetometer – corrects yaw given “North” reference
+Inertial Sensors (2)
+Fiber-optic Gyro
+Ring laser gyroscope
+
+
+--- Page 20 ---
+•
+See previous slides
+•
+Useful for Low Earth Orbit.
+•
+However, progress made toward GEO and Cislunar potentially on the horizon.
+GPS
+
+
+--- Page 21 ---
+•
+Examples:
+o
+Small Deep Space Transponder (SDST)
+•
+Radio transponders used in conjunction with the Deep Space Network
+•
+Designed by JPL, manufactured by General Dynamics
+o
+IRIS V2 – deep space transponder for smaller form factor spacecraft such as cube sats.
+Deep Space Navigation
+
+
+--- Page 22 ---
+•
+Light Detection and Ranging 
+(LIDAR)
+o
+Time-of-flight sensor (laser-
+object-reflected laser light)
+o
+Used across many different 
+industries.
+•
+Used for larger satellites doing 
+proximity operations
+•
+Also viable for smaller satellites 
+and cubesats.
+•
+Outside of GNC, LIDAR plays a 
+large role in remote sensing 
+(surface, atmosphere, oceans)
+LIDAR
+
+
+--- Page 23 ---
+Questions?
+•
+Reference:
+o
+5.0 Guidance, Navigation, and Control – NASA from the NASA SmallSat Institute

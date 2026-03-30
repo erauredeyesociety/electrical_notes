@@ -1,0 +1,1870 @@
+--- Page 1 ---
+Journal Pre-proofs
+Review
+Research status and prospect of avionics system technology for spacecraft
+Chaoji CHEN, Yaobao YIN, Kewu HUANG, Xiongwen HE
+PII:
+S1000-9361(25)00654-5
+DOI:
+https://doi.org/10.1016/j.cja.2025.104048
+Reference:
+CJA 104048
+To appear in:
+Chinese Journal of Aeronautics
+Received Date:
+1 April 2025
+Revised Date:
+23 December 2025
+Accepted Date:
+23 December 2025
+Please cite this article as: C. CHEN, Y. YIN, K. HUANG, X. HE, Research status and prospect of avionics
+system technology for spacecraft, Chinese Journal of Aeronautics (2025), doi: https://doi.org/10.1016/j.cja.
+2025.104048
+This is a PDF of an article that has undergone enhancements after acceptance, such as the addition of a cover
+page and metadata, and formatting for readability. This version will undergo additional copyediting, typesetting
+and review before it is published in its final form. As such, this version is no longer the Accepted Manuscript, but
+it is not yet the definitive Version of Record; we are providing this early version to give early visibility of the
+article. Please note that Elsevier's sharing policy for the Published Journal Article applies to this version, see:
+https://www.elsevier.com/about/policies-and-standards/sharing#4-published-journal-article. Please also note that,
+during the production process, errors may be discovered which could affect the content, and all legal disclaimers
+that apply to the journal pertain.
+© 2025 The Author(s). Published by Elsevier Ltd on behalf of Chinese Society of Aeronautics and Astronautics.
+
+
+--- Page 2 ---
+Contents lists available at ScienceDirect
+Chinese Journal of Aeronautics
+Journal homepage: www.elsevier.com/locate/cja
+Final Accepted 
+Version
+Research status and prospect of avionics system technology 
+for spacecraft
+Chaoji CHEN a,b,*, Yaobao YINa, Kewu HUANGb, Xiongwen HEb
+aSchool of Mechanical Engineering, Tongji University, Shanghai 201804, China
+bBeijing Institute of Spacecraft System Engineering, Beijing, 100094, China
+Received 1 April 2025; revised 31 August 2025; accepted 17 October 2025
+Abstract
+The existing studies on spacecraft focus on improving the networked, intelligent, and autonomous level of avionics 
+systems. This paper reviews the research status of spacecraft avionics system architecture and typical spacecraft 
+avionics system, as well as the technical features and potential trends of key technologies, such as network 
+interconnection, high-speed bus, onboard computing, autonomous operation, and software-defined technology. A 
+development roadmap, a novel kind of intelligent system architecture and application scenarios of avionics systems 
+are then proposed. To tackle the challenges faced in the development of spacecraft avionics systems, suggestions are 
+made from the aspects of system architecture, heterogeneous network interconnection, on-orbit intelligent information 
+processing, Commercial Off-The-Shelf (COTS) products application, and intelligent autonomous management. This 
+provides a guide for the related studies on the development of spacecraft avionics technology.
+Keywords: Spacecraft avionics; System architecture; Development roadmap; Network interconnection; High-speed bus; 
+Onboard computing; Autonomous operation; Software defined networking
+ 
+*Corresponding author. E-mail address: chaojichen@tongji.edu.cn
+
+
+--- Page 3 ---
+·2 ·
+ Chinese Journal of Aeronautics
+2
+1. Introduction0F1
+The notion of avionics1 was initially used for airplane avionics systems. At present, it is widely used in the design of 
+electronic systems for spacecrafts. The avionics system is one of the platform subsystems of a spacecraft, serving as 
+its brain, which efficiently manages data, analyzes information, integrates scheduling, and controls the system. As 
+spacecrafts have evolved from individual units to constellations and ultimately to space-based networks, their avionics 
+systems have increasingly emphasized networking, intelligence, and autonomy. However, because of the unique design 
+of spacecraft avionics systems, the differences in information categories, and the various communication protocols, 
+resource sharing cannot be performed between different types of applications within the spacecraft, the underlying 
+software and hardware cannot be reused, and the interconnection and interoperability between different spacecrafts 
+cannot be reached. Constructing an open intelligent avionics system architecture will be a feasible solution.
+The space agencies are continuously studying the spacecraft avionics system, in order to meet the demands of the 
+future space applications and the rapid advancements in information technology. The U.S. Air Force Research 
+Laboratory (AFRL) proposed the Space Plug-and-play Avionics (SPA) system aiming to increase the ability of the 
+spacecraft to quickly respond. The European Space Agency (ESA) created the Space AVionics Open Interface 
+aRchitecture (SAVOIR) avionics architecture in an effort aiming to unify the design of spacecraft information systems. 
+Airbus initiated the avionics architecture referred to as Open Modular Avionics Architecture for Space Applications 
+(OMAC4S) aiming to reduce the cost of electronic devices and enhance their maintainability. NASA released the 
+Distributed Integrated Modular Avionics (DIMA) architecture standard for the Artemis Return to the Moon mission in 
+order to guide the design of avionics system, as well as the avionics architecture referred to as Modular Unified Space 
+Technology Avionics for Next Generation (MUSTANG) to conduct modular satellite design. It also implemented an 
+avionics architecture based on the software-defined technology in its Blackjack, SmartSat and other programs. In 
+addition, due to the technological benefits of the constellation system, SpaceX successfully completed the mass 
+production and the launch of its Starlink satellites, which will revolutionize the future satellite application models. 
+Due to the future spacecraft requirements for high-speed computing, lightweight design, and function diversification, 
+the avionics system is continuously becoming crucial, especially that its design quality significantly affects the overall 
+performance of the spacecraft. The main challenges of the avionics systems include making the spacecraft manageable, 
+useful, and user-friendly, as well as the all-round support of future space applications. It is expected that the future 
+spacecraft will be able to autonomously complete complex tasks, conduct health monitoring and fault handling in order 
+to minimize the amount of work associated with ground operation. The successful application of new technologies, 
+such as artificial intelligence and cloud computing, in the industrial field laid a solid foundation for the advancement 
+of the spacecraft avionics technology. Thus, space organizations are continuously promoting the use of new 
+technologies in space missions.
+This study focuses on the networked, intelligent, and autonomous requirements of the spacecraft avionics system, 
+analyzes the architecture of typical spacecraft avionics systems, and reviews the research status of spacecrafts. It details 
+characteristics and development trends of the avionics system technology from five aspects: network interconnection, 
+high-speed bus, onboard computing, autonomous operation, and software-defined technology. It then presents the 
+development roadmap, intelligent system architecture and typical application scenarios of the avionics system. Finally, 
+it provides development suggestions for spacecraft avionics systems, taking challenges faced by the current ones into 
+consideration.
+2. Research status of spacecraft avionics system
+2.1. System architecture
+Typical foreign spacecraft avionics system architectures include SPA, SAVOIR, OMAC4S, DIMA, and MUSTANG. 
+
+
+--- Page 4 ---
+Chinese Journal of Aeronautics
+· 3 ·
+The spacecraft avionics system of China has also made some progress in terms of distributed architecture and SPA 
+technology.
+2.1.1. Avionics architecture worldwide
+To solve the problem of quick response in space, the AFRL proposed a space plug-and-play avionics architecture 
+known as SPA2. This architecture started as conceptual study in 2004. Flight tests were then conducted in 2007 and 
+20093, to finally evolve to the Modular Open Network ARCHitecture (MONARCH) in 20114. A schematic diagram 
+of the SPA architecture is shown in Fig. 15. Note that this architecture is similar to the USB interface standard. It 
+consists of components, self-organizing network, plug-and-play middleware, and different types of applications. Its 
+software middleware mainly consists of the data manager, task manager, processor manager, and sensor manager. It 
+can automatically and quickly discover the inserted component and configure the services it provides. Relevant 
+standards supporting the SPA technology have been developed by the American Institute of Aeronautics and 
+Astronautics (AIAA) and the Consultative Committee for Space Data Systems (CCSDS)6. Using the SPA technology, 
+the mechanical, electrical, and thermal interfaces of spacecrafts should be unified, enabling the quick production, 
+assembly, testing, and maintenance, which allows to significantly reduce the time needed for the development of a new 
+spacecraft. 
+Fig. 1 Schematic diagram of SPA architecture.5 
+ESA presented the SAVOIR architecture in 2007 to meet the low-cost and high-performance needs of space avionics 
+systems, paving the way for further missions, including the Earth observation and scientific space exploration. This 
+architecture aims to reduce the spacecraft design time while enhancing the interchangeability and reusability of the 
+device. Fig. 2 shows the SAVOIR reference architecture7-8. Its protocol integrates many standards, such as the CCSDS 
+standard, and European Cooperation for Space Standardization (ECSS) standard. This is performed by combining 
+multiple protocols to accomplish the system functions. The hardware consists of intelligent sensors and actuators, data 
+storage, on-board computers, payloads and instruments. Different devices are connected through several buses, 
+including 1553B, SpaceWire, and Time-Triggered Ethernet (TTE). The software adopts a layered architecture and a 
+time-space partitioning operating system, and its design adopts software components that can be assembled.
+ 
+
+
+--- Page 5 ---
+·4 ·
+ Chinese Journal of Aeronautics
+4
+Fig. 2 SAVOIR reference architecture.7,8
+Airbus and TTTech initiated an open modular architecture for spacecraft avionics systems referred to as OMAC4S. 
+Its architecture is shown in Fig. 39. It uses commercial backplane standards to make the system highly modular, adopts 
+TTE as the backbone, employs a multi-core CPU and a time-space partitioning operating system to increase the 
+computer performance. The software is designed to support standard services, such as PUS and APIs for applications. 
+This design ensures that each function is an independent interchangeable Line Replaceable Unit (LRU) having all the 
+interfaces, software, and hardware needed to reach its intended purpose. The LRU modular design allows the rapid 
+replacement at the operating area, which can significantly enhance the system maintainability and reduce the 
+maintenance costs.
+Fig. 3 OMAC4S architecture.9 
+NASA announced the Artemis program, a mission to return to the Moon, which includes sending astronauts to the 
+south pole of the moon paving the way for human exploration of Mars. The program involves the successive launch of 
+manned spacecraft, lunar surface landers, and lunar orbital space stations. They then released seven interoperable 
+standards for avionics, communications, environmental control, energy, robotics, rendezvous and docking, and thermal 
+control, which are used to guide the design of the Lunar Gateway space station, serving as a transit station and supply 
+hub for the program. Fig. 4 shows the Distributed Integrated Modular Avionics (DIMA) architecture10-11 used in its 
+avionics interoperable standard. This architecture is advantageous in terms of size, weight, and power, allowing the 
+functional integration with less hardware using TTE bus as the backbone network and widely applying the CCSDS 
+standard protocols.
+
+
+--- Page 6 ---
+Chinese Journal of Aeronautics
+· 5 ·
+Fig. 4 Lunar Gateway avionics system architecture. 10,11 
+NASA proposed a backplane-less MUSTANG avionics system architecture12. This architecture provides a set of 
+hardware boards and an avionics platform to satisfy the most typical needs of data processing and electronic systems 
+for spacecrafts. It is designed for being as modular as possible, allowing quick design while reducing the underlying 
+costs through hardware hybrid integration. Although it has compact size and several restrictions, the MUSTANG 
+architecture is widely adaptable to the design of avionics systems for medium and large spacecrafts.
+2.1.2. Avionics architecture in China
+Spacecraft avionics systems are derived from the integrated modular avionics system architecture, which has evolved 
+through discrete, joint, integrated, and advanced integrated stages. At present, the DIMA architecture13-14 is the 
+development direction for the next generation of avionics systems. In order to meet the development needs for avionics 
+systems, Zhou et al.15 developed a resource scheduling algorithm for the DIMA system based on Time-Triggered 
+Ethernet, aiming to achieve minimal end-to-end latency at the partition level. Liu and Wang.16 compared the features 
+of distributed and centralized satellite avionics architectures. They also proposed a design strategy for hardware 
+modularization and software componentization. Liu et al.17 proposed a distributed avionics system architecture and 
+validated it in orbit. They also analyzed key technologies, including the parallel computing, distributed storage, and 
+related space information network protocol. A centralized avionics architecture was proposed by Jiang et al.18 for 
+CubeSats, which had been functioning well on the TianQi-2 satellite for more than three years. Chen et al.19 proposed 
+an intelligent avionics architecture for low-cost and highly reliable spacecraft based on COTS technology. Future 
+developments in spacecraft avionics system will focus on low cost, high performance, high intelligence, high 
+integration and high reliability. He et al.20 introduced a spacecraft avionics system architecture and detailed its 
+implementation strategy from three aspects: hardware modularization, service and protocol standardization, and 
+software layering and componentization. This provided suggestions for the design of the spacecraft avionics system.
+To enhance the generalization, intelligence, and networking level of satellite avionics system, Liu et al.21 proposed 
+an avionics system architecture as shown in Fig. 5, which is based on high-speed and low-speed hybrid buses, 
+
+
+--- Page 7 ---
+·6 ·
+ Chinese Journal of Aeronautics
+6
+generalized hardware modules, and software components to form a set of standard functional units that can be selected 
+on demand, so as to realize the ability of shelf-style assembly of avionics systems and task migration between various 
+units. The system network bus consists of ARINC659, 1553B, and SpaceWire. The ARINC659 bus is used to 
+communicate between hardware modules in the unit, the 1553B bus is used to ensure the reliable transmission of key 
+data to other systems, and high-speed data interaction between the payload device and the platform is realized by the 
+high-speed routing unit and the SpaceWire bus.
+Fig. 5 Avionics architecture based on high and low speed hybrid networks.21
+Liu et al.22 presented an avionics system design as illustrated in Fig. 6 to meet the demand for lightweight, high-
+reliability, and high-performance computation in the manned lunar exploration spacecraft. According to the concept 
+of network integration, universal computing, integrated execution, and software store-based loading, the three-level 
+control structure of “system-subsystem-area execution” of traditional spacecraft is simplified to a two-level control 
+structure of “unified system management-area execution.” Configuring numerous high-performance computers 
+achieves system-level unified management, and TTE switches enable the integrated transmission of high-speed and 
+low-speed mixed data. The execution service units, which are made up of standard hardware modules, are configured 
+by area in accordance with the acquisition and driving needs.
+
+
+--- Page 8 ---
+Chinese Journal of Aeronautics
+· 7 ·
+Fig. 6 Avionics architecture of manned lunar exploration spacecraft.22
+Gao et al. proposed a system architecture of a satellite intelligent computing platform to address the issue of difficult 
+computing resource sharing and insufficient autonomous management capability of low-orbit satellites. The hardware 
+architecture is shown in Fig. 723, and it primarily consists of the main control module, storage module, routing and 
+switching module, and computational processing module. Among them, the main control module is used to realize 
+state monitoring and comprehensive scheduling of other modules, while the routing and switching module facilitates 
+data exchange between modules and data transmission between payloads. The computing processing module is 
+composed of FPGA, CPU, GPU, NPU, etc. Through hardware virtualization technology, a unified computing resource 
+pool is formed to provide intelligent computing power support for image processing, AI computing, etc. The various 
+modules interact with each other through CAN, Ethernet, and so on.
+Fig. 7 Hardware architecture of satellite intelligent computing platform.23
+2.1.3. Analysis of research status
+It can be deduced from the comparison between the aforementioned spacecraft avionics system architectures (Table 1) 
+that the SPA, SAVOIR, OMAC4S, DIMA, and MUSTANG open modular system architectures exhibit the same design 
+principles. They all aim at reducing the system costs while increasing the flexibility and maintainability of the 
+spacecraft avionics system through standardized and modularized design. However, each type of architecture has a 
+distinct focus in terms of many factors, including the design concepts, integration methods, and application scenarios. 
+The SPA architecture simplifies the system integration for spacecrafts that require routine maintenance or updates. 
+However, it may make the system design and verification more difficult because of its inter-module compatibility. The 
+SAVOIR architecture, which emphasizes the design of open interfaces for space electronics and focuses on 
+interoperability and information sharing among different systems, is the most suitable for complex and large-scale 
+space missions requiring collaborative work. However, it may complicate the system integration in order to ensure the 
+universality and compatibility of the underlying interfaces. By providing backup components, the OMAC4S 
+architecture emphasizes modular design and component interchangeability, which may increase the complexity of the 
+system while facilitating the quick replacement and maintenance of electronic devices. The DIMA architecture uses 
+functional synthesis and physical distribution to increase the reliability of the system. This makes it more appropriate 
+for the design of avionics systems of large and complex spacecrafts, at the expense of increasing the complexity of the 
+system because of the contradiction between synthesis and distribution. The MUSTANG architecture provides 
+solutions for next-generation space avionics systems by striking a compromise between the compactness of the 
+spacecraft structure and its maximum functionality through a unified modular design without backplanes. However, 
+the inter-module interactions make the system design and verification more complex. Among the aforementioned 
+architectures, SAVOIR and DIMA are the most widely studied and adopted. They are the mainstream architectures 
+currently used by NASA and ESA. Note that it is expected to widely use the MUSTANG architecture in future satellites.
+Table 1 Comparison between avionics architectures of spacecrafts.
+
+
+--- Page 9 ---
+·8 ·
+ Chinese Journal of Aeronautics
+8
+Architecture
+SPA
+SAVOIR
+OMAC4S
+DIMA
+MUSTANG
+Name
+Space Plug-and-
+play Avionics
+Space AVionics Open 
+Interface aRchitecture
+Open Modular Avionics 
+Architecture for Space 
+Applications
+Distributed Integrated 
+Modular Avionics
+Modular Unified Space 
+Technology Avionics
+for Next Generation
+Proposer
+AFRL2-6
+ESA7,8
+Airbus, TTTech9
+NASA10,11
+NASA12
+Year
+2004
+2007
+2013
+2018
+2019
+Advancement
+Supports hot-
+plugging and quick 
+assembly, simplify 
+maintenance and 
+upgrades.
+Data sharing and 
+interoperability between 
+different modules can be 
+accomplished using 
+modular and open 
+architecture.
+Its use for modular and 
+open architecture makes 
+the system flexible and 
+emphasizes the reuse of 
+hardware and software.
+Distributed and 
+integrated architecture 
+with features of 
+physical distribution 
+and functional 
+integration.
+Open architecture and 
+backplane-less modular 
+design optimize the 
+functionality in a very 
+small size.
+Openness
+Support a wide 
+range of devices 
+and interfaces
+Emphasizes the interface 
+standardization and 
+openness.
+Support the use of open 
+standards, and different 
+modules can be 
+seamlessly integrated.
+Standardized 
+interfaces support 
+good openness.
+Support standardized 
+interfaces and protocols.
+Reliability
+Rigorous testing is 
+required to ensure 
+compatibility and 
+reliability. 
+Increase the reliability 
+through standardized 
+interfaces and redundant 
+design.
+Increase the reliability 
+through standardized 
+interfaces and redundant 
+design.
+High reliability due to 
+distributed 
+architecture and fault 
+isolation.
+Increase the reliability 
+through standardized 
+interfaces and 
+redundant design.
+Complexity
+Complex design 
+and verification
+Complex system 
+integration
+Complex inter-module 
+interaction
+Complex initial 
+system design
+Complex system 
+integration
+Scalability
+Easy to expand and 
+maintain
+Easy to expand and 
+maintain
+Easy to expand and 
+maintain
+Easy to expand and 
+maintain
+Easy to expand and 
+maintain
+Economy
+High costs for 
+initial design and 
+validation.
+Modularization and 
+standardization facilitate 
+the cost reduction.
+Modularization and 
+standardization facilitate 
+the cost reduction.
+High cost of initial 
+system design. 
+Modularization and 
+standardization 
+facilitate the cost 
+reduction.
+Scenario
+Project of rapid 
+design and rapid 
+response.
+Large project requiring 
+multi-vendor integration 
+and interoperability.
+Highly modular and 
+reusable project.
+High-reliability 
+project.
+High-performance deep 
+space exploration 
+missions.
+In China, the avionics system architecture of spacecrafts recently evolved from a centralized to a distributed 
+networked direction. At present, it reached the stage of distributed integrated modularization, and relevant applications 
+are actively explored in terms of plug-and-play technology. The main features of the avionics system architecture 
+comprise the hardware modularity, protocol standardization, and software componentization. In the future, to meet the 
+growing demands for computing intelligence, service diversification, and communication integration, spacecraft 
+avionics systems will prioritize enhanced networking, intelligence, and autonomy while also improving the usability 
+and operational convenience.
+2.2. Typical spacecrafts
+The design solutions for typical spacecraft avionics systems in the fields of deep space, manned, remote sensing, 
+communication, navigation, and small satellites were investigated both domestically and internationally. In each field, 
+the key traits and development trends of spacecraft avionics systems were studied and compared.
+2.2.1. Foreign spacecrafts
+In the manned spacecraft field, the information system of the International Space Station, which has over 100 
+computers, is mainly responsible for data collection, command transmission, and network administration of payloads 
+and platforms. The avionics system of each cabin uses a hierarchical bus and implements redundancy and 
+generalization in computer design at every level according to functional needs. These features facilitate the system 
+
+
+--- Page 10 ---
+Chinese Journal of Aeronautics
+· 9 ·
+expansion and maintenance. For instance, the avionics system of the U.S. Experiment Module is arranged in three 
+layers24-25. The control layer is the first layer that coordinates the management of the systems of the space station, the 
+regional control layer is the second layer that handles the application tasks for the subsystems, and the user layer is the 
+third layer that manages local data acquisition and control.
+The U.S. Defense Advanced Research Projects Agency (DARPA) proposed the Blackjack program, which is a low-
+orbit constellation providing continuous global coverage at very low cost. Pitboss is the on-board control unit having 
+a high-speed processor and an encryption device. It is considered as the central component of the satellite, as illustrated 
+in Fig. 826-27. The satellite can be software-defined to quickly and autonomously perform tasks such as target 
+identification, on-orbit data processing, and data encryption. By collaborating with other satellites, it can handle long-
+term autonomous operation of the constellation. In addition, the SmartSat satellite developed by Lockheed Martin 
+adopts a software-defined architecture, which allows the users to add functions and assign new tasks. Moreover, it has 
+adjustable satellite bandwidth, and it can support changing the satellite coverage area according to task requirements.
+Fig. 8 Architecture of the Blackjack satellite.26,27 
+In the communication field, satellites demonstrate a development trend of large-scale, serialization, and high cost-
+effectiveness. The integrated, generalized, and flexible design of the device allows to decrease the expenses and 
+production time. Typical satellite platforms include the LM2100 of Loma28 and the NeoSAT of ESA29. Through 
+integrated and generalized design, the LM2100 platform reduced the components variation and production time by 
+56% and 28%, respectively. The on-board computer and remote interface unit of its avionics systems are constructed 
+using radiation-hardened PowerPC. The on-board computer can be modified on orbit, and the remote interface unit has 
+1.5-2 times the integration degree of traditional devices. The NeoSAT platform includes Euro-StarNEO of ADS and 
+SpaceBus of TAS, which have almost the same indices. This yields a 30% increase in the overall competitiveness 
+compared with traditional platforms. It also has highly-integrated functionality and uses the all-electric propulsion 
+technology to support heavier load weights. In the satellite internet field, more than 10000 Starlink satellites of the 
+SpaceX company have been launched. The latest versions of these satellites have laser interplanetary links and optical 
+imaging systems, which can perform flexible networking and autonomous debris avoidance in space.
+In the navigation field, Galileo is a typical avionics system. The avionics system of the GIOVE-A satellite was 
+launched in 2005. It is based on the GEMINI small satellite platform30. Its avionics system uses integrated, networked, 
+and modularized design ideas, and the satellite is managed by a data management computer through CAN bus for data 
+exchange. The next-generation Galileo system improves the accuracy of the signal and the autonomous operation 
+capacity31. Satellites are equipped with laser interplanetary links to enhance the positioning and timing services of the 
+system. In addition, the navigation payloads are distinguished by their high performance and safety, as well as their 
+
+
+--- Page 11 ---
+·10 ·
+ Chinese Journal of Aeronautics
+10
+configurable on-orbit functions. In order to form group intelligence and provide continuous services of high reliability, 
+future navigation constellations will require satellites to cooperate and share resources.
+In the deep space exploration field, the avionics system of the American Orion spacecraft adopts a distributed 
+modular integrated system architecture. Fig. 932 illustrates the TTE bus serving as the system backbone network, 
+connecting the remote unit and the on-board computer. This switched network architecture has high scalability, and 
+new devices can join the system by only connecting to the switch33. With a high degree of system function synthesis, 
+the on-board computer integrates several complex functions, including human-computer interface, autonomous heat 
+control, autonomous energy control, and bus network management.
+Fig. 9 Avionics system of Orion spacecraft.32 
+In the field of small satellites, the Surrey Satellite Technology of the UK launched the NovaSAR-1 satellite, 
+constructed using the SSTL300 platform34. It uses integrated, networked, and modularized design ideas, and it also 
+adopted a mature and highly-reliable avionics architecture. The platform computer adopts a radiation-hardened 
+processor and performs unified data management through CAN bus. Customized Field Programmable Gate Array 
+(FPGA) is used to process payload data, and COTS components are widely used to cut costs.
+2.2.2. Spacecrafts in China
+In the manned spacecraft field, the information system of the Chinese space station adopts a layered network 
+architecture based on modular computers. According to different types of information, its network is divided into 
+system, communication, and payload networks, as shown in Fig. 1035. These kinds of networks are connected by 
+gateways. The system network is based on the 1553B bus to perform system management of the platform. The 
+communication network is based on Gigabit Ethernet, mainly designed for astronaut information service, and the 
+payload network uses 10 Gigabit Ethernet to make the payload data management more straightforward. In addition, 
+the information system of the manned spacecraft consists of highly-reliable computer, remote terminal, and 
+communication bus, and it adopts several measures to satisfy the mission requirements, such as hardware redundancy 
+and crucial data backup.
+
+
+--- Page 12 ---
+Chinese Journal of Aeronautics
+· 11 ·
+Fig. 10 Architecture of the China space station network.35 
+In the remote sensing field, Yang et al.36 proposed an intelligent remote sensing satellite system that consists of 
+remote sensing satellites, satellite-ground networks, and cloud service centers. This system mainly aims at constructing 
+an on-orbit open software platform to facilitate the flexible access of third-party applications. This platform can also 
+be used to acquire and process on-orbit images based on user needs. The information system of the Resource One 02D 
+satellite37 constructed a high-speed and low-speed distributed network, including 1553B, LVDS, and TLK2711 buses. 
+The low-speed network was mainly used to transmit platform information, while the high-speed network was used to 
+transmit camera images and data between the underlying devices. Lei et al.38 argued that the avionics system of further 
+remote sensing satellites would consist of a lightweight, generalized, and hierarchical software architecture as well as 
+an open, intelligent, highly-integrated, and high-computing hardware architecture.
+In the communication field, China's first global high-throughput broadband satellite, which is referred to as Asia-
+Pacific 6D, developed a distributed avionics system having a central computer as its core39. It performed unified 
+satellite management through 1553B bus, and solved the problem of heavy cable and many payloads by hardware 
+integration and modularization, yielding a cable weight reduction of 50%. It increased the capacity of the satellite for 
+on-orbit autonomous operation by adopting almost 20 software-defined functions, including autonomous sun tracking 
+and autonomous temperature control. Based on the Dongfanghong V satellite platform, the Shijian 20 communication 
+satellite40 was developed using modular, scalable, fully autonomous, and intelligent design concepts. It developed a 
+distributed avionics system having a Central Management Unit as its brain, an Integrated Service Unit as execution 
+terminal, and the 1553B bus as core network. Many autonomous functions, such as autonomous data management and 
+autonomous fault disposal, are have been widely used. In addition, the successful launch of the satellites of the StarNet 
+Constellation41 and the Qianfan Constellation42 paved the way for the deployment stage of China's satellite internet 
+program.
+In the navigation field, the BeiDou-3 satellite developed a hierarchical distributed avionics system having the Central 
+Management Unit as brain43. This allowed to perform unified scheduling and integrated information processing of the 
+constellation, as well as the provision of dependable and stable services for users. The system mainly comprises the 
+Central Management Unit (CMU), Interface Service Unit (ISU), and Dynamic Path Routing Unit (DPRU), as 
+illustrated in Fig. 1144. The CMU performs the platform management, including data management, the ISU provides 
+telemetry acquisition, command output, power distribution, and other services for different types of devices, and DPRU 
+mainly performs the information fusion of spacecraft-earth communication and interplanetary links. Through the 
+highly-integrated and portable compactness design of the avionics system, the weight was reduced by more than 30% 
+compared with the traditional method.
+
+
+--- Page 13 ---
+·12 ·
+ Chinese Journal of Aeronautics
+12
+Fig. 11 Avionics architecture for navigation satellites.44 
+In the deep space exploration field, the avionics system of Chang'e-3 rover45 was the first successfully deployed on-
+orbit avionics system, while the avionics architecture of Chang'e-4 lander46 combined centralized and distributed 
+methods, and it was characterized by its unique modularity, fault tolerance, and ease of expansion. The avionics system 
+of Chang’e-5 orbiter optimized the resource sharing by configuring power, information, and radio frequency device 
+modules47. This was accompanied by the reduction of the weight by almost 40% compared with the traditional 
+architecture. The avionics system of the "Zhu Rong" Mars rover48 in the "Tianwen" Mars spacecraft had many 
+autonomous functions, including mission planning, navigation control, autonomous health management, and scientific 
+exploration.
+The Shijian 5 satellite is the first real small satellite in China49, which built and validated a distributed avionics 
+architecture. The avionics system of the Beijing III satellite50 comprised the functions of many devices joined in one 
+computer, serving as the satellite brain. The information management of the satellite was implemented by a CAN bus, 
+yielding reduction of 60% and 20% in satellite quality and power consumption compared with the conventional 
+approach, respectively. The architecture of the avionics system of small satellites has gradually evolved51 from 
+distributed to centralized, due to the advancement of the information technology. The internal high-speed bus of the 
+device, which communicates with the underlying data through various mediums, such as CAN, 1553B, and SpaceWire, 
+takes the place of the external bus, and its architecture illustrates a networked, intelligent, and integrated development 
+trend of high-performance.
+2.2.3. Analysis of research status 
+The avionics system plays a crucial role in the establishment of functions, performance increase, reliability 
+improvement, and mission completion of spacecrafts. Typical spacecraft avionics systems in manned, remote sensing, 
+communication, navigation, deep space, and small satellites are presented in Table 2. It can be seen that the features 
+of the spacecraft avionics systems are mainly reflected in the following aspects:
+(1) The system architecture is shifting towards distributed integrated modularity for complex spacecrafts and 
+centralization for small satellites. However, they are also designed with higher functional density and computing power. 
+For example, the International Space Station uses a layered network architecture to facilitate the system expansion, 
+and its computers are highly integrated. The avionics systems of the Orion spacecraft and the Chang'e series lunar 
+probe include physical distribution and functional integration. The avionics systems of small satellites, such as Beijing 
+III and No-vaSAR-1, use centralized architectures, exhibiting tightly-integrated electronic devices.
+(2) The novel hardware design of avionics systems emphasizes the modularity as well as the high performance and 
+integration. The hardware devices are classified into a few types, such as on-board computers and remote units, and 
+the system performs unified scheduling and resource management through switching networks. The modularization 
+
+
+--- Page 14 ---
+Chinese Journal of Aeronautics
+· 13 ·
+technology of the devices is more advanced, and standard modules are used to accomplish many tasks, such as 
+telemetry acquisition, command output, drive control, heating control, and power distribution, which significantly 
+reduces the variability of the hardware modules. Many technologies, including SoC and ASIC, are used to perform the 
+integration and reach portable compactness of the devices. Consequently, their integration degree is increased by more 
+than one time compared with the traditional methods. In addition, COTS components using radiation-hardened 
+techniques are widely used to significantly increase the performance of the system and reduce the underlying costs.
+(3) The software has lightweight, generic, and hierarchical architecture, using componentized design approaches. It 
+adopts a layered system structure and a time-space partitioning operating system to facilitate the integration of multiple 
+complex applications and the decoupling of hardware and software. It also enables the on-orbit software transplantation 
+and software-defined functions through software componentized design, as well as the widespread use of 
+standardization organization communication protocols, such as CCSDS. Complex system functions can be established 
+by combining several standard protocols, leading to the development of a software design ecosystem that promotes 
+multi-party collaboration and parallel design.
+(4) The network architecture should support the hybrid transmission of high-speed and low-speed heterogeneous 
+data. The CAN (or the 1553B bus) is a standard backbone network of the spacecraft avionics system, besides additional 
+connections provided by other buses, including Ethernet, SpaceWire, and serial interfaces. The coexistence of multiple 
+buses results in complex cable wiring and large system weight, which does not meet the portable compactness 
+requirements of the spacecraft. Future spacecraft data buses should be flexible enough to expand and transfer data at 
+high and low speeds. Time-deterministic Ethernet, such as the TTE or TSN bus, is a development trend that will be 
+increasingly used.
+(5) There is an increasing demand for the onboard high-performance computing and information processing capacity 
+of spacecrafts. The on-orbit applications are becoming more complex, and therefore spacecrafts should be equipped 
+with many features, such as on-orbit data management, mission planning, target recognition, and image processing. At 
+present, the computing and storage capacities of spacecrafts are not able to meet the demand for intelligent and high-
+speed information services that will be needed by users in the future. This presents a new challenge for high-
+performance computing and information-processing capacities. As a result, many countries promote the upgrading of 
+onboard computing capacities.
+(6) The future spacecrafts will emphasize the intelligence and autonomy. Higher demands have been made on 
+spacecraft autonomous operations due to the complexity of scientific missions, and avionics systems will increasingly 
+be responsible for performing intelligent computing and autonomous management of tasks. To deal with the 
+requirement of long-term on-orbit autonomous operation, spacecrafts should be able to accurately perceive changes in 
+their own status and external environmental conditions by adopting novel technologies, including artificial intelligence, 
+cloud computing, and software-defined technology. They should also be able to autonomously perform many tasks, 
+such as mission planning, status monitoring, command execution, and autonomous on-orbit fault disposal.
+(7) The development of future spacecrafts for remote sensing, communication, and navigation will require a 
+cooperative constellation. The establishment of a cooperative constellation based on the principles of physical 
+distribution, information integration, and intelligent cooperation provides the spacecraft with a longer measuring 
+range52, broader coverage capacity, and higher positioning accuracy in the fields of remote sensing, communication, 
+and navigation. To increase the overall performance of the system, the constellation spacecraft can provide flexible 
+networking, cooperative sensing, and quick response to dynamic tasks by forming team intelligence through 
+information exchange and task collaboration.
+Table 2 Features and development trends of typical spacecraft avionics.
+
+
+--- Page 15 ---
+·14 ·
+ Chinese Journal of Aeronautics
+14
+Fields
+Country/
+organization
+Typical 
+spacecrafts
+Key features
+Development trends
+USA, Russia, 
+Japan, etc.
+International 
+Space 
+Station24,25
+Hierarchical bus architecture and 
+generalized computer.
+Manned
+China
+Chinese space 
+station35
+Its network includes system 
+network, 
+communication 
+network, payload network, and 
+generalized computer.
+It adopts layered distributed network architecture, highly 
+integrated electrical systems, and generalized 
+computation.
+USA
+Blackjack 
+spacecraft26,27
+It 
+uses 
+software-defined 
+architecture and has powerful 
+computers facilitating the quick 
+reaction.
+Remote sensing
+China
+Resource One 
+02D satellite37
+Adopts a distributed information 
+network using buses of different 
+speeds.
+Hardware architecture tends to be intelligent, highly 
+integrated, and of high performance, while software 
+architecture tends to be software-defined, generalized, 
+and layered.
+USA
+LM2100 
+platform28
+The integration degree is 1.5-2 
+times that of the traditional 
+system, which is reached using 
+integrated 
+and 
+generalized 
+architecture.
+ESA
+NeoSAT 
+platform29
+Exhibits a 30% increase in 
+overall 
+competitiveness 
+compared 
+with 
+traditional 
+platforms, as well as highly-
+modular payloads and very high 
+integration level.
+USA
+Starlink satellite
+It has laser interplanetary links 
+and optical imaging systems, 
+enabling flexible networking and 
+avoiding 
+autonomous 
+space 
+debris.
+China
+Asia-Pacific 6D 
+satellite39
+It uses a distributed avionics 
+system having software-defined 
+and 
+autonomous 
+operation 
+capacities.
+China
+Dongfanghong 
+V platform40
+It uses a modular, scalable, fully 
+autonomous, 
+and 
+intelligent 
+distributed avionics system.
+Communication
+China
+StarNet41 and 
+Qianfan 
+satellite42
+It marks the beginning of the 
+deployment stage of China's 
+satellite internet program.
+On the one hand, the satellite platform presents a large-
+scale high-payload ratio development trend, which results 
+in significantly increasing the load capacity. On the other 
+hand, the low-orbit communication satellite Internet has 
+become a hotspot. The Starlink is the world's leading 
+system, and China also started to construct the satellite 
+internet.
+
+
+--- Page 16 ---
+Chinese Journal of Aeronautics
+· 15 ·
+Fields
+Country/
+organization
+Typical 
+spacecrafts
+Key features
+Development trends
+UK
+Galileo 
+satellite30
+It uses a modular, networked, 
+and integrated architecture to 
+increase the accuracy of the 
+signal 
+and 
+the 
+ability 
+to 
+autonomously operate.
+Navigation
+China
+BeiDou-3 
+satellite43,44
+It uses a hierarchical distributed 
+system architecture that reduces 
+the weight by more than 30%. It 
+is lightweight and has high 
+integration ability.
+It is characterized by integration, networking, 
+modularization, and configurability of on-orbit functions. 
+Consequently, the future navigation constellations will be 
+able to share resources and collaborate on work.
+USA
+Orion 
+spacecraft32
+It has a distributed modular 
+integrated architecture and a 
+flexible access based on TTE 
+switching network.
+Deep space 
+exploration
+China
+Chang'e series 
+of spacecraft45-47 
+Its features include modularity, 
+high fault tolerance, autonomy, 
+and portable compactness.
+The system architecture is distinguished by its physical 
+distribution, modularity, and high fault tolerance.
+UK
+SSTL300
+platform34
+It adopts integrated, networked, 
+and modular design, and widely 
+uses COTS products.
+Small satellite
+China
+Beijing III 
+satellite50
+The function is highly integrated, 
+with 
+information 
+exchange 
+facilitated by an internal bus.
+It mostly uses centralized architecture and exhibits a 
+trend of high integration, networking, intelligence, and 
+commercialization.
+3. Key technologies and trends
+The aforementioned research status demonstrates that the avionics system, which serves as a spacecraft information 
+center, played a crucial role in practical applications. However, some key technologies have room for improvements. 
+Fig. 12 summarizes the evolution of key technologies in terms of network interconnection, high-speed bus, onboard 
+computing, autonomous operation, and software-defined technology.
+
+
+--- Page 17 ---
+·16 ·
+ Chinese Journal of Aeronautics
+16
+ Fig. 12 Key technologies of spacecraft avionics.
+3.1. Network interconnection technology
+The spacecraft network interconnection technology performs network connection and information interaction between 
+different spacecrafts as well as between the spacecraft and the ground. The three main types of spacecraft network 
+interconnection protocol systems are the Transmission Control Protocol/Internet Protocol (TCP/IP), Common Carrier 
+Switching Data System (CCSDS) protocol, and Delay/Disruption Tolerant Network (DTN) protocol53.
+(1) TCP/IP protocol system
+The TCP/IP protocol system started in the 1960s and then evolved into the most widely used computer 
+interconnection protocol in the 1990s. The protocol stack consists of five layers: application, transport, network, data 
+connection, and physical layers. Although this protocol exhibits simplicity and flexibility, it only provides "best-effort" 
+services, and thus the high quality of data transmission cannot be ensured. The use of the IP technology in space 
+communications started after the rapid development of terrestrial Internet. In 2002, NASA launched the OMNI project, 
+which integrated terrestrial and space networks and performed all-IP interconnections from spacecraft to terrestrial 
+users. Conducted on-orbit tests then demonstrated the possibility of using IP protocols54 in space missions.
+(2) CCSDS protocol system
+The CCSDS protocol system is designed for space communication. It includes a series of protocols from the data 
+link layer to the application layer, while each one includes a certain number of protocols that can be combined, such 
+as the Advanced Orbiting System (AOS) protocol and CCSDS File Delivery Protocol (CFDP) 55. Although the CCSDS 
+protocol, which is has been applied and verified in more than 1000 spacecrafts, is more refined, it cannot be directly 
+connected to the ground network. CCSDS undergone many adjustments and upgrades for space communication 
+
+
+--- Page 18 ---
+Chinese Journal of Aeronautics
+· 17 ·
+protocols in order to keep up with the rapid development of terrestrial Internet. The "IP over CCSDS" standard, released 
+in 2012, allows to transmit IP data through space communication links.
+(3) DTN protocol system
+Fall et al. proposed the DTN protocol for the interplanetary Internet. In contrast to the conventional terrestrial 
+Internet, this protocol has a bundle layer between the application and transport layers. This layer enables the 
+interoperability of the underlying protocols, such as TCP/IP and CCSDS. Due to the fact that the DTN uses the store-
+and-forward approach, Bundle Protocol (BP) in the Bundle layer can provide permanent storage and transport. In other 
+words, data can be permanently stored on a DTN node56 until it is successfully sent to the next hop node through the 
+BP protocol. Thus, this is the ideal solution for network communications between nodes in deep space exploration 
+missions. NASA used it to build an interplanetary Internet. They then conducted many experiments demonstrating that 
+the DTNs can successfully function over links of high latency and disruption.
+China conducted many studies on CCSDS protocols. In order to unify the space network with the internal network 
+of the spacecraft, the Beijing Institute of Spacecraft System Engineering integrated the subpacket remote control 
+protocol, AOS protocol, space packet protocol, and asynchronous messaging protocol that are established in CCSDS 
+and ESA's PUS standard. They also developed the "Fuxi" software architecture for the spacecraft, which is compatible 
+with this architecture, and published the first CCSDS standard proposal of China57. Other organizations also 
+significantly contributed to space networking technologies. For instance, Tsinghua University studied the use of the 
+IPv6 protocols in space, and developed several space protocols, such as the Open Shortest Path First (OSPF+)58. 
+Nanjing University also studied DTN protocols and developed a network simulation system.
+In summary, the CCSDS protocol system is reasonably developed, and it has been widely used in the spacecraft 
+field. However, it cannot be directly connected to the terrestrial Internet. The TCP/IP protocol is able to reduce the 
+building and maintaining costs. However, it is unsuitable for deep space communication. The protocol system that 
+combines TCP/IP with CCSDS has these two advantages. However, it cannot solve many problems, such as the 
+dynamic routing in deep space communication. The DTN protocol system is proposed and used in deep space 
+communication. It can integrate the CCSDS protocol stack and lower layer protocols (e.g., IP and AOS) in the TCP/IP 
+protocol stack through the bundle layer. This allows to interconnect many heterogeneous networks, and provides 
+advantages compared with network systems, in terms of compatibility and extensibility. The system that integrates 
+CCSDS, TCP/IP, and DTN will be adopted in future spacecraft network protocols.
+3.2. High-speed bus technology
+The spacecraft performs the information exchange and data transmission between computer and terminal devices 
+through a data bus. At present, CAN, 1553B, SpaceWire, Ethernet, TTE, and Time-Sensitive Networking (TSN) are 
+data buses that can be typically used in spacecrafts. Note that CAN and 1553B are low-speed buses while the others 
+are high-speed buses. Table 359-60 shows a comparison between these buses. The main features of the SpaceWire, TTE, 
+and TSN buses are summarized as follows:
+
+
+--- Page 19 ---
+·18 ·
+ Chinese Journal of Aeronautics
+18
+(1) SpaceWire bus: It is a high-speed bus developed by ESA to be mainly used in spacecraft applications. It has a 
+very flexible topology, point-to-point full-duplex communication ability, enhanced fault and error detection, exception 
+handling, and high timing accuracy. SpaceFibre is the next generation of SpaceWire, which can transmit data at speeds 
+of up to 1 Gbit/s. 
+(2) TTE bus: It is a type of time-deterministic Ethernet created by the TTTech company. It incorporates time-
+triggered modes to the event-triggered modes of conventional Ethernet, which allows to meet the low time-delay 
+requirements of some control systems while remaining widely compatible with the current Ethernet standards. 
+Applications for the TTE bus in spacecrafts can be tackled through a single bus network that combines high-speed and 
+low-speed data transmission. The TTE bus has been successfully applied in the Orion spacecraft of the US. It also 
+serves as the backbone network in the spacecraft of NASA’s Lunar Gateway.
+(3) TSN bus: It is based on the Audio Video Bridging (AVB) technology, designed to perform deterministic real-
+time Ethernet-based video/audio data transmission over Ethernet. Time-sensitive data transmission can be performed 
+with very low end-to-end latency and transmission reliability through many methods, including clock synchronization 
+and bandwidth reservation. The IEEE 802.1 working group renamed AVB to TSN61-62. Its current application scenarios 
+are extended from audio and video data transmission to other fields, such as automotive, electronics, and spacecrafts.
+For a long period of time, CAN and 1553B buses have been the primary data buses used in spacecrafts. However, 
+due to their limited communication rates, they cannot handle the demands of real-time communication of the massive 
+volumes of data that future spacecrafts will require. TTE buses have been used in many applications, including 
+automobiles, aircrafts, and spacecrafts. They are considered a new network technology that combines high bandwidth, 
+high reliability, and high certainty. The TTE bus can fulfill the demand for mixed transmission of data with different 
+rates and levels of certainty on a single network. In addition, they can be used as the backbone bus selection form for 
+the future spacecrafts. Similarly, due to its deterministic switching technology, which considers forward compatibility 
+with current Ethernet switching, the TSN bus is easily accepted by the industry. As a result, it has started to be used in 
+industry and will probably have a larger market in the future63. However, the relevant standards and products of the 
+TSN bus are currently being developed and refined, and their suitability for use in spacecrafts should still be evaluated.
+3.3. Onboard computing technology
+The onboard computing technology serves as the foundation of the spacecraft to perform information services and on-
+orbit processing. In addition, the space-grade processor is the core of reaching high-performance onboard computing. 
+Table 4 shows the onboard computing technology using space-grade Central Processing Unit (CPU). NASA started 
+conducting studies as early as the 1970s, which resulted in the development of the RAD750, RAD5545, and other 
+Performance optimization with increased risc Performance Computing (PowerPC) architectures of the space-grade 
+processor. The RAD750 processor64, which has 400 DMIPS of computing capacity, is widely used in all the types of 
+NASA spacecrafts. The RAD5545 processor65, which integrates four processing cores and has floating-point 
+Table 3 Comparison between spacecraft data buses. 
+  Features
+CAN
+1553B
+SpaceWire
+Ethernet
+TTE
+TSN
+Topology
+Bus structure
+Bus structure
+Point to point/
+switched 
+structure
+Point to point/
+bus or switched 
+structure
+Point to point/
+switched 
+structure
+Point to point/
+bus or switched
+structure
+Node
+number
+≤128
+≤32
+No limit
+No limit
+No limit
+No limit
+Scalability
+no
+no
+Expansion 
+through
+switch
+Expansion through
+switch
+Expansion 
+through switch
+Expansion 
+through switch
+Rate
+Max 1 Mbit/s
+1-10 Mbit/s
+2-400 Mbit/s,
+1 Gbit/s with 
+fiber
+10 Mbit/s,
+100 Mbit/s,
+1 Gbit/s
+100 Mbit/s,
+1 Gbit/s
+10 Gbit/s/,
+25 Gbit/s
+Maturity
+Widely used
+Widely used
+Widely used
+Widely used
+Start using
+Start using
+Application 
+scenarios
+Automotive, 
+electronics, 
+spacecraft
+Aviation, 
+spacecraft
+Aviation, 
+spacecraft
+Every field
+Automotive, 
+aviation, 
+spacecraft
+Automotive, 
+electronics
+
+
+--- Page 20 ---
+Chinese Journal of Aeronautics
+· 19 ·
+computing capacity of almost 3.7 GFLOPS, was used for the Mars mission.
+Since the 1990s, the ESA has developed 32-bit processors, including ERC32 and TSC69566 as well as 64-bit 
+processors, such as GR712RC and GR740, forming the Scalable Processor Architecture (SPARC) series of space-
+grade processors. The latter are widely used in space missions. GR712RC67 uses a dual-core LEON3-FT processor at 
+100 MHz exhibiting a computing power of 200 MIPS, while GR74068 integrates four LEON4 processors at 250 MHz 
+reaching a computing power of almost 1700 DMPS. NASA and ESA studied next-generation multicore space-grade 
+processors to meet the high-performance computing requirements for different space applications. Since 2015, the 
+Advanced RISC Machine (ARM) architecture processor has been the main focus for low-power development. In 2016, 
+NASA initiated studies on high-performance spaceflight computing (HPSC) using the ARM architecture. The HPSC 
+processor69 consists of eight radiation-hardened ARM Cortex A53 processors. In 2017, ESA launched the DAHLIA70 
+program which is based on the ARM architecture. The latter is made of four radiation-hardened ARM Cortex-R52s, 
+having a computing performance of almost 4 000 DMIPS. In 2021, ESA conducted a study on a space-grade processor 
+based on the open RISC-V architecture, which is referred to as GR7xV.
+NASA proposed a high-performance reconfigurable hybrid processor architecture based on FPGA, which is referred 
+to as the SpaceCube71-72. The latter fully uses the functional advantages of different processors, such as CPU, DSP, 
+and FPGA, and takes radiation-hardened measures for commercial processors. It also enables the high-speed 
+interconnection through many interfaces, including PCI and SATA, significantly increasing the processing ability of 
+scientific data through distributed computing among various heterogeneous resources. The SpaceCube architecture has 
+been used in several spacecrafts73-74 that adopt radiation-hardened HPSC chips. The second-generation Spaceborne 
+Computer-2 (SBC-2)75 was developed by Microsoft, HP, and NASA. It was launched to the International Space Station 
+(ISS) in February 2021. At present, it is considered as the most powerful high-performance computing platform in 
+space, and it can handle the real-time processing of on-orbit experimental data as well as space artificial intelligence. 
+Furthermore, new computing technologies, such as brain-inspired computing76 and quantum computing77 should be 
+considered in the future use of on-board intelligent computing.
+BM3803 is a commonly used space-grade processor for spacecrafts in China. It has a main frequency of 100 MHz 
+and an integer computing capability of 86 MIPS78. However, it has a low performance. The BM382379 space-grade 
+processor is widely used and has made some progress in the field. It has a main frequency of 300 MHz and a floating-
+point computing capacity of 69 MFLOPS. BM3883MARH80 is the most recent SPARC architecture octa-core 
+radiation-hardened processor. It has a main frequency of 1 GHz, fixed-point and floating-point computing powers of 
+16 GIPS and 32GFlops, respectively. It can fulfill the computing needs of different tasks in the future. In terms of 
+ARM architecture, the Yulong 810A chip81 features a 4-core ARM A9 main processor, a co-processor with a Graphic 
+Processing Unit (GPU), a Neural Network Accelerator engine (NNA) unit, a fixed-point processing power of 12 Tops, 
+and a floating-point processing capacity of almost 64 GFlops. In conclusion, the processing capacity of space-grade 
+processors in China is gradually increasing. In the future, they will be able to process a wider range of space 
+applications.
+Future onboard computing technology will mostly focus on moving from single-core to multi-core processors. On 
+Table 4 Typical space-grade processors.
+CPU name
+Year
+Country/
+organizatio
+n
+Main frequency/MHz
+CPU cores
+Computing ability
+Architecture
+TSC695FEr
+ror! Reference 
+source not 
+found.
+1998
+ESA
+25
+1
+20DMIPS
+SPARC
+RAD750
+2001
+USA
+200
+1
+400DMIPS
+PowerPC
+GR712RC
+2009
+ESA
+100
+2
+200DMIPS
+SPARC
+RAD5545
+2015
+USA
+466
+4
+3.7GFLOPS
+PowerPC
+GR740
+2017
+ESA
+250
+4
+1700DMIPS
+SPARC
+DAHLIA
+2019
+ESA
+1600
+4
+4000DMIPS
+ARM
+HPSC
+2019
+USA
+800
+8
+14720DMIPS
+ARM
+BM3803Err
+
+
+--- Page 21 ---
+·20 ·
+ Chinese Journal of Aeronautics
+20
+the one hand, processor architectures, such as SpaceCube, will play a crucial role in meeting the high-performance 
+application requirements of the upcoming scientific exploration missions for task planning, image compression, and 
+processing. In addition, the onboard computer can further improve the functional density and increase the computing 
+ability of avionics systems by coordinating the distribution computing ability of different heterogeneous computing 
+resources. On the other hand, due to their low cost and high performance, the COTS products will become increasingly 
+popular in space applications. It is expected to use high-performance COTS products for non-critical functions and 
+space-grade chips for crucial functions, allowing to reach on-board high-performance computing of spacecrafts.
+3.4. Autonomous operation technology
+The autonomous operation technology of spacecrafts does not rely (or slightly rely) on external intervention, and it 
+performs long-term, safe, and autonomous operation by sensing its own state and the external environment. It is able 
+to autonomously schedule tasks, execute commands, monitor states, and reconfigure faults82. The autonomous 
+operation of spacecraft includes the autonomous survival management, autonomous mission management, autonomous 
+health management, and autonomous scientific exploration, as shown in Fig. 13.83
+Fig. 13 Spacecraft autonomous operation technology.83
+(1) Autonomous survival management: The spacecraft will be designed with the basic ability to maintain the regular 
+operations of the platform by developing autonomous management systems for many functions, including energy, 
+communication, attitude, and temperature control. Examples for ensuring high safety of the spacecraft platform include 
+its necessity to have an autonomous energy management mode that allows it to automatically reduce the load power 
+in the case of insufficient energy outside the TT&C area. The SMART-1 lunar probe, launched by ESA in 2003, should 
+be able to automatically reconfigure itself in the event of a hardware failure, continuously operate for 10 days without 
+ground assistance, and survive a two-month period when ground contacts are interrupted and the satellite is in safe 
+mode.
+(2) Autonomous mission management: The spacecraft performs mission planning and automatically conducts 
+important flight events based on mission objectives. For the first time, the Deep Space-1(DS-1) spacecraft84-85 was able 
+to perform autonomous mission management, mission planning, autonomous execution, and spacecraft status 
+monitoring using the Remote Agent software system. The “new millennium” plan of NASA also considers the 
+autonomous technology as a key development direction.
+(3) Autonomous health management: In case of failure, the spacecraft detects its health state and performs 
+autonomous disposal and recovery functions. The F-3586 aircraft, which was jointly developed by the United States 
+and several other countries, is the most successful application of health management technology in use today. NASA 
+designed the Livingstone system based on the transfer system model, they applied it to many spacecrafts, such as DS-
+1, EO-1, X-34, and X-37, yielding satisfactory results. More precisely, it was able to efficiently and stably perform 
+fault detection and diagnosis with minimal human assistance. ESA also summarized the hierarchical Failure Detection, 
+Isolation and Recovery (FDIR) technology in several related projects. This technology has been used on spacecrafts, 
+such as the Smart-1 probe87 and Spacebus 4000, enabling the autonomous on-orbit fault detection and reconstruction.
+(4) Autonomous scientific exploration: Future space missions will emphasize the extent to which scientific 
+
+
+--- Page 22 ---
+Chinese Journal of Aeronautics
+· 21 ·
+objectives are met, and spacecrafts will conduct scientific exploration with greater autonomy while returning collected 
+scientific data to the Earth, which will be analyzed by scientists. To increase the scientific return of the mission, future 
+autonomous scientific exploration technologies will focus on science-oriented autonomous functions, such as 
+processing scientific data, discovering scientific phenomena on orbit, and autonomously detecting unexpected 
+scientific events88-91. Many studies are being conducted on new intelligent autonomous scientific exploration 
+approaches, including deep learning techniques based on FPGA.
+The Beijing Institute of Control Engineering as well as other research institutes and universities conducted studies 
+on autonomous mission planning and autonomous health management92-93. Studies on autonomous mission planning 
+and autonomous health management technology, have also been conducted for new remote sensing satellites and many 
+other missions. Some of the technologies started to be implemented on orbit.
+The future development trend of the autonomous operation technology for spacecrafts mainly comprises the 
+following aspects: (A) As exploration objectives become more various and complex, the main trend of the autonomous 
+operation technology is the transition from ground support to on-orbit autonomy, with an increasing demand for 
+system-level autonomous operation. (B) The future autonomous operation technology will gradually shift from 
+autonomous task management to autonomous scientific exploration, while emphasizing the extent to which scientific 
+aims are met in exploration tasks. (C) New technologies, such as machine learning, will become crucial in 
+strengthening the spacecraft autonomy, demonstrating promising applications in autonomous mission planning and 
+autonomous health management.
+3.5. Software-defined technology
+The software-defined technology94-95 decouples hardware and software through advanced corresponding architectural 
+design, and unifies the management and scheduling of the hardware by a software. The software-defined technology 
+uses a software to control and manage hardware resources while also empowering hardware. This results in 
+significantly increasing the flexibility, efficiency, and adaptability of the system. In the spacecraft field, the software-
+defined technology can be divided into software-defined load, Software-Defined Network (SDN), and software-
+defined satellite.
+(1) Software-defined payload: In 2012, the NASA’s Space Communications and Navigation (SCaN) test platform 
+project developed Software-Defined Radio (SDR) payloads and integrated radar imaging with communication by 
+implementing SDR-based architecture for communication, navigation, and network software applications on the 
+International Space Station. Eutelsat-Quantum96-97 is the world's first software-defined commercial communication 
+satellite. It was developed in Europe in 2015. It uses the SDR technology to increase its communication ability in the 
+full Ku-band. It could be reconfigured on-orbit in terms of many parameters, such as communication coverage, 
+frequency, bandwidth, and power. The Space Inspire satellite98 of Thales Alenia space uses the software-defined 
+payload technology to seamlessly transition between satellite video broadcasting and broadband connectivity services 
+as required.
+(2) Software-defined networking: It is a new network architecture based on the OpenFlow99 technology. In contrast 
+to traditional networks, which have tightly coupled control and data plane architectures, the SDN technology100 isolates 
+the complex message forwarding control logic from the routing device, and adopts a specific software to perform 
+hardware forwarding control of data. Software-defined satellite networks use the SDN technology to separate the data 
+from the control plane in satellite networks, so that the satellite should only perform basic forwarding and hardware 
+configuration functions, while the ground control center handles other tasks, such as routing calculations and resource 
+management.
+(3) Software-defined satellite: In the Blackjack program, each node satellite is software-defined, and PitBoss101, 
+which serves as the on-board control unit exhibiting efficient reconfigurable processing of payloads, is considered as 
+a comprehensive application of software-defined payloads and software-defined satellites. The SmartSat of Loma is 
+
+
+--- Page 23 ---
+·22 ·
+ Chinese Journal of Aeronautics
+22
+another typical example of software-defined satellites. Similar to a smartphone, it allows the users to modify and add 
+new applications following their needs. GSky-1 is a software-defined satellite owned by Vector Space (an American 
+small solid rocket company), which incorporates a cloud-based intelligence layer102 based on its software-defined 
+satellite technology, referred to as GalacticSky TM.
+In terms of software-defined technology in China, the "software-defined satellite"103 uses the software radio 
+technology to perform on-orbit functional reconfiguration of satellite payloads through software upgrades. In order to 
+support the unified deployment various application software in the micro-cloud computing platform, the "Tianzhi" 
+satellite104 adopts an open system architecture composed of intelligent computing engines, switches, and intelligent 
+components, as shown in Fig. 14105. The program can be downloaded and updated at any time, and various customized 
+services are available. Thus, progress has been made in many aspects, including space supercomputing platforms, 
+onboard operating environments, and software-defined satellites. Xing et al.106 proposed a software-defined spacecraft 
+system architecture, in which various devices at the equipment layer can be connected to the system through 
+reconfigurable interface units to achieve plug-and-play.
+Software-defined payloads perform functional reconfiguration of payloads on a shared hardware platform using 
+software-defined107 systems. At present, the latter is mostly based on communication payloads, and it relies on the 
+development of software-defined radios. In the future, software and algorithms will play a crucial role in increasing 
+the capacity and performance of payloads, and a gradual trend toward interface standardization, hardware configuration 
+minimization, and software function maximization is expected. The software-defined satellite and software-defined 
+network technology has more slowly developed compared with the software-defined payload technology. The 
+software-defined satellite technology reconfigures on-orbit functions to be able to perform various functions while 
+increasing the overall satellite efficiency. However, this increases the cost and complexity of the satellites. The 
+software-defined network technology has not been used in space yet. However, it is expected to become an essential 
+factor in the interconnection of future spacecrafts due to its ongoing development and widespread ground-based 
+applications.
+Fig. 14 Software-defined satellite system architecture.105 
+4. Roadmap of spacecraft avionics technology
+Based on the previously mentioned analysis of the research status of spacecraft avionics systems and related key 
+technologies, and taking into account the maturity and mission requirements, a roadmap for the development of the 
+spacecraft avionics technology was developed in two stages: 2025-2030 and 2030-2035. The details of this roadmap 
+are illustrated in Fig. 15. In terms of system architecture, the first stage develops a distributed integrated modular 
+
+
+--- Page 24 ---
+Chinese Journal of Aeronautics
+· 23 ·
+system architecture characterized by functional integration and physical distribution, while the second stage adopts a 
+general open system architecture, which is characterized by on-demand service and random access. In terms of network 
+interconnection technology, the first stage is based on the coexistence of the IP, CCSDS, and DTN protocols to enable 
+the interconnection of spatially heterogeneous networks, while the second stage relies on the convergence of the IP, 
+CCSDS, and DTN protocols to enable the interconnection of networks across planetary domains. In addition, in terms 
+of high-speed bus technology, the first stage combines SpaceWire, Ethernet, and TTE buses to establish a satellite 
+network, while the second stage uses TTE and TSN buses. Moreover, in terms of the onboarding computing technology, 
+the first stage consists of a hybrid heterogeneous computing strategy based on multi-core processors, while the second 
+stage uses commercial servers and many-core processors to establish brain-inspired computing and space 
+supercomputing. As for the autonomous operation technology, the first stage enables the autonomous survival 
+management, autonomous mission management, and autonomous health management of the spacecrafts, while the 
+second stage provides autonomous scientific exploration and on-orbit autonomous decision-making of spacecraft. 
+Moreover, in terms of the software-defined technology, the first stage allows to use the software-defined payload and 
+software-defined network technology, while the second stage enables the use of the software-defined spacecraft 
+technology and also yields the real on-orbit functional reconfiguration of the spacecraft.
+Fig. 15 Roadmap of the spacecraft avionics technology.
+5. Intelligent avionics system architecture
+5.1 Concept of intelligent avionics system
+Based on the above-mentioned spacecraft avionics system architecture, as well as the development status, key 
+technologies, and development trends of typical spacecraft avionics systems, this paper proposes the concept of an 
+intelligent avionics system for future spacecraft applications, as shown in Fig. 16. The system will take the intelligent 
+supercomputing platform as the core, and through the ground cloud support system and the edge intelligent spacecraft, 
+it will build an intelligent spacecraft information system integrated with the satellite and the ground, with the 
+capabilities of open and sharing, cloud-edge collaboration, fusion decision based on inference and rules, intelligent 
+autonomous operation, and functional reconstruction. The ground cloud support system includes laser stations, 
+microwave stations, distributed data centers, operation management centers, ground cloud centers, etc. The edge 
+intelligent spacecraft is a constellation system composed of relay satellites and spacecraft. Key features are described 
+as follows:
+
+
+--- Page 25 ---
+·24 ·
+ Chinese Journal of Aeronautics
+24
+Fig. 16 Concept of intelligent avionics system.
+(1) Open and sharing: Using the principles of hardware modularization and software componentization, an open and 
+shared intelligent avionics system with a uniform standard is created. The system includes several devices, such as 
+computing unit, communication unit, energy unit, intelligent unit, control unit, load unit, and so on. These devices are 
+realized by standardized hardware modules and software components through shelf-type assembling, with the feature 
+of physical distribution and functional integration. These devices are connected by high-speed Ethernet, which can 
+realize plug-and-play and flexible access of different devices. Cross-node mutual control between spacecraft is possible 
+thanks to the high level of standardization in hardware and software architecture. For example, ground workers can 
+remotely manage the lunar robot across many spacecraft by specifying simply the control object, while the spacecraft 
+handle the routing and data transfer autonomously.
+(2) Cloud-edge collaboration: By collaborating between the powerful inference capability of the large model on the 
+ground cloud support system and the edge intelligent spacecraft, the problem of limited on-orbit computing resources 
+of spacecraft under complex application scenarios is solved. Firstly, the complex tasks are decomposed according to 
+the application scenarios, and the tasks with high real-time and environment-related requirements are handed over to 
+the spacecraft for on-orbit processing, while the complex analysis tasks are turned over to the large ground model for 
+processing. Secondly, the spacecraft collects real-time data, sends the results processed by the on-orbit lightweight 
+model to the large ground model, which uses its own massive data and the received results to continuously conduct 
+model training and inference analysis, and then sends the analysis results to the spacecraft, realizing the cloud-edge 
+cooperative interaction of the spacecraft data. Finally, the large ground model can update and optimize the lightweight 
+model in the spacecraft intelligent unit based on the spacecraft's on-orbit operation state, improving the accuracy of its 
+on-orbit inference.
+(3) Fusion decision based on inference and rules: The spacecraft employs the model inference method of on-orbit 
+lightweight model and large ground model collaboration, together with traditional rules, to make intelligent decisions 
+
+
+--- Page 26 ---
+Chinese Journal of Aeronautics
+· 25 ·
+on complicated tasks. The large ground model has powerful model training, general inference, and knowledge updating 
+capabilities, and after pruning and distilling the key inference logic and knowledge of the large model, the on-orbit 
+lightweight model is generated and deployed on the spacecraft's intelligent unit so that the model can run on the 
+resource-constrained intelligent unit. The lightweight model processes on-orbit data in real time and autonomously 
+performs tasks such as spacecraft health management. At the same time, it sets clear rules for the spacecraft’s safety-
+critical systems and adopts an inference mechanism that integrates model inference methods and traditional rules when 
+making decisions to ensure the safe and stable operation of the spacecraft. For example, if the model detects a fault in 
+the computing unit, the spacecraft would autonomously switch the computing unit from the main module to the backup 
+module or migrate the task to other units according to the rules.
+(4) Intelligent autonomous operation: In terms of autonomous survival management, machine learning algorithms 
+are used to conduct real-time monitoring of key survival parameters such as energy and temperature of spacecraft, 
+autonomously adjusting energy and thermal resources to a balanced state to ensure spacecraft safety. In terms of 
+autonomous mission management, deep learning algorithms are adopted to identify mission scenarios, and when 
+combined with rules, mission planning and resource allocation strategies are autonomously generated to improve 
+mission execution efficiency. In terms of autonomous health management, on-orbit lightweight models are used to 
+monitor the spacecraft's operating status in real time, warn of probable malfunctions, and take countermeasures 
+autonomously. In terms of autonomous scientific exploration, algorithms such as machine vision and deep learning are 
+used to analyze exploration data, discover interesting scientific phenomena, and autonomously adjust exploration 
+strategies. When necessary, reasoning support is requested from large ground models to achieve efficient study of 
+scientific targets.
+(5) Functional reconfiguration: Through the integration and application of software definition, resource 
+virtualization, dynamic function loading, and other technologies, the spacecraft's on-orbit mission migration, intelligent 
+resource management, and function reconfiguration are realized. Specifically, software-defined technology abstracts 
+and virtualizes hardware resources into a unified resource pool, resulting in the decoupling of hardware and software, 
+allowing hardware resources to be controlled and managed as if they were software. Resource virtualization technology 
+divides physical resources into several independent virtual resource units, which facilitates efficient utilization and 
+isolation of resources and provides a foundation for task migration and function reconfiguration. Dynamic function 
+loading technology enables on-orbit real-time loading and unloading of functional modules, allowing the spacecraft to 
+update and reconstruct its functions in real time as mission changes occur.
+5.2 Architecture of intelligent avionics system
+The architecture of an intelligent avionics system for spacecraft is shown in Fig. 17, in which the standardized hardware 
+modules are assembled on demand to form functional units, the general software components are assembled on demand 
+to form software, and the communication protocols follow the unified standard so that the hardware and software can 
+be assembled on demand, the devices can be plug-and-play, the software can be upgraded, and the functions can be 
+reconfigured on-orbit. The hardware module is mainly divided into three types: computing and storage, network 
+interconnection, and input/output interface, and these modules interact with each other through the backplane interface 
+within the unit.
+
+
+--- Page 27 ---
+·26 ·
+ Chinese Journal of Aeronautics
+26
+Fig. 17 Architecture of intelligent avionics system.
+(1) The computing and storage type comprises general processor modules, data storage modules, AI processing 
+modules, and so on, which enable task management, data storage, and intelligent computing capabilities.
+(2) The network interconnection type includes bus communication modules, intra-satellite high-speed switching 
+modules, inter-satellite network routing modules, and so on, which enable intra- satellite and inter-satellite information 
+interaction.
+(3) The input/output interface type includes power supply module, power distribution module, telemetry module, 
+command module, heat control module, channel gateway module, power drive module, high-speed interface module, 
+and multifunctional payload module. Among them, the channel gateway module realizes low-speed/high-speed 
+communication with other spacecrafts. The high-speed interface module transmits data at high speeds by TTE or TSN 
+bus, while the multipurpose load module configures a wide range of loads through hardware sharing and software 
+defining.
+Among them, the general processor module runs on avionics system software, which is designed using layering and 
+componentization principles and is divided into five layers: the hardware resource layer, the operating system layer, 
+the virtualized layer108-109, the application support layer, and the application layer. The main functions of each layer 
+are described as follows:
+(1) Hardware resource layer: It is the operating entity of system functions and services, including a variety of 
+hardware resources such as computing, storage and network. Specifically, computing resources are made up of high-
+performance heterogeneous computing units like CPU, FPGA, GPU, NPU, and so on.
+(2) Operating system layer: It includes real-time operating system, BSP (board-level support package) and hardware 
+drivers, etc., and it supports the kernel, system libraries, and tool chain. Different standardized operating systems can 
+be selected for various hardware resources.
+
+
+--- Page 28 ---
+Chinese Journal of Aeronautics
+· 27 ·
+(3) Virtualized layer: It provides abstracted software interfaces to various hardware resources to form a unified 
+virtual resource pool, breaks physical resource isolation by partitioning and combining virtual resources, and provides 
+interfaces such as task scheduling and resource management for the application support layer to improve resource 
+management flexibility.
+(4) Application support layer: It mainly deploys software components such as resource scheduling, task management, 
+network management, security management, and other software components, as well as intelligent algorithm libraries 
+such as failure prediction models, AI lightweight models, path planning models, etc., providing a large number of 
+generalized services to the application layer and supporting the scheduling of virtualized resources.
+(5) Application Layer: It runs a variety of partitioned applications, such as heat management, energy management, 
+task planning, data management, intelligent inference, and so on, and allows for rapid deployment and dynamic loading 
+of third-party software store applications.
+6. Application scenario
+The Moon and cislunar space became popular destinations for deep space exploration110-111. Many countries, including 
+the US and Japan, proposed plans for lunar communication and navigation. The former is also promoting the 
+establishment of LunarNet112 through the Artemis program, and ESA released the Moonlight program113-114, while 
+expecting to develop a sustainable lunar communication and navigation system by 2027. The Japan Aerospace 
+Exploration Agency (JAXA) proposed a lunar navigation satellite system for the lunar south pole mission. Qiao et al.115 
+proposed the concept of cislunar space cloud network by establishing a cross-domain integrated cislunar space network. 
+Fig. 18 shows a schematic diagram of another cislunar space network that includes the Earth, Moon, and cislunar space 
+domains. Together with other satellites, the backbone network of satellites in the Earth GEO orbit, the cislunar space 
+Lagrange point, and the circumlunar orbit form the generalized cislunar space network, which provides many crucial 
+functions, such as location navigation, data communication, and information services to cislunar space users. Key 
+avionics technologies can be applied in the cislunar space network system.
+Fig. 18 Schematic diagram of cislunar space network.
+(1) Data communication: Telemetry data should be shared and delivered inside the spacecraft and between 
+spacecrafts. There are different types of data, such as state telemetry, control instructions, and other low-speed data 
+that require low latency and high reliability, as well as video, test data, and other large-volume data that do not require 
+high real-time performance. The avionics system performs the mixed transmission of heterogeneous data within the 
+
+
+--- Page 29 ---
+·28 ·
+ Chinese Journal of Aeronautics
+28
+spacecraft through high-speed buses, designs suitable network protocols using the network interconnection technology, 
+and then performs the interconnection of spacecrafts in different network domains through spacecraft and spacecraft-
+terrestrial microwave or laser links, enabling the information sharing between cross-domain spacecrafts.
+(2) Location navigation: The location navigation functions in cislunar space are divided into three regions: the Earth 
+region, the Moon region, and cislunar space116. The services in the Earth region are advanced, and those in the lunar 
+region can be accomplished by referring to the Earth region model and establishing circumlunar navigation 
+constellations. This can be done by the users of the cislunar space by conducting spacecraft measurements and adopting 
+external high-precision observation techniques. Future studies should emphasize cislunar cooperative Positioning, 
+Navigating, and Timing (PNT) design, multi-source fusion autonomous navigation, and software-defined technologies. 
+The latter are made possible through avionics technologies, such as deep-space network interconnection, high-
+performance onboard computing, software-defined payloads, and satellite autonomous operation.
+(3) Information service: This function mainly includes space situational awareness, space environment monitoring, 
+and scientific exploration. In order to perform space situational awareness and environment monitoring, mixed 
+heterogeneous resources are adopted to conduct high-performance onboard computing in the design of satellite 
+avionics for the cislunar space network system. This system consists of a deep-space information infrastructure, which 
+should be able to perform various autonomous operations, including survival management, mission management, 
+health management, and scientific exploration. By relying on software-defined payload, software-defined network, and 
+software-defined satellite technologies, the service capacity of the payloads can be enriched. In addition, on-orbit 
+reconfiguration of payload functions can be performed by equipping it with various payloads.
+7. Challenges and development suggestions
+7.1. Challenges
+The existing spacecraft avionics system cannot fulfill the networked, intelligent, and autonomous requirements of 
+future missions. Its application is restricted by many challenges, such as the inconsistent system architecture117-118, 
+difficult interconnection, insufficient on-orbit computing, and low intelligence.
+(1) Inconsistent system architecture
+At present, spacecraft avionics systems are designed independently from their own requirements due to the lack of 
+uniform standards. This leads to various avionics system architectures, weak expandability, less functional integration 
+between subsystems, and difficulties in implementing software componentization and hardware modularization in 
+spacecraft design. Due to the rocket capacity and platform resource constraints, deep space exploration missions 
+require lightweight and compact avionics systems. Therefore, integrated consideration should be taken at the hardware, 
+software, and protocol levels in order to establish a generalized, open, flexible, and scalable architecture for an 
+intelligent avionics system. This could drastically solve the problem of tightly coupled hardware and software.
+(2) Difficult interconnection
+The spacecraft should have interconnection networking abilities, and it should be supported by the space-ground 
+integrated network communication protocol in order to facilitate the real-time information transmission and 
+collaborative work with other spacecrafts. At present, the main problems can be summarized as follows: lack of 
+uniformity protocols, tight coupling of software and hardware, complexity and wide range of network interconnections, 
+numerous intra-, inter-, and terrestrial interfaces, independent design of different spacecraft network protocols, and 
+difficulty in supporting future functions (e.g., cooperative operation and flexible multi-spacecraft networking). This 
+
+
+--- Page 30 ---
+Chinese Journal of Aeronautics
+· 29 ·
+yields a significant challenge, which consists of ensuring that every spacecraft and subsystem conducts product in 
+accordance with standardized interfaces and protocols.
+(3) Insufficient on-orbit computing
+The ability of the spacecraft to autonomously execute algorithms, such as mission planning and network 
+management, is a new challenge faced by the processing capacity of the onboard computing platforms. This could be 
+intensified with the future application scenario of large volumes of data and high algorithmic complexity in on-orbit 
+information processing. The computing and storage ability of the existing spacecrafts is far from meeting the demand 
+on orbit, and the dispersion of the underlying computing resources makes the support of many functional requirements 
+(e.g., intelligence and autonomous management) more difficult. Studies on the high-performance onboard computing 
+technology are required to enhance the on-orbit computing and increase the information processing capacity of the 
+spacecraft.
+(4) Low intelligence
+At present, the spacecraft operation highly depends on ground intervention. The support for on-orbit information 
+services and autonomous decision-making capacity is still very limited. In addition, the level of intelligence and 
+autonomy is moderate, and most of them are still ground-based. Because of these factors, the demand for highly-
+reliable long-term autonomous operation of spacecrafts cannot be met. Therefore, it is crucial to break through the on-
+orbit autonomous management technology of spacecrafts and increase the intelligence level for autonomous decision-
+making and autonomous health management.
+In summary, the development of avionics systems for spacecrafts should overcome many challenges, including 
+inconsistent system architecture, difficult interconnection, insufficient on-orbit computing, and low intelligence level.
+7.2. Development suggestions
+The following development suggestions are provided to solve the aforementioned problems:
+(1) Promoting the application of intelligent avionics system architecture
+By referring to important space electronic system architectures, such as SAVOIR and DIMA, this paper proposes a 
+generalized open intelligent avionics system architecture for spacecraft, the application of which should be accelerated. 
+The architecture realizes the resource distribution and function synthesis of the avionics system. The system design 
+follows a uniform specification, and modules having the same function can be compatible with and replace one another. 
+Many technologies, including the Micro Electro-mechanical System (MEMS) and System in Package (SIP), led to 
+advancements in the standardization of spacecraft modules, portable compactness design, high functional integration, 
+and rapid assembly. This allowed to further reduce the cost of the spacecraft and solve problems of tightly coupled 
+software and hardware, as well as difficult interconnection, gradually developing an intelligent avionics system that 
+can quickly respond to the needs of the users.
+(2) Building an integrated cross-domain interconnection network on a wide spatial and temporal scale
+Spacecraft networks that rely on the ground for operation and are disconnected from one another can no longer 
+match the users' demands for real-time and comprehensive services. On the one hand, the future spacecraft network 
+
+
+--- Page 31 ---
+·30 ·
+ Chinese Journal of Aeronautics
+30
+will have a higher-speed network bus, allowing to satisfy the large-capacity and high-real-time data transmission needs 
+of underlying missions. On the other hand, the development of a distributed and cooperative constellation system is 
+crucial in the fields of navigation, communications, and remote sensing. It is expected that the future spacecraft 
+networks will perform the interconnection of resources in the air, sky, earth, sea, and even deep space. They will 
+perform interoperability and resource sharing between many nodes, applications, and users in the cross-domain 
+heterogeneous network. In addition, they will provide users with personalized subscriptions of efficient services 
+through effective acquisition, coordination, transmission, and integration of multidimensional information.
+(3) Enhancing the on-orbit computing and increasing the information processing ability of the spacecraft
+With the rapid growth in demand for various applications and functions, spacecrafts should perform various tasks, 
+such as mission planning, image processing, health management, and multi-satellite collaboration. At present, the 
+processing capacity of the spacecraft on-board computers is significantly affected by the need for processing and 
+storing massive heterogeneous telemetry data. To solve the problems of massive data and resource limitation in on-
+orbit information processing, the key technologies of on-orbit intelligent information processing, high-performance 
+distributed computing, and large-capacity storage should be applied and improved. To enhance the on-orbit information 
+processing and increase the computing capacity of the aircraft for future complex missions, a high-performance on-
+board information processing platform should be established using heterogeneous resources such as CPU, GPU, Digital 
+Signal Processor (DSP), FPGA, and NPU.
+(4) Emphasizing the importance of commercial off-the-shelf components in space systems
+COTS products will have a wide range of applications since their processing capacity is much higher than that of 
+conventional on-board processors. To fully use advanced technologies and volume products developed by commercial 
+innovation and investment, high-performance COTS products in non-critical spacecraft parts should be studied and 
+adopted. This is also an efficient means for reducing the spacecraft costs, boosting the payload ratios, ensuring the 
+spacecraft technological progress, and improving the market competitiveness. Therefore, to increase the reliability of 
+the component in the space environment, the use of COTS products in space still requires a systematic study on space 
+environment tests, component screening, and fault-tolerant design. The reliability analysis, validation, and evaluation 
+of COTS products should also be strengthened.
+(5) Improving the autonomous management and increasing the intelligence level of the spacecraft
+Traditional spacecraft operation and management based on ground stations face many challenges, such as excessive 
+resource consumption and delayed fault disposal. This is mainly due to the continuously increasing number of 
+spacecrafts and the complexity of the future operations. Due to their properties, such as long flight distances, very large 
+communication delays, and unknown space environment, deep space probes require a high level of autonomy. Key 
+technologies, including autonomous mission planning, autonomous health management, and on-orbit autonomous 
+decision-making for spacecrafts, will be studied using novel technologies, such as artificial intelligence and cloud 
+computing. This will contribute to the on-orbit autonomous management capacity of the spacecrafts, allowing them to 
+accurately detect changes in themselves and the external environment when dealing with unexpected factors, and to 
+autonomously complete their flight missions and remove faults.
+8. Conclusions
+This paper reviews the architecture of typical spacecraft avionics systems and the state of their development. In terms 
+of architecture, spacecraft avionics systems mainly follow the development trend of combining integration and 
+distribution, while there is a growing need for intelligent autonomous management capacities, on-orbit high-
+performance computing, and information processing. The key technologies involved in avionics, such as network 
+
+
+--- Page 32 ---
+Chinese Journal of Aeronautics
+· 31 ·
+interconnection, high-speed bus, onboard computing, autonomous operation, and software-defined technology, as well 
+as their features and potential future development trends, are thoroughly analyzed.
+Based on the drawn conclusions, an intelligent avionics system architecture for future spacecraft applications is 
+proposed, suggestions for the development of future spacecraft avionics systems are provided. Future work will 
+emphasize accelerating the application of intelligent avionics system architecture, establishment of an integrated cross-
+domain interconnection network on a large spatial-temporal scale, increase of the on-orbit computing and information 
+processing ability, full use of COTS products in space systems, and improvement of autonomous management and 
+intelligence of spacecrafts. The aforementioned measures will significantly improve the networked, intelligent, and 
+autonomous level of the spacecraft avionics systems, and it will serve as a useful guide for the long-term advancement 
+of the spacecraft avionics technology.
+Acknowledgement
+This study was jointly supported by the civil aerospace foreign technical cooperation project of China (No. ZB02) and 
+the civil aerospace pre research project of China (No.D030102).
+References 
+1.
+Avtin IV, Baburov VI, Ponomarenko BV, et al. Principles of integrated airborne avionics. Singapore: Springer 
+aerospace technology, E-Publishing Inc.; 2021.p.1-20.
+[2] Lin CW, Chen G, He SS, et al. Overview of space plug-and-play avionics interface technology. 2020 international 
+conference on computer engineering and application (ICCEA). Piscataway: IEEE Press; 2020.
+[3] Martin M, Summers J, Lyke J. AFRL plug-and-play spacecraft avionics experiment (SAE). 2012 IEEE aerospace 
+conference. Piscataway: IEEE Press; 2012.
+[4] Martin M, Lyke J. Modular open network ARCHitecture (MONARCH): transitioning plug-and-play to aerospace. 
+2013 IEEE aerospace conference. Piscataway: IEEE Press; 2013.
+[5] Mitchell C, Rexroat J, Rawashdeh SA, et al. Development of a modular command and data handling architecture 
+for the KySat-2 CubeSat. 2014 IEEE aerospace conference. Piscataway: IEEE Press; 2014.
+6.
+AIAA. Space plug-and-play architecture standards development guidebook. Reston: AIAA; 2013. Report No.: 
+AIAA G-133-1-2013.
+[7] Nannipieri P, Dinelli G, Sterpaio LD, et al. Next-generation high-speed satellite interconnect. Cham: Springer; 
+2021.p.1-21.
+
+
+--- Page 33 ---
+·32 ·
+ Chinese Journal of Aeronautics
+32
+8.
+He XW, Li JH, Bai F, et al. Avionics system architectures for software-defined spacecraft. Mobile wireless 
+middleware, operating systems and applications (MOBILWARE 2022). Cham: Springer; 2023.p.150-151.
+[9] Herpel HJ, Schuettauf A, Willich G, et al. Open modular computing platforms in space—Learning from other 
+industrial domains. 2016 IEEE aerospace conference. Piscataway: IEEE Press; 2016.
+10. Internationaldeepspacestandards.com. International avionics system interoperability standards[Internet]. 
+Washington, D.C.; 2019 [cited 2025 Nov 15]. Available from: https://internationaldeepspacestandards.com/wp-
+content/uploads/2024/02/avionics_baseline_final_3-2019.pdf.
+11. NASA. An open avionics and software architecture to support future NASA exploration missions. Washington, 
+D.C.: NASA; 2018. Report No.: JSC-E-DAA-TN56993.
+[12] Green C, Haghani N, Hernandez-Pellerano A, et al. MUSTANG: A workhorse for NASA spaceflight avionics. 
+2023 IEEE 9th international conference on space mission challenges for information technology (SMC-IT). 
+Piscataway: IEEE Press; 2023.
+[13] Robati T, Gherbi A, Mullins J. A modeling and verification approach to the design of distributed IMA architectures 
+using TTEthernet. Procedia Comput Sci 2016; 83:229–36.
+[14] Wang HC, Niu WS. A review on key technologies of the distributed integrated modular avionics system. Int J 
+Wirel Inf Netw 2018;25(3):358–69.
+[15] Zhou X, Xiong HG, He F. Hybrid partition- and network-level scheduling design for distributed integrated 
+modular avionics systems. Chin J Aeronaut 2020;33(1):308–23.
+16. Liu S, Wang HM. Overall design technology of integrated electronic system configuration for next generation 
+satellites. Space Electronic Technology 2015;12(6):90-4[Chinese].
+17. Liu WW, Cheng BW, Wang LY, et al. Design of distributed spacecraft avionics system. Spacecraft Engineering 
+2016(6):86-93[Chinese].
+[18] Jiang LX, Wang L, Li MX, et al. Design of onboard avionics based on commercial off-the-shelf parts for TianQi-
+2 nanosatellite. J Spacecr Rockets 2024;61(4):1114–23.
+[19] Chen CJ, Yin YB, Yang J, et al. Discussion on the design of low-cost spacecraft avionics based on COTS 
+technology. 2024 7th international conference on electronics technology (ICET). Piscataway: IEEE Press; 2024.
+20. He XW, Li N, Xu Y, et al. Requirements system analysis of intelligent spacecraft avionics and discussion of its 
+architecture. Spacecraft Engineering 2018;27(4):82-89[Chinese].
+21. Liu WW, Yu JH, Mu Q, et al. Design and implementation of an open modular onboard avionics system. Journal 
+of Telemetry, Tracking and Command 2023;44(3):53-60[Chinese].
+
+
+--- Page 34 ---
+Chinese Journal of Aeronautics
+· 33 ·
+22. Liu Y, Yan ZW, Jia YC, et al. Design of manned lunar spacecraft avionics system structure. Journal of 
+Astronautics 2024;45(2):314-324[Chinese].
+23. Gao JX, Xu ZP, Ding WH, et al. Autonomous control architecture of satellite intelligent computing platform. 
+Space-Integrated-Ground Information Net-works 2024;5(4):85-94[Chinese].
+24. Taylor C, Konig H, Schlossstein U. Standard payload computer for the international space station. ESA bulletin-
+european space agency 1998;93: 10-18.
+[25] Fletcher DP, Alena R. A scalable, out-of-band diagnostics architecture for international space station systems 
+support.2003 IEEE aerospace conference proceedings. Piscataway: IEEE Press; 2003.
+26. DARPA. Blackjack pit boss broad agency announcement. Arlington: DARPA tactical technology office; 2019. 
+ReportNo.:HR001119S0012.
+27. Eoportal.org. Blackjack program of DARPA (Defence Advanced Research Projects Agency)[Internet]. [cited 
+2025 
+Nov 
+15].Available 
+from: 
+https://www.eoportal.org/ftp/satellite-
+missions/b/Blackjack_010222/Blackjack.html.
+28. Krebs, G. D. Lockheed Martin: A2100/LM-2100[Internet]. [cited 2025 Oct 10]. Available from: https://space.
+skyrocket.de/doc_sat/lockheed_a2100.htm.
+29. Pablo R. Satellite projects in ESA ARTES programmer. Proceedings of the space congress proceedings. Paris: 
+ESA; 2016.p.1-13.
+[30] Liddle J, Edge L, Tondryk W, et al. GIOVE-A and GMP: SSTL’s MEO and GEO satellite family-first in-orbit 
+test results. 24th AIAA international communications satellite systems conference. Reston: AIAA; 2006.
+[31] Giorgi G, Kroese B, Michalak G. Future GNSS constellations with optical inter-satellite links. Preliminary space 
+segment analyses. 2019 IEEE aerospace conference. Piscataway: IEEE Press; 2019.
+[32] Timmons K, Coderre K, Pratt WD, et al. The orion spacecraft as a key element in a deep space gateway. 2018 
+IEEE aerospace conference. Piscataway: IEEE Press; 2018.
+[33] Baggerman C, McCabe M, Verma D. Avionics system architecture for the NASA orion vehicle. SAE technical 
+paper series. SAE Internationa; 2009.
+34.  Zhou ZS, Parker A, Brindle L, et al. Initial NovaSAR-1 data processing and imagery evaluation. IGARSS 2020-
+2020 IEEE international geoscience and remote sensing symposium. Piscataway: IEEE Press; 2020.
+[35] Guo ZW, Zhang X, Gao YC, et al. Design of information management system for large modular manned 
+spacecraft. 2021 IEEE 16th conference on industrial electronics and applications (ICIEA). Piscataway: IEEE 
+
+
+--- Page 35 ---
+·34 ·
+ Chinese Journal of Aeronautics
+34
+Press; 2021.
+36. Yang F, Liu SY, Zao J, et al. Technology prospective of intelligent remote sensing satellite. Spacecraft 
+Engineering 2017; 26(5):74-5[Chinese].
+37. Lei Y, Wang WP, Zhang HY, et al. Information system design of ZY-1-02D satellite. Spacecraft Engineering 
+2020; 29(6):35-42[Chinese].
+38. Lei Y, Tian HX, Yu LJ, et al. Research on the development and convergence of remote sensing satellite 
+information system and space information network. Proceedings of the 8th annual conference on high resolution 
+earth observation. 2022.
+39. Wei Q, Liao Y, Shi M, et al. APSTAR-6D communication satellite system design and technology. Spacecraft 
+Engineering 2022;31(1):10-17[Chinese].
+40. Li F. China’s new generation of large geosynchronous orbit satellite public platform-DFH-5 satellite platform. 
+Space International 2020;4:27-31[Chinese].
+41. Song MM, Yang DZ, Shi HR, et al. STARNet: A deep-learning algorithm for surface shortwave radiation retrieval 
+from fengyun-4A. Geophysical Research Letters 2025; 52(13): e2025GL116237.
+[42] Yu YL, Jiang H, Cai JJ, et al. Analyses of Qianfan constellation coverage with respect to the ground users as of 
+May 23, 2025. J Phys Conf Ser 2025; 3073(1):012006
+[43] Yang YX, Gao WG, Guo SR, et al. Introduction to BeiDou-3 navigation satellite system. Navigation 
+2019;66(1):7–18.
+44. Jia WS, Zeng LL, Li LM, et al. Design of Beidou-3 satellite avionics system. Astronautical Systems Engineering 
+Technology 2020;4(6):50-55[Chinese].
+[45] Gong JG, Yu ZH, Wei R, et al. Design and realization of the integrated electronic system for the Chang’E-3 lunar 
+rover. Sci Sin-Tech 2014;44(5):450-60.
+46. Ye ZL, Gu M, Zhang CT. Design and verification of data management system of Chang’e-4 lander. Spacecraft 
+Engineering 2019; 28(4):94-100[Chinese].
+47. Wang LS, Yang M, Tu ZJ, et al. Design of integrated electronic system architecture for Chang’e-5 orbiter. 
+Aerospace ShangHai 2022;39(S1):10-14[Chinese].
+48. Jia Y, Tian H, Zhang TY. The autonomous function design of "Zhu rong" rover. Aerospace China 2021(6):19-
+24[Chinese].
+49. Bai ZG. Development achievements and prospects of China modern small satellite. Spacecraft Engineering 2019; 
+
+
+--- Page 36 ---
+Chinese Journal of Aeronautics
+· 35 ·
+28(2):1-8[Chinese].
+[50] Tian SH, Li C, Zhao L, et al. Information processing technology of housekeeping subsystem for BJ-3A/B satellites. 
+Spacecr Eng 2023;32(3):85-92 [Chinese].
+51. Li ZG, Li JY, Li C, et al. Review and prospect of small satellite onboard housekeeping system. Spacecraft 
+Engineering 2021;30(6):128-133[Chinese].
+52. Chen ZS. Development analysis and technical prospect of space⁃based cross⁃domain intelligent swarm. 
+Aerospace Electronic Warfare 2022; 38(1):1-5[Chinese].
+[53] Wang RH, Taleb T, Jamalipour A, et al. Protocols for reliable data transport in space Internet. IEEE Commun 
+Surv Tutor 2009;11(2):21–32.
+[54] Hogie K, Criscuolo E, Parise R. Using standard Internet protocols and applications in space. Comput Netw 
+2005;47(5):603-50.
+[55] Jiao J, Zhang QY, Li H. An optimal ARQ timer design of file delivery time in CFDP NAK model. 2009 5th 
+international conference on wireless communications, networking and mobile computing. Piscataway: IEEE Press; 
+2009.
+[56] Caini C, Cornice P, Firrincieli R, et al. A DTN approach to satellite communications. IEEE J Sel Areas Commun 
+2008;26(5):820–7.
+57. CCSDS.CAST flight software as a CCSDS onboard reference architecture. Washington, D.C.: Consultative 
+committee for space data systems; 2021. Report No.:CCSDS 811.1-O-1.
+[58] Zhang X, Yang Y, Xu MW, et al. ASER: Scalable distributed routing protocol for LEO satellite networks. 2021 
+IEEE 46th conference on local computer networks (LCN). Piscataway: IEEE Press; 2021.
+[59] Kopetz H. The rationale for time-triggered Ethernet. 2008 real-time systems symposium. Piscataway: IEEE Press; 
+2008.
+[60] Li J, Yao JG, Huang DS. Ethernet-based avionic databus and time-space partition switch design. J Commun Netw 
+2015;17(3):286–95.
+[61] Bello LL, Mariani R, Mubeen S, et al. Recent advances and trends in on-board embedded and networked 
+automotive systems. IEEE Trans Ind Inform 2019;15(2):1038–51.
+[62] Ashjaei M, Lo Bello L, Daneshtalab M, et al. Time-Sensitive Networking in automotive embedded systems: State 
+of the art and research opportunities. J Syst Archit 2021;117:102137.
+63. TSN Time Synchronization NASA’s Use Cases and Needs[Internet]. Washington, D.C.: National Aeronautics 
+
+
+--- Page 37 ---
+·36 ·
+ Chinese Journal of Aeronautics
+36
+and 
+Space 
+Administration.c2022[cited 
+2025 
+Nov 
+15]. 
+Available 
+from: 
+https://grouper.ieee.org/groups/802/1/files/public/docs2022/dp-donnelly-NASA-needs-0522-v00.pdf.
+64. BAE Systems.RAD750 radiation-hardened PowerPC microprocessor[Internet]. [cited 2025 Nov 15]. Available 
+from: 
+https://www.baesystems.com/en-us/who-we-are/electronic-systems/c4isr/space-electronics#075d8771-
+15f4-4e0f-bdb8-56d24e2be2fd.
+[65] Li Y, Zhu XY, Zhang WG, et al. Design and verification of CPU for teaching based on sparc V8. 2013 fourth 
+international conference on intelligent systems design and engineering applications. Piscataway: IEEE Press; 
+2013.
+66. ATMEL.Rad-hard 32-bit SPARC embedded processor, TSC695E[Internet]. [cited 2025 Nov 15]. Available from: 
+https://pdf.dzsc.com/88889/26096.pdf.
+[67] Guertin SM, Some R, Nsengiyumva P, et al. Radiation specification and testing of heterogenous microprocessor 
+SOCs. 2019 19th European conference on radiation and its effects on components and systems (RADECS). 
+Piscataway: IEEE Press; 2019.
+68. Sjalander.com.Trondheim: LEON4: Fourth generation of the LEON processor[Internet]. [cited 2025 Nov 15]. 
+Available from: https://sjalander.com/research/pdf/sialander-dasia2009.pdf.
+[69] Schwaller B, Holtzman S, George AD. Emulation-based performance studies on the HPSC space processor. 2019 
+IEEE aerospace conference. Piscataway: IEEE Press; 2019.
+70. Dahlia-h2020.eu [Internet].2022[cited 2025 Nov 15]. Available from: https://dahlia-h2020.eu.
+[71] Petrick D, Espinosa D, Ripley R, et al. Adapting the reconfigurable spacecube processing system for multiple 
+mission applications. 2014 IEEE aerospace conference. Piscataway: IEEE Press; 2014.
+[72] Schmidt AG, Weisz G, French M, et al. SpaceCubeX: A framework for evaluating hybrid multi-core 
+CPU/FPGA/DSP architectures. 2017 IEEE aerospace conference. Piscataway: IEEE Press; 2017.
+73. Geist A, Brewer C, Davis M,et al. SpaceCube v3. 0 NASA next-generation high-performance processor for 
+science applications. The 33rd Annual AIAA/USU conference on small satellites. Reston: AIAA; 2019. 
+74. Brewer C G. SpaceCube v3. 0 mini: NASA next-generation data-processing system for advanced CubeSat 
+applications. NASA electronic parts and packaging program (NEPP)2019 electronic technology workshop(ETW). 
+Washington, D.C.: NASA;2019.
+75. Hewlett Packard Enterprise: HPE Spaceborne Computer-2 returns to the international space station[Internet]. 
+[cited 2024 Jan 30]. Available from: https://www.businesswire.com/news/home/20240129331403/en/HPE-
+Spaceborne-Computer-2-Returns-to-the-International-Space-Station.
+[76] Zhang WH, Ma SC, Ji XL, et al. The development of general-purpose brain-inspired computing. Nat Electron 
+
+
+--- Page 38 ---
+Chinese Journal of Aeronautics
+· 37 ·
+2024;7:954-65.
+[77] Chung C, Ward T, Dirgo B. Quantum computing use cases and impacts for the aerospace industry. 2025 IEEE 
+aerospace conference. Piscataway: IEEE Press; 2025.
+[78] he YT, Ji XY, Zhao R, et al. A software reconfiguration method for CPU of satellite-board controller. Third 
+international conference on testing technology and automation engineering (TTAE 2023). 2024.
+79. An WY, Han XD, Wang C, et al. High-reliability satellite avionics system design using domestic chips. Spacecraft 
+Engineering 2021;30(5):76-81[Chinese].
+80. Beijing 
+institute 
+of 
+microelectronics. 
+Introduction 
+to 
+radiation-resistant 
+eight-core 
+processor 
+BM3883MARH[Internet]. [cited 2025 Nov 15]. Available from: http://www.bime.ac.cn/bm3883marh[Chinese].
+81. Aero-Chips: Introduction to high-performance embedded AI processor Yulong810A[Internet]. [cited 2025 Oct 
+10]. Available from: https://www.myorbita.net/uploadfiles/2024/10/2024102316010919.pdf.
+[82] Feather MS, Kennedy B, MacKey R, et al. Demonstrations of system-level autonomy for spacecraft. 2021 IEEE 
+aerospace conference (50100). Piscataway: IEEE Press; 2021.
+[83] Chen CJ, Yin YB, Yang J, et al. Design and implementation of avionic autonomous management system for deep 
+space exploration. 2023 6th international symposium on autonomous systems (ISAS). Piscataway: IEEE Press; 
+2023.
+[84] Bernard DE, Dorais GA, Fry C, et al. Design of the remote agent experiment for spacecraft autonomy. 1998 IEEE 
+aerospace conference proceedings. Piscataway: IEEE Press; 1998.
+[85] Pell B, Bernard DE, Chien SA, et al. An autonomous spacecraft agent prototype. Auton Rob 1998;5(1):29–52.
+[86] Li SJ, Zhang GG, Wang J. Civil aircraft health management research based on big data and deep learning 
+technologies. 2017 IEEE international conference on prognostics and health management (ICPHM). Piscataway: 
+IEEE Press; 2017.
+[87] Rathsman P, Kugelberg J, Bodin P, et al. SMART-1: Development and lessons learnt. Acta Astronaut 2005;57(2–
+8):455–68.
+[88] Castano A, Fukunaga A, Biesiadecki J, et al. Automatic detection of dust devils and clouds on Mars. Mach Vis 
+Appl 2008;19(5):467–82.
+[89] Estlin T, Castano R, Bornstein B, et al. Automated targeting for the MER rovers. 2009 third IEEE international 
+conference on space mission challenges for information technology. Piscataway: IEEE Press; 2009.
+[90] Francis R, Estlin T, Gaines D, et al. AEGIS autonomous targeting for the Curiosity rover’s ChemCam instrument. 
+
+
+--- Page 39 ---
+·38 ·
+ Chinese Journal of Aeronautics
+38
+2015 IEEE applied imagery pattern recognition workshop (AIPR). Piscataway: IEEE Press; 2015.
+[91] Prokop LE, Dorney DJ, Feather MS, et al. Case studies in verifying spacecraft autonomy. 2021 IEEE aerospace 
+conference (50100). Piscataway: IEEE Press; 2021.
+[92] Bai LH, Yang H, Liang K. The research of autonomous in-orbit health management system for China’s manned 
+spacecrafts. MATEC Web Conf 2019; 257:01006.
+[93] Suo ML, Tao LF, Zhu BL, et al. Soft decision-making based on decision-theoretic rough set and Takagi-Sugeno 
+fuzzy model with application to the autonomous fault diagnosis of satellite power system. Aerosp Sci Technol 
+2020;106:106108.
+[94] Chelmins D, Downey J, Johnson SK, et al. Unique challenges testing SDRs for space. 2013 IEEE aerospace 
+conference. Piscataway: IEEE Press; 2013.
+[95] Darabseh A, Freris NM. A software-defined architecture for control of IoT cyberphysical systems. Clust Comput 
+2019;22(4):1107–22.
+96. Eutelsat.com[Internet]. [cited 2025 Oct 10]. Available from: https://www.eutelsat.com.
+[97] Paillassa B, Morlet C. Flexible satellites: software radio in the sky. 10th international conference on 
+telecommunications, 2003. Piscataway: IEEE Press; 2003.
+98. Thales-group.com[Internet]. 
+[cited 
+2025 
+Oct 
+10]. 
+Available 
+from: 
+https://www.thalesgroup.com/en/worldwide/space/press-release/thales-alenia-space-releases-fully-digital-
+satellite-address-fas.
+[99] McKeown N, Anderson T, Balakrishnan H, et al. OpenFlow. SIGCOMM Comput Commun Rev 2008;38(2):69–
+74.
+100. Bao J, Zhao B, Yu W, et al. Open SAN: A software-defined satellite network architecture. Aem Sigcomm 
+Computer Communication Review 2014,347-348.
+[101] Hu GX, Li XH, Zhang GH. Research on space mosaic reconfigurable system based on MAS. 2021 IEEE 4th 
+advanced information management, communicates, electronic and automation control conference (IMCEC). 
+Piscataway: IEEE Press; 2021.
+102. Space.skyrocket.de[Internet]. [cited 2025 Oct 10]. Available from: https://space.skyrocket.de/doc_sdat/gsky-
+1.htm.
+103. Li WH, Yang XN, Xu JL, et al. Software-defined satellite application in operationally responsive space. 
+Spacecraft Engineering 2009;18(5):28-31[Chinese].
+
+
+--- Page 40 ---
+Chinese Journal of Aeronautics
+· 39 ·
+[104] Lin YJ, Hu JX, Li L, et al. Design and implementation of on-orbit valuable image extraction for the TianZhi-1 
+satellite. 2019 IEEE 14th international conference on intelligent systems and knowledge engineering (ISKE). 
+Piscataway: IEEE Press; 2019.
+105. Krebs, Gunter D. Tianzhi 2D[Internet]. [cited 2025 Oct 10].Available from: https://space.skyrocket.de/doc_sdat/
+tianzhi-2d.htm.
+106. Xing ZY, Zhu SJ, Huang XF, et al. Design on software-defined spacecraft system architecture. Spacecraft 
+Engineering 2021;30(5):1-8[Chinese].
+[107] Fenech H, Amos S, Waterfield T. The role of array antennas in commercial telecommunication satellites. 2016 
+10th European conference on antennas and propagation (EuCAP).Piscataway: IEEE Press; 2016.
+[108] Chien WC, Lai CF, Hossain MS, et al. Heterogeneous space and terrestrial integrated networks for IoT: 
+Architecture and challenges. IEEE Netw 2019;33(1):15-21.
+[109] Yan L, Cao SZ, Gong YS, et al. SatEC: A 5G satellite edge computing framework based on microservice 
+architecture. Sensors 2019;19(4):831.
+110. Bao WM, Wang XW. Develop highly reliable and low-cost technology for access to space, embrace the new 
+space economy era. Aerospace China 2019; 20(4):23-30.
+111. Bennett T, Cain C, Campbell N, et al. Engineering the cislunar economic system based on ULA's CisLunar-1000 
+vision. AIAA SPACE 2016 conference and exposition. Red Hook: Curran Associates, Inc.; 2016.p.1-21.
+[112] Israel DJ, Mauldin KD, Roberts CJ, et al. LunaNet: A flexible and extensible lunar exploration communications 
+and navigation infrastructure. 2020 IEEE aerospace conference. Piscataway: IEEE Press; 2020.
+113. P. Giordano, A. Grenier, P. Zoccarato, et al. Moonlight navigation service-how to land on peaks of eternal light. 
+Proceedings of the 72nd international astronautical congress(IAC). Paris: IAF Press; 2021.p.25-29.
+[114] Mangialardo M, Jurado MM, Hagan D, et al. Autonomous navigation for moon missions: A realistic performance 
+assessment, considering earth GNSS signals and LCNS constellation. 2022 10th workshop on satellite navigation 
+technology (NAVITEC). Piscataway: IEEE Press; 2022.
+115. Qiao L, Li CH, Wang SP, et al. Cislunar cloud network: The cross-domain integrated cislunar-spatial network. 
+Chinese Space Science and Technology 2024;44(3):43-50[Chinese].
+116. Zhou HC, Zheng JJ, Wang HH, et al. Construction and transfer of space-based spatial-temporal reference in earth-
+moon space. Chinese Space Science and Technology 2024;44(3):51-59[Chinese].
+[117] Littlefield-Lawwill J, Viswanathan R. Advancing open standards in integrated modular avionics: An industry 
+analysis. 2007 IEEE/AIAA 26th digital avionics systems conference. Piscataway: IEEE Press; 2007.
+
+
+--- Page 41 ---
+·40 ·
+ Chinese Journal of Aeronautics
+40
+[118] Gaska T, Watkin C, Chen Y. Integrated modular avionics-past, present, and future. IEEE Aerosp Electron Syst 
+Mag 2015;30(9):12-23.
+Declaration of Interest Statement
+☒ The authors declare that they have no known competing financial interests or 
+personal relationships that could have appeared to influence the work reported in 
+this paper.
+☐ The author is an Editorial Board Member/Editor-in-Chief/Associate 
+Editor/Guest Editor for this journal and was not involved in the editorial review or 
+the decision to publish this article.
+☐ The authors declare the following financial interests/personal relationships 
+which may be considered as potential competing interests: 

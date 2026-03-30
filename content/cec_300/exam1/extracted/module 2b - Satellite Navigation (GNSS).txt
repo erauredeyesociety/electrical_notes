@@ -1,0 +1,1923 @@
+--- Page 1 ---
+Satellite Navigation: GPS
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+•
+Basic Geodetics
+•
+GNSS Systems
+•
+Fundamentals of the GPS
+•
+GPS Codes and Signals
+•
+Questions
+Outline
+
+
+--- Page 3 ---
+CEC 300: Computing in Aviation and Aerospace
+GEODETICS
+
+
+--- Page 4 ---
+Datums
+•
+We need to define points on earth with 
+respect to a coordinate system.
+o Consistently calculate positions relative to an 
+origin following the same model of the Earth’s 
+ellipsoid relative to the equator and prime 
+meridian
+•
+A geodetic datum is a model that defines:
+o Shape of the Earth (irregular and modeled as an 
+ellipsoid
+o Center of Mass
+o System to define lines of latitude and longitude on 
+the ellipsoid
+•
+Global or local datums
+Coordinate Systems 101: The Importance of Geodetics for High-Accuracy GIS Data Collection
+
+
+--- Page 5 ---
+Global vs. Local Datums
+Global
+•
+Covers entire Earth’s surface fixed to Earth’s 
+center
+•
+Used by GNSS systems
+•
+Standards:
+o WGS (World Geodetics System)
+•
+US Department of Defense
+•
+e.g., WGS84
+o ITF (International Terrestrial Reference Frame)
+•
+International Earth Rotation and Reference Systems Service.
+•
+e.g. ITRF2024
+•
+Challenge: positions of features can change 
+over time
+•
+Updated periodically
+Local
+•
+Avoids the challenge of global
+•
+Covers a local area with a local feature 
+identified as the zero reference.
+•
+Work well with uniform tectonic motion
+Dynamic vs. Static Datums
+o Static - remain generally fixed with few periodic 
+changes
+o Dynamic – updated more frequently due to the 
+constant non-uniform tectonic changes.
+
+
+--- Page 6 ---
+Epoch
+•
+Moment in time
+•
+Serves as reference in time-varying measurements
+•
+e.g. wind measurements at a weather station needs to have a epoch for the time of 
+measurement
+•
+Often shown as a decimal number
+o
+year.wheninyear, 
+•
+When day of year/360, i.e. the percentage of the year completed.
+o
+e.g. January 1, 2021, 0 days or 0% of year, epoch = 2021.00.
+o
+e.g. May 5, 1991, day 128 or 35% of year, epoch = 1991.35
+•
+“The combination of datum + epoch is called a reference frame.”
+
+
+--- Page 7 ---
+WGS84
+•
+Standard used when publishing/sharing waypoint 
+coordinates for navigation worldwide (e.g. runways, navaids, 
+intersections, etc.).
+•
+Provides: coordinate system, reference ellipsoid, and 
+additional models
+o
+No deformation model
+•
+Over time, objects at referenced coordinates can move and 
+their coordinates change over time.
+o
+e.g. an underwater seismic event causes the gap between 
+two plates to grow.  If two buoys were anchored to their 
+respective plates, their coordinates will shift based on the 
+deviation of the surface.
+•
+Observations will now see them as further apart as 
+they have moved relative to the coordinate system.
+o
+Therefore, WGS84 is an example of a dynamic model
+From: Position information in the WGS84 and the ETRS
+
+
+--- Page 8 ---
+•
+Web Mercator Projection, online maps and web 
+mapping applications
+•
+Based on WGS84 geographic CRS
+•
+Uses Mercator projection to map the Earth’s 
+surface, flat, 2D
+•
+Useful for small areas to preserve shape of 
+features.
+•
+Larger areas will have higher distortion
+EPSG:3857
+
+
+--- Page 9 ---
+Universal Transverse Mercator 
+•
+Assumes perfect ellipsoid
+•
+Divided x,y-planes, ignores 
+altitude
+•
+Location given as:
+•
+Zone, x, y coordinates in 
+the zone.
+
+
+--- Page 10 ---
+Latitude & Longitude
+•
+Lat/long is the predominant coordinate system 
+used for nautical and aeronautical navigation.
+•
+Angular coordinates are perfectly suited to the 
+ellipsoidal shape of the earth.
+•
+A geographic (spherical) coordinate system.
+o Coordinates in degrees, minutes and seconds or 
+decimal degrees
+o Position coordinates are based on an angular 
+distance from a known reference point.
+•
+Reference Point:  Intersection of Prime 
+Meridian, (0°, 0°)
+
+
+--- Page 11 ---
+0º
+0º
+Point of Origin
+Prime Meridian
+Equator
+(Longitude)
+(Latitude)
+Latitude & Longitude
+
+
+--- Page 12 ---
+Latitude & Longitude
+0º, 0º
+Prime Meridian
+Equator
+10º
+20º
+W   30º
+10º 20º 30º E
+10º
+20º
+30º
+10º
+20º
+30º
+S
+N
++
+
+
+--- Page 13 ---
+Latitude
+•
+Latitude is comprised of parallels, which are equally spaced circles around the earth 
+paralleling the equator.
+•
+Parallels are designated by their angle north or south of the equator (10°, 20°, etc.) .
+•
+The equator is 0° latitude, and the north and south poles are at 90° angles from the 
+equator.
+•
+The linear distance between parallel (latitude) lines never changes, regardless of their 
+position on the earth.
+
+
+--- Page 14 ---
+Distance between Latitudes
+•
+Earth Circumference
+o
+Along Equator, 40,075 km
+o
+Pole-to-pole, 40,008 km
+•
+Since each latitude is in parallel, the distance between latitudes is consistent.
+o
+Pole-to-pole circumference can be divided by 360° to determine distance between 
+latitudes
+•
+𝐷𝑖𝑠𝑡𝑎𝑛𝑐𝑒 𝑏𝑒𝑡𝑤𝑒𝑒𝑛 𝑜𝑛𝑒 𝑑𝑒𝑔𝑟𝑒𝑒 𝑜𝑓 𝑙𝑎𝑡𝑖𝑡𝑢𝑑𝑒=
+40008
+360 = 111.1 𝑘𝑚
+
+
+--- Page 15 ---
+Parallels of Latitude
+10º
+10º
+10º
+1111 km
+10º S
+0º N
+10º N
+20º N
+1111 km
+1111 km
+
+
+--- Page 16 ---
+•
+Comprised of meridians that form one-half of a circle, or plane.
+o
+Designated by their angle west or east of the prime meridian.
+o
+Meridians are angled, and do not parallel each other.
+•
+Prime meridian is designated 0º and extends from the north pole to the south pole 
+through Greenwich, England.
+•
+Linear distance between degrees longitude depends upon the latitude
+o
+Equator: approximately 111.321 km (69.172 miles)
+o
+Arctic circle: approximately 41.8 km
+Longitude
+
+
+--- Page 17 ---
+Meridians of Longitude
+10º
+10º
+110º W
+120º W
+1113 km
+1046 km
+10º
+Equator
+To North Pole
+To South Pole
+
+
+--- Page 18 ---
+•
+At equator, the distance between longitudes is the diameter of the Earth along 
+equator, divided by 360°.
+o
+𝑂𝑛𝑒 𝑑𝑒𝑔𝑟𝑒𝑒 𝑜𝑓 𝑙𝑜𝑛𝑔𝑖𝑡𝑢𝑑𝑒𝑒𝑞𝑢𝑎𝑡𝑜𝑟=
+40075
+360 = 111.3 𝑘𝑚
+•
+If non-equatorial, we must account for the change in radius
+•
+One degree longitude = 111.3 ∗cos 𝑙𝑎𝑡𝑖𝑡𝑢𝑑𝑒𝑘𝑚
+o
+Examples: 
+•
+@20 degrees longitude: 1 𝑑𝑒𝑔𝑟𝑒𝑒= 111.3 cos 20° ≈104.6 𝑘𝑚
+•
+@ 70 degrees longitude: 1 degree = 111.3 cos(70°) ≈ 38.1 km
+Distance Between Longitude
+
+
+--- Page 19 ---
+Decimal Degrees vs. Degree, Minute, Seconds
+•
+60 minutes per degree
+•
+60 seconds per minute
+o
+Therefore, 60 ∗60 = 3600 seconds per degree
+•
+𝑑𝑒𝑔°𝑚𝑖𝑛′𝑠𝑒𝑐′′ to degrees decimal
+o
+𝑋𝑋°𝑀𝑀′𝑆𝑆“ = XX +
+MM
+60 +
+SS
+3600
+o
+𝑒. 𝑔. 45°10′30“ = 45 +
+10
+60 +
+30
+3600 = 45.175°
+•
+degrees decimal to 𝑑𝑒𝑔°𝑚𝑖𝑛′𝑠𝑒𝑐′′ to
+o
+𝑋𝑋. 𝑌𝑌𝑌= 𝑋𝑋°(floor(YYY*3600)/60)’ ((YYY*3600)%60)’’
+o
+E.g. 45.175 = 45°[floor((175*3600)/60]’ (175*3600)%60’’
+
+
+--- Page 20 ---
+CEC 300: Computing in Aviation and Aerospace
+GPS FUNDAMENTALS
+
+
+--- Page 21 ---
+What is GNSS?
+•
+A GNSS or Global Navigation Satellite System is comprised of satellites. For example, 
+with GPS, each satellite transmits two codes (C/A and P-Code) to ground receivers 
+and information about is ephemeris (including location, orbital path, etc.).
+•
+Enables:
+o
+Navigational positioning (global position)
+o
+Timing solutions (atomic clock-like performance and accuracy synchronized with 
+UTC clock)
+•
+Examples:
+o
+Navstar GPS System, GLONASS, etc.
+
+
+--- Page 22 ---
+Orbits
+Image from Binns, 2023
+
+
+--- Page 23 ---
+GPS Constellation Orbits
+Source: gps-orbit-map | The 24 GPS satellites in geo-stationary orbi… | Adlopa | Flickr
+
+
+--- Page 24 ---
+Highly Elliptical Orbits
+Apogee extends past geosynchronous orbit to enable longer term dwell times.  
+Long dwell
+From: http://earthobservatory.nasa.gov/Features/OrbitsCatalog/page2.php
+From: http://en.wikipedia.org/wiki/Image:Molniya.jpg
+
+
+--- Page 25 ---
+•
+Sputnick (1957) – scientists observe the increase in frequency as the satellite 
+approaches but decreases as it moves away.
+o
+Example of Doppler Effect.
+o
+Enabled tracking of satellite position
+o
+Inspiration for receiver localization given measured distance to satellite.
+•
+Transit (1958) – first global satellite-based navigation system
+o
+Launch in 1960
+o
+Military and commercial use
+o
+36 satellite constellation by 1968
+o
+Replaced by GPS in 1996
+GPS History
+
+
+--- Page 26 ---
+GPS History (2)
+•
+Woodford and Nakamura (1966) – proposed an architecture for a satellite-based 
+navigation system
+o
+Use four satellites to localize without need for ground receiver to have its own 
+atomic clock.
+•
+Significantly reduced the cost of satellite-based navigation systems.
+•
+Reduces weight of systems
+o
+Locate atomic clocks onboard the satellites
+•
+General technology advancements in 1960s include solid-state microcontrollers.
+•
+Atomic clock established at Naval Research Laboratory’s Naval Center of Space 
+Technology
+
+
+--- Page 27 ---
+GPS History (3)
+•
+Timation (Time Navigation)  (late 1960s to early 1970s) – 
+o
+1967 + 1968s – launch of first two satellites with crystal osciallator clocks
+o
+1974 – launch of first atomic clock equipped satellites
+o
+Observed improved accuracy and 3D localization capabilities
+•
+Navstar/GPS satellite system (1970s – today)
+o
+1972 – start on new satellite system taking lessons learned from earlier systems.
+o
+1974 – first series of Navstar satellites, control station, and receivers began 
+development
+o
+1978 – Block I satellites launched
+o
+1983 – President Reagan authorized civilian use of GPS for airlines
+o
+1985 – first Block II satellite launched
+
+
+--- Page 28 ---
+•
+GPS satellites are space vehicles orbiting the earth.
+o
+Broadcast on UHF frequency, which limits to line-of-sight only
+GPS Space Vehicles
+
+
+--- Page 29 ---
+Constellation history
+Image from Binns, 2019
+
+
+--- Page 30 ---
+•
+Operational Dec. 1993 with full 24-satellite 
+constellation online January 17 1994.
+•
+Selective availability
+o Built-in mechanism to encrypt the P-code signal to 
+restrict access from adversaries.
+o P-Code (Precise Code) becomes Y-Code when 
+encrypted prior to transmission.
+User segment includes:
+o Fixed GPS stations
+o Mobile GPS receivers
+• Aircraft
+• Sea vessels
+• Ground vehicles
+• Suborbital space flight operations
+Ground-based segment
+o Observes health of the GPS system
+o Adjust satellite position to maintain orbits 
+and coverage
+o Used to synchronize satellite’s atomic clocks.
+Basic Principles of GPS
+From: 1 Introduction | The Global Positioning System for the Geosciences: 
+Summary and Proceedings of a Workshop on Improving the GPS Reference 
+Station Infrastructure for Earth, Oceanic, and Atmospheric Science Applications | 
+The National Academies Press
+
+
+--- Page 31 ---
+Space Segment: Satellite Distribution Across Constellation
+From: 8 Global Navigation Satellite System (GNSS) | Aircraft Systems
+
+
+--- Page 32 ---
+Consider a single satellite
+•
+A pseudorandom number (PRN) code (not actually random but appears random) is 
+broadcast at a specified time.
+•
+Receivers can compare the signal expected with the signal received.
+o
+Autocorrelation of the broadcast signal and expected signal enables a time-of-
+flight estimation.
+•
+Given the satellite’s broadcast ephemeris, the distance of the receiver forms a sphere 
+around the satellite’s location in space.
+o
+The receiver must be on the surface of that sphere.
+
+
+--- Page 33 ---
+Determining Position
+https://youtu.be/FU_pY2sTwTA
+
+
+--- Page 34 ---
+Adding Satellites provides…
+From: 8 Global Navigation Satellite System (GNSS) | Aircraft Systems
+
+
+--- Page 35 ---
+•
+Quality of a quartz clock is insufficient
+o
+Not enough precision or accuracy
+o
+1𝜇𝑠 offset ≈300𝑚 error
+•
+Four atomic clocks, two cesium (primary) and two rubidium (secondary) clocks 
+onboard.
+o
+Synchronized with the other satellites, “GPS Time”
+o
+GPS Time synchronized with the UTC clock
+o
+Results:  GPS signals are precise, repeatable, and synchronized with our 
+standardized time reference.
+•
+Corrections sent periodically from GPS ground stations
+Importance of Atomic Synchronization
+
+
+--- Page 36 ---
+Image from GPS.gov: Control Segment
+
+
+--- Page 37 ---
+•
+GPS satellites transmit on UHF-band requiring line of sight to receivers.
+•
+At least four receivers needed to determine position.  But, what would be gained with 
+more?
+o More satellites will result in improved position fix accuracy.
+o Greater than four enables some error correcting & integrity monitoring.
+•
+Majority of the following discussion will address the U.S. Navstar Constellation AKA 
+GPS
+Constellation of Space Vehicles
+From: 8 Global Navigation Satellite System (GNSS) | Aircraft Systems
+
+
+--- Page 38 ---
+Geometry of a satellite  pointing at Earth
+From: 8 Global Navigation Satellite System (GNSS) | Aircraft Systems
+
+
+--- Page 39 ---
+•
+Twenty-four (24) satellites
+•
+GPS orbit is ½ sidereal day
+o
+11h, 58 min, 2 sec
+o
+43,082 s
+•
+Radius must be at the point when centripetal force equals the gravitational attraction 
+between the satellite and Earth
+o
+𝐺𝑀⨁𝑚𝑠
+𝑟2
+=
+ms𝑉2
+𝑟
+Orbital Radius of GPS Constellation
+
+
+--- Page 40 ---
+Calculating Radius and orbit period
+•
+𝐺𝑀⨁𝑚𝑠
+𝑟2
+=
+ms𝑉2
+𝑟 
+•
+𝑣=
+𝐺𝑀⨁
+𝑟
+•
+𝑣𝜏= 2Π𝑟
+o orbit length = circumference of circle of radius r
+o 𝜏 is the orbital period (seconds)
+•
+𝜏=
+2Π𝑟
+3
+2
+𝑠𝑞𝑟𝑡(𝐺𝑀⨁)
+•
+G – gravitational constant
+o 6.67430×10−11 𝑚3
+𝑘𝑔.𝑠2
+•
+𝑀⨁ - mass of earth
+o 5.97219𝑥1024 𝑘𝑔
+Solving for Radius, r:
+𝑟=
+𝜏2𝐺𝑀⨁
+4Π2
+1
+3
+Example: GPS: 𝜏= 43082.1 𝑠  
+                           (1/2 sidereal day)
+r ≈ 26,561,350.4395 m or 26,561.82 km
+From: 8 Global Navigation Satellite System (GNSS) | Aircraft Systems
+
+
+--- Page 41 ---
+CEC 300: Computing in Aviation and Aerospace
+GPS CODES AND SIGNALS
+
+
+--- Page 42 ---
+GPS Signals
+Signal
+Frequency
+Notes
+L1
+1575.42 MHz (154𝑓0)
+•
+C/A and P(Y) Code
+L2
+1227.60 MHz (120𝑓0)
+•
+P(Y) Code Only 
+L1C
+1575.42 MHz (154𝑓0)
+•
+Downward compatible with L1
+•
+Additional codes:
+•
+Pilot code
+•
+Overlay code
+•
+CNAV-2 navigation data format
+L2C
+1227.60 MHz (𝑓0)
+•
+Civil moderate (CM) code
+•
+Civil long (CL) code
+•
+Codes multiplexed at 1023 MHz (551,500 chips/s 
+each).
+L5
+1176.45 MHz (115𝑓0)
+•
+Ranging code
+•
+Navigation message
+•
+CNAV navigation data format
+𝑓0 = 1023.00 𝑀𝐻𝑧, High stability quarts oscillator produces the fundamental frequency.
+Our lecture will focus on L1 and L2 in greater detail.
+
+
+--- Page 43 ---
+•
+A pseudorandom number code transmitted by each GPS satellite.
+o
+Two 10-bit polynomials
+o
+Size: 1023 𝑐ℎ𝑖𝑝𝑠
+•
+Each satellite has 32 unique C/A codes
+•
+Data Rate: 1.023 𝑀𝑏/𝑠
+•
+Period: 1 𝑚𝑠
+•
+Gold codes are used to generate the C/A code
+Course Acquisition (C/A) Code
+
+
+--- Page 44 ---
+Precision Code -  P(Y) Code
+•
+A signal comprised of the P or Y code
+•
+Message much longer than C/A code and transmitted at a faster bitrate:
+o
+Size: 2.35 𝑥 104 chips
+o
+Rate: 10.23 Mb/s
+o
+Period: 7 days
+•
+Available on L1 and L2 frequencies
+•
+Called P-Code when unencrypted; Y-code when encrypted
+o
+Encryption called “selective availability” was turned off by presidential order.
+o
+Often referred to as the P(Y)-code when there is no need to distinguish between 
+the two.
+
+
+--- Page 45 ---
+Basic Concept
+•
+Consider a GPS receiver and GPS satellite produce a C/A code (OR P-code) at a given 
+time.
+o
+Through autocorrelation, the phase shift distance between the two signals can be 
+measured.
+o
+The pseudorange of the satellite to the receiver can be approximated based on the 
+phase shift and almanac data indicating the location of the satellite on Earth.
+•
+P-code follows a similar approach, but given its size, the C/A code can help identify 
+the approximate distance, which can aid the autocorrelation of the P-code.
+
+
+--- Page 46 ---
+1227.6 Mhz
+Image Source: Binns, 2019
+
+
+--- Page 47 ---
+Navigation Message and
+ 
+C/A Code
+C/A Code
+1023000 Hz
+20 ms
+= 20 PRN Codes
+Nav Bits
+= 20460 Chips
+50 Hz
+Modulo 2 Addition
+C/A Code
++Nav Bits
+
+
+--- Page 48 ---
+•
+Gold codes are generated via a 
+pair of shift registers and a 
+sequence of modulo 2 additions.
+•
+The following slides will walk 
+through the process.
+•
+Given the satellite (SV), a 
+sequence of chips is produced 
+unique to that satellite.
+•
+Easy to correlate like signals and 
+autocorrelated to determine any 
+phase difference in two codes 
+from the same satellite.
+Generating Gold Codes
+Image Source: (Helfrick, 2007)
+
+
+--- Page 49 ---
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+Stage 1: Shift Register
+Shift to Right per Iteration (1023 total)
+XOR
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+XOR
+0
+XOR
+XOR
+PRN chip
+Stage 2: Shift Register
+Stage 1 Execution shown above
+Polynomial 2: 1 + 𝑥2 + 𝑥3 + 𝑥6 + 𝑥8 + 𝑥9 + 𝑥10
+Indicates that the feedback to the shift register is the addition modulo 2 result of the 
+Polynomial 1: 1 + 𝑥3 + 𝑥10
+1
+Register shifts to the right with the right most 
+value becoming the input to the final XOR
+
+
+--- Page 50 ---
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+Stage 1: Shift Register
+Shift to Right per Iteration (1023 total)
+XOR
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+XOR
+XOR
+XOR
+PRN chip
+Stage 2: Shift Register
+Stage 2 output and final XOR – output is PRN chip
+2 ⊕6 = 0
+1
+1
+
+
+--- Page 51 ---
+Addition Module 2 for XOR
+•
+XOR(A,B,C) = (A+B+C) % 2
+o i.e. if the number of high bits is even, then false (0) ; 
+else, true (1).
+o Note: Number of bits will influence your results once 
+the number of inputs > 2.
+•
+Examples: 
+o XOR(0,1,0) = 1%2 = 1
+o XOR(1,1,1) = 3%2 = 1
+o XOR(1,1,1,1) = 4%2 = 0
+I1
+I1
+I3
+Outpu
+t
+0
+0
+0
+0
+0
+0
+1
+1
+0
+1
+0
+1
+0
+1
+1
+0
+1
+0
+0
+1
+1
+0
+1
+0
+1
+1
+0
+0
+1
+1
+1
+1
+
+
+--- Page 52 ---
+Polynomial 
+Generation 
+Stage 1
+Polynomial: 1 + 𝑋3 + 𝑥10
+Not a real polynomial, rather 
+shows which bits must be 
+summed (X-OR addition) to 
+determine the value with 
+each time step to add to the 
+shift register.
+Process
+1.
+Shift register is loaded to one.
+2.
+For each time step, 
+•
+The result of a modulo 2 
+addition between bits 3 and 
+10 is inserted into the shift 
+register. 
+•
+The right most bit is passed 
+onward to polynomial 2 (next 
+shift register).
+Image Source: Binns, 2019
+
+
+--- Page 53 ---
+Example 1: Stage 1, Iteration1
+•
+Step 1: Shift Register Initialized
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+
+--- Page 54 ---
+Example 1: Stage 1, Iteration1
+•
+Step 2a: Determine the modulo 2 addition (XOR) between bits (chips) 3 and 
+10, i.e. 3 ⊕10
+3 ⊕10 = (1+1) % 2 = 0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+
+--- Page 55 ---
+Example 1: Stage 1, Iteration1
+•
+Step 2b: Add the result of 3 ⊕10 into the shift register.
+o
+All values shift to the right.
+o
+New value added to the left
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+3 ⊕10 
+Values shift to the right
+1
+Send bit 10 to next 
+polynomial stage
+RESULT
+To Stage 2
+
+
+--- Page 56 ---
+Example 2: Stage 1, Iteration 2
+•
+Starting with the results of iteration 1, we repeat the process
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+0
+0
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+3 ⊕10 = 0 
+Values shift to the right
+1
+Send bit 10 to next 
+polynomial stage
+RESULT
+To Stage 2
+
+
+--- Page 57 ---
+Example 3: Stage 1, Iteration 3
+•
+Starting with the results of iteration 1, we repeat the process
+0
+0
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+0
+0
+0
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+3 ⊕10 = 0 
+Values shift to the right
+1
+Send bit 10 to next 
+polynomial stage
+RESULT
+To Stage 2
+
+
+--- Page 58 ---
+Example 4: Stage 1, Iteration 4
+•
+Starting with the results of iteration 1, we repeat the process
+0
+0
+0
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+1
+0
+0
+0
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+3 ⊕10 = 1 
+Values shift to the right
+1
+Send bit 10 to next 
+polynomial stage
+RESULT
+To Stage 2
+
+
+--- Page 59 ---
+Stage1
+Results 
+(first 12 chips)
+Image Source: Binns, 2019
+
+
+--- Page 60 ---
+Stage 2
+Each SV has its own pair of bits to personalize its 
+pattern for the second polynomial.
+1.
+Reset shift register with 1s
+2.
+For each iteration, after stage 1 has produced its 
+output:
+a)
+Generate output for PRN, 
+i.
+Given PRN ID, a pair of tap 
+attributes.,  e.g. PRN 1, 2 ⊕6 
+ii.
+XOR the identified bits
+iii.
+XOR the result with the bit output 
+from stage 1 for this same iteration.
+b)
+Update shift register
+i.
+Determine the next value to add to 
+the shift register.
+ii.
+1 + x2 + x3 + X6 + x8 + x9 + x10
+c)
+Repeat until all 1023 bits of PRN are 
+computed and sent.
+Image Source: Binns, 2019
+
+
+--- Page 61 ---
+Mapping of Space Vehicles to Stage 2 Taps
+•
+SV = { 1: [2,6], 2: [3,7], 3: [4,8], 4: [5,9], 5: [1,9],
+6: [2,10], 7: [1,8], 8: [2,9], 9: [3,10], 10: [2,3], 11:
+[3,4], 12: [5,6], 13: [6,7], 14: [7,8], 15: [8,9], 16:
+[9,10], 17: [1,4], 18: [2,5], 19: [3,6], 20: [4,7], 21:
+[5,8], 22: [6,9], 23: [1,3], 24: [4,6], 25: [5,7], 26:
+[6,8], 27: [7,9], 28: [8,10], 29: [1,6], 30: [2,7], 31:
+[3,8], 32: [4,9], }
+
+
+--- Page 62 ---
+Example 5: Stage 2, Iteration 1
+•
+Step 1: Shift Register Initialized
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+From Stage 1,
+
+
+--- Page 63 ---
+Example 5: Stage 2, Iteration 1
+•
+Step 2: Determine the PRN 
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+From Stage 1,
+⊕
+⊕
+C/A Code
+Output bit from stage 1
+0
+1
+1
+
+
+--- Page 64 ---
+Example 5: Stage 2, Iteration 1
+•
+Step 3: Update shift register
+o
+Determine output of 1 + 𝑥2 + 𝑥3 + 𝑥6 + 𝑥8 + 𝑥9 + 𝑥10
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+From Stage 1,
+⊕
+xor(1,1,1,1,1, 1) = 0
+10th bit forwarded to final XOR just before bit shift.
+
+
+--- Page 65 ---
+Example 5: Stage 2, Iteration1
+•
+Shift register at the end of iteration1.
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+
+--- Page 66 ---
+Example 6: Stage 2, Iteration 2
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+⊕
+0
+⊕
+⊕
+Output bit from stage 1
+0
+1
+1
+0
+0
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+
+--- Page 67 ---
+Example 7: Stage 2, Iteration 3
+0
+0
+1
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+⊕
+1
+⊕
+⊕
+Output bit from stage 1
+1
+0
+1
+1
+0
+0
+1
+1
+1
+1
+1
+1
+1
+bit
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+
+--- Page 68 ---
+Stage 2
+Results for first 10 
+chips
+Image Source: Binns, 2019
+
+
+--- Page 69 ---
+Stage 1: Shift Register
+XOR
+XOR
+XOR
+XOR
+PRN chip
+Stage 2: Shift Register
+Practice with Class.
+
+
+--- Page 70 ---
+Mapping of Space Vehicles to Stage 2 Taps
+•
+SV = { 1: [2,6], 2: [3,7], 3: [4,8], 4: [5,9], 5: [1,9],
+6: [2,10], 7: [1,8], 8: [2,9], 9: [3,10], 10: [2,3], 11:
+[3,4], 12: [5,6], 13: [6,7], 14: [7,8], 15: [8,9], 16:
+[9,10], 17: [1,4], 18: [2,5], 19: [3,6], 20: [4,7], 21:
+[5,8], 22: [6,9], 23: [1,3], 24: [4,6], 25: [5,7], 26:
+[6,8], 27: [7,9], 28: [8,10], 29: [1,6], 30: [2,7], 31:
+[3,8], 32: [4,9], }
+
+
+--- Page 71 ---
+Navigation Message
+•
+Master frame
+o 25 subframes
+•
+30 seconds each
+o Modulated on both carriers
+o 12.55 minutes to transmit
+•
+Each Frame is divided into 5 subframes
+•
+Each subframe is divided into 10 words with 30 
+bits per word)
+o First two words
+o Telemetry Word (TLM) 
+•
+Status of updates from ground
+•
+Age of the ephemeris data
+o Handover Word (HOW)
+•
+Time of the GPS week (TOW)
+•
+Helps identify the current TOW information to help with P-
+Code acquisition/launch.
+File:Navigation Message.png - Navipedia
+Example Structure of “legacy” subframe.
+
+
+--- Page 72 ---
+Image Source: Binns, 2019
+
+
+--- Page 73 ---
+The Navigation Message | GEOG 862: GPS and 
+GNSS for Geospatial Professionals
+
+
+--- Page 74 ---
+Image Source: Binns, 2019
+
+
+--- Page 75 ---
+Encoding and Decoding the NAV Messge
+Image Source: Binns, 2019
+
+
+--- Page 76 ---
+Multi-channel decoding of Nav Messages from multiple receivers
+Image Source: Binns, 2019
+
+
+--- Page 77 ---
+•
+A – semi-major axis (distance 
+from earth center to perigee
+•
+B – Semi-minor axis 
+(distance between earth 
+center and ascending node.
+•
+Ω0– Right Ascension
+•
+𝐼0 – inclination angle
+•
+𝑒 – ellipticity
+•
+𝜔 – direction of semimajor 
+axis relative to vector 
+between earth and the 
+ascending node.
+Ephimeris data
+Image Source: Binns, 2019
+
+
+--- Page 78 ---
+Additional Signals: L2C
+•
+Providing public on the L2 satellite 
+o
+Enables real-time corrections of ionospheric noise
+o
+Redundancy in case of interference.
+•
+Installed on Block II RM, 2005
+•
+Not C/A, but two signals that are multiplexed together 
+o
+Each individually transmitted at 551,500 chips/s.
+o
+Multiplxed signal transmitted at 1023.0kHz
+•
+Civil moderate (CM) code – modulated by new navigation message, CNAV  (legacy 
+signal is called LNAV)
+•
+Civil-long (CL) code – no navigation message, built for strong correlation with receiver 
+generated signal.
+
+
+--- Page 79 ---
+L5 Safety of Life Signal
+•
+On Block II F (2010) onward SVs
+•
+𝑓= 1176.45 𝑀𝐻𝑧= 115𝑓0
+•
+Includes:
+o
+Ranging code – two PRN codes transmitted in quadrature
+•
+I5 code (in-phase) and Q5 code (quadrature).
+o
+Navigation message
+•
+Similar encoding strategy as L2C
+•
+Intent to improve accuracy so that GPS could be used without augmentation for 
+precision approaches.
+
+
+--- Page 80 ---
+L1C Signal
+•
+On L1 frequency and downward compatible with legacy C/A
+•
+On Block III GPS SV launched December 2018
+o
+Six broadcasting message
+o
+Plan for all 24 by late 2020s.
+•
+Two new codes, pilot code and overlay code.
+•
+Navigational data format called CNAV-2 (similar frames to L2C and L5 CNAV types).
+
+
+--- Page 81 ---
+CEC 300: Computing in Aviation and Aerospace
+GPS QUALITY METRICS AND CONSIDERATIONS
+
+
+--- Page 82 ---
+PDOP
+•
+Position Dilution of Precision (PDOP)- quality 
+metric indicating the quality of the geometric 
+arrangement of the satellite’s providing signals 
+to a GPS receiver at a given time.
+o The higher the PDOP, the higher the position dilution, 
+resulting in less reliable and lower quality results.
+•
+1 to 2 – Excellent
+•
+3 to 5 – Good to moderate
+•
+6+ - Poor precision, less reliability
+•
+Contributions to PDOP
+o Geometry, 
+•
+Satellites are spread out across the sky.
+•
+Filtering satellites low on horizon can reduce PDOP
+o Number of satellites
+•
+Missing satellites can result in gaps in coverage.
+o Receiver quality
+o Environmental factors
+•
+Solar storms for instance
+
+
+--- Page 83 ---
+Other Geometric Dilution of Precision Metrics
+•
+PDOP considers x,y,z positional error with HDOP and VDOP specific to the horizontal 
+and vertical planes
+•
+In addition to PDOP, we have
+o
+HDOP – Horizontal Dilution of Performance  
+o
+VDOP -  Vertical Dilution of Performance
+•
+TDOP – Time Dilution of Performance
+•
+Measure the magnitude of user position errors
+o
+Smaller values indicate better performance.
+
+
+--- Page 84 ---
+Good vs. bad Geometry example
+Image Source: Binns, 2019
+
+
+--- Page 85 ---
+Positional 
+Dilution of 
+Precision
+From https://www.nstb.tc.faa.gov/reports/FAA_SPS_PAN_Report_120_v2.0.pdf?req_time=1738713600148 
+
+
+--- Page 86 ---
+Estimated Position Uncertainty (EPU)
+•
+Statistically determined
+o
+Radius around the current position in which position accuracy greater than 95%.
+o
+Based on constellation geometry relative to receiver.
+•
+Measured in nautical miles (NM). 
+•
+For pilot, it provides an indication of reliability of using GPS.
+•
+Performance-based Navigation and RNAV utilize this metric.
+
+
+--- Page 87 ---
+Figure of Merit
+•
+Similar to Estimated Position Error
+o
+3D Root-Mean-Square (RMS) error
+•
+The table provides a mapping to EPE vs. the FOM value.
+o
+Used in addition to 
+
+
+--- Page 88 ---
+Sources of GPS Errors
+In additions to geometry and ionosphere 
+induced errors, the following are some other 
+sources of error in the GPS system.
+Image Source: Binns, 2019
+
+
+--- Page 89 ---
+CEC 300: Computing in Aviation and Aerospace
+GPS AUGMENTATION SYSTEMS
+
+
+--- Page 90 ---
+Augmentation Systems
+•
+Ground and satellite-based augmentation 
+systems can help improve GNSS performance.
+•
+Position error correction information is 
+communicated to the receiver, which applies 
+the corrections to improve position accuracy 
+and precision.
+•
+Examples include:
+o LAAS
+o WAAS
+•
+Standard GPS Accuracy:
+o Horizontal: ±13 𝑚
+o Vertical: ±22 𝑚
+o Time: ±40 𝑛𝑠
+
+
+--- Page 91 ---
+Differential GPS
+•
+Differential GPS is an augmentation of traditional GPS.
+•
+A base station is established at a surveyed location.
+o
+Given its known position, the base station receiver identifies corrections to the 
+received signals.
+o
+Many of the corrected errors can be attributed to factors such as ionospheric noise, 
+which would have similar impact on other receivers within the vicinity
+o
+The corrections are shared with suitably equipped GPS receivers
+•
+Suitably equipped receivers will receive both the GPS signal and the corrections, 
+which results in a significant reduction in error.
+
+
+--- Page 92 ---
+From: What Is Differential GPS (DGPS) and How Does It 
+Improve Accuracy?
+
+
+--- Page 93 ---
+Wide Area Augmentation System (WAAS)
+•
+WAAS systems in the United States, Europe (EGNOSE), Japan (MASA, and India 
+(GAGAN).  Slide will focus on U.S. WAAS system.
+•
+38 receiver sites
+o
+Receive GPS signals from visible statellites
+o
+Signals forwarded to master site
+•
+Master site 
+o
+Receives the signals and identifies corrections to major errors within the signals.
+o
+Rebroadcasts to aircraft by transmitting to two GEO satellites, which broadcasts the 
+message across their area of coverage.
+•
+Accuracy improved to within 5 meters
+
+
+--- Page 94 ---
+WAAS
+
+
+--- Page 95 ---
+Local Area Augmentation System
+•
+Applicable to CAT II and CAT III ILS approaches
+•
+Uses differential GPS,
+o GNSS receiver at surveyed site
+o Error corrections are compiled
+o Transmitted on the VOR band datalink (108-118 MHz)
+o Aircraft receives the message and applies corrections.
+•
+Address errors from ionospheric and 
+tropospheric noise.
+
+
+--- Page 96 ---
+CEC 300: Computing in Aviation and Aerospace
+GPS DISPLAYS
+
+
+--- Page 97 ---
+Cockpit 
+GPS 
+Display
+
+
+--- Page 99 ---
+Questions?

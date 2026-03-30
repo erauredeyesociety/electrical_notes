@@ -1,0 +1,644 @@
+--- Page 1 ---
+Spacecraft Avionics: Architectures and Buses
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+•
+Introduction
+•
+Spacecraft Architectures
+o
+Federated
+o
+Integrated Modular Avionics
+o
+Distributed Integrated Modular Avionics (DIMA)
+o
+Space Plug-and-Play Avionics (SPA)
+o
+Space Avionics Open Interface Architecture (SAVOIR)
+o
+Open Modular Avionics Architecture for Space Applications (OMAC4S)
+•
+Buses
+o
+SpaceWire, SpaceFibre
+o
+MIL-STD-1553
+o
+Controller Area Network (CAN)
+o
+Time-Triggered Ethernet (TTE)
+•
+Onboard Computers (OBC)
+•
+Examples
+Overview
+
+
+--- Page 3 ---
+Course Title
+SPACECRAFT ARCHITECTURES
+
+
+--- Page 4 ---
+•
+Definition: 
+o
+The spacecraft "brain" and "nervous system," responsible for Command & Data 
+Handling (C&DH), Guidance, Navigation & Control (GNC), and Payload 
+Management.
+•
+The Paradigm Shift: 
+o
+Moving from single-unit spacecraft to networked constellations and space-based 
+cloud computing.
+•
+Core Difference: 
+o
+Aircraft avionics: maintainable, atmosphere-cooled), 
+o
+Spacecraft avionics: autonomous, radiation-hardened, and thermally managed in a 
+vacuum.
+From Air to Vacuum – Space Avionics
+
+
+--- Page 5 ---
+System Faults Due To Radiation
+•
+Total Ionizing Dose (TID): 
+o
+Cumulative damage resulting in a 
+graduate degradation.
+•
+Single Event Effects (SEE):
+o
+See Figure
+Hostile Environment – Radiation and Reliability
+Mitigation Strategies
+•
+Testing to determine the current and voltage 
+thresholds and tolerance for components.
+•
+Hardware: redundant systems (e.g. triple modular 
+redundancy (TMR), scrubbing, and watchdogs.
+•
+Physical:  shielding, RAD hardening
+
+
+--- Page 6 ---
+•
+Federated Architecture
+o
+Each function has its own integrated box 
+with its own computing resources.
+•
+Integrated Modular Avionics (IMA)
+o
+Functions operating on shared computing 
+resources; leverages generic computing 
+platforms.
+•
+Distributed Integrated Modular Avionics 
+(DIMA)
+o
+Network nodes are physically distributed, but 
+functions are logically integrated.
+o
+Less cables.
+o
+Functions can be distributed within a 
+spacecraft.
+o
+Processing distributed
+Evolution of Architecture
+Feature
+IMA
+DIMA
+Physical layout
+Centralized
+Distributed
+Primary Goal
+Resource sharing 
+(Swap reduction)
+Flexibility and 
+Scalibility
+Cable weight
+Low (vs. Federated)
+Very Low
+Fault isolation
+Logical Partitioning
+Physical & Logical 
+Partitioning
+Upgradeability
+Moderate
+High
+COMPARISON OF IMA AND DIMA
+
+
+--- Page 7 ---
+•
+A "One Function, One Box" approach. Subsystems (AOCS, Thermal, Power) are 
+physically and functionally distinct.
+•
+Topology:
+o
+Typically bus or Star topology
+o
+Connects remote terminals to centralized processing
+•
+Resource Allocation:
+o
+RTs have exclusive processor, I/O, and drivers
+o
+Resources are not shared between subsystems.
+Federated Architecture (classical approach)
+
+
+--- Page 8 ---
+•
+Functions are combined to operate on shared computing resources.
+•
+Instead of dedicated processors per function, processing units now interact with 
+multiple functions that are isolated through software partitions.
+•
+Use a Data Interface Unit (DIU) or Remote Interface Unit (RIU) for data gathering 
+from sensors but processed centrally.
+•
+IMA has high functional density resulting in a reduction in the size, weight, and power 
+requirements of the avionics system.
+Integrated Modular Avionics (Centralized)
+
+
+--- Page 9 ---
+•
+Combines the functional integration of IMA with physical distribution
+•
+Computing nodes are distributed near sensors/actuators on standardized software 
+tasks.
+•
+Example:
+o
+Sensor processing on a processing node that leverages a high-speed backbone to 
+exchange information.
+•
+Real world:
+o
+NASA Lunar Gateway
+Distributed Integrated Modular Avionics (DIMA)
+
+
+--- Page 10 ---
+DIMA Architecture for Lunar Gateway
+
+
+--- Page 11 ---
+•
+SAVOIR (ESA) – Space Avionics Open Interface Architecture
+o
+Aims for interoperability and standardized interfaces permitting integration of 
+components from multiple vendors.
+•
+SPA (US AFRL) – Space Plug-and-play Avionics
+o
+Modelled after USB enabling rapid detection and configuration of components.
+o
+Leverages self-organizing networks
+•
+OMAC4S
+o
+Approach is like IMA, but uses a commercial backplane standard.
+Open Architectures
+
+
+--- Page 12 ---
+•
+Definition:
+o
+An open reference architecture for spacecraft avionics 
+systems developed by ESA.
+o
+Standardizes hardware and software platforms, modules, 
+and internal/external interfaces.
+•
+Hardware Interconnectivity:
+o
+Standardized communication protocol
+•
+CCSDS (Consultative Committee for Space Data Systems)
+•
+ECSS (European Cooperation for Space Standardization)
+o
+Leverages standard buses such as MIL-STD-1553B, 
+SpaceWire, and Time-Triggered Ethernet.
+•
+Software Architecture
+o
+Layered software architecture
+o
+Time-space partitioning operating system
+•
+Application Software
+•
+Execution platform – runs the services enabling 
+application software
+SAVOIR
+Design Tradeoffs
+•
+Interoperability
+•
+Most applicable to large, complex 
+missions supported by multiple 
+collaborators.
+•
+Enables reusability.
+•
+Decreases spacecraft design time. 
+•
+Integration Complexity
+•
+Each system must be assessed to 
+ensure compliance with the 
+standards used.
+
+
+--- Page 13 ---
+SAVOIR Architecture
+
+
+--- Page 14 ---
+•
+Open architecture proposed in 2024 by the US Air Force 
+Research Laboratory.
+o
+Enables spacecraft to swiftly respond to mission needs 
+(i.e. rapid integration, maintenance, test, etc.).
+•
+Approach:
+o
+Like terrestrial USB interface
+o
+Self-organizing network
+o
+Plug-and-play middleware
+•
+Divided into different managers: data, task, processor, 
+and sensor managers
+o
+Interface Unification
+•
+Unification of mechanical, electrical, and thermal 
+interfaces across spacecraft.
+•
+Enable rapid production, assembly, test, and 
+maintenance.
+o
+Topology
+•
+Dual-star topology with routers/switches as “data 
+exchange centers” and plug-and-play nodes
+•
+Unified interfaces
+•
+High-bandwidth 
+SPA
+Design Tradeoffs
+•
+Rapid assembly – enables self-style assembly, hot-
+plugging and simplified maintenance or upgrades.
+•
+Initial design complexity – must automate verification 
+and validation to ensure compatibility and reliability.
+•
+Must integrate a variety of disparate systems.
+
+
+--- Page 15 ---
+SPA Architecture
+
+
+--- Page 16 ---
+•
+Origin:
+o
+Initiated in 2013 by Airbus, TTTech, and additional partners.
+•
+Purpose:
+o
+Reduce cost and complexity of hardware/software system
+o
+Combat obsolescence in aviation electronic systems
+•
+Approach
+o
+Line Replaceable Units integrated into a commercial backplane such as CPCI-E.
+•
+Replace faulty hardware
+•
+Upgrade obsolete / discontinued hardware
+o
+Time-triggered Ethernet (TTE) serves as the network backbone (more on TTE later).
+•
+Tradeoffs
+o
+Maintainability – highly modular with LRU’s enabling fast replacement of faulty or 
+obsolete hardware, which lowers maintenance and upgrade costs.
+o
+Interaction Complexity – while LRUs are simple, their integration is complex 
+governed by the system’s software and TTE network.
+OMAC4S
+
+
+--- Page 17 ---
+OMAC4S Architecture
+
+
+--- Page 18 ---
+Course Title
+DATABUSES
+
+
+--- Page 19 ---
+Low-speed & Control Buses
+• MIL-STD-1553B: 
+• Legacy standard, command/response protocol, 
+reliable, but slow and heavy.
+• CAN Bus (Controller Area Network): Adapted 
+from automotive. Differential signaling which 
+handles noise mitigation, multi-master, 
+lightweight.
+• RS-485: Simple, differential, high throughput for 
+short distances, but no built-in error handling 
+protocol.
+High-speed
+• SpaceWire / SpaceFibre
+• High-speed, point-to-point (switched), full-duplex, 
+2-400Mbps
+• TTEthernet (Time-Triggered Ethernet)
+• Mixed-criticality ethernet network, built from IEEE 
+802.3 Ethernet standard with synchronized data 
+slots.
+Databus – Backbone of Satellite Avionics Architectures
+
+
+--- Page 20 ---
+•
+Bus:
+o
+Linear bus with Bus Controller
+•
+Protocol: Command/Response
+o
+Bus Controller polls remote terminals.
+o
+Remote terminals only communicate to respond to commands from the bus controller.
+•
+Performance:
+o
+Up to 1 Mbps
+o
+Half-duplex
+•
+Tradeoffs
+o
+Heavy cabling
+o
+Low bandwidth
+o
+Deterministic
+o
+reliable
+Legacy – MIL-STD-1553B
+
+
+--- Page 21 ---
+•
+Lighter than MIL-STD-1553b bus, often used in 
+small sats including cubesat.
+•
+Topology: 
+o
+Linear with differential signaling
+o
+Differential signaling provides noise immunity.
+•
+Protocol:
+o
+Multi-master, event triggered
+o
+CSMA/CD + AMP for arbitration
+•
+Performance:
+o
+Up to 1Mbps (classical)
+o
+Up to 5Mbps (CAN-FD)
+•
+Tradeoffs:
+o
+Low SWaP, simple wiring
+o
+High overhead limits throughput to only 40%
+Controller Area Network (CAN) Bus
+
+
+--- Page 22 ---
+•
+Full-duplex with flow control w/ SpaceFibre being the next-generation successor to 
+SpaceWire.
+•
+Topology: 
+o
+Network, not bus
+o
+Switched Fabric / Point-to-Point 
+•
+Protocols:
+o
+“Worm hole” routing – packets forwarded to destination before the entire message is 
+received.
+•
+Performance:
+o
+SpaceWire – 2-400 Mbps 
+o
+SpaceFibre – up to 6.25 Gbps, longer cable distances, maintains quality of service, and 
+built in fault detection isolation and recovery (FDIR)
+•
+Applications
+o
+James Webb Space Telescope (SpaceWire)
+o
+Supports remote sensing where each orbit can produce terabytes of data
+•
+E.g. Synesthetic Aperture Radar (SAR) or hyperspectral imaging.
+SpaceWire and SpaceFibre
+
+
+--- Page 23 ---
+SpaceWire Example – Arase Spacecraft Architecture
+Figure 2 | Design of a mission network system using SpaceWire for scientific payloads onboard the Arase spacecraft | 
+Earth, Planets and Space | Springer Nature Link
+
+
+--- Page 24 ---
+SpaceFibre Architecture
+SpaceFibre Networks - STAR-Dundee
+
+
+--- Page 25 ---
+•
+Multiple types of data on the 
+network:
+o
+Time-Triggered: critical control 
+commands, guaranteed 
+bandwidth
+o
+Rate-Constrained: Audio/Video 
+streams, guaranteed bandwidth
+o
+Best-Effort: file transfers, no 
+guarantee on bandwidth
+•
+Enables the combination of 
+command/control communications 
+and payload communications on a 
+common network. 
+•
+Real-World Example
+o
+Orion Spacecraft
+Time-Triggered Ethernet (TTE)
+Research status and prospect of avionics system technology for spacecraft - ScienceDirect
+
+
+--- Page 26 ---
+Lunar Gateway – DIMA with TTE Networking
+
+
+--- Page 27 ---
+•
+Rad-Hard Processors:
+o
+Pro: immunity to radiation
+o
+Con: expensive and significantly lower performance compared to modern systems
+o
+e.g. RAD750, LEON
+•
+Commercial off-the-shelf (COTS) Processors:
+o
+Pro: High performance, cheap, low power
+o
+Con: Susceptible to radiation.
+o
+e.g. ARM Cortex, Snapdragon
+o
+Real-world: Ingenuity Mars Helicopter – uses Snapdragon for computing power to 
+enable autonomous flight controls without any radiation hardening.
+•
+Hybrid/Heterogeneous Computing: 
+o
+Combination of COTS with RAD-HARD reliability
+o
+e.g. NASA SpaceCube – fast FPGA with rad-tolerant supervisor
+Onboard Computing
+
+
+--- Page 28 ---
+•
+Software-Defined Systems: Decoupling 
+hardware from software. Reconfigurable radios 
+(SDR) and satellites.
+•
+FDIR (Fault Detection, Isolation, and 
+Recovery): Hierarchical autonomy (Device -> 
+Subsystem -> System -> Safe Mode). 
+o Layered Approach:
+• Device Level: A memory bit flips? EDAC 
+corrects it.
+• Subsystem Level: A star tracker freezes? The 
+computer switches to the backup.
+• System Level: The battery is dying? The 
+satellite autonomously enters 'Safe Mode,' 
+pointing solar panels at the sun and shutting 
+down non-essentials.
+•
+Autonomy Levels: From simple survival 
+(power/thermal) to autonomous scientific 
+discovery (filtering data onboard).
+Examples of reconfigurable test platforms:
+•
+ESA OPS-SAT: A "flying laboratory" that allows 
+the upload of new software apps in orbit to test 
+novel communication protocols.
+•
+SmartSat: Lockheed Martin's architecture 
+allowing satellites to be reconfigured like 
+smartphones.
+Software & Autonomy 
+
+
+--- Page 29 ---
+System Integration and Test for Orion Crew Capsule
+
+
+--- Page 30 ---
+•
+Mega-Constellations: Shift from 
+"Handcrafted" to "Batch Production" 
+(Automotive manufacturing 
+techniques).
+•
+Inter-Satellite Links (ISL): Lasers/RF 
+connecting satellites to form a space-
+based internet (Space mesh 
+networks).
+•
+Cloud-Edge Collaboration: Satellites 
+act as "Edge" nodes, processing data 
+before sending only insights to the 
+ground cloud.
+Where are we going?
+Effects of Space Environment on Satellite Mega-Constellations: From Nodes and Links to Network 
+Performance - ScienceDirect
+
+
+--- Page 31 ---
+Wrapping Up
+Last Time: 
+Learned about MIL-STD-1553 a bus-based 
+avionics architecture.
+This Unit
+Addresses the AFDX/ARINC 664 Standard 
+created by Airbus, which utilizes ethernet 
+and time-division multiplexing.
+Coming up: 
+Discussion of space-based databuses and 
+architectures.
+What parts of aviation and space 
+databuses are common and what are 
+different given the application type?
+
+
+--- Page 32 ---
+Questions?
+
+
+--- Page 33 ---
+•
+C. CHEN, Y. YIN, K. HUANG, X. HE, Research status and prospect of avionics system 
+technology for spacecraft, Chinese Journal of Aeronautics (2025), doi: 
+https://doi.org/10.1016/j.cja. 2025.104048
+•
+A. Cratere, L. Gagliardi, G. A. Sanca, F. Golmar, and F. Dell’Olio, "On-Board Computer 
+for CubeSats: State-of-the-Art and Future Trends," IEEE Access, July 2024. DOI: 
+10.1109/ACCESS.2024.3428388
+•
+L. Jiang and P. Xu, "Onboard Avionics in the New Space Era: Present and Future," 
+Journal of Aerospace Information Systems, Vol. 21, No. 9, September 2024. DOI: 
+https://doi.org/10.2514/1.I011326
+Module References

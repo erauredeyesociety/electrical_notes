@@ -1,0 +1,517 @@
+--- Page 1 ---
+Detect in DAA: Air-based and 
+Ground-based Sensing
+CEC 300: Unmanned Aircraft Design
+Instructor: Richard S. Stansbury
+College of Engineering
+Embry-Riddle Aeronautical University, Daytona Beach, FL
+CEC 300
+College of Engineering, Daytona Beach, FL
+1
+
+
+--- Page 2 ---
+Airborne Detection
+CEC 300
+College of Engineering, Daytona Beach, FL
+2
+
+
+--- Page 3 ---
+Learning Outcomes
+• Identify and describe airborne cooperative detection sensors.
+• Identify and describe airborne non-cooperative detection sensors.
+CEC 300
+College of Engineering, Daytona Beach, FL
+3
+
+
+--- Page 4 ---
+Overview
+• Airborne detection involves the use of sensors onboard the UAS to 
+sufficiently detect and track an intruder.
+• Cooperative and non-cooperative solutions exist
+• Cooperative – detection is dependent upon the equipage of the intruder with some 
+cooperative technology.
+• e.g. Transponder, ADS-B, TCAS II, etc.
+• Non-cooperative – detection relies solely upon the sensor and sensor processing’s 
+capabilities to detect and track an intruder.
+• Sensors can be active or passive:
+• Active – energy is emitted to aid the sensor in detecting the intruder
+• Passive – relies solely on external stimuli
+CEC 300
+College of Engineering, Daytona Beach, FL
+4
+
+
+--- Page 5 ---
+TCAS – Big Picture
+CEC 300
+College of Engineering, Daytona Beach, FL
+5
+
+
+--- Page 6 ---
+Transponders
+CEC 300
+College of Engineering, Daytona Beach, FL
+6
+
+
+--- Page 7 ---
+Summary of Transponder Types
+Type
+Data
+Compatibility
+Other Notes
+Mode 3/A
+Ident (Squawk Code)
+Reply to all interrogations
+Mode C
+Pressure Altitude
+Often used in conjunction with 
+Mode 3/A
+Reply to all interrogations
+Mode S
+Pressure altitude (25 ft. 
+increments)
+Call Sign and/or permanent 
+address code (e.g. ICAO code)
+Compatible with Mode 3/A and 
+Mode C transponders
+Supports anti-collision systems 
+such as TCAS and ADS-B
+Interrogates specific 
+transponders (filtering)
+Mode 5
+Encrypted Mode S
+Encrypted ADS-B position data
+Military usage
+Automatic Dependent 
+Surveillance – Broadcast (ADS-B)
+Callsign
+ICAO Address
+GPS Position
+Altitude (pressure and/or GPS)
+Velocity
+Utilizes Mode S transponder for 
+1090 MHz (Extended Squitter) 
+ADS-B
+Two standards:
+•
+1090MHz Extended Squitter
+•
+978 MHz UAT
+TCAS / ACAS
+Traffic Advisories
+Resolution Advisories
+Works in conjunction with Mode 
+S transponder
+•
+Interrogates other systems 
+with TCAS
+CEC 300
+College of Engineering, Daytona Beach, FL
+7
+
+
+--- Page 8 ---
+FLARM
+• Designed primarily for glider use
+• Similar to ADS-B
+• Utilizes a digitally encrypted 
+channel
+• Alerts issued to both aircraft
+• Supports up to 50 FLARM and 
+ADS-B targets at a time
+• Range 10km
+• Some avionics integrated options
+CEC 300
+College of Engineering, Daytona Beach, FL
+8
+FLARM display
+PowerFLARM display
+
+
+--- Page 9 ---
+Identification, Friend, or Foe (IFF)
+• Challenge and reply
+• Military platforms (often with ADS-B and Mode S integrated)
+CEC 300
+College of Engineering, Daytona Beach, FL
+9
+
+
+--- Page 10 ---
+Non-Cooperative Airborne 
+Sensors
+CEC 300
+College of Engineering, Daytona Beach, FL
+10
+
+
+--- Page 11 ---
+Radar (Primary)
+• Most versatile non-cooperative sensor
+• Field of regard achieved through:
+• Antenna array
+• Actively scanning (mechanical or electronically steered antenna)
+• Scanning approaches:
+• Must frequently revisit frame of tracked target, but does not want to waste time there versus 
+exploring rest of the field of reference
+• Must be considered
+• Must prioritize intruders given range.
+• Outputs:
+• Range, range rate, azimuth, and elevation
+• Standards developed by RTCA, SC-228,number DO-386.
+CEC 300
+College of Engineering, Daytona Beach, FL
+11
+
+
+--- Page 12 ---
+Radar Considerations for UAS
+• Requirements suggested by 
+NATO NIAG Study Group 205
+CEC 300
+College of Engineering, Daytona Beach, FL
+12
+Parameter
+Value
+Horizontal FOR
++-110 degrees
+Vertical FOR
++-15 degrees
+Declaration Range
+3-8nm
+Azimuth angle accuracy
+< 1 deg
+Vertical angle accuracy
+< 1 degree
+Track capacity
+> 20 intruders
+Probability of false track
+< 1 per hour
+• Limitations:
+• Availably of frequency bands
+• Limited for small and non-metallic 
+intruders
+• Reflections off grounds
+• Weather impacts some 
+frequencies
+• SWAP
+• Antenna volume / mounting
+• Computer volume and power 
+• TRL
+• 6-7 for large to medium UAS
+• 3-4 for smaller systems
+
+
+--- Page 13 ---
+Laser Systems
+• Example: LIDAR – or laser range finder – emits laser light, which is reflected off of 
+any surface it encounters.  
+• The time of flight between emission and receiving the reflection is used to 
+measure distance.
+• Parameters include:
+• Scan rate
+• Range 
+• Resolution (angular distance between measurements)
+• Can determine (dependent upon specifications):
+• Distance to target
+• Bearing to target
+• Trajectory of target
+• Can operate through certain atmospheric features such as fog, but typically not 
+suitable for aviation applications due to eye safety of other pilots
+CEC 300
+College of Engineering, Daytona Beach, FL
+13
+
+
+--- Page 14 ---
+Cameras Overview
+• Passive non-cooperative
+• Factors:
+• Contrast and intensity of target 
+illumination
+• Target temperature
+• Visual Range
+• Operating Altitude
+• Optics
+• Detector
+CEC 300
+College of Engineering, Daytona Beach, FL
+14
+
+
+--- Page 15 ---
+EO/IR Cameras Overview (2)
+• Must consider the number of pixels sufficient to detect a target
+• Johnson’s Criteria – estimate of how number of pixels necessary to 
+attain a certain level of interpretation of your target
+CEC 300
+College of Engineering, Daytona Beach, FL
+15
+
+
+--- Page 16 ---
+EO/IR Performance and Comparison
+Electro-Optical/Infrared Camera (EO/IR) – combine 
+visible spectrum (EO) and thermal (IR) imaging enabling 
+surveillance, targeting, and tracking.
+• Key Features:
+•
+Electro-Optical (EO): Captures high-resolution images in 
+the visible and near-infrared spectrum, ideal for 
+recognizing objects and identifying targets during daylight 
+or well-lit conditions.
+•
+Infrared (IR): Operates in the thermal spectrum, detecting 
+heat signatures emitted by objects, enabling imaging in 
+complete darkness or through obscurants like fog, smoke, 
+or dust.
+• Applications:
+•
+Military and Defense: Long-range surveillance, targeting, 
+tracking, and reconnaissance.
+•
+Security: Monitoring critical infrastructure, border 
+security, and perimeter defense.
+•
+Search and Rescue: Locating survivors in low-visibility 
+conditions or open water.
+•
+Law Enforcement: Crowd monitoring, riot control, and 
+emergency response.
+CEC 300
+College of Engineering, Daytona Beach, FL
+16
+
+
+--- Page 17 ---
+Acoustic Sensors
+• Utilize an array of microphones and 
+processors to analyze the sounds 
+within the airspace surrounding the 
+aircraft
+• Can be capable of detecting and 
+tracking local air traffic 
+• NASA Access 5 study indicated 
+concern about high signal-to-noise 
+ratio
+• SARA Inc.’s Terrestrial Acoustic Sensor 
+Array (TASA) – acoustic phased array
+• Detects aircraft, classifies threat, and can 
+provide evasive maneuvers to 
+automated vehicles such as UAS or UAM.
+CEC 300
+College of Engineering, Daytona Beach, FL
+17
+
+
+--- Page 18 ---
+References
+• NATO Industrial Advisory Group (NIAG) Study Group 205, “Final Report on NIAG Study Group 205 
+on Sense and Avoid Feasibility and Certification for UAS Flight in Non-Segregated Airspace”
+• Stansbury and Wilson, “Technology Surveys and Regulatory Gap Analyses of UAS Sub-Systems 
+toward Access to the NAS,” In the Handbook for Unmanned Aerial Vehicles, 2014.
+• Chris Reynolds and Timothy Wilson, “Regulatory Gap Analysis:  Detect, Sense, and Avoid 
+Technologies For UAS,” FAA Technical Report, 2008.
+• FAA TCAS Booklet, 
+https://www.faa.gov/documentLibrary/media/Advisory_Circular/TCAS%20II%20V7.1%20Intro%20
+booklet.pdf
+• Munoz and Nackawic, and Chamberlain. “A TCAS-II Resolution Advisory Detection Algorithm.” 
+AIAA GNC Conference 2013.  Online at: 
+https://shemesh.larc.nasa.gov/people/cam/publications/gnc2013-draft.pdf 
+CEC 300
+College of Engineering, Daytona Beach, FL
+18
+
+
+--- Page 19 ---
+DAA Ground-Based Detection
+CEC 300
+College of Engineering, Daytona Beach, FL
+19
+
+
+--- Page 20 ---
+Learning Outcomes
+• Identify and describe ground-based cooperative detection 
+technologies.
+• Identify and describe ground-based non-cooperative detection 
+technologies.
+• Identify and describe ground-based detection technologies that 
+support both cooperative and non-cooperative.
+CEC 300
+College of Engineering, Daytona Beach, FL
+20
+
+
+--- Page 21 ---
+Overview
+• Ground-based systems utilize UAS tailored or existing ground 
+infrastructure to support detection within detect-and-avoid.
+• Communication is a consideration:
+• Communication of data with the UAS
+• Communication of data with the GCS
+• Like airborne sensors, these sensors can be:
+• Cooperative – based upon suitable equipage for ownship and/or intruder
+• Non-cooperative – based solely upon the sensor’s capabilities to extract 
+information from its environment
+CEC 300
+College of Engineering, Daytona Beach, FL
+21
+
+
+--- Page 22 ---
+Mixed Cooperative / Non-Cooperative
+CEC 300
+College of Engineering, Daytona Beach, FL
+22
+
+
+--- Page 23 ---
+Ground-based Radar
+• Ground-based radar can support the detection requirements of UAS detect-and-
+avoid
+• Organic: 
+• UAS integrated radar
+•
+Radar is part of the integrated UAS “system-of-systems”, i.e. it is dedicated to the UAS system configuration and 
+integrated with the control station and/or command and control datalink.
+• Non-Organic:
+• ANSP radar (e.g. FAA ATC Radar)
+•
+Air traffic control from Air Navigation Service Providers (ANSP) such as the FAA’s Air Traffic Control (ATC) / Air 
+traffic Management (ATM) systems
+• 3rd Part Surveillance Services (e.g. flightradar24.com)
+• Ground-based Radar types:
+• Primary Radar (cooperative and non-cooperative)
+• Secondary Radar (cooperative only)
+• Passive Radar (non-cooperative and cooperative)
+• Note: these types are not exclusive to ground-based usage
+CEC 300
+College of Engineering, Daytona Beach, FL
+23
+
+
+--- Page 24 ---
+Radar - Primary
+• Detects cooperative and non-cooperative air traffic within a limited range.
+• Issues:
+• Limited range (compared with secondary radar)
+• Can have difficulty discriminating between local aircraft and other airborne phenomena (e.g.. Birds)
+CEC 300
+College of Engineering, Daytona Beach, FL
+24
+
+
+--- Page 25 ---
+Cooperative Ground Sensors
+CEC 300
+College of Engineering, Daytona Beach, FL
+25
+
+
+--- Page 26 ---
+Radar - Secondary
+• Detects cooperative (transponder equipped) aircraft with a greater 
+range than primary radar.
+CEC 300
+College of Engineering, Daytona Beach, FL
+26
+
+
+--- Page 27 ---
+Traffic Information System – Broadcast (TIS-B)
+• Similar to ADS-B and utilizes same 
+frequencies:
+• 1090MHz ES
+• 978MHz UAT
+• Summary of approach:
+• Utilizes ground-based radar (ATC 
+radar) to detect local air traffic
+• Information is then transmitted via 
+uplink to aircraft equipped with an 
+ADS-B receiver
+• Ground-radar can detect non-ADS-B 
+equipped aircraft so long as they have 
+a Mode S or Mode C transponder
+CEC 300
+College of Engineering, Daytona Beach, FL
+27
+• Suitably equipped aircraft and control 
+stations can receive information 
+regarding local air traffic
+• ADS-B IN or Hybrid TCAS/ACAS 
+system
+
+
+--- Page 28 ---
+Ground-based EO / IR cameras 
+• Provide imagery of a particular field-of-view
+• Image processing can detect potential targets, relative motion, etc.
+• Calculate 3D UAS trajectory in non-cooperative manner
+• 2+ optical tracker stations
+• Centralized communication
+• Can fuse with other sources
+• Detection Range
+• Depends on weather, size of target, focal lengths, etc.
+• IR camera – range of 35 km in clear weather
+• Visual – 20 km
+CEC 300
+College of Engineering, Daytona Beach, FL
+28
+
+
+--- Page 29 ---
+Visual Observers (spotters)
+• Observers the UAS flight and notifies pilot of UAS position, 
+terrain/vegetation collision threats, and any perceived right-of-way issues 
+with local air traffic
+• Pilot-in-command has legal authority over the flight safety
+• They are responsible for ensuring well-clear of other air traffic and not the spotters.
+• Types:
+• Ground-based Visual Observers
+• Located strategically along the mission area / flight path.
+• Airborne-based Visual Observers
+• Located onboard a chase aircraft
+• Observers that assist in taxi, runway situational awareness, etc. are 
+sometimes called “marshals”
+• Required for Part 107
+CEC 300
+College of Engineering, Daytona Beach, FL
+29
+
+
+--- Page 30 ---
+Summary
+• Ground-based technologies can be cooperative, non-cooperative, or a 
+mix of both.
+• ATC radar facilities typically provide both cooperative (secondary radar, ADS-
+B) and non-cooperative (primary radar)
+• Cooperative sensors include secondary radar, TIS-B, and wide area 
+multilateration techniques
+• Non-cooperative sensors include primary radar, passive radar, EO/IR cameras, 
+etc.
+• Visual observers can also play the role of non-cooperative detection
+CEC 300
+College of Engineering, Daytona Beach, FL
+30
+
+
+--- Page 31 ---
+References
+• NATO Industrial Advisory Group (NIAG) Study Group 205, “Final 
+Report on NIAG Study Group 205 on Sense and Avoid Feasibility and 
+Certification for UAS Flight in Non-Segregated Airspace”
+• Stansbury and Wilson, “Technology Surveys and Regulatory Gap 
+Analyses of UAS Sub-Systems toward Access to the NAS,” In the 
+Handbook for Unmanned Aerial Vehicles, 2014.
+• Chris Reynolds and Timothy Wilson, “Regulatory Gap Analysis:  
+Detect, Sense, and Avoid Technologies For UAS,” FAA Technical 
+Report, 2008.
+CEC 300
+College of Engineering, Daytona Beach, FL
+31

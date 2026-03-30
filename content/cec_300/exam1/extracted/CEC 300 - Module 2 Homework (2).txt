@@ -1,0 +1,149 @@
+--- Page 1 ---
+Name: 
+Student ID: 
+ 
+Module 2 Homework - CEC 300: Computing for Aviation and Aerospace 
+Expected Completion Time: 2-4 hours 
+Problem 1: Write a small application in Matlab, Python or Java to simulate the analysis of DME pulses. 
+The pulses are measured relative to an unsynchronized clock. The program will take in four(4) numbers 
+representing the time (in µs) of the leading edge of each pulse . The first two pulses are the transmitted 
+pulses from the aircraft to the DME station, and the other two pulses correspond to the response as 
+received by the airplane. 
+e.g. DME(1862, 1874, 2024, and 2036) 
+Has a pulse pair spacing of 1874-1862 = 12 µs  and 2036-2024 = 12 µs.    This would be a Channel X 
+signal. 
+The time between first pulses of the sent and received signals is 2024-1862 = 162 µs. 
+We determine the distance as (162 – 50 µs)/(12.36 s/nmi)= 9.06 nmi (nautical miles), where 50 µs is the 
+delay for Channel X.  
+Task: Create a Matlab, Python, Java, or C function that takes the time of 4 pulses. Use only channel X and 
+Y. 
+• 
+If correct pulses for channel X are detected the system will print  
+o Channel is X, distance is dd.d nautical miles.      
+▪ 
+Where dd.d is the correct distance such as 12.2. 
+• 
+If correct pulses for channel Y are detected the system will print  
+o Channel is Y, distance is dd.d nautical miles.      
+▪ 
+Where dd.d is the correct distance such as 12.2. 
+• 
+If the system receives a valid pulse spacing for the X channel when transmitting on the Y channel 
+or vice versa, this means that we have received pulses from an aircraft other than our own. In this 
+case, the system will print:  
+o FRUIT detected.  
+• 
+If the measured time between the transmitted and received pulses exceeds 200 nmi than the 
+system will print (depending on channel):  
+o Channel is X, no reply.    
+o Channel is Y, no reply.   
+• 
+If incorrect pulses spacings (receive or transmit) for channel X or Y are detected or if the received 
+signals arrive in less than the built-in delay of the ground station print  
+o Signal Garbled. 
+ 
+Note: To allow proper grading, the function shall be implemented so the arguments look like the example 
+below, and the result shall be displayed in the following command line. Submit your source code with your 
+algorithm, your main method, and a readme file providing me with compilation/run instructions. Please 
+submit your files in a .zip file with the format “cec300-m2-yourlastname.zip.” 
+
+
+--- Page 2 ---
+ 
+Grading (for Problem 6) 
+System identifies channel X and channel Y pulses correctly 
+ 
+10 points 
+System calculates the correct distance.  
+ 
+ 
+ 
+10 points 
+System correctly identifies FRUIT. 
+ 
+ 
+ 
+ 
+10 points 
+System correctly identifies garbled signals  
+ 
+ 
+ 
+10 points 
+System correctly handles no reply condition 
+                                 
+10 points 
+Total 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+         
+50 points 
+ 
+Example: 
+>> DME(572,584,772,784) 
+Channel is X, distance is 12.14 nm. 
+ 
+You can test your code with a wide range of test cases. Some sample test cases are below. There is no 
+order in these test cases, nor they cover all the scenarios previously described. 
+ 
+DME(572,584,772,784) 
+DME(1011,1047,1361,1391) 
+DME(1671,1683,2081,2117) 
+DME(2307,2319,2337,2349) 
+DME(5181,5217,7767,7797) 
+DME(8011,8047, 8300,8322) 
+ 
+Problem 2 [short answer]: Given the following  VOR indicator, please answer the following questions. 
+ 
+ 
+a. What radial is the VOR set to? 
+ 
+ 
+ 
+b. Does the indicator show that we must turn left or right?   
+ 
+ 
+ 
+c. What degree of heading change is needed (approximately) based on the indicator?  How did you 
+determine this? 
+ 
+
+
+--- Page 3 ---
+Problem 3 [short answer]: Answer the following questions about ILS? 
+ 
+a. If your aircraft is left of the runway center line before landing, what would be the characteristics 
+of the signal received by the aircraft?  How would the signal change if the aircraft is right of the 
+runway? 
+ 
+ 
+ 
+b. Which ILS category would you a transport category jet flying arriving at an airport with 950 feet 
+of runway visibility? 
+ 
+Problem 4 [essay]: Answer the following questions about GPS.  Your response should be at least 500 
+words. 
+In your own words, explain the process of how a GPS receiver determines its three-dimensional position 
+and discuss the various sources of error that can affect the accuracy of this calculation. 
+ 
+ 
+Problem 5: Answer the following questions about satellite sensors and actuators. 
+a. Compare and contrast reaction wheels vs. magnetorquers.  How do they complement each 
+other? 
+ 
+ 
+ 
+ 
+b. Explain in your own wods how fiber-optic gyroscopes are used to determine the angular rate 
+about an axes.  Your answer should include a brief discussion of the Sagnac Effect. 
+ 
+ 
+ 
+ 
+c. How does the Deep Space Network enable satellite guidance and control for spacecraft 
+operating beyond cislunar space? 
