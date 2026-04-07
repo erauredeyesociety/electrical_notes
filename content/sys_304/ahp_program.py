@@ -2,14 +2,40 @@
 SYS 304 Homework 5 - Part III
 AHP (Analytic Hierarchy Process) Calculator
 
-Decision problem from Slide 8:
-  Goal: Select best overall automated system
-  Criteria (Level II): A=CIMS goals, B=Net present worth, C=Serviceability,
-                        D=Management/eng effort, E=Lack of riskiness
-  Alternatives (Level III): P-1, P-2, P-3
+Usage:
+    python3 ahp_program.py
 
-Users can modify the pairwise comparison matrices below to change inputs.
-All results update automatically.
+    Runs the AHP analysis with the current pairwise comparison inputs
+    and prints all results (criteria weights, alternative weights,
+    overall priorities, consistency ratios, and the selected alternative).
+
+    No command-line arguments needed. To change inputs, edit the numpy
+    arrays below (criteria_matrix, alt_A through alt_E).
+
+How to modify inputs:
+    1. Find the comparison matrices starting around line 40.
+    2. Each matrix is a numpy array of Saaty pairwise comparison values.
+    3. The diagonal is always 1 (anything vs itself = equally preferred).
+    4. Upper triangle: if the ROW item is preferred over the COLUMN item,
+       enter the Saaty scale value (1-9).
+    5. Lower triangle: enter the reciprocal (e.g., if upper is 5, lower is 1/5).
+    6. Save and re-run. All outputs update automatically.
+
+Saaty scale quick reference:
+    1 = Equally preferred
+    3 = Moderately preferred
+    5 = Strongly preferred
+    7 = Very strongly preferred
+    9 = Extremely preferred
+    2, 4, 6, 8 = Intermediate values
+
+Decision problem (from Lecture Slide 8):
+    Goal: Select best overall automated system
+    Criteria (Level II): A=CIMS goals, B=Net present worth, C=Serviceability,
+                          D=Management/eng effort, E=Lack of riskiness
+    Alternatives (Level III): P-1, P-2, P-3
+
+Requires: numpy (pip install numpy)
 """
 
 import numpy as np

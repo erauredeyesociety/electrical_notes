@@ -175,23 +175,23 @@ Conclusion: B is dominated by A and can be eliminated. A and C remain — neithe
 
 ### 2. Comparing against a standard (Rules 1 and 2)
 
-Rule 1 (conjunctive screening): An alternative must meet the minimum standard on ALL criteria to remain feasible.
+Rule 1 (disjunctive): An alternative may be retained if it meets the minimum standard on at least one criterion.
 
-    Alternative A: Crit 1: 6 < 7 (FAILS). A does not meet the minimum standard.
-    Alternative B: Crit 1: 5 < 7 (FAILS). B does not meet the minimum standard.
-    Alternative C: Crit 1: 8 >= 7, Crit 2: 75 >= 70, Crit 3: 50 >= 30, Crit 4: VG >= F. All pass.
+    Alternative A: Crit 2: 90 >= 70 (passes). Crit 3: 40 >= 30 (passes). Crit 4: G >= F (passes). RETAINED.
+    Alternative B: Crit 2: 80 >= 70 (passes). Crit 3: 35 >= 30 (passes). RETAINED.
+    Alternative C: Crit 1: 8 >= 7. Crit 2: 75 >= 70. Crit 3: 50 >= 30. Crit 4: VG >= F. RETAINED.
 
-Under Rule 1 (conjunctive), only C survives. A and B fail criterion 1.
+Under Rule 1, all three alternatives survive because each meets the standard on at least one criterion.
 
-Rule 2 (disjunctive screening): An alternative is acceptable if it meets the ideal on at least one criterion.
+Rule 2 (conjunctive): An alternative may be retained only if it meets the minimum standard on ALL criteria.
 
-    Alternative A: No criterion meets the ideal (6<10, 90<100, 40<50, G<E). Fails.
-    Alternative B: No criterion meets the ideal. Fails.
-    Alternative C: Crit 3: 50 = 50 (MEETS ideal). Passes.
+    Alternative A: Crit 1: 6 < 7 (FAILS). Eliminated.
+    Alternative B: Crit 1: 5 < 7 (FAILS). Eliminated.
+    Alternative C: Crit 1: 8>=7, Crit 2: 75>=70, Crit 3: 50>=30, Crit 4: VG>=F. All pass. RETAINED.
 
-Under Rule 2 (disjunctive), only C survives.
+Under Rule 2, only C survives. A and B fail criterion 1.
 
-Conclusion: C is the only alternative that passes both screening methods.
+Conclusion: Rule 1 retains all three. Rule 2 eliminates A and B, leaving only C.
 
 ### 3. Comparing criteria across alternatives (criteria ranked 2 > 3 > 1 > 4)
 
