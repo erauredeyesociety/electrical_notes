@@ -1,0 +1,338 @@
+--- Page 1 ---
+TCAS II, ACAS X, and ACAS Xu
+CEC 300
+
+
+--- Page 2 ---
+TCAS II
+
+
+--- Page 3 ---
+TCAS Video
+4/10/2026
+3
+
+
+--- Page 4 ---
+TCAS II
+4/10/2026
+4
+
+
+--- Page 5 ---
+TCAS II
+4/10/2026
+5
+Primary Flight Display:
+•
+RA pitch cue (left)
+•
+Vertical speed tape (right)
+
+
+--- Page 6 ---
+TCAS II - Hazard Zone vs. Non-Hazard Zone
+4/10/2026
+6
+
+
+--- Page 7 ---
+TCAS II (RA/TA thresholds)
+4/10/2026
+7
+Time to Co-altitude Threshold. (TVTHR)
+
+
+--- Page 8 ---
+TA / RA times vs. altitude
+4/10/2026
+8
+
+
+--- Page 9 ---
+TCAS II
+4/10/2026
+9
+
+
+--- Page 10 ---
+Advisories / Advisory Reversals
+
+
+--- Page 11 ---
+Single Threat Encounters
+
+
+--- Page 12 ---
+Single Threat Encounters
+
+
+--- Page 13 ---
+Single Threat Encounters
+
+
+--- Page 14 ---
+Single Threat Encounters
+
+
+--- Page 15 ---
+ACAS 𝑿𝒂
+
+
+--- Page 16 ---
+•
+Airborne Collision Avoidance System X
+o
+Updated standard for collision 
+avoidance system, specialized by 
+aircraft type.
+•
+Differences with TCAS II
+o
+Use of ADS-B to create hybrid 
+surveillance
+o
+Improved alerting and advisory logic
+•
+ACAS Xu – Designed for UAS applications, 
+RTCA DO-385
+ACAS X
+4/10/2026
+16
+RTCA SC-228 is looking to extend the ACAS Xu by defining remain 
+well clear functional requirements.
+
+
+--- Page 17 ---
+Self-Separation vs. Collision Avoidance
+
+
+--- Page 18 ---
+ACAS X
+4/10/2026
+18
+
+
+--- Page 19 ---
+ACAS Xa Logic
+4/10/2026
+19
+
+
+--- Page 20 ---
+Uncertainty and State Estimation
+4/10/2026
+20
+ACAS Xa combines a probalistic dynamics model to determine where the aircrafts may go and a probabilistic sensor 
+model to account for noise/error in sensor measurements.
+Based on these models and the state of the vehicle, the aircraft’s state can be approximated.
+
+
+--- Page 21 ---
+•
+With TCAS II, a set of rules is used to 
+determine given the states of ownship 
+and intruder the type of traffic alert or 
+resolution advisory to issue.
+•
+ACAS Xa uses a look-up table to 
+determine possible actions to take 
+given the state. 
+o Considering the associated cost of the 
+action, the system selects action with the 
+lowest cost.
+TCAS II vs. ACAS Xa
+4/10/2026
+21
+
+
+--- Page 22 ---
+Explainer: Markov Decision Process
+
+
+--- Page 24 ---
+TCAS II vs. ACAS Xa – Advisory Types and Annunciations
+4/10/2026
+24
+
+
+--- Page 25 ---
+•
+ACAS Xo – is a 
+designation for 
+special cases of 
+operations.
+•
+Pilot can designate 
+another flight as: 
+o
+CSPO – Closely spaced 
+parallel approach
+•
+Resolution advisory 
+thresholds reduced.
+o
+DNA - Designated No 
+Alert
+•
+Aircraft is ignored, no 
+alerts
+ACAS Xo – handling special cases
+
+
+--- Page 26 ---
+ACAS 𝑿𝒖
+
+
+--- Page 27 ---
+•
+ACAS X standard for Uncrewed Aircraft Systems (normal category)
+•
+Issues resolution advisories only.
+•
+Safety net for prevention of Near Mid-Air Collisions and Mid-Air Collisions
+•
+Alerts / Guidance: Rule-based given encounter and tracking of aircraft and local intruders.
+o
+Unlike ACAS Xa’s look up table approach.
+•
+Functions include ensuring
+o
+Collision Avoidance (CA)
+o
+Remain Well Clear (RWC)
+•
+Works for cooperative intruders (with transponders or ADS-B) and non-cooperative intruders.
+o
+Active sensors can be used for non-cooperative systems or under some cooperative encounters.
+o
+e.g. air-to-air radar meeting RTCA DO-360
+ACAS Xu 
+
+
+--- Page 28 ---
+ACAS Xu Alert levels from RTCA DO-365
+4/10/2026
+28
+
+
+--- Page 29 ---
+Sagetech Demo of ACAS-X for UAS/AAM DAA
+
+
+--- Page 30 ---
+ACAS Xu Testing : Merlin Labs and MIT Lincoln Laboratory
+Detect and Avoid Goes Autonomous - Inside Unmanned Systems
+
+
+--- Page 31 ---
+Differences with ACAS Xa or Xo
+o Provides remain well clear function
+o Resolution advisories in both the vertical 
+and horizontal planes
+o Non-cooperative surveillance can support 
+the resolution advisory logic.
+o Automation enables ACAS Xu vehicles to 
+automatically respond to a RA and then 
+return to course once resolved (optional)
+•
+Or Remote Pilot can respond to RA and return to 
+course.
+o RAs can be issued based only on ADS-B 
+input
+• Condition: active surveillance must 
+confirm the ADS-B values for position, 
+altitude, etc.
+• Failure to verify ADS-B message results 
+in only using the active sensing method.
+Comparison of alerting (TCAS II and ACAS Xa vs. ACAS Xu)
+
+
+--- Page 32 ---
+Horizontal Maneuver Guidance using NASA’s DAIDALUS
+
+
+--- Page 33 ---
+•
+Similar approach to vertical Ras
+•
+Display shows the headings that are needed to 
+seek goal as well as headings that can lead 
+toward a collision.
+•
+Blended RA specify BOTH horizontal and 
+vertical changes to mitigate a flight risk.
+Horizontal Resolution Advisories
+In the above situation, the pilot on a 0 degree heading 
+must turn left toward 290 degrees (approx.)
+Anunciation “turn left”
+
+
+--- Page 34 ---
+• There are two approaches to 
+addressing alerts
+o Remote Pilot in Command – performs the 
+maneuver and then flies the vehicle back 
+onto course once clear of conflict.
+o Automated flight
+• Onboard software commands the flight control 
+system to execute the appropriate evasive 
+maneuver followed by a Return-to-Course 
+behavior.
+• These automatic responses are not part of 
+ACAS Xu, but can be triggered by ACAS Xu.
+Handling Alerts
+
+
+--- Page 35 ---
+Vertical
+• Initial RA:
+• Maneuver within 5 seconds of RA
+• Vertical acceleration of 1
+4 g
+• Reversal RA
+• Maneuver within 2.5 seconds of reversal RA
+• Vertical acceleration of 1
+3  g
+• Maneuver 
+• Vertical Rate for climb and descend are +/- 1000 
+ft/min
+• Increase Climb or Descend are +/- 2000 ft/min
+Horizontal
+• Initial RA:
+• Maneuver with 5 seconds of RA
+• Reversal RA
+• Maneuver within 2.5 seconds of reversal RA
+• Turn rate:
+• 3 deg/s turn rate
+• 1 deg/𝑠2 acceleration
+• If the performance cannot be achieved, ACAS Xu 
+can attempt to compensate for the 
+underperformance to ensure safety.
+Aircraft performance for RA Compliance Requirements
+
+
+--- Page 36 ---
+•
+Both aircraft w/ RA Capability
+o
+Each system produces an RA
+o
+Through an interrogation message, each vehicle can assess and reply to the other 
+whether the proposed RA will be compatible.
+o
+i.e. The following coordination approach is followed (from the perspective of 
+Ownship)
+•
+Ownship will share its plan.  
+•
+Intruder will assess the RA sent from ownship to determine if they are 
+compatible (will not collide or NMAC), and respond with approval/rejection.  And 
+vice-versa.
+•
+Once both agree with the other’s plan, they take action.
+Coordination w/ ACAS Equipped Intruder(s)
+
+
+--- Page 37 ---
+Questions
