@@ -1,0 +1,368 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{CEC 315 --- Signals and Systems}
+\rhead{Homework 6 Solutions}
+\cfoot{\thepage}
+
+\title{\textbf{CEC 315 Homework 6 Solutions} \\ \large Z-Transform: Lectures 19--21}
+\author{}
+\date{}
+
+\newcommand{\zt}{\xleftrightarrow{\mathcal{Z}}}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+%=============================================================
+\section*{Problem 1: Computing Z-Transforms and ROCs}
+%=============================================================
+
+\subsection*{(a) $x_1[n] = 5(0.7)^n u[n]$}
+
+Using the pair $a^n u[n] \zt \dfrac{1}{1 - az^{-1}},\; |z|>|a|$ with $a=0.7$:
+
+\begin{equation*}
+\boxed{X_1(z) = \frac{5}{1 - 0.7\,z^{-1}}, \quad \text{ROC: } |z| > 0.7}
+\end{equation*}
+
+\subsection*{(b) $x_2[n] = -(4)^n u[-n-1]$}
+
+Using the pair $-a^n u[-n-1] \zt \dfrac{1}{1 - az^{-1}},\; |z|<|a|$ with $a=4$:
+
+\begin{equation*}
+\boxed{X_2(z) = \frac{1}{1 - 4\,z^{-1}}, \quad \text{ROC: } |z| < 4}
+\end{equation*}
+
+\subsection*{(c) $x_3[n] = 3\,\delta[n] - 2\,\delta[n-1] + \delta[n-4]$}
+
+Using $\delta[n-k] \zt z^{-k}$:
+
+\begin{equation*}
+\boxed{X_3(z) = 3 - 2z^{-1} + z^{-4}, \quad \text{ROC: } |z| > 0}
+\end{equation*}
+
+\subsection*{(d) $x_4[n] = n(0.5)^n u[n]$}
+
+Using the pair $n\,a^n u[n] \zt \dfrac{az^{-1}}{(1 - az^{-1})^2},\; |z|>|a|$ with $a=0.5$:
+
+\begin{equation*}
+\boxed{X_4(z) = \frac{0.5\,z^{-1}}{(1 - 0.5\,z^{-1})^2}, \quad \text{ROC: } |z| > 0.5}
+\end{equation*}
+
+\subsection*{(e) $x_5[n] = 2(0.3)^n u[n] + 4(0.9)^n u[n]$}
+
+Each term separately, then combine over common denominator:
+\begin{align*}
+X_5(z) &= \frac{2}{1 - 0.3z^{-1}} + \frac{4}{1 - 0.9z^{-1}} \\[6pt]
+\text{Num} &= 2(1 - 0.9z^{-1}) + 4(1 - 0.3z^{-1}) = 6 - 3z^{-1}
+\end{align*}
+
+\begin{equation*}
+\boxed{X_5(z) = \frac{6 - 3z^{-1}}{(1 - 0.3z^{-1})(1 - 0.9z^{-1})}, \quad \text{ROC: } |z| > 0.9}
+\end{equation*}
+
+Poles: $z = 0.3,\; z = 0.9$. \quad Zero: $z = 0.5$ (from $6 - 3z^{-1} = 0$). Also a zero at $z = 0$.
+
+\subsection*{(f) $x_6[n] = (0.6)^n u[n] - 3(2)^n u[-n-1]$}
+
+First term: $\dfrac{1}{1 - 0.6z^{-1}},\; |z|>0.6$. \quad Second term: $-3(2)^n u[-n-1] \to \dfrac{3}{1 - 2z^{-1}},\; |z|<2$.
+
+\begin{align*}
+X_6(z) &= \frac{1}{1 - 0.6z^{-1}} + \frac{3}{1 - 2z^{-1}} = \frac{4 - 3.8z^{-1}}{(1 - 0.6z^{-1})(1 - 2z^{-1})}
+\end{align*}
+
+\begin{equation*}
+\boxed{\text{ROC: } 0.6 < |z| < 2}
+\end{equation*}
+
+DTFT exists? Since $0.6 < 1 < 2$, the unit circle is in the ROC. \textbf{Yes.}
+
+\subsection*{(g) $x_7[n] = (0.8)^n \cos(0.25\pi\,n)\,u[n]$}
+
+Using $r^n \cos(\omega_0 n)\,u[n] \zt \dfrac{1 - r\cos\omega_0\,z^{-1}}{1 - 2r\cos\omega_0\,z^{-1} + r^2 z^{-2}}$ with $r = 0.8$, $\omega_0 = 0.25\pi$:
+
+\[
+\cos(0.25\pi) = \frac{\sqrt{2}}{2} \approx 0.7071, \quad r\cos\omega_0 = 0.5657, \quad r^2 = 0.64
+\]
+
+\begin{equation*}
+\boxed{X_7(z) = \frac{1 - 0.5657\,z^{-1}}{1 - 1.1314\,z^{-1} + 0.64\,z^{-2}}, \quad \text{ROC: } |z| > 0.8}
+\end{equation*}
+
+Poles: $z = 0.8\,e^{\pm j\,0.25\pi}$ (magnitude $0.8$, angle $\pm 45^\circ$). DTFT exists since poles are inside the unit circle.
+
+\subsection*{(h) Evaluate $X(z)$ at $z = 1$}
+
+At $z=1$, $X(1) = \sum_n x[n]$.
+
+\begin{center}
+\begin{tabular}{c l l}
+\toprule
+Part & $X(1)$ & Verification \\
+\midrule
+(a) & $5/0.3 = 16.667$ & $\sum 5(0.7)^n = 16.667$ \checkmark \\
+(b) & $1/(1-4) = -1/3$ & $-\sum (1/4)^m = -1/3$ \checkmark \\
+(c) & $3 - 2 + 1 = 2$ & Direct sum $= 2$ \checkmark \\
+(d) & $0.5/(0.5)^2 = 2$ & $\sum n(0.5)^n = 2$ \checkmark \\
+(e) & $3/0.07 = 42.857$ & $2/0.7 + 4/0.1 = 42.857$ \checkmark \\
+(f) & $0.2/(-0.4) = -0.5$ & $2.5 + (-3) = -0.5$ \checkmark \\
+(g) & $0.4343/0.5086 = 0.854$ & Matches \checkmark \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%=============================================================
+\section*{Problem 2: Inverse Z-Transform}
+%=============================================================
+
+\subsection*{(a) Distinct real poles, causal}
+
+\[
+X(z) = \frac{1 + 3z^{-1}}{(1 - 0.2z^{-1})(1 - 0.6z^{-1})}, \quad |z| > 0.6
+\]
+
+Partial fractions: $X(z) = \dfrac{A}{1 - 0.2z^{-1}} + \dfrac{B}{1 - 0.6z^{-1}}$
+
+\[
+1 + 3z^{-1} = A(1 - 0.6z^{-1}) + B(1 - 0.2z^{-1})
+\]
+
+Set $z^{-1} = 5$: $16 = -2A \Rightarrow A = -8$. \quad Set $z^{-1} = 5/3$: $6 = 2B/3 \Rightarrow B = 9$.
+
+\begin{equation*}
+\boxed{x[n] = -8(0.2)^n u[n] + 9(0.6)^n u[n]}
+\end{equation*}
+
+\subsection*{(b) Distinct real poles, two-sided}
+
+\[
+X(z) = \frac{4}{(1 - 0.5z^{-1})(1 - 3z^{-1})}, \quad 0.5 < |z| < 3
+\]
+
+Set $z^{-1} = 2$: $A = -0.8$. \quad Set $z^{-1} = 1/3$: $B = 4.8$.
+
+Pole at $z=0.5$: ROC outside $\Rightarrow$ right-sided. Pole at $z=3$: ROC inside $\Rightarrow$ left-sided.
+
+\begin{equation*}
+\boxed{x[n] = -0.8(0.5)^n u[n] - 4.8(3)^n u[-n-1]}
+\end{equation*}
+
+\subsection*{(c) Repeated poles}
+
+\[
+X(z) = \frac{z^{-1}}{(1 - 0.5z^{-1})^2}, \quad |z| > 0.5
+\]
+
+Using $n\,a^n u[n] \zt \dfrac{az^{-1}}{(1-az^{-1})^2}$ with $a=0.5$: $X(z) = 2 \cdot \dfrac{0.5z^{-1}}{(1-0.5z^{-1})^2}$
+
+\begin{equation*}
+\boxed{x[n] = 2\,n\,(0.5)^n u[n]}
+\end{equation*}
+
+\subsection*{(d) Complex conjugate poles}
+
+\[
+X(z) = \frac{1 - 0.9\cos(0.3\pi)\,z^{-1}}{1 - 2(0.9)\cos(0.3\pi)\,z^{-1} + 0.81\,z^{-2}}, \quad |z| > 0.9
+\]
+
+Matches $r^n\cos(\omega_0 n)\,u[n]$ with $r = 0.9$, $\omega_0 = 0.3\pi$.
+
+\begin{equation*}
+\boxed{x[n] = (0.9)^n \cos(0.3\pi\,n)\,u[n]}
+\end{equation*}
+
+Poles: $z = 0.9\,e^{\pm j\,0.3\pi}$ (magnitude $0.9$, angle $\pm 54^\circ$).
+
+%=============================================================
+\section*{Problem 3: Z-Transform Properties}
+%=============================================================
+
+\subsection*{(a) Time shifting}
+
+Given $x[n] = (0.8)^n u[n] \zt \dfrac{1}{1 - 0.8z^{-1}}$. Then $y[n] = x[n-2]$.
+
+\begin{equation*}
+\boxed{Y(z) = \frac{z^{-2}}{1 - 0.8z^{-1}}, \quad \text{ROC: } |z| > 0.8}
+\end{equation*}
+
+The factor $z^{-2}$ introduces \textbf{2 zeros at $z = 0$}.
+
+\subsection*{(b) Z-domain scaling}
+
+Given $u[n] \zt \dfrac{1}{1 - z^{-1}},\; |z|>1$. Using $z_0^n x[n] \zt X(z/z_0)$ with $z_0 = 0.5$:
+
+\[
+F(z) = X\!\left(\frac{z}{0.5}\right) = \frac{1}{1 - 0.5z^{-1}}, \quad \text{ROC: } |z| > 0.5
+\]
+
+Matches the standard pair $a^n u[n]$ with $a = 0.5$. \checkmark
+
+\subsection*{(c) Convolution property}
+
+$h_1[n] = (0.3)^n u[n]$, \quad $h_2[n] = (0.7)^n u[n]$
+
+\textbf{(i)} $H_1(z) = \dfrac{1}{1 - 0.3z^{-1}}$, \quad $H_2(z) = \dfrac{1}{1 - 0.7z^{-1}}$
+
+\textbf{(ii)} $H(z) = \dfrac{1}{(1 - 0.3z^{-1})(1 - 0.7z^{-1})}, \quad |z| > 0.7$
+
+\textbf{(iii)} Partial fractions: $z^{-1}=10/3 \Rightarrow A = -3/4$, \quad $z^{-1}=10/7 \Rightarrow B = 7/4$.
+
+\begin{equation*}
+\boxed{h[n] = -\tfrac{3}{4}(0.3)^n u[n] + \tfrac{7}{4}(0.7)^n u[n]}
+\end{equation*}
+
+\textbf{(iv)} $h[0] = -0.75 + 1.75 = 1.0$. Direct: $h_1[0] \cdot h_2[0] = 1$. \checkmark
+
+$h[1] = -0.225 + 1.225 = 1.0$. Direct: $0.7 + 0.3 = 1.0$. \checkmark
+
+\subsection*{(d) Initial-value theorem}
+
+\[
+X(z) = \frac{3 - z^{-1}}{(1 - 0.4z^{-1})(1 + 0.5z^{-1})}, \quad |z| > 0.5
+\]
+
+\textbf{(i)} $x[0] = \lim_{z\to\infty} X(z) = \dfrac{3}{1 \cdot 1} = 3$
+
+\textbf{(ii)} Partial fractions: $z^{-1}=2.5 \Rightarrow A = 2/9$, \quad $z^{-1}=-2 \Rightarrow B = 25/9$.
+
+\[
+x[n] = \tfrac{2}{9}(0.4)^n u[n] + \tfrac{25}{9}(-0.5)^n u[n]
+\]
+
+Verify: $x[0] = 2/9 + 25/9 = 27/9 = 3$ \checkmark
+
+\textbf{(iii)} $x[1] = \dfrac{0.8 - 12.5}{9} = -1.3$, \quad $x[2] = \dfrac{0.32 + 6.25}{9} = 0.730$
+
+%=============================================================
+\section*{Problem 4: System Analysis with $H(z)$}
+%=============================================================
+
+\textbf{Given:} $y[n] - 0.9\,y[n-1] + 0.18\,y[n-2] = x[n]$
+
+\subsection*{(a) System function}
+
+\[
+Y(z)\bigl(1 - 0.9z^{-1} + 0.18z^{-2}\bigr) = X(z)
+\]
+
+\begin{equation*}
+\boxed{H(z) = \frac{1}{(1 - 0.3z^{-1})(1 - 0.6z^{-1})}, \quad \text{ROC: } |z| > 0.6}
+\end{equation*}
+
+Poles: $z = 0.3$ and $z = 0.6$. No finite zeros.
+
+\subsection*{(b) BIBO stability}
+
+Both poles satisfy $|p_i| < 1$. \textbf{System is BIBO stable.}
+
+\subsection*{(c) Impulse response}
+
+$z^{-1}=10/3 \Rightarrow A = -1$, \quad $z^{-1}=5/3 \Rightarrow B = 2$.
+
+\begin{equation*}
+\boxed{h[n] = -(0.3)^n u[n] + 2(0.6)^n u[n]}
+\end{equation*}
+
+Check: $h[0] = -1 + 2 = 1 = \delta[0]$ \checkmark
+
+\subsection*{(d) Input $x[n] = (0.5)^n u[n]$}
+
+\textbf{(i)} $Y(z) = \dfrac{1}{(1 - 0.3z^{-1})(1 - 0.6z^{-1})(1 - 0.5z^{-1})}$
+
+\textbf{(ii)} Cover-up: $A = 3/2$, \quad $B = 12$, \quad $C = -12.5$.
+
+\begin{equation*}
+\boxed{y[n] = 1.5(0.3)^n u[n] + 12(0.6)^n u[n] - 12.5(0.5)^n u[n]}
+\end{equation*}
+
+\textbf{(iii)} $y[0] = 1.5 + 12 - 12.5 = 1.0$. Diff eq: $y[0] = x[0] = 1$. \checkmark
+
+$y[1] = 0.45 + 7.2 - 6.25 = 1.4$. Diff eq: $y[1] = 0.9(1) + 0.5 = 1.4$. \checkmark
+
+\subsection*{(e) $G(z) = \dfrac{1}{1 - 1.5z^{-1}}$, pole at $z = 1.5$}
+
+\textbf{Causal} (ROC: $|z| > 1.5$): $g[n] = (1.5)^n u[n]$. Pole outside unit circle $\Rightarrow$ \textbf{NOT BIBO stable}. DTFT does not exist.
+
+\textbf{Anti-causal} (ROC: $|z| < 1.5$): $g[n] = -(1.5)^n u[-n-1]$. Unit circle is in the ROC $\Rightarrow$ \textbf{BIBO stable}. DTFT exists.
+
+%=============================================================
+\section*{Problem 5: Unilateral Z-Transform}
+%=============================================================
+
+\subsection*{(a) First-order with IC}
+
+\[
+y[n] - 0.8\,y[n-1] = (0.5)^n u[n], \quad y[-1] = 3
+\]
+
+\textbf{(i)} Using $\mathcal{Z}_u\{y[n-1]\} = z^{-1}Y(z) + y[-1]$:
+
+\[
+Y(z) - 0.8\bigl(z^{-1}Y(z) + 3\bigr) = \frac{1}{1 - 0.5z^{-1}}
+\]
+\[
+Y(z)(1 - 0.8z^{-1}) = \frac{1}{1 - 0.5z^{-1}} + 2.4
+\]
+
+\textbf{(ii)} Combine over common denominator:
+
+\[
+Y(z) = \frac{3.4 - 1.2z^{-1}}{(1 - 0.5z^{-1})(1 - 0.8z^{-1})}
+\]
+
+\textbf{(iii)} $z^{-1}=2 \Rightarrow A = -5/3$, \quad $z^{-1}=1.25 \Rightarrow B = 76/15$.
+
+\begin{equation*}
+\boxed{y[n] = -\frac{5}{3}(0.5)^n u[n] + \frac{76}{15}(0.8)^n u[n]}
+\end{equation*}
+
+\textbf{(iv)} $y[0] = -25/15 + 76/15 = 51/15 = 3.4$. Diff eq: $0.8(3)+1 = 3.4$. \checkmark
+
+$y[1] = -0.833 + 4.053 = 3.22$. Diff eq: $0.8(3.4)+0.5 = 3.22$. \checkmark
+
+\subsection*{(b) Second-order, zero-input}
+
+\[
+y[n] - 0.5\,y[n-1] - 0.06\,y[n-2] = 0, \quad y[-1] = 5,\; y[-2] = 0
+\]
+
+\textbf{(i)} $Y(z)(1 - 0.5z^{-1} - 0.06z^{-2}) = 2.5 + 0.3z^{-1}$
+
+\textbf{(ii)} Factor: $(1 - 0.6z^{-1})(1 + 0.1z^{-1})$. \quad $A = 18/7$, \quad $B = -1/14$.
+
+\begin{equation*}
+\boxed{y[n] = \frac{18}{7}(0.6)^n u[n] - \frac{1}{14}(-0.1)^n u[n]}
+\end{equation*}
+
+\textbf{(iii)} This is the \textbf{zero-input response (ZIR)} --- input is zero, response comes entirely from initial conditions.
+
+\subsection*{(c) ZSR/ZIR decomposition for part (a)}
+
+\textbf{ZSR} (ICs $= 0$):
+\[
+Y_{ZS}(z) = \frac{1}{(1-0.5z^{-1})(1-0.8z^{-1})} \quad \Rightarrow \quad y_{ZS}[n] = -\frac{5}{3}(0.5)^n u[n] + \frac{8}{3}(0.8)^n u[n]
+\]
+
+\textbf{ZIR} (input $= 0$):
+\[
+Y_{ZI}(z) = \frac{2.4}{1-0.8z^{-1}} \quad \Rightarrow \quad y_{ZI}[n] = 2.4(0.8)^n u[n]
+\]
+
+\textbf{Verify:}
+\[
+y_{ZS}[n] + y_{ZI}[n] = -\frac{5}{3}(0.5)^n u[n] + \left(\frac{8}{3} + 2.4\right)(0.8)^n u[n] = -\frac{5}{3}(0.5)^n u[n] + \frac{76}{15}(0.8)^n u[n]
+\]
+
+Matches total $y[n]$ from part (a). \checkmark
+
+\end{document}
