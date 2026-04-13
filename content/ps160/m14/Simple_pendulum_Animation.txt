@@ -1,0 +1,64 @@
+% Define pendulum parameters
+L = 1; % Length of pendulum (m)
+g = 9.81; % Acceleration due to gravity (m/s^2)
+theta0 = pi/4; % Initial angle (radians)
+m = 1; % Mass (kg)
+duration = 10; % Duration of the animation in seconds
+fps = 30; % Frames per second
+dt = 1/fps; % Time step
+time = 0:dt:duration; % Time vector
+omega = sqrt(g/L); % Angular frequency
+
+% Initialize figure
+figure;
+subplot(1,2,1); % For pendulum animation
+axis equal;
+xlim([-L L]);
+ylim([-L L]);
+hold on;
+pendulumLine = plot([0, 0], [0, -L], 'k-', 'LineWidth', 2); % Pendulum line
+pendulumBob = plot(0, -L, 'bo', 'MarkerSize', 10, 'MarkerFaceColor', 'b'); % Pendulum bob
+
+subplot(1,2,2); % For energy plots
+hold on;
+energyPlot = plot(time, zeros(1,length(time)), 'LineWidth', 2); % Total energy
+potentialEnergyPlot = plot(time, zeros(1,length(time)), 'r', 'LineWidth', 2); % Potential energy
+kineticEnergyPlot = plot(time, zeros(1,length(time)), 'g', 'LineWidth', 2); % Kinetic energy
+legend('Total Energy', 'Potential Energy', 'Kinetic Energy');
+xlim([0, duration]);
+ylim([0, m*g*L*(1-cos(theta0))]); % Max potential energy
+
+% Pre-allocate arrays for energy data
+PE_data = zeros(1, length(time));
+KE_data = zeros(1, length(time));
+ME_data = zeros(1, length(time));
+
+% Animation loop
+for idx = 1:length(time)
+    t = time(idx);
+    theta = theta0 * cos(omega*t); % Angular position
+    
+    % Pendulum position
+    x = L * sin(theta);
+    y = -L * cos(theta);
+    set(pendulumLine, 'XData', [0, x], 'YData', [0, y]);
+    set(pendulumBob, 'XData', x, 'YData', y);
+    
+    % Energy calculations
+    v = L * omega * theta0 * sin(omega*t); % Velocity
+    KE = 0.5 * m * v^2; % Kinetic energy
+    PE = m * g * L * (1 - cos(theta)); % Potential energy
+    ME = KE + PE; % Total energy
+    
+    % Update energy data
+    PE_data(idx) = PE;
+    KE_data(idx) = KE;
+    ME_data(idx) = ME;
+    
+    % Update energy plots
+    set(energyPlot, 'XData', time(1:idx), 'YData', ME_data(1:idx));
+    set(potentialEnergyPlot, 'XData', time(1:idx), 'YData', PE_data(1:idx));
+    set(kineticEnergyPlot, 'XData', time(1:idx), 'YData', KE_data(1:idx));
+    
+    drawnow;
+end

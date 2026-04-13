@@ -1,0 +1,71 @@
+% Harmonic Oscillator Parameters
+m = 1; % Mass (kg)
+k = 9; % Spring constant (N/m)
+b = 0.5; % Damping coefficient (kg/s)
+A = 1; % Initial amplitude of oscillation (m) - not used directly in forced oscillation
+omega_n = sqrt(k/m); % Natural angular frequency (rad/s)
+
+% Driving force parameters
+F0 = 1; % Amplitude of the driving force (N)
+omega_d = omega_n; % Driving angular frequency (rad/s) - set to natural frequency for resonance
+
+% Time parameters for the animation
+duration = 30; % Duration of the animation in seconds
+fps = 30; % Frames per second for the animation
+dt = 1/fps; % Time step (s)
+time = 0:dt:duration; % Time vector
+
+% Initial conditions
+x0 = 0; % Initial position (m)
+v0 = 0; % Initial velocity (m/s)
+
+% Create figure for the animation
+fig = figure;
+
+% For the oscillator animation
+subplot(1,2,1);
+massPlot = plot(0, 0, 'bo', 'MarkerSize', 10, 'MarkerFaceColor', 'b'); % Mass
+hold on;
+springPlot = plot([0, 0], [0, 0], 'k-', 'LineWidth', 2); % Spring
+xlim([-1.5*A, 1.5*A]);
+ylim([-A, A]);
+title('Forced Damped Oscillator');
+
+% For the amplitude plot
+subplot(1,2,2);
+amplitudePlot = plot(time, zeros(1,length(time)), 'b', 'LineWidth', 2);
+xlim([0, duration]);
+ylim([0, 1.5*A]); % Adjust based on expected maximum amplitude
+title('Amplitude vs. Time');
+
+% Initialize variables for numerical solution
+x = x0;
+v = v0;
+amplitude_data = zeros(1, length(time));
+
+% Numerical solution using Euler's method
+for idx = 1:length(time)
+    t = time(idx);
+    % External force
+    F = F0*cos(omega_d*t);
+    % Acceleration
+    a = (F - b*v - k*x) / m;
+    % Update velocity and position
+    v = v + a*dt;
+    x = x + v*dt;
+    
+    % Update plots
+    set(massPlot, 'XData', x);
+    set(springPlot, 'XData', [0, x]);
+    amplitude_data(idx) = abs(x); % Store absolute value of displacement as amplitude
+    
+    % Update amplitude plot
+    set(amplitudePlot, 'XData', time(1:idx), 'YData', amplitude_data(1:idx));
+    
+    drawnow;
+    
+    % Optional: Break if figure is closed
+    if ~isvalid(fig)
+        break;
+    end
+end

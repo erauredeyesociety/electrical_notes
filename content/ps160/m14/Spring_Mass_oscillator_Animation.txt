@@ -1,0 +1,76 @@
+% Harmonic Oscillator Parameters
+m = 1; % Mass (kg)
+k = 9; % Spring constant (N/m)
+A = 1; % Amplitude of oscillation (m)
+omega = sqrt(k/m); % Angular frequency (rad/s)
+
+% Time parameters for the animation
+duration = 10; % Duration of the animation in seconds
+fps = 30; % Frames per second for the animation
+dt = 1/fps; % Time step (s)
+time = 0:dt:duration; % Time vector
+
+% Create figure for the animation
+fig = figure;
+
+% For the oscillator animation
+subplot(1,2,1);
+massPlot = plot(0, 0, 'bo', 'MarkerSize', 10, 'MarkerFaceColor', 'b'); % Mass
+hold on;
+springPlot = plot([0, 0], [0, 0], 'k-', 'LineWidth', 2); % Spring
+xlim([-1.5*A, 1.5*A]);
+ylim([-A, A]);
+title('Harmonic Oscillator');
+
+% For the energy plots
+subplot(1,2,2);
+energyPlot = plot(time, zeros(1,length(time)), 'LineWidth', 2);
+hold on;
+potentialEnergyPlot = plot(time, zeros(1,length(time)), 'r', 'LineWidth', 2);
+kineticEnergyPlot = plot(time, zeros(1,length(time)), 'g', 'LineWidth', 2);
+legend('Mechanical Energy', 'Potential Energy', 'Kinetic Energy');
+xlim([0, duration]);
+ylim([0, 1.5*m*A^2*omega^2]); % Max energy
+title('Energy vs. Time');
+
+% Initialize energy data storage for plot updates
+ME_data = zeros(1, length(time));
+PE_data = zeros(1, length(time));
+KE_data = zeros(1, length(time));
+
+% Check if the figure and plots are still valid before updating in each iteration
+if ~isvalid(fig) || ~isvalid(massPlot) || ~isvalid(springPlot)
+    disp('Figure or plot objects are no longer valid.');
+    return; % Exit if objects are invalid
+end
+
+% Animation loop
+for idx = 1:length(time)
+    t = time(idx);
+    % Oscillator position
+    x = A*cos(omega*t);
+    set(massPlot, 'XData', x);
+    set(springPlot, 'XData', [0, x]);
+    
+    % Energy calculations
+    KE = 0.5*m*(omega*A*sin(omega*t))^2; % Kinetic energy
+    PE = 0.5*k*x^2; % Potential energy
+    ME = KE + PE; % Mechanical energy
+    
+    % Update energy data for plots
+    ME_data(idx) = ME;
+    PE_data(idx) = PE;
+    KE_data(idx) = KE;
+    
+    % Update energy plots
+    set(energyPlot, 'XData', time(1:idx), 'YData', ME_data(1:idx));
+    set(potentialEnergyPlot, 'XData', time(1:idx), 'YData', PE_data(1:idx));
+    set(kineticEnergyPlot, 'XData', time(1:idx), 'YData', KE_data(1:idx));
+    
+    drawnow;
+    
+    % Optional: Break if figure is closed
+    if ~isvalid(fig)
+        break;
+    end
+end
