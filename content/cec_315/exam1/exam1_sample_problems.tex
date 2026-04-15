@@ -1,0 +1,427 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{CEC 315 --- Exam 1 Sample Problems\\\large Lectures 2--8: Signals, Systems, LTI, Convolution, Singularity}
+\author{CEC 315 --- Signals and Systems (Spring 2026)}
+\date{}
+
+\newcommand{\Conv}{\ast}
+\newcommand{\Real}{\operatorname{Re}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Lecture 2 --- Signal Definitions and Transformations}
+
+\subsection{Problem 2.1 --- Time-Shift Sketch}
+\textbf{Reference:} Lecture 2, \S 2.4.1.\\
+\textbf{Topic:} Time shift.\\
+\textbf{Concepts tested:} Direction of delay/advance.
+
+\textbf{Statement.} Let $x(t)$ be a triangular pulse nonzero only for $0\le t\le 2$. Sketch $x(t-3)$ and $x(t+1)$.
+
+\textbf{Solution.}
+\begin{itemize}[leftmargin=*]
+  \item $x(t-3)$: same shape, delayed by 3 $\Rightarrow$ nonzero for $3\le t\le 5$.
+  \item $x(t+1)$: same shape, advanced by 1 $\Rightarrow$ nonzero for $-1\le t\le 1$.
+\end{itemize}
+\textbf{Rule.} $x(t-t_0)$ delays by $t_0$ if $t_0>0$, advances if $t_0<0$.
+
+\subsection{Problem 2.2 --- Combined Scale and Shift}
+\textbf{Reference:} Lecture 2, \S 2.4.\\
+\textbf{Topic:} Order of operations for $x(at-b)$.\\
+\textbf{Concepts tested:} Factoring out $a$ before shifting.
+
+\textbf{Statement.} Given $x(t)$ with support $[0,4]$, find the support of $y(t)=x(2t-4)$.
+
+\textbf{Solution.} Factor: $y(t)=x(2(t-2))$. Require $0\le 2t-4\le 4$, so $2\le t\le 4$. New support $[2,4]$ (length halved).
+
+\subsection{Problem 2.3 --- Energy of a Rectangular Pulse}
+\textbf{Reference:} Lecture 2, \S 2.3.3.\\
+\textbf{Topic:} Signal energy.
+
+\textbf{Statement.} Compute $E_\infty$ for $x(t)=A$, $0\le t\le T$; zero otherwise.
+
+\textbf{Solution.}
+\[
+E_\infty = \int_0^T A^2\,dt = A^2 T.
+\]
+Finite-energy signal: $E_\infty<\infty$, $P_\infty = 0$.
+
+\subsection{Problem 2.4 --- Power of a Sinusoid}
+\textbf{Reference:} Lecture 2, \S 2.3.4 / Lecture 3, \S 3.5.2.\\
+\textbf{Topic:} Average power of a sinusoid.
+
+\textbf{Statement.} Compute $P_\infty$ for $x(t)=A\cos(\omega_0 t+\phi)$.
+
+\textbf{Solution.} Using $\cos^2\theta=\tfrac12(1+\cos 2\theta)$,
+\[
+P_\infty = \lim_{T\to\infty}\frac{1}{2T}\int_{-T}^T A^2\cos^2(\omega_0 t+\phi)\,dt = \frac{A^2}{2}.
+\]
+Finite-power signal (infinite energy, finite power).
+
+\subsection{Problem 2.5 --- Even/Odd Decomposition}
+\textbf{Reference:} Lecture 2, \S 2.6.3.\\
+\textbf{Topic:} Even/odd decomposition.
+
+\textbf{Statement.} Decompose $x(t)=e^{-2t}u(t)$ into its even and odd parts.
+
+\textbf{Solution.}
+\begin{align*}
+x_e(t) &= \tfrac12[e^{-2t}u(t) + e^{2t}u(-t)] = \tfrac12\,e^{-2|t|},\\
+x_o(t) &= \tfrac12[e^{-2t}u(t) - e^{2t}u(-t)] = \tfrac12\,\operatorname{sign}(t)\,e^{-2|t|}.
+\end{align*}
+
+\section{Lecture 3 --- Complex Exponentials and Sinusoidal Signals}
+
+\subsection{Problem 3.1 --- Rectangular / Polar Conversion}
+\textbf{Reference:} Lecture 3, \S 3.2.4.
+
+\textbf{Statement.} Convert $c=1+j\sqrt 3$ to polar form.
+
+\textbf{Solution.} $r=\sqrt{1+3}=2$, $\theta=\arctan(\sqrt 3)=\pi/3$. So $c=2e^{j\pi/3}$.
+
+\subsection{Problem 3.2 --- Complex Multiplication}
+\textbf{Reference:} Lecture 3, \S 3.2.7.
+
+\textbf{Statement.} Compute $(2e^{j\pi/3})(3e^{j\pi/6})$ in rectangular form.
+
+\textbf{Solution.} $6 e^{j\pi/2} = 6j$.
+
+\subsection{Problem 3.3 --- Cosine Addition via Euler}
+\textbf{Reference:} Lecture 3, \S 3.8 (Exercise).
+
+\textbf{Statement.} Derive $\cos(\alpha+\beta)=\cos\alpha\cos\beta-\sin\alpha\sin\beta$.
+
+\textbf{Solution.}
+\[
+e^{j(\alpha+\beta)}=(\cos\alpha+j\sin\alpha)(\cos\beta+j\sin\beta).
+\]
+Expanding the product and taking real parts yields
+\[
+\cos(\alpha+\beta)=\cos\alpha\cos\beta-\sin\alpha\sin\beta,
+\]
+while the imaginary part gives $\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta$.
+
+\subsection{Problem 3.4 --- CT Sinusoid Period}
+\textbf{Reference:} Lecture 3, \S 3.5.1.
+
+\textbf{Statement.} Find the fundamental period of $x(t)=5\cos(10\pi t+\pi/4)$.
+
+\textbf{Solution.} $\omega_0=10\pi$, so $T_0 = 2\pi/(10\pi) = 0.2$ s.
+
+\subsection{Problem 3.5 --- DT Sinusoid Periodicity}
+\textbf{Reference:} Lecture 3, \S 3.7.
+
+\textbf{Statement.} Is $\cos(n)$ periodic? Is $\cos(\pi n/4)$ periodic?
+
+\textbf{Solution.}
+\begin{itemize}[leftmargin=*]
+  \item $\cos(n)$: $\omega_0/(2\pi) = 1/(2\pi)$ is irrational $\Rightarrow$ \textbf{not periodic}.
+  \item $\cos(\pi n/4)$: $\omega_0/(2\pi) = 1/8$ rational $\Rightarrow$ periodic with $N_0 = 8$.
+\end{itemize}
+
+\subsection{Problem 3.6 --- Real Sinusoid via Complex Exponentials}
+\textbf{Reference:} Lecture 3, \S 3.3.3.
+
+\textbf{Statement.} Express $x(t)=A\cos(\omega_0 t + \theta)$ as a sum of two complex exponentials.
+
+\textbf{Solution.}
+\[
+x(t) = \frac{A}{2}e^{j\theta}e^{j\omega_0 t}+\frac{A}{2}e^{-j\theta}e^{-j\omega_0 t}.
+\]
+Complex amplitudes $X_C = (A/2)e^{j\theta}$ and its conjugate.
+
+\section{Lecture 4 --- Key Functions and System Basics}
+
+\subsection{Problem 4.1 --- CT Integrator with Impulses}
+\textbf{Reference:} Lecture 4, Exercise 1.\\
+\textbf{Topic:} CT integrator fed by an impulse train.
+
+\textbf{Statement.} Compute $y(t)=\int_0^t x(\tau)\,d\tau$ for $x(t)=\delta(t+1)+\delta(t-1)+\delta(t-3)$, $t\ge 0$.
+
+\textbf{Solution.} Only impulses in $[0,t]$ contribute. $\delta(t+1)$ at $\tau=-1$ is outside for all $t\ge 0$. The others yield steps once passed:
+\[
+y(t) = u(t-1) + u(t-3).
+\]
+
+\subsection{Problem 4.2 --- CT Differentiator with Rect}
+\textbf{Reference:} Lecture 4, Exercise 2.
+
+\textbf{Statement.} For a CT differentiator fed $x(t)=u(t)-u(t-2)$, find $y(t)$.
+
+\textbf{Solution.}
+\[
+y(t) = \delta(t) - \delta(t-2).
+\]
+
+\subsection{Problem 4.3 --- Sifting Computation}
+\textbf{Reference:} Lecture 7, \S 7.2.2.
+
+\textbf{Statement.} $\displaystyle\int_{-\infty}^\infty (t^2+3t)\delta(t-2)\,dt = ?$
+
+\textbf{Solution.} Set $t=2$: $4+6=10$. Answer: $\boxed{10}$.
+
+\subsection{Problem 4.4 --- Sifting with Limits}
+\textbf{Reference:} Lecture 7, \S 7.2.2.
+
+\textbf{Statement.} $\displaystyle\int_0^5 x(t)\delta(t+2)\,dt = ?$
+
+\textbf{Solution.} The impulse is at $t=-2$, outside $[0,5]$. Answer: $\boxed{0}$.
+
+\subsection{Problem 4.5 --- Sampling Multiplication}
+\textbf{Reference:} Lecture 4, \S 4.3.6 / Lecture 8, \S 8.6.2.
+
+\textbf{Statement.} Simplify $(t^2+3)\delta(t-2)$.
+
+\textbf{Solution.} Evaluate the smooth factor at $t=2$: $(t^2+3)\delta(t-2) = 7\delta(t-2)$.
+
+\section{Lecture 5 --- Basic System Properties}
+
+\subsection{Problem 5.1 --- Classify $y(t)=3x(t)+2$}
+\textbf{Reference:} Lecture 5, \S 5.5.2 / \S 5.6.5.
+
+\textbf{Statement.} Full classification.
+
+\textbf{Solution.}
+\begin{itemize}[leftmargin=*]
+  \item Memoryless, causal, stable, time invariant, invertible.
+  \item \textbf{Not linear}: zero input gives $y=2$. Affine, not linear.
+\end{itemize}
+
+\subsection{Problem 5.2 --- Classify $y(t)=tx(t)$}
+\textbf{Reference:} Lecture 5, \S 5.5.2.
+
+\textbf{Solution.}
+\begin{itemize}[leftmargin=*]
+  \item Memoryless; causal; \textbf{not stable} (let $x=1$; $y=t$ unbounded).
+  \item \textbf{Not time invariant}: $y_2(t)=tx_1(t-t_0)$ vs.\ $y_1(t-t_0)=(t-t_0)x_1(t-t_0)$.
+  \item Linear; invertible for $t\ne 0$.
+\end{itemize}
+
+\subsection{Problem 5.3 --- Classify $T_1(x[n])=1/x[n+1]$}
+\textbf{Reference:} Lecture 5, Exercise 1.
+
+\textbf{Solution.} Has memory; non-causal; nonlinear ($T_1(ax)=T_1(x)/a$); time invariant; not stable; invertible ($x[n]=1/y[n-1]$).
+
+\subsection{Problem 5.4 --- Classify $T_2(x[n])=x[n]+0.5 x[n+1]$}
+\textbf{Reference:} Lecture 5, Exercise 1.
+
+\textbf{Solution.} Has memory; non-causal; linear; time invariant; stable ($|y|\le 1.5 B_x$); invertible.
+
+\subsection{Problem 5.5 --- Inverse Systems (Z-Preview)}
+\textbf{Reference:} Lecture 5, \S 5.2.2.
+
+\textbf{Statement.} $H_1(z)=1/(1-\alpha z^{-1})$, $H_2(z)=1+\beta z^{-1}$. Find $\alpha,\beta$ giving $H_1 H_2 = 1$.
+
+\textbf{Solution.} Choose $\alpha=-\beta$. Then $H_1H_2=1$, whose inverse transform is $\delta[n]$.
+
+\section{Lecture 6 --- DT LTI Convolution}
+
+\subsection{Problem 6.1 --- Finite-Length Convolution}
+\textbf{Reference:} Lecture 6, \S 6.5.1.
+
+\textbf{Statement.} Compute $y[n]=x[n]\Conv h[n]$ where $x[n]=\{1,2,3\}$ ($n=0,1,2$) and $h[n]=\{1,1\}$ ($n=0,1$).
+
+\textbf{Solution.} Output length $3+2-1=4$. Sample-by-sample:
+\[
+y[0]=1,\ y[1]=3,\ y[2]=5,\ y[3]=3.
+\]
+Sanity: $(1+2+3)(1+1)=12=1+3+5+3$. $\checkmark$
+
+\subsection{Problem 6.2 --- Polynomial Trick}
+\textbf{Reference:} Lecture 6.
+
+\textbf{Statement.} Redo Problem 6.1 via polynomial multiplication in $z^{-1}$.
+
+\textbf{Solution.}
+\[
+(1+2z^{-1}+3z^{-2})(1+z^{-1}) = 1+3z^{-1}+5z^{-2}+3z^{-3}.
+\]
+
+\subsection{Problem 6.3 --- Geometric with Step}
+\textbf{Reference:} Lecture 6, \S 6.5.2.
+
+\textbf{Statement.} Compute $\alpha^n u[n]\Conv u[n]$.
+
+\textbf{Solution.}
+\[
+y[n] = \sum_{k=0}^n \alpha^k = \frac{1-\alpha^{n+1}}{1-\alpha}u[n].
+\]
+
+\subsection{Problem 6.4 --- Accumulator}
+\textbf{Reference:} Lecture 6, \S 6.5.3.
+
+\textbf{Statement.} Express $x[n]\Conv u[n]$.
+
+\textbf{Solution.}
+\[
+y[n] = \sum_{k=-\infty}^n x[k].
+\]
+
+\subsection{Problem 6.5 --- Shift as Convolution}
+\textbf{Reference:} Lecture 6, \S 6.5.4.
+
+\textbf{Solution.}
+\[
+x[n]\Conv \delta[n-n_0] = x[n-n_0].
+\]
+
+\section{Lecture 7 --- CT LTI Properties and Convolution}
+
+\subsection{Problem 7.1 --- Rectangle with Rectangle}
+\textbf{Reference:} Lecture 7, \S 7.6.1.
+
+\textbf{Statement.} $x(t)=u(t)-u(t-1)$, $h(t)=u(t)-u(t-2)$. Compute $y(t)=x(t)\Conv h(t)$.
+
+\textbf{Solution.} Critical values $t=0,1,2,3$:
+\[
+y(t)=\begin{cases}
+0, & t<0\\
+t, & 0\le t<1\\
+1, & 1\le t<2\\
+3-t, & 2\le t<3\\
+0, & t\ge 3
+\end{cases}
+\]
+Trapezoidal pulse. Area $=2=1\cdot 2$. $\checkmark$
+
+\subsection{Problem 7.2 --- Exponential with Unit Step}
+\textbf{Reference:} Lecture 7, \S 7.6.2.
+
+\textbf{Statement.} $x(t)=e^{-at}u(t)$, $h(t)=u(t)$, $a>0$. Find $y(t)$.
+
+\textbf{Solution.}
+\[
+y(t) = \int_0^t e^{-a\tau}d\tau = \frac{1}{a}(1-e^{-at})u(t).
+\]
+
+\subsection{Problem 7.3 --- LTI Properties from $h(t)$}
+\textbf{Reference:} Lecture 7, \S 7.8.
+
+\textbf{Statement.} Classify $h(t)=e^{-2t}u(t)$.
+
+\textbf{Solution.} Causal ($h(t)=0$ for $t<0$); stable ($\int_0^\infty e^{-2t}dt=1/2$); has memory; invertible.
+
+\subsection{Problem 7.4 --- Stable but Non-Causal}
+\textbf{Reference:} Lecture 7, \S 7.8.
+
+\textbf{Statement.} Classify $h(t)=e^{t}u(-t)$.
+
+\textbf{Solution.} Non-causal (nonzero for $t<0$); stable ($\int_{-\infty}^0 e^t\,dt = 1<\infty$). Shows causality and stability are independent.
+
+\subsection{Problem 7.5 --- Step Response}
+\textbf{Reference:} Lecture 7, \S 7.9.
+
+\textbf{Statement.} $h(t)=e^{-t}u(t)$. Find $s(t)$.
+
+\textbf{Solution.}
+\[
+s(t)=\int_0^t e^{-\tau}d\tau = (1-e^{-t})u(t).
+\]
+Check $ds/dt = e^{-t}u(t) = h(t)$.
+
+\subsection{Problem 7.6 --- Inverse of a Pure Delay}
+\textbf{Reference:} Lecture 7, \S 7.8.4.
+
+\textbf{Statement.} $h(t)=\delta(t-t_0)$. Find $h_i(t)$.
+
+\textbf{Solution.} $h_i(t)=\delta(t+t_0)$, since $\delta(t-t_0)\Conv\delta(t+t_0)=\delta(t)$.
+
+\section{Lecture 8 --- Difference / Differential Equations and Singularity Functions}
+
+\subsection{Problem 8.1 --- CT Impulse Response via Jump}
+\textbf{Reference:} Lecture 8, Worked Example 1.
+
+\textbf{Statement.} Find $h(t)$ for $\dfrac{dy}{dt}+2y=x$.
+
+\textbf{Solution.} For $t>0$: $h(t)=Ce^{-2t}$. Jump condition $h(0^+)-h(0^-)=1$ gives $C=1$. With causality,
+\[
+h(t) = e^{-2t}u(t).
+\]
+
+\subsection{Problem 8.2 --- CT Step Response}
+\textbf{Reference:} Lecture 8, Worked Example 2.
+
+\textbf{Statement.} Solve $\dfrac{dy}{dt}+2y=3x$, $x(t)=u(t)$, $y(0^-)=0$.
+
+\textbf{Solution.} Homogeneous: $Ce^{-2t}$. Particular: $y_p=3/2$. Apply IC: $C=-3/2$.
+\[
+y(t) = \tfrac32(1-e^{-2t})u(t).
+\]
+
+\subsection{Problem 8.3 --- DT Impulse Response by Iteration}
+\textbf{Reference:} Lecture 8, Worked Example 3.
+
+\textbf{Statement.} $y[n]=\tfrac12 y[n-1]+x[n]$; find $h[n]$.
+
+\textbf{Solution.} Iterate: $h[0]=1$, $h[1]=1/2$, $h[2]=1/4$, $\ldots$
+\[
+h[n] = (1/2)^n u[n].
+\]
+Stable since $|\alpha|=1/2<1$.
+
+\subsection{Problem 8.4 --- DT Step Response by Iteration}
+\textbf{Reference:} Lecture 8, Worked Example 4.
+
+\textbf{Statement.} Same system, $x[n]=u[n]$. Find $s[n]$.
+
+\textbf{Solution.} Iterate: $s[0]=1$, $s[1]=3/2$, $s[2]=7/4$, $s[3]=15/8$.
+\[
+s[n] = 2\bigl(1-(1/2)^{n+1}\bigr)u[n].
+\]
+Steady state $=2$.
+
+\subsection{Problem 8.5 --- Stability Classification}
+\textbf{Reference:} Lecture 8, \S 8.4.
+
+\textbf{Statement.} Classify the stability of four first-order systems.
+
+\textbf{Solution.}
+\begin{itemize}[leftmargin=*]
+  \item $dy/dt+3y=x$: $a=3>0$, \textbf{stable}.
+  \item $dy/dt-2y=x$: $a=-2<0$, \textbf{unstable}.
+  \item $y[n]=0.5y[n-1]+x[n]$: $|\alpha|=0.5<1$, \textbf{stable}.
+  \item $y[n]=2y[n-1]+x[n]$: $|\alpha|=2>1$, \textbf{unstable}.
+\end{itemize}
+
+\subsection{Problem 8.6 --- Derivative of $(t+1)u(t)$}
+\textbf{Reference:} Lecture 8, Worked Example 5.
+
+\textbf{Solution.} Product rule:
+\[
+\frac{d}{dt}[(t+1)u(t)] = u(t) + (t+1)\delta(t) = u(t) + \delta(t),
+\]
+using $(t+1)\delta(t)=(0+1)\delta(t)=\delta(t)$.
+
+\subsection{Problem 8.7 --- Impulse Scaling}
+\textbf{Reference:} Lecture 8, \S 8.6.1.
+
+\textbf{Statement.} Simplify $\delta(2t)$.
+
+\textbf{Solution.} $\delta(2t) = \tfrac12\delta(t)$.
+
+\subsection{Problem 8.8 --- Doublet Convolution}
+\textbf{Reference:} Lecture 8, \S 8.5.4.
+
+\textbf{Statement.} $x(t)=e^{-t}u(t)$; compute $x(t)\Conv\delta'(t)$.
+
+\textbf{Solution.}
+\[
+x(t)\Conv\delta'(t) = \frac{dx}{dt} = -e^{-t}u(t)+\delta(t).
+\]
+
+\end{document}

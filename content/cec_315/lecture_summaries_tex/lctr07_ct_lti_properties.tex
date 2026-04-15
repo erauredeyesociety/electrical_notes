@@ -1,0 +1,648 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\title{Lecture 7 — Continuous-Time LTI Systems and Properties}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\textbf{Course:} CEC 315 — Signals and Systems (Spring 2026)
+\textbf{Instructor:} Rogelio Gracia Otalvaro
+\textbf{Source PDF:} \texttt{all\_lectures/cec315-lctr07-ct-lti-properties.pdf}
+\textbf{Exam coverage:} Exam 1
+
+\textbf{Lctr 7: Continuous-Time LTI Systems and Properties}
+
+Rogelio Gracia Otalvaro
+
+Spring 2026
+
+\textbf{Focus:} Sections 2.2 and 2.3 (Pages 97 to 115)
+
+\section*{7.1 From Discrete-Time to Continuous-Time: The Big Picture}
+
+\begin{quote}
+\textbf{Why This Matters}
+
+In Lecture 6, we learned that for discrete-time LTI systems, the output is the \textbf{convolution sum}. Now we extend these ideas to \textbf{continuous-time} systems. The math changes from sums to integrals, but the intuition remains the same: \textbf{if you know how a system responds to an impulse, you can predict its response to any input!}
+\end{quote}
+
+\textbf{Quick comparison:}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Concept} & \textbf{Discrete-Time (DT)} & \textbf{Continuous-Time (CT)} \\
+\hline
+Signal decomposition & $\displaystyle \sum_{k=-\infty}^{\infty} x[k]\,\delta[n-k]$ & $\displaystyle \int_{-\infty}^{\infty} x(\tau)\,\delta(t-\tau)\,d\tau$ \\
+\hline
+Convolution & $\displaystyle \sum_{k=-\infty}^{\infty} x[k]\,h[n-k]$ & $\displaystyle \int_{-\infty}^{\infty} x(\tau)\,h(t-\tau)\,d\tau$ \\
+\hline
+Impulse function & $\delta[n]$ (unit sample) & $\delta(t)$ (Dirac delta) \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{quote}
+\textbf{Key Insight}
+
+Sums become integrals, and the index $k$ becomes the continuous variable $\tau$. The concepts are the same — only the notation changes!
+\end{quote}
+
+\section*{7.2 The Continuous-Time Unit Impulse (Dirac Delta)}
+
+Before we can do convolution, we need to understand the continuous-time impulse function $\delta(t)$.
+
+\subsection*{7.2.1 What is $\delta(t)$?}
+
+The \textbf{Dirac delta function} $\delta(t)$ is \textbf{not} a regular function — it is a mathematical idealization. Think of it as:
+
+\begin{itemize}
+  \item An infinitely tall, infinitely narrow spike at $t=0$
+  \item With area under the spike equal to exactly 1
+\end{itemize}
+
+Formally:
+
+\[\delta(t) = 0 \text{ for } t \neq 0, \qquad \int_{-\infty}^{\infty} \delta(t)\,dt = 1\]
+
+\textbf{Intuition:} imagine a rectangular pulse that gets narrower and taller while keeping its area equal to 1. The Dirac delta is the "limit" of this process.
+
+\textit{[Figure: A sequence of narrow pulses of widths $\Delta, \Delta/2, \Delta/4, \ldots$ and corresponding heights $1/\Delta, 2/\Delta, 4/\Delta, \ldots$ — each has unit area. As $\Delta \to 0$, the limit is $\delta(t)$.]}
+
+\subsection*{7.2.2 The Sifting Property (Most Important!)}
+
+The sifting property is the key to understanding convolution:
+
+\[\boxed{\;\int_{-\infty}^{\infty} x(\tau)\,\delta(\tau - t_0)\,d\tau = x(t_0)\;}\]
+
+\textbf{What this means:} the integral "sifts out" (extracts) the value of $x(\tau)$ at the point $\tau = t_0$.
+
+\textit{[Figure 2.14: (a) an arbitrary signal $x(\tau)$; (b) the shifted impulse $\delta(t-\tau)$ as a function of $\tau$, showing a spike at $\tau = t$; (c) the product $x(\tau)\,\delta(t-\tau) = x(t)\,\delta(t-\tau)$, which is a single impulse of area $x(t)$.]}
+
+\begin{quote}
+\textbf{Key Insight — How to Use the Sifting Property}
+
+1. Find where the delta function is "active" (where its argument equals zero).
+2. Evaluate the other function at that point.
+3. That's your answer!
+\end{quote}
+
+\textbf{Example 1:} Evaluate $\displaystyle\int_{-\infty}^{\infty} (t^2 + 3t)\,\delta(t-2)\,dt$.
+
+\textbf{Solution.}
+
+\begin{itemize}
+  \item The delta is at $t=2$ (set $t-2=0$).
+  \item Evaluate $(t^2+3t)$ at $t=2$: $(2)^2 + 3(2) = 4 + 6 = 10$.
+  \item \textbf{Answer:} $\boxed{10}$
+\end{itemize}
+
+\textbf{Example 2:} Evaluate $\displaystyle\int_{-\infty}^{\infty} e^{-3t}\,\delta(t+1)\,dt$.
+
+\textbf{Solution.}
+
+\begin{itemize}
+  \item The delta is at $t = -1$ (set $t+1=0$).
+  \item Evaluate $e^{-3t}$ at $t=-1$: $e^{-3(-1)} = e^{3}$.
+  \item \textbf{Answer:} $\boxed{e^{3}}$
+\end{itemize}
+
+\begin{quote}
+\textbf{Common Mistake — Watch the Limits!}
+
+If the delta function is \textbf{outside} the integration limits, the integral equals zero!
+
+Example: $\displaystyle\int_0^5 x(t)\,\delta(t+2)\,dt = 0$ because the delta is at $t=-2$, which is outside $[0,5]$.
+\end{quote}
+
+\section*{7.3 Representing CT Signals Using Impulses}
+
+Just like in discrete-time, any continuous-time signal can be written as a "sum" (integral) of shifted, scaled impulses:
+
+\[\boxed{\;x(t) = \int_{-\infty}^{\infty} x(\tau)\,\delta(t - \tau)\,d\tau\;}\]
+
+\textbf{Interpretation:}
+
+\begin{itemize}
+  \item We decompose $x(t)$ into infinitely many infinitesimally small impulses.
+  \item Each impulse at time $\tau$ has "weight" $x(\tau)\,d\tau$.
+  \item The integral adds up all these weighted impulses.
+\end{itemize}
+
+This representation is the foundation for deriving the convolution integral.
+
+\textit{[Figure 2.12: Staircase approximation to a continuous-time signal. The signal is approximated by a sum of narrow rectangular pulses of width $\Delta$ and heights $x(k\Delta)$. As $\Delta \to 0$, the sum becomes an integral and the pulses become impulses.]}
+
+\section*{7.4 The Continuous-Time Impulse Response}
+
+\subsection*{7.4.1 Definition}
+
+\begin{quote}
+\textbf{Definition — Impulse Response}
+
+The \textbf{impulse response} $h(t)$ is the output of an LTI system when the input is the unit impulse $\delta(t)$:
+
+\[h(t) = T\{\delta(t)\}\]
+\end{quote}
+
+\textbf{Due to time invariance:}
+
+\begin{itemize}
+  \item If input is $\delta(t)$, output is $h(t)$.
+  \item If input is $\delta(t - \tau)$ (impulse shifted to time $\tau$), output is $h(t - \tau)$.
+\end{itemize}
+
+\begin{quote}
+\textbf{Key Insight}
+
+The impulse response \textbf{completely characterizes} an LTI system. Once you know $h(t)$, you can find the output for \textbf{any} input!
+\end{quote}
+
+\section*{7.5 The Convolution Integral}
+
+\subsection*{7.5.1 Derivation (Step by Step)}
+
+This derivation follows the exact same logic as the discrete-time case.
+
+\textbf{Step 1: Decompose the input.}
+
+\[x(t) = \int_{-\infty}^{\infty} x(\tau)\,\delta(t - \tau)\,d\tau\]
+
+\textbf{Step 2: Apply the system.}
+
+\[y(t) = T\{x(t)\} = T\!\left\{\int_{-\infty}^{\infty} x(\tau)\,\delta(t - \tau)\,d\tau\right\}\]
+
+\textbf{Step 3: Use LINEARITY} (move $T$ inside the integral):
+
+\[y(t) = \int_{-\infty}^{\infty} x(\tau)\,T\{\delta(t - \tau)\}\,d\tau\]
+
+\textbf{Step 4: Use TIME-INVARIANCE:}
+
+\[T\{\delta(t - \tau)\} = h(t - \tau)\]
+
+\textbf{Step 5: The convolution integral.}
+
+\[\boxed{\;y(t) = \int_{-\infty}^{\infty} x(\tau)\,h(t - \tau)\,d\tau = x(t)*h(t)\;}\]
+
+\subsection*{7.5.2 The Flip-and-Shift Interpretation}
+
+To compute $y(t)$ for a specific value of $t$:
+
+\begin{enumerate}
+  \item \textbf{Flip:} take $h(\tau)$ and flip it about $\tau = 0$ to get $h(-\tau)$.
+  \item \textbf{Shift:} shift by $t$ to get $h(t - \tau)$.
+  \item \textbf{Multiply:} multiply $x(\tau)$ by $h(t - \tau)$.
+  \item \textbf{Integrate:} integrate the product over all $\tau$.
+\end{enumerate}
+
+\begin{quote}
+\textbf{Common Mistake}
+
+Just like in discrete-time, you must \textbf{flip before shifting}! The argument $h(t - \tau)$ means: flip $h$, then shift it by $t$. Forgetting the flip is the most common mistake!
+\end{quote}
+
+\subsection*{7.5.3 Alternative Form (Commutativity)}
+
+By a change of variables, we can also write:
+
+\[y(t) = \int_{-\infty}^{\infty} x(t - \tau)\,h(\tau)\,d\tau\]
+
+This shows convolution is \textbf{commutative}: $x(t)*h(t) = h(t)*x(t)$.
+
+\begin{quote}
+\textbf{Key Insight — Practical Tip}
+
+You can flip either $x$ or $h$ — choose whichever is simpler! Flip the signal with a simpler shape or smaller support.
+\end{quote}
+
+\subsection*{7.5.4 How to Find the Cases and Integration Limits}
+
+This is one of the most challenging parts of CT convolution. Here's a systematic approach:
+
+\begin{quote}
+\textbf{Key Insight — The Golden Rule}
+
+The integration limits are determined by the \textbf{overlap} between $x(\tau)$ and $h(t-\tau)$. You only integrate where \textbf{both} functions are nonzero!
+\end{quote}
+
+\textbf{Step-by-Step Procedure.}
+
+\textbf{Step 1: Identify the "support" of each signal.} The support is the range of values where the signal is nonzero.
+
+\begin{itemize}
+  \item For $x(\tau)$: find where $x(\tau) \neq 0$. Call this range $[a,b]$.
+  \item For $h(t-\tau)$: start with where $h(\tau) \neq 0$, say $[c,d]$. After flipping and shifting, $h(t-\tau) \neq 0$ for $t-d \leq \tau \leq t-c$.
+\end{itemize}
+
+\textbf{Step 2: Find the overlap region.} The integrand $x(\tau)\cdot h(t-\tau)$ is nonzero only where both signals are nonzero:
+
+\[\text{Overlap} = [a,b]\cap[t-d,\,t-c]\]
+
+Lower limit $= \max(a, t-d)$; upper limit $= \min(b, t-c)$.
+
+\textbf{Step 3: Find the critical values of $t$.} The "cases" change when the overlap relationship changes. This happens at the four $t$-values where the edges align:
+
+\begin{itemize}
+  \item Left edge of $h(t-\tau)$ reaches left edge of $x(\tau)$: $t-d = a \Rightarrow t = a+d$.
+  \item Left edge of $h(t-\tau)$ reaches right edge of $x(\tau)$: $t-d = b \Rightarrow t = b+d$.
+  \item Right edge of $h(t-\tau)$ reaches left edge of $x(\tau)$: $t-c = a \Rightarrow t = a+c$.
+  \item Right edge of $h(t-\tau)$ reaches right edge of $x(\tau)$: $t-c = b \Rightarrow t = b+c$.
+\end{itemize}
+
+Sort these critical values to find the boundaries between cases.
+
+\textbf{Step 4: For each case, determine the limits.} For each range of $t$ between critical points:
+
+\begin{itemize}
+  \item Lower limit of integral $=\max(\text{left edge of } x,\text{left edge of } h(t-\tau))$.
+  \item Upper limit of integral $=\min(\text{right edge of } x,\text{right edge of } h(t-\tau))$.
+\end{itemize}
+
+\begin{quote}
+\textbf{Common Mistake}
+
+Students often set limits incorrectly. Remember:
+
+- If $x(\tau)$ is nonzero on $[a,b]$, these are \textbf{fixed} limits (don't depend on $t$).
+- If $h(t-\tau)$ is nonzero on $[t-d,t-c]$, these limits \textbf{move with $t$}.
+\end{quote}
+
+\subsection*{7.5.5 Detailed Example: Finding the Cases}
+
+Let $x(\tau) = u(\tau) - u(\tau - 1)$ (a pulse from 0 to 1) and $h(\tau) = u(\tau) - u(\tau - 2)$ (a pulse from 0 to 2).
+
+\textbf{Step 1 — Identify supports.}
+
+\begin{itemize}
+  \item $x(\tau) \neq 0$ for $0 \leq \tau \leq 1$, so $a=0$, $b=1$.
+  \item $h(\tau) \neq 0$ for $0 \leq \tau \leq 2$, so $c=0$, $d=2$.
+  \item After flip-and-shift: $h(t-\tau) \neq 0$ for $t-2 \leq \tau \leq t$.
+\end{itemize}
+
+\textbf{Step 2 — Critical values of $t$.}
+
+\begin{itemize}
+  \item Right edge of $h(t-\tau)$ reaches left edge of $x$: $t-0 = 0 \Rightarrow t=0$.
+  \item Right edge of $h(t-\tau)$ reaches right edge of $x$: $t-0 = 1 \Rightarrow t=1$.
+  \item Left edge of $h(t-\tau)$ reaches left edge of $x$: $t-2 = 0 \Rightarrow t=2$.
+  \item Left edge of $h(t-\tau)$ reaches right edge of $x$: $t-2 = 1 \Rightarrow t=3$.
+\end{itemize}
+
+Critical values in order: $t = 0,\,1,\,2,\,3$.
+
+\textbf{Step 3 — Analyze each region.}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Case} & \textbf{Range of $t$} & \textbf{Overlap?} & \textbf{Integration Limits} \\
+\hline
+1 & $t < 0$ & No ($h$ is to the left of $x$) & None, $y(t) = 0$ \\
+\hline
+2 & $0 \leq t < 1$ & Partial ($h$ entering) & $\int_0^t$ \\
+\hline
+3 & $1 \leq t < 2$ & Full overlap with $x$ & $\int_0^1$ \\
+\hline
+4 & $2 \leq t < 3$ & Partial ($h$ exiting) & $\int_{t-2}^1$ \\
+\hline
+5 & $t \geq 3$ & No ($h$ is to the right of $x$) & None, $y(t) = 0$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\textit{[Figure: Five graphical snapshots of $x(\tau)$ (fixed, blue) and $h(t-\tau)$ (moving right, red-dashed), with the green overlap region shaded. Shows Cases 1–5 at representative $t$ values.]}
+
+\begin{quote}
+\textbf{Key Insight — Continuity Check}
+
+At the boundary between cases, the limits should give the same value. For example, at $t=1$:
+
+- From Case 2: $\int_0^1 = 1$
+- From Case 3: $\int_0^1 = 1$ $\checkmark$
+
+This continuity check helps verify your cases are correct!
+\end{quote}
+
+\section*{7.6 Worked Examples: Computing the Convolution Integral}
+
+\subsection*{7.6.1 Example: Two Rectangular Pulses}
+
+\textbf{Problem:} Let $x(t) = u(t) - u(t-1)$ and $h(t) = u(t) - u(t-2)$. Find $y(t) = x(t)*h(t)$.
+
+\textbf{Step 1 — Sketch the signals.} $x(t)$ is a pulse of height 1 from $t=0$ to $t=1$; $h(t)$ is a pulse of height 1 from $t=0$ to $t=2$.
+
+\textbf{Step 2 — Flip and shift $h$.}
+
+\begin{itemize}
+  \item $h(-\tau)$: pulse from $\tau = -2$ to $\tau = 0$.
+  \item $h(t-\tau)$: pulse from $\tau = t-2$ to $\tau = t$.
+\end{itemize}
+
+\textbf{Step 3 — Find regions of overlap.} We computed the cases above. Now evaluate the integrals.
+
+\textbf{Case 1:} $t < 0$ (no overlap): $y(t) = 0$.
+
+\textbf{Case 2:} $0 \leq t < 1$ (partial, $h$ entering):
+
+\[y(t) = \int_0^t 1\cdot 1\,d\tau = t\]
+
+\textbf{Case 3:} $1 \leq t < 2$ (full overlap with $x$):
+
+\[y(t) = \int_0^1 1\cdot 1\,d\tau = 1\]
+
+\textbf{Case 4:} $2 \leq t < 3$ (partial, $h$ exiting):
+
+\[y(t) = \int_{t-2}^1 1\cdot 1\,d\tau = 1 - (t-2) = 3-t\]
+
+\textbf{Case 5:} $t \geq 3$ (no overlap): $y(t) = 0$.
+
+\textbf{Final answer:}
+
+\[y(t) = \begin{cases} 0, & t < 0 \\ t, & 0 \leq t < 1 \\ 1, & 1 \leq t < 2 \\ 3-t, & 2 \leq t < 3 \\ 0, & t \geq 3 \end{cases}\]
+
+\begin{quote}
+\textbf{Key Insight — Sanity Check}
+
+The result is a \textbf{trapezoidal pulse}. This makes sense because convolving two rectangular pulses always produces a trapezoidal (or triangular, when widths are equal) shape!
+\end{quote}
+
+\subsection*{7.6.2 Example: Exponential With Unit Step}
+
+\textbf{Problem:} Let $x(t) = e^{-at}\,u(t)$ and $h(t) = u(t)$, where $a > 0$. Find $y(t) = x(t)*h(t)$.
+
+\textbf{Solution.} For $t<0$ there is no overlap, so $y(t) = 0$. For $t \geq 0$:
+
+\[y(t) = \int_0^t e^{-a\tau}\cdot 1\,d\tau = \int_0^t e^{-a\tau}\,d\tau\]
+
+\[y(t) = \left[-\frac{1}{a}\,e^{-a\tau}\right]_0^t = -\frac{1}{a}\,e^{-at} - \left(-\frac{1}{a}\,e^0\right) = \frac{1}{a}\left(1 - e^{-at}\right)\]
+
+\textbf{Final answer:}
+
+\[\boxed{\;y(t) = \frac{1}{a}\left(1 - e^{-at}\right)u(t)\;}\]
+
+\textbf{Physical interpretation:} If $h(t) = u(t)$ represents an integrator and $x(t)$ is a decaying exponential starting at $t=0$, then $y(t)$ is the running integral of that exponential. At $t=0$ the integral is 0; as $t\to\infty$ it asymptotes to $1/a$.
+
+\section*{7.7 Properties of LTI Systems}
+
+\begin{quote}
+\textbf{Why This Matters}
+
+These properties are not just abstract math — they have practical implications! They tell us how to:
+
+- Simplify calculations (commutativity)
+- Analyze \textbf{series} connections of systems (associativity)
+- Analyze \textbf{parallel} connections of systems (distributivity)
+\end{quote}
+
+\subsection*{7.7.1 Commutativity}
+
+\[\boxed{\;x(t)*h(t) = h(t)*x(t)\;}\]
+
+\textbf{Meaning:} you can interchange the roles of input and impulse response. Flip whichever signal is simpler!
+
+\subsection*{7.7.2 Distributivity}
+
+\[\boxed{\;x(t)*[h_1(t) + h_2(t)] = x(t)*h_1(t) + x(t)*h_2(t)\;}\]
+
+\textbf{Application:} for \textbf{parallel} systems, the equivalent impulse response is:
+
+\[h_{\text{eq}}(t) = h_1(t) + h_2(t)\]
+
+\subsection*{7.7.3 Associativity}
+
+\[\boxed{\;x(t)*[h_1(t)*h_2(t)] = [x(t)*h_1(t)]*h_2(t)\;}\]
+
+\textbf{Application:} for \textbf{cascade (series)} systems, the equivalent impulse response is:
+
+\[h_{\text{eq}}(t) = h_1(t)*h_2(t)\]
+
+\begin{quote}
+\textbf{Key Insight}
+
+\textbf{Cascade systems are interchangeable!} Due to commutativity and associativity, the order of LTI systems in a cascade doesn't affect the overall input-output relationship.
+\end{quote}
+
+\subsection*{7.7.4 Convolution With the Impulse}
+
+\[x(t)*\delta(t) = x(t)\]
+
+The impulse is the \textbf{identity element} for convolution (like 1 for multiplication).
+
+\subsection*{7.7.5 Convolution With a Shifted Impulse (Time Delay)}
+
+\[x(t)*\delta(t - t_0) = x(t - t_0)\]
+
+Convolving with a shifted impulse \textbf{delays} the signal by $t_0$.
+
+\section*{7.8 LTI System Properties From the Impulse Response}
+
+\begin{quote}
+\textbf{Why This Matters}
+
+One of the most powerful aspects of LTI systems: you can determine important properties just by looking at $h(t)$!
+\end{quote}
+
+\subsection*{7.8.1 Memory}
+
+\textbf{Memoryless:} the output depends only on the current input value. An LTI system is memoryless if and only if:
+
+\[h(t) = K\,\delta(t)\quad\text{for some constant } K\]
+
+In this case $y(t) = K\cdot x(t)$ (just scaling).
+
+\textbf{Has memory:} if $h(t)$ is anything other than a scaled impulse, the system has memory.
+
+\textbf{Example.}
+
+\begin{itemize}
+  \item $h(t) = 2\,\delta(t)\;\Rightarrow$ \textbf{memoryless} (output $= 2\,x(t)$).
+  \item $h(t) = e^{-t}\,u(t)\;\Rightarrow$ \textbf{has memory} (output depends on past inputs).
+\end{itemize}
+
+\subsection*{7.8.2 Causality}
+
+\textbf{Causal:} the output at time $t$ depends only on the input at time $t$ and earlier (not the future). An LTI system is causal if and only if:
+
+\[\boxed{\;h(t) = 0\quad\text{for }t<0\;}\]
+
+\textbf{Physical interpretation:} the system cannot respond \textit{before} the impulse is applied.
+
+\textbf{Examples.}
+
+\begin{itemize}
+  \item $h(t) = e^{-2t}\,u(t)\;\Rightarrow$ \textbf{causal} (zero for $t<0$).
+  \item $h(t) = e^{2t}\,u(-t)\;\Rightarrow$ \textbf{non-causal} (nonzero for $t<0$).
+  \item $h(t) = e^{-|t|}\;\Rightarrow$ \textbf{non-causal} (nonzero for all $t$).
+\end{itemize}
+
+\begin{quote}
+\textbf{Key Insight}
+
+For a \textbf{causal} system with a \textbf{causal} input (i.e., $x(t) = 0$ for $t<0$), the convolution integral simplifies to:
+
+\[y(t) = \int_0^t x(\tau)\,h(t-\tau)\,d\tau\]
+
+This is often easier to compute!
+\end{quote}
+
+\subsection*{7.8.3 Stability (BIBO)}
+
+\textbf{BIBO stable:} Bounded Input $\Rightarrow$ Bounded Output. An LTI system is BIBO stable if and only if the impulse response is \textbf{absolutely integrable}:
+
+\[\boxed{\;\int_{-\infty}^{\infty} |h(t)|\,dt < \infty\;}\]
+
+\textbf{Intuition:} if the "total area" under $|h(t)|$ is finite, then a bounded input cannot produce an unbounded output.
+
+\textbf{Examples.}
+
+\begin{itemize}
+  \item $h(t) = e^{-2t}\,u(t)$: $\int_0^{\infty} e^{-2t}\,dt = \tfrac{1}{2} < \infty \Rightarrow$ \textbf{stable}.
+  \item $h(t) = e^{t}\,u(-t)$: $\int_{-\infty}^0 e^{t}\,dt = 1 < \infty \Rightarrow$ \textbf{stable}.
+  \item $h(t) = e^{2t}\,u(t)$: $\int_0^{\infty} e^{2t}\,dt = \infty \Rightarrow$ \textbf{unstable}.
+  \item $h(t) = u(t)$: $\int_0^{\infty} 1\,dt = \infty \Rightarrow$ \textbf{unstable}.
+\end{itemize}
+
+\begin{quote}
+\textbf{Common Mistake}
+
+A system can be \textbf{causal but unstable} (like $h(t) = e^{2t}\,u(t)$), or \textbf{stable but non-causal} (like $h(t) = e^{t}\,u(-t)$). Causality and stability are independent properties!
+\end{quote}
+
+\subsection*{7.8.4 Invertibility}
+
+An LTI system with impulse response $h(t)$ is \textbf{invertible} if there exists an inverse system $h_i(t)$ such that:
+
+\[h(t)*h_i(t) = \delta(t)\]
+
+The cascade of the system and its inverse gives back the original signal.
+
+\textbf{Example — Time delay and time advance.}
+
+\begin{itemize}
+  \item If $h(t) = \delta(t - t_0)$ (delay by $t_0$),
+  \item then $h_i(t) = \delta(t + t_0)$ (advance by $t_0$),
+  \item because $\delta(t - t_0)*\delta(t + t_0) = \delta(t)$.
+\end{itemize}
+
+\section*{7.9 The Unit Step Response}
+
+The \textbf{unit step response} $s(t)$ is the output when the input is the unit step $u(t)$:
+
+\[\boxed{\;s(t) = u(t)*h(t) = \int_{-\infty}^{t} h(\tau)\,d\tau\;}\]
+
+\textbf{Why this formula?} Since $u(t - \tau) = 1$ for $\tau \leq t$ and 0 otherwise:
+
+\[s(t) = \int_{-\infty}^{\infty} h(\tau)\,u(t-\tau)\,d\tau = \int_{-\infty}^{t} h(\tau)\,d\tau\]
+
+\subsection*{7.9.1 Relationship Between $h(t)$ and $s(t)$}
+
+The step response is the integral of the impulse response:
+
+\[s(t) = \int_{-\infty}^{t} h(\tau)\,d\tau\]
+
+Conversely, the impulse response is the derivative of the step response:
+
+\[\boxed{\;h(t) = \frac{d s(t)}{d t}\;}\]
+
+\begin{quote}
+\textbf{Key Insight}
+
+If measuring the impulse response directly is difficult (an ideal impulse is hard to generate physically), you can:
+
+1. Apply a step input $u(t)$.
+2. Measure the step response $s(t)$.
+3. Differentiate to get $h(t) = ds(t)/dt$.
+\end{quote}
+
+\textbf{Example:} If $h(t) = e^{-t}\,u(t)$, find the step response.
+
+\[s(t) = \int_{-\infty}^{t} e^{-\tau}\,u(\tau)\,d\tau = \int_0^t e^{-\tau}\,d\tau = 1 - e^{-t}\text{ for } t\geq 0\]
+
+So $s(t) = (1 - e^{-t})\,u(t)$.
+
+\section*{7.10 Summary and Key Formulas}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Concept} & \textbf{Formula} \\
+\hline
+Sifting property & $\int_{-\infty}^{\infty} x(\tau)\,\delta(\tau-t_0)\,d\tau = x(t_0)$ \\
+\hline
+Signal decomposition & $x(t) = \int_{-\infty}^{\infty} x(\tau)\,\delta(t-\tau)\,d\tau$ \\
+\hline
+Impulse response & $h(t) = T\{\delta(t)\}$ \\
+\hline
+Convolution integral & $y(t) = \int_{-\infty}^{\infty} x(\tau)\,h(t-\tau)\,d\tau$ \\
+\hline
+Commutativity & $x(t)*h(t) = h(t)*x(t)$ \\
+\hline
+Distributivity & $x*(h_1 + h_2) = x*h_1 + x*h_2$ \\
+\hline
+Associativity & $(x*h_1)*h_2 = x*(h_1*h_2)$ \\
+\hline
+Identity & $x(t)*\delta(t) = x(t)$ \\
+\hline
+Delay & $x(t)*\delta(t-t_0) = x(t-t_0)$ \\
+\hline
+Memoryless & $h(t) = K\,\delta(t)$ \\
+\hline
+Causal & $h(t) = 0$ for $t<0$ \\
+\hline
+BIBO stable & $\int_{-\infty}^{\infty} |h(t)|\,dt < \infty$ \\
+\hline
+Step response & $s(t) = \int_{-\infty}^{t} h(\tau)\,d\tau$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{7.11 Common Mistakes to Avoid}
+
+\begin{enumerate}
+  \item \textbf{Forgetting to flip before shifting:} in $h(t-\tau)$, you must flip $h(\tau)$ first, then shift. Most common error!
+  \item \textbf{Wrong integration limits:} the limits depend on where both signals are nonzero. Always sketch the signals and identify the overlap region.
+  \item \textbf{Confusing $t$ and $\tau$:}
+\end{enumerate}
+\begin{itemize}
+  \item $t$ is the output time (the variable in your answer).
+  \item $\tau$ is the dummy integration variable.
+\end{itemize}
+\begin{enumerate}
+  \item \textbf{Forgetting delta sifting rules:} when the delta is outside the integration limits, the integral equals zero.
+  \item \textbf{Confusing stability and causality:} these are independent properties! A system can be stable but non-causal, or causal but unstable.
+  \item \textbf{Computing $\int h(t)\,dt$ without absolute values:} for stability, you need the integral of $|h(t)|$, \textbf{not} $h(t)$.
+\end{enumerate}
+
+\begin{quote}
+\textbf{Key Insight — Study Strategy}
+
+Practice computing convolutions by hand. Work through the graphical method (flip-shift-multiply-integrate) until it becomes automatic. This builds intuition that will help you throughout the course!
+\end{quote}
+
+Rogelio Gracia Otalvaro
+
+\section*{Practice Problems Summary}
+
+\begin{enumerate}
+  \item \textbf{Sifting Example 1:} $\int (t^2+3t)\delta(t-2)\,dt = (2)^2 + 3(2) = 10$.
+  \item \textbf{Sifting Example 2:} $\int e^{-3t}\delta(t+1)\,dt = e^{-3(-1)} = e^3$.
+  \item \textbf{Sifting with limits:} $\int_0^5 x(t)\delta(t+2)\,dt = 0$ (delta at $t=-2$ is outside the interval).
+  \item \textbf{Two rectangular pulses:} $x(t)=u(t)-u(t-1)$ convolved with $h(t)=u(t)-u(t-2)$ gives a trapezoidal pulse: $y(t) = 0$/$t$/$1$/$(3-t)$/$0$ over five regions.
+  \item \textbf{Exponential and step:} $e^{-at}u(t) * u(t) = \frac{1}{a}(1 - e^{-at})\,u(t)$.
+  \item \textbf{Impulse response of memoryless system:} $h(t) = K\delta(t)$ gives $y(t) = K\,x(t)$.
+  \item \textbf{Causality check:} $h(t) = e^{-2t}u(t)$ is causal; $h(t) = e^{2t}u(-t)$ and $h(t) = e^{-|t|}$ are non-causal.
+  \item \textbf{Stability check:} $h(t)=e^{-2t}u(t)$ is stable; $h(t)=e^{2t}u(t)$ and $h(t)=u(t)$ are unstable.
+  \item \textbf{Inverse of delay:} $\delta(t-t_0) * \delta(t+t_0) = \delta(t)$ — advance is the inverse of delay.
+  \item \textbf{Step response of $h(t)=e^{-t}u(t)$:} $s(t) = (1 - e^{-t})\,u(t)$, and $ds/dt = e^{-t}u(t) + 0 = h(t)$ recovers $h$.
+\end{enumerate}
+
+\end{document}

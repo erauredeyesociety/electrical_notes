@@ -1,0 +1,554 @@
+\documentclass[11pt]{article}
+
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  pdftitle={CEC 315 -- Master Homework Problem Collection},
+  pdfauthor={Compiled from course HW PDFs}
+}
+
+\title{CEC 315 --- Master Homework Problem Collection\\
+\large Signals and Systems, Spring 2026}
+\author{Compiled from \texttt{hw\_practice\_problems/} and student solution notes}
+\date{}
+
+\newcommand{\Laplace}{\xleftrightarrow{\mathcal{L}}}
+\newcommand{\ZT}{\xleftrightarrow{\mathcal{Z}}}
+\newcommand{\FT}{\xleftrightarrow{\mathcal{F}}}
+\newcommand{\Real}{\operatorname{Re}}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\part*{Introduction}
+\addcontentsline{toc}{part}{Introduction}
+
+This document collects every assigned / practice homework problem from CEC~315 (Spring 2026), grouped into three parts corresponding to the three exams. Each problem statement is reproduced verbatim from the source PDF, and worked solutions are included wherever a solutions PDF or student-prepared solutions file is available. The Part~III content (lectures 16--23, Exam~3 coverage) is the most thorough.
+
+\textbf{Sources consulted:}
+\begin{itemize}[nosep]
+  \item \texttt{hw\_practice\_problems/hw-chapter01.pdf}
+  \item \texttt{hw\_practice\_problems/lctr03-exercise-euler-derivations.pdf}
+  \item \texttt{hw\_practice\_problems/lctr04-exercise.pdf}, \texttt{lctr05-exercise.pdf}
+  \item \texttt{hw\_practice\_problems/lctr06-convolution-problems.pdf}, \texttt{lctr07-convolution-problems.pdf}, \texttt{lctr08-problems.pdf}
+  \item \texttt{hw\_practice\_problems/hw-lctr09-11.pdf} + solutions PDF
+  \item \texttt{hw\_practice\_problems/hw-lctr12-15.pdf} + solutions PDF (also \texttt{homework/hw4/hw4\_solutions.md})
+  \item \texttt{hw\_practice\_problems/hw-lctr16-18.pdf}
+  \item \texttt{hw\_practice\_problems/hw-lctr19-21.pdf} (+ \texttt{homework/hw6/hw6\_solutions.md})
+  \item \texttt{hw\_practice\_problems/lctr22-exercise.pdf}, \texttt{lctr23-exercise.pdf}
+\end{itemize}
+
+\newpage
+
+\part{Exam 1 Homework (Chapter 1, Lectures 3--8)}
+
+\section{HW Chapter 1 --- Signals, Systems, Complex Numbers}
+\emph{Lecture tag:} Lectures 2--5. \emph{Source:} \texttt{hw-chapter01.pdf}. \emph{Solutions available:} No.
+
+\subsection{Problem 1 --- Power and Energy}
+Determine $P_\infty$ and $E_\infty$ for each signal:
+\begin{enumerate}[label=(\alph*)]
+  \item $x_1(t) = e^{-2t}\,u(t)$
+  \item $x_2(t) = e^{j(2t+\pi/4)}$
+  \item $x_3(t) = \cos(t)$
+  \item $x_1[n] = (1/2)^n\,u[n]$
+  \item $x_2[n] = e^{j(\pi n/2 + \pi/8)}$
+  \item $x_3[n] = \cos(\pi n/4)$
+\end{enumerate}
+
+\subsection{Problem 2 --- Periodicity}
+Determine whether each signal is periodic; if so, give the fundamental period.
+\begin{enumerate}[label=(\alph*)]
+  \item $x_1(t) = j\,e^{j10 t}$
+  \item $x_2(t) = e^{(-1+j)t}$
+  \item $x_3[n] = e^{j 7\pi n}$
+  \item $x_4[n] = 3\,e^{j 3\pi(n+1/2)/5}$
+  \item $x_5[n] = 3\,e^{j(3/5)(n+1/2)}$
+\end{enumerate}
+
+\subsection{Problem 3 --- System Properties}
+For each CT system determine (1) memoryless, (2) time invariant, (3) linear, (4) causal, (5) stable.
+\begin{enumerate}[label=(\alph*)]
+  \item $y(t) = x(t-2) + x(2-t)$
+  \item $y(t) = [\cos(3t)]\,x(t)$
+  \item $y(t) = \int_{-\infty}^{2t} x(\tau)\,d\tau$
+  \item $y(t) = 0$ for $t<0$; $y(t) = x(t)+x(t-2)$ for $t\ge 0$
+  \item $y(t) = 0$ for $x(t)<0$; $y(t) = x(t)+x(t-2)$ for $x(t)\ge 0$
+  \item $y(t) = x(t/3)$
+  \item $y(t) = dx(t)/dt$
+\end{enumerate}
+
+\subsection{Problem 4 --- Signal Transformations}
+Given a CT signal $x(t)$ (trapezoid plot: value 2 on $-1\le t<0$, straight line from 2 at $t=0$ down to 0 at $t=2$, zero elsewhere). Sketch and label:
+\begin{enumerate}[label=(\alph*)]
+  \item $x(t-1)$
+  \item $x(2-t)$
+  \item $x(2t+1)$
+  \item $x(4 - t/2)$
+  \item $[x(t) + x(-t)]\,u(t)$
+  \item $x(t)\,[\delta(t+3/2) - \delta(t-3/2)]$
+\end{enumerate}
+
+\subsection{Problem 5 --- Complex Numbers in Polar Form}
+\begin{enumerate}[label=(\alph*)]
+  \item $1 + j\sqrt{3}$ \quad (b) $-5$ \quad (c) $-5 - 5j$ \quad (d) $3 + 4j$
+  \item[(e)] $(1 - j\sqrt{3})^3$ \quad (f) $(1+j)^5$ \quad (g) $(\sqrt{3} + j3)(1-j)$
+  \item[(h)] $\dfrac{2 - j(6/\sqrt{3})}{2 + j(6/\sqrt{3})}$ \quad (i) $\dfrac{1+j\sqrt{3}}{\sqrt{3}+j}$
+  \item[(j)] $j(1+j)\,e^{j\pi/6}$ \quad (k) $(\sqrt{3}+j)\,2\sqrt{2}\,e^{-j\pi/4}$ \quad (l) $\dfrac{e^{j\pi/3}-1}{1+j\sqrt{3}}$
+\end{enumerate}
+
+\section{Lecture 3 Exercise --- Euler Derivations}
+\emph{Source:} \texttt{lctr03-exercise-euler-derivations.pdf}. \emph{Solutions:} No.
+
+Starting from $e^{j\theta} = \cos\theta + j\sin\theta$, derive expressions for:
+$\cos(\alpha\pm\beta)$, $\sin(\alpha\pm\beta)$, $\cos\alpha\cos\beta$, $\cos\alpha\sin\beta$, $\sin\alpha\sin\beta$.
+
+\section{Lecture 4 Exercise --- Fundamental Functions and Systems}
+\emph{Source:} \texttt{lctr04-exercise.pdf}. \emph{Solutions:} No.
+
+\subsection{Exercise 1 --- CT integrator with impulse train}
+$y(t) = \int_0^t x(\tau)\,d\tau$ with $x(t) = \delta(t+1) + \delta(t-1) + \delta(t-3)$. Find $y(t)$; sketch input and output.
+
+\subsection{Exercise 2 --- CT differentiator with rectangular pulse}
+$y(t) = dx/dt$ with $x(t) = 1$ for $0<t<2$ and zero otherwise. Find $y(t)$; sketch input and output.
+
+\section{Lecture 5 Exercise --- Basic System Properties}
+\emph{Source:} \texttt{lctr05-exercise.pdf}. \emph{Solutions:} No.
+
+\subsection{Exercise 1 --- Classify DT systems}
+$T_1(x[n]) = 1/x[n+1]$, $T_2(x[n]) = x[n] + 0.5\,x[n+1]$. Determine invertibility, causality, BIBO stability, time invariance, linearity, memoryless property.
+
+\subsection{Exercise 2 --- Waveform sketches}
+Sketch $x_1[n] = 0.5^n u[n]$, $x_2[n] = x_1[n-2]$, $x_3[n] = x_2[-n]$.
+
+\section{Lecture 6 --- DT Convolution Practice}
+\emph{Source:} \texttt{lctr06-convolution-problems.pdf}. \emph{Solutions:} No.
+
+For each problem compute $y[n] = x[n]*h[n]$.
+\begin{enumerate}[leftmargin=*]
+  \item $x=\{2,1\}$, $h=\{1,3\}$ (both at $n=0,1$).
+  \item $x=\{1,2,1\}$ ($n=0,1,2$), $h=\{1,-1\}$.
+  \item $x=\{1,0,2\}$, $h=\{2,1,1\}$ (both at $n=0,1,2$).
+  \item $x=\{1,2,3,4\}$ ($n=0..3$), $h=\{1,1\}$.
+  \item $x[-1]=1,\,x[0]=2,\,x[1]=-1$; $h=\{3,1\}$.
+\end{enumerate}
+
+\section{Lecture 7 --- CT Sifting / Convolution}
+\emph{Source:} \texttt{lctr07-convolution-problems.pdf}. \emph{Solutions:} No.
+
+\subsection{Problem 1 --- Sifting, unbounded limits}
+\begin{enumerate}[label=(\alph*)]
+  \item $\int_{-\infty}^{\infty}(3t^2-2t+5)\delta(t-1)\,dt$
+  \item $\int_{-\infty}^{\infty}\cos(\pi t)\delta(t+0.5)\,dt$
+  \item $\int_{-\infty}^{\infty}e^{-2t}\delta(t-3)\,dt$
+\end{enumerate}
+
+\subsection{Problem 2 --- Finite limits}
+\begin{enumerate}[label=(\alph*)]
+  \item $\int_0^{10}t^3\delta(t-2)\,dt$
+  \item $\int_0^{5}e^{t}\delta(t+3)\,dt$
+  \item $\int_{-2}^{2}(t+1)^2\delta(t+1)\,dt$
+\end{enumerate}
+
+\subsection{Problem 3 --- System properties from $h(t)$}
+For (a) $h(t)=3\delta(t)$; (b) $h(t)=e^{-3t}u(t)$; (c) $h(t)=e^{2t}u(-t)$; (d) $h(t)=e^{t}u(t)$: determine memory, causality, BIBO stability (show the stability integral).
+
+\subsection{Problem 4 --- Convolution with shifted impulses}
+$(a)$ $e^{-2t}u(t) * \delta(t-3)$; $(b)$ $\cos(2\pi t) * \delta(t+1)$; $(c)$ $[u(t)-u(t-2)] * \delta(t-4)$.
+
+\subsection{Problem 5 --- Convolution integral}
+$x(t) = u(t)-u(t-2)$, $h(t) = e^{-t}u(t)$. Compute $y(t)$, splitting by cases on $t$.
+
+\section{Lecture 8 --- Differential / Difference Equations}
+\emph{Source:} \texttt{lctr08-problems.pdf}. \emph{Solutions:} No.
+
+\subsection{Problem 1 --- CT first-order}
+$\dfrac{dy}{dt} + 3y(t) = 6x(t)$. (a) Find $h(t)$. (b) Stable? (c) $h(0),h(1)$.
+
+\subsection{Problem 2 --- DT first-order}
+$y[n] = \tfrac{1}{3}y[n-1] + 2x[n]$. (a) Iterate for $h[0..3]$. (b) General formula. (c) Stable?
+
+\newpage
+\part{Exam 2 Homework (Lectures 9--15)}
+
+\section{HW Lectures 9--11 --- Fourier Series, DTFS, Frequency Response}
+\emph{Source:} \texttt{hw-lctr09-11.pdf}; \emph{Solutions:} \texttt{hw-lctr09-11-solutions.pdf}; also \texttt{exam2/hw\_lctr9\_11\_solutions\_summary.md}.
+
+\subsection{Problem 1 --- Eigenfunction Property and CT FS (Lecture 9)}
+LTI system $h(t)=e^{-4t}u(t)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Input $x(t)=\cos(3t)$. Compute $H(j3) = \int_0^\infty e^{-4\tau}e^{-j3\tau}d\tau$ in rectangular and polar form; write $y(t)$.
+  \item Periodic $x(t)$, $T=4\,\text{s}$; $x(t)=3$ for $0\le t<1$, $0$ for $1\le t<4$. Find $\omega_0$, $a_0$ (explain), derive $a_k$ ($k\neq 0$), compute $a_1,a_2$ in polar form.
+  \item Verify $a_{-1}=a_1^*$; explain what this requires of $x(t)$.
+\end{enumerate}
+
+\paragraph{Solution.}
+$H(j3) = \dfrac{1}{4+j3} = \dfrac{4}{25} - j\dfrac{3}{25}$, $|H(j3)| = 1/5 = 0.2$, $\angle = -36.87^\circ$. Output: $y(t) = 0.2\cos(3t-36.87^\circ)$.
+
+$\omega_0 = \pi/2$ rad/s; $a_0 = 3/4 = 0.75$; $a_k = \dfrac{3}{2jk\pi}(1 - e^{-jk\pi/2})$. $a_1 = \dfrac{3(1-j)}{2\pi}$, $|a_1|\approx 0.675$, $\angle a_1=-45^\circ$. $a_2 = -\dfrac{3j}{2\pi}$, $|a_2|\approx 0.477$, $\angle=-90^\circ$. $a_{-1} = \dfrac{3(1+j)}{2\pi} = a_1^*$, which holds for any real-valued $x$.
+
+\subsection{Problem 2 --- Convergence and Gibbs (Lecture 10)}
+Odd square wave, $T=2\pi$, $\pm 1$, with FS $x(t) = \tfrac{4}{\pi}\sum_{k\,\text{odd}}\tfrac{\sin(kt)}{k}$.
+\begin{enumerate}[label=(\alph*)]
+  \item State Dirichlet conditions and verify them.
+  \item Convergence at $t=0$ and $t=\pi/2$; three-term sum at $\pi/2$.
+  \item Write $x_1(t)$ and $x_3(t)$ explicitly; state Gibbs overshoot rule.
+  \item Connect spectral decay ($1/k$ vs $1/k^2$) to smoothness.
+\end{enumerate}
+
+\paragraph{Solution.}
+All Dirichlet conditions hold. FS at $t=0$ converges to $0$; at $t=\pi/2$ to $1$. Three-term sum at $\pi/2$: $(4/\pi)[1 - 1/3 + 1/5] = 52/(15\pi) \approx 1.103$.
+$x_1(t) = (4/\pi)\sin t$, $x_3(t) = (4/\pi)[\sin t + \sin 3t/3 + \sin 5t/5]$. Gibbs overshoot $\approx 8.9\%$, persists as $N\to\infty$. Triangular wave ($1/k^2$) is smoother; rule: if first discontinuous derivative is the $m$-th, coefficients decay as $1/k^{m+1}$.
+
+\subsection{Problem 3 --- CT FS Properties (Lecture 10)}
+Real $x(t)$, $T=\pi$, $\omega_0=2$, $a_0=2$, $a_{\pm1}=1$, $a_{\pm2}=1/4$, $a_{\pm3}=1/9$, else $0$.
+\begin{enumerate}[label=(\alph*)]
+  \item $w(t) = 4x(t)+6\sin(2t)$: find $c_k$.
+  \item $y(t) = x(t-\pi/4)$: find $b_k$; verify $|b_k|=|a_k|$ for $k=1,2$.
+  \item $g(t) = dx/dt$: find $d_k$; compute $|d_1|,|d_2|,|d_3|$.
+  \item Parseval $P_x$; fraction carried by DC.
+\end{enumerate}
+
+\paragraph{Solution.} $\sin(2t)$: $b_1 = -j/2$, $b_{-1}=j/2$. $c_0=8$, $c_{\pm1}=4\mp 3j$, $c_{\pm 2}=1$, $c_{\pm 3}=4/9$. $b_k = a_k e^{-jk\pi/2}$; magnitudes unchanged. $|d_k| = 2|k|\cdot|a_k|$: $|d_1|=2$, $|d_2|=1$, $|d_3|=2/3$. $P_x = 4 + 2(1+1/16+1/81) \approx 6.1497$; DC fraction $\approx 65\%$.
+
+\subsection{Problem 4 --- DTFS (Lecture 10)}
+$x[n]$ periodic $N=6$; $x[n]=1$ for $n=0,1,2$ and $0$ for $n=3,4,5$.
+\begin{enumerate}[label=(\alph*)]
+  \item State DTFS equations; justify why there are $N$ distinct coefficients.
+  \item Compute $a_0,a_1,a_2,a_3$.
+  \item Use periodicity for $a_4,a_5$.
+  \item Verify Parseval.
+\end{enumerate}
+
+\paragraph{Solution.} $\omega_0 = \pi/3$. $a_0 = 1/2$; $a_1 = (1-j\sqrt 3)/6$ ($|a_1|=1/3$, $\angle=-60^\circ$); $a_2 = 0$; $a_3 = 1/6$. $a_4 = a_2^* = 0$, $a_5 = a_1^* = (1+j\sqrt 3)/6$. Parseval: both sides $=1/2$ ($9/36+4/36+1/36+4/36=18/36$).
+
+\subsection{Problem 5 --- Frequency Response and Filtering (Lecture 11)}
+$h(t)=e^{-3t}u(t)$, input $x(t) = 2 + 4\cos(3t) + 2\cos(9t)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $H(j\omega)$; express as $1/(a+j\omega)$.
+  \item Table of $H$ at $\omega=0,3,9$.
+  \item Output $y(t)$.
+  \item Lowpass/highpass; ratio $|H(j9)|/|H(j3)|$; sketch $|H|$, mark $\omega_c$.
+  \item If $h'(t)=e^{-10t}u(t)$: how does $\omega_c$ change; is $y'$ more similar to $x$?
+\end{enumerate}
+
+\paragraph{Solution.} $H(j\omega)=1/(3+j\omega)$, $a=3$. $|H(0)|=1/3$; $|H(j3)|=1/(3\sqrt 2)\approx 0.236$, $\angle=-45^\circ$; $|H(j9)|=1/(3\sqrt{10})\approx 0.105$, $\angle\approx -71.57^\circ$. $y(t) = \tfrac{2}{3} + \tfrac{2\sqrt 2}{3}\cos(3t-45^\circ) + \tfrac{2}{3\sqrt{10}}\cos(9t-71.57^\circ)$. $|H(j9)|/|H(j3)| = 1/\sqrt 5 \approx 0.447$: higher harmonic more attenuated. Lowpass, $\omega_c = 3$. New $\omega_c'=10$, wider bandwidth, $y'$ more similar to $x$.
+
+\section{HW Lectures 12--15 --- Fourier Transforms, Properties, Filters, Bode}
+\emph{Source:} \texttt{hw-lctr12-15.pdf}; \emph{Solutions:} \texttt{hw-lctr12-15-solutions.pdf}, also \texttt{hw4/hw4\_solutions.md}.
+
+\subsection{Problem 1 --- CT FT Basic Pairs (Lecture 12)}
+\begin{enumerate}[label=(\alph*)]
+  \item $x(t)=3e^{-5t}u(t)$: compute $X(j\omega)$; express as $A/(a+j\omega)$; find $|X|,\angle X$.
+  \item $g(t)=4e^{-2|t|}$: split integral; show real; explain via symmetry.
+  \item Rectangular pulse $p(t)=2$ for $|t|\le 3$. Compute $P(j\omega)$; $P(0)$; first two positive zeros.
+  \item Sanity check $X(0) = \int x(t)\,dt$ for each.
+\end{enumerate}
+
+\paragraph{Solution.} $X(j\omega) = 3/(5+j\omega)$, $|X|=3/\sqrt{25+\omega^2}$, $\angle = -\arctan(\omega/5)$, $X(0)=0.6$. $G(j\omega) = 16/(4+\omega^2)$ (real \& even), $G(0)=4$. $P(j\omega) = 4\sin(3\omega)/\omega$, $P(0)=12$, zeros at $\omega=\pi/3,2\pi/3$.
+
+\subsection{Problem 2 --- DTFT Basic Pairs (Lecture 12)}
+\begin{enumerate}[label=(\alph*)]
+  \item $x[n]=(0.6)^n u[n]$: DTFT via geometric series.
+  \item $|X(e^{j0})|, |X(e^{j\pi})|$; LP/HP? Interval for full specification?
+  \item $h[n]=\{1,2,3,2,1\}$ for $n=0..4$: $H(e^{j\omega})$, $H(e^{j0})$; factor out $e^{-j2\omega}$ to show linear phase.
+\end{enumerate}
+
+\paragraph{Solution.} $X(e^{j\omega}) = 1/(1-0.6 e^{-j\omega})$. $X(e^{j0})=2.5$; $X(e^{j\pi})=0.625$; lowpass; $2\pi$-periodic so any $2\pi$-interval suffices. $H(e^{j0}) = 9$; $H(e^{j\omega}) = e^{-j2\omega}[3+4\cos\omega+2\cos 2\omega]$ -- linear phase, delay 2 samples.
+
+\subsection{Problem 3 --- FT Properties and Convolution (Lecture 13)}
+Given $x(t) = e^{-3t}u(t)$, $X = 1/(3+j\omega)$.
+\begin{enumerate}[label=(\alph*)]
+  \item $y(t) = e^{-3(t-2)}u(t-2)$.
+  \item $z(t) = e^{-3t}u(t)\cos(10t)$.
+  \item Differentiation property for $w(t) = -3e^{-3t}u(t)+\delta(t)$.
+  \item Convolution with $h(t)=2e^{-4t}u(t)$: find $Y$, PFE, $y(t)$; verify $y(0), y(\infty)$.
+\end{enumerate}
+
+\paragraph{Solution.} $Y = e^{-j2\omega}/(3+j\omega)$; magnitude unchanged. $Z(j\omega) = \tfrac{1}{2}[1/(3+j(\omega-10)) + 1/(3+j(\omega+10))]$. $W(j\omega)=j\omega/(3+j\omega)=j\omega X$. $Y = 2/[(3+j\omega)(4+j\omega)]$, PFE $2/(3+j\omega) - 2/(4+j\omega)$; $y(t)=2(e^{-3t}-e^{-4t})u(t)$; $y(0)=0,y(\infty)=0$.
+
+\subsection{Problem 4 --- Systems from Equations (Lectures 13, 15)}
+\paragraph{(a) CT.} $y''+7y'+10y = 3x$. Find $H(j\omega)$, poles, stability, PFE, $h(t)$, $|H(0)|, |H(j1)|, |H(j10)|$; LP/HP?
+
+\paragraph{Solution.} $H = 3/[(j\omega+2)(j\omega+5)]$, poles $-2,-5$ (stable). $H = 1/(j\omega+2) - 1/(j\omega+5)$. $h(t)=(e^{-2t}-e^{-5t})u(t)$. $|H(0)| = 0.3$; lowpass.
+
+\paragraph{(b) DT.} $y[n]-0.5 y[n-1]-0.06y[n-2] = x[n]$. Find $H(e^{j\omega})$, poles, stability, PFE, $h[n]$, $|H(e^{j0})|,|H(e^{j\pi})|$.
+
+\paragraph{Solution.} Poles $z=0.6, -0.1$ (both inside unit circle, stable). $h[n] = (6/7)(0.6)^n u[n] + (1/7)(-0.1)^n u[n]$. $|H(e^{j0})|\approx 2.273$, $|H(e^{j\pi})|\approx 0.694$; lowpass.
+
+\subsection{Problem 5 --- Magnitude, Phase, Group Delay (Lecture 14)}
+$H(j\omega) = 1/(1+j\omega/5)$, $\omega_c=5$.
+\begin{enumerate}[label=(\alph*)]
+  \item Table $|H|$, $|H|_{dB}$, $\angle H$ at $\omega=0, 0.5, 1, 5, 10, 50, 500$.
+  \item Derive $\tau(\omega) = -d(\angle H)/d\omega$; evaluate at $\omega=0,5$; constant?
+  \item Linear-phase test at $\omega=5$.
+  \item Two-tone $x(t)=\cos t + \cos(50t)$: find $y(t)$ and the attenuation ratio in dB.
+\end{enumerate}
+
+\paragraph{Solution.} $|H(0)|=1$ (0 dB, 0$^\circ$); $|H(5)|=1/\sqrt 2$ ($-3.01$ dB, $-45^\circ$); $|H(10)|\approx 0.447$ ($-6.99$ dB, $-63.4^\circ$); $|H(50)|\approx 0.0995$ ($-20.04$ dB, $-84.3^\circ$). $\tau(\omega)=5/(25+\omega^2)$, $\tau(0)=0.2$, $\tau(5)=0.1$ -- not constant, nonlinear phase. $y(t)\approx 0.981\cos(t-11.3^\circ)+0.0995\cos(50t-84.3^\circ)$, attenuation $\sim 20$ dB.
+
+\subsection{Problem 6 --- Second-Order / Bode (Lecture 15)}
+$H(j\omega) = \dfrac{\omega_n^2}{(j\omega)^2+2\zeta\omega_n(j\omega)+\omega_n^2}$, $\omega_n=20$, $\zeta=0.25$.
+\begin{enumerate}[label=(\alph*)]
+  \item Classify damping; resonance peak?
+  \item $|H(0)|$; $|H(j\omega_n)|$ in dB; $\omega_r$ and $|H|_{\max}$.
+  \item \%OS, $t_s$, $\omega_d$.
+  \item Bode asymptotes: low freq, high-freq slope, break freq, peak excess.
+\end{enumerate}
+
+\paragraph{Solution.} Underdamped, resonance exists. $|H(0)|=1$ (0 dB); $|H(j\omega_n)| = 1/(2\zeta) = 2$ ($\approx 6.02$ dB); $\omega_r = 20\sqrt{0.875}\approx 18.71$; $|H|_{\max}\approx 2.065$. \%OS $\approx 44.4\%$; $t_s = 0.8$ s; $\omega_d\approx 19.36$. Bode: flat 0 dB; $-40$ dB/dec high-freq slope; break at $20$ rad/s; peak excess $\approx 6$ dB.
+
+\newpage
+\part{Exam 3 Homework (Lectures 16--23)}
+
+\section{HW Lectures 16--18 --- Laplace Transform}
+\emph{Source:} \texttt{hw-lctr16-18.pdf} (markdown \texttt{hw-lctr16-18.md}). \emph{Solutions:} Not available; worked below.
+
+\subsection{Problem 1 --- Computing Laplace Transforms and ROCs (Lecture 16)}
+
+\paragraph{(a) $x_1(t)=4e^{-2t}u(t)$.} $X_1(s) = \dfrac{4}{s+2}$, ROC: $\Real\{s\}>-2$.
+
+\paragraph{(b) $x_2(t)=-3e^{5t}u(-t)$.} Using $-e^{-at}u(-t) \Laplace 1/(s+a)$ with $a=-5$ and factor 3: $X_2(s) = \dfrac{3}{s-5}$, ROC: $\Real\{s\}<5$.
+
+\paragraph{(c) $x_3(t) = 7\delta(t-3)$.} $X_3(s) = 7 e^{-3s}$, ROC: all $s$.
+
+\paragraph{(d) $x_4(t) = t e^{-4t}u(t)$.} $X_4(s) = \dfrac{1}{(s+4)^2}$, ROC: $\Real\{s\}>-4$.
+
+\paragraph{(e) $x_5(t) = 2e^{-t}u(t) - 5 e^{-3t}u(t)$.}
+\[
+X_5(s) = \frac{2}{s+1}-\frac{5}{s+3} = \frac{2(s+3)-5(s+1)}{(s+1)(s+3)} = \frac{-3s+1}{(s+1)(s+3)}.
+\]
+Poles $s=-1,-3$; zero $s=1/3$. ROC: $\Real\{s\}>-1$.
+
+\paragraph{(f) $x_6(t) = e^{-2t}u(t) + 3e^{4t}u(-t)$.}
+\[
+X_6(s) = \frac{1}{s+2} - \frac{3}{s-4}, \quad -2 < \Real\{s\} < 4.
+\]
+ROC contains $j\omega$-axis, so Fourier transform exists.
+
+\subsection{Problem 2 --- Inverse Laplace via PFE (Lecture 17)}
+
+\paragraph{(a)} $X(s) = \dfrac{3s+5}{(s+1)(s+4)}$, $\Real\{s\}>-1$. PFE: $A = 2/3$, $B = 7/3$. $x(t) = (\tfrac{2}{3}e^{-t} + \tfrac{7}{3}e^{-4t})u(t)$.
+
+\paragraph{(b)} $X(s) = \dfrac{2s-4}{(s+2)(s-3)}$, $-2 < \Real\{s\} < 3$. $A = 8/5$, $B = 2/5$. Pole at $s=-2$ is right-sided; pole at $s=3$ is left-sided.
+\[
+x(t) = \tfrac{8}{5}e^{-2t}u(t) - \tfrac{2}{5}e^{3t}u(-t).
+\]
+
+\paragraph{(c)} $X(s) = \dfrac{6}{(s+2)^2(s+5)}$, $\Real\{s\}>-2$. PFE $-2/3 \cdot 1/(s+2) + 2/(s+2)^2 + 2/3 \cdot 1/(s+5)$.
+\[
+x(t) = \left(-\tfrac{2}{3}e^{-2t}+2te^{-2t}+\tfrac{2}{3}e^{-5t}\right)u(t).
+\]
+
+\paragraph{(d)} $X(s) = \dfrac{s+3}{s^2+6s+25}$. Complete the square: $(s+3)^2 + 4^2$. So
+\[
+x(t) = e^{-3t}\cos(4t)\,u(t).
+\]
+Damping $a=3$, oscillation $\omega_d = 4$ rad/s.
+
+\subsection{Problem 3 --- Laplace Properties (Lectures 16--17)}
+
+\paragraph{(a) $s$-domain shift.} $f(t) = e^{-2t}\cos(5t)u(t)$:
+\[
+F(s) = \frac{s+2}{(s+2)^2 + 25}, \qquad \Real\{s\}>-2.
+\]
+
+\paragraph{(b) Differentiation in time.} $X = 1/(s+3)$; $Y = sX = s/(s+3) = 1 - 3/(s+3)$, so $y(t) = \delta(t) - 3e^{-3t}u(t)$. Matches $dx/dt = -3e^{-3t}u(t) + \delta(t)$ directly.
+
+\paragraph{(c) Convolution.} $h_1 = e^{-t}u(t)$, $h_2 = 3e^{-6t}u(t)$. $H(s) = \dfrac{3}{(s+1)(s+6)} = \dfrac{3/5}{s+1} - \dfrac{3/5}{s+6}$; $h(t) = \tfrac{3}{5}(e^{-t}-e^{-6t})u(t)$.
+
+\paragraph{(d) IVT/FVT.} $X(s) = \dfrac{8(s+1)}{s(s+2)(s+4)}$.
+$x(0^+) = \lim_{s\to\infty} sX = 0$. $x(\infty) = \lim_{s\to 0} sX = 1$. PFE: $A=1, B=2, C=-3$, so $x(t) = (1 + 2e^{-2t} - 3e^{-4t})u(t)$. Checks: $x(0^+) = 0$, $x(\infty) = 1$.
+
+\subsection{Problem 4 --- System Analysis with $H(s)$ (Lecture 18)}
+Causal LTI: $y'' + 6 y' + 8 y = 2x$.
+
+\paragraph{(a)} $H(s) = \dfrac{2}{(s+2)(s+4)}$. Poles $s=-2,-4$; no finite zeros.
+
+\paragraph{(b)} Both poles in LHP, causal $\Rightarrow$ BIBO stable.
+
+\paragraph{(c)} $H = \dfrac{1}{s+2} - \dfrac{1}{s+4}$; $h(t) = (e^{-2t}-e^{-4t})u(t)$.
+
+\paragraph{(d)} $x(t)=e^{-t}u(t)$, $X = 1/(s+1)$. $Y = 2/[(s+1)(s+2)(s+4)]$. PFE: $A = 2/3$, $B = -1$, $C = 1/3$. So $y(t) = (\tfrac{2}{3}e^{-t}-e^{-2t}+\tfrac{1}{3}e^{-4t})u(t)$. $y(0^+)=0$, $y(\infty)=0$.
+
+\paragraph{(e) $G(s) = 3/(s-1)$.} Pole at $s=1$ (RHP).
+Causal ROC $\Real\{s\}>1$: $g(t) = 3 e^{t}u(t)$, unbounded, NOT stable.
+Anti-causal ROC $\Real\{s\}<1$: $g(t) = -3e^{t}u(-t)$, bounded; $j\omega$-axis is in ROC, stable.
+
+\subsection{Problem 5 --- Unilateral Laplace (Lecture 18)}
+
+\paragraph{(a) $y' + 4y = 3e^{-t}u(t)$, $y(0^-) = 2$.}
+$(s+4)Y - 2 = 3/(s+1) \Rightarrow Y = \dfrac{3}{(s+1)(s+4)} + \dfrac{2}{s+4} = \dfrac{2s+5}{(s+1)(s+4)}$. PFE: $A=1, B=1$. $y(t) = (e^{-t}+e^{-4t})u(t)$. $y(0)=2$, $y(\infty)=0$.
+
+\paragraph{(b) $y''+3y'+2y=0$, $y(0^-)=1, y'(0^-)=-1$.}
+$(s^2+3s+2) Y = s\cdot 1 + (-1) + 3\cdot 1 = s+2$. $Y = \dfrac{s+2}{(s+1)(s+2)} = \dfrac{1}{s+1}$. $y(t) = e^{-t}u(t)$. Zero-input response (input is zero; response driven entirely by ICs).
+
+\paragraph{(c) ZSR/ZIR for (a).}
+$Y_{\text{ZS}} = 3/[(s+1)(s+4)] = 1/(s+1) - 1/(s+4)$; $y_{\text{ZS}}(t) = (e^{-t}-e^{-4t})u(t)$.
+$Y_{\text{ZI}} = 2/(s+4)$; $y_{\text{ZI}}(t) = 2e^{-4t}u(t)$.
+Sum: $e^{-t} - e^{-4t} + 2e^{-4t} = e^{-t} + e^{-4t}$ matches part (a).
+
+\section{HW Lectures 19--21 --- z-Transform}
+\emph{Source:} \texttt{hw-lctr19-21.pdf}. \emph{Solutions:} \texttt{homework/hw6/hw6\_solutions.md}.
+
+\subsection{Problem 1 --- Computing z-Transforms and ROCs (Lecture 19)}
+
+\paragraph{(a)} $x_1[n]=5(0.7)^n u[n]$: $X_1(z) = \dfrac{5}{1-0.7 z^{-1}}$, $|z|>0.7$.
+
+\paragraph{(b)} $x_2[n]=-(4)^n u[-n-1]$: $X_2(z) = \dfrac{1}{1-4 z^{-1}}$, $|z|<4$.
+
+\paragraph{(c)} $x_3[n]=3\delta[n]-2\delta[n-1]+\delta[n-4]$: $X_3(z) = 3 - 2z^{-1} + z^{-4}$, $|z|>0$.
+
+\paragraph{(d)} $x_4[n]=n(0.5)^n u[n]$: $X_4(z) = \dfrac{0.5 z^{-1}}{(1-0.5 z^{-1})^2}$, $|z|>0.5$.
+
+\paragraph{(e)} $x_5[n]=2(0.3)^n u[n] + 4(0.9)^n u[n]$:
+\[
+X_5(z) = \frac{6 - 3 z^{-1}}{(1-0.3 z^{-1})(1-0.9 z^{-1})}, \qquad |z|>0.9.
+\]
+Poles $z=0.3, 0.9$; finite zero at $z=0.5$ and a zero at $z=0$.
+
+\paragraph{(f)} $x_6[n]=(0.6)^n u[n] - 3(2)^n u[-n-1]$:
+\[
+X_6(z) = \frac{4-3.8 z^{-1}}{(1-0.6 z^{-1})(1-2 z^{-1})}, \qquad 0.6<|z|<2.
+\]
+ROC contains unit circle, so DTFT exists.
+
+\paragraph{(g)} $x_7[n]=(0.8)^n\cos(0.25\pi n)u[n]$. $r=0.8$, $\omega_0=\pi/4$, $r\cos\omega_0 \approx 0.5657$, $r^2=0.64$:
+\[
+X_7(z) = \frac{1-0.5657\,z^{-1}}{1-1.1314\,z^{-1} + 0.64\,z^{-2}}, \qquad |z|>0.8.
+\]
+Poles at $z = 0.8 e^{\pm j\pi/4}$; DTFT exists.
+
+\paragraph{(h)} $X(1) = \sum x[n]$: (a) $50/3$; (b) $-1/3$; (c) $2$; (d) $2$; (e) $\approx 42.857$; (f) $-0.5$; (g) $\approx 0.854$.
+
+\subsection{Problem 2 --- Inverse z-Transform (Lecture 20)}
+
+\paragraph{(a)} $X(z) = \dfrac{1+3z^{-1}}{(1-0.2z^{-1})(1-0.6z^{-1})}$, $|z|>0.6$. PFE: $A=-8, B=9$. $x[n] = -8(0.2)^n u[n] + 9(0.6)^n u[n]$.
+
+\paragraph{(b)} $X(z) = \dfrac{4}{(1-0.5z^{-1})(1-3z^{-1})}$, $0.5<|z|<3$. PFE: $A=-0.8, B=4.8$. Pole $z=0.5$ right-sided; pole $z=3$ left-sided. $x[n]=-0.8(0.5)^n u[n] - 4.8(3)^n u[-n-1]$.
+
+\paragraph{(c)} $X(z) = \dfrac{z^{-1}}{(1-0.5z^{-1})^2}$, $|z|>0.5$. Table pair with $a=0.5$ gives $0.5z^{-1}/(1-0.5z^{-1})^2$, so $x[n] = 2 n (0.5)^n u[n]$.
+
+\paragraph{(d)} Damped-cosine pair with $r=0.9$, $\omega_0=0.3\pi$: $x[n] = (0.9)^n\cos(0.3\pi n)u[n]$. Poles $z = 0.9 e^{\pm j 0.3\pi}$.
+
+\subsection{Problem 3 --- z-Transform Properties (Lectures 19--20)}
+
+\paragraph{(a) Time shift.} $y[n] = (0.8)^{n-2}u[n-2]$: $Y(z) = z^{-2}/(1-0.8 z^{-1})$, $|z|>0.8$. Two zeros at $z=0$ from $z^{-2}$.
+
+\paragraph{(b) z-domain scaling.} $u[n]\ZT 1/(1-z^{-1})$; scale by $z_0=0.5$: $F(z) = 1/(1-0.5 z^{-1})$, $|z|>0.5$, matching the standard pair.
+
+\paragraph{(c) Convolution.} $h_1=(0.3)^n u[n]$, $h_2=(0.7)^n u[n]$. $H(z) = 1/[(1-0.3z^{-1})(1-0.7z^{-1})]$, $|z|>0.7$. PFE: $A=-0.75$, $B=1.75$. $h[n] = -0.75(0.3)^n u[n] + 1.75(0.7)^n u[n]$. Verify $h[0]=1$, $h[1]=1$.
+
+\paragraph{(d) IVT.} $X(z) = (3-z^{-1})/[(1-0.4z^{-1})(1+0.5z^{-1})]$. $x[0] = 3$. PFE: $A=2/9$, $B=25/9$. $x[n]=(2/9)(0.4)^n u[n]+(25/9)(-0.5)^n u[n]$. $x[1]\approx -1.3$, $x[2]\approx 0.73$.
+
+\subsection{Problem 4 --- System Analysis with $H(z)$ (Lecture 21)}
+$y[n] - 0.9 y[n-1] + 0.18 y[n-2] = x[n]$.
+
+\paragraph{(a)} $H(z) = 1/[(1-0.3z^{-1})(1-0.6z^{-1})]$. Poles $z=0.3, 0.6$. No finite zeros.
+
+\paragraph{(b)} Both poles inside unit circle, causal $\Rightarrow$ BIBO stable.
+
+\paragraph{(c)} PFE: $A=-1$, $B=2$. $h[n] = [-(0.3)^n + 2(0.6)^n]u[n]$.
+
+\paragraph{(d) Input $x[n] = (0.5)^n u[n]$.} $Y(z) = 1/[(1-0.3z^{-1})(1-0.6z^{-1})(1-0.5z^{-1})]$. PFE: $A=1.5, B=12, C=-12.5$.
+\[
+y[n] = 1.5(0.3)^n u[n] + 12(0.6)^n u[n] - 12.5(0.5)^n u[n].
+\]
+$y[0] = 1$ \checkmark; $y[1] = 1.4$ \checkmark.
+
+\paragraph{(e) $G(z) = 1/(1-1.5 z^{-1})$.}
+Causal: $g[n] = (1.5)^n u[n]$, grows, unstable; DTFT DNE.
+Anti-causal: $g[n] = -(1.5)^n u[-n-1]$; ROC $|z|<1.5$ contains unit circle, stable; DTFT exists.
+
+\subsection{Problem 5 --- Unilateral z-Transform (Lecture 21)}
+
+\paragraph{(a) $y[n]-0.8 y[n-1] = (0.5)^n u[n]$, $y[-1]=3$.}
+$(1-0.8 z^{-1})Y = 1/(1-0.5 z^{-1}) + 2.4$. So
+\[
+Y(z) = \frac{3.4 - 1.2 z^{-1}}{(1-0.5 z^{-1})(1-0.8 z^{-1})}.
+\]
+PFE: $A = -5/3$, $B = 76/15$. $y[n] = -\tfrac{5}{3}(0.5)^n u[n] + \tfrac{76}{15}(0.8)^n u[n]$. Checks: $y[0] = 3.4$, $y[1]\approx 3.22$.
+
+\paragraph{(b) $y[n]-0.5y[n-1]-0.06y[n-2]=0$, $y[-1]=5, y[-2]=0$.}
+$(1-0.5 z^{-1}-0.06 z^{-2})Y = 2.5 + 0.3 z^{-1}$; denom factors $(1-0.6z^{-1})(1+0.1 z^{-1})$. PFE: $A = 18/7$, $B = -1/14$.
+\[
+y[n] = \tfrac{18}{7}(0.6)^n u[n] - \tfrac{1}{14}(-0.1)^n u[n].
+\]
+Zero-input response (ZIR).
+
+\paragraph{(c) ZSR/ZIR for (a).}
+$y_{\text{ZS}}[n] = -\tfrac{5}{3}(0.5)^n u[n] + \tfrac{8}{3}(0.8)^n u[n]$; $y_{\text{ZI}}[n] = 2.4(0.8)^n u[n]$. Sum matches total $y[n]$.
+
+\section{Lecture 22 Exercise --- Sampling}
+\emph{Source:} \texttt{lctr22-exercise.pdf}. Short-answer problems with standard sampling theorem reasoning.
+
+\subsection*{Problems}
+\begin{enumerate}[leftmargin=*]
+  \item $X(j\omega)=0$ for $|\omega|>5000\pi$: Nyquist rate $= 10000\pi$ rad/s ($f_s = 5$ kHz); $T_{\max} = 0.2$ ms.
+  \item \emph{FALSE} (strict inequality $\omega_s > 2\omega_M$ is required; equality only works if no content at $\omega_M$).
+  \item Multiplying in time by an impulse train convolves $X(j\omega)$ with a frequency impulse train, producing periodic spectral replicas.
+  \item No. Linear filtering cannot separate frequencies that have added at the same bin.
+  \item Anti-aliasing filter: analog LPF \emph{before} the sampler that bounds the spectrum to $|\omega|<\omega_s/2$.
+  \item $x(t)=\cos(600\pi t)+\cos(1800\pi t)$: $\omega_M = 1800\pi$, Nyquist rate $3600\pi$ rad/s ($1800$ Hz).
+  \item $T = 2\times 10^{-4}$ s $\Rightarrow \omega_s = 10000\pi$. $2\omega_M = 6000\pi < \omega_s$: no aliasing.
+  \item $\cos(2\pi\cdot 900 t)$ at $f_s = 1000$ Hz: alias at $|900-1000| = 100$ Hz.
+  \item At $f_s = 1500$ Hz: alias at $|900 - 1500|=600$ Hz.
+  \item $x(t-5)$: same Nyquist rate $\omega_0$. $x(2t)$: bandwidth doubles, Nyquist rate $2\omega_0$.
+  \item Replicas scale by $1/T$; the filter compensates by $T$ in its passband.
+  \item ZOH is not exact: sinc droop in passband; residual spectral images requiring an additional anti-imaging filter.
+  \item Camera 24 fps, blade 25 rev/s: alias at $25-24 = 1$ rev/s; blade appears to rotate slowly forward.
+  \item Bandwidth $|\omega| > 10000\pi$ sampled at 8 kHz: aliasing. Minimum $f_s > 10$ kHz (strictly).
+  \item Non-band-limited signals in practice: use an analog anti-aliasing LPF before the ADC.
+\end{enumerate}
+
+\section{Lecture 23 Exercise --- Feedback Systems}
+\emph{Source:} \texttt{lctr23-exercise.pdf}. Worked solutions by standard block-diagram algebra.
+
+\subsection{Problem 1 --- Cascade + Unity Feedback}
+Forward: $G = \dfrac{2}{(s+1)(s+4)}$. $Q(s) = \dfrac{G}{1+G} = \dfrac{2}{(s+1)(s+4) + 2} = \dfrac{2}{(s+2)(s+3)}$.
+
+\subsection{Problem 2 --- Parallel + Feedback Gain 4}
+Forward: $G = \dfrac{3}{s+2} + \dfrac{1}{s+5} = \dfrac{4s+17}{(s+2)(s+5)}$.
+$Q(s) = \dfrac{G}{1+4G} = \dfrac{4s+17}{(s+2)(s+5) + 4(4s+17)} = \dfrac{4s+17}{s^2 + 23 s + 78}$.
+
+\subsection{Problem 3 --- Nested Loops}
+Inner: $Q_{\text{in}} = \dfrac{1/s}{1+3/s} = \dfrac{1}{s+3}$. Outer unity feedback: $Q(s) = \dfrac{1/(s+3)}{1+1/(s+3)} = \dfrac{1}{s+4}$.
+
+\subsection{Problem 4 --- $H(s)=K/(s+5)$, Unity Feedback}
+$Q(s) = \dfrac{K}{s+5+K}$. Pole at $s=-(5+K)$. Stable for $K > -5$. Pole at $-10$ requires $K = 5$.
+
+\subsection{Problem 5 --- $H(s)=K/[(s+1)(s+2)]$}
+Characteristic equation: $s^2 + 3s + (2+K) = 0$. Stable for $2+K>0$, i.e.\ $K>-2$.
+
+\subsection{Problem 6 --- DT: $H(z) = K z^{-1}/(1-0.8 z^{-1})$}
+Closed-loop pole: $z = 0.8 - K$. For $K>0$: stability requires $|0.8-K|<1$, i.e.\ $0 < K < 1.8$.
+
+\subsection{Problem 7 --- Bode Plot Margins}
+$\omega_2=5$ ($|GH|=0$ dB, $\angle GH=-150^\circ$); $\omega_1=20$ ($\angle GH=-180^\circ$, $|GH|=-8$ dB).
+\begin{itemize}[nosep]
+  \item Phase margin $= 180 - 150 = 30^\circ$.
+  \item Gain margin $= 0 - (-8) = 8$ dB.
+  \item Both positive $\Rightarrow$ stable (assuming open-loop stable).
+  \item Max added delay: $\omega_2\tau_d = \text{PM (rad)} = \pi/6$, so $\tau_d = \pi/30 \approx 0.105$ s.
+\end{itemize}
+
+\subsection{Problem 8 --- T/F: Negative feedback always stabilizes.}
+\textbf{False.} With sufficient loop gain and phase lag, negative feedback can push poles into the RHP (CT) or outside the unit circle (DT).
+
+\subsection{Problem 9 --- T/F: PM $=60^\circ$ implies stability.}
+\textbf{True} (for open-loop stable systems). $60^\circ$ is a common design target.
+
+\subsection{Problem 10 --- T/F: Nyquist plot.}
+\textbf{True.} The Nyquist plot is the locus of $G(j\omega)H(j\omega)$ in the complex plane as $\omega$ varies.
+
+\end{document}

@@ -1,0 +1,416 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{CEC 315 --- Exam 2 Sample Problems\\\large Lectures 9--15: Fourier Series, Fourier Transforms, Filters, Bode}
+\author{CEC 315 --- Signals and Systems (Spring 2026)}
+\date{}
+
+\newcommand{\FT}{\overset{\mathcal{F}}{\longleftrightarrow}}
+\newcommand{\sinc}{\operatorname{sinc}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Lecture 9 --- CT Fourier Series}
+
+\subsection{Problem 9.1 --- Eigenfunction Property}
+\textbf{Reference:} Lecture 9; \texttt{examples/hw\_problem1\_eigenfunction\_fs\_coefficients.md}.\\
+\textbf{Topic:} Eigenfunctions of LTI systems.\\
+\textbf{Concepts tested:} $H(j\omega)=\int h(\tau)e^{-j\omega\tau}d\tau$; frequency preservation.
+
+\textbf{Statement.} Let $h(t) = e^{-4t}u(t)$ and $x(t) = \cos(3t)$. Find the output $y(t)$.
+
+\textbf{Solution.}
+\begin{align*}
+H(j3) &= \int_0^\infty e^{-4\tau}e^{-j3\tau}\,d\tau = \frac{1}{4+j3}.\\
+|H(j3)| &= 1/\sqrt{4^2+3^2} = 1/5 = 0.2,\\
+\angle H(j3) &= -\arctan(3/4)\approx -36.87^\circ.
+\end{align*}
+By the eigenfunction property, $\cos(3t)$ passes through with the same frequency:
+\[
+\boxed{\,y(t) = 0.2\cos(3t - 36.87^\circ)\,}
+\]
+
+\subsection{Problem 9.2 --- CTFS of a Pulse Train}
+\textbf{Reference:} Lecture 9; \texttt{examples/hw\_problem1\_eigenfunction\_fs\_coefficients.md} Part (b).\\
+\textbf{Topic:} Analysis integral for a rectangular-pulse periodic signal.\\
+\textbf{Concepts tested:} Direct computation of $a_k$; DC value; integration only over nonzero intervals.
+
+\textbf{Statement.} $x(t)$ is periodic with $T=4$, and on one period $x(t)=3$ for $0\le t<1$, $x(t)=0$ for $1\le t<4$. Find $\omega_0$, $a_0$, and $a_k$ for $k\ne 0$.
+
+\textbf{Solution.}
+\[
+\omega_0 = 2\pi/T = \pi/2,\qquad a_0 = \frac{1}{4}\int_0^1 3\,dt = 3/4.
+\]
+For $k\ne 0$,
+\[
+a_k = \frac{1}{4}\int_0^1 3 e^{-jk(\pi/2)t}\,dt = \frac{3}{2jk\pi}\left(1 - e^{-jk\pi/2}\right).
+\]
+Conjugate symmetry: $a_{-1} = 3(1+j)/(2\pi) = a_1^*$.
+\[
+\boxed{\,\omega_0=\pi/2,\ a_0=3/4,\ a_k=\tfrac{3}{2jk\pi}(1-e^{-jk\pi/2})\,}
+\]
+
+\subsection{Problem 9.3 --- Square-Wave FS Coefficients}
+\textbf{Reference:} Lecture 9; \texttt{exam2\_solutions.md} Problem 1.\\
+\textbf{Topic:} Odd-symmetric square wave.\\
+\textbf{Concepts tested:} $a_0=0$ from symmetry; simplification $e^{-jk\pi}=(-1)^k$.
+
+\textbf{Statement.} $x(t)$ is periodic with $T=2$, $x(t)=+1$ on $[0,1)$ and $x(t)=-1$ on $[1,2)$. Find $a_0$ and $a_k$ for $k\ne 0$.
+
+\textbf{Solution.}
+\[
+\omega_0 = \pi,\qquad a_0 = 0 \text{ (signed areas cancel).}
+\]
+\[
+a_k = \frac{1}{2}\left[\int_0^1 e^{-jk\pi t}\,dt - \int_1^2 e^{-jk\pi t}\,dt\right] = \frac{1-(-1)^k}{jk\pi}.
+\]
+Zero for even $k$, equals $2/(jk\pi) = -2j/(k\pi)$ for odd $k$. Parseval: $P = \sum|a_k|^2 = (8/\pi^2)\sum_{n=0}^\infty 1/(2n+1)^2 = 1$. \checkmark
+\[
+\boxed{\,a_0=0,\ a_k = \tfrac{1-(-1)^k}{jk\pi}\,}
+\]
+
+\section{Lecture 10 --- Convergence, Gibbs, DTFS}
+
+\subsection{Problem 10.1 --- Convergence at a Discontinuity}
+\textbf{Reference:} Lecture 10; \texttt{examples/hw\_problem2\_convergence\_gibbs.md}.\\
+\textbf{Topic:} Dirichlet convergence at jumps.\\
+\textbf{Concepts tested:} Value at a jump equals midpoint of left/right limits.
+
+\textbf{Statement.} Let $x(t)$ be the odd square wave on $[-\pi,\pi)$ with $x(t)=-1$ on $(-\pi,0)$ and $x(t)=+1$ on $(0,\pi)$. Find the Fourier-series value at $t=0$ and $t=\pi/2$.
+
+\textbf{Solution.}
+At $t=0$, $x(0^-)=-1$, $x(0^+)=+1$, so $x_\mathrm{FS}(0) = (-1+1)/2 = 0$. At $t=\pi/2$, $x$ is continuous and $x_\mathrm{FS}(\pi/2) = 1$.
+\[
+\boxed{\,x_\mathrm{FS}(0)=0,\ x_\mathrm{FS}(\pi/2)=1\,}
+\]
+
+\subsection{Problem 10.2 --- Gibbs Partial Sum}
+\textbf{Reference:} Lecture 10; \texttt{examples/hw\_problem2\_convergence\_gibbs.md} Part (c).\\
+\textbf{Topic:} Gibbs overshoot in a 3-term partial sum.\\
+\textbf{Concepts tested:} Square-wave coefficients; $\sim$9\% asymptotic overshoot.
+
+\textbf{Statement.} Compute the three-term partial sum $x_3(t) = (4/\pi)[\sin t + \sin(3t)/3 + \sin(5t)/5]$ at $t=\pi/2$ and compare with the true value 1.
+
+\textbf{Solution.}
+\[
+x_3(\pi/2) = \frac{4}{\pi}\left(1 - \frac{1}{3} + \frac{1}{5}\right) = \frac{4}{\pi}\cdot\frac{13}{15} \approx 1.103.
+\]
+Relative to the jump height $2$, this is about 5.2\% overshoot for 3 terms; as $N\to\infty$ the peak approaches $\sim$9\% of the jump height and does \emph{not} vanish.
+\[
+\boxed{\,x_3(\pi/2)\approx 1.103\,}
+\]
+
+\subsection{Problem 10.3 --- DTFS of a Rectangular Pulse}
+\textbf{Reference:} Lecture 10; \texttt{examples/hw\_problem4\_dtfs.md}; \texttt{hw\_lctr9\_11\_solutions\_summary.md} Problem 4.\\
+\textbf{Topic:} DTFS analysis equation.\\
+\textbf{Concepts tested:} Finite sum; $a_{k+N}=a_k$; Parseval.
+
+\textbf{Statement.} $x[n]$ is periodic with $N=6$: $x[0]=x[1]=x[2]=1$, $x[3]=x[4]=x[5]=0$. Find $a_0$, $a_1$, and verify Parseval.
+
+\textbf{Solution.}
+$\omega_0 = 2\pi/6 = \pi/3$, $a_k = \tfrac{1}{6}\sum_{n=0}^2 e^{-jk(\pi/3)n}$.
+\[
+a_0 = \tfrac{3}{6} = \tfrac{1}{2},\qquad
+a_1 = \tfrac{1}{6}\bigl(1 + e^{-j\pi/3} + e^{-j2\pi/3}\bigr) = \tfrac{1-j\sqrt{3}}{6}.
+\]
+Parseval: $\tfrac{1}{6}\sum|x[n]|^2 = 3/6 = 1/2$, matching $\sum_{k=0}^5|a_k|^2 = 1/2$.
+\[
+\boxed{\,a_0=\tfrac12,\ a_1=\tfrac{1-j\sqrt{3}}{6},\ \text{Parseval: }1/2=1/2\,}
+\]
+
+\section{Lecture 11 --- Frequency Response and Filtering}
+
+\subsection{Problem 11.1 --- LTI System with a Multi-Tone Input}
+\textbf{Reference:} Lecture 11; \texttt{exam2\_solutions.md} Problem 3.\\
+\textbf{Topic:} First-order lowpass frequency response.\\
+\textbf{Concepts tested:} Evaluating $H(j\omega)$ at multiple frequencies; recognizing lowpass behavior.
+
+\textbf{Statement.} $h(t) = 4 e^{-4t}u(t)$, $x(t) = 3 + 2\cos(4t) + \cos(20t)$. Find $y(t)$.
+
+\textbf{Solution.}
+$H(j\omega) = 4/(4+j\omega) = 1/(1+j\omega/4)$, cutoff $\omega_c = 4$ rad/s.
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$\omega$ & $H(j\omega)$ & $|H|$ & $\angle H$\\
+\hline
+$0$ & $1$ & $1$ & $0^\circ$\\
+$4$ & $1/(1+j)$ & $1/\sqrt{2}\approx 0.707$ & $-45^\circ$\\
+$20$ & $1/(1+j5)$ & $1/\sqrt{26}\approx 0.196$ & $-78.69^\circ$\\
+\hline
+\end{tabular}
+\end{center}
+\[
+\boxed{\,y(t) = 3 + \sqrt{2}\cos(4t-45^\circ) + \tfrac{1}{\sqrt{26}}\cos(20t-78.69^\circ)\,}
+\]
+$|H|$ decreases with $\omega$: lowpass. Relative attenuation of 20 rad/s vs 4 rad/s: $\sim -11.14$ dB.
+
+\subsection{Problem 11.2 --- RC Lowpass Cutoff}
+\textbf{Reference:} Lecture 11; \texttt{lctr11\_frequency\_response\_filtering.md}.\\
+\textbf{Topic:} First-order RC lowpass.\\
+\textbf{Concepts tested:} Deriving $\omega_c$ from $H$.
+
+\textbf{Statement.} $H(j\omega) = 1/(1+j\omega RC)$ with $R=10\,\mathrm{k}\Omega$, $C=1\,\mu\mathrm{F}$. Find $\omega_c$ and $f_c$.
+
+\textbf{Solution.}
+$\omega_c = 1/(RC) = 1/(10^4\cdot 10^{-6}) = 100$ rad/s. $f_c = \omega_c/(2\pi)\approx 15.9$ Hz. At $\omega_c$, $|H|=1/\sqrt{2}$, $\angle H=-45^\circ$.
+\[
+\boxed{\,\omega_c = 100\text{ rad/s},\ f_c\approx 15.9\text{ Hz}\,}
+\]
+
+\section{Lecture 12 --- Fourier Transforms}
+
+\subsection{Problem 12.1 --- One-Sided Exponential}
+\textbf{Reference:} Lecture 12; \texttt{hw\_lctr12\_15\_solutions\_summary.md} Problem 1(a).\\
+\textbf{Topic:} FT from definition.\\
+\textbf{Concepts tested:} Integral on $[0,\infty)$; magnitude/phase; sanity check $X(0)=\int x\,dt$.
+
+\textbf{Statement.} Compute $X(j\omega)$ for $x(t) = 3 e^{-5t}u(t)$; give $|X|$ and $\angle X$.
+
+\textbf{Solution.}
+\[
+X(j\omega) = \int_0^\infty 3 e^{-5t}e^{-j\omega t}\,dt = \frac{3}{5+j\omega},\quad |X| = \frac{3}{\sqrt{25+\omega^2}},\quad \angle X = -\arctan(\omega/5).
+\]
+Sanity: $X(0) = 3/5 = \int_0^\infty 3 e^{-5t}\,dt$. \checkmark
+\[
+\boxed{\,X(j\omega) = 3/(5+j\omega)\,}
+\]
+
+\subsection{Problem 12.2 --- Two-Sided Exponential}
+\textbf{Reference:} Lecture 12; \texttt{hw\_lctr12\_15\_solutions\_summary.md} Problem 1(b).\\
+\textbf{Topic:} Real-even signal $\to$ real-even transform.
+
+\textbf{Statement.} Compute $G(j\omega)$ for $g(t) = 4 e^{-2|t|}$.
+
+\textbf{Solution.}
+\[
+G(j\omega) = \frac{4}{2+j\omega} + \frac{4}{2-j\omega} = \frac{16}{4+\omega^2}.
+\]
+Real and even spectrum (zero phase). Sanity: $G(0)=4$ matches the area. \checkmark
+\[
+\boxed{\,G(j\omega) = 16/(4+\omega^2)\,}
+\]
+
+\subsection{Problem 12.3 --- Rectangular Pulse}
+\textbf{Reference:} Lecture 12; \texttt{hw\_lctr12\_15\_solutions\_summary.md} Problem 1(c).\\
+\textbf{Topic:} rect $\to$ sinc.
+
+\textbf{Statement.} $p(t) = 2$ on $|t|\le 3$, $0$ otherwise. Compute $P(j\omega)$.
+
+\textbf{Solution.}
+\[
+P(j\omega) = \int_{-3}^3 2 e^{-j\omega t}\,dt = \frac{4\sin(3\omega)}{\omega}.
+\]
+$P(0) = 12$ (area). First zero at $\omega=\pi/3$.
+\[
+\boxed{\,P(j\omega) = 4\sin(3\omega)/\omega = 12\,\sinc(3\omega/\pi)\,}
+\]
+
+\subsection{Problem 12.4 --- DTFT of a Causal Exponential}
+\textbf{Reference:} Lecture 12; \texttt{hw\_lctr12\_15\_solutions\_summary.md} Problem 2(a).\\
+\textbf{Topic:} Geometric series for DTFT.
+
+\textbf{Statement.} Compute $X(e^{j\omega})$ for $x[n] = (0.6)^n u[n]$.
+
+\textbf{Solution.}
+\[
+X(e^{j\omega}) = \sum_{n=0}^\infty (0.6 e^{-j\omega})^n = \frac{1}{1 - 0.6 e^{-j\omega}}.
+\]
+$X(e^{j0}) = 2.5$, $X(e^{j\pi}) = 0.625$ --- DC larger than Nyquist, lowpass.
+\[
+\boxed{\,X(e^{j\omega}) = 1/(1-0.6 e^{-j\omega})\,}
+\]
+
+\section{Lecture 13 --- FT Properties and Convolution}
+
+\subsection{Problem 13.1 --- Time Shift}
+\textbf{Reference:} Lecture 13; \texttt{exam2\_solutions.md} Problem 2(a).\\
+\textbf{Topic:} Time-shift property.
+
+\textbf{Statement.} $x(t) = e^{-3t}u(t)$, $X(j\omega) = 1/(3+j\omega)$. Find $Y(j\omega)$ for $y(t) = e^{-3(t-4)}u(t-4)$.
+
+\textbf{Solution.}
+Recognize $y(t) = x(t-4)$. Time-shift: $Y(j\omega) = e^{-j4\omega}X(j\omega) = e^{-j4\omega}/(3+j\omega)$. Magnitude preserved; linear phase $-4\omega$ added.
+\[
+\boxed{\,Y(j\omega) = e^{-j4\omega}/(3+j\omega)\,}
+\]
+
+\subsection{Problem 13.2 --- Frequency Shift (Modulation)}
+\textbf{Reference:} Lecture 13; \texttt{exam2\_solutions.md} Problem 2(b).\\
+\textbf{Topic:} Frequency-shift via Euler.
+
+\textbf{Statement.} For the same $x(t)$, let $z(t) = x(t)\cos(8t)$. Find $Z(j\omega)$.
+
+\textbf{Solution.}
+$\cos(8t) = \tfrac{1}{2}(e^{j8t}+e^{-j8t})$, so
+\[
+Z(j\omega) = \frac{1}{2}\left[\frac{1}{3+j(\omega-8)} + \frac{1}{3+j(\omega+8)}\right].
+\]
+\[
+\boxed{\,Z(j\omega) = \tfrac{1}{2}[1/(3+j(\omega-8)) + 1/(3+j(\omega+8))]\,}
+\]
+
+\subsection{Problem 13.3 --- Convolution via FT + Partial Fractions}
+\textbf{Reference:} Lecture 13; \texttt{exam2\_solutions.md} Problem 2(c)-(d).\\
+\textbf{Topic:} Convolution property + PFE pipeline.\\
+\textbf{Concepts tested:} Computing $Y = XH$; PFE; inverse FT.
+
+\textbf{Statement.} $x(t) = e^{-3t}u(t)$, $h(t) = 6 e^{-5t}u(t)$. Find $y(t) = x*h$.
+
+\textbf{Solution.}
+\begin{align*}
+X(j\omega) &= \frac{1}{3+j\omega},\quad H(j\omega) = \frac{6}{5+j\omega},\\
+Y(j\omega) &= \frac{6}{(3+j\omega)(5+j\omega)}.
+\end{align*}
+PFE: $Y = \frac{3}{3+j\omega} - \frac{3}{5+j\omega}$ (cover-up at $j\omega=-3,-5$). Inverting each term:
+\[
+\boxed{\,y(t) = 3(e^{-3t} - e^{-5t})u(t)\,}
+\]
+Verify: $y(0)=0$, $y(\infty)=0$. \checkmark
+
+\subsection{Problem 13.4 --- CT System from an ODE}
+\textbf{Reference:} Lecture 13; \texttt{hw\_lctr12\_15\_solutions\_summary.md} Problem 4(a).\\
+\textbf{Topic:} $d^k/dt^k\to(j\omega)^k$.\\
+\textbf{Concepts tested:} ODE to $H(j\omega)$; stability from pole locations.
+
+\textbf{Statement.} Find $H(j\omega)$ and $h(t)$ for $y'' + 7y' + 10 y = 3 x$ and classify the filter.
+
+\textbf{Solution.}
+\[
+H(j\omega) = \frac{3}{(j\omega)^2 + 7(j\omega) + 10} = \frac{3}{(j\omega+2)(j\omega+5)}.
+\]
+Poles at $j\omega=-2,-5$: LHP $\Rightarrow$ stable. PFE: $H = 1/(j\omega+2) - 1/(j\omega+5)$. Inverting:
+\[
+h(t) = (e^{-2t}-e^{-5t})u(t).
+\]
+DC gain $|H(0)| = 0.3$; $|H|$ decreases with $\omega$ $\Rightarrow$ lowpass.
+\[
+\boxed{\,H = 3/[(j\omega+2)(j\omega+5)],\ h(t)=(e^{-2t}-e^{-5t})u(t)\,}
+\]
+
+\section{Lecture 14 --- Magnitude, Phase, and Ideal Filters}
+
+\subsection{Problem 14.1 --- Magnitude, Phase, Group Delay}
+\textbf{Reference:} Lecture 14; \texttt{hw\_lctr12\_15\_solutions\_summary.md} Problem 5.\\
+\textbf{Topic:} Polar form and group delay.\\
+\textbf{Concepts tested:} $|H|$, $\angle H$ at sample frequencies; $\tau = -d\angle H/d\omega$.
+
+\textbf{Statement.} $H(j\omega) = 1/(1+j\omega/5)$. Compute $|H|$ and $\angle H$ at $\omega = 0, 1, 5, 10, 50$; find the group delay.
+
+\textbf{Solution.}
+$|H(j\omega)| = 1/\sqrt{1+\omega^2/25}$, $\angle H = -\arctan(\omega/5)$.
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$\omega$ & $|H|$ & dB & $\angle H$\\
+\hline
+$0$ & $1$ & $0$ & $0^\circ$\\
+$1$ & $0.981$ & $-0.17$ & $-11.3^\circ$\\
+$5$ & $0.707$ & $-3.01$ & $-45^\circ$\\
+$10$ & $0.447$ & $-6.99$ & $-63.4^\circ$\\
+$50$ & $0.0995$ & $-20.04$ & $-84.3^\circ$\\
+\hline
+\end{tabular}
+\end{center}
+\[
+\tau(\omega) = -\frac{d}{d\omega}\left[-\arctan(\omega/5)\right] = \frac{5}{25+\omega^2}.
+\]
+$\tau(0)=0.2$ s, $\tau(5)=0.1$ s --- not constant $\Rightarrow$ nonlinear phase, mild distortion.
+\[
+\boxed{\,\tau(\omega) = 5/(25+\omega^2)\,}
+\]
+
+\subsection{Problem 14.2 --- Ideal Lowpass Impulse Response}
+\textbf{Reference:} Lecture 14; \texttt{lctr14\_magnitude\_phase\_filters.md}.\\
+\textbf{Topic:} Inverse FT of a rectangular $H$.\\
+\textbf{Concepts tested:} Duality (rect $\leftrightarrow$ sinc); noncausality of ideal filters.
+
+\textbf{Statement.} Find $h(t)$ of an ideal LPF with cutoff $\omega_c$, $H(j\omega) = 1$ on $|\omega|\le\omega_c$, $0$ otherwise.
+
+\textbf{Solution.}
+\[
+h(t) = \frac{1}{2\pi}\int_{-\omega_c}^{\omega_c} e^{j\omega t}\,d\omega = \frac{\sin(\omega_c t)}{\pi t}.
+\]
+$h(t)\ne 0$ for $t<0$, so the ideal LPF is \textbf{noncausal} and physically unrealizable.
+\[
+\boxed{\,h(t) = \sin(\omega_c t)/(\pi t) = (\omega_c/\pi)\sinc(\omega_c t/\pi)\,}
+\]
+
+\section{Lecture 15 --- First/Second-Order Systems and Bode}
+
+\subsection{Problem 15.1 --- First-Order Bode Plot}
+\textbf{Reference:} Lecture 15; \texttt{lctr15\_systems\_bode.md}.\\
+\textbf{Topic:} First-order lowpass Bode asymptotes.
+
+\textbf{Statement.} Sketch the Bode magnitude asymptote of $H(j\omega) = 1/(1+j\omega/10)$ and give the phase at $\omega=1,10,100$.
+
+\textbf{Solution.}
+DC gain 1 (0 dB); corner $\omega_c = 10$. Below $\omega_c$: flat. Above $\omega_c$: $-20$ dB/decade.
+
+Asymptote levels: at $\omega = 10$, 0 dB (actual $-3$ dB); at $\omega=100$, $-20$ dB; at $\omega=1000$, $-40$ dB.
+
+Phase ($-\arctan(\omega/10)$): $\omega=1 \to -5.7^\circ$; $\omega=10\to -45^\circ$; $\omega=100\to -84.3^\circ$ (close to $-90^\circ$).
+\[
+\boxed{\,\text{Flat at 0 dB to }\omega_c=10,\text{ then }-20\text{ dB/dec; phase }0^\circ\to -45^\circ\to -90^\circ\,}
+\]
+
+\subsection{Problem 15.2 --- Second-Order System Analysis}
+\textbf{Reference:} Lecture 15; \texttt{exam2\_solutions.md} Problem 4.\\
+\textbf{Topic:} Standard second-order form; classification; Bode; step response.\\
+\textbf{Concepts tested:} $\omega_n$, $\zeta$, resonance, \%OS, $t_s$, corner frequency.
+
+\textbf{Statement.} $H(j\omega) = 100/[(j\omega)^2 + 10(j\omega) + 100]$. Classify; compute DC gain, $|H(j\omega_n)|$, $\omega_r$, \%OS, $t_s$, Bode asymptotes.
+
+\textbf{Solution.}
+Match $\omega_n^2 = 100\Rightarrow \omega_n = 10$; $2\zeta\omega_n = 10\Rightarrow \zeta = 0.5$.
+
+$\zeta<1$ underdamped (complex poles); $\zeta<1/\sqrt{2}\approx 0.707$ so resonance exists:
+\[
+\omega_r = \omega_n\sqrt{1-2\zeta^2} = 10\sqrt{0.5}\approx 7.07\text{ rad/s}.
+\]
+At $\omega_n=10$: $H(j10) = 100/(j100) = -j$, so $|H(j10)|=1 = 1/(2\zeta)$, $\angle H = -90^\circ$.
+
+Peak magnitude: $|H|_\mathrm{max} = 1/(2\zeta\sqrt{1-\zeta^2}) = 2/\sqrt{3}\approx 1.155$ ($\approx 1.25$ dB).
+
+Step metrics:
+\[
+\%\mathrm{OS} = 100\, e^{-\pi(0.5)/\sqrt{0.75}}\approx 16.3\%,\qquad t_s\approx \frac{4}{0.5\cdot 10} = 0.8\text{ s}.
+\]
+Bode: 0 dB flat below $\omega_n=10$, then $-40$ dB/dec. Phase $0^\circ\to -90^\circ$ at $\omega_n\to -180^\circ$.
+\[
+\boxed{\,\omega_n = 10,\ \zeta = 0.5,\ \omega_r\approx 7.07,\ \%\mathrm{OS}\approx 16.3\%,\ t_s=0.8\text{ s},\ \text{HF }-40\text{ dB/dec}\,}
+\]
+
+\subsection{Problem 15.3 --- Cascade of Two First-Order Sections}
+\textbf{Reference:} Lecture 15; \texttt{lctr15\_systems\_bode.md} (Bode cascade rule).\\
+\textbf{Topic:} Cascading Bode plots.
+
+\textbf{Statement.} Sketch the Bode magnitude asymptote of $H(j\omega) = 1/[(1+j\omega)(1+j\omega/100)]$.
+
+\textbf{Solution.}
+Poles at $\omega=1$ and $\omega=100$. DC gain 1 (0 dB).
+\begin{itemize}[leftmargin=*]
+  \item $\omega<1$: 0 dB, flat.
+  \item $1<\omega<100$: $-20$ dB/dec (one pole active).
+  \item $\omega>100$: $-40$ dB/dec (both poles active).
+\end{itemize}
+Phase starts at $0^\circ$; by $\omega=1000$ it approaches $-180^\circ$. Each pole contributes $-90^\circ$ one decade above its corner.
+\[
+\boxed{\,\text{Flat at 0 dB, then $-20$ dB/dec at $\omega=1$, then $-40$ dB/dec at $\omega=100$}\,}
+\]
+
+\end{document}

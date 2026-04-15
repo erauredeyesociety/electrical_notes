@@ -1,0 +1,158 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{longtable}
+
+\title{CEC 315 Exam Style Analysis \\ \large Predicting Exam 3 from Exams 1 and 2}
+\author{Exam Prep Notes}
+\date{Spring 2026}
+
+\begin{document}
+\maketitle
+
+\noindent Analysis of past exams (Exam 1 Ch.\ 1--2, Exam 2 Lectures 9--15) to predict the format, scope, and emphasis of Exam 3 (Lectures 16--23: Laplace, Z-transform, sampling, feedback).
+
+\section{Past Exam 1 Breakdown (Chapters 1 \& 2)}
+
+\textbf{Header:} ``Exam: Chapters 1 \& 2 (Modified Version), Spring 2026.''\\
+\textbf{Structure:} 100 pts $=$ 4 problems $\times$ 20 pts $+$ 5 multiple choice $\times$ 4 pts. One problem per page. ``Show all your work.''\\
+\textbf{Formatting:} Each problem sits in a blue-bordered title box (dark-blue header with topic label, light-blue interior). Problem title appears outside the box as \texttt{Problem N (20 points)}. Part II MC at the end, no box, ``no partial credit.''
+
+\begin{longtable}{@{}clp{1.6cm}p{1.4cm}p{5.8cm}@{}}
+\toprule
+\# & Topic (Box Label) & Pts & Lec & Technique \\
+\midrule
+\endhead
+1 & System Properties & 20 & 3--4 & Memoryless / causal / time-invariant / linear classification for 3 systems (mix CT \& DT), with justification. \\
+2 & DT Convolution & 20 & 5--6 & Convolution sum on two finite sequences; output length; show sum. \\
+3 & CT LTI Systems & 20 & 5--7 & Sifting integrals (2 sub-parts), causal/memory/BIBO from $h(t)$, convolution with shifted delta. \\
+4 & Differential and Difference Equations & 20 & 7--8 & Impulse response of 1st-order ODE; iterate DT difference equation for $h[0],h[1],h[2]$; general $h[n]$; stability. \\
+MC1 & LTI characterization & 4 & 6 & Impulse response is complete characterization. \\
+MC2 & DT convolution definition & 4 & 6 & Symmetric-form identity. \\
+MC3 & CT BIBO condition & 4 & 7 & Absolute integrability. \\
+MC4 & 1st-order ODE impulse response & 4 & 8 & $h(t)=b e^{-at}u(t)$. \\
+MC5 & Shifted unit impulse & 4 & 6 & Ideal delay of $n_0$. \\
+\bottomrule
+\end{longtable}
+
+\noindent\textbf{Emphasis:} System properties (1 full problem $+$ 2 MC) and LTI/impulse response (2 full problems $+$ 3 MC). Convolution is tested on both CT (sifting $+$ shifted impulse) and DT (full convolution sum). Stability, causality, and memory appear at least three times.
+
+\section{Past Exam 2 Breakdown (Lectures 9--15)}
+
+\textbf{Header:} ``Exam: Lectures 9--15 (Exam 2), Spring 2026, Rogelio Gracia Otalvaro.''\\
+\textbf{Structure:} 100 pts, 60 minutes. \textbf{Part I (5 MC $\times$ 4 pts = 20 pts) first}, then \textbf{Part II (4 problems = 80 pts)} with \emph{non-uniform} weights $20 / 25 / 20 / 15$. Name/Date line at top.\\
+\textbf{Instructions:} ``Show all work clearly. Box your final answers. Assume all systems are causal and stable unless stated otherwise.''\\
+\textbf{Useful formulas provided on page 1:} Euler identities, CT FS analysis/synthesis, CT FT pair, $e^{-at}u(t)\leftrightarrow 1/(a+j\omega)$, convolution-multiplication, Parseval (FS), 2nd-order standard form with \%OS and $t_s$.
+
+\begin{longtable}{@{}clp{1.4cm}p{1.4cm}p{5.6cm}@{}}
+\toprule
+\# & Topic & Pts & Lec & Technique \\
+\midrule
+\endhead
+MC1 & Gibbs phenomenon (9\%) & 4 & 10 & Conceptual \\
+MC2 & Frequency-shift FT property & 4 & 13 & Conceptual \\
+MC3 & DT FS: $N$ distinct coefficients & 4 & 10 & Conceptual \\
+MC4 & Bode high-freq slope (1st-order LPF) & 4 & 14--15 & Conceptual \\
+MC5 & 2nd-order damping / resonance peak & 4 & 15 & Conceptual \\
+P1 & CT Fourier Series \& Properties & 20 & 9--10 & Square wave: analysis integral with Euler trick, $|a_1|,|a_2|,|a_3|$, $1/k$ decay, Parseval check. \\
+P2 & FT Properties \& Convolution & 25 & 12--13 & Time shift (phase only), freq shift via Euler, convolution-multiplication, 2-term PFE, inverse, verify $y(0)$ and $y(\infty)$. \\
+P3 & Frequency Response and Filtering & 20 & 11, 14 & $H(j\omega)$ from $h(t)=4e^{-4t}u(t)$, $-3$ dB cutoff, $\omega\in\{0,4,20\}$ table, trig-form output, dB attenuation. \\
+P4 & Second-Order System and Bode Plot & 15 & 15 & Classify damping, DC gain, $|H(j\omega_n)|$ in dB, \%OS, $t_s$, Bode asymptotes, phase at $\omega_n$. \\
+\bottomrule
+\end{longtable}
+
+\noindent\textbf{Emphasis:} Fourier properties (time shift, frequency shift, Parseval, convolution-multiplication) dominate with $>\!45$ pts. 2nd-order time/frequency metrics claim 15+ pts (P4 + MC5). Filtering/Bode 20+ pts. \emph{Every} problem is a multi-part 3--5 sub-question chain that walks through setup~$\to$~compute~$\to$~verify/interpret.
+
+\subsection*{Exam 2 Study Guide vs Actual Exam}
+The 32-page study guide flagged, in green ``Key Insight'' and red ``Common Mistake'' boxes, the exact topics that appeared on the exam: Euler inspection trick, Parseval sanity check, differentiation shortcut, $1/k$ vs $1/k^2$ decay, ``DT has only $N$ distinct coefficients,'' Gibbs $\approx 9\%$, time-shift phase-only effect, eigenfunction bridge to frequency response, 2nd-order metrics and $\zeta<1/\sqrt{2}$ resonance condition. \textbf{Every flagged box maps to a question on the actual exam, a near 1:1 hit rate.}
+
+\section{Pattern Observations}
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Layout:} identical blue-box style, ``Show all your work,'' 100 pts, 5 MC $\times$ 4 pts. Exam 2 adds a formula box and name/date line. Exam 3 should follow Exam 2's template.
+    \item \textbf{Problem count:} 4 long problems $+$ 5 MC is stable.
+    \item \textbf{Point distribution} is \emph{not} always uniform. Exam 1 used $4\times 20$; Exam 2 used $20/25/20/15$. Expect non-uniform on Exam 3.
+    \item \textbf{Per-problem scope:} 3--5 sub-parts each, averaging 4--5 pts per sub-part, walking through a complete technique.
+    \item \textbf{Flagship technique} dictates weighting. Exam 1 flagship $=$ convolution + system properties. Exam 2 flagship $=$ Fourier (FS, FT properties, filtering, 2nd-order). Exam 3 flagship $=$ Laplace + Z + sampling + feedback.
+    \item \textbf{Multiple choice} targets the exact ``Key Insight'' and ``Common Mistake'' callouts in the lecture summaries---the single most reliable predictor of MC content.
+    \item \textbf{Useful Formulas box} appears whenever formulas are bulky (Exam 2 had it). Exam 3 should get an even bigger one.
+    \item \textbf{Integration of lectures}: Exam 2 chains multiple lectures into one problem. Exam 3 covers 8 lectures---expect similar integration (e.g., Laplace ROC + inverse + system analysis).
+\end{enumerate}
+
+\section{Exam 3 Predictions (Lectures 16--23)}
+
+\subsection*{Format (high confidence)}
+\begin{itemize}[leftmargin=*]
+    \item 100 pts, 60 minutes, same boxed blue style, ``Show all work, box final answer, assume causal/stable unless stated otherwise.''
+    \item Page 1: name/date line $+$ \textbf{Useful Formulas box} likely containing: Laplace pair $e^{-at}u(t)\leftrightarrow 1/(s+a)$, derivative property with IC $\mathcal{L}\{y'\}=sY(s)-y(0^-)$, Z pair $a^n u[n]\leftrightarrow z/(z-a)$, Nyquist $\omega_s>2\omega_M$, closed-loop $T=G/(1+GH)$, final-value theorem.
+    \item \textbf{Part I}: 5 MC $\times$ 4 pts $=$ 20 pts.
+    \item \textbf{Part II}: 4 problems $=$ 80 pts, non-uniform (probably $20/20/20/20$ or $25/20/20/15$).
+\end{itemize}
+
+\subsection*{Likely multiple-choice topics (from lecture 16--23 ``Key Insight / Common Mistake'' callouts)}
+\begin{itemize}[leftmargin=*]
+    \item ROC shape rule: right-sided signals $\Rightarrow$ ROC is right half-plane of rightmost pole (CT) or outside outermost pole (DT).
+    \item Causality $+$ stability $\Rightarrow$ ROC contains the $j\omega$-axis (CT) or the unit circle (DT).
+    \item Unilateral Laplace derivative property with initial conditions.
+    \item Nyquist rate $\omega_s > 2\omega_M$ and aliasing.
+    \item Closed-loop sensitivity reduction by factor $1/(1+GH)$.
+\end{itemize}
+
+\subsection*{Likely long problems (high confidence)}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Bilateral Laplace $+$ Inverse (20 pts, Lec 16--17).} Given $X(s)$ with 2--3 poles: poles/zeros, PFE constants, invert for each ROC case (right-sided, left-sided, two-sided), identify stable ROC. Direct analog of Exam 2 P2.
+    \item \textbf{Unilateral Laplace IVP / System Analysis (20 pts, Lec 18).} Given ODE $y''+3y'+2y=x(t)$ with $y(0^-),y'(0^-)$ and $x(t)=u(t)$: transform with initial conditions, solve $Y(s)$, PFE, inverse, split zero-input vs zero-state, write $H(s)$, pole locations, stability.
+    \item \textbf{Z-transform $+$ DT System Analysis (20 pts, Lec 19--21).} Given $H(z)$ or difference equation: poles, ROC for causal, stability (unit circle), PFE, inverse via table, response to $x[n]=u[n]$ via unilateral Z.
+    \item \textbf{Sampling \emph{or} Feedback (15--20 pts, Lec 22--23).}
+    \begin{itemize}
+        \item Sampling: bandwidth stated, find Nyquist rate, sketch $X_p(j\omega)$ for given $\omega_s$, identify aliasing, reconstruct with ideal LPF.
+        \item Feedback: given $G(s)$ and $H(s)$, compute $T(s)=G/(1+GH)$, closed-loop poles, stability, steady-state error via final-value theorem, comment on sensitivity.
+    \end{itemize}
+\end{enumerate}
+
+\subsection*{Estimated point distribution}
+\begin{itemize}[leftmargin=*]
+    \item Laplace (bilateral inverse $+$ unilateral IVP): $\sim 40$ pts across 2 problems $+$ 1--2 MC.
+    \item Z-transform (inverse $+$ DT system analysis): $\sim 20$ pts, 1 problem $+$ 1 MC.
+    \item Sampling: $\sim 10$--$20$ pts.
+    \item Feedback: $\sim 10$--$20$ pts.
+    \item MC distributed across all 8 lectures.
+\end{itemize}
+
+\section{Difficulty and Length Comparison}
+
+\begin{longtable}{@{}p{4.2cm}p{5.3cm}p{5.3cm}@{}}
+\toprule
+ & Exam 1 & Exam 2 \\
+\midrule
+Total points & 100 & 100 \\
+Problem count & 4 long + 5 MC & 4 long + 5 MC \\
+Per-problem scope & 2--3 sub-parts, single technique & 3--5 sub-parts, chained techniques \\
+Formulas given & None & Full formula box \\
+Cross-lecture integration & Moderate & Heavy \\
+Computational burden & Moderate & Higher (Euler trick, PFE, table fills, dB) \\
+Conceptual reasoning & In sub-parts & In sub-parts + heavier MC \\
+Average difficulty & Moderate & Moderate--High \\
+\bottomrule
+\end{longtable}
+
+\noindent\textbf{Verdict:} Exam 2 is noticeably longer per problem and demands more integration. Exam 3 spans the broadest lecture set (8 lectures) and will match Exam 2's density and difficulty. With 60 minutes for 4 multi-part problems, plan $\sim 12$--$13$ minutes per long problem.
+
+\section{Preparation Priorities}
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Laplace PFE + inverse with ROC reasoning}---the highest-value drill. 2--3 pole $X(s)$, PFE, ROC $\leftrightarrow$ causal/anti-causal/two-sided.
+    \item \textbf{Unilateral Laplace IVPs.} Nonzero $y(0^-), y'(0^-)$, split zero-input vs zero-state, invert. Memorize derivative property.
+    \item \textbf{Z-transform symmetry with Laplace.} Same workflow, $z/(z-a)$, inverse by table, unilateral Z for difference equations with ICs.
+    \item \textbf{Nyquist + aliasing sketches.} $\omega_s>2\omega_M$, draw shifted replicas of $X(j\omega)$, identify overlap, state reconstruction LPF cutoff.
+    \item \textbf{Closed-loop transfer function and stability.} $T=G/(1+GH)$, root locations, final-value theorem for tracking error.
+    \item \textbf{Memorize transform pairs} likely to appear in the formula box: $e^{-at}u(t), tu(t), \cos/\sin\times u(t), a^n u[n], n a^n u[n]$.
+    \item \textbf{Review every green ``Key Insight'' and red ``Common Mistake'' box} in lecture 16--23 summaries---historically maps 1:1 to MC.
+    \item \textbf{Time-pressure drill:} work a full practice problem in 12 minutes.
+\end{enumerate}
+
+\end{document}

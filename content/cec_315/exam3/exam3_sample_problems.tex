@@ -1,0 +1,555 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{CEC 315 --- Exam 3 Sample Problems\\\large Lectures 16--23: Laplace, Z-Transform, Sampling, Feedback}
+\author{CEC 315 --- Signals and Systems (Spring 2026)}
+\date{}
+
+\newcommand{\ROC}{\text{ROC}}
+\newcommand{\Lap}{\overset{\mathcal{L}}{\longleftrightarrow}}
+\newcommand{\Zed}{\overset{\mathcal{Z}}{\longleftrightarrow}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Lecture 16 --- Laplace Transform and ROC}
+
+\subsection{Problem 16.1 --- Right-Sided Exponential}
+\textbf{Reference:} Lecture 16, \S 16.4.1 (Example 9.1).\\
+\textbf{Topic:} Bilateral Laplace transform from the definition; ROC.\\
+\textbf{Concepts tested:} Integral convergence condition; ROC as half-plane.
+
+\textbf{Statement.} Compute the Laplace transform of $x(t) = e^{-at}u(t)$ and state the ROC.
+
+\textbf{Solution.}
+\begin{align*}
+X(s) &= \int_0^{\infty} e^{-at} e^{-st}\,dt = \int_0^{\infty} e^{-(s+a)t}\,dt.
+\end{align*}
+The integral converges iff $\operatorname{Re}\{s+a\}>0$, i.e., $\operatorname{Re}\{s\}>-\operatorname{Re}\{a\}$. Then
+\[
+X(s) = \frac{1}{s+a}.
+\]
+\[
+\boxed{\,e^{-at}u(t)\ \Lap\ \frac{1}{s+a},\quad \operatorname{Re}\{s\}>-\operatorname{Re}\{a\}\,}
+\]
+
+\subsection{Problem 16.2 --- Left-Sided Exponential}
+\textbf{Reference:} Lecture 16, \S 16.4.2.\\
+\textbf{Topic:} Left-sided signals and ROC direction.\\
+\textbf{Concepts tested:} Same $X(s)$, different ROCs $\Rightarrow$ different signals.
+
+\textbf{Statement.} Compute the Laplace transform of $x(t)=-e^{-at}u(-t)$.
+
+\textbf{Solution.}
+\[
+X(s) = -\int_{-\infty}^{0} e^{-(s+a)t}\,dt.
+\]
+This converges iff $\operatorname{Re}\{s+a\}<0$, so $\operatorname{Re}\{s\}<-\operatorname{Re}\{a\}$, and equals $1/(s+a)$.
+\[
+\boxed{\,-e^{-at}u(-t)\ \Lap\ \frac{1}{s+a},\quad \operatorname{Re}\{s\}<-\operatorname{Re}\{a\}\,}
+\]
+
+\subsection{Problem 16.3 --- Two-Sided Signal}
+\textbf{Reference:} Lecture 16, \S 16.4.4.\\
+\textbf{Topic:} Linearity and intersection of ROCs.\\
+\textbf{Concepts tested:} Strip ROC between poles.
+
+\textbf{Statement.} Find $X(s)$ and its ROC for $x(t) = e^{-3t}u(t) + 2e^{2t}u(-t)$.
+
+\textbf{Solution.}
+\begin{align*}
+e^{-3t}u(t) &\Lap \frac{1}{s+3},\quad \operatorname{Re}\{s\}>-3,\\
+2e^{2t}u(-t) &= -2[-e^{2t}u(-t)] \Lap \frac{-2}{s-2},\quad \operatorname{Re}\{s\}<2.
+\end{align*}
+\[
+X(s) = \frac{1}{s+3}-\frac{2}{s-2},\qquad -3<\operatorname{Re}\{s\}<2.
+\]
+
+\subsection{Problem 16.4 --- Sum of Two Right-Sided Exponentials}
+\textbf{Reference:} Lecture 16, \S 16.7.1.\\
+\textbf{Topic:} Linearity.\\
+\textbf{Concepts tested:} Combining rational terms; ROC intersection.
+
+\textbf{Statement.} Find $X(s)$ for $x(t) = 3e^{-2t}u(t) - 2e^{-5t}u(t)$.
+
+\textbf{Solution.}
+\[
+X(s) = \frac{3}{s+2}-\frac{2}{s+5} = \frac{s+11}{(s+2)(s+5)},\qquad \operatorname{Re}\{s\}>-2.
+\]
+
+\subsection{Problem 16.5 --- Unit Step}
+\textbf{Reference:} Lecture 16, \S 16.7.3.\\
+\textbf{Topic:} Laplace transform of $u(t)$.\\
+\textbf{Concepts tested:} Pole on the $j\omega$-axis; ROC open half-plane.
+
+\textbf{Solution.} Set $a=0$ in Problem 16.1: $u(t)\Lap 1/s$, $\operatorname{Re}\{s\}>0$.
+
+\section{Lecture 17 --- Inverse Laplace and Properties}
+
+\subsection{Problem 17.1 --- Distinct Real Poles}
+\textbf{Reference:} Lecture 17, \S 17.3.\\
+\textbf{Topic:} Partial fraction expansion (cover-up method).
+
+\textbf{Statement.} Find $x(t)$ given
+\[
+X(s) = \frac{2s+6}{(s+1)(s+3)},\qquad \operatorname{Re}\{s\}>-1.
+\]
+
+\textbf{Solution.} PFE: $A=2$ (from $s=-1$), $B=0$ (from $s=-3$).
+\[
+X(s) = \frac{2}{s+1} \implies \boxed{x(t) = 2 e^{-t}u(t)}.
+\]
+
+\subsection{Problem 17.2 --- Distinct Poles with Mixed ROC}
+\textbf{Reference:} Lecture 17, \S 17.4.\\
+\textbf{Topic:} Two-sided inversion; ROC sets direction.
+
+\textbf{Statement.} Find $x(t)$ given $X(s) = \dfrac{5s+17}{(s+1)(s-3)}$, $-1<\operatorname{Re}\{s\}<3$.
+
+\textbf{Solution.} PFE gives $A=-3$, $B=8$. Pole at $-1$ is right-sided; pole at $3$ is left-sided.
+\[
+\boxed{x(t) = -3e^{-t}u(t) - 8e^{3t}u(-t)}.
+\]
+
+\subsection{Problem 17.3 --- Repeated Poles}
+\textbf{Reference:} Lecture 17, \S 17.5.\\
+\textbf{Topic:} Partial fractions with repeated poles.
+
+\textbf{Statement.}
+\[
+X(s) = \frac{4s+5}{(s+1)^2 (s+3)},\quad \operatorname{Re}\{s\}>-1.
+\]
+
+\textbf{Solution.}
+\[
+X(s) = \frac{7/4}{s+1} + \frac{1/2}{(s+1)^2} + \frac{-7/4}{s+3}.
+\]
+\[
+\boxed{x(t) = \tfrac{7}{4}e^{-t}u(t) + \tfrac{1}{2}te^{-t}u(t) - \tfrac{7}{4}e^{-3t}u(t)}.
+\]
+
+\subsection{Problem 17.4 --- Complex Conjugate Poles}
+\textbf{Reference:} Lecture 17, \S 17.6.\\
+\textbf{Topic:} Completing the square; damped sinusoid pairs.
+
+\textbf{Statement.} $X(s) = \dfrac{2s}{s^2+4s+13}$, $\operatorname{Re}\{s\}>-2$.
+
+\textbf{Solution.} $s^2+4s+13 = (s+2)^2+3^2$; write $2s = 2(s+2)-4$:
+\[
+X(s) = 2\cdot\frac{s+2}{(s+2)^2+9} - \frac{4}{3}\cdot\frac{3}{(s+2)^2+9}.
+\]
+\[
+\boxed{x(t) = \left[2e^{-2t}\cos(3t)-\tfrac{4}{3}e^{-2t}\sin(3t)\right]u(t)}.
+\]
+
+\subsection{Problem 17.5 --- $s$-Domain Shifting}
+\textbf{Reference:} Lecture 17, \S 17.8.2.\\
+\textbf{Topic:} Property-based derivation.
+
+\textbf{Statement.} Find $\mathcal{L}\{e^{-3t}\cos(5t)u(t)\}$.
+
+\textbf{Solution.} Start from $\cos(5t)u(t)\Lap s/(s^2+25)$; apply $e^{-3t}x(t)\Lap X(s+3)$:
+\[
+e^{-3t}\cos(5t)u(t)\Lap \frac{s+3}{(s+3)^2+25},\quad \operatorname{Re}\{s\}>-3.
+\]
+
+\subsection{Problem 17.6 --- Initial and Final Value Theorems}
+\textbf{Reference:} Lecture 17, \S 17.9.\\
+\textbf{Topic:} Boundary behavior from $X(s)$.
+
+\textbf{Statement.} Given $X(s) = \dfrac{10}{s(s+2)(s+5)}$, ROC $\operatorname{Re}\{s\}>0$, find $x(0^+)$ and $x(\infty)$.
+
+\textbf{Solution.}
+\begin{align*}
+x(0^+) &= \lim_{s\to\infty}\frac{10}{(s+2)(s+5)} = 0,\\
+x(\infty) &= \lim_{s\to 0}\frac{10}{(s+2)(s+5)} = 1.
+\end{align*}
+
+\section{Lecture 18 --- System Analysis via Unilateral Laplace}
+
+\subsection{Problem 18.1 --- Differential Equation to $H(s)$}
+\textbf{Reference:} Lecture 18, \S 18.2.\\
+\textbf{Topic:} Deriving the transfer function.
+
+\textbf{Statement.} For
+\[
+\frac{d^2 y}{dt^2}+5\frac{dy}{dt}+6y = 2\frac{dx}{dt}+x,
+\]
+find $H(s)$.
+
+\textbf{Solution.}
+\[
+(s^2+5s+6)Y = (2s+1)X \implies H(s) = \frac{2s+1}{(s+2)(s+3)}.
+\]
+Poles $-2,-3$ (LHP), zero $-1/2$. Causal and stable.
+
+\subsection{Problem 18.2 --- Stability Classification}
+\textbf{Reference:} Lecture 18, \S 18.5.\\
+\textbf{Topic:} Pole-location criterion.
+
+\textbf{Statement.} Classify each causal $H(s)$:
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+$H(s)$ & Poles & Classification\\
+\hline
+$\dfrac{1}{s+3}$ & $-3$ & Stable\\
+$\dfrac{1}{s-2}$ & $+2$ & Unstable\\
+$\dfrac{1}{s^2+4}$ & $\pm j2$ & Marginally stable\\
+$\dfrac{s+1}{(s+2)(s+5)}$ & $-2,-5$ & Stable\\
+$\dfrac{1}{(s+1)(s-1)}$ & $\pm 1$ & Unstable\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Problem 18.3 --- Complete Pipeline}
+\textbf{Reference:} Lecture 18, \S 18.6.\\
+\textbf{Topic:} DE $\to H(s)\to$ output.
+
+\textbf{Statement.} Solve $\dfrac{dy}{dt}+3y = x(t)$, $x(t)=e^{-t}u(t)$, zero ICs.
+
+\textbf{Solution.} $H(s) = 1/(s+3)$, $X(s)=1/(s+1)$,
+\[
+Y(s) = \frac{1}{(s+1)(s+3)} = \frac{1/2}{s+1}-\frac{1/2}{s+3}.
+\]
+\[
+\boxed{y(t) = \tfrac{1}{2}\left(e^{-t}-e^{-3t}\right)u(t)}.
+\]
+
+\subsection{Problem 18.4 --- First-Order ODE with IC}
+\textbf{Reference:} Lecture 18, \S 18.11.\\
+\textbf{Topic:} Unilateral Laplace with nonzero IC.
+
+\textbf{Statement.} Solve $\dfrac{dy}{dt}+3y=0$, $y(0^-)=5$.
+
+\textbf{Solution.} $sY-5+3Y=0$, $Y(s)=5/(s+3)$.
+\[
+\boxed{y(t) = 5e^{-3t}u(t)}.
+\]
+
+\subsection{Problem 18.5 --- Second-Order ODE with ICs}
+\textbf{Reference:} Lecture 18, \S 18.11.\\
+\textbf{Topic:} Unilateral Laplace, second-derivative rule.
+
+\textbf{Statement.} Solve $\dfrac{d^2 y}{dt^2}+5\dfrac{dy}{dt}+6y = 2u(t)$, $y(0^-)=1$, $y'(0^-)=0$.
+
+\textbf{Solution.}
+\[
+(s^2+5s+6)Y = \frac{2}{s}+s+5 \implies Y(s) = \frac{s^2+5s+2}{s(s+2)(s+3)}.
+\]
+PFE: $A=1/3$, $B=2$, $C=-4/3$.
+\[
+\boxed{y(t) = \left[\tfrac{1}{3}+2e^{-2t}-\tfrac{4}{3}e^{-3t}\right]u(t)}.
+\]
+Checks: $y(0)=1$, $y'(0)=0$, $y(\infty) = 1/3$.
+
+\section{Lecture 19 --- Z-Transform and ROC}
+
+\subsection{Problem 19.1 --- Right-Sided Geometric Sequence}
+\textbf{Reference:} Lecture 19, \S 19.4.1.\\
+\textbf{Topic:} Geometric series; fundamental Z pair.
+
+\textbf{Statement.} Find $X(z)$ and ROC for $x[n]=a^n u[n]$.
+
+\textbf{Solution.}
+\[
+X(z) = \sum_{n=0}^\infty (az^{-1})^n = \frac{1}{1-az^{-1}},\qquad |z|>|a|.
+\]
+
+\subsection{Problem 19.2 --- Left-Sided Geometric Sequence}
+\textbf{Reference:} Lecture 19, \S 19.4.2.\\
+\textbf{Topic:} Left-sided sequences; interior ROC.
+
+\textbf{Statement.} Find $X(z)$ for $x[n]=-a^n u[-n-1]$.
+
+\textbf{Solution.}
+\[
+X(z) = \frac{1}{1-az^{-1}},\qquad |z|<|a|.
+\]
+Identical algebraic form as Problem 19.1; only the ROC differs.
+
+\subsection{Problem 19.3 --- Two-Sided Signal}
+\textbf{Reference:} Lecture 19, \S 19.4.5.\\
+\textbf{Topic:} Two-sided signal with annular ROC.
+
+\textbf{Statement.} Find $X(z)$ for $x[n] = (0.5)^n u[n] + 2(3)^n u[-n-1]$.
+
+\textbf{Solution.}
+\[
+X(z) = \frac{1}{1-0.5z^{-1}} - \frac{2}{1-3z^{-1}},\qquad 0.5<|z|<3.
+\]
+
+\subsection{Problem 19.4 --- Sum of Two Right-Sided Sequences}
+\textbf{Reference:} Lecture 19, \S 19.4.6.\\
+\textbf{Topic:} Rational algebra.
+
+\textbf{Statement.} Find $X(z)$ for $x[n]=3(0.4)^n u[n] - 2(0.8)^n u[n]$.
+
+\textbf{Solution.}
+\[
+X(z) = \frac{1-1.6z^{-1}}{(1-0.4z^{-1})(1-0.8z^{-1})},\qquad |z|>0.8.
+\]
+Sanity: $X(1) = -0.6/0.12 = -5$ matches direct sum $5-10=-5$.
+
+\subsection{Problem 19.5 --- Finite-Duration Sequence}
+\textbf{Reference:} Lecture 19, \S 19.4.7.\\
+\textbf{Topic:} Polynomial Z transform.
+
+\textbf{Statement.} $x[n] = \{2,-1,3,0,4\}$ for $n=0,\ldots,4$.
+
+\textbf{Solution.}
+\[
+X(z) = 2 - z^{-1}+3z^{-2}+4z^{-4},\qquad \text{ROC: all }z\neq 0.
+\]
+Check: $X(1) = 8 = \sum x[n]$.
+
+\section{Lecture 20 --- Inverse Z-Transform and Properties}
+
+\subsection{Problem 20.1 --- Distinct Real Poles, Right-Sided}
+\textbf{Reference:} Lecture 20, \S 20.3.\\
+\textbf{Topic:} Partial fractions in $z^{-1}$.
+
+\textbf{Statement.} Find $x[n]$ for
+\[
+X(z) = \frac{3-z^{-1}}{(1-0.5z^{-1})(1-0.25z^{-1})},\quad |z|>0.5.
+\]
+
+\textbf{Solution.} $A=2$, $B=1$:
+\[
+\boxed{x[n] = 2(0.5)^n u[n] + (0.25)^n u[n]}.
+\]
+
+\subsection{Problem 20.2 --- Mixed ROC}
+\textbf{Reference:} Lecture 20, \S 20.4.\\
+\textbf{Topic:} Two-sided inversion.
+
+\textbf{Statement.} $X(z) = \dfrac{1}{(1-2z^{-1})(1-0.5z^{-1})}$, $0.5<|z|<2$.
+
+\textbf{Solution.} $A=4/3$, $B=-1/3$. Pole at $z=2$ inside ROC $\Rightarrow$ left-sided; pole at $z=0.5$ outside $\Rightarrow$ right-sided.
+\[
+\boxed{x[n] = -\tfrac{4}{3}2^n u[-n-1] - \tfrac{1}{3}(0.5)^n u[n]}.
+\]
+
+\subsection{Problem 20.3 --- Repeated Poles}
+\textbf{Reference:} Lecture 20, \S 20.5.\\
+\textbf{Topic:} Repeated-pole pair.
+
+\textbf{Statement.} $X(z) = \dfrac{1}{(1-0.5z^{-1})^2}$, $|z|>0.5$.
+
+\textbf{Solution.}
+\[
+\boxed{x[n] = (n+1)(0.5)^n u[n]}.
+\]
+
+\subsection{Problem 20.4 --- Complex Conjugate Poles}
+\textbf{Reference:} Lecture 20, \S 20.6.\\
+\textbf{Topic:} Damped DT sinusoid.
+
+\textbf{Statement.}
+\[
+X(z) = \frac{1-0.8\cos(0.4\pi)z^{-1}}{1-2(0.8)\cos(0.4\pi)z^{-1}+0.64z^{-2}},\quad |z|>0.8.
+\]
+
+\textbf{Solution.} $r=0.8$, $\omega_0=0.4\pi$:
+\[
+\boxed{x[n] = (0.8)^n \cos(0.4\pi n) u[n]}.
+\]
+
+\subsection{Problem 20.5 --- Time-Shift Property}
+\textbf{Reference:} Lecture 20, \S 20.8.2.\\
+\textbf{Topic:} Delay as $z^{-n_0}$.
+
+\textbf{Statement.} $x[n]=(0.5)^n u[n]$; find Z-transform of $y[n]=x[n-3]$.
+
+\textbf{Solution.}
+\[
+Y(z) = \frac{z^{-3}}{1-0.5z^{-1}},\qquad |z|>0.5.
+\]
+
+\subsection{Problem 20.6 --- Initial and Final Value Theorems}
+\textbf{Reference:} Lecture 20, \S 20.8.4.
+
+\textbf{Statement.} $X(z) = \dfrac{5}{(1-z^{-1})(1-0.6z^{-1})}$, $|z|>1$. Find $x[0]$ and $x[\infty]$.
+
+\textbf{Solution.}
+\begin{align*}
+x[0] &= \lim_{z\to\infty}X(z) = 5,\\
+x[\infty] &= \lim_{z\to 1}(1-z^{-1})X(z) = \lim_{z\to 1}\frac{5}{1-0.6z^{-1}} = 12.5.
+\end{align*}
+
+\section{Lecture 21 --- System Analysis via Unilateral Z}
+
+\subsection{Problem 21.1 --- Difference Equation to $H(z)$}
+\textbf{Reference:} Lecture 21, \S 21.2.\\
+\textbf{Topic:} Deriving $H(z)$.
+
+\textbf{Statement.} $y[n]-0.8y[n-1]+0.15y[n-2] = x[n]+2x[n-1]$.
+
+\textbf{Solution.}
+\[
+H(z) = \frac{1+2z^{-1}}{(1-0.5z^{-1})(1-0.3z^{-1})}.
+\]
+Poles $0.5,0.3$ inside unit circle $\Rightarrow$ causal and stable.
+
+\subsection{Problem 21.2 --- Full Pipeline}
+\textbf{Reference:} Lecture 21, \S 21.4.
+
+\textbf{Statement.} Solve $y[n] - 0.5 y[n-1] = x[n]$ with $x[n]=(0.8)^n u[n]$, zero ICs.
+
+\textbf{Solution.}
+\[
+Y(z) = \frac{1}{(1-0.5z^{-1})(1-0.8z^{-1})} = \frac{-5/3}{1-0.5z^{-1}}+\frac{8/3}{1-0.8z^{-1}}.
+\]
+\[
+\boxed{y[n] = \left[-\tfrac{5}{3}(0.5)^n + \tfrac{8}{3}(0.8)^n\right]u[n]}.
+\]
+
+\subsection{Problem 21.3 --- First-Order Difference Equation with IC}
+\textbf{Reference:} Lecture 21, \S 21.8.
+
+\textbf{Statement.} Solve $y[n] - 0.6 y[n-1] = (0.5)^n u[n]$, $y[-1]=4$.
+
+\textbf{Solution.} Unilateral Z:
+\[
+(1-0.6z^{-1})Y(z) = \frac{1}{1-0.5z^{-1}} + 2.4.
+\]
+After PFE:
+\[
+Y(z) = \frac{-5}{1-0.5z^{-1}} + \frac{8.4}{1-0.6z^{-1}}.
+\]
+\[
+\boxed{y[n] = \left[-5(0.5)^n + 8.4(0.6)^n\right]u[n]}.
+\]
+Check: $y[0]=3.4$; from ODE $y[0] = 0.6\cdot 4 + 1 = 3.4$.
+
+\subsection{Problem 21.4 --- Second-Order Zero-Input Response}
+\textbf{Reference:} Lecture 21, \S 21.8.
+
+\textbf{Statement.} $y[n] - 0.7 y[n-1] + 0.1 y[n-2] = 0$, $y[-1]=1$, $y[-2]=0$.
+
+\textbf{Solution.}
+\[
+(1-0.7z^{-1}+0.1z^{-2})Y(z) = 0.7-0.1z^{-1},
+\]
+giving
+\[
+Y(z) = \frac{5/6}{1-0.5z^{-1}} - \frac{2/15}{1-0.2z^{-1}}.
+\]
+\[
+\boxed{y[n] = \left[\tfrac{5}{6}(0.5)^n - \tfrac{2}{15}(0.2)^n\right]u[n]}.
+\]
+
+\section{Lecture 22 --- Sampling}
+
+\subsection{Problem 22.1 --- Nyquist Rate: Sum of Sinusoids}
+\textbf{Reference:} Lecture 22, Example 22.1(a).
+
+\textbf{Statement.} $x(t) = 1 + \cos(2000\pi t) + \sin(4000\pi t)$. Find the Nyquist rate.
+
+\textbf{Solution.} $\omega_M = 4000\pi$ rad/s; Nyquist rate $=8000\pi$ rad/s $=4000$ Hz.
+
+\subsection{Problem 22.2 --- Nyquist Rate: Sinc Function}
+\textbf{Reference:} Lecture 22, Example 22.1(b).
+
+\textbf{Statement.} $x(t) = \sin(4000\pi t)/(\pi t)$.
+
+\textbf{Solution.} $X(j\omega)$ is a rectangle for $|\omega|<4000\pi$. Nyquist rate $=8000\pi$ rad/s $=4000$ Hz.
+
+\subsection{Problem 22.3 --- Nyquist Rate: Squared Sinc}
+\textbf{Reference:} Lecture 22, Example 22.1(c).
+
+\textbf{Statement.} $x(t) = [\sin(4000\pi t)/(\pi t)]^2$.
+
+\textbf{Solution.} Squaring convolves the spectrum with itself, doubling the bandwidth. $\omega_M = 8000\pi$; Nyquist rate $= 16000\pi$ rad/s $= 8000$ Hz.
+
+\subsection{Problem 22.4 --- Checking a Sampling Period}
+\textbf{Reference:} Lecture 22, Example 22.2.
+
+\textbf{Statement.} $X(j\omega)=0$ for $|\omega|>1000\pi$. Which of $T\in\{0.5,2,0.1\}$ ms allows perfect reconstruction?
+
+\textbf{Solution.} Need $T<1$ ms. $(a)$ and $(c)$ work; $(b)$ causes aliasing.
+
+\subsection{Problem 22.5 --- Sampling at Exactly Nyquist Rate Fails}
+\textbf{Reference:} Lecture 22, Example 22.3.
+
+\textbf{Statement.} Sample $x(t) = \sin(\omega_s t/2)$ at rate $\omega_s$.
+
+\textbf{Solution.} All samples equal $\sin(\pi n) = 0$. Perfect reconstruction impossible; strict inequality $\omega_s>2\omega_M$ is required.
+
+\subsection{Problem 22.6 --- Aliasing of a Cosine}
+\textbf{Reference:} Lecture 22, Example 22.4.
+
+\textbf{Statement.} 5 Hz cosine sampled at $f_s = 6$ Hz.
+
+\textbf{Solution.} $f_\text{alias} = |6-5| = 1$ Hz.
+
+\section{Lecture 23 --- Linear Feedback Systems}
+
+\subsection{Problem 23.1 --- Cascade + Feedback}
+\textbf{Reference:} Lecture 23, Worked Example 23.1.
+
+\textbf{Statement.} $H_1(s) = 1/(s+1)$, $H_2(s) = 1/(s+3)$, $G=2$. Find the closed-loop $Q(s)$.
+
+\textbf{Solution.} Cascade: $H_1 H_2 = 1/(s^2+4s+3)$. Feedback:
+\[
+Q(s) = \frac{1}{s^2+4s+5}.
+\]
+Poles at $s=-2\pm j$ $\Rightarrow$ stable.
+
+\subsection{Problem 23.2 --- Unity Feedback with Adjustable Gain}
+\textbf{Reference:} Lecture 23, Worked Example 23.2.
+
+\textbf{Statement.} $H(s) = K/(s+2)$, unity feedback.
+
+\textbf{Solution.}
+\[
+Q(s) = \frac{K}{s+2+K},\qquad \text{pole at }s=-(2+K).
+\]
+Stable for $K>-2$.
+
+\subsection{Problem 23.3 --- Stabilizing an Unstable Plant}
+\textbf{Reference:} Lecture 23, Worked Example 23.3.
+
+\textbf{Statement.} $H(s) = 3/(s-1)$ (unstable), unity feedback with gain $K$.
+
+\textbf{Solution.}
+\[
+Q(s) = \frac{3K}{s+(3K-1)},\qquad \text{pole at }s=1-3K.
+\]
+Stable for $K>1/3$.
+
+\subsection{Problem 23.4 --- Nyquist Stability Check}
+\textbf{Reference:} Lecture 23, Worked Example 23.5.
+
+\textbf{Statement.} A Nyquist plot crosses the negative real axis at $-0.5$; open-loop stable. Is the closed-loop stable for $K=1$? What is $K_\text{max}$?
+
+\textbf{Solution.} $-1/K = -1$ not encircled $\Rightarrow$ stable. Instability at $-1/K=-0.5\Rightarrow K_\text{max}=2$.
+
+\subsection{Problem 23.5 --- Gain and Phase Margins}
+\textbf{Reference:} Lecture 23, Worked Example 23.6.
+
+\textbf{Statement.} At $\omega_2=10$ rad/s, $|GH|=0$ dB and $\angle GH = -135^\circ$. At $\omega_1 = 31$ rad/s, $|GH|=-12$ dB and $\angle GH = -180^\circ$. Find PM, GM, stability, and max tolerable delay.
+
+\textbf{Solution.}
+\begin{align*}
+\text{PM} &= 180^\circ + (-135^\circ) = 45^\circ,\\
+\text{GM} &= 12\text{ dB (factor of 4)},\\
+\tau_\text{max} &= \frac{45^\circ \cdot \pi/180^\circ}{10\text{ rad/s}} \approx 79\text{ ms}.
+\end{align*}
+Both margins positive $\Rightarrow$ stable.
+
+\end{document}

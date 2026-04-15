@@ -1,0 +1,174 @@
+# CEC 315 — Exam 3 Cheatsheet (Lec 16–23)
+
+## Transform Definitions
+
+| | Forward | Inverse |
+|---|---|---|
+| **Bilat. Laplace** | $X(s)=\int_{-\infty}^{\infty}x(t)e^{-st}dt$ | $x(t)=\tfrac{1}{2\pi j}\int_{\sigma-j\infty}^{\sigma+j\infty}X(s)e^{st}ds$ |
+| **Unilat. Laplace** | $\mathcal{X}(s)=\int_{0^-}^{\infty}x(t)e^{-st}dt$ | (contour, $\sigma$ in ROC) |
+| **Bilat. Z** | $X(z)=\sum_{n=-\infty}^{\infty}x[n]z^{-n}$ | $x[n]=\tfrac{1}{2\pi j}\oint X(z)z^{n-1}dz$ |
+| **Unilat. Z** | $\mathcal{X}(z)=\sum_{n=0}^{\infty}x[n]z^{-n}$ | (contour in ROC) |
+
+$s=\sigma+j\omega$; $z=re^{j\Omega}$. FT exists iff $j\omega$-axis $\subset$ ROC; DTFT exists iff unit circle $\subset$ ROC.
+
+## Laplace Pairs (causal unless noted)
+
+| $x(t)$ | $X(s)$ | ROC |
+|---|---|---|
+| $\delta(t)$ | $1$ | all $s$ |
+| $\delta(t-t_0)$ | $e^{-st_0}$ | all $s$ |
+| $u(t)$ | $1/s$ | $\operatorname{Re}\{s\}>0$ |
+| $tu(t)$ | $1/s^2$ | $\operatorname{Re}\{s\}>0$ |
+| $\tfrac{t^{n-1}}{(n-1)!}u(t)$ | $1/s^n$ | $\operatorname{Re}\{s\}>0$ |
+| $e^{-at}u(t)$ | $\tfrac{1}{s+a}$ | $\operatorname{Re}\{s\}>-a$ |
+| $te^{-at}u(t)$ | $\tfrac{1}{(s+a)^2}$ | $\operatorname{Re}\{s\}>-a$ |
+| $\tfrac{t^{n-1}}{(n-1)!}e^{-at}u(t)$ | $\tfrac{1}{(s+a)^n}$ | $\operatorname{Re}\{s\}>-a$ |
+| $\cos(\omega_0 t)u(t)$ | $\tfrac{s}{s^2+\omega_0^2}$ | $\operatorname{Re}\{s\}>0$ |
+| $\sin(\omega_0 t)u(t)$ | $\tfrac{\omega_0}{s^2+\omega_0^2}$ | $\operatorname{Re}\{s\}>0$ |
+| $e^{-at}\cos(\omega_d t)u(t)$ | $\tfrac{s+a}{(s+a)^2+\omega_d^2}$ | $\operatorname{Re}\{s\}>-a$ |
+| $e^{-at}\sin(\omega_d t)u(t)$ | $\tfrac{\omega_d}{(s+a)^2+\omega_d^2}$ | $\operatorname{Re}\{s\}>-a$ |
+| $-e^{-at}u(-t)$ | $\tfrac{1}{s+a}$ | $\operatorname{Re}\{s\}<-a$ |
+
+## Laplace Properties
+
+| Property | Time | $s$-Domain |
+|---|---|---|
+| Linearity | $ax+by$ | $aX+bY$; ROC $\supseteq R_x\cap R_y$ |
+| Time shift | $x(t-t_0)$ | $e^{-st_0}X(s)$ |
+| $s$-shift | $e^{s_0 t}x(t)$ | $X(s-s_0)$ |
+| Scaling | $x(at),a\ne 0$ | $\tfrac{1}{\lvert a\rvert}X(s/a)$ |
+| Diff. (bilat.) | $x'(t)$ | $sX(s)$ |
+| Diff. (unilat.) | $x'(t)$ | $sX-x(0^-)$ |
+| 2nd deriv (unilat.) | $x''(t)$ | $s^2X-sx(0^-)-x'(0^-)$ |
+| Integration | $\int_{-\infty}^{t}x\,d\tau$ | $X(s)/s$ |
+| Diff. in $s$ | $-tx(t)$ | $dX/ds$ |
+| Convolution | $x*y$ | $X(s)Y(s)$ |
+| **IVT** | $x(0^+)$ | $\lim_{s\to\infty}sX(s)$ |
+| **FVT** | $x(\infty)$ | $\lim_{s\to 0}sX(s)$ |
+
+**FVT valid iff** all poles of $sX(s)$ lie strictly in open LHP (else meaningless).
+
+## Laplace ROC Rules
+
+- ROC is a vertical strip, never contains poles.
+- **Finite duration** $\Rightarrow$ entire $s$-plane.
+- **Right-sided (causal):** $\operatorname{Re}\{s\}>\sigma_{\max}$ (right of rightmost pole).
+- **Left-sided (anticausal):** $\operatorname{Re}\{s\}<\sigma_{\min}$.
+- **Two-sided:** vertical strip between poles; may be empty.
+- **Causal** $\Leftrightarrow$ rational + $M\le N$ + right-sided.
+- **BIBO stable** $\Leftrightarrow$ $j\omega$-axis $\in$ ROC.
+- **Causal + Stable** $\Leftrightarrow$ all poles $\operatorname{Re}\{p_i\}<0$.
+
+## Z-Transform Pairs
+
+| $x[n]$ | $X(z)$ | ROC |
+|---|---|---|
+| $\delta[n]$ | $1$ | all $z$ |
+| $\delta[n-k]$ | $z^{-k}$ | $z\ne 0$ ($k>0$) |
+| $u[n]$ | $\tfrac{1}{1-z^{-1}}$ | $\lvert z\rvert>1$ |
+| $-u[-n-1]$ | $\tfrac{1}{1-z^{-1}}$ | $\lvert z\rvert<1$ |
+| $a^n u[n]$ | $\tfrac{1}{1-az^{-1}}$ | $\lvert z\rvert>\lvert a\rvert$ |
+| $-a^n u[-n-1]$ | $\tfrac{1}{1-az^{-1}}$ | $\lvert z\rvert<\lvert a\rvert$ |
+| $na^n u[n]$ | $\tfrac{az^{-1}}{(1-az^{-1})^2}$ | $\lvert z\rvert>\lvert a\rvert$ |
+| $(n+1)a^n u[n]$ | $\tfrac{1}{(1-az^{-1})^2}$ | $\lvert z\rvert>\lvert a\rvert$ |
+| $\cos(\Omega_0 n)u[n]$ | $\tfrac{1-\cos\Omega_0\,z^{-1}}{1-2\cos\Omega_0\,z^{-1}+z^{-2}}$ | $\lvert z\rvert>1$ |
+| $\sin(\Omega_0 n)u[n]$ | $\tfrac{\sin\Omega_0\,z^{-1}}{1-2\cos\Omega_0\,z^{-1}+z^{-2}}$ | $\lvert z\rvert>1$ |
+| $r^n\cos(\Omega_0 n)u[n]$ | $\tfrac{1-r\cos\Omega_0\,z^{-1}}{1-2r\cos\Omega_0\,z^{-1}+r^2z^{-2}}$ | $\lvert z\rvert>r$ |
+| $r^n\sin(\Omega_0 n)u[n]$ | $\tfrac{r\sin\Omega_0\,z^{-1}}{1-2r\cos\Omega_0\,z^{-1}+r^2z^{-2}}$ | $\lvert z\rvert>r$ |
+
+## Z Properties
+
+| Property | Sequence | $z$-Domain |
+|---|---|---|
+| Linearity | $ax_1+bx_2$ | $aX_1+bX_2$ |
+| Time shift (bilat.) | $x[n-n_0]$ | $z^{-n_0}X(z)$ |
+| $z$-scaling | $z_0^n x[n]$ | $X(z/z_0)$ |
+| Time reversal | $x[-n]$ | $X(z^{-1})$ |
+| Diff. in $z$ | $nx[n]$ | $-z\,dX/dz$ |
+| First diff. | $x[n]-x[n-1]$ | $(1-z^{-1})X$ |
+| Accumulation | $\sum_{k\le n}x[k]$ | $X/(1-z^{-1})$ |
+| Convolution | $x_1*x_2$ | $X_1 X_2$ |
+| **Unilat. shift-1** | $x[n-1]$ | $z^{-1}X+x[-1]$ |
+| Unilat. shift-2 | $x[n-2]$ | $z^{-2}X+x[-1]z^{-1}+x[-2]$ |
+| **IVT** | $x[0]$ | $\lim_{z\to\infty}X(z)$ |
+| **FVT** | $x[\infty]$ | $\lim_{z\to 1}(1-z^{-1})X(z)$ |
+
+**FVT valid iff** all poles of $(1-z^{-1})X(z)$ strictly inside unit circle.
+
+## Z ROC Rules
+
+- ROC is an annulus $r_1<|z|<r_2$, never contains poles.
+- **Finite duration** $\Rightarrow$ entire $z$-plane (except possibly $0$ and/or $\infty$).
+- **Right-sided (causal):** $|z|>r_{\max}$ (outside outermost pole); includes $z=\infty$ if causal.
+- **Left-sided (anticausal):** $|z|<r_{\min}$.
+- **Two-sided:** annular ring between poles.
+- **BIBO stable** $\Leftrightarrow$ unit circle $\subset$ ROC.
+- **Causal + Stable** $\Leftrightarrow$ all poles $|p_i|<1$.
+- LHP (CT) $\leftrightarrow$ interior of unit circle (DT).
+
+## Partial Fraction Expansion
+
+**Distinct poles:** $X(s)=\sum_k\tfrac{A_k}{s-p_k}$, $\;A_k=(s-p_k)X(s)\big|_{s=p_k}$.
+
+**Repeated pole** (order $r$ at $p$): $\sum_{k=1}^{r}\tfrac{B_k}{(s-p)^k}$, $\;B_k=\tfrac{1}{(r-k)!}\tfrac{d^{r-k}}{ds^{r-k}}\!\left[(s-p)^r X(s)\right]_{s=p}$.
+
+**Complex conj. pair** $p=-a\pm j\omega_d$: complete the square; use $(s+a)^2+\omega_d^2$ denominator with $\cos/\sin$ pairs.
+
+**Z-transform:** expand in $z^{-1}$, NOT $z$. For improper $X(z)$ (num order $\ge$ den), long-divide first. ROC decides right- vs. left-sided for each term.
+
+## Unilateral System Analysis
+
+**CT (ODE):** $y^{(k)}\to s^kY-\sum_{j=0}^{k-1}s^{k-1-j}y^{(j)}(0^-)$. Solve for $Y(s)=Y_{\text{zs}}+Y_{\text{zi}}$; PFE; invert. $H(s)=Y_{\text{zs}}/X$.
+
+**DT (diff. eq.):** $y[n-k]\to z^{-k}Y+\sum_{m=1}^{k}z^{-(k-m)}y[-m]$. Solve, PFE in $z^{-1}$, invert. $H(z)=Y_{\text{zs}}/X$.
+
+**Total response** = ZSR (ICs$=0$) + ZIR (input$=0$).
+
+## Sampling (Lec 22)
+
+- Impulse train: $p(t)=\sum_n\delta(t-nT)$; $\omega_s=2\pi/T$, $f_s=1/T$.
+- $x_p(t)=x(t)p(t)=\sum_n x(nT)\delta(t-nT)$.
+- **Sampled spectrum:** $X_p(j\omega)=\tfrac{1}{T}\sum_{k=-\infty}^{\infty}X(j(\omega-k\omega_s))$.
+- **Sampling Theorem:** bandlimited to $\omega_M \Rightarrow$ unique recovery iff $\omega_s>2\omega_M$ (strict). Nyquist rate $=2\omega_M$.
+- **Aliasing** (undersampled): replicas overlap; $f_{\text{alias}}=|f_s-f_0|$ for $f_0\in(f_s/2,f_s)$; irreversible $\Rightarrow$ use anti-alias LPF first.
+- **Ideal reconstruction:** LPF of gain $T$, cutoff $\omega_c\in(\omega_M,\omega_s-\omega_M)$, typically $\omega_s/2$.
+- **Sinc interp.:** $x_r(t)=\sum_n x(nT)\,\operatorname{sinc}\!\left(\tfrac{t-nT}{T}\right)$, $\operatorname{sinc}(u)=\tfrac{\sin\pi u}{\pi u}$.
+- **ZOH:** conv with rect width $T$; spectrum $H_0(j\omega)=\tfrac{2\sin(\omega T/2)}{\omega}e^{-j\omega T/2}$.
+- **C/D mapping:** $\Omega=\omega T$ (rad/sample $=$ rad/s $\times T$).
+- **Pitfall:** $\omega_s=2\omega_M$ not sufficient. Squaring doubles BW. Shift preserves Nyquist rate; $x(at)$ scales it by $|a|$.
+
+## Feedback Systems (Lec 23)
+
+**Negative feedback** (forward $G$, feedback $H$):
+$$T(s)=\dfrac{G(s)}{1+G(s)H(s)},\quad \text{unity fdbk: }T=\dfrac{G}{1+G}.$$
+Positive fdbk: $G/(1-GH)$. Loop gain $L=GH$.
+
+**Closed-loop poles** $=$ roots of $1+L(s)=0$ (characteristic equation). Feedback can stabilize unstable plants but also destabilize; open-loop poles $\ne$ closed-loop poles.
+
+**Nyquist criterion** (plant open-loop stable): closed-loop stable iff Nyquist plot of $L(j\omega)$ does NOT encircle $-1$ (or $-1/K$ for variable gain $K$). General: $N=Z-P$ where $N=$ CW encirclements of $-1$, $P=$ open-loop RHP poles, $Z=$ closed-loop RHP poles; need $Z=0$.
+
+**Gain margin** at $\omega_{180}$ (where $\angle L=-180°$):
+$$\mathrm{GM}_{\mathrm{dB}}=-20\log_{10}|L(j\omega_{180})|.$$
+
+**Phase margin** at $\omega_{\text{gc}}$ (where $|L|=1$):
+$$\mathrm{PM}=180°+\angle L(j\omega_{\text{gc}}).$$
+
+Both margins $>0\Rightarrow$ stable. Max delay: $\tau_{\max}=\mathrm{PM}_{\text{rad}}/\omega_{\text{gc}}$. First-order plants: $\mathrm{GM}=\infty$ (phase never hits $-180°$).
+
+**Routh-Hurwitz** (for $a_ns^n+\cdots+a_0$): build array; # sign changes in first column $=$ # RHP roots. Necessary (not sufficient) condition: all $a_i>0$ with same sign; missing term $\Rightarrow$ unstable/marginal.
+
+## One-Liners / Traps
+
+- $\delta\!\leftrightarrow\!1$; $u(t)\!\leftrightarrow\!1/s$; $e^{-at}u\!\leftrightarrow\!1/(s+a)$.
+- $u[n]\!\leftrightarrow\!1/(1-z^{-1})$; $a^nu[n]\!\leftrightarrow\!1/(1-az^{-1})$, $|z|>|a|$.
+- Unilat. Laplace diff: $sX-x(0^-)$ (**minus**). Unilat. Z shift: $z^{-1}X+x[-1]$ (**plus**).
+- Conv $\leftrightarrow$ multiply. ROC of product $\supseteq$ intersection.
+- Causal+Stable $\Leftrightarrow$ LHP poles (CT) / $|p|<1$ (DT).
+- Poles of $1/(1-az^{-1})$ are at $z=a$, not $1/a$.
+- PFE in Z: use $z^{-1}$, not $z$.
+- Always state ROC; same $X(s)$ w/ diff. ROC $=$ diff. signals.
+- FVT invalid if growing/oscillating.
+- RHP **zero** $\ne$ instability (only poles).
+- Marginal poles ($j\omega$-axis / unit circle) $\Rightarrow$ **not** BIBO stable.
+- $f_{\text{alias}}=|f_s-f_0|$; $\omega_s>2\omega_M$ strict.
+- $T=G/(1+GH)$; char. eq. $1+GH=0$.

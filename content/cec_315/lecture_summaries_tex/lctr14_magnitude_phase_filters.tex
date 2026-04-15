@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\title{Lecture 14: Magnitude-Phase Representation and Filters}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Polar Form of FT}
+
+\[X(j\omega) = |X(j\omega)| \, e^{j\angle X(j\omega)}\]
+
+\begin{itemize}
+  \item \textbf{Magnitude spectrum} $|X(j\omega)|$: amplitude at each frequency
+  \item \textbf{Phase spectrum} $\angle X(j\omega)$: phase shift at each frequency
+\end{itemize}
+
+\section*{Decibel Scale}
+
+\[|H(j\omega)|_{\text{dB}} = 20 \log_{10} |H(j\omega)|\]
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Linear} & \textbf{dB} \\
+\hline
+1 & 0 dB \\
+\hline
+$1/\sqrt{2} \approx 0.707$ & -3 dB \\
+\hline
+0.5 & -6 dB \\
+\hline
+0.1 & -20 dB \\
+\hline
+0.01 & -40 dB \\
+\hline
+10 & +20 dB \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Cutoff frequency:} defined at the \textbf{-3 dB point} where power is halved ($|H|^2 = \frac{1}{2}|H(0)|^2$).
+
+\section*{Energy Spectral Density}
+
+\[E = \int_{-\infty}^{\infty} |x(t)|^2 \, dt = \frac{1}{2\pi} \int_{-\infty}^{\infty} |X(j\omega)|^2 \, d\omega\]
+
+$|X(j\omega)|^2$ tells how energy is distributed across frequency. Phase does not affect total energy.
+
+\section*{Phase and Delay}
+
+\subsection*{Linear Phase}
+
+\[\angle H(j\omega) = -\omega t_0\]
+
+A system with linear phase imposes a \textbf{pure time delay} of $t_0$ seconds on all frequencies equally. The output shape is preserved -- no distortion.
+
+\[h(t) \text{ linear phase} \implies y(t) = c \cdot x(t - t_0)\]
+
+\subsection*{Phase Distortion}
+
+Nonlinear phase means different frequencies experience different delays. The output waveform shape is \textbf{distorted} even if magnitude is flat.
+
+\subsection*{Group Delay}
+
+\[\tau(\omega) = -\frac{d}{d\omega} \angle H(j\omega)\]
+
+\begin{itemize}
+  \item For linear phase: $\tau(\omega) = t_0$ (constant for all $\omega$)
+  \item For nonlinear phase: $\tau(\omega)$ varies with frequency
+\end{itemize}
+
+\section*{Ideal Filters}
+
+\subsection*{Ideal Lowpass Filter}
+
+\[H(j\omega) = \begin{cases} 1, & |\omega| \leq \omega_c \\ 0, & |\omega| > \omega_c \end{cases}\]
+
+Impulse response: $h(t) = \frac{\sin(\omega_c t)}{\pi t} = \frac{\omega_c}{\pi} \text{sinc}\left(\frac{\omega_c t}{\pi}\right)$
+
+\textbf{Non-causal:} $h(t) \neq 0$ for $t < 0$, so ideal filters are \textbf{physically unrealizable}.
+
+\subsection*{With Linear Phase (Delayed Ideal Filter)}
+
+\[H(j\omega) = e^{-j\omega t_0}, \quad |\omega| \leq \omega_c\]
+
+\[h(t) = \frac{\sin(\omega_c(t - t_0))}{\pi(t - t_0)}\]
+
+Still noncausal for any finite $t_0$ (sinc extends to $-\infty$).
+
+\section*{Nonideal (Real) Filter Specifications}
+
+\begin{itemize}
+  \item \textbf{Passband edge} $\omega_p$: end of the passband
+  \item \textbf{Stopband edge} $\omega_s$: start of the stopband
+  \item \textbf{Transition band}: $\omega_p < \omega < \omega_s$ (gradual roll-off region)
+  \item \textbf{Passband ripple} $\delta_1$: maximum deviation from 1 in passband
+  \item \textbf{Stopband attenuation} $\delta_2$: maximum leakage in stopband
+\end{itemize}
+
+\section*{Bandwidth and Rise Time Trade-off}
+
+\[\omega_c \cdot t_r \approx \text{constant}\]
+
+\begin{itemize}
+  \item \textbf{Wider bandwidth} (larger $\omega_c$) $\Rightarrow$ \textbf{shorter rise time} (faster response)
+  \item \textbf{Narrower bandwidth} $\Rightarrow$ \textbf{longer rise time} (slower, smoother response)
+  \item Cannot have both sharp frequency cutoff and fast time response
+\end{itemize}
+
+\section*{Real-Part Sufficiency}
+
+For a \textbf{real and causal} system, $H(j\omega)$ is completely determined by:
+\begin{itemize}
+  \item Its real part alone, OR
+  \item Its imaginary part alone
+\end{itemize}
+
+The real and imaginary parts are related by the \textbf{Hilbert transform}.
+
+\end{document}

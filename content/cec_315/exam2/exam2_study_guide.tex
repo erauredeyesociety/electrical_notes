@@ -1,0 +1,298 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{array}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{CEC 315 --- Exam 2 Study Guide\\\large Lectures 9--15: Fourier Series, Fourier Transform, Filters, Bode}
+\author{CEC 315 --- Signals and Systems (Spring 2026)}
+\date{}
+
+\newcommand{\FT}{\overset{\mathcal{F}}{\longleftrightarrow}}
+\newcommand{\FS}{\overset{\text{FS}}{\longleftrightarrow}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Topic Overview by Lecture}
+
+\subsection{Lecture 9 --- Continuous-Time Fourier Series}
+\begin{itemize}[leftmargin=*]
+  \item Complex exponentials $e^{st}$ are \textbf{eigenfunctions} of LTI systems: $e^{st} \to H(s)e^{st}$, where $H(s) = \int h(\tau)e^{-s\tau}d\tau$.
+  \item Periodic signal: $x(t)=x(t+T)$, fundamental frequency $\omega_0 = 2\pi/T$.
+  \item CTFS pair:
+  \[ x(t) = \sum_{k=-\infty}^{\infty} a_k e^{jk\omega_0 t},\qquad a_k = \frac{1}{T}\int_T x(t) e^{-jk\omega_0 t}dt. \]
+  \item $a_0 = \frac{1}{T}\int_T x(t)dt$ is the DC / average value.
+  \item Real signal $\Rightarrow a_{-k} = a_k^*$ (conjugate symmetry).
+  \item Inspection trick: expand $\cos/\sin$ via Euler and read off coefficients directly.
+\end{itemize}
+
+\subsection{Lecture 10 --- Convergence, Gibbs, DTFS}
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Dirichlet conditions:} $\int_T|x|dt<\infty$, bounded variation, finite-jump discontinuities. At a jump, FS $\to$ midpoint $(x(t_0^-)+x(t_0^+))/2$.
+  \item \textbf{Gibbs phenomenon:} $\sim 9\%$ overshoot near jumps, persists for all $N$.
+  \item \textbf{Spectral decay:} $|a_k| \sim 1/k^{m+1}$ where $m$ is the first discontinuous-derivative order.
+  \item CTFS properties: linearity, time shift $a_k e^{-jk\omega_0 t_0}$, time reversal $a_{-k}$, conjugation $a_{-k}^*$, differentiation $jk\omega_0 a_k$, Parseval.
+  \item DTFS: $x[n]=\sum_{k=\langle N\rangle} a_k e^{jk(2\pi/N)n}$ with exactly $N$ coefficients, periodic $a_{k+N}=a_k$, no convergence issues.
+\end{itemize}
+
+\subsection{Lecture 11 --- Frequency Response and Filtering}
+\begin{itemize}[leftmargin=*]
+  \item Output to periodic input: $y(t) = \sum a_k H(jk\omega_0) e^{jk\omega_0 t}$, i.e., $b_k = a_k H(jk\omega_0)$.
+  \item $H(j\omega)=\int h(\tau)e^{-j\omega\tau}d\tau$; for $h(t)=e^{-at}u(t)$, $H(j\omega)=1/(a+j\omega)$.
+  \item DT: $H(e^{j\omega})=\sum_n h[n]e^{-j\omega n}$; for $h[n]=a^n u[n]$ with $|a|<1$, $H(e^{j\omega})=1/(1-ae^{-j\omega})$.
+  \item RC lowpass: $\omega_c = 1/(RC)$; at $\omega_c$, $|H|=1/\sqrt{2}$, $\angle H=-45^\circ$.
+  \item Bandwidth--rise-time trade-off: $\omega_c t_r \approx $ constant.
+\end{itemize}
+
+\subsection{Lecture 12 --- Fourier Transforms (CT and DT)}
+\begin{itemize}[leftmargin=*]
+  \item CTFT: $X(j\omega)=\int x(t)e^{-j\omega t}dt$, $x(t) = \frac{1}{2\pi}\int X(j\omega)e^{j\omega t}d\omega$.
+  \item Convergence: Dirichlet + absolute integrability $\int|x|dt<\infty$.
+  \item FT of periodic $x$: impulse train $\sum_k 2\pi a_k \delta(\omega-k\omega_0)$.
+  \item DTFT: $X(e^{j\omega})=\sum_n x[n]e^{-j\omega n}$ is $2\pi$-periodic.
+  \item Four representations: CTFS/CTFT/DTFS/DTFT; discrete in one domain $\Leftrightarrow$ periodic in the other.
+\end{itemize}
+
+\subsection{Lecture 13 --- FT Properties and Convolution}
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Convolution property:} $x*h \FT XH$. Pipeline: transform $\to$ multiply $\to$ partial fractions $\to$ invert.
+  \item Multiplication: $xy \FT \frac{1}{2\pi} X*Y$.
+  \item Differentiation: $dx/dt \FT j\omega X$ (amplifies high frequencies).
+  \item ODE $\to H(j\omega)$: replace $d^k/dt^k \to (j\omega)^k$.
+  \item Duality: $X(jt) \FT 2\pi x(-\omega)$.
+\end{itemize}
+
+\subsection{Lecture 14 --- Magnitude, Phase, Ideal Filters}
+\begin{itemize}[leftmargin=*]
+  \item Polar form $X = |X|e^{j\angle X}$; $|H|_\text{dB}=20\log_{10}|H|$; $-3$ dB $\Leftrightarrow |H|=1/\sqrt{2}$.
+  \item Energy: $E=\int|x|^2dt=\frac{1}{2\pi}\int|X|^2 d\omega$; phase does not affect energy.
+  \item Linear phase $\angle H = -\omega t_0 \Rightarrow$ pure delay; group delay $\tau(\omega) = -d\angle H/d\omega$.
+  \item Ideal LPF $h(t)=\sin(\omega_c t)/(\pi t)$ is noncausal $\Rightarrow$ unrealizable.
+  \item Nonideal specs: passband/stopband edges, transition band, ripple, attenuation.
+\end{itemize}
+
+\subsection{Lecture 15 --- First/Second-Order Systems and Bode}
+\begin{itemize}[leftmargin=*]
+  \item First-order LP $H(j\omega)=1/(1+j\omega/\omega_c)$: $0$ dB flat, $-20$ dB/dec, $-45^\circ$ at $\omega_c$, $-90^\circ$ asymptote.
+  \item Bode building blocks: pole $\to -20$ dB/dec, zero $\to +20$ dB/dec, $(j\omega)^{\pm 1}\to \pm 20$ dB/dec.
+  \item Second-order standard: $H=\omega_n^2/[(j\omega)^2+2\zeta\omega_n(j\omega)+\omega_n^2]$.
+  \item DC gain 1; $|H(j\omega_n)|=1/(2\zeta)$; $\angle H(j\omega_n) = -90^\circ$; HF slope $-40$ dB/dec.
+  \item Resonance exists iff $\zeta<1/\sqrt{2}$: $\omega_r=\omega_n\sqrt{1-2\zeta^2}$, $|H|_{\max}=1/(2\zeta\sqrt{1-\zeta^2})$.
+  \item Step response (underdamped): $\%\text{OS}=100 e^{-\pi\zeta/\sqrt{1-\zeta^2}}$, $t_s\approx 4/(\zeta\omega_n)$.
+\end{itemize}
+
+\section{Key Equations}
+
+\subsection{Fourier Series (CT)}
+\[ x(t)=\sum_k a_k e^{jk\omega_0 t},\qquad a_k=\frac{1}{T}\int_T x(t)e^{-jk\omega_0 t}dt,\qquad \omega_0=\frac{2\pi}{T}. \]
+\[ \text{Parseval: }\ \frac{1}{T}\int_T|x(t)|^2 dt = \sum_k |a_k|^2. \]
+
+\subsection{Fourier Series (DT, length $N$)}
+\[ x[n]=\sum_{k=\langle N\rangle} a_k e^{jk(2\pi/N)n},\qquad a_k=\frac{1}{N}\sum_{n=\langle N\rangle} x[n] e^{-jk(2\pi/N)n}. \]
+\[ \text{Parseval: }\ \frac{1}{N}\sum_{n=\langle N\rangle}|x[n]|^2 = \sum_{k=\langle N\rangle}|a_k|^2,\qquad a_{k+N}=a_k. \]
+
+\subsection{Fourier Transform (CT)}
+\[ X(j\omega)=\int x(t)e^{-j\omega t}dt,\qquad x(t)=\frac{1}{2\pi}\int X(j\omega)e^{j\omega t}d\omega. \]
+\[ \text{Parseval: }\ \int|x(t)|^2 dt = \frac{1}{2\pi}\int|X(j\omega)|^2 d\omega. \]
+
+\subsection{Fourier Transform (DT)}
+\[ X(e^{j\omega})=\sum_n x[n]e^{-j\omega n},\qquad x[n]=\frac{1}{2\pi}\int_{2\pi}X(e^{j\omega})e^{j\omega n}d\omega. \]
+$X(e^{j\omega})$ is periodic in $\omega$ with period $2\pi$.
+
+\section{Fourier Transform Properties and Pairs}
+
+\subsection{CT FT Properties}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Property & Time & Frequency\\
+\hline
+Linearity & $ax(t)+by(t)$ & $aX(j\omega)+bY(j\omega)$\\
+Time shift & $x(t-t_0)$ & $e^{-j\omega t_0}X(j\omega)$\\
+Frequency shift & $e^{j\omega_0 t}x(t)$ & $X(j(\omega-\omega_0))$\\
+Time scaling & $x(at)$ & $X(j\omega/a)/|a|$\\
+Time reversal & $x(-t)$ & $X(-j\omega)$\\
+Conjugation & $x^*(t)$ & $X^*(-j\omega)$\\
+Differentiation & $dx/dt$ & $j\omega X(j\omega)$\\
+Integration & $\int_{-\infty}^t x\,d\tau$ & $X(j\omega)/(j\omega)+\pi X(0)\delta(\omega)$\\
+Convolution & $x*y$ & $X(j\omega)Y(j\omega)$\\
+Multiplication & $xy$ & $X(j\omega)*Y(j\omega)/(2\pi)$\\
+Duality & $X(jt)$ & $2\pi x(-\omega)$\\
+Parseval & $\int|x|^2 dt$ & $\frac{1}{2\pi}\int|X|^2 d\omega$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{CT FS Properties}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Property & Time & Coefficient\\
+\hline
+Linearity & $Ax+By$ & $Aa_k+Bb_k$\\
+Time shift & $x(t-t_0)$ & $a_k e^{-jk\omega_0 t_0}$\\
+Time reversal & $x(-t)$ & $a_{-k}$\\
+Conjugation & $x^*(t)$ & $a_{-k}^*$\\
+Differentiation & $dx/dt$ & $jk\omega_0 a_k$\\
+Real signal & $x\in\mathbb{R}$ & $a_{-k}=a_k^*$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Common CT FT Pairs}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+$x(t)$ & $X(j\omega)$\\
+\hline
+$\delta(t)$ & $1$\\
+$1$ & $2\pi\delta(\omega)$\\
+$u(t)$ & $1/(j\omega)+\pi\delta(\omega)$\\
+$e^{-at}u(t),\ a>0$ & $1/(a+j\omega)$\\
+$te^{-at}u(t),\ a>0$ & $1/(a+j\omega)^2$\\
+$e^{-a|t|},\ a>0$ & $2a/(a^2+\omega^2)$\\
+$e^{j\omega_0 t}$ & $2\pi\delta(\omega-\omega_0)$\\
+$\cos\omega_0 t$ & $\pi[\delta(\omega-\omega_0)+\delta(\omega+\omega_0)]$\\
+$\sin\omega_0 t$ & $(\pi/j)[\delta(\omega-\omega_0)-\delta(\omega+\omega_0)]$\\
+rect of half-width $T_1$ & $2\sin(\omega T_1)/\omega$\\
+$\sin(Wt)/(\pi t)$ & rect on $|\omega|\le W$ (ideal LPF)\\
+Periodic $x$ & $\sum_k 2\pi a_k\delta(\omega-k\omega_0)$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Common DT FT Pairs}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+$x[n]$ & $X(e^{j\omega})$\\
+\hline
+$\delta[n]$ & $1$\\
+$a^n u[n],\ |a|<1$ & $1/(1-ae^{-j\omega})$\\
+$(n+1)a^n u[n],\ |a|<1$ & $1/(1-ae^{-j\omega})^2$\\
+$e^{j\omega_0 n}$ & $2\pi\sum_k\delta(\omega-\omega_0-2\pi k)$\\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Filter Design Basics}
+
+\subsection{Magnitude, Phase, Decibels}
+\begin{itemize}[leftmargin=*]
+  \item Polar: $H(j\omega) = |H|e^{j\angle H}$.
+  \item $|H|_\text{dB} = 20\log_{10}|H|$. Cutoff at $-3$ dB $\Leftrightarrow |H|=1/\sqrt{2}$.
+  \item Linear phase $\angle H = -\omega t_0 \Rightarrow$ pure delay; group delay $\tau = -d\angle H/d\omega$ is constant.
+\end{itemize}
+
+\subsection{Ideal Filters}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+Filter & $H(j\omega)$\\
+\hline
+Ideal LPF & $1,\ |\omega|\le\omega_c$; $0$ otherwise\\
+Ideal HPF & $1-$ ideal LPF\\
+Ideal BPF & $1,\ \omega_1 \le |\omega| \le \omega_2$; $0$ otherwise\\
+\hline
+\end{tabular}
+\end{center}
+Ideal LPF impulse response: $h(t)=\sin(\omega_c t)/(\pi t)$. \textbf{Noncausal $\Rightarrow$ unrealizable.}
+
+\subsection{Bode Plot Rules}
+\begin{itemize}[leftmargin=*]
+  \item Plot $|H|_\text{dB}$ vs.\ $\log_{10}\omega$ and $\angle H$ vs.\ $\log_{10}\omega$.
+  \item Cascades add magnitudes (dB) and phases.
+  \item First-order pole $(1+j\omega/\omega_c)^{-1}$: flat below $\omega_c$, $-20$ dB/dec above; phase $0\to -45^\circ$ at $\omega_c \to -90^\circ$.
+  \item First-order zero: $+20$ dB/dec; phase $0\to +90^\circ$.
+  \item $(j\omega)^{\pm 1}$: constant $\pm 20$ dB/dec.
+  \item Second-order underdamped: flat $\to -40$ dB/dec past $\omega_n$; phase $0\to -90^\circ$ at $\omega_n \to -180^\circ$.
+\end{itemize}
+
+\section{Second-Order Systems}
+
+Standard form: $H(j\omega) = \dfrac{\omega_n^2}{(j\omega)^2+2\zeta\omega_n(j\omega)+\omega_n^2}.$
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Quantity & Formula & Notes\\
+\hline
+DC gain & $1$ & always\\
+$|H(j\omega_n)|$ & $1/(2\zeta)$ & always\\
+$\angle H(j\omega_n)$ & $-90^\circ$ & always\\
+$\omega_r$ & $\omega_n\sqrt{1-2\zeta^2}$ & if $\zeta<1/\sqrt{2}$\\
+Peak $|H|_{\max}$ & $1/(2\zeta\sqrt{1-\zeta^2})$ & if $\zeta<1/\sqrt{2}$\\
+$\omega_d$ & $\omega_n\sqrt{1-\zeta^2}$ & underdamped\\
+\%OS & $100 e^{-\pi\zeta/\sqrt{1-\zeta^2}}$ & underdamped\\
+$t_p$ & $\pi/\omega_d$ & underdamped\\
+$t_s$ (2\%) & $4/(\zeta\omega_n)$ & underdamped\\
+$t_r$ & $1.8/\omega_n$ & underdamped\\
+HF Bode slope & $-40$ dB/dec & always\\
+\hline
+\end{tabular}
+\end{center}
+
+Damping classification: $\zeta<1$ underdamped (complex poles), $\zeta=1$ critically damped, $\zeta>1$ overdamped.
+
+\section{What to Memorize}
+
+\textbf{Must-know FT pairs:}
+\[ \delta(t) \FT 1,\quad 1 \FT 2\pi\delta(\omega),\quad e^{-at}u(t) \FT \frac{1}{a+j\omega},\quad e^{-a|t|} \FT \frac{2a}{a^2+\omega^2}, \]
+\[ \cos\omega_0 t \FT \pi[\delta(\omega-\omega_0)+\delta(\omega+\omega_0)],\ \ \text{rect}_{T_1} \FT 2T_1\,\text{sinc}(\omega T_1/\pi). \]
+
+\textbf{Must-know identities:}
+\begin{itemize}[leftmargin=*]
+  \item $\omega_0 = 2\pi/T$, $a_0 = \frac{1}{T}\int_T x\,dt$.
+  \item Real $x \Rightarrow a_{-k}=a_k^*$ and $X(-j\omega)=X^*(j\omega)$.
+  \item CTFT Parseval has $\frac{1}{2\pi}$; CTFS Parseval does not.
+  \item $dx/dt \FT j\omega X$.
+  \item $x*h \FT XH$ (the workhorse).
+  \item Gibbs $\approx 9\%$.
+\end{itemize}
+
+\textbf{Must-know procedures:}
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{CTFS coefficients:} $T,\omega_0 \to a_0 \to$ analysis integral $\to$ Euler simplification.
+  \item \textbf{LTI output to periodic input:} $\{a_k\} \to H(jk\omega_0) \to \{b_k=a_k H\} \to$ reassemble $y$.
+  \item \textbf{Convolution pipeline:} transform $\to$ multiply $\to$ PFE $\to$ invert.
+  \item \textbf{ODE $\to H(j\omega)$:} replace $d^k/dt^k \to (j\omega)^k$, form rational $H$.
+  \item \textbf{Second-order extraction:} read $\omega_n^2$ and $2\zeta\omega_n$; compute $\zeta$; derive $\omega_r$, \%OS, $t_s$.
+\end{enumerate}
+
+\section{Common Pitfalls}
+\begin{enumerate}[leftmargin=*]
+  \item Differentiation kills DC: $d_0 = 0$ always.
+  \item Gibbs overshoot is $\sim 9\%$ \emph{independent of $N$}; ripple narrows, peak doesn't.
+  \item Parseval constants: CTFT has a $1/(2\pi)$; CTFS/DTFS/DTFT normalizations differ.
+  \item Frequency shift: $e^{j\omega_0 t}x \FT X(j(\omega-\omega_0))$ (shift right).
+  \item Ideal filter $\Rightarrow$ noncausal $\Rightarrow$ unrealizable.
+  \item DTFS has exactly $N$ coefficients, not infinitely many.
+  \item $H(j\omega) = 1/(a+j\omega)$ gives $\omega_c = a$; the standard form $1/(1+j\omega/\omega_c)$ makes $\omega_c$ explicit.
+  \item At $\omega_n$ in second-order: $|H|=1/(2\zeta)$ (not 1); DC gain is 1.
+  \item Resonance only when $\zeta < 1/\sqrt{2} \approx 0.707$.
+  \item Time shift preserves $|a_k|$ and $|X|$; only phase changes.
+  \item Cover-up method uses $j\omega$ as the variable; plug $j\omega=-a$, not $s=-a$.
+  \item Conjugate symmetry only holds for real signals.
+  \item First-order corner deviation is 3 dB (asymptote error).
+  \item Unit conversion: $\omega = 2\pi f$.
+  \item Linear phase vs.\ zero phase: linear phase still distortion-free, just delayed.
+\end{enumerate}
+
+\vfill
+\begin{center}
+\textit{Prepared for CEC 315 Exam 2 --- Spring 2026.}
+\end{center}
+
+\end{document}

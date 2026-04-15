@@ -1,0 +1,196 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath,amssymb,siunitx}
+\usepackage{parskip}
+\usepackage{enumitem}
+
+\title{PS160 --- Midterm 2 Equation Sheet}
+\author{Thermodynamics \\ (Modules 17, 18, 19, 20)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Temperature and Thermal Expansion (Module 17)}
+
+\paragraph{Temperature scale conversions.}
+\[
+T_{K} = T_{C} + 273.15
+\qquad
+T_{F} = \tfrac{9}{5}T_{C} + 32
+\qquad
+T_{R} = T_{F} + 459.67
+\]
+
+\paragraph{Linear thermal expansion.}
+\[
+\Delta L = \alpha L_{0}\,\Delta T
+\]
+
+\paragraph{Volume thermal expansion.}
+\[
+\Delta V = \beta V_{0}\,\Delta T
+\qquad
+\beta = 3\alpha
+\]
+
+\paragraph{Thermal stress (rod prevented from expanding).}
+\[
+\frac{F}{A} = -Y \alpha\,\Delta T
+\]
+
+\paragraph{Quantity of heat / specific heat.}
+\[
+Q = m c\,\Delta T = n C\,\Delta T
+\]
+
+\paragraph{Latent heat (phase change).}
+\[
+Q = \pm m L
+\qquad (L_{f}\text{: fusion},\; L_{v}\text{: vaporization})
+\]
+
+\paragraph{Heat transfer by conduction.}
+\[
+H = \frac{dQ}{dt} = k A\,\frac{\Delta T}{L}
+\]
+
+\paragraph{Heat transfer by radiation (Stefan--Boltzmann for a blackbody).}
+\[
+H = A\sigma T^{4}
+\qquad\text{(emissivity $e$: } H = e A\sigma T^{4}\text{)}
+\]
+\[
+\sigma = \SI{5.67e-8}{W/(m^{2} K^{4})}
+\]
+
+\paragraph{Useful constants.} $c_{\text{water}} = \SI{4190}{J/(kg\cdot K)}$.
+
+\section*{Thermal Properties of Matter / Kinetic Theory (Module 18)}
+
+\paragraph{Ideal gas law.}
+\[
+pV = N k T
+\qquad
+pV = n R T
+\qquad
+k N_{A} = R
+\]
+
+\paragraph{Boltzmann constant and Avogadro's number.}
+\[
+k = \SI{1.380649e-23}{J/K}
+\qquad
+N_{A} = \SI{6.02214076e23}{mol^{-1}}
+\]
+
+\paragraph{Equipartition theorem (each quadratic degree of freedom).}
+\[
+\langle \tfrac{1}{2} m v^{2}\rangle_{\text{per d.o.f.}} = \tfrac{1}{2} k T
+\qquad
+\tfrac{1}{2} m\,\langle v^{2}\rangle = \tfrac{3}{2} k T
+\]
+
+\paragraph{rms speed.}
+\[
+v_{\text{rms}} = \sqrt{\langle v^{2}\rangle} = \sqrt{\frac{3 k T}{m}} = \sqrt{\frac{3 R T}{M}}
+\]
+
+\paragraph{Maxwell--Boltzmann speed distribution.}
+\[
+f(v) \propto v^{2}\, e^{-m v^{2}/(2 k T)}
+\]
+
+\paragraph{Molar heat capacities for an ideal gas.}
+\[
+C_{V} = \frac{f}{2} R
+\qquad
+C_{P} = C_{V} + R
+\qquad
+\gamma = \frac{C_{P}}{C_{V}}
+\]
+Dulong--Petit for solids: $C_{V} = 3R$.
+
+\section*{First Law of Thermodynamics (Module 19)}
+
+\paragraph{Work done by a gas.}
+\[
+W = \int p\,dV
+\]
+
+\paragraph{First law.}
+\[
+dU = \bar{d}Q - \bar{d}W
+\qquad
+\Delta U = Q - W
+\]
+
+\paragraph{Internal energy of ideal gas (depends only on $T$).}
+\[
+U = n C_{V} T
+\qquad
+\Delta U = n C_{V}\,\Delta T
+\]
+
+\paragraph{Basic processes (ideal gas).}
+
+Isobaric ($p$ const): $W = p\,\Delta V$, $Q = n C_{P}\,\Delta T$.
+
+Isochoric ($V$ const): $W = 0$, $Q = n C_{V}\,\Delta T$, $\Delta U = Q$.
+
+Isothermal ($T$ const): $\Delta U = 0$, $Q = W = n R T\ln(V_{2}/V_{1})$.
+
+Adiabatic ($Q = 0$): $\Delta U = -W$ and
+\[
+p V^{\gamma} = \text{const},\quad
+T V^{\gamma - 1} = \text{const},\quad
+W = \frac{p_{1} V_{1} - p_{2} V_{2}}{\gamma - 1}
+\]
+
+\section*{Second Law / Entropy / Cycles (Module 20)}
+
+\paragraph{Zeroth law.} $T_{A} = T_{B} = T_{C}$ (transitivity of thermal equilibrium).
+
+\paragraph{Second law (Clausius / Kelvin--Planck).} $\Delta S_{\text{universe}} \ge 0$.
+
+\paragraph{Entropy (definitions).}
+\[
+\Delta S = \int \frac{\bar{d}Q_{\text{rev}}}{T}
+\qquad
+S = k\ln w
+\]
+
+\paragraph{First law for a complete cycle.} $\Delta U = 0$, hence
+\[
+W_{\text{net}} = Q_{\text{net}} = Q_{H} + Q_{C}
+\]
+(with sign convention: $Q_{H} > 0$, $Q_{C} < 0$ for a heat engine).
+
+\paragraph{Heat-engine efficiency.}
+\[
+e = \frac{W}{Q_{H}} = 1 + \frac{Q_{C}}{Q_{H}} = 1 - \frac{|Q_{C}|}{Q_{H}}
+\]
+
+\paragraph{Carnot efficiency (reversible maximum).}
+\[
+e_{\text{Carnot}} = 1 - \frac{T_{C}}{T_{H}}
+\]
+
+\paragraph{Refrigerator coefficient of performance.}
+\[
+K_{\text{ref}} = \frac{Q_{C}}{-W} = \frac{|Q_{C}|}{|W|}
+\qquad
+K_{\text{heat pump}} = \frac{-Q_{H}}{-W} = \frac{|Q_{H}|}{|W|}
+\]
+
+\paragraph{Carnot cycle entropy change.}
+\[
+\Delta S_{\text{Carnot}} = \frac{Q_{H}}{T_{H}} + \frac{Q_{C}}{T_{C}} = 0
+\]
+
+\paragraph{Entropy of simple processes.}
+Isothermal ideal gas: $\Delta S = n R\ln(V_{2}/V_{1})$.\\
+Heating a substance: $\Delta S = m c\ln(T_{2}/T_{1})$.\\
+Phase change: $\Delta S = \pm m L / T$.
+
+\end{document}

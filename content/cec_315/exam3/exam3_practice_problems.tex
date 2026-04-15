@@ -1,0 +1,1316 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{CEC 315 --- Exam 3 Additional Practice Problems\\
+\large Lectures 16--23: Laplace, Z-Transform, Sampling, Feedback}
+\author{CEC 315 --- Signals and Systems (Spring 2026)}
+\date{}
+
+\newcommand{\Real}{\operatorname{Re}}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\textit{Brand-new variations on the worked examples in
+\texttt{exam3\_sample\_problems.md}.\\
+Same techniques, different numerical data.}
+\end{center}
+
+\tableofcontents
+\newpage
+
+%==============================================================
+\section{Lecture 16 --- Laplace Transform and ROC}
+%==============================================================
+
+\subsection{Problem P16.1 --- Ramp--Exponential Pair}
+\textbf{Topic:} Basic Laplace pair $t^{n-1}e^{-at}u(t)/(n-1)!\leftrightarrow 1/(s+a)^n$.\\
+\textbf{Concept tested:} Recognize a table entry; state the ROC.
+
+\textbf{Statement.} Compute $\mathcal{L}\{t^{2}e^{-5t}u(t)\}$ and state the ROC.
+
+\textbf{Solution.}
+
+\textit{Step 1.} The standard pair (for $n=3$, $a=5$) is
+\[
+\frac{t^{2}}{2!}e^{-5t}u(t)\leftrightarrow \frac{1}{(s+5)^{3}},\qquad \Real\{s\}>-5.
+\]
+
+\textit{Step 2.} Multiply both sides by $2!=2$:
+\[
+t^{2}e^{-5t}u(t)\leftrightarrow \frac{2}{(s+5)^{3}}.
+\]
+
+\textit{Step 3.} The ROC is unchanged by the scalar.
+
+\textbf{Result.}
+\[
+\boxed{\,X(s) = \frac{2}{(s+5)^{3}},\qquad \Real\{s\}>-5.\,}
+\]
+
+\subsection{Problem P16.2 --- Two-Sided Combination with Strip ROC}
+\textbf{Topic:} Linearity; intersecting ROCs for a right-sided + left-sided piece.\\
+\textbf{Concept tested:} Identify the strip ROC when two exponentials of opposite type are added.
+
+\textbf{Statement.} Find $X(s)$ and the ROC of
+\[
+x(t) = 5e^{-t}u(t) - 2e^{4t}u(-t).
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Right-sided piece: $5e^{-t}u(t)\leftrightarrow 5/(s+1)$, ROC $\Real\{s\}>-1$.
+
+\textit{Step 2.} Left-sided piece: rewrite $-2e^{4t}u(-t) = 2\bigl[-e^{4t}u(-t)\bigr]$.
+Using $-e^{-at}u(-t)\leftrightarrow 1/(s+a)$ with $a=-4$:
+\[
+-2e^{4t}u(-t)\leftrightarrow \frac{2}{s-4},\qquad \Real\{s\}<4.
+\]
+
+\textit{Step 3.} Sum and intersect the ROCs.
+
+\textbf{Result.}
+\[
+\boxed{\,X(s) = \frac{5}{s+1}+\frac{2}{s-4},\qquad -1<\Real\{s\}<4.\,}
+\]
+
+The ROC is a vertical strip between the poles $s=-1$ and $s=4$.
+
+\subsection{Problem P16.3 --- Damped Sine via Frequency-Shift}
+\textbf{Topic:} Frequency-shift property $e^{-at}x(t)\leftrightarrow X(s+a)$.\\
+\textbf{Concept tested:} Build a new pair from a known one using a property.
+
+\textbf{Statement.} Find $\mathcal{L}\{e^{-2t}\sin(3t)u(t)\}$ and its ROC.
+
+\textbf{Solution.}
+
+\textit{Step 1.} Known pair: $\sin(3t)u(t)\leftrightarrow 3/(s^{2}+9)$, ROC $\Real\{s\}>0$.
+
+\textit{Step 2.} Apply $e^{-2t}x(t)\leftrightarrow X(s+2)$:
+\[
+X(s) = \frac{3}{(s+2)^{2}+9}.
+\]
+
+\textit{Step 3.} The ROC shifts left by $2$: $\Real\{s\}>-2$.
+
+\textbf{Result.}
+\[
+\boxed{\,X(s) = \frac{3}{(s+2)^{2}+9},\qquad \Real\{s\}>-2.\,}
+\]
+
+\subsection{Problem P16.4 --- Hyperbolic Cosine Pulse}
+\textbf{Topic:} Decompose a hyperbolic function into exponentials.\\
+\textbf{Concept tested:} Sum of two right-sided exponentials with opposite-sign poles; find the common ROC.
+
+\textbf{Statement.} Find $X(s)$ and the ROC of
+\[
+x(t) = \cosh(3t)\,u(t) = \tfrac{1}{2}\bigl(e^{3t}+e^{-3t}\bigr)u(t).
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} By linearity,
+\[
+X(s) = \frac{1}{2}\!\left[\frac{1}{s-3}+\frac{1}{s+3}\right].
+\]
+
+\textit{Step 2.} Common denominator:
+\[
+X(s) = \frac{1}{2}\cdot\frac{(s+3)+(s-3)}{(s-3)(s+3)} = \frac{s}{s^{2}-9}.
+\]
+
+\textit{Step 3.} Individual ROCs: $\Real\{s\}>3$ and $\Real\{s\}>-3$.
+Intersection: $\Real\{s\}>3$.
+
+\textbf{Result.}
+\[
+\boxed{\,X(s) = \frac{s}{s^{2}-9},\qquad \Real\{s\}>3.\,}
+\]
+
+\subsection{Problem P16.5 --- Finite-Duration Delayed Pulse}
+\textbf{Topic:} Time-shift property; finite-duration ROC is the entire plane.\\
+\textbf{Concept tested:} Decompose a pulse as a difference of two shifted steps.
+
+\textbf{Statement.} Find $X(s)$ and the ROC of
+\[
+x(t) = u(t-4) - u(t-7).
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Use $u(t)\leftrightarrow 1/s$ and $u(t-t_{0})\leftrightarrow e^{-st_{0}}/s$:
+\[
+X(s) = \frac{e^{-4s}}{s} - \frac{e^{-7s}}{s} = \frac{e^{-4s}-e^{-7s}}{s}.
+\]
+
+\textit{Step 2.} The signal has finite support $[4,7]$ and is bounded, so
+it is absolutely integrable. The ROC is the entire $s$-plane (the apparent
+pole at $s=0$ is removable: $\lim_{s\to 0}(e^{-4s}-e^{-7s})/s = 3$).
+
+\textbf{Result.}
+\[
+\boxed{\,X(s) = \frac{e^{-4s}-e^{-7s}}{s},\qquad \text{all }s.\,}
+\]
+
+%==============================================================
+\section{Lecture 17 --- Inverse Laplace and Properties}
+%==============================================================
+
+\subsection{Problem P17.1 --- Distinct Real Poles (Right-Sided)}
+\textbf{Topic:} Partial fraction expansion via cover-up.\\
+\textbf{Concept tested:} Two distinct first-order terms, causal direction.
+
+\textbf{Statement.} Find $x(t)$ given
+\[
+X(s) = \frac{s+7}{(s+1)(s+4)},\qquad \Real\{s\}>-1.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} PFE:
+\[
+X(s) = \frac{A}{s+1}+\frac{B}{s+4}.
+\]
+
+\textit{Step 2.} Cover-up.
+\begin{itemize}
+\item $A = (s+7)/(s+4)\big|_{s=-1} = 6/3 = 2$.
+\item $B = (s+7)/(s+1)\big|_{s=-4} = 3/(-3) = -1$.
+\end{itemize}
+\[
+X(s) = \frac{2}{s+1} - \frac{1}{s+4}.
+\]
+
+\textit{Step 3.} ROC is right of both poles $\Rightarrow$ both terms right-sided.
+
+\textbf{Result.}
+\[
+\boxed{\,x(t) = \bigl[2e^{-t} - e^{-4t}\bigr]u(t).\,}
+\]
+
+\textit{Check.} $x(0^{+}) = 2-1 = 1$; IVT: $\lim_{s\to\infty}sX(s) = 1$. \checkmark
+
+\subsection{Problem P17.2 --- Improper Rational (Long Division First)}
+\textbf{Topic:} Polynomial long division before PFE.\\
+\textbf{Concept tested:} Recognize that $\deg\text{num}\ge\deg\text{den}$ produces an impulse term.
+
+\textbf{Statement.} Find $x(t)$ given
+\[
+X(s) = \frac{s^{2}+4s+5}{s^{2}+3s+2},\qquad \Real\{s\}>-1.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Long division:
+\[
+s^{2}+4s+5 = 1\cdot(s^{2}+3s+2) + (s+3),
+\]
+so $X(s) = 1 + (s+3)/[(s+1)(s+2)]$.
+
+\textit{Step 2.} PFE of the proper part:
+\begin{itemize}
+\item $A$ at $s=-1$: $(-1+3)/(-1+2) = 2$.
+\item $B$ at $s=-2$: $(-2+3)/(-2+1) = -1$.
+\end{itemize}
+\[
+X(s) = 1 + \frac{2}{s+1}-\frac{1}{s+2}.
+\]
+
+\textit{Step 3.} The constant $1$ inverts to $\delta(t)$; the rest is right-sided.
+
+\textbf{Result.}
+\[
+\boxed{\,x(t) = \delta(t)+\bigl[2e^{-t}-e^{-2t}\bigr]u(t).\,}
+\]
+
+\subsection{Problem P17.3 --- Repeated Triple Pole}
+\textbf{Topic:} Table pair for $t^{n-1}e^{-at}u(t)$.\\
+\textbf{Concept tested:} Direct match for a higher-order pole.
+
+\textbf{Statement.} Find $x(t)$ given
+\[
+X(s) = \frac{1}{(s+3)^{3}},\qquad \Real\{s\}>-3.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Use
+\[
+\frac{t^{n-1}}{(n-1)!}e^{-at}u(t)\leftrightarrow \frac{1}{(s+a)^{n}},\qquad n=3,\ a=3.
+\]
+
+\textit{Step 2.} With $n=3$, $(n-1)!=2$:
+\[
+\frac{t^{2}}{2}e^{-3t}u(t)\leftrightarrow \frac{1}{(s+3)^{3}}.
+\]
+
+\textbf{Result.}
+\[
+\boxed{\,x(t) = \tfrac{1}{2}t^{2}e^{-3t}u(t).\,}
+\]
+
+\subsection{Problem P17.4 --- Complex Conjugate Poles}
+\textbf{Topic:} Complete the square; use the damped cosine/sine pair.\\
+\textbf{Concept tested:} Split the numerator into an "$(s+a)$-like" part and a constant.
+
+\textbf{Statement.} Find $x(t)$ given
+\[
+X(s) = \frac{2s+8}{s^{2}+6s+25},\qquad \Real\{s\}>-3.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Complete the square:
+$s^{2}+6s+25 = (s+3)^{2}+16$, so poles at $s=-3\pm j4$ and $\omega_{d}=4$.
+
+\textit{Step 2.} Split the numerator:
+$2s+8 = 2(s+3)+2$.
+\[
+X(s) = 2\cdot\frac{s+3}{(s+3)^{2}+16} + \tfrac{1}{2}\cdot\frac{4}{(s+3)^{2}+16}.
+\]
+
+\textit{Step 3.} Invert using the damped cosine/sine pairs.
+
+\textbf{Result.}
+\[
+\boxed{\,x(t) = e^{-3t}\!\left[2\cos(4t)+\tfrac{1}{2}\sin(4t)\right]u(t).\,}
+\]
+
+\subsection{Problem P17.5 --- Mixed ROC (Two-Sided Inversion)}
+\textbf{Topic:} Use the ROC to assign direction per term.\\
+\textbf{Concept tested:} One pole right-sided, the other left-sided.
+
+\textbf{Statement.} Find $x(t)$ given
+\[
+X(s) = \frac{6}{(s-1)(s+5)},\qquad -5<\Real\{s\}<1.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} PFE.
+\begin{itemize}
+\item $A$ at $s=1$: $6/(1+5) = 1$.
+\item $B$ at $s=-5$: $6/(-5-1) = -1$.
+\end{itemize}
+$X(s) = 1/(s-1) - 1/(s+5)$.
+
+\textit{Step 2.} Direction from the ROC.
+\begin{itemize}
+\item Pole $s=1$: ROC to its \textbf{left} $\Rightarrow$ left-sided $\Rightarrow 1/(s-1)\leftrightarrow -e^{t}u(-t)$.
+\item Pole $s=-5$: ROC to its \textbf{right} $\Rightarrow$ right-sided $\Rightarrow 1/(s+5)\leftrightarrow e^{-5t}u(t)$.
+\end{itemize}
+
+\textbf{Result.}
+\[
+\boxed{\,x(t) = -e^{t}u(-t) - e^{-5t}u(t).\,}
+\]
+
+\subsection{Problem P17.6 --- Initial and Final Value Theorems}
+\textbf{Topic:} IVT and FVT applied without inverting.\\
+\textbf{Concept tested:} Check FVT validity before applying it.
+
+\textbf{Statement.} Given
+\[
+X(s) = \frac{2s+3}{s(s+1)(s+4)},\qquad \Real\{s\}>0,
+\]
+find $x(0^{+})$ and $x(\infty)$.
+
+\textbf{Solution.}
+
+\textit{IVT.}
+\[
+x(0^{+}) = \lim_{s\to\infty}sX(s) = \lim_{s\to\infty}\frac{2s+3}{(s+1)(s+4)} = 0.
+\]
+
+\textit{FVT validity.} $sX(s) = (2s+3)/[(s+1)(s+4)]$ has poles at
+$s=-1,-4$ (LHP). \checkmark
+
+\[
+x(\infty) = \lim_{s\to 0}\frac{2s+3}{(s+1)(s+4)} = \frac{3}{4}.
+\]
+
+\textbf{Result.}
+\[
+\boxed{\,x(0^{+})=0,\qquad x(\infty) = \tfrac{3}{4}.\,}
+\]
+
+%==============================================================
+\section{Lecture 18 --- System Analysis via Unilateral Laplace}
+%==============================================================
+
+\subsection{Problem P18.1 --- Differential Equation to $H(s)$ with Cancellation}
+\textbf{Topic:} Derive $H(s)$; recognize a pole-zero cancellation.\\
+\textbf{Concept tested:} ODE $\to$ transfer function; stability.
+
+\textbf{Statement.} A causal LTI system obeys
+\[
+\frac{d^{2}y}{dt^{2}}+7\frac{dy}{dt}+12y = 2\frac{dx}{dt}+8x.
+\]
+Find $H(s)$ and classify stability.
+
+\textbf{Solution.}
+
+\textit{Step 1.} With zero ICs, $d^{k}/dt^{k}\to s^{k}$:
+\[
+(s^{2}+7s+12)Y(s) = (2s+8)X(s).
+\]
+
+\textit{Step 2.}
+\[
+H(s) = \frac{2s+8}{s^{2}+7s+12} = \frac{2(s+4)}{(s+3)(s+4)} = \frac{2}{s+3}.
+\]
+
+\textit{Step 3.} After cancellation the only pole is $s=-3$ (LHP).
+Causal $\Rightarrow$ ROC $\Real\{s\}>-3$, contains $j\omega$-axis.
+
+\textbf{Result.}
+\[
+\boxed{\,H(s) = \frac{2}{s+3};\ \text{causal and stable.}\,}
+\]
+
+\subsection{Problem P18.2 --- Stability Classification Table}
+\textbf{Topic:} Causal pole-locations vs. BIBO stability.\\
+\textbf{Concept tested:} Apply the LHP rule; spot marginal cases.
+
+\textbf{Statement.} For each causal LTI system, state whether it is stable, marginally stable, or unstable.
+
+\begin{center}
+\begin{tabular}{c|c}
+ & $H(s)$ \\\hline
+(a) & $\dfrac{4}{s+5}$ \\[4pt]
+(b) & $\dfrac{s+2}{(s+1)(s-4)}$ \\[4pt]
+(c) & $\dfrac{7}{s^{2}+16}$ \\[4pt]
+(d) & $\dfrac{3s+2}{s^{2}+4s+8}$ \\[4pt]
+(e) & $\dfrac{1}{s(s+2)}$ \\
+\end{tabular}
+\end{center}
+
+\textbf{Solution.}
+
+\begin{center}
+\begin{tabular}{c|c|c}
+Case & Pole locations & Classification\\\hline
+(a) & $s=-5$ & Stable\\
+(b) & $s=-1,\ +4$ & Unstable (RHP pole)\\
+(c) & $s=\pm j4$ & Marginally stable\\
+(d) & $s=-2\pm j2$ & Stable\\
+(e) & $s=0,\ -2$ & Marginally stable (pole at origin)\\
+\end{tabular}
+\end{center}
+
+\[
+\boxed{\,(a)\text{ stable},\ (b)\text{ unstable},\ (c)\text{ marginal},\ (d)\text{ stable},\ (e)\text{ marginal.}\,}
+\]
+
+\subsection{Problem P18.3 --- First-Order ODE with IC and Exponential Input}
+\textbf{Topic:} ZIR + ZSR via unilateral Laplace.\\
+\textbf{Concept tested:} Solve a first-order ODE with a nonzero initial condition.
+
+\textbf{Statement.} Solve
+\[
+\frac{dy}{dt}+2y = 4e^{-t}u(t),\qquad y(0^{-})=3.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Unilateral Laplace:
+$[sY(s)-3]+2Y(s) = 4/(s+1)$.
+
+\textit{Step 2.} Solve:
+\[
+(s+2)Y(s) = \frac{4}{s+1}+3\Rightarrow Y(s) = \frac{4}{(s+1)(s+2)}+\frac{3}{s+2}.
+\]
+
+\textit{Step 3.} PFE of the ZSR term:
+$4/[(s+1)(s+2)] = 4/(s+1)-4/(s+2)$.
+
+Combine with the ZIR $3/(s+2)$:
+\[
+Y(s) = \frac{4}{s+1}-\frac{1}{s+2}.
+\]
+
+\textit{Step 4.} Invert.
+
+\textbf{Result.}
+\[
+\boxed{\,y(t) = \bigl[4e^{-t}-e^{-2t}\bigr]u(t).\,}
+\]
+
+\textit{Check.} $y(0) = 4-1 = 3$. \checkmark\ $y(\infty) = 0$.
+
+\subsection{Problem P18.4 --- Second-Order ODE with ICs and Step Input}
+\textbf{Topic:} Full unilateral-Laplace pipeline with both $y(0^{-})$ and $y'(0^{-})$.\\
+\textbf{Concept tested:} Handle the $s^{2}Y-sy(0^{-})-y'(0^{-})$ formula carefully.
+
+\textbf{Statement.} Solve
+\[
+\frac{d^{2}y}{dt^{2}}+5\frac{dy}{dt}+6y = 12u(t),\qquad y(0^{-})=1,\ y'(0^{-})=-1.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Unilateral Laplace:
+\[
+\bigl[s^{2}Y - s\cdot 1 - (-1)\bigr] + 5\bigl[sY - 1\bigr] + 6Y = \frac{12}{s}.
+\]
+Simplify: $s^{2}Y - s + 1 + 5sY - 5 + 6Y = 12/s$.
+
+\textit{Step 2.} Collect:
+\[
+(s^{2}+5s+6)Y(s) = \frac{12}{s}+s+4\Rightarrow Y(s) = \frac{s^{2}+4s+12}{s(s+2)(s+3)}.
+\]
+
+\textit{Step 3.} PFE: $A/s + B/(s+2) + C/(s+3)$.
+\begin{itemize}
+\item $A = 12/6 = 2$.
+\item $B = (4-8+12)/((-2)(1)) = 8/(-2) = -4$.
+\item $C = (9-12+12)/((-3)(-1)) = 9/3 = 3$.
+\end{itemize}
+\[
+Y(s) = \frac{2}{s}-\frac{4}{s+2}+\frac{3}{s+3}.
+\]
+
+\textit{Step 4.} Invert.
+
+\textbf{Result.}
+\[
+\boxed{\,y(t) = \bigl[2 - 4e^{-2t}+3e^{-3t}\bigr]u(t).\,}
+\]
+
+\textit{Checks.}
+$y(0) = 2-4+3 = 1$ \checkmark;
+$y'(t) = 8e^{-2t}-9e^{-3t}$, so $y'(0) = -1$ \checkmark;
+$y(\infty) = 2$.
+
+\subsection{Problem P18.5 --- Step Response of a Second-Order System}
+\textbf{Topic:} Step response, ZSR.\\
+\textbf{Concept tested:} $S(s) = H(s)/s$; PFE with a pole at the origin.
+
+\textbf{Statement.} Find the step response $s(t)$ of the causal LTI system
+\[
+H(s) = \frac{6}{s^{2}+5s+6}.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Factor: $s^{2}+5s+6 = (s+2)(s+3)$; $X(s)=1/s$.
+
+\textit{Step 2.} $S(s) = 6/[s(s+2)(s+3)]$.
+
+\textit{Step 3.} PFE: $A/s + B/(s+2) + C/(s+3)$.
+\begin{itemize}
+\item $A = 6/((0+2)(0+3)) = 1$.
+\item $B = 6/((-2)(-2+3)) = -3$.
+\item $C = 6/((-3)(-3+2)) = 2$.
+\end{itemize}
+\[
+S(s) = \frac{1}{s}-\frac{3}{s+2}+\frac{2}{s+3}.
+\]
+
+\textit{Step 4.} Invert (right-sided).
+
+\textbf{Result.}
+\[
+\boxed{\,s(t) = \bigl[1 - 3e^{-2t} + 2e^{-3t}\bigr]u(t).\,}
+\]
+
+\textit{Checks.} $s(0) = 0$; $s(\infty) = 1 = H(0)$. \checkmark
+
+%==============================================================
+\section{Lecture 19 --- Z-Transform and ROC}
+%==============================================================
+
+\subsection{Problem P19.1 --- Right-Sided Geometric}
+\textbf{Topic:} Z-transform from the definition; geometric-series convergence.\\
+\textbf{Concept tested:} Recognize a causal exponential and its ROC.
+
+\textbf{Statement.} Find $X(z)$ and the ROC of $x[n] = (3/4)^{n}u[n]$.
+
+\textbf{Solution.}
+
+\textit{Step 1.}
+\[
+X(z) = \sum_{n=0}^{\infty}\!\bigl((3/4)z^{-1}\bigr)^{n}.
+\]
+
+\textit{Step 2.} Converges iff $|(3/4)z^{-1}|<1$, i.e., $|z|>3/4$. Then
+$X(z) = 1/(1-(3/4)z^{-1})$.
+
+\textbf{Result.}
+\[
+\boxed{\,X(z) = \frac{1}{1-\tfrac{3}{4}z^{-1}},\qquad |z|>3/4.\,}
+\]
+
+\subsection{Problem P19.2 --- Two-Sided Signal (Annular ROC)}
+\textbf{Topic:} Right + left-sided sum; intersection of ROCs.\\
+\textbf{Concept tested:} Apply the left-sided pair $-a^{n}u[-n-1]\leftrightarrow 1/(1-az^{-1})$.
+
+\textbf{Statement.} Find $X(z)$ and the ROC of
+\[
+x[n] = (1/4)^{n}u[n] - 3(5)^{n}u[-n-1].
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Right-sided piece: $1/(1-(1/4)z^{-1})$, ROC $|z|>1/4$.
+
+\textit{Step 2.} Left-sided piece. Rewrite $-3(5)^{n}u[-n-1] = 3[-(5)^{n}u[-n-1]]$:
+\[
+\frac{3}{1-5z^{-1}},\qquad |z|<5.
+\]
+
+\textit{Step 3.} Sum; intersect the ROCs.
+
+\textbf{Result.}
+\[
+\boxed{\,X(z) = \frac{1}{1-\tfrac{1}{4}z^{-1}} + \frac{3}{1-5z^{-1}},\qquad \tfrac{1}{4}<|z|<5.\,}
+\]
+
+The ROC is an annular ring between the two pole circles.
+
+\subsection{Problem P19.3 --- Finite-Length Sequence}
+\textbf{Topic:} Polynomial form; ROC of finite-length signals.\\
+\textbf{Concept tested:} Direct summation for finite support.
+
+\textbf{Statement.} Let $x[n] = \{1, 0, -2, 3\}$ at $n = 0,1,2,3$ (and $0$ elsewhere).
+Find $X(z)$ and its ROC.
+
+\textbf{Solution.}
+
+\textit{Step 1.} Direct sum:
+\[
+X(z) = 1 - 2z^{-2} + 3z^{-3}.
+\]
+
+\textit{Step 2.} Nonzero for $n\ge 0$ and for $n>0$, so $z=\infty$ is included
+and $z=0$ is excluded. ROC: $|z|>0$.
+
+\textit{Check.} $X(1) = 1 - 2 + 3 = 2 = \sum x[n]$. \checkmark
+
+\textbf{Result.}
+\[
+\boxed{\,X(z) = 1 - 2z^{-2} + 3z^{-3},\qquad |z|>0.\,}
+\]
+
+\subsection{Problem P19.4 --- Damped Sinusoid (Simple Angle)}
+\textbf{Topic:} Damped-sine Z pair.\\
+\textbf{Concept tested:} Match $r^{n}\sin(\omega_{0}n)u[n]\leftrightarrow\ldots$.
+
+\textbf{Statement.} Find $X(z)$ and the ROC of
+\[
+x[n] = (0.6)^{n}\sin\!\bigl(\tfrac{\pi}{2}n\bigr)u[n].
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Identify $r = 0.6$, $\omega_{0} = \pi/2$, so $\cos\omega_{0}=0$,
+$\sin\omega_{0}=1$, $r^{2}=0.36$.
+
+\textit{Step 2.} Apply the pair
+\[
+r^{n}\sin(\omega_{0}n)u[n]\leftrightarrow \frac{r\sin\omega_{0}\,z^{-1}}{1 - 2r\cos\omega_{0}\,z^{-1}+r^{2}z^{-2}}.
+\]
+Numerator $0.6\,z^{-1}$, denominator $1 + 0.36\,z^{-2}$.
+
+\textit{Step 3.} Poles at $z=\pm j0.6$, $|z|=0.6$. ROC: $|z|>0.6$.
+
+\textbf{Result.}
+\[
+\boxed{\,X(z) = \frac{0.6\,z^{-1}}{1+0.36\,z^{-2}},\qquad |z|>0.6.\,}
+\]
+
+\subsection{Problem P19.5 --- Sum of Two Causal Geometric Sequences}
+\textbf{Topic:} Linearity; combine into a single rational function.\\
+\textbf{Concept tested:} Simplify $A/(1-a_{1}z^{-1})+B/(1-a_{2}z^{-1})$.
+
+\textbf{Statement.} Find $X(z)$ of $x[n] = 5(0.3)^{n}u[n] - 2(0.6)^{n}u[n]$.
+
+\textbf{Solution.}
+
+\textit{Step 1.}
+\[
+X(z) = \frac{5}{1-0.3z^{-1}}-\frac{2}{1-0.6z^{-1}}.
+\]
+
+\textit{Step 2.} Common denominator:
+\[
+X(z) = \frac{5(1-0.6z^{-1})-2(1-0.3z^{-1})}{(1-0.3z^{-1})(1-0.6z^{-1})}
+= \frac{3 - 2.4z^{-1}}{(1-0.3z^{-1})(1-0.6z^{-1})}.
+\]
+
+\textit{Step 3.} Both right-sided; outermost pole $z=0.6$. ROC $|z|>0.6$.
+
+\textbf{Result.}
+\[
+\boxed{\,X(z) = \frac{3 - 2.4\,z^{-1}}{(1-0.3z^{-1})(1-0.6z^{-1})},\qquad |z|>0.6.\,}
+\]
+
+\textit{Check.} $x[0] = 5-2 = 3$; IVT: $\lim_{z\to\infty}X(z) = 3$. \checkmark
+
+%==============================================================
+\section{Lecture 20 --- Inverse Z-Transform and Properties}
+%==============================================================
+
+\subsection{Problem P20.1 --- Distinct Poles, Right-Sided}
+\textbf{Topic:} PFE in $z^{-1}$; cover-up.\\
+\textbf{Concept tested:} Straightforward distinct-pole inversion.
+
+\textbf{Statement.} Find $x[n]$ given
+\[
+X(z) = \frac{2+z^{-1}}{(1-0.3z^{-1})(1-0.7z^{-1})},\qquad |z|>0.7.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} PFE $X(z) = A/(1-0.3z^{-1})+B/(1-0.7z^{-1})$.
+
+\textit{Step 2.} Cover-up.
+\begin{itemize}
+\item $A$ at $z^{-1}=10/3$: $A = (2+10/3)/(1 - 7/3) = (16/3)/(-4/3) = -4$.
+\item $B$ at $z^{-1}=10/7$: $B = (2+10/7)/(1 - 3/7) = (24/7)/(4/7) = 6$.
+\end{itemize}
+\[
+X(z) = \frac{-4}{1-0.3z^{-1}}+\frac{6}{1-0.7z^{-1}}.
+\]
+
+\textit{Step 3.} ROC outside both poles $\Rightarrow$ both right-sided.
+
+\textbf{Result.}
+\[
+\boxed{\,x[n] = \bigl[-4(0.3)^{n}+6(0.7)^{n}\bigr]u[n].\,}
+\]
+
+\textit{Check.} $x[0] = -4+6 = 2$; IVT: $X(\infty) = 2$. \checkmark
+
+\subsection{Problem P20.2 --- Mixed ROC (Two-Sided)}
+\textbf{Topic:} Direction assignment from the ROC.\\
+\textbf{Concept tested:} One pole inside, one outside the ROC annulus.
+
+\textbf{Statement.} Find $x[n]$ given
+\[
+X(z) = \frac{2}{(1-4z^{-1})(1-0.5z^{-1})},\qquad 0.5<|z|<4.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} PFE.
+\begin{itemize}
+\item $A$ at $z^{-1}=1/4$: $A = 2/(1-1/8) = 16/7$.
+\item $B$ at $z^{-1}=2$: $B = 2/(1-8) = -2/7$.
+\end{itemize}
+Check: $A+B = 14/7 = 2$, matches $X(z)$ at $z^{-1}=0$. \checkmark
+\[
+X(z) = \frac{16/7}{1-4z^{-1}} - \frac{2/7}{1-0.5z^{-1}}.
+\]
+
+\textit{Step 2.} Direction from ROC $0.5<|z|<4$.
+\begin{itemize}
+\item Pole $z=4$: ROC \textbf{inside} $\Rightarrow$ left-sided: $-(4)^{n}u[-n-1]$.
+\item Pole $z=0.5$: ROC \textbf{outside} $\Rightarrow$ right-sided: $(0.5)^{n}u[n]$.
+\end{itemize}
+
+\textbf{Result.}
+\[
+\boxed{\,x[n] = -\tfrac{16}{7}(4)^{n}u[-n-1] - \tfrac{2}{7}(0.5)^{n}u[n].\,}
+\]
+
+\subsection{Problem P20.3 --- Repeated Pole with $z^{-1}$ Numerator}
+\textbf{Topic:} Pair $na^{n}u[n]\leftrightarrow az^{-1}/(1-az^{-1})^{2}$.\\
+\textbf{Concept tested:} Distinguish the two repeated-pole pairs.
+
+\textbf{Statement.} Find $x[n]$ given
+\[
+X(z) = \frac{0.4\,z^{-1}}{(1-0.4z^{-1})^{2}},\qquad |z|>0.4.
+\]
+
+\textbf{Solution.}
+
+Apply the pair
+\[
+\frac{a z^{-1}}{(1-a z^{-1})^{2}}\leftrightarrow n\,a^{n}u[n],\qquad |z|>|a|,
+\]
+with $a = 0.4$.
+
+\textbf{Result.}
+\[
+\boxed{\,x[n] = n(0.4)^{n}u[n].\,}
+\]
+
+\textit{Check.} $x[0]=0$; $x[1]=0.4$; $x[2]=0.32$.
+
+\subsection{Problem P20.4 --- Power Series (Long Division)}
+\textbf{Topic:} Long division to read off $x[n]$ for small $n$.\\
+\textbf{Concept tested:} Direct extraction of the series coefficients.
+
+\textbf{Statement.} Given
+\[
+X(z) = \frac{2-z^{-1}}{1-0.3z^{-1}},\qquad |z|>0.3,
+\]
+find $x[0]$, $x[1]$, $x[2]$, $x[3]$, and a closed-form $x[n]$.
+
+\textbf{Solution.}
+
+\textit{Step 1. Long division in $z^{-1}$.}
+\begin{itemize}
+\item $2 \div 1 = 2$; multiply divisor: $2 - 0.6z^{-1}$; remainder $-0.4z^{-1}$.
+\item $-0.4z^{-1}\div 1 = -0.4z^{-1}$; multiply: $-0.4z^{-1}+0.12z^{-2}$; remainder $-0.12z^{-2}$.
+\item $-0.12z^{-2}$; multiply: $-0.12z^{-2}+0.036z^{-3}$; remainder $-0.036z^{-3}$.
+\item $-0.036z^{-3}$; \ldots
+\end{itemize}
+So $X(z) = 2 - 0.4z^{-1} - 0.12z^{-2} - 0.036z^{-3} - \cdots$.
+
+\textit{Step 2. Closed form.} Write $2 - z^{-1} = K(1-0.3z^{-1}) + R$:
+coefficient of $z^{-1}$ gives $-0.3K = -1$, so $K = 10/3$;
+constant gives $K+R=2$, so $R=-4/3$.
+\[
+X(z) = \frac{10}{3} + \frac{-4/3}{1-0.3z^{-1}}.
+\]
+Inverse: $x[n] = (10/3)\delta[n] - (4/3)(0.3)^{n}u[n]$.
+
+\textit{Check.} $x[0] = 10/3-4/3 = 2$ \checkmark;
+$x[1]=-(4/3)(0.3)=-0.4$ \checkmark;
+$x[2]=-(4/3)(0.09)=-0.12$ \checkmark;
+$x[3]=-(4/3)(0.027)=-0.036$ \checkmark.
+
+\textbf{Result.}
+\[
+\boxed{\,x[0]=2,\ x[1]=-0.4,\ x[2]=-0.12,\ x[3]=-0.036;\ \ x[n] = \tfrac{10}{3}\delta[n]-\tfrac{4}{3}(0.3)^{n}u[n].\,}
+\]
+
+\subsection{Problem P20.5 --- Initial and Final Value Theorems}
+\textbf{Topic:} DT IVT and FVT.\\
+\textbf{Concept tested:} Apply the formulas; check FVT applicability.
+
+\textbf{Statement.} Given
+\[
+X(z) = \frac{3}{(1-z^{-1})(1-0.4z^{-1})},\qquad |z|>1,
+\]
+find $x[0]$ and $x[\infty]$.
+
+\textbf{Solution.}
+
+\textit{IVT.}
+\[
+x[0] = \lim_{z\to\infty}X(z) = \frac{3}{1\cdot 1} = 3.
+\]
+
+\textit{FVT validity.} $(1-z^{-1})X(z) = 3/(1-0.4z^{-1})$ has a single pole
+at $z=0.4$ (inside the unit circle). \checkmark
+\[
+x[\infty] = \lim_{z\to 1}\frac{3}{1-0.4z^{-1}} = \frac{3}{0.6} = 5.
+\]
+
+\textbf{Result.}
+\[
+\boxed{\,x[0] = 3,\qquad x[\infty] = 5.\,}
+\]
+
+\subsection{Problem P20.6 --- Time Shift Property}
+\textbf{Topic:} Delay $z^{-n_{0}}$.\\
+\textbf{Concept tested:} Apply the shift property.
+
+\textbf{Statement.} Let $x[n] = (0.4)^{n}u[n]$. Find the Z-transform and
+ROC of $y[n] = x[n-3]$.
+
+\textbf{Solution.}
+
+\textit{Step 1.} $X(z) = 1/(1-0.4z^{-1})$, $|z|>0.4$.
+
+\textit{Step 2.} Shift: $x[n-3]\leftrightarrow z^{-3}X(z)$.
+
+\textbf{Result.}
+\[
+\boxed{\,Y(z) = \frac{z^{-3}}{1-0.4z^{-1}},\qquad |z|>0.4.\,}
+\]
+
+%==============================================================
+\section{Lecture 21 --- System Analysis via Unilateral Z}
+%==============================================================
+
+\subsection{Problem P21.1 --- Difference Equation to $H(z)$}
+\textbf{Topic:} Derive $H(z)$; stability from pole locations.\\
+\textbf{Concept tested:} Replace $y[n-k]\to z^{-k}Y(z)$ and factor.
+
+\textbf{Statement.} Find $H(z)$ and classify the stability of the causal LTI system
+\[
+y[n]-\tfrac{5}{6}y[n-1]+\tfrac{1}{6}y[n-2] = x[n]+x[n-1].
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Zero ICs:
+\[
+\bigl(1-\tfrac{5}{6}z^{-1}+\tfrac{1}{6}z^{-2}\bigr)Y(z) = (1+z^{-1})X(z).
+\]
+
+\textit{Step 2.} Factor the denominator. Roots of $z^{2}-(5/6)z+1/6=0$ are
+\[
+z = \frac{5/6\pm 1/6}{2} = \tfrac{1}{2},\ \tfrac{1}{3}.
+\]
+\[
+H(z) = \frac{1+z^{-1}}{(1-\tfrac{1}{2}z^{-1})(1-\tfrac{1}{3}z^{-1})}.
+\]
+
+\textit{Step 3.} Both poles inside unit circle $\Rightarrow$ causal system is BIBO stable.
+
+\textbf{Result.}
+\[
+\boxed{\,H(z) = \frac{1+z^{-1}}{(1-\tfrac{1}{2}z^{-1})(1-\tfrac{1}{3}z^{-1})};\ \text{causal and stable.}\,}
+\]
+
+\subsection{Problem P21.2 --- Full Pipeline (Difference Equation to Output, ZSR)}
+\textbf{Topic:} DE $\to Y(z)\to y[n]$; zero ICs.\\
+\textbf{Concept tested:} ZSR via partial fractions.
+
+\textbf{Statement.} Solve
+\[
+y[n]-\tfrac{1}{4}y[n-1] = x[n],\qquad x[n] = (1/2)^{n}u[n],
+\]
+with zero initial conditions.
+
+\textbf{Solution.}
+
+\textit{Step 1.} $H(z) = 1/(1-(1/4)z^{-1})$; $X(z) = 1/(1-(1/2)z^{-1})$.
+
+\textit{Step 2.} $Y(z) = 1/[(1-(1/4)z^{-1})(1-(1/2)z^{-1})]$.
+
+\textit{Step 3.} PFE.
+\begin{itemize}
+\item $A$ at $z^{-1}=4$: $1/(1-(1/2)(4)) = -1$.
+\item $B$ at $z^{-1}=2$: $1/(1-(1/4)(2)) = 2$.
+\end{itemize}
+\[
+Y(z) = \frac{-1}{1-(1/4)z^{-1}}+\frac{2}{1-(1/2)z^{-1}}.
+\]
+
+\textit{Step 4.} Both right-sided (ROC $|z|>1/2$).
+
+\textbf{Result.}
+\[
+\boxed{\,y[n] = \left[-\bigl(\tfrac{1}{4}\bigr)^{n}+2\bigl(\tfrac{1}{2}\bigr)^{n}\right]u[n].\,}
+\]
+
+\textit{Check.} $y[0] = -1+2 = 1 = x[0]$. \checkmark
+
+\subsection{Problem P21.3 --- First-Order Difference Equation with IC}
+\textbf{Topic:} Unilateral Z with nonzero initial condition; ZSR + ZIR.\\
+\textbf{Concept tested:} Apply $x[n-1]\leftrightarrow z^{-1}X(z)+x[-1]$.
+
+\textbf{Statement.} Solve $y[n]-(1/3)y[n-1] = (1/5)^{n}u[n]$ with $y[-1]=6$.
+
+\textbf{Solution.}
+
+\textit{Step 1.} Unilateral Z:
+\[
+Y(z) - \tfrac{1}{3}\bigl[z^{-1}Y(z)+6\bigr] = \frac{1}{1-(1/5)z^{-1}}.
+\]
+
+\textit{Step 2.} Collect:
+\[
+\bigl(1-\tfrac{1}{3}z^{-1}\bigr)Y(z) = \frac{1}{1-(1/5)z^{-1}} + 2.
+\]
+
+\textit{Step 3.} Solve:
+\[
+Y(z) = \underbrace{\frac{1}{(1-(1/5)z^{-1})(1-(1/3)z^{-1})}}_{\text{ZSR}}
++\underbrace{\frac{2}{1-(1/3)z^{-1}}}_{\text{ZIR}}.
+\]
+
+\textit{Step 4.} PFE of ZSR.
+\begin{itemize}
+\item $A$ at $z^{-1}=5$: $1/(1-5/3) = -3/2$.
+\item $B$ at $z^{-1}=3$: $1/(1-3/5) = 5/2$.
+\end{itemize}
+Combine: $Y(z) = -3/2/(1-(1/5)z^{-1}) + 9/2/(1-(1/3)z^{-1})$.
+
+\textit{Step 5.} Invert.
+
+\textbf{Result.}
+\[
+\boxed{\,y[n] = \left[-\tfrac{3}{2}\bigl(\tfrac{1}{5}\bigr)^{n}+\tfrac{9}{2}\bigl(\tfrac{1}{3}\bigr)^{n}\right]u[n].\,}
+\]
+
+\textit{Check.} $y[0] = -3/2+9/2 = 3$. From DE: $y[0] = (1/3)(6)+1 = 3$. \checkmark
+
+\subsection{Problem P21.4 --- Zero-Input Response with a Repeated Pole}
+\textbf{Topic:} ZIR only; repeated-pole case.\\
+\textbf{Concept tested:} Apply the unilateral shift-2 formula and handle a double pole.
+
+\textbf{Statement.} Solve
+\[
+y[n]-\tfrac{1}{2}y[n-1]+\tfrac{1}{16}y[n-2] = 0,\qquad y[-1]=0,\ y[-2]=16.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Unilateral Z: using
+$y[n-1]\leftrightarrow z^{-1}Y+y[-1]$ and
+$y[n-2]\leftrightarrow z^{-2}Y+y[-1]z^{-1}+y[-2]$:
+\[
+Y-\tfrac{1}{2}(z^{-1}Y+0)+\tfrac{1}{16}(z^{-2}Y+0\cdot z^{-1}+16) = 0.
+\]
+\[
+\bigl(1-\tfrac{1}{2}z^{-1}+\tfrac{1}{16}z^{-2}\bigr)Y(z) = -1.
+\]
+
+\textit{Step 2.} Recognize the perfect square:
+$1-(1/2)z^{-1}+(1/16)z^{-2} = (1-(1/4)z^{-1})^{2}$.
+\[
+Y(z) = \frac{-1}{(1-(1/4)z^{-1})^{2}}.
+\]
+
+\textit{Step 3.} Apply $1/(1-az^{-1})^{2}\leftrightarrow (n+1)a^{n}u[n]$ with $a=1/4$.
+
+\textbf{Result.}
+\[
+\boxed{\,y[n] = -(n+1)\bigl(\tfrac{1}{4}\bigr)^{n}u[n].\,}
+\]
+
+\textit{Check.} $y[0] = -1$; DE: $y[0] = (1/2)(0)-(1/16)(16) = -1$. \checkmark
+
+\subsection{Problem P21.5 --- Step Response (First-Order)}
+\textbf{Topic:} Step response via $S(z) = H(z)/(1-z^{-1})$.\\
+\textbf{Concept tested:} PFE with a pole at $z=1$; DC-gain check.
+
+\textbf{Statement.} Find the causal step response of
+\[
+H(z) = \frac{1}{1-(1/3)z^{-1}}.
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} $X(z) = 1/(1-z^{-1})$, so
+$S(z) = 1/[(1-z^{-1})(1-(1/3)z^{-1})]$.
+
+\textit{Step 2.} PFE.
+\begin{itemize}
+\item $A$ at $z^{-1}=1$: $1/(2/3) = 3/2$.
+\item $B$ at $z^{-1}=3$: $1/(-2) = -1/2$.
+\end{itemize}
+\[
+S(z) = \frac{3/2}{1-z^{-1}}-\frac{1/2}{1-(1/3)z^{-1}}.
+\]
+
+\textit{Step 3.} Invert.
+
+\textbf{Result.}
+\[
+\boxed{\,s[n] = \left[\tfrac{3}{2}-\tfrac{1}{2}\bigl(\tfrac{1}{3}\bigr)^{n}\right]u[n].\,}
+\]
+
+\textit{Checks.} $s[0]=1=h[0]$; $s[\infty]=3/2=H(1)$. \checkmark
+
+%==============================================================
+\section{Lecture 22 --- Sampling}
+%==============================================================
+
+\subsection{Problem P22.1 --- Nyquist Rate of a Sum of Sinusoids}
+\textbf{Topic:} Identify the highest frequency component.\\
+\textbf{Concept tested:} Report the Nyquist rate in both rad/s and Hz.
+
+\textbf{Statement.} Find the Nyquist rate of
+\[
+x(t) = \cos(400\pi t) + 2\sin(900\pi t) + 3\cos(1500\pi t).
+\]
+
+\textbf{Solution.}
+
+\textit{Step 1.} Angular frequencies: $400\pi$, $900\pi$, $1500\pi$ rad/s.
+
+\textit{Step 2.} Maximum: $\omega_{M} = 1500\pi$ rad/s, i.e., $f_{M}=750$ Hz.
+
+\textit{Step 3.} Nyquist rate $= 2\omega_{M} = 3000\pi$ rad/s $= 1500$ Hz.
+
+\textbf{Result.}
+\[
+\boxed{\,\text{Nyquist rate} = 3000\pi\text{ rad/s} = 1500\text{ Hz}.\,}
+\]
+
+\subsection{Problem P22.2 --- Bandwidth of a Product}
+\textbf{Topic:} Multiplication in time $\leftrightarrow$ convolution in frequency.\\
+\textbf{Concept tested:} Bandwidths add for a product.
+
+\textbf{Statement.} $x_{1}(t)$ has $X_{1}(j\omega) = 0$ for $|\omega|>1500\pi$,
+and $x_{2}(t)$ has $X_{2}(j\omega) = 0$ for $|\omega|>2500\pi$. Find the
+Nyquist rate of $y(t) = x_{1}(t)x_{2}(t)$.
+
+\textbf{Solution.}
+
+\textit{Step 1.} Support of $Y(j\omega)$ is contained in the sum of supports:
+$|\omega|\le 1500\pi+2500\pi = 4000\pi$.
+
+\textit{Step 2.} $\omega_{M,y} = 4000\pi$ rad/s; Nyquist rate $= 8000\pi$ rad/s $= 4000$ Hz.
+
+\textbf{Result.}
+\[
+\boxed{\,\text{Nyquist rate} = 8000\pi\text{ rad/s} = 4000\text{ Hz}.\,}
+\]
+
+\subsection{Problem P22.3 --- Checking Sampling Periods}
+\textbf{Topic:} Converting $\omega_{s}>2\omega_{M}$ to a bound on $T$.\\
+\textbf{Concept tested:} Strict inequality and unit conversion.
+
+\textbf{Statement.} A signal has $X(j\omega)=0$ for $|\omega|>800\pi$ rad/s.
+Which sampling periods allow perfect reconstruction?
+(a) $T=0.5$ ms, (b) $T=1.25$ ms, (c) $T=1$ ms, (d) $T=2$ ms.
+
+\textbf{Solution.}
+
+\textit{Step 1.} Nyquist rate is $1600\pi$ rad/s. Required:
+$\omega_{s} = 2\pi/T > 1600\pi$, i.e., $T < 1.25$ ms (strict).
+
+\textit{Step 2.}
+\begin{itemize}
+\item (a) $0.5$ ms $<1.25$ ms $\Rightarrow$ works.
+\item (b) $1.25$ ms $=1.25$ ms $\Rightarrow$ fails (strict inequality violated).
+\item (c) $1$ ms $<1.25$ ms $\Rightarrow$ works.
+\item (d) $2$ ms $>1.25$ ms $\Rightarrow$ aliases.
+\end{itemize}
+
+\textbf{Result.}
+\[
+\boxed{\,(a)\text{ works},\ (b)\text{ fails},\ (c)\text{ works},\ (d)\text{ aliases.}\,}
+\]
+
+\subsection{Problem P22.4 --- Aliased Tone}
+\textbf{Topic:} Aliased-frequency formula.\\
+\textbf{Concept tested:} Recognize undersampling and compute the fold-back.
+
+\textbf{Statement.} A tone at $f_{0}=8$ Hz is sampled at $f_{s}=6$ Hz. After
+reconstruction through an ideal LPF with cutoff $f_{s}/2$, what frequency
+appears?
+
+\textbf{Solution.}
+
+\textit{Step 1.} Nyquist rate for 8 Hz is 16 Hz; $f_{s}=6$ Hz is too low.
+
+\textit{Step 2.} Fold by $f_{s}$ into $[0,f_{s}/2]$: $|f_{0}-f_{s}| = |8-6| = 2$ Hz,
+and $2\le f_{s}/2 = 3$. \checkmark
+
+\textbf{Result.}
+\[
+\boxed{\,f_{\text{alias}} = 2\text{ Hz}.\,}
+\]
+
+\subsection{Problem P22.5 --- DT Processing of a CT Signal}
+\textbf{Topic:} Mapping $\Omega = \omega T$.\\
+\textbf{Concept tested:} Sampling with no aliasing.
+
+\textbf{Statement.} A CT sinusoid $x(t) = \cos(300\pi t)$ is sampled at
+$f_{s}=500$ Hz. Find the discrete-time frequency $\Omega$ (rad/sample).
+
+\textbf{Solution.}
+
+\textit{Step 1.} $T = 1/f_{s} = 2$ ms; $\omega = 300\pi$ rad/s.
+
+\textit{Step 2.} Aliasing check: $f_{0}=150$ Hz, $f_{s}/2=250$ Hz; $f_{0}<f_{s}/2$. \checkmark
+
+\textit{Step 3.} $\Omega = \omega T = 300\pi\cdot 2\times 10^{-3} = 0.6\pi$ rad/sample.
+
+\textbf{Result.}
+\[
+\boxed{\,\Omega = 0.6\pi\text{ rad/sample}.\,}
+\]
+
+\subsection{Problem P22.6 --- Reconstruction Filter Specification}
+\textbf{Topic:} Ideal LPF for reconstruction.\\
+\textbf{Concept tested:} Gain $T$ and cutoff range $\omega_{M}<\omega_{c}<\omega_{s}-\omega_{M}$.
+
+\textbf{Statement.} A signal with $\omega_{M}=2000\pi$ rad/s is sampled at
+$\omega_{s}=6000\pi$ rad/s. Specify the gain and allowable cutoff range of
+the ideal reconstruction LPF.
+
+\textbf{Solution.}
+
+\textit{Step 1.} $T = 2\pi/\omega_{s} = 1/3$ ms; gain $= T = 1/3$ ms.
+
+\textit{Step 2.} Cutoff:
+\[
+2000\pi < \omega_{c} < 4000\pi\ \text{rad/s}.
+\]
+Typical choice $\omega_{c} = \omega_{s}/2 = 3000\pi$ rad/s.
+
+\textbf{Result.}
+\[
+\boxed{\,\text{Gain} = T = 1/3\text{ ms};\ \omega_{c}\in(2000\pi,4000\pi)\text{ rad/s}.\,}
+\]
+
+%==============================================================
+\section{Lecture 23 --- Linear Feedback Systems}
+%==============================================================
+
+\subsection{Problem P23.1 --- Closed-Loop Transfer Function}
+\textbf{Topic:} Negative feedback formula $Q = H/(1+GH)$.\\
+\textbf{Concept tested:} Simplify a single forward path with proportional feedback.
+
+\textbf{Statement.} With forward path $H(s) = 3/(s+2)$ and feedback
+$G(s)=4$ in a unity-summer negative-feedback loop, find $Q(s)$ and
+classify stability.
+
+\textbf{Solution.}
+
+\textit{Step 1.}
+\[
+Q(s) = \frac{H}{1+GH} = \frac{3/(s+2)}{1+12/(s+2)} = \frac{3}{s+14}.
+\]
+
+\textit{Step 2.} Pole at $s=-14$ (LHP) $\Rightarrow$ stable.
+
+\textbf{Result.}
+\[
+\boxed{\,Q(s) = \frac{3}{s+14};\ \text{stable.}\,}
+\]
+
+Feedback moved the pole from $s=-2$ to $s=-14$ (faster).
+
+\subsection{Problem P23.2 --- Stability vs. Gain (Second-Order)}
+\textbf{Topic:} Characteristic equation; Routh for $s^{2}+a_{1}s+a_{0}$.\\
+\textbf{Concept tested:} Find the range of $K$ for closed-loop stability.
+
+\textbf{Statement.} Plant $H(s) = K/(s^{2}+3s+4)$ is placed in a unity-feedback
+loop. For what real $K$ is the closed-loop system stable?
+
+\textbf{Solution.}
+
+\textit{Step 1.} Characteristic polynomial:
+\[
+1+\frac{K}{s^{2}+3s+4} = 0\Rightarrow s^{2}+3s+(4+K) = 0.
+\]
+
+\textit{Step 2.} Stability requires $a_{1}=3>0$ \checkmark\ and
+$a_{0}=4+K>0\Rightarrow K>-4$.
+
+\textbf{Result.}
+\[
+\boxed{\,\text{Stable iff }K>-4.\,}
+\]
+
+\subsection{Problem P23.3 --- Stabilizing a Plant with a RHP Pole}
+\textbf{Topic:} Feedback can move an unstable pole into the LHP.\\
+\textbf{Concept tested:} Compute stability range for a plant with a RHP pole.
+
+\textbf{Statement.} Plant $H(s)=4/((s-2)(s+3))$ is placed in unity negative
+feedback with forward gain $K$. Find the range of $K$ for closed-loop stability.
+
+\textbf{Solution.}
+
+\textit{Step 1.} Characteristic polynomial:
+\[
+(s-2)(s+3)+4K = s^{2}+s-6+4K = 0.
+\]
+
+\textit{Step 2.} Routh: $a_{1}=1>0$ \checkmark; $a_{0}=4K-6>0\Rightarrow K>1.5$.
+
+\textbf{Result.}
+\[
+\boxed{\,\text{Stable iff }K>1.5.\,}
+\]
+
+For $K=2$: $s^{2}+s+2=0$, roots $s=-0.5\pm j\sqrt{7}/2$, both in LHP.
+Feedback has stabilized an otherwise unstable plant.
+
+\subsection{Problem P23.4 --- Nyquist Stability Check}
+\textbf{Topic:} Reading a Nyquist plot; critical point $-1/K$.\\
+\textbf{Concept tested:} Determine whether the curve encircles the critical point.
+
+\textbf{Statement.} An open-loop-stable $G(j\omega)H(j\omega)$ has a Nyquist
+plot that crosses the negative real axis exactly once, at $-1/3$.
+(a) Is the closed loop stable for $K=1$? (b) Find $K_{\max}$.
+
+\textbf{Solution.}
+
+\textit{Step 1.} At $K=1$, critical point $-1/K=-1$. The plot only reaches
+$-1/3$, so $-1$ is not encircled. \textbf{Stable.}
+
+\textit{Step 2.} Stability boundary: $-1/K_{\max} = -1/3\Rightarrow K_{\max}=3$.
+
+\textbf{Result.}
+\[
+\boxed{\,(a)\text{ stable},\quad K_{\max} = 3.\,}
+\]
+
+\subsection{Problem P23.5 --- Gain and Phase Margins from Bode}
+\textbf{Topic:} Reading GM, PM, maximum loop delay from Bode data.\\
+\textbf{Concept tested:} Apply the margin and delay formulas.
+
+\textbf{Statement.} Bode data for the open-loop $G(j\omega)H(j\omega)$:
+
+\begin{center}
+\begin{tabular}{c|c|c}
+Frequency & $|GH|$ & $\angle GH$\\\hline
+$\omega_{c}=8$ rad/s & $0$ dB & $-135^{\circ}$\\
+$\omega_{\pi}=25$ rad/s & $-20$ dB & $-180^{\circ}$\\
+\end{tabular}
+\end{center}
+
+Find PM, GM, the stability verdict, and the maximum tolerable loop delay.
+
+\textbf{Solution.}
+
+\textit{Step 1. PM.} At $\omega_{c}=8$ rad/s:
+$\text{PM} = 180^{\circ}-135^{\circ} = 45^{\circ}$.
+
+\textit{Step 2. GM.} At $\omega_{\pi}=25$ rad/s:
+$\text{GM}_{\text{dB}} = 0-(-20) = 20$ dB,
+$\text{GM}_{\text{lin}} = 10^{20/20}=10$.
+
+\textit{Step 3.} Both positive $\Rightarrow$ stable.
+
+\textit{Step 4.} Max delay:
+\[
+\tau_{\max} = \frac{\text{PM (rad)}}{\omega_{c}} = \frac{\pi/4}{8} = \frac{\pi}{32}\approx 0.098\text{ s}.
+\]
+
+\textbf{Result.}
+\[
+\boxed{\,\text{PM}=45^{\circ},\ \text{GM}=20\text{ dB},\ \text{stable},\ \tau_{\max}\approx 98\text{ ms}.\,}
+\]
+
+\subsection{Problem P23.6 --- Cascade-then-Feedback}
+\textbf{Topic:} Block-diagram simplification (series $\to$ feedback).\\
+\textbf{Concept tested:} Reduce a cascade first, then apply the feedback formula.
+
+\textbf{Statement.} Two blocks $H_{1}(s) = 3/(s+3)$ and $H_{2}(s) = 2/(s+5)$
+are in cascade in the forward path, with unity negative feedback wrapped
+around the pair. Find $Q(s)$ and classify stability.
+
+\textbf{Solution.}
+
+\textit{Step 1.} Forward cascade:
+\[
+H(s) = H_{1}H_{2} = \frac{6}{(s+3)(s+5)} = \frac{6}{s^{2}+8s+15}.
+\]
+
+\textit{Step 2.} Unity negative feedback:
+\[
+Q(s) = \frac{H}{1+H} = \frac{6}{s^{2}+8s+21}.
+\]
+
+\textit{Step 3.} Closed-loop poles: $s = (-8\pm\sqrt{64-84})/2 = -4\pm j\sqrt{5}$,
+both in LHP.
+
+\textbf{Result.}
+\[
+\boxed{\,Q(s) = \frac{6}{s^{2}+8s+21};\ \text{stable (poles }s=-4\pm j\sqrt{5}\text{).}\,}
+\]
+
+\bigskip\bigskip
+\noindent\textit{Prepared for CEC 315 Exam 3 --- Spring 2026.
+Numerical variations of the problems in \texttt{exam3\_sample\_problems.md};
+same techniques, new data. Total: 38 problems.}
+
+\end{document}

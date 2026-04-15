@@ -1,0 +1,134 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\title{Lecture 10: Convergence, Properties, and DTFS}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Dirichlet Conditions for CTFS Convergence}
+
+The Fourier series converges for signals satisfying all three:
+
+\begin{enumerate}
+  \item \textbf{Absolute integrability:} $\int_T |x(t)| \, dt < \infty$
+  \item \textbf{Bounded variation:} Finite number of maxima/minima per period
+  \item \textbf{Finite discontinuities:} Finite number of finite-jump discontinuities per period
+\end{enumerate}
+
+At a \textbf{discontinuity}, the FS converges to the midpoint:
+
+\[x_{FS}(t_0) = \frac{x(t_0^-) + x(t_0^+)}{2}\]
+
+\section*{Gibbs Phenomenon}
+
+\begin{itemize}
+  \item Near jump discontinuities, finite partial sums exhibit \textbf{overshoot ripples}
+  \item Peak overshoot is always \textasciitilde{}\textbf{9\%} of jump height, regardless of number of harmonics
+  \item Overshoot region narrows as $N \to \infty$ but peak amplitude stays at \textasciitilde{}9\%
+  \item A finite sum of smooth sinusoids \textbf{cannot} reproduce a discontinuity
+\end{itemize}
+
+\section*{Smoothness and Spectral Decay}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Signal Type} & \textbf{Spectral Decay} & \textbf{Smoothness} \\
+\hline
+Jump discontinuity & $\|a_k\| \sim 1/k$ & 0 continuous derivatives \\
+\hline
+Continuous, $dx/dt$ discontinuous & $\|a_k\| \sim 1/k^2$ & 1st derivative discontinuous \\
+\hline
+General: $m$th derivative discontinuous & $\|a_k\| \sim 1/k^{m+1}$ & $m$ continuous derivatives \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Key insight:} Smoother signals need fewer harmonics for accurate representation.
+
+\section*{CTFS Properties}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Property} & \textbf{Time Domain} & \textbf{Frequency Domain} \\
+\hline
+Linearity & $Ax(t) + By(t)$ & $Aa_k + Bb_k$ \\
+\hline
+Time Shift & $x(t - t_0)$ & $a_k \, e^{-jk\omega_0 t_0}$ \\
+\hline
+Time Reversal & $x(-t)$ & $a_{-k}$ \\
+\hline
+Conjugation & $x^*(t)$ & $a_{-k}^*$ \\
+\hline
+Differentiation & $dx/dt$ & $jk\omega_0 \, a_k$ \\
+\hline
+Conjugate Symmetry & $x(t)$ real & $a_{-k} = a_k^*$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Parseval's Relation (Average Power)}
+
+\[P = \frac{1}{T} \int_T |x(t)|^2 \, dt = \sum_{k=-\infty}^{\infty} |a_k|^2\]
+
+Power is conserved across domains. Each $|a_k|^2$ gives the power in the $k$th harmonic.
+
+\section*{Key Property Implications}
+
+\begin{itemize}
+  \item \textbf{Time shift} changes phase but NOT magnitude: $|b_k| = |a_k|$, so power is preserved
+  \item \textbf{Differentiation} amplifies high frequencies by factor $k$: acts as a highpass operation
+  \item \textbf{DC component} ($k=0$) is always killed by differentiation: $d_0 = j(0)\omega_0 a_0 = 0$
+\end{itemize}
+
+\section*{Discrete-Time Fourier Series (DTFS)}
+
+\subsection*{Key Differences from CTFS}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Feature} & \textbf{CTFS} & \textbf{DTFS} \\
+\hline
+Period & $T$ (continuous) & $N$ (integer samples) \\
+\hline
+Fundamental freq & $\omega_0 = 2\pi/T$ & $\omega_0 = 2\pi/N$ \\
+\hline
+Sum range & $k = -\infty$ to $\infty$ & $k = 0$ to $N-1$ (finite!) \\
+\hline
+Convergence issues & Yes (Dirichlet/Gibbs) & \textbf{None} (finite sum) \\
+\hline
+Coefficients & Aperiodic & \textbf{Periodic}: $a_{k+N} = a_k$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{DTFS Pair}
+
+\textbf{Synthesis:}
+\[x[n] = \sum_{k=\langle N \rangle} a_k \, e^{jk(2\pi/N)n}\]
+
+\textbf{Analysis:}
+\[a_k = \frac{1}{N} \sum_{n=\langle N \rangle} x[n] \, e^{-jk(2\pi/N)n}\]
+
+\subsection*{Why Only N Coefficients?}
+
+Because $e^{j(k+N)(2\pi/N)n} = e^{jk(2\pi/N)n} \cdot e^{j2\pi n} = e^{jk(2\pi/N)n}$
+
+The $(k+N)$th harmonic is \textbf{identical} to the $k$th harmonic. Adding more harmonics beyond $N$ produces no new signals.
+
+\subsection*{DT Parseval's Relation}
+
+\[\frac{1}{N} \sum_{n=\langle N \rangle} |x[n]|^2 = \sum_{k=\langle N \rangle} |a_k|^2\]
+
+\end{document}

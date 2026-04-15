@@ -1,0 +1,199 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath,amssymb,siunitx}
+\usepackage{parskip}
+\usepackage{enumitem}
+
+\title{PS160 --- Midterm 1 Equation Sheet}
+\author{Fluids, Oscillations, Waves and Sound \\ (Modules 12, 14, 15, 16)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Fluids (Module 12)}
+
+\paragraph{Density and pressure.}
+\[
+\rho = \frac{m}{V}
+\qquad
+p = \frac{F_\perp}{A}
+\]
+
+\paragraph{Hydrostatic condition / constant-density solution.}
+\[
+\frac{dp}{dy} = -\rho g
+\qquad
+p(y) = p_0 - \rho g y
+\]
+
+\paragraph{Pascal's law.} A pressure change applied to an enclosed incompressible fluid is transmitted undiminished:
+\[
+\Delta p_{\text{applied}} = \Delta p_{\text{anywhere}}
+\]
+
+\paragraph{Gauge pressure.} $p_{\text{gauge}} = p_{\text{abs}} - p_{\text{atm}}$.
+
+\paragraph{Buoyancy (Archimedes' principle).}
+\[
+F_B = \rho_{\text{fluid}}\, V_{\text{disp}}\, g
+\]
+
+\paragraph{Continuity equation (incompressible).}
+\[
+\rho A v = \mathcal{C}
+\qquad (A_1 v_1 = A_2 v_2)
+\]
+
+\paragraph{Volume flow rate.} $\dfrac{dV}{dt} = A v$.
+
+\paragraph{Bernoulli's equation.}
+\[
+p + \rho g y + \tfrac{1}{2}\rho v^{2} = \mathcal{C}'
+\]
+
+\paragraph{Constants.} $\rho_{\text{water}} = \SI{1000}{kg/m^3}$, $p_{\text{atm}} = \SI{101325}{Pa}$, $g = \SI{9.81}{m/s^2}$.
+
+\section*{Oscillations (Module 14)}
+
+\paragraph{Hooke's law.} $F = -kx$.
+
+\paragraph{SHM differential equation and solution.}
+\[
+\frac{d^{2}x}{dt^{2}} + \omega^{2} x = 0
+\qquad
+x(t) = A\cos(\omega t + \varphi)
+\]
+
+\paragraph{Velocity and acceleration.}
+\[
+v(t) = -A\omega\sin(\omega t + \varphi)
+\qquad
+a(t) = -A\omega^{2}\cos(\omega t + \varphi) = -\omega^{2} x(t)
+\]
+
+\paragraph{Frequency, angular frequency, period.}
+\[
+f = \frac{1}{T} = \frac{\omega}{2\pi}
+\qquad
+\omega = 2\pi f = \frac{2\pi}{T}
+\qquad
+T = \frac{1}{f} = \frac{2\pi}{\omega}
+\]
+
+\paragraph{Angular frequencies of small oscillations.}
+\[
+\omega_{\text{spring}} = \sqrt{\frac{k}{m}}
+\qquad
+\omega_{\text{simple pend.}} = \sqrt{\frac{g}{\ell}}
+\qquad
+\omega_{\text{phys. pend.}} = \sqrt{\frac{m g d}{I}}
+\]
+
+\paragraph{Energy in SHM (mass on spring).}
+\[
+K = \tfrac{1}{2} m v^{2}
+\qquad
+U = \tfrac{1}{2} k x^{2}
+\qquad
+E_{\text{tot}} = \tfrac{1}{2} k A^{2} = \tfrac{1}{2} m \omega^{2} A^{2}
+\]
+
+\paragraph{Damped oscillator.}
+\[
+m\ddot{x} + b\dot{x} + kx = 0
+\qquad
+\omega' = \sqrt{\frac{k}{m} - \frac{b^{2}}{4 m^{2}}}
+\]
+Underdamped: $b < 2\sqrt{mk}$. Critically damped: $b = 2\sqrt{mk}$. Overdamped: $b > 2\sqrt{mk}$.
+
+\paragraph{Driven oscillator, amplitude at steady state.}
+\[
+A_{\text{drv}} = \frac{F_{0}}{\sqrt{(k - m\omega_{d}^{2})^{2} + b^{2}\omega_{d}^{2}}}
+\]
+Resonance when $\omega_{d} \approx \omega_{0}$.
+
+\section*{Mechanical Waves (Module 15)}
+
+\paragraph{Wave function (right-going sinusoidal wave).}
+\[
+y(x,t) = A\cos(kx - \omega t)
+\]
+
+\paragraph{Wavenumber and wave speed.}
+\[
+k = \frac{2\pi}{\lambda}
+\qquad
+v = \lambda f = \frac{\omega}{k}
+\]
+
+\paragraph{Wave equation.}
+\[
+\frac{\partial^{2} y}{\partial t^{2}} = v^{2}\frac{\partial^{2} y}{\partial x^{2}}
+\]
+
+\paragraph{Wave speed in various media.}
+\[
+v_{\text{string}} = \sqrt{\frac{F}{\mu}}
+\qquad
+v_{\text{solid}} = \sqrt{\frac{Y}{\rho}}
+\qquad
+v_{\text{fluid}} = \sqrt{\frac{B}{\rho}}
+\]
+
+\paragraph{Average power carried by a wave on a string.}
+\[
+P_{\text{av}} = \tfrac{1}{2}\sqrt{\mu F}\;\omega^{2} A^{2}
+\]
+
+\paragraph{Standing waves (both ends fixed / both ends open $\to$ $2L/n$; one end fixed $\to$ $4L/n$).}
+\[
+f_{n} = \frac{n v}{2 L}\;\text{or}\;\frac{n v}{4 L}
+\qquad
+\lambda_{n} = \frac{2 L}{n}\;\text{or}\;\frac{4 L}{n}
+\]
+
+\paragraph{Superposition principle.} Two waves on the same medium add linearly: $y = y_1 + y_2$.
+
+\section*{Sound (Module 16)}
+
+\paragraph{Sound wave speed.} $v = \sqrt{B/\rho}$, $v_{\text{air}} \approx \SI{343}{m/s}$ at room temperature.
+
+\paragraph{Intensity of sound waves.}
+\[
+I = \tfrac{1}{2}\sqrt{\rho B}\,\omega^{2} A^{2}
+= \frac{p_{\max}^{2}}{2\sqrt{\rho B}}
+\]
+
+\paragraph{Pressure amplitude.}
+\[
+p_{\max} = B k A
+\]
+
+\paragraph{Intensity--distance relationship (spherical source).}
+\[
+I = \frac{P}{4\pi r^{2}}
+\]
+
+\paragraph{Sound intensity level (decibels).}
+\[
+\beta = (10\text{ dB})\log_{10}\!\left(\frac{I}{I_{0}}\right)
+\qquad
+I_{0} = \SI{e-12}{W/m^{2}}
+\]
+
+\paragraph{Doppler effect (source to the right of listener; velocities measured along source-to-listener axis).}
+\[
+f_{L} = f_{S}\left(\frac{v + v_{L}}{v + v_{S}}\right)
+\]
+
+\paragraph{Beat frequency.}
+\[
+f_{\text{beat}} = |f_{a} - f_{b}|
+\]
+
+\paragraph{Standing sound waves in pipes.}
+Open--open: $f_{n} = n v/(2L)$, $n = 1,2,3,\dots$\\
+Open--closed: $f_{n} = n v/(4L)$, $n = 1,3,5,\dots$ (odd only)
+
+\end{document}

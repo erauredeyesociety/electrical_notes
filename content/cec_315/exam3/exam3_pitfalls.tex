@@ -1,0 +1,705 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\renewcommand{\Re}{\operatorname{Re}}
+
+% ---- Wrong / Right callout boxes (tcolorbox) -----------------------------
+\newtcolorbox{wrongbox}{
+  colback=red!5!white,
+  colframe=red!60!black,
+  title=\textbf{Wrong},
+  fonttitle=\bfseries,
+  boxrule=0.4pt,
+  left=4pt,right=4pt,top=2pt,bottom=2pt,
+  breakable
+}
+\newtcolorbox{rightbox}{
+  colback=green!5!white,
+  colframe=green!50!black,
+  title=\textbf{Right},
+  fonttitle=\bfseries,
+  boxrule=0.4pt,
+  left=4pt,right=4pt,top=2pt,bottom=2pt,
+  breakable
+}
+\newtcolorbox{pitfallbox}[1]{
+  colback=yellow!8!white,
+  colframe=orange!70!black,
+  title=\textbf{Pitfall: #1},
+  fonttitle=\bfseries,
+  boxrule=0.5pt,
+  left=5pt,right=5pt,top=3pt,bottom=3pt,
+  breakable
+}
+
+\title{CEC 315 --- Exam 3 Pitfalls and Traps\\\large Lectures 16--23}
+\author{CEC 315 --- Signals and Systems (Spring 2026)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\emph{Consolidated list of common mistakes, sign errors, and conceptual traps.\\
+For each pitfall: the mistake, why it happens, the correct approach, and worked wrong-vs-right examples.}
+\end{center}
+
+\tableofcontents
+\newpage
+
+% =========================================================================
+\section{Laplace Transform and ROC (Lecture 16)}
+
+\begin{pitfallbox}{Omitting the ROC entirely}
+\textbf{Mistake:} Writing $X(s) = \dfrac{1}{s+3}$ and calling it ``the Laplace transform.''\\
+\textbf{Why:} Tables list only the algebraic expression; students treat $(X(s), x(t))$ as one-to-one.\\
+\textbf{Correct:} The Laplace transform is the \emph{pair} $(X(s), \text{ROC})$. Two different signals can share the same algebra.
+\begin{wrongbox}
+``$X(s) = \dfrac{1}{s+3}$, so $x(t) = e^{-3t} u(t)$.''
+\end{wrongbox}
+\begin{rightbox}
+With ROC $\Re\{s\} > -3$: $x(t) = e^{-3t} u(t)$. With ROC $\Re\{s\} < -3$: $x(t) = -e^{-3t} u(-t)$. Same $X(s)$, two different signals.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Getting the ROC direction backward}
+\textbf{Mistake:} Writing ``ROC $\Re\{s\} < \sigma_{\max}$'' for a right-sided signal.\\
+\textbf{Why:} ``ROC is bounded by the rightmost pole'' is memorized without a direction.\\
+\textbf{Correct:} Right-sided $\Rightarrow$ ROC is \emph{right of} the rightmost pole. Left-sided $\Rightarrow$ ROC is \emph{left of} the leftmost pole.
+\begin{wrongbox}
+$x(t) = 3e^{-2t}u(t) - 2e^{-5t}u(t)$. ``Poles at $-2, -5$, so ROC is $\Re\{s\} < -5$.''
+\end{wrongbox}
+\begin{rightbox}
+Both terms right-sided $\Rightarrow$ ROC $\Re\{s\} > -2$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Assuming a pole can lie in the ROC}
+\textbf{Mistake:} Listing pole locations as part of the ROC, e.g., ``ROC $\Re\{s\} \ge -3$.''\\
+\textbf{Why:} ``$\ge$'' feels like a harmless convention.\\
+\textbf{Correct:} $X(s)\to\infty$ at a pole; the integral cannot converge. ROC inequalities are \emph{strict} at poles.
+\begin{wrongbox}
+$u(t) \leftrightarrow 1/s$, pole at $s=0$. ``ROC $\Re\{s\} \ge 0$, so $U(j\omega) = 1/(j\omega)$.''
+\end{wrongbox}
+\begin{rightbox}
+ROC $\Re\{s\} > 0$ (strict). The $j\omega$-axis is \emph{not} in the open ROC, so $s=j\omega$ substitution misses the impulse at $\omega=0$ in the true DTFT.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{ROC of a sum --- assuming it's always the intersection}
+\textbf{Mistake:} ``ROC of $X_1 + X_2$ $=$ ROC$_1 \cap$ ROC$_2$, full stop.''\\
+\textbf{Why:} That is how linearity is usually stated.\\
+\textbf{Correct:} The ROC \emph{contains} the intersection but can be \emph{larger} due to pole-zero cancellation. Always verify after simplifying.
+\begin{wrongbox}
+$x(t) = e^{-t}u(t) - e^{-t}u(t) = 0$. ``ROC $= \Re\{s\} > -1$.''
+\end{wrongbox}
+\begin{rightbox}
+$X(s) = 0$; ROC is the entire $s$-plane. Cancellation removed the pole at $s=-1$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Treating Laplace as ``Fourier with $\omega \to s$''}
+\textbf{Mistake:} Claiming $X(j\omega) = X(s)|_{s=j\omega}$ without checking.\\
+\textbf{Why:} The substitution usually works for damped causal signals.\\
+\textbf{Correct:} Valid \emph{only} when the $j\omega$-axis is in the ROC.
+\begin{wrongbox}
+$x(t) = e^{2t}u(t) \leftrightarrow \dfrac{1}{s-2}$. ``$X(j\omega) = \dfrac{1}{j\omega - 2}$.''
+\end{wrongbox}
+\begin{rightbox}
+ROC is $\Re\{s\} > 2$, which excludes the $j\omega$-axis. The signal grows unbounded; its Fourier transform does not exist. Substitution invalid.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Finite-duration signals get a restricted ROC}
+\textbf{Mistake:} Assigning ``ROC $\Re\{s\}>0$'' to a finite-duration signal.\\
+\textbf{Why:} Pattern-matching ``exponential $\Rightarrow$ half-plane.''\\
+\textbf{Correct:} A finite, integrable signal has ROC $=$ \emph{entire} $s$-plane.
+\begin{wrongbox}
+$x(t) = \delta(t) + \delta(t-2)$. ``ROC $\Re\{s\}>0$.''
+\end{wrongbox}
+\begin{rightbox}
+$X(s) = 1 + e^{-2s}$, ROC $=$ all $s$. No poles.
+\end{rightbox}
+\end{pitfallbox}
+
+% =========================================================================
+\section{Inverse Laplace via PFE (Lecture 17)}
+
+\begin{pitfallbox}{Direction from pole sign, not ROC}
+\textbf{Mistake:} ``LHP pole $\Rightarrow$ right-sided; RHP pole $\Rightarrow$ left-sided.''\\
+\textbf{Why:} Causal examples hardwire the pattern.\\
+\textbf{Correct:} The ROC alone determines direction.
+\begin{wrongbox}
+$X(s) = \dfrac{5s+17}{(s+1)(s-3)}$, ROC $-1 < \Re\{s\} < 3$.\\
+$x(t) = -3e^{-t}u(t) + 8e^{3t}u(t)$ (wrong signs \emph{and} direction).
+\end{wrongbox}
+\begin{rightbox}
+ROC is a strip. The pole at $-1$ is right-sided; the pole at $3$ is left-sided.
+$$x(t) = -3 e^{-t}u(t) - 8 e^{3t} u(-t).$$
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Missing terms in repeated-pole expansions}
+\textbf{Mistake:} For $(s+1)^3$ writing only $\dfrac{A}{(s+1)^3}$.\\
+\textbf{Why:} Cover-up at the highest power gives one coefficient; students stop there.\\
+\textbf{Correct:} A pole of order $n$ needs \emph{all} $n$ terms: $\dfrac{B_1}{s+1} + \dfrac{B_2}{(s+1)^2} + \dfrac{B_3}{(s+1)^3}$.
+\begin{wrongbox}
+$X(s) = \dfrac{4s+5}{(s+1)^2(s+3)}$. Decompose as $\dfrac{A}{(s+1)^2}+\dfrac{B}{s+3}$.
+\end{wrongbox}
+\begin{rightbox}
+$\dfrac{B_1}{s+1} + \dfrac{B_2}{(s+1)^2} + \dfrac{C}{s+3}$, giving
+$$x(t) = \tfrac{7}{4} e^{-t}u(t) + \tfrac{1}{2} t e^{-t}u(t) - \tfrac{7}{4} e^{-3t}u(t).$$
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Splitting complex conjugate poles}
+\textbf{Mistake:} Writing $\dfrac{A}{s-p} + \dfrac{A^*}{s-p^*}$ and inverting with complex exponentials.\\
+\textbf{Why:} It looks like the distinct-real-poles case.\\
+\textbf{Correct:} Complete the square and use $e^{-at}\cos$/$\sin$ pairs. Keeps arithmetic real.
+\begin{wrongbox}
+$X(s) = \dfrac{2s}{s^2+4s+13}$. Split into $\dfrac{A}{s+2-3j} + \dfrac{A^*}{s+2+3j}$.
+\end{wrongbox}
+\begin{rightbox}
+$s^2+4s+13 = (s+2)^2 + 3^2$. Rewrite as
+$\dfrac{2(s+2)}{(s+2)^2+9} - \dfrac{4}{(s+2)^2+9}$, giving
+$$x(t) = \left[ 2 e^{-2t} \cos(3t) - \tfrac{4}{3} e^{-2t}\sin(3t)\right] u(t).$$
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Cover-up at the wrong order of a repeated pole}
+\textbf{Mistake:} For $\dfrac{N(s)}{(s+1)^2(s+3)}$, computing $B_1$ as $(s+1)X(s)|_{s=-1}$.\\
+\textbf{Why:} Students apply cover-up universally.\\
+\textbf{Correct:} Cover-up yields the \emph{highest}-order coefficient $B_n$. Lower orders need derivatives:
+$B_k = \dfrac{1}{(n-k)!}\dfrac{d^{n-k}}{ds^{n-k}}\left[(s-p)^n X(s)\right]_{s=p}$.
+\begin{wrongbox}
+$X(s) = \dfrac{1}{(s+1)^2(s+3)}$. ``$B_1 = (s+1)X(s)|_{s=-1}$'' --- undefined.
+\end{wrongbox}
+\begin{rightbox}
+$B_2 = (s+1)^2 X(s)|_{s=-1} = \tfrac{1}{2}$; then $B_1 = \dfrac{d}{ds}\left[(s+1)^2 X(s)\right]_{s=-1} = -\tfrac{1}{4}$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Applying FVT when it doesn't apply}
+\textbf{Mistake:} Plugging $\lim_{s\to 0} sX(s)$ without checking pole locations.\\
+\textbf{Why:} The formula is short; students skip the hypothesis.\\
+\textbf{Correct:} FVT is valid only if $sX(s)$ has all poles strictly in the open LHP.
+\begin{wrongbox}
+$X(s) = \dfrac{1}{s^2+1}$. ``$x(\infty) = \lim_{s\to 0}\dfrac{s}{s^2+1}=0$.''
+\end{wrongbox}
+\begin{rightbox}
+$x(t) = \sin(t)u(t)$ oscillates forever; no limit exists. Poles at $\pm j$ violate the FVT hypothesis --- theorem does not apply.
+\end{rightbox}
+\end{pitfallbox}
+
+% =========================================================================
+\section{Unilateral Laplace System Analysis (Lecture 18)}
+
+\begin{pitfallbox}{Bilateral rule with nonzero ICs}
+\textbf{Mistake:} Transforming $y'\to sY$ when $y(0^-)\ne 0$.\\
+\textbf{Why:} Bilateral is learned first.\\
+\textbf{Correct:} $\mathcal{L}_u\{y'\} = sY(s) - y(0^-)$. Second derivative: $s^2 Y - s y(0^-) - y'(0^-)$.
+\begin{wrongbox}
+$y' + 3y = 0$, $y(0^-) = 5$. $sY + 3Y = 0 \Rightarrow Y = 0 \Rightarrow y(t) = 0$.
+\end{wrongbox}
+\begin{rightbox}
+$[sY - 5] + 3Y = 0 \Rightarrow Y = \dfrac{5}{s+3} \Rightarrow y(t) = 5 e^{-3t} u(t)$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Sign error on the IC term}
+\textbf{Mistake:} Writing $sY(s) + y(0^-)$ or forgetting the sign.\\
+\textbf{Why:} Students guess without deriving.\\
+\textbf{Correct:} Memorize: $y'(t) \leftrightarrow sY(s) - y(0^-)$ (\textbf{minus} in Laplace; \textbf{plus} in unilateral Z).
+\begin{wrongbox}
+$y'' + 5y' + 6y = 2u(t)$, $y(0^-)=1$, $y'(0^-)=0$.\\
+$s^2 Y + s + 5[sY + 1] + 6Y = 2/s$.
+\end{wrongbox}
+\begin{rightbox}
+$[s^2 Y - s - 0] + 5[sY - 1] + 6Y = 2/s$, giving
+$y(t) = \left[\tfrac{1}{3} + 2 e^{-2t} - \tfrac{4}{3} e^{-3t}\right] u(t)$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Using $y(0^+)$ instead of $y(0^-)$}
+\textbf{Mistake:} Plugging the post-switching value into the unilateral rule.\\
+\textbf{Why:} Physical intuition computes $y(0^+)$ from continuity.\\
+\textbf{Correct:} Unilateral Laplace integrates from $0^-$; use $y(0^-)$. If input has a discontinuity at $t=0$, $y(0^+)$ can differ from $y(0^-)$.
+\begin{wrongbox}
+RC circuit, $v_C(0^-) = 2$\,V, step input applied. Use $v_C(0^+) = 2$\,V as ``the IC.''
+\end{wrongbox}
+\begin{rightbox}
+Use $v_C(0^-)=2$\,V directly in the unilateral rule. The IC sits just \emph{before} the step.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Confusing ZSR and ZIR}
+\textbf{Mistake:} Calling $Y(s) = H(s)X(s)$ the total response when ICs are nonzero.\\
+\textbf{Why:} The convolution property is the most-used formula.\\
+\textbf{Correct:} Total $=$ ZSR $+$ ZIR. $Y_{\text{ZS}} = HX$ (zero ICs). $Y_{\text{ZI}}$ is the response to ICs alone.
+\begin{wrongbox}
+$y'' + 5y' + 6y = 2u(t)$, $y(0^-)=1$, $y'(0^-)=0$. ``$Y = H\cdot 2/s = \dfrac{2}{s(s+2)(s+3)}$.''
+\end{wrongbox}
+\begin{rightbox}
+$Y_{\text{ZS}} = \dfrac{2}{s(s+2)(s+3)}$; $Y_{\text{ZI}} = \dfrac{s+5}{(s+2)(s+3)}$. Total $= \dfrac{s^2 + 5s + 2}{s(s+2)(s+3)}$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{RHP zeros $\Rightarrow$ instability}
+\textbf{Mistake:} ``Zero at $s=+2$, so unstable.''\\
+\textbf{Why:} Conflating zeros with poles.\\
+\textbf{Correct:} Stability depends only on \emph{poles}. RHP zeros give nonminimum-phase behavior, not instability.
+\begin{wrongbox}
+$H(s) = \dfrac{s-2}{(s+1)(s+3)}$. ``Unstable from RHP zero.''
+\end{wrongbox}
+\begin{rightbox}
+Both poles in LHP $\Rightarrow$ stable. RHP zero only affects transient shape (initial undershoot).
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Coupling causality and stability}
+\textbf{Mistake:} ``Stable iff all poles in LHP'' applied to a non-causal system.\\
+\textbf{Why:} The Golden Rule is drilled for causal systems.\\
+\textbf{Correct:} That rule \emph{assumes} causality. Non-causal: stability needs the $j\omega$-axis in the ROC, regardless of whether the ROC is a right half-plane.
+\begin{wrongbox}
+$H(s) = \dfrac{1}{s-2}$, ROC $\Re\{s\}<2$. ``RHP pole $\Rightarrow$ unstable.''
+\end{wrongbox}
+\begin{rightbox}
+The $j\omega$-axis is in the ROC, so the system is BIBO stable; it is anti-causal: $h(t) = -e^{2t}u(-t)$, which decays backward in time.
+\end{rightbox}
+\end{pitfallbox}
+
+% =========================================================================
+\section{Z-Transform and ROC (Lecture 19)}
+
+\begin{pitfallbox}{Omitting the ROC}
+\textbf{Mistake:} $X(z) = \dfrac{1}{1-0.5z^{-1}}$ as a complete answer.\\
+\textbf{Why:} Same as Laplace --- tables hide the ROC.\\
+\textbf{Correct:} Always pair $X(z)$ with ROC.
+\begin{wrongbox}
+``$x[n] = (0.5)^n u[n]$, done.''
+\end{wrongbox}
+\begin{rightbox}
+$|z|>0.5$: $x[n] = (0.5)^n u[n]$. $|z|<0.5$: $x[n] = -(0.5)^n u[-n-1]$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{``Outside'' vs ``inside'' for left-sided signals}
+\textbf{Mistake:} ``Left-sided $\Rightarrow$ ROC outside the leftmost pole.''\\
+\textbf{Why:} Carrying Laplace language literally into an annular geometry.\\
+\textbf{Correct:} Right-sided $\Rightarrow$ ROC \emph{outside} the outermost pole circle. Left-sided $\Rightarrow$ ROC \emph{inside} the innermost pole circle.
+\begin{wrongbox}
+$x[n] = -3^n u[-n-1]$, pole at $z=3$. ``ROC $|z|>3$.''
+\end{wrongbox}
+\begin{rightbox}
+ROC $|z|<3$. Unit circle is in the ROC, so the DTFT exists.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Misidentifying the pole in $1/(1-az^{-1})$}
+\textbf{Mistake:} Reading the pole as $z=1/a$.\\
+\textbf{Why:} Setting $z^{-1}=a$ and solving.\\
+\textbf{Correct:} $\dfrac{1}{1-az^{-1}} = \dfrac{z}{z-a}$. Pole at $z=a$, zero at $z=0$.
+\begin{wrongbox}
+$X(z) = \dfrac{1}{1-0.4z^{-1}}$. ``Pole at $z=2.5$.''
+\end{wrongbox}
+\begin{rightbox}
+Pole at $z=0.4$, zero at $z=0$, ROC $|z|>0.4$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Unit circle replaces the $j\omega$-axis, not the LHP}
+\textbf{Mistake:} Checking DTFT existence by ``LHP'' reasoning.\\
+\textbf{Why:} CT habits bleed in.\\
+\textbf{Correct:} DTFT exists iff the \emph{unit circle} is in the ROC.
+\begin{wrongbox}
+$x[n] = 2^n u[n]$, pole at $z=2$. ``Not in LHP, so DTFT fails.'' (Right answer, wrong reason.)
+\end{wrongbox}
+\begin{rightbox}
+ROC $|z|>2$ does not contain the unit circle $\Rightarrow$ DTFT does not exist.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Restrictive ROC for finite-duration signals}
+\textbf{Mistake:} Writing ``$|z|>1$'' for a finite-length sequence.\\
+\textbf{Why:} Pattern-matching to $u[n]$.\\
+\textbf{Correct:} Finite-length $\Rightarrow$ ROC $=$ entire $z$-plane, possibly minus $z=0$ and/or $z=\infty$.
+\begin{wrongbox}
+$x[n] = \{2, -1, 3, 0, 4\}$ for $n=0,\ldots,4$. ``ROC $|z|>1$.''
+\end{wrongbox}
+\begin{rightbox}
+$X(z) = 2 - z^{-1} + 3 z^{-2} + 4 z^{-4}$; ROC $=$ all $z\ne 0$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Geometric-series convergence: $w<1$ vs $|w|<1$}
+\textbf{Mistake:} Requiring ``$az^{-1} < 1$'' as a real inequality.\\
+\textbf{Why:} Real-variable intuition.\\
+\textbf{Correct:} $\sum_{n=0}^\infty w^n$ converges iff $|w|<1$. For $w = az^{-1}$: $|z|>|a|$.
+\begin{wrongbox}
+$x[n] = (-0.8)^n u[n]$. ``$-0.8 z^{-1} < 1$ for any $z>0$ $\Rightarrow$ ROC $|z|>0$.''
+\end{wrongbox}
+\begin{rightbox}
+$|-0.8 z^{-1}| < 1 \Leftrightarrow |z|>0.8$. Pole at $z=-0.8$.
+\end{rightbox}
+\end{pitfallbox}
+
+% =========================================================================
+\section{Inverse Z via PFE (Lecture 20)}
+
+\begin{pitfallbox}{Partial fractions in $z$ instead of $z^{-1}$}
+\textbf{Mistake:} Expanding $X(z)$ directly in $z$-poles.\\
+\textbf{Why:} Feels natural, like Laplace.\\
+\textbf{Correct:} Standard pairs are in $z^{-1}$. Use $z^{-1}$ as the expansion variable, or divide $X(z)/z$, expand in $z$, then multiply back.
+\begin{wrongbox}
+$X(z) = \dfrac{z}{(z-0.5)(z-0.25)}$. ``$\dfrac{A}{z-0.5}+\dfrac{B}{z-0.25}$, then invert each.'' Inversion is awkward.
+\end{wrongbox}
+\begin{rightbox}
+Divide by $z^2$: $X(z) = \dfrac{z^{-1}}{(1-0.5z^{-1})(1-0.25z^{-1})}$, or expand $X(z)/z$ in $z$-poles and rebuild. Result (ROC $|z|>0.5$): $x[n] = 2(0.5)^n u[n] - 2(0.25)^n u[n] + \ldots$ (clean $\dfrac{A}{1-dz^{-1}}$ form).
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Wrong direction from the ROC}
+\textbf{Mistake:} ``Pole inside unit circle $\Rightarrow$ right-sided,'' applied blindly.\\
+\textbf{Why:} Causal examples always have that pattern.\\
+\textbf{Correct:} For each pole ask: is the ROC \emph{outside} (right-sided) or \emph{inside} (left-sided) that pole's radius?
+\begin{wrongbox}
+$X(z) = \dfrac{1}{(1-2z^{-1})(1-0.5z^{-1})}$, ROC $0.5<|z|<2$.\\
+Both terms right-sided: $x[n] = -\tfrac{2}{3}(0.5)^n u[n] + \tfrac{2}{3}\cdot 2^n u[n]$ (grows; DTFT won't match the annular ROC).
+\end{wrongbox}
+\begin{rightbox}
+ROC outside $|z|=0.5$ but inside $|z|=2$, so the $0.5$ pole is right-sided and the $2$ pole is left-sided:
+$$x[n] = -\tfrac{2}{3}(0.5)^n u[n] - \tfrac{2}{3}\cdot 2^n u[-n-1].$$
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Missing minus sign on left-sided pairs}
+\textbf{Mistake:} Writing $a^n u[-n-1]$ instead of $-a^n u[-n-1]$.\\
+\textbf{Why:} The $X(z)$ algebra is identical to the right-sided case.\\
+\textbf{Correct:} The table row is $-a^n u[-n-1] \leftrightarrow \dfrac{1}{1-az^{-1}}$, ROC $|z|<|a|$. Leading minus.
+\begin{wrongbox}
+$X(z) = \dfrac{1}{1-3z^{-1}}$, ROC $|z|<3$. ``$x[n] = 3^n u[-n-1]$.''
+\end{wrongbox}
+\begin{rightbox}
+$x[n] = -3^n u[-n-1]$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Skipping long division on improper $X(z)$}
+\textbf{Mistake:} Going straight to PFE when numerator degree $\ge$ denominator degree (in $z^{-1}$).\\
+\textbf{Why:} Skipping what looks like a formality.\\
+\textbf{Correct:} Extract a polynomial in $z^{-1}$ by long division first (that becomes $\delta$-functions), then expand the proper remainder.
+\begin{wrongbox}
+$X(z) = \dfrac{1 + 2z^{-1} + 3z^{-2}}{1-0.5z^{-1}}$ expanded directly as $\dfrac{A}{1-0.5z^{-1}}$.
+\end{wrongbox}
+\begin{rightbox}
+Long-divide in $z^{-1}$ first $\Rightarrow$ polynomial $+$ proper fraction. Polynomial $\to$ impulses at $n=0,1,2,\ldots$; proper remainder $\to$ exponential.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{$\omega=0$ is $z=1$, not $z=0$}
+\textbf{Mistake:} Evaluating DC by plugging $z=0$.\\
+\textbf{Why:} In Laplace, $s=0$ is DC.\\
+\textbf{Correct:} $\omega=0 \Leftrightarrow z=e^{j0}=1$. $\omega=\pi \Leftrightarrow z=-1$. The origin $z=0$ is ``$\omega=\infty$.''
+\begin{wrongbox}
+$X(z) = \dfrac{1}{1-0.5z^{-1}}$. ``DC value is $X(0)$, which is undefined.''
+\end{wrongbox}
+\begin{rightbox}
+DC value $= X(1) = \dfrac{1}{1-0.5} = 2$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{FVT on oscillating signals}
+\textbf{Mistake:} Using $\lim_{z\to 1}(1-z^{-1}) X(z)$ for a non-decaying signal.\\
+\textbf{Why:} The limit exists algebraically.\\
+\textbf{Correct:} FVT requires $(1-z^{-1}) X(z)$ to have all poles strictly inside the unit circle.
+\begin{wrongbox}
+$x[n] = \cos(\pi n/2) u[n]$. ``$x[\infty] = 0$.''
+\end{wrongbox}
+\begin{rightbox}
+$x[n]$ oscillates; no limit. $X(z)$ has poles on the unit circle at $z=\pm j$; FVT hypothesis violated.
+\end{rightbox}
+\end{pitfallbox}
+
+% =========================================================================
+\section{Unilateral Z System Analysis (Lecture 21)}
+
+\begin{pitfallbox}{Sign error on unilateral shift}
+\textbf{Mistake:} $\mathcal{Z}_u\{y[n-1]\} = z^{-1} Y(z) - y[-1]$.\\
+\textbf{Why:} Laplace uses minus; students assume Z does too.\\
+\textbf{Correct:} $y[n-1] \leftrightarrow z^{-1}Y(z) \mathbf{+} y[-1]$. \textbf{Plus.} This is one of the most common Exam 3 sign errors.
+\begin{wrongbox}
+$y[n] - 0.6 y[n-1] = 0$, $y[-1]=4$. $Y - 0.6[z^{-1}Y - 4] = 0 \Rightarrow y[n] = -2.4(0.6)^n u[n]$, $y[0]=-2.4$ (wrong).
+\end{wrongbox}
+\begin{rightbox}
+$Y - 0.6[z^{-1}Y + 4] = 0 \Rightarrow Y = \dfrac{2.4}{1-0.6z^{-1}} \Rightarrow y[n] = 2.4(0.6)^n u[n]$. Check: $y[0] = 2.4$, $y[1] = 1.44 = 0.6\cdot 2.4$. \checkmark
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Second-shift rule: missing the $y[-1]z^{-1}$ term}
+\textbf{Mistake:} $y[n-2] \leftrightarrow z^{-2}Y + y[-2]$.\\
+\textbf{Why:} Generalizing the first-shift rule with only one IC term.\\
+\textbf{Correct:} $y[n-2] \leftrightarrow z^{-2}Y + y[-1] z^{-1} + y[-2]$. Each past sample contributes a term scaled by its own delay.
+\begin{wrongbox}
+$y[n] - 0.7 y[n-1] + 0.1 y[n-2] = 0$, $y[-1]=1$, $y[-2]=0$.\\
+$Y - 0.7[z^{-1}Y+1] + 0.1[z^{-2}Y+0] = 0$ (missing $y[-1]z^{-1}$).
+\end{wrongbox}
+\begin{rightbox}
+$Y - 0.7[z^{-1}Y + 1] + 0.1[z^{-2}Y + 1\cdot z^{-1} + 0] = 0$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{``Inside unit circle'' vs ``in LHP''}
+\textbf{Mistake:} Calling a DT pole at $z=-0.9$ unstable or borderline.\\
+\textbf{Why:} ``Negative'' feels like ``LHP.''\\
+\textbf{Correct:} DT stability is a magnitude test: $|p|<1$. Sign of the real part is irrelevant.
+\begin{wrongbox}
+$H(z) = \dfrac{1}{1+0.9z^{-1}}$, pole $z=-0.9$. ``Not LHP $\Rightarrow$ unstable.''
+\end{wrongbox}
+\begin{rightbox}
+$|-0.9| = 0.9 < 1 \Rightarrow$ stable. $h[n] = (-0.9)^n u[n]$ decays while alternating sign.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Testing $a<1$ instead of $|a|<1$}
+\textbf{Mistake:} ``$-2 < 1$, so stable.''\\
+\textbf{Why:} Real-number comparison instead of magnitude.\\
+\textbf{Correct:} Stability is $|a|<1$.
+\begin{wrongbox}
+Pole at $z=-2$. ``Stable because $-2<1$.''
+\end{wrongbox}
+\begin{rightbox}
+$|-2|=2>1 \Rightarrow$ unstable.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Delay vs advance}
+\textbf{Mistake:} $x[n+1] \leftrightarrow z^{-1} X(z)$.\\
+\textbf{Why:} Memorized ``$z^{-1} = $ shift'' without sign.\\
+\textbf{Correct:} $z^{-1}$ is \emph{delay}: $x[n-1] \leftrightarrow z^{-1}X(z) + x[-1]$. $z$ is \emph{advance}: $x[n+1] \leftrightarrow zX(z) - z x[0]$ (unilateral).
+\begin{wrongbox}
+$y[n+1] = 0.5 y[n]$, $y[0]=2$. ``$z^{-1}Y = 0.5 Y$.''
+\end{wrongbox}
+\begin{rightbox}
+$zY - 2z = 0.5 Y \Rightarrow Y = \dfrac{2z}{z-0.5} = \dfrac{2}{1-0.5z^{-1}} \Rightarrow y[n] = 2(0.5)^n u[n]$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Losing ZSR + ZIR structure}
+\textbf{Mistake:} Calling $Y = HX$ the total response when $y[-1]\ne 0$.\\
+\textbf{Why:} Convolution property overuse.\\
+\textbf{Correct:} Total $=$ ZSR $+$ ZIR. Apply the unilateral shift rule \emph{with} the IC terms, then split.
+\begin{wrongbox}
+$y[n] - 0.6 y[n-1] = (0.5)^n u[n]$, $y[-1]=4$. ``$Y = \dfrac{1}{(1-0.6z^{-1})(1-0.5z^{-1})}$.''
+\end{wrongbox}
+\begin{rightbox}
+$Y(1-0.6z^{-1}) = \dfrac{1}{1-0.5z^{-1}} + 0.6\cdot 4 = \dfrac{1}{1-0.5z^{-1}} + 2.4$. The ZIR term $\dfrac{2.4}{1-0.6z^{-1}}$ is explicit.
+\end{rightbox}
+\end{pitfallbox}
+
+% =========================================================================
+\section{Sampling (Lecture 22)}
+
+\begin{pitfallbox}{$\Omega$ vs $\omega$}
+\textbf{Mistake:} Comparing DT $\Omega$ (rad/sample) directly to CT $\omega$ (rad/s).\\
+\textbf{Why:} Both are called ``frequency'' and both are in radians.\\
+\textbf{Correct:} $\Omega = \omega T$. $\Omega$ is dimensionless (rad/sample); $\omega$ has units rad/s.
+\begin{wrongbox}
+$\omega_0 = 1000\pi$\,rad/s, $T = 10^{-3}$\,s. ``DT frequency is $1000\pi$.''
+\end{wrongbox}
+\begin{rightbox}
+$\Omega_0 = \omega_0 T = 1000\pi \cdot 10^{-3} = \pi$\,rad/sample --- right at the DT Nyquist edge.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Nyquist rate vs Nyquist frequency vs sampling rate}
+\textbf{Mistake:} Using the three terms interchangeably.\\
+\textbf{Why:} Textbooks differ; they are one factor of 2 apart.\\
+\textbf{Correct:}
+\begin{itemize}[leftmargin=1.5em,nosep]
+\item \textbf{Nyquist frequency} $= \omega_M$ (highest component in the signal).
+\item \textbf{Nyquist rate} $= 2\omega_M$ (minimum required \emph{sampling} rate).
+\item \textbf{Sampling rate} $\omega_s$ must satisfy $\omega_s > 2\omega_M$.
+\end{itemize}
+\begin{wrongbox}
+$\omega_M = 3000\pi$. ``Nyquist rate is $3000\pi$.''
+\end{wrongbox}
+\begin{rightbox}
+Nyquist frequency $= 3000\pi$; Nyquist rate $= 6000\pi$. Need $\omega_s > 6000\pi \Leftrightarrow T < 1/3000$\,s.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{$\omega_s = 2\omega_M$ is not sufficient}
+\textbf{Mistake:} Sampling \emph{at} Nyquist and claiming perfect reconstruction.\\
+\textbf{Why:} The informal statement ``$\omega_s \ge 2\omega_M$'' looks the same.\\
+\textbf{Correct:} Strict inequality: $\omega_s > 2\omega_M$.
+\begin{wrongbox}
+$x(t) = \sin(\omega_s t / 2) = \sin(\pi t / T)$. ``Samples at $t=nT$: reconstruct perfectly.''
+\end{wrongbox}
+\begin{rightbox}
+Samples are $\sin(n\pi) = 0$ for all $n$. The entire signal is lost.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Aliasing direction}
+\textbf{Mistake:} Reporting a negative alias frequency like $-100$\,Hz.\\
+\textbf{Why:} Forgetting that aliasing folds into $[-f_s/2, f_s/2]$.\\
+\textbf{Correct:} For $f_s/2 < f_0 < f_s$: $f_\text{alias} = |f_s - f_0|$. More generally, fold by adding/subtracting multiples of $f_s$ and take magnitude.
+\begin{wrongbox}
+$\cos(2\pi\cdot 900 t)$ sampled at $f_s = 1000$\,Hz. ``Reconstructed frequency $= 900 - 1000 = -100$\,Hz.''
+\end{wrongbox}
+\begin{rightbox}
+$f_\text{alias} = |1000 - 900| = 100$\,Hz. Reconstruction yields a 100\,Hz cosine.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Missing the $1/T$ scaling}
+\textbf{Mistake:} $X_p(j\omega) = \sum_k X(j(\omega-k\omega_s))$ with no $1/T$; or unity-gain LPF for reconstruction.\\
+\textbf{Why:} Easy factor to drop.\\
+\textbf{Correct:} $X_p(j\omega) = \dfrac{1}{T}\sum_k X(j(\omega - k\omega_s))$. Ideal LPF has passband gain $T$.
+\begin{wrongbox}
+Reconstructing with a unity-gain LPF and expecting $x(t)$ back.
+\end{wrongbox}
+\begin{rightbox}
+Output is $x(t)/T$. Set LPF gain to $T$ to recover $x(t)$ itself.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Hz vs rad/s unit mixing}
+\textbf{Mistake:} Writing $f_s > 2\omega_M$ or $\omega_s > 2 f_M$.\\
+\textbf{Why:} Both are called ``frequency.''\\
+\textbf{Correct:} Stay in one family. $f_s > 2 f_M$ (Hz) or $\omega_s > 2\omega_M$ (rad/s). $\omega = 2\pi f$.
+\begin{wrongbox}
+$f_M = 500$\,Hz, $\omega_s = 1200$\,rad/s. ``$1200 > 2\cdot 500 = 1000$, so OK.''
+\end{wrongbox}
+\begin{rightbox}
+$\omega_M = 2\pi\cdot 500 \approx 3142$\,rad/s; need $\omega_s > 6284$\,rad/s. $\omega_s = 1200$ is catastrophically aliased.
+\end{rightbox}
+\end{pitfallbox}
+
+% =========================================================================
+\section{Feedback Systems (Lecture 23)}
+
+\begin{pitfallbox}{Sign error at the summing junction}
+\textbf{Mistake:} Writing $Q = H/(1-GH)$ for a negative-feedback system.\\
+\textbf{Why:} Sign at the summer is easy to miss.\\
+\textbf{Correct:} Negative feedback: $Q = H/(1+GH)$. Positive feedback: $Q = H/(1-GH)$.
+\begin{wrongbox}
+$H(s) = \dfrac{2}{s+1}$, unity negative feedback. ``$Q = \dfrac{2/(s+1)}{1 - 2/(s+1)} = \dfrac{2}{s-1}$.'' Pole at $+1$, ``unstable.''
+\end{wrongbox}
+\begin{rightbox}
+$Q = \dfrac{2/(s+1)}{1 + 2/(s+1)} = \dfrac{2}{s+3}$. Pole at $-3$, stable. Feedback pushed the pole left.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Open-loop poles vs closed-loop poles}
+\textbf{Mistake:} Judging closed-loop stability from the poles of $GH$.\\
+\textbf{Why:} $GH$ is easy to factor.\\
+\textbf{Correct:} Closed-loop poles are roots of $1 + KGH = 0$. They \emph{move} with $K$.
+\begin{wrongbox}
+$GH(s) = \dfrac{K}{(s+1)(s+2)}$. ``Poles at $-1,-2$ for all $K$.''
+\end{wrongbox}
+\begin{rightbox}
+$(s+1)(s+2) + K = 0 \Rightarrow s = \dfrac{-3\pm\sqrt{1-4K}}{2}$. Closed-loop poles depend on $K$, not the open-loop factors.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Sensitivity formula}
+\textbf{Mistake:} $S = GH/(1+GH)$ or $S = 1/GH$.\\
+\textbf{Why:} Confusing sensitivity with complementary sensitivity.\\
+\textbf{Correct:} $S = \dfrac{1}{1 + GH}$. Large loop gain $\Rightarrow$ small sensitivity.
+\begin{wrongbox}
+$GH = 9$. ``$S = 9/10 = 0.9$ --- high sensitivity.''
+\end{wrongbox}
+\begin{rightbox}
+$S = 1/10 = 0.1$. A $10\%$ plant error gives only $1\%$ output error.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Solving the wrong equation for closed-loop poles}
+\textbf{Mistake:} Setting $GH = 0$ or $GH = 1$.\\
+\textbf{Why:} Mixing up ``something equals something.''\\
+\textbf{Correct:} Characteristic equation: $1 + L(s) = 0$, i.e., $L(s) = -1$.
+\begin{wrongbox}
+$L(s) = \dfrac{K}{s(s+2)}$. ``Set $L = 0 \Rightarrow K = 0$.''
+\end{wrongbox}
+\begin{rightbox}
+$s^2 + 2s + K = 0 \Rightarrow s = -1 \pm \sqrt{1-K}$. Closed-loop poles in LHP for all $K>0$.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Nyquist: encircling the wrong point}
+\textbf{Mistake:} Counting encirclements of the origin, or forgetting the critical point is $-1/K$ (not $-1$).\\
+\textbf{Why:} ``Encircles $-1$'' is the default.\\
+\textbf{Correct:} For open-loop-stable $GH$, closed-loop is stable iff the Nyquist plot of $GH(j\omega)$ does \emph{not} encircle $-1/K$. The critical point moves with $K$.
+\begin{wrongbox}
+Nyquist plot passes near $-0.25$. ``Doesn't encircle $-1$, so stable for all $K$.''
+\end{wrongbox}
+\begin{rightbox}
+At $K = 4$, critical point is $-1/4 = -0.25$: marginal. For $K > 4$, the critical point lies inside the encirclement $\Rightarrow$ unstable.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Swapping GM and PM readouts}
+\textbf{Mistake:} Reading GM at the $0$\,dB crossing and PM at the $-180^\circ$ crossing.\\
+\textbf{Why:} Two crossings, two margins.\\
+\textbf{Correct:}
+\begin{itemize}[leftmargin=1.5em,nosep]
+\item \textbf{Gain margin}: at $\omega_1$ where $\angle GH = -180^\circ$, read $-20\log_{10}|GH(\omega_1)|$ from the magnitude plot.
+\item \textbf{Phase margin}: at $\omega_2$ where $|GH| = 1$ ($0$\,dB), read $180^\circ + \angle GH(\omega_2)$ from the phase plot.
+\end{itemize}
+\begin{wrongbox}
+At $\omega_1=20$, $|GH|=-8$\,dB, $\angle GH = -180^\circ$. At $\omega_2=5$, $|GH| = 0$\,dB, $\angle GH = -150^\circ$. ``GM $= 30^\circ$, PM $= -8$\,dB.''
+\end{wrongbox}
+\begin{rightbox}
+GM $= -(-8) = +8$\,dB; PM $= 180^\circ + (-150^\circ) = 30^\circ$. Both positive $\Rightarrow$ stable.
+\end{rightbox}
+\end{pitfallbox}
+
+\begin{pitfallbox}{Negative feedback always stabilizes}
+\textbf{Mistake:} ``More feedback is always better.''\\
+\textbf{Why:} Textbook narrative emphasizes feedback's benefits.\\
+\textbf{Correct:} Too much loop gain can push closed-loop poles into the RHP. Feedback is a tool, not a guarantee.
+\begin{wrongbox}
+$H(s) = \dfrac{K}{s(s+1)(s+2)}$ with unity feedback. ``Stable for any $K>0$.''
+\end{wrongbox}
+\begin{rightbox}
+Characteristic eqn $s^3 + 3s^2 + 2s + K = 0$; Routh gives $0 < K < 6$. For $K\ge 6$ the closed-loop crosses into the RHP.
+\end{rightbox}
+\end{pitfallbox}
+
+% =========================================================================
+\section*{Quick-Reference Sign Table}
+\addcontentsline{toc}{section}{Quick-Reference Sign Table}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Rule} & \textbf{Formula} & \textbf{Sign} \\\hline
+Unilateral Laplace diff & $y'(t) \leftrightarrow sY(s) - y(0^-)$ & \textbf{minus} \\
+Unilateral Laplace 2nd diff & $y''\leftrightarrow s^2Y - sy(0^-) - y'(0^-)$ & \textbf{both minus} \\
+Unilateral Z delay & $y[n-1] \leftrightarrow z^{-1}Y + y[-1]$ & \textbf{plus} \\
+Unilateral Z 2-step delay & $y[n-2] \leftrightarrow z^{-2}Y + y[-1]z^{-1} + y[-2]$ & \textbf{both plus} \\
+Unilateral Z advance & $y[n+1] \leftrightarrow zY - z y[0]$ & \textbf{minus} \\
+Negative feedback loop & $Q = H/(1+GH)$ & \textbf{plus in denom.} \\
+Positive feedback loop & $Q = H/(1-GH)$ & \textbf{minus in denom.} \\
+Left-sided Z pair & $-a^n u[-n-1] \leftrightarrow 1/(1-az^{-1})$, $|z|<|a|$ & \textbf{leading minus} \\\hline
+\end{tabular}
+\end{center}
+
+\vspace{1em}
+\begin{center}\emph{Prepared for CEC 315 Exam 3 --- Spring 2026.}\end{center}
+
+\end{document}

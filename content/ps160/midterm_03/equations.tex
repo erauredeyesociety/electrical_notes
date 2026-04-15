@@ -1,0 +1,208 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath,amssymb,siunitx}
+\usepackage{parskip}
+\usepackage{enumitem}
+
+\title{PS160 --- Midterm 3 (Final) Equation Sheet}
+\author{Nature and Propagation of Light, Geometric Optics, Interference, Diffraction \\ (Modules 33, 34, 35, 36)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent \textbf{Note:} Midterm 3 is comprehensive. This sheet focuses on new content (Ch 33--36);
+see \texttt{master\_equations.tex} for the full course equation set.
+
+\section*{Nature and Propagation of Light (Module 33)}
+
+\paragraph{Speed of light and index of refraction.}
+\[
+c = \SI{3.00e8}{m/s}
+\qquad
+n = \frac{c}{v}
+\qquad
+\lambda_{\text{med}} = \frac{\lambda_0}{n}
+\]
+Frequency is unchanged when light crosses an interface; wavelength and speed scale by $1/n$.
+
+\paragraph{Law of reflection.} $\theta_r = \theta_a$ (both measured from the normal to the surface).
+
+\paragraph{Law of refraction (Snell's law).}
+\[
+n_a\sin\theta_a = n_b\sin\theta_b
+\]
+
+\paragraph{Total internal reflection (TIR).} Occurs only when $n_a > n_b$:
+\[
+\sin\theta_c = \frac{n_b}{n_a}
+\]
+
+\paragraph{Dispersion.} $n = n(\lambda)$. In normal dispersion, shorter wavelengths (blue) refract more than longer ones (red). Prisms and raindrops separate white light into a spectrum.
+
+\paragraph{Huygens's principle.} Every point on a wavefront is the source of spherical wavelets; the new wavefront is the envelope of these wavelets. This yields both the law of reflection and Snell's law.
+
+\paragraph{Linear polarization / Malus's law.}
+\[
+I = I_{\max}\cos^{2}\phi
+\]
+Unpolarized light through an ideal polarizer: $I = I_0/2$.
+
+\paragraph{Brewster's angle (reflected light fully polarized).}
+\[
+\tan\theta_{B} = \frac{n_2}{n_1}
+\]
+
+\section*{Geometric Optics: Mirrors and Lenses (Module 34)}
+
+\paragraph{Plane mirror.} Virtual image, same size, distance behind mirror equal to object distance in front.
+
+\paragraph{Spherical mirror / thin lens (sign convention: distances measured positive in the "real" direction).}
+\[
+\frac{1}{s} + \frac{1}{s'} = \frac{1}{f}
+\qquad\text{(paraxial / Gaussian mirror \& thin-lens equation)}
+\]
+
+\paragraph{Mirror focal length.} $f = R/2$.
+
+\paragraph{Lateral (transverse) magnification.}
+\[
+m = \frac{y'}{y} = -\frac{s'}{s}
+\]
+$|m| > 1$ enlarged, $|m| < 1$ reduced; $m > 0$ erect, $m < 0$ inverted.
+
+\paragraph{Lensmaker's equation (thin lens in air).}
+\[
+\frac{1}{f} = (n - 1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right)
+\]
+
+\paragraph{Refraction at a single spherical surface.}
+\[
+\frac{n_1}{s} + \frac{n_2}{s'} = \frac{n_2 - n_1}{R}
+\]
+
+\paragraph{Sign conventions (right-moving light, objects on left).}
+\begin{itemize}\itemsep0pt
+\item $s > 0$: object on the incoming (left) side. Virtual object: $s < 0$.
+\item $s' > 0$: image on the outgoing (right) side for a lens, same side as object for a mirror (real image).
+\item $R > 0$: center of curvature on the outgoing (transmitted) side.
+\item $f > 0$ for a converging (convex) lens or concave mirror; $f < 0$ for diverging (concave) lens or convex mirror.
+\end{itemize}
+
+\paragraph{Two-lens systems.} Image of the first lens becomes the object of the second:
+\[
+s_2 = d - s_1'
+\]
+Total magnification $m = m_1 m_2$.
+
+\paragraph{Simple magnifier / microscope / telescope (angular magnification).}
+\[
+M_{\text{magnifier}} = \frac{25\text{ cm}}{f}
+\qquad
+M_{\text{telescope}} = -\frac{f_{\text{obj}}}{f_{\text{eye}}}
+\]
+
+\paragraph{Camera $f$-number and optical power.}
+\[
+f\text{-number} = \frac{f}{D}
+\qquad
+P_{\text{optical}} = \frac{1}{f\;[\text{m}]}\quad (\text{diopters})
+\]
+
+\section*{Interference (Module 35)}
+
+\paragraph{Two-source phase difference.}
+Path difference $\Delta r$ produces phase difference
+\[
+\Delta\phi = \frac{2\pi}{\lambda}\,\Delta r
+\]
+
+\paragraph{Conditions for constructive and destructive interference (coherent sources, same phase).}
+\[
+\Delta r = m\lambda \Rightarrow\text{constructive},\quad m = 0,\pm 1,\pm 2,\dots
+\]
+\[
+\Delta r = (m + \tfrac{1}{2})\lambda \Rightarrow\text{destructive}
+\]
+
+\paragraph{Young's double-slit (slit separation $d$, screen distance $R$).}
+Maxima at
+\[
+d\sin\theta = m\lambda
+\qquad
+y_{m}\approx \frac{m\lambda R}{d}\;(\text{small-angle})
+\]
+Minima at $d\sin\theta = (m + \tfrac{1}{2})\lambda$.
+
+\paragraph{Intensity pattern of two-source interference.}
+\[
+I(\theta) = I_0\cos^{2}\!\left(\frac{\phi}{2}\right)
+= I_0\cos^{2}\!\left(\frac{\pi d\sin\theta}{\lambda}\right)
+\]
+
+\paragraph{Thin-film interference.}
+A reflection at an interface where light goes from lower-$n$ to higher-$n$ introduces a $\pi$ phase shift ($\lambda/2$ path shift). Combining path-length and reflection phase shifts:
+\[
+2 n t = m\lambda_0 \text{ or } (m + \tfrac{1}{2})\lambda_0
+\]
+(choice depends on the number of hard reflections: one hard reflection flips the rule).
+
+\paragraph{Newton's rings / wedge.} Uses same logic: $2t = $ integer/half-integer of $\lambda_{\text{med}}$.
+
+\paragraph{Michelson interferometer.}
+Moving one mirror by $\Delta d$ shifts the fringe pattern by $\Delta m$ fringes:
+\[
+2\,\Delta d = \Delta m\,\lambda
+\]
+
+\section*{Diffraction (Module 36)}
+
+\paragraph{Single-slit (Fraunhofer) diffraction minima.} Slit width $a$:
+\[
+a\sin\theta = m\lambda,\quad m = \pm 1,\pm 2,\dots
+\]
+(note: $m = 0$ is the central maximum, not a minimum). For small angles,
+\[
+y_{m}\approx \frac{m\lambda R}{a}
+\]
+
+\paragraph{Single-slit intensity pattern.}
+\[
+I(\theta) = I_0\left(\frac{\sin(\beta/2)}{\beta/2}\right)^{2},\qquad
+\beta = \frac{2\pi a\sin\theta}{\lambda}
+\]
+
+\paragraph{Two-slit diffraction envelope.} Double-slit fringes modulated by single-slit envelope:
+\[
+I(\theta) = I_0\cos^{2}\!\left(\frac{\pi d\sin\theta}{\lambda}\right)\left(\frac{\sin(\beta/2)}{\beta/2}\right)^{2}
+\]
+
+\paragraph{Diffraction grating (slit spacing $d$, maxima).}
+\[
+d\sin\theta = m\lambda,\quad m = 0,\pm 1,\pm 2,\dots
+\]
+Chromatic resolving power: $R = \lambda/\Delta\lambda = Nm$ ($N$ = total slits illuminated).
+
+\paragraph{Circular aperture (Airy disk) --- Rayleigh criterion.}
+\[
+\sin\theta_{R} = 1.22\,\frac{\lambda}{D}
+\]
+$D$ is the aperture diameter; $\theta_R$ is the minimum angular separation of two just-resolvable sources.
+
+\paragraph{X-ray diffraction (Bragg's law).}
+\[
+2 d\sin\theta = m\lambda
+\]
+where $d$ is the spacing between crystal planes and $\theta$ is measured from the plane (not the normal).
+
+\section*{Constants}
+\begin{tabular}{ll}
+Speed of light & $c = \SI{2.998e8}{m/s}$ \\
+Permittivity of free space & $\varepsilon_0 = \SI{8.854e-12}{F/m}$ \\
+Permeability of free space & $\mu_0 = 4\pi\times\SI{e-7}{T\cdot m/A}$ \\
+Index of refraction, air & $n \approx 1.00$ \\
+Index of refraction, water & $n \approx 1.33$ \\
+Index of refraction, glass & $n \approx 1.5$ \\
+\end{tabular}
+
+\end{document}

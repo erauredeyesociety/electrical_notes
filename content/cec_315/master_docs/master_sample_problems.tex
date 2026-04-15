@@ -1,0 +1,678 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+
+\newcommand{\Real}{\operatorname{Re}}
+\newcommand{\Lap}{\overset{\mathcal{L}}{\longleftrightarrow}}
+\newcommand{\ZT}{\overset{\mathcal{Z}}{\longleftrightarrow}}
+\newcommand{\FT}{\overset{\mathcal{F}}{\longleftrightarrow}}
+
+\title{CEC 315 --- Master Sample Problems (Lectures 2--23)}
+\author{Compiled from course lectures}
+\date{}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\newpage
+
+\noindent This document collects every worked example from the course lectures,
+organized by exam. Exam 3 (Part III) covers Lectures 16--23 and is the focus of
+the most detail since it is the upcoming exam.
+
+\part{Exam 1 Material (Lectures 2--8)}
+
+\section{Lecture 2 --- Signal Definitions and Transformations}
+Lecture 2 is a definitional/overview lecture and contains no explicit numbered worked examples. It introduces CT vs.\ DT signals, energy/power classification, time transformations (shift, reversal, scaling), periodic signals, and even/odd decomposition.
+
+\section{Lecture 3 --- Complex Numbers, Exponential and Sinusoidal Signals}
+
+\subsection{Example 1 --- Derive trig identities from Euler's formula}
+\textbf{Topic:} Euler's formula, angle-sum and product-to-sum identities.
+
+\textbf{Problem.} Using $e^{j\theta}=\cos\theta+j\sin\theta$, derive the identities for $\cos(\alpha\pm\beta)$, $\sin(\alpha\pm\beta)$, $\cos\alpha\cos\beta$, $\cos\alpha\sin\beta$, $\sin\alpha\sin\beta$.
+
+\textbf{Solution.} Start from $e^{j(\alpha+\beta)}=e^{j\alpha}e^{j\beta}$ and expand:
+\[(\cos\alpha+j\sin\alpha)(\cos\beta+j\sin\beta)=(\cos\alpha\cos\beta-\sin\alpha\sin\beta)+j(\sin\alpha\cos\beta+\cos\alpha\sin\beta).\]
+Equating real and imaginary parts gives
+\[\cos(\alpha+\beta)=\cos\alpha\cos\beta-\sin\alpha\sin\beta,\qquad\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta.\]
+Replacing $\beta\to-\beta$ yields $\cos(\alpha-\beta)$, $\sin(\alpha-\beta)$. Product-to-sum follows from $\cos\alpha=(e^{j\alpha}+e^{-j\alpha})/2$, $\sin\alpha=(e^{j\alpha}-e^{-j\alpha})/(2j)$:
+\begin{align*}
+\cos\alpha\cos\beta&=\tfrac12[\cos(\alpha+\beta)+\cos(\alpha-\beta)],\\
+\sin\alpha\sin\beta&=\tfrac12[\cos(\alpha-\beta)-\cos(\alpha+\beta)],\\
+\cos\alpha\sin\beta&=\tfrac12[\sin(\alpha+\beta)-\sin(\alpha-\beta)].
+\end{align*}
+
+\section{Lecture 4 --- Key Functions and System Basics}
+
+\subsection{Example 1 --- CT integrator with three impulses}
+\textbf{Topic:} $y(t)=\int_0^t x(\tau)\,d\tau$.
+
+\textbf{Problem.} $x(t)=\delta(t+1)+\delta(t-1)+\delta(t-3)$.
+
+\textbf{Solution.} Only impulses in $[0,t]$ contribute:
+\[y(t)=u(t-1)+u(t-3).\]
+Staircase from $0$ to $2$ with jumps at $t=1,3$.
+
+\subsection{Example 2 --- CT differentiator on a rectangular pulse}
+\textbf{Problem.} $x(t)=u(t)-u(t-2)$.
+\textbf{Solution.} $y(t)=\delta(t)-\delta(t-2)$ (impulses at the rising/falling edges).
+
+\section{Lecture 5 --- Basic System Properties}
+
+\subsection{Example 1 --- Classify two systems}
+\textbf{Problem.} $T_1(x[n])=1/x[n+1]$, $T_2(x[n])=x[n]+0.5\,x[n+1]$. For each: invertible, causal, BIBO stable, time invariant, linear, memoryless?
+
+\textbf{Solution.} $T_1$: invertible (yes), causal (no, uses $x[n+1]$), BIBO stable (no, $1/0$ blows up), time invariant (yes), linear (no --- reciprocal is nonlinear), memoryless (no).
+$T_2$: invertible (yes), causal (no), BIBO stable (yes, $|y|\le 1.5\|x\|_\infty$), time invariant (yes), linear (yes), memoryless (no).
+
+\subsection{Example 2 --- Sketch transformed signals}
+\textbf{Problem.} $x_1[n]=(0.5)^n u[n]$, $x_2[n]=x_1[n-2]$, $x_3[n]=x_2[-n]$.
+
+\textbf{Solution.} $x_1$: decaying geometric starting at $n=0$. $x_2$: same shape delayed by 2, nonzero for $n\ge 2$. $x_3$: reflection of $x_2$, nonzero for $n\le -2$, decaying as $n\to-\infty$.
+
+\section{Lecture 6 --- Discrete-Time LTI Systems and Convolution Sum}
+
+\subsection{Example 1 --- Convolution $\{1,2,3\}\ast\{1,1\}$}
+\textbf{Problem.} Compute $y[n]=x[n]*h[n]$ with $x=\{1,2,3\}$, $h=\{1,1\}$.
+
+\textbf{Solution.} Length $3+2-1=4$.
+\begin{align*}
+y[0]&=1\cdot 1=1\\
+y[1]&=1\cdot 1+2\cdot 1=3\\
+y[2]&=2\cdot 1+3\cdot 1=5\\
+y[3]&=3\cdot 1=3
+\end{align*}
+\[y[n]=\{1,3,5,3\}.\]
+Check: $(\sum x)(\sum h)=6\cdot 2=12=\sum y$ \checkmark.
+
+\subsection{Example 2 --- Convolution with unit step (accumulator)}
+\textbf{Problem.} $h[n]=u[n]$, $x[n]=\{1,2,3\}$.
+\textbf{Solution.} $y[n]=\sum_{k=-\infty}^{n}x[k]$: $y=\{1,3,6,6,\ldots\}$.
+
+\subsection{Example 3 --- Convolution with shifted impulse}
+\textbf{Solution.} $x[n]*\delta[n-n_0]=x[n-n_0]$.
+
+\subsection{Example 4 --- Echo view of convolution}
+\textbf{Problem.} $h=\{1,1,1\}$ at $n=0,1,2$; $x=\{0.5,2\}$ at $n=0,1$.
+\textbf{Solution.} $y=\{0.5,2.5,2.5,2\}$.
+
+\subsection{Example 5 --- Geometric convolved with step}
+\textbf{Problem.} $x[n]=u[n]$, $h[n]=\alpha^n u[n]$, $|\alpha|<1$.
+\textbf{Solution.} $y[n]=\dfrac{1-\alpha^{n+1}}{1-\alpha}u[n]$.
+
+\section{Lecture 7 --- Continuous-Time LTI Systems and Properties}
+
+\subsection{Example 1 --- Sifting $\int(t^2+3t)\delta(t-2)\,dt$}
+\textbf{Solution.} $t=2$: $(2)^2+3(2)=\boxed{10}$.
+
+\subsection{Example 2 --- Sifting $\int e^{-3t}\delta(t+1)\,dt$}
+\textbf{Solution.} $t=-1$: $e^{3}=\boxed{e^3}$.
+
+\subsection{Example 3 --- Convolution of two rectangular pulses}
+\textbf{Problem.} $x(t)=u(t)-u(t-1)$, $h(t)=u(t)-u(t-2)$. Find $y(t)$.
+
+\textbf{Solution.} Five cases of $t$: $t<0$, $0\le t<1$, $1\le t<2$, $2\le t<3$, $t\ge 3$.
+\[y(t)=\begin{cases}0,&t<0\\ t,&0\le t<1\\ 1,&1\le t<2\\ 3-t,&2\le t<3\\ 0,&t\ge 3\end{cases}\]
+Trapezoidal pulse.
+
+\subsection{Example 4 --- Exponential convolved with unit step}
+\textbf{Problem.} $x(t)=e^{-at}u(t)$, $h(t)=u(t)$, $a>0$.
+\textbf{Solution.} $y(t)=\dfrac{1}{a}(1-e^{-at})u(t)$.
+
+\subsection{Example 5 --- Step response from impulse response}
+\textbf{Problem.} $h(t)=e^{-t}u(t)$.
+\textbf{Solution.} $s(t)=\int_0^t e^{-\tau}d\tau=(1-e^{-t})u(t)$.
+
+\section{Lecture 8 --- Differential/Difference Equations and Singularity Functions}
+
+\subsection{Example 1 --- Impulse response of $y'+2y=x$}
+\textbf{Solution.} $h(t)=e^{-2t}u(t)$. General rule: $y'+ay=bx\Rightarrow h(t)=be^{-at}u(t)$.
+
+\subsection{Example 2 --- Step response of $y'+2y=3x$, $x=u(t)$}
+\textbf{Solution.} Homogeneous $Ce^{-2t}$, particular $3/2$. ICs: $C=-3/2$. $y(t)=\tfrac32(1-e^{-2t})u(t)$.
+
+\subsection{Example 3 --- Impulse response by iteration}
+\textbf{Problem.} $y[n]=\tfrac12 y[n-1]+x[n]$.
+\textbf{Solution.} Iterate with $x=\delta$: $h[0]=1$, $h[1]=1/2$, $h[2]=1/4,\ldots$. $h[n]=(1/2)^n u[n]$. General rule: $y[n]=\alpha y[n-1]+bx[n]\Rightarrow h[n]=b\alpha^n u[n]$, stable iff $|\alpha|<1$.
+
+\subsection{Example 4 --- Step response by iteration}
+\textbf{Problem.} Same system, $x[n]=u[n]$.
+\textbf{Solution.} $s[0]=1$, $s[1]=3/2$, $s[2]=7/4$, $s[3]=15/8\ldots$. Closed form: $s[n]=2-(1/2)^n$.
+
+\subsection{Example 5 --- Derivative of $(t+1)u(t)$}
+\textbf{Solution.} Product rule: $\dfrac{d}{dt}[(t+1)u(t)]=u(t)+(t+1)\delta(t)=u(t)+\delta(t)$.
+
+\part{Exam 2 Material (Lectures 9--15)}
+
+\section{Lecture 9 --- CT Fourier Series}
+
+\subsection{Example 1 --- Eigenfunction in action}
+\textbf{Problem.} System $h(t)=e^{-t}u(t)$, input $\cos(2t)$.
+\textbf{Solution.} $H(j2)=1/(1+j2)$, $|H|=1/\sqrt 5\approx 0.447$, $\angle H\approx -63.4^\circ$.
+$y(t)=0.447\cos(2t-63.4^\circ)$.
+
+\subsection{Example 2 --- Delay as eigenfunction}
+\textbf{Problem.} $y(t)=x(t-3)$, $x=e^{j2t}$.
+\textbf{Solution.} $H(s)=e^{-3s}$, $H(j2)=e^{-j6}$. $y=e^{-j6}e^{j2t}=e^{j2(t-3)}$.
+
+\subsection{Example 3 --- DT two-point average eigenfunction}
+\textbf{Problem.} $y[n]=\tfrac12 x[n]+\tfrac12 x[n-1]$, $x[n]=e^{j\pi n/3}$.
+\textbf{Solution.} $H(e^{j\pi/3})=\tfrac34-j\tfrac{\sqrt3}{4}$, $|H|\approx 0.866$.
+
+\subsection{Example 4 --- Period and frequency}
+$T=0.01\,\mathrm{s}\Rightarrow\omega_0=200\pi$, $f_0=100$ Hz. $T=1\,\mathrm{s}\Rightarrow\omega_0=2\pi$, $f_0=1$ Hz.
+
+\subsection{Example 5 --- DC coefficient}
+\textbf{Problem.} $T=4$, $x=3$ on $(0,1)$, $-1$ on $(1,4)$. $a_0=\tfrac14[3-3]=0$. Change to $x=3$ on $(0,2)$: $a_0=\tfrac14[6-2]=1$.
+
+\subsection{Example 6 --- CTFS of $\sin(\omega_0 t)$}
+\textbf{Solution.} $a_1=-j/2$, $a_{-1}=j/2$, all others zero.
+
+\subsection{Example 7 --- Multi-term CTFS by inspection}
+\textbf{Problem.} $x=1+\sin(\omega_0 t)+2\cos(\omega_0 t)+\cos(2\omega_0 t+\pi/4)$.
+\textbf{Solution.} $a_0=1$, $a_1=1-j/2$, $a_{-1}=1+j/2$, $a_2=\tfrac12 e^{j\pi/4}$, $a_{-2}=\tfrac12 e^{-j\pi/4}$.
+
+\subsection{Example 8 --- Periodic square wave $T=4, T_1=1$}
+\textbf{Solution.} $a_0=1/2$; for $k\ne 0$, $a_k=\dfrac{\sin(k\pi/2)}{k\pi}$. Even harmonics vanish; odd harmonics decay as $1/k$.
+
+\subsection{Example 9 --- Trig form conversion}
+\textbf{Solution.} For $\sin$: $a_1=-j/2$, $A_1=1/2$, $\theta_1=-\pi/2$, trig form $\cos(\omega_0 t-\pi/2)=\sin(\omega_0 t)$ \checkmark.
+
+\section{Lecture 10 --- Convergence, Properties, and DT Fourier Series}
+
+\subsection{Example 1 --- Parseval for a square wave}
+\textbf{Solution.} Time: $(1/T)\int|x|^2=1$. Frequency: $\sum|a_k|^2=(8/\pi^2)(1+1/9+1/25+\cdots)=(8/\pi^2)(\pi^2/8)=1$. \checkmark
+
+\subsection{Example 2 --- Triangular wave via differentiation property}
+\textbf{Problem.} Triangular wave with $T=4$ ramping between $\pm 1$.
+\textbf{Solution.} Derivative is a square wave with known coefficients $d_k=2/(jk\pi)$ for odd $k$. Using $d_k=jk\omega_0\,a_k$ with $\omega_0=\pi/2$:
+\[a_k=-\frac{4}{k^2\pi^2}\quad(k\text{ odd}),\qquad a_k=0\quad(k\text{ even}),\quad a_0=0.\]
+Triangular coefficients decay as $1/k^2$ (smoother than square wave's $1/k$).
+
+\subsection{Example 3 --- DTFS of $\sin(2\pi n/N)$}
+\textbf{Solution.} $a_1=-j/2$, $a_{-1}=j/2$ (and periodic with period $N$).
+
+\subsection{Example 4 --- DT periodic square wave}
+\textbf{Solution.}
+\[a_k=\frac{1}{N}\cdot\frac{\sin[2\pi k(N_1+1/2)/N]}{\sin(\pi k/N)}\quad(k\ne 0,\pm N,\ldots),\qquad a_0=(2N_1+1)/N.\]
+
+\section{Lecture 11 --- Frequency Response and Filtering}
+
+\subsection{Example 1 --- CT system with multi-harmonic input}
+\textbf{Problem.} $h(t)=e^{-t}u(t)$, $x(t)=1+\sin(\omega_0 t)+2\cos(\omega_0 t)+\cos(2\omega_0 t+\pi/4)$, $\omega_0=2\pi$.
+\textbf{Solution.} $H(j\omega)=1/(1+j\omega)$. Output coefficients $b_k=a_k\,H(jk\omega_0)$. Magnitudes: $|H(0)|=1$, $|H(j2\pi)|\approx 0.16$, $|H(j4\pi)|\approx 0.079$. Strong lowpass behavior.
+
+\subsection{Example 2 --- RC lowpass filter}
+\textbf{Problem.} $RC\,dv_C/dt+v_C=v_s$.
+\textbf{Solution.} $H(j\omega)=\dfrac{1}{1+j\omega RC}$. Cutoff $\omega_c=1/(RC)$, $-3$ dB, phase $-45^\circ$ at cutoff.
+
+\subsection{Example 3 --- RC highpass filter}
+\textbf{Solution.} With $v_R$ as output: $G(j\omega)=\dfrac{j\omega RC}{1+j\omega RC}$. Same cutoff; $|H|^2+|G|^2=1$.
+
+\subsection{Example 4 --- DT two-point average (lowpass)}
+\textbf{Problem.} $y[n]=\tfrac12(x[n]+x[n-1])$.
+\textbf{Solution.} $H(e^{j\omega})=e^{-j\omega/2}\cos(\omega/2)$. Lowpass: $|H(0)|=1$, $|H(e^{j\pi})|=0$.
+
+\subsection{Example 5 --- DT two-point difference (highpass)}
+\textbf{Problem.} $y[n]=\tfrac12(x[n]-x[n-1])$.
+\textbf{Solution.} $H(e^{j\omega})=je^{-j\omega/2}\sin(\omega/2)$. $|H(0)|=0$, $|H(e^{j\pi})|=1$.
+
+\section{Lecture 12 --- Fourier Transforms (CT and DT)}
+
+\subsection{Example 1 --- FT of $e^{-at}u(t)$, $a>0$}
+\textbf{Solution.} $X(j\omega)=\dfrac{1}{a+j\omega}$. $|X|=1/\sqrt{a^2+\omega^2}$, $\angle X=-\arctan(\omega/a)$.
+
+\subsection{Example 2 --- FT of $e^{-a|t|}$}
+\textbf{Solution.} $X(j\omega)=\dfrac{2a}{a^2+\omega^2}$ (purely real and even).
+
+\subsection{Example 3 --- FT of $\delta(t)$}
+\textbf{Solution.} $X(j\omega)=1$.
+
+\subsection{Example 4 --- FT of a rectangular pulse}
+\textbf{Problem.} Width $2T_1$.
+\textbf{Solution.} $X(j\omega)=\dfrac{2\sin(\omega T_1)}{\omega}$. At $\omega=0$: $X(0)=2T_1$. First zero at $\omega=\pi/T_1$.
+
+\subsection{Example 5 --- FT of $e^{j\omega_0 t}$}
+\textbf{Solution.} $X(j\omega)=2\pi\delta(\omega-\omega_0)$.
+
+\subsection{Example 6 --- FT of cosine and sine}
+\begin{align*}
+\cos(\omega_0 t)&\FT\pi[\delta(\omega-\omega_0)+\delta(\omega+\omega_0)],\\
+\sin(\omega_0 t)&\FT\frac{\pi}{j}[\delta(\omega-\omega_0)-\delta(\omega+\omega_0)].
+\end{align*}
+
+\subsection{Example 7 --- DTFT of $\delta[n]$}
+$X(e^{j\omega})=1$.
+
+\subsection{Example 8 --- DTFT of $a^n u[n]$, $|a|<1$}
+\textbf{Solution.} $X(e^{j\omega})=\dfrac{1}{1-ae^{-j\omega}}$. For $a=0.8$: peak $1/(1-0.8)=5$ at $\omega=0$, min $1/1.8$ at $\omega=\pi$.
+
+\subsection{Example 9 --- DTFT of rectangular window}
+\textbf{Problem.} $x[n]=1$ for $0\le n\le M$, zero otherwise.
+\textbf{Solution.} $X(e^{j\omega})=e^{-j\omega M/2}\dfrac{\sin(\omega(M+1)/2)}{\sin(\omega/2)}$. For $M=4$: peak $X(e^{j0})=5$, first zero at $\omega=2\pi/5$.
+
+\subsection{Example 10 --- DTFT of DT cosine}
+\textbf{Solution.} $\cos(2\pi n/N)\FT \pi\delta(\omega-2\pi/N)+\pi\delta(\omega+2\pi/N)$, periodic.
+
+\section{Lecture 13 --- FT Properties, Convolution, and Systems}
+
+\subsection{Example 1 --- Time shifting (delayed exponential)}
+\textbf{Problem.} FT of $x(t)=e^{-2(t-3)}u(t-3)$.
+\textbf{Solution.} $X(j\omega)=e^{-j3\omega}\cdot\dfrac{1}{2+j\omega}$. Magnitude unchanged, phase acquires $-3\omega$.
+
+\subsection{Example 2 --- Frequency shifting (modulation)}
+\textbf{Problem.} $x(t)=e^{-|t|}\cos(5t)$.
+\textbf{Solution.}
+\[Y(j\omega)=\frac{1}{1+(\omega-5)^2}+\frac{1}{1+(\omega+5)^2}.\]
+Spectrum shifts to $\omega=\pm 5$.
+
+\subsection{Example 3 --- Duality: sinc $\to$ ideal lowpass}
+\textbf{Solution.} $x(t)=\sin(Wt)/(\pi t)\FT X(j\omega)=1$ for $|\omega|\le W$, else $0$.
+
+\subsection{Example 4 --- Convolution property (CT)}
+\textbf{Problem.} $h=e^{-3t}u(t)$, $x=e^{-2t}u(t)$.
+\textbf{Solution.} $Y=1/[(2+j\omega)(3+j\omega)]=\dfrac{1}{2+j\omega}-\dfrac{1}{3+j\omega}$, so $y(t)=(e^{-2t}-e^{-3t})u(t)$.
+
+\subsection{Example 5 --- Convolution property (DT)}
+\textbf{Problem.} $h[n]=(0.5)^n u[n]$, $x[n]=(0.8)^n u[n]$.
+\textbf{Solution.} $Y=\dfrac{1}{(1-0.5e^{-j\omega})(1-0.8e^{-j\omega})}=\dfrac{-5/3}{1-0.5e^{-j\omega}}+\dfrac{8/3}{1-0.8e^{-j\omega}}$, so $y[n]=-\tfrac53(0.5)^n u[n]+\tfrac83(0.8)^n u[n]$.
+
+\subsection{Example 6 --- Second-order CT system from ODE}
+\textbf{Problem.} $y''+5y'+6y=x$.
+\textbf{Solution.} $H(j\omega)=\dfrac{1}{(j\omega+2)(j\omega+3)}=\dfrac{1}{j\omega+2}-\dfrac{1}{j\omega+3}$, so $h(t)=(e^{-2t}-e^{-3t})u(t)$.
+
+\subsection{Example 7 --- Second-order DT system}
+\textbf{Problem.} $y[n]-1.2y[n-1]+0.32y[n-2]=x[n]$.
+\textbf{Solution.} Poles of $z^2-1.2z+0.32=0$ are $z=0.8,0.4$. $H=\dfrac{1}{(1-0.8e^{-j\omega})(1-0.4e^{-j\omega})}=\dfrac{2}{1-0.8e^{-j\omega}}-\dfrac{1}{1-0.4e^{-j\omega}}$, so $h[n]=2(0.8)^n u[n]-(0.4)^n u[n]$. Stable.
+
+\section{Lecture 14 --- Magnitude, Phase, Group Delay, and Filters}
+
+\subsection{Example 1 --- Nonlinear phase distortion}
+\textbf{Problem.} Input $\cos t+\cos 3t$. System A: $\angle H=-2\omega$ (linear). System B: $\angle H(\omega_1=1)=-2$, $\angle H(\omega_2=3)=-9$.
+\textbf{Solution.} $y_A(t)=\cos(t-2)+\cos(3(t-2))$ (undistorted delayed copy). $y_B(t)=\cos(t-2)+\cos(3(t-3))$ --- components arrive at different times, waveform distorted.
+
+\subsection{Example 2 --- Group delay of first-order lowpass}
+\textbf{Problem.} $H=1/(1+j\omega/\omega_c)$, $\omega_c=3$. Find $\tau(\omega)$.
+\textbf{Solution.} $\tau(\omega)=\dfrac{\omega_c}{\omega_c^2+\omega^2}$. Values: $\tau(0)=1/3$; $\tau(3)=1/6$; $\tau(10)\approx 0.028$ s. Not constant $\Rightarrow$ nonlinear phase.
+
+\subsection{Example 3 --- Ideal lowpass impulse response}
+\textbf{Problem.} $H(j\omega)=e^{-j\omega t_d}$ for $|\omega|\le\omega_c$.
+\textbf{Solution.} $h(t)=\dfrac{\sin(\omega_c(t-t_d))}{\pi(t-t_d)}$. Sinc shape, noncausal.
+
+\section{Lecture 15 --- First/Second-Order Systems and Bode Plots}
+
+\subsection{Example 1 --- First-order, $\omega_c=100$}
+\textbf{Solution.} $|H|$: at $\omega=10$, $0.995$ ($-0.04$ dB); at $\omega_c$, $0.707$ ($-3$ dB); at $1000$, $0.0995$ ($-20$ dB); at $10000$, $0.01$ ($-40$ dB). Phase: $-5.7^\circ$, $-45^\circ$, $-84.3^\circ$.
+
+\subsection{Example 2 --- DT first-order $-3$ dB frequency}
+\textbf{Problem.} $a=0.9$. $\omega_{-3\text{dB}}\approx 0.325$ rad/sample $\approx\pi/10$.
+
+\subsection{Example 3 --- Automobile suspension}
+\textbf{Problem.} $m\ddot y+b\dot y+ky=b\dot x+kx$, $m=500$, $b=2000$, $k=20000$.
+\textbf{Solution.} $\omega_n=\sqrt{k/m}\approx 6.32$ rad/s, $\zeta=b/(2\sqrt{mk})\approx 0.316$ (underdamped). DC gain $1$. Resonance peak $|H(j\omega_n)|\approx 1.87$ --- body amplitude nearly twice the road disturbance.
+
+\subsection{Example 4 --- Full-pipeline CT example}
+\textbf{Problem.} $y''+5y'+4y=2x$, $x(t)=e^{-t}u(t)$.
+\textbf{Solution.} $H=\dfrac{2}{(j\omega+1)(j\omega+4)}$, $X=\dfrac{1}{1+j\omega}$, $Y=\dfrac{2}{(1+j\omega)^2(4+j\omega)}$.
+Partial fractions: $A=-2/9$, $B=2/3$, $C=2/9$.
+\[y(t)=\left(-\tfrac{2}{9}e^{-t}+\tfrac{2}{3}te^{-t}+\tfrac{2}{9}e^{-4t}\right)u(t).\]
+
+\subsection{Example 5 --- DT FIR lowpass filter design}
+\textbf{Problem.} $f_s=1000$ Hz, pass $\le 50$ Hz, stop $\ge 100$ Hz.
+\textbf{Solution.} $\omega_p=0.1\pi$, $\omega_s=0.2\pi$, $\Delta\omega=0.1\pi$. Rule of thumb $M\approx 4\pi/\Delta\omega=40$ (41-tap filter). $\omega_c=0.15\pi$. Truncated-sinc impulse response, linear phase, group delay 20 samples (20 ms).
+
+\part{Exam 3 Material (Lectures 16--23)}
+
+\section{Lecture 16 --- Laplace Transform and ROC}
+
+\subsection{Example 1 --- Right-sided exponential $e^{-at}u(t)$}
+\textbf{Problem.} Compute $X(s)$.
+\textbf{Solution.}
+\[X(s)=\int_0^{\infty}e^{-(s+a)t}dt=\frac{1}{s+a},\quad\Real\{s\}>-\Real\{a\}.\]
+Pole at $s=-a$, ROC is the right half-plane to its right.
+
+\subsection{Example 2 --- Left-sided exponential $-e^{-at}u(-t)$}
+\textbf{Solution.}
+\[X(s)=-\int_{-\infty}^{0}e^{-(s+a)t}dt=\frac{1}{s+a},\quad\Real\{s\}<-\Real\{a\}.\]
+Same algebraic expression as Example 1 but opposite ROC.
+
+\subsection{Example 3 --- Two-sided signal $e^{-3t}u(t)+2e^{2t}u(-t)$}
+\textbf{Solution.}
+\[X(s)=\frac{1}{s+3}-\frac{2}{s-2},\quad -3<\Real\{s\}<2.\]
+Strip ROC.
+
+\subsection{Example 4 --- Sum of two right-sided exponentials}
+\textbf{Problem.} $x(t)=3e^{-2t}u(t)-2e^{-5t}u(t)$.
+\textbf{Solution.}
+\[X(s)=\frac{s+11}{(s+2)(s+5)},\quad\Real\{s\}>-2.\]
+
+\subsection{Example 5 --- $\delta(t)$}
+$X(s)=1$, ROC all $s$.
+
+\subsection{Example 6 --- Unit step $u(t)$}
+$X(s)=1/s$, ROC $\Real\{s\}>0$.
+
+\subsection{Example 7 --- Growing exponential $e^{2t}u(t)$}
+$X(s)=1/(s-2)$, ROC $\Real\{s\}>2$. FT does not exist (unit axis not in ROC).
+
+\subsection{Example 8 --- Fourier from Laplace (valid)}
+$\Real\{s\}>-3$ includes the $j\omega$-axis, so $X(j\omega)=1/(j\omega+3)$.
+
+\subsection{Example 9 --- Fourier from Laplace (invalid)}
+$\Real\{s\}>2$ does not include the $j\omega$-axis, so the FT substitution is invalid.
+
+\section{Lecture 17 --- Inverse Laplace and Properties}
+
+\subsection{Example 1 --- Distinct real poles, right-sided}
+\textbf{Problem.} $X(s)=\dfrac{2s+6}{(s+1)(s+3)}$, $\Real\{s\}>-1$.
+
+\textbf{Solution.} Partial fractions: $X(s)=\dfrac{A}{s+1}+\dfrac{B}{s+3}$. $s=-1$: $4=2A\Rightarrow A=2$. $s=-3$: $0=-2B\Rightarrow B=0$. Right-sided:
+\[x(t)=2e^{-t}u(t).\]
+
+\subsection{Example 2 --- Distinct real poles, mixed ROC}
+\textbf{Problem.} $X(s)=\dfrac{5s+17}{(s+1)(s-3)}$, $-1<\Real\{s\}<3$.
+
+\textbf{Solution.} Partial fractions: $A=-3$, $B=8$. Pole at $-1$ (ROC to right $\Rightarrow$ right-sided), pole at $3$ (ROC to left $\Rightarrow$ left-sided):
+\[x(t)=-3e^{-t}u(t)-8e^{3t}u(-t).\]
+
+\subsection{Example 3 --- Repeated poles}
+\textbf{Problem.} $X(s)=\dfrac{4s+5}{(s+1)^2(s+3)}$, $\Real\{s\}>-1$.
+
+\textbf{Solution.} Expansion:
+\[X(s)=\frac{A}{s+1}+\frac{B}{(s+1)^2}+\frac{C}{s+3}.\]
+$s=-3$: $-7=4C\Rightarrow C=-7/4$. $s=-1$: $1=2B\Rightarrow B=1/2$. Compare $s^2$: $A=-C=7/4$.
+\[x(t)=\tfrac{7}{4}e^{-t}u(t)+\tfrac{1}{2}te^{-t}u(t)-\tfrac{7}{4}e^{-3t}u(t).\]
+
+\subsection{Example 4 --- Complex conjugate poles}
+\textbf{Problem.} $X(s)=\dfrac{2s}{s^2+4s+13}$, $\Real\{s\}>-2$.
+
+\textbf{Solution.} Complete the square: $s^2+4s+13=(s+2)^2+9$. Write $2s=2(s+2)-4$:
+\[X(s)=2\cdot\frac{s+2}{(s+2)^2+9}-\frac{4}{3}\cdot\frac{3}{(s+2)^2+9}.\]
+\[x(t)=\left[2e^{-2t}\cos(3t)-\tfrac{4}{3}e^{-2t}\sin(3t)\right]u(t).\]
+
+\subsection{Example 5 --- Geometric frequency response}
+\textbf{Problem.} $H(s)=1/(s+a)$, $a>0$.
+\textbf{Solution.} $|H(j\omega)|=1/\sqrt{a^2+\omega^2}$ (distance from $j\omega$ to pole at $-a$).
+
+\subsection{Example 6 --- $s$-domain shifting}
+\textbf{Problem.} FT of $e^{-3t}\cos(5t)u(t)$.
+\textbf{Solution.} Start from $\cos(5t)u(t)\Lap s/(s^2+25)$, ROC $\sigma>0$. Replace $s\to s+3$:
+\[\frac{s+3}{(s+3)^2+25},\quad\Real\{s\}>-3.\]
+
+\subsection{Example 7 --- Differentiation in $s$}
+\textbf{Problem.} Transform of $te^{-2t}u(t)$.
+\textbf{Solution.} From $e^{-2t}u(t)\Lap 1/(s+2)$: $-te^{-2t}u(t)\Lap\dfrac{d}{ds}(1/(s+2))=-1/(s+2)^2$. Multiply by $-1$:
+\[te^{-2t}u(t)\Lap\frac{1}{(s+2)^2},\quad\sigma>-2.\]
+
+\subsection{Example 8 --- Initial/final value theorems}
+\textbf{Problem.} $X(s)=\dfrac{10}{s(s+2)(s+5)}$, $\Real\{s\}>0$.
+\textbf{Solution.}
+\[x(0^+)=\lim_{s\to\infty}sX(s)=0,\qquad x(\infty)=\lim_{s\to 0}sX(s)=\frac{10}{10}=1.\]
+
+\section{Lecture 18 --- System Analysis with the Unilateral Laplace Transform}
+
+\subsection{Example 1 --- Differential equation to $H(s)$}
+\textbf{Problem.} $y''+5y'+6y=2x'+x$.
+\textbf{Solution.} $H(s)=\dfrac{2s+1}{(s+2)(s+3)}$. Poles $-2,-3$ (LHP), zero $-1/2$. Causal+stable.
+
+\subsection{Example 2 --- Stability classification}
+\begin{center}
+\begin{tabular}{l l l}
+\hline
+$H(s)$ & Poles & Classification\\
+\hline
+$1/(s+3)$ & $-3$ & Stable\\
+$1/(s-2)$ & $+2$ & Unstable\\
+$1/(s^2+4)$ & $\pm j2$ & Marginally stable\\
+$(s+1)/[(s+2)(s+5)]$ & $-2,-5$ & Stable\\
+$1/[(s+1)(s-1)]$ & $\pm 1$ & Unstable\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Example 3 --- Full pipeline}
+\textbf{Problem.} $y'+3y=x$, $x(t)=e^{-t}u(t)$.
+\textbf{Solution.} $H(s)=1/(s+3)$, $X(s)=1/(s+1)$, $Y=1/[(s+3)(s+1)]$. Partial fractions: $A=-1/2$, $B=1/2$. Both right-sided:
+\[y(t)=\tfrac{1}{2}(e^{-t}-e^{-3t})u(t).\]
+Checks: $y(0)=0$ \checkmark; $y(\infty)=0$ \checkmark; $y'(0)=1=x(0)$ \checkmark.
+
+\subsection{Example 4 --- First-order IVP}
+\textbf{Problem.} $y'+3y=0$, $y(0^-)=5$.
+\textbf{Solution.} $sY-5+3Y=0\Rightarrow Y=5/(s+3)$. $y(t)=5e^{-3t}u(t)$.
+
+\subsection{Example 5 --- Second-order IVP}
+\textbf{Problem.} $y''+5y'+6y=2u(t)$, $y(0^-)=1$, $y'(0^-)=0$.
+\textbf{Solution.} Unilateral transform gives
+\[(s^2+5s+6)Y=\frac{2}{s}+s+5,\qquad Y=\frac{s^2+5s+2}{s(s+2)(s+3)}.\]
+Partial fractions: $A=1/3$, $B=2$, $C=-4/3$.
+\[y(t)=\left[\tfrac{1}{3}+2e^{-2t}-\tfrac{4}{3}e^{-3t}\right]u(t).\]
+Checks: $y(0)=1$ \checkmark; $y'(0)=0$ \checkmark; $y(\infty)=1/3$ \checkmark.
+
+\subsection{Example 6 --- ZSR + ZIR decomposition}
+For the second-order IVP above:
+\begin{align*}
+Y_{ZS}(s)&=\frac{2}{s(s+2)(s+3)},\\
+Y_{ZI}(s)&=\frac{s+5}{(s+2)(s+3)}.
+\end{align*}
+Sum equals the total response.
+
+\section{Lecture 19 --- z-Transform and ROC}
+
+\subsection{Example 1 --- Right-sided $a^n u[n]$}
+\textbf{Solution.}
+\[X(z)=\sum_{n=0}^{\infty}(az^{-1})^n=\frac{1}{1-az^{-1}}=\frac{z}{z-a},\quad|z|>|a|.\]
+
+\subsection{Example 2 --- Decaying ($a=0.5$)}
+\textbf{Solution.} $X(z)=1/(1-0.5 z^{-1})$, $|z|>0.5$. At $z=1$: $X(1)=2=\sum(0.5)^n$ \checkmark. At $z=-1$: $X(-1)=2/3$ \checkmark.
+
+\subsection{Example 3 --- Growing ($a=2$)}
+$X(z)=1/(1-2z^{-1})$, $|z|>2$. DTFT does not exist.
+
+\subsection{Example 4 --- Left-sided $-a^n u[-n-1]$}
+\textbf{Solution.} $X(z)=\dfrac{1}{1-az^{-1}}$, $|z|<|a|$. Interior ROC.
+
+\subsection{Example 5 --- Left-sided $-(3)^n u[-n-1]$}
+$X(z)=1/(1-3z^{-1})$, $|z|<3$. Unit circle inside ROC, DTFT exists.
+
+\subsection{Example 6 --- Impulses}
+$\delta[n]\ZT 1$ (all $z$); $\delta[n-k]\ZT z^{-k}$ ($|z|>0$, $k\ge 1$).
+
+\subsection{Example 7 --- Unit step $u[n]$}
+$u[n]\ZT 1/(1-z^{-1})=z/(z-1)$, $|z|>1$. Pole on unit circle.
+
+\subsection{Example 8 --- Two-sided annular ROC}
+\textbf{Problem.} $x[n]=(0.5)^n u[n]+2(3)^n u[-n-1]$.
+\textbf{Solution.}
+\[X(z)=\frac{1}{1-0.5 z^{-1}}-\frac{2}{1-3z^{-1}},\quad 0.5<|z|<3.\]
+
+\subsection{Example 9 --- Sum of two right-sided terms}
+\textbf{Problem.} $x[n]=3(0.4)^n u[n]-2(0.8)^n u[n]$.
+\textbf{Solution.}
+\[X(z)=\frac{1-1.6z^{-1}}{(1-0.4 z^{-1})(1-0.8 z^{-1})},\quad|z|>0.8.\]
+Poles $0.4,0.8$; zero $1.6$. Check $X(1)=-5$.
+
+\subsection{Example 10 --- Finite-duration sequence}
+\textbf{Problem.} $x[n]=\{2,-1,3,0,4\}$ at $n=0,\ldots,4$.
+\textbf{Solution.} $X(z)=2-z^{-1}+3z^{-2}+4z^{-4}$, ROC all $z\ne 0$. $X(1)=8$.
+
+\section{Lecture 20 --- Inverse z-Transform and Properties}
+
+\subsection{Example 1 --- Distinct poles, right-sided}
+\textbf{Problem.} $X(z)=\dfrac{3-z^{-1}}{(1-0.5 z^{-1})(1-0.25 z^{-1})}$, $|z|>0.5$.
+
+\textbf{Solution.} Partial fractions: $A=2$, $B=1$.
+\[x[n]=2(0.5)^n u[n]+(0.25)^n u[n].\]
+
+\subsection{Example 2 --- Mixed ROC}
+\textbf{Problem.} $X(z)=\dfrac{1}{(1-2z^{-1})(1-0.5 z^{-1})}$, $0.5<|z|<2$.
+
+\textbf{Solution.} $A=4/3$, $B=-1/3$. Pole at $z=2$: left-sided; pole at $z=0.5$: right-sided.
+\[x[n]=-\tfrac{4}{3}\cdot 2^n u[-n-1]-\tfrac{1}{3}(0.5)^n u[n].\]
+
+\subsection{Example 3 --- Repeated poles}
+\textbf{Problem.} $X(z)=1/(1-0.5 z^{-1})^2$, $|z|>0.5$.
+\textbf{Solution.} $x[n]=(n+1)(0.5)^n u[n]$.
+
+\subsection{Example 4 --- Complex conjugate poles}
+\textbf{Problem.} Match $\dfrac{1-0.8\cos(0.4\pi)z^{-1}}{1-2(0.8)\cos(0.4\pi)z^{-1}+0.64 z^{-2}}$, $|z|>0.8$.
+\textbf{Solution.} $r=0.8$, $\omega_0=0.4\pi$. $x[n]=(0.8)^n\cos(0.4\pi n)u[n]$.
+
+\subsection{Example 5 --- Time shifting}
+\textbf{Problem.} Delay $(0.5)^n u[n]$ by 3.
+\textbf{Solution.} $Y(z)=z^{-3}/(1-0.5 z^{-1})$.
+
+\subsection{Example 6 --- Initial/final value theorems}
+\textbf{Problem.} $X(z)=\dfrac{5}{(1-z^{-1})(1-0.6 z^{-1})}$, $|z|>1$.
+\textbf{Solution.} $x[0]=\lim_{z\to\infty}X(z)=5$. $(1-z^{-1})X(z)=5/(1-0.6 z^{-1})$ pole at $0.6$ (inside). $x[\infty]=5/(1-0.6)=12.5$.
+
+\section{Lecture 21 --- DT System Analysis and the Unilateral z-Transform}
+
+\subsection{Example 1 --- Difference equation to $H(z)$}
+\textbf{Problem.} $y[n]-0.8 y[n-1]+0.15 y[n-2]=x[n]+2x[n-1]$.
+\textbf{Solution.} Factor $z^2-0.8 z+0.15=0$: $z=0.5,0.3$. Zero $z=-2$.
+\[H(z)=\frac{1+2z^{-1}}{(1-0.5 z^{-1})(1-0.3 z^{-1})}.\]
+Causal+stable.
+
+\subsection{Example 2 --- Stability classification}
+\begin{center}
+\begin{tabular}{l l l}
+\hline
+$H(z)$ & $|p|$ & Stable?\\
+\hline
+$1/(1-0.5 z^{-1})$ & 0.5 & Yes\\
+$1/(1-1.2 z^{-1})$ & 1.2 & No\\
+$1/(1-z^{-1})$ & 1.0 & Marginal\\
+$1/[(1-0.3 z^{-1})(1+0.7 z^{-1})]$ & 0.3,0.7 & Yes\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Example 3 --- Full pipeline}
+\textbf{Problem.} $y[n]-0.5 y[n-1]=x[n]$, $x[n]=(0.8)^n u[n]$.
+\textbf{Solution.} Partial fractions: $A=-5/3$, $B=8/3$.
+\[y[n]=\left[-\tfrac{5}{3}(0.5)^n+\tfrac{8}{3}(0.8)^n\right]u[n].\]
+Checks: $y[0]=1$, $y[1]=1.3$.
+
+\subsection{Example 4 --- First-order with IC}
+\textbf{Problem.} $y[n]-0.6 y[n-1]=(0.5)^n u[n]$, $y[-1]=4$.
+\textbf{Solution.} Unilateral: $(1-0.6 z^{-1})Y-2.4=1/(1-0.5 z^{-1})$.
+\[Y=\frac{-5}{1-0.5 z^{-1}}+\frac{8.4}{1-0.6 z^{-1}},\quad y[n]=[-5(0.5)^n+8.4(0.6)^n]u[n].\]
+Checks: $y[0]=3.4$, $y[1]=2.54$.
+
+\subsection{Example 5 --- Second-order zero-input response}
+\textbf{Problem.} $y[n]-0.7 y[n-1]+0.1 y[n-2]=0$, $y[-1]=1$, $y[-2]=0$.
+\textbf{Solution.}
+\[(1-0.7 z^{-1}+0.1 z^{-2})Y=0.7-0.1 z^{-1}.\]
+Poles $z=0.5,0.2$. $A=5/6$, $B=-2/15$.
+\[y[n]=\left[\tfrac{5}{6}(0.5)^n-\tfrac{2}{15}(0.2)^n\right]u[n].\]
+Check: $y[0]=0.7=0.7\cdot y[-1]$ \checkmark.
+
+\section{Lecture 22 --- Sampling}
+
+\subsection{Example 1(a) --- Nyquist rate of sum of sinusoids}
+$x(t)=1+\cos(2000\pi t)+\sin(4000\pi t)$. $\omega_M=4000\pi$, Nyquist rate $=8000\pi$ rad/s $=4000$ Hz.
+
+\subsection{Example 1(b) --- Nyquist rate of sinc}
+$\sin(4000\pi t)/(\pi t)=4000\operatorname{sinc}(4000 t)$. Spectrum is a rectangle of half-width $4000\pi$. Nyquist rate $=8000\pi$ rad/s $=4000$ Hz.
+
+\subsection{Example 1(c) --- Nyquist rate of squared sinc}
+Squaring in time $\Rightarrow$ rectangle convolved with itself $\Rightarrow$ triangle of half-width $8000\pi$. Nyquist rate $=16000\pi$ rad/s $=8000$ Hz. \textbf{Lesson:} squaring doubles bandwidth.
+
+\subsection{Example 2 --- Which sampling periods work?}
+\textbf{Problem.} $\omega_c=1000\pi$. Candidates: $T=0.5\,\mathrm{ms},\,2\,\mathrm{ms},\,0.1\,\mathrm{ms}$.
+\textbf{Solution.} Need $T<1$ ms. (a) \checkmark, (b) \text{\ding{55}} (aliasing), (c) \checkmark.
+
+\subsection{Example 3 --- Nyquist-rate sampling fails}
+$\sin(\omega_s t/2)$ sampled at $\omega_s$ gives $\sin(\pi n)=0$ for all $n$. Strict inequality required.
+
+\subsection{Example 4 --- 5 Hz cosine at $f_s=6$ Hz}
+$f_\text{alias}=|6-5|=1$ Hz.
+
+\subsection{Practice problems (key answers)}
+\begin{enumerate}[label=P\arabic*., leftmargin=*]
+\item $\omega_M=5000\pi\Rightarrow$ Nyquist $=10000\pi$ rad/s, $T_\max<0.2$ ms.
+\item False --- equality is insufficient.
+\item Multiplication by impulse train in time $\leftrightarrow$ convolution with frequency-domain impulse train $\Rightarrow$ copies.
+\item No --- aliasing is irreversible.
+\item Anti-aliasing filter placed \emph{before} the sampler to enforce $\omega<\omega_s/2$.
+\item $\omega_M=1800\pi$. Nyquist $=3600\pi$ rad/s.
+\item $\omega_s=10000\pi>6000\pi$. No aliasing.
+\item Aliased to $|1000-900|=100$ Hz.
+\item At $f_s=1500$: $f_s/2=750<900$, aliased to $600$ Hz.
+\item $x(t-5)$: unchanged Nyquist rate $\omega_0$. $x(2t)$: $2\omega_0$.
+\item The passband gain $T$ compensates the $1/T$ scaling of the replicas.
+\item ZOH is not exact; introduces sinc distortion and aliases.
+\item 25 rev/s at 24 fps appears as 1 rev/s (wagon-wheel effect).
+\item $f_s=8000<10000$: aliasing. Minimum valid $f_s>10000$ Hz.
+\item Use an anti-aliasing filter before sampling.
+\end{enumerate}
+
+\section{Lecture 23 --- Linear Feedback Systems}
+
+\subsection{Example 1 --- Cascade + feedback}
+\textbf{Problem.} $H_1=1/(s+1)$, $H_2=1/(s+3)$, $G=2$.
+\textbf{Solution.} $H_1H_2=1/(s^2+4s+3)$. $Q(s)=\dfrac{1}{s^2+4s+5}$. Poles $-2\pm j$: stable.
+
+\subsection{Example 2 --- Unity feedback with gain $K$}
+\textbf{Problem.} $H(s)=K/(s+2)$.
+\textbf{Solution.} $Q=\dfrac{K}{s+2+K}$, pole $s=-(2+K)$. Stable for $K>-2$.
+
+\subsection{Example 3 --- Stabilizing unstable plant}
+\textbf{Problem.} $H(s)=3/(s-1)$ with unity feedback gain $K$.
+\textbf{Solution.} $Q=\dfrac{3K}{s+3K-1}$. Stable iff $K>1/3$.
+
+\subsection{Example 4 --- Nyquist plot of $1/[(s+1)(s/2+1)]$}
+\textbf{Solution.} Key points: $\omega=0\to(1,0)$; $\omega=1\to(0.20,-0.60)$; $\omega=2\to(-0.10,-0.30)$; $\omega\to\infty\to(0,0)$ at $-180^\circ$. Curve traces through the lower half-plane; mirror in upper half-plane for $\omega<0$.
+
+\subsection{Example 5 --- Nyquist stability check}
+\textbf{Problem.} Curve crosses negative real axis at $-0.5$. Open loop stable. Stable for $K=1$? $K_\max$?
+\textbf{Solution.} $-1/K=-1$ not encircled $\Rightarrow$ stable. $K_\max=2$.
+
+\subsection{Example 6 --- Margins from Bode data}
+\textbf{Problem.} At $\omega_2=10$ rad/s: $|GH|=0$ dB, $\angle GH=-135^\circ$. At $\omega_1=31$ rad/s: $|GH|=-12$ dB, $\angle GH=-180^\circ$.
+\textbf{Solution.}
+\begin{itemize}
+\item $\mathrm{PM}=45^\circ$.
+\item $\mathrm{GM}=12$ dB (factor $\approx 4$).
+\item Both positive $\Rightarrow$ stable.
+\item $\tau_\max=0.785/10\approx 79$ ms.
+\end{itemize}
+
+\subsection{Example 7 --- Problem 1: cascade + unity feedback}
+Forward $\tfrac{2}{s+1}\cdot\tfrac{1}{s+4}=\tfrac{2}{s^2+5s+4}$. $Q=\dfrac{2}{s^2+5s+6}=\dfrac{2}{(s+2)(s+3)}$.
+
+\subsection{Example 8 --- Problem 2: parallel + feedback}
+Parallel sum $\dfrac{4s+17}{(s+2)(s+5)}$. $Q=\dfrac{4s+17}{s^2+23s+78}$.
+
+\subsection{Example 9 --- Problem 3: nested loops}
+Inner: $\tfrac{1/s}{1+3/s}=\tfrac{1}{s+3}$. Outer: $\dfrac{1}{s+4}$.
+
+\subsection{Example 10 --- Problem 4: unity feedback first-order}
+$H=K/(s+5)$. $Q=K/(s+5+K)$, pole $-(5+K)$. Stable for $K>-5$. Pole at $-10$: $K=5$.
+
+\subsection{Example 11 --- Problem 5: second-order}
+$H=K/[(s+1)(s+2)]$. Characteristic $s^2+3s+2+K=0$. Stable for $K>-2$.
+
+\subsection{Example 12 --- Problem 6: DT feedback}
+$H(z)=Kz^{-1}/(1-0.8 z^{-1})$. Closed-loop pole at $z=0.8-K$. Stable for $|0.8-K|<1$, i.e. $-0.2<K<1.8$ (for $K>0$: $0<K<1.8$).
+
+\subsection{Example 13 --- Problem 7: margins from Bode data}
+At $\omega_2=5$: $|GH|=0$ dB, $\angle GH=-150^\circ$. At $\omega_1=20$: $|GH|=-8$ dB.
+$\mathrm{PM}=30^\circ$, $\mathrm{GM}=8$ dB. Stable. $\tau_\max\approx 0.524/5\approx 105$ ms.
+
+\subsection{True/False problems}
+\begin{itemize}
+\item \textbf{P8.} Negative feedback always stabilizes: \textbf{False.}
+\item \textbf{P9.} $60^\circ$ PM $\Rightarrow$ stable: \textbf{True} (with usual assumptions).
+\item \textbf{P10.} Nyquist plot construction: \textbf{True.}
+\end{itemize}
+
+\end{document}

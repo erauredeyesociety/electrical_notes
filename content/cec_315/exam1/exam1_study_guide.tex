@@ -1,0 +1,230 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{CEC 315 --- Exam 1 Study Guide\\\large Lectures 2--8: Signals, Systems, LTI Convolution, Differential Equations}
+\author{CEC 315 --- Signals and Systems (Spring 2026)}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Per-Lecture Topic Bullets}
+
+\subsection{Lecture 2 --- Signal Definitions and Transformations (\S 1.1--1.2)}
+\begin{itemize}[leftmargin=*]
+    \item CT vs.\ DT signals: $x(t)$ vs.\ $x[n]$; sampling relation $x[n] = x(nT_s)$.
+    \item Signal energy $E_\infty$ and power $P_\infty$; classification into finite-energy, finite-power, or neither.
+    \item Transformations: time shift $x(t-t_0)$, time reversal $x(-t)$, time scaling $x(at)$.
+    \item Order for $x(at-b) = x(a(t-b/a))$: shift first by $b/a$, then scale.
+    \item Periodicity: CT $x(t)=x(t+T)$, DT $x[n]=x[n+N]$; fundamental period $T_0$ or $N_0$.
+    \item Even/odd decomposition: $x_e = \tfrac{1}{2}[x(t)+x(-t)]$, $x_o = \tfrac{1}{2}[x(t)-x(-t)]$.
+\end{itemize}
+
+\subsection{Lecture 3 --- Complex Numbers, Complex Exponentials, and Sinusoids (\S 1.3)}
+\begin{itemize}[leftmargin=*]
+    \item Rectangular $c = a+jb$, polar $c = re^{j\theta}$; $r = \sqrt{a^2+b^2}$, $\theta = \operatorname{atan2}(b,a)$.
+    \item Euler: $e^{j\phi} = \cos\phi + j\sin\phi$; inverse Euler:
+    $\cos\phi = \tfrac{1}{2}(e^{j\phi}+e^{-j\phi})$, $\sin\phi = \tfrac{1}{2j}(e^{j\phi}-e^{-j\phi})$.
+    \item Polar multiplication/division: magnitudes multiply/divide, angles add/subtract.
+    \item Complex sinusoid $x_C(t) = Ae^{j(\omega_0 t + \theta)}$; real sinusoid $A\cos(\omega_0 t + \theta)$.
+    \item Real exponentials $Ce^{at}$: growing if $a>0$, decaying if $a<0$.
+    \item DT periodicity quirk: $e^{j\omega_0 n}$ periodic only if $\omega_0/(2\pi)$ rational; $\omega_0$ and $\omega_0 + 2\pi$ are the same.
+    \item Special values: $1 = e^{j0}$, $j = e^{j\pi/2}$, $-1 = e^{j\pi}$, $-j = e^{-j\pi/2}$.
+\end{itemize}
+
+\subsection{Lecture 4 --- Fundamental Functions and System Basics (\S 1.4--1.5)}
+\begin{itemize}[leftmargin=*]
+    \item DT unit impulse $\delta[n]$ and step $u[n]$; $\delta[n] = u[n]-u[n-1]$, $u[n] = \sum_{m\leq n}\delta[m]$.
+    \item CT Dirac delta $\delta(t)$: $\int\delta(t)\,dt = 1$; $\delta(t) = du/dt$; $u(t) = \int_{-\infty}^{t}\delta$.
+    \item Signal decompositions: $x[n] = \sum_k x[k]\delta[n-k]$, $x(t) = \int x(\tau)\delta(t-\tau)\,d\tau$.
+    \item Impulse sampling: $x[n]\delta[n-k] = x[k]\delta[n-k]$, $x(t)\delta(t-t_0) = x(t_0)\delta(t-t_0)$.
+    \item System basics: impulse response $h(t)$ or $h[n]$; interconnections (cascade, parallel, feedback).
+\end{itemize}
+
+\subsection{Lecture 5 --- Basic System Properties (\S 1.6)}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Memoryless:} output depends only on current input.
+    \item \textbf{Invertible:} one-to-one input/output map.
+    \item \textbf{Causal:} no dependence on future input. LTI causal $\iff h=0$ for $t<0$.
+    \item \textbf{BIBO stable:} bounded input $\Rightarrow$ bounded output. LTI stable $\iff \int|h|<\infty$.
+    \item \textbf{Time invariant:} $x(t-t_0)\to y(t-t_0)$. Red flag: explicit $t$ or $n$.
+    \item \textbf{Linear:} superposition; apply zero-in/zero-out necessary test first.
+\end{itemize}
+
+\subsection{Lecture 6 --- DT LTI Convolution Sum (\S 2.1)}
+\begin{itemize}[leftmargin=*]
+    \item Derivation from linearity + time invariance: $y[n] = \sum_k x[k]h[n-k]$.
+    \item Flip-and-slide computation; output length $N+M-1$.
+    \item Properties: commutativity, associativity (cascade $\Rightarrow h_1*h_2$), distributivity (parallel $\Rightarrow h_1+h_2$), identity $x*\delta = x$.
+    \item Sanity: $(\sum x)(\sum h) = \sum y$.
+\end{itemize}
+
+\subsection{Lecture 7 --- CT LTI Convolution Integral (\S 2.2--2.3)}
+\begin{itemize}[leftmargin=*]
+    \item Sifting: $\int x(\tau)\delta(\tau-t_0)\,d\tau = x(t_0)$ (watch limits).
+    \item Convolution integral $y(t) = \int x(\tau)h(t-\tau)\,d\tau$; flip-and-slide with case analysis.
+    \item LTI properties from $h$: memoryless $\iff h = K\delta$; causal $\iff h=0$ for $t<0$; stable $\iff \int|h|<\infty$.
+    \item Step response $s(t) = \int_{-\infty}^{t}h(\tau)\,d\tau$; conversely $h = ds/dt$.
+\end{itemize}
+
+\subsection{Lecture 8 --- Differential/Difference Equations and Singularity Functions (\S 2.4--2.5)}
+\begin{itemize}[leftmargin=*]
+    \item CT first-order: $\tfrac{dy}{dt}+ay = bx$ gives $h(t) = be^{-at}u(t)$; stable iff $a>0$.
+    \item DT first-order: $y[n] = \alpha y[n-1] + bx[n]$ gives $h[n] = b\alpha^n u[n]$; stable iff $|\alpha|<1$.
+    \item Method: solve homogeneous + apply jump condition (CT) or iterate from initial rest (DT).
+    \item Singularity family: $r(t) \to u(t) \to \delta(t) \to \delta'(t)$ via $d/dt$; integration reverses.
+    \item Key identities: $\delta(at) = \delta(t)/|a|$, $x(t)\delta(t-t_0) = x(t_0)\delta(t-t_0)$, $x*\delta' = dx/dt$.
+\end{itemize}
+
+\section{Key Equations and Definitions}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Concept} & \textbf{Formula} \\
+\hline
+Time shift & $x(t-t_0)$ \\
+Time reversal & $x(-t)$ \\
+Time scale & $x(at)$ \\
+Even/odd parts & $x_e=\tfrac{1}{2}(x(t)+x(-t))$, $x_o=\tfrac{1}{2}(x(t)-x(-t))$ \\
+CT energy & $E_\infty = \int_{-\infty}^{\infty}|x(t)|^2\,dt$ \\
+CT power & $P_\infty = \lim_{T\to\infty}\tfrac{1}{2T}\int_{-T}^{T}|x(t)|^2\,dt$ \\
+Euler's formula & $e^{j\phi} = \cos\phi + j\sin\phi$ \\
+Inverse Euler & $\cos\phi = \tfrac{1}{2}(e^{j\phi}+e^{-j\phi})$, $\sin\phi = \tfrac{1}{2j}(e^{j\phi}-e^{-j\phi})$ \\
+Polar $\leftrightarrow$ rect & $a=r\cos\theta$, $b=r\sin\theta$, $r=\sqrt{a^2+b^2}$ \\
+CT sinusoid & $A\cos(\omega_0 t+\phi)$, $T_0 = 2\pi/\omega_0$ \\
+DT unit impulse & $\delta[n]=1$ at $n=0$, else $0$ \\
+DT unit step & $u[n]=1$ for $n\geq 0$, else $0$ \\
+$\delta$--$u$ (DT) & $\delta[n]=u[n]-u[n-1]$ \\
+CT unit impulse & $\delta(t)=0$ for $t\neq 0$, $\int\delta = 1$ \\
+CT unit step & $u(t)=1$ for $t>0$, $0$ for $t<0$ \\
+$\delta$--$u$ (CT) & $\delta(t)=du/dt$, $u(t)=\int_{-\infty}^{t}\delta$ \\
+Sifting & $\int x(\tau)\delta(\tau-t_0)\,d\tau = x(t_0)$ \\
+Sampling (multiplication) & $x(t)\delta(t-t_0) = x(t_0)\delta(t-t_0)$ \\
+Impulse scale & $\delta(at) = \delta(t)/|a|$ \\
+Convolution sum & $y[n] = \sum_k x[k]h[n-k]$ \\
+Convolution integral & $y(t) = \int x(\tau)h(t-\tau)\,d\tau$ \\
+Length of DT conv & $N + M - 1$ \\
+Commutativity & $x*h = h*x$ \\
+Associativity & $(x*h_1)*h_2 = x*(h_1*h_2)$ \\
+Distributivity & $x*(h_1+h_2) = x*h_1 + x*h_2$ \\
+Identity & $x*\delta = x$ \\
+Delay & $x(t)*\delta(t-t_0) = x(t-t_0)$ \\
+Step response & $s(t) = \int_{-\infty}^{t}h(\tau)\,d\tau$, $h = ds/dt$ \\
+LTI memoryless & $h(t) = K\delta(t)$ \\
+LTI causal & $h(t) = 0$ for $t<0$ \\
+LTI BIBO stable & $\int|h(t)|\,dt < \infty$ \\
+1st-order CT impulse & $h(t) = be^{-at}u(t)$ \\
+1st-order DT impulse & $h[n] = b\alpha^n u[n]$ \\
+Ramp & $r(t) = tu(t)$ \\
+Doublet derivative & $x(t)*\delta'(t) = dx/dt$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{System Properties Checklist}
+
+For every system, walk through these six in order.
+\begin{enumerate}
+    \item \textbf{Memoryless?} Any reference to $x$ at a time other than the output time, or any past outputs? If so, has memory.
+    \item \textbf{Causal?} Any reference to future input ($x[n+1]$, $x(t+1)$)? For LTI, check $h(t)=0$ for $t<0$.
+    \item \textbf{Stable (BIBO)?} Bound the output for $|x|\leq B_x$; for LTI, compute $\int|h|$ or $\sum|h[n]|$.
+    \item \textbf{Time invariant?} Compare $y_2(t)$ built from $x_2(t)=x_1(t-t_0)$ with $y_1(t-t_0)$. Explicit $t$, $n$, or $x(at)$ is usually time-varying.
+    \item \textbf{Linear?} Apply zero-in/zero-out test; then verify superposition $a x_1 + b x_2 \to a y_1 + b y_2$.
+    \item \textbf{Invertible?} Can you recover $x$ from $y$? For LTI, does an inverse $h_i$ exist?
+\end{enumerate}
+
+\textbf{Example --- $y(t) = t\,x(t)$.}
+Memoryless (yes); causal (yes); stable (\emph{no}, $x=1\Rightarrow y=t$); time invariant (\emph{no}, explicit $t$); linear (yes); invertible (yes, away from $t=0$).
+
+\textbf{Example --- $y(t) = 3x(t) + 2$.}
+Memoryless, causal, stable, time invariant, but \emph{not linear} (affine).
+
+\textbf{Example --- $y[n] = x[n] - \beta x[n+1]$.}
+Has memory, non-causal, BIBO stable, time invariant, linear.
+
+\section{CT Convolution Cookbook}
+
+\begin{enumerate}
+    \item \textbf{Sketch} $x(\tau)$ and $h(\tau)$; identify supports $[a,b]$ and $[c,d]$.
+    \item \textbf{Flip} $h$ to get $h(-\tau)$ on $[-d,-c]$.
+    \item \textbf{Shift} by $t$: $h(t-\tau)$ on $[t-d,\,t-c]$.
+    \item \textbf{Critical $t$-values} where edges align:
+    $t_1 = a+c,\ t_2 = a+d,\ t_3 = b+c,\ t_4 = b+d$.
+    \item \textbf{For each case}, integration limits are $\max(a,\,t-d)$ to $\min(b,\,t-c)$ when nonempty.
+    \item \textbf{Continuity check:} adjacent cases must agree at the boundary.
+    \item \textbf{Sanity:} area of $y$ = (area of $x$)(area of $h$).
+\end{enumerate}
+
+\subsection*{Standard CT Results to Memorize}
+\begin{itemize}[leftmargin=*]
+    \item Rect $\ast$ rect $=$ trapezoid (triangle if same width).
+    \item $e^{-at}u(t) \ast u(t) = \tfrac{1}{a}(1-e^{-at})u(t)$.
+    \item $e^{-at}u(t) \ast e^{-bt}u(t) = \tfrac{1}{b-a}(e^{-at} - e^{-bt})u(t)$ for $a\neq b$.
+    \item $u(t) \ast u(t) = t\,u(t) = r(t)$.
+\end{itemize}
+
+\section{DT Convolution Cookbook}
+
+\begin{enumerate}
+    \item List nonzero values of $x[k]$ and $h[k]$ with indices.
+    \item Output range: first nonzero at sum of earliest indices; last at sum of latest; length $N+M-1$.
+    \item For each $n$, compute $y[n] = \sum_k x[k]\,h[n-k]$, using only $k$ where both are nonzero.
+    \item \emph{Polynomial multiplication trick:} treat $x$ and $h$ as polynomial coefficients in $z^{-1}$; multiply.
+    \item Sanity: $(\sum x)(\sum h) = \sum y$.
+\end{enumerate}
+
+\subsection*{Standard DT Results}
+\begin{itemize}[leftmargin=*]
+    \item $x[n]*\delta[n-n_0] = x[n-n_0]$.
+    \item $\alpha^n u[n] * u[n] = \tfrac{1-\alpha^{n+1}}{1-\alpha}u[n]$.
+    \item $u[n] * u[n] = (n+1)u[n]$.
+\end{itemize}
+
+\section{What to Memorize}
+
+\begin{itemize}[leftmargin=*]
+    \item Euler and inverse Euler.
+    \item Definitions and relations of $\delta[n]$, $u[n]$, $\delta(t)$, $u(t)$, $r(t)$.
+    \item $\delta(at) = \delta(t)/|a|$, sifting, sampling.
+    \item Convolution sum and integral with length $N+M-1$ (DT).
+    \item LTI properties from $h$: memoryless, causal, BIBO stable.
+    \item First-order CT: $h(t) = be^{-at}u(t)$, stable iff $a>0$.
+    \item First-order DT: $h[n] = b\alpha^n u[n]$, stable iff $|\alpha|<1$.
+    \item Step response = integral (or running sum) of impulse response.
+    \item Zero-in/zero-out necessary test for linearity.
+    \item Standard convolution results listed above.
+\end{itemize}
+
+\section{Common Pitfalls}
+
+\begin{enumerate}[leftmargin=*]
+    \item Affine $\neq$ linear. $y = mx + b$ with $b\neq 0$ fails zero-in/zero-out.
+    \item Forgetting to flip before shifting. $h(t-\tau)$ means flip \emph{first}, then shift.
+    \item Wrong integration/summation limits. Use the overlap of supports only.
+    \item Confusing sifting (integral $\to$ number) with sampling (multiplication $\to$ scaled impulse).
+    \item Mixing up causality and stability --- they are independent.
+    \item Forgetting the $u(t)$ factor on causal impulse responses.
+    \item Sign in first-order impulse response: $\tfrac{dy}{dt}+ay = bx$ gives $e^{-at}$.
+    \item DT periodicity: $\cos(\omega_0 n)$ periodic only if $\omega_0/(2\pi)\in\mathbb{Q}$.
+    \item Explicit $t$ or $n$ in the equation $\Rightarrow$ time-varying.
+    \item BIBO needs $\int|h|$, \emph{not} $\int h$.
+    \item Combined transforms $x(at+b)$: factor as $x(a(t+b/a))$.
+    \item Initial-rest convention: $y(0^-) = 0$ unless stated otherwise.
+\end{enumerate}
+
+\end{document}

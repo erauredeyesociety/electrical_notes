@@ -1,0 +1,100 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\title{Lecture 15: First/Second-Order Systems and Bode Plots}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{1. First-Order CT Lowpass}
+
+\textbf{Standard form:} $H(j\omega) = \frac{1}{1 + j\omega/\omega_c}$
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Parameter} & \textbf{Value} \\
+\hline
+DC gain & $|H(0)| = 1$ (0 dB) \\
+\hline
+At cutoff $\omega_c$ & $|H| = 1/\sqrt{2}$ ($-3$ dB) \\
+\hline
+Phase at DC & $0^\circ$ \\
+\hline
+Phase at $\omega_c$ & $-45^\circ$ \\
+\hline
+Phase as $\omega \to \infty$ & $-90^\circ$ \\
+\hline
+Time constant & $\tau = 1/\omega_c$ \\
+\hline
+Impulse response & $h(t) = \omega_c e^{-\omega_c t}u(t)$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{2. Bode Plot Conventions}
+\begin{itemize}
+  \item Magnitude in dB vs log-frequency axis
+  \item Phase in degrees vs log-frequency axis
+  \item Cascaded systems: add magnitudes (dB) and phases
+\end{itemize}
+
+\section*{3. First-Order Bode Asymptotes}
+
+\textbf{Magnitude:} 0 dB for $\omega \ll \omega_c$; $-20$ dB/decade for $\omega \gg \omega_c$. Max error 3 dB at corner.
+
+\textbf{Phase:} $0^\circ$ below $\omega_c/10$; $-45^\circ$ at $\omega_c$; $-90^\circ$ above $10\omega_c$. Linear transition over 2 decades.
+
+\textbf{Building blocks:} Pole $\to$ $-20$ dB/dec, $0^\circ \to -90^\circ$. Zero $\to$ $+20$ dB/dec, $0^\circ \to +90^\circ$. $(j\omega)^{\pm 1}$ $\to$ $\pm 20$ dB/dec through all $\omega$.
+
+\section*{4. Second-Order CT System}
+
+\textbf{Standard form:} $H(j\omega) = \frac{\omega_n^2}{(j\omega)^2 + 2\zeta\omega_n(j\omega) + \omega_n^2}$
+
+\textbf{Damping classification:}
+\begin{itemize}
+  \item $\zeta < 1$: underdamped (complex poles, oscillatory)
+  \item $\zeta = 1$: critically damped (repeated real poles)
+  \item $\zeta > 1$: overdamped (distinct real poles)
+\end{itemize}
+
+\textbf{Key frequency values:}
+\begin{itemize}
+  \item DC: $|H(0)| = 1$
+  \item At $\omega_n$: $|H(j\omega_n)| = 1/(2\zeta)$, $\angle H = -90^\circ$ (always)
+  \item Resonance: $\omega_r = \omega_n\sqrt{1-2\zeta^2}$ exists only if $\zeta < 1/\sqrt{2} \approx 0.707$
+  \item Peak: $|H|_{\max} = 1/(2\zeta\sqrt{1-\zeta^2})$
+\end{itemize}
+
+\section*{5. Step Response (Underdamped)}
+\begin{itemize}
+  \item \%OS $= 100 \cdot e^{-\pi\zeta/\sqrt{1-\zeta^2}}$
+  \item Peak time: $t_p = \pi/\omega_d$, where $\omega_d = \omega_n\sqrt{1-\zeta^2}$
+  \item Settling time (2\%): $t_s \approx 4/(\zeta\omega_n)$
+  \item Rise time: $t_r \approx 1.8/\omega_n$
+\end{itemize}
+
+\section*{6. Second-Order Bode}
+\begin{itemize}
+  \item Low freq: 0 dB flat
+  \item High freq: $-40$ dB/decade
+  \item Break at $\omega_n$
+  \item Near $\omega_n$: peak of $\approx 20\log_{10}(1/(2\zeta))$ dB above asymptote
+  \item Phase: $0^\circ \to -90^\circ$ at $\omega_n \to -180^\circ$
+\end{itemize}
+
+\section*{7. DT Systems}
+\begin{itemize}
+  \item First-order: pole at $z = a$, $|a| < 1$ for stability. $a \to 1$ = narrow bandwidth.
+  \item Second-order: poles at $z = re^{\pm j\theta_0}$. $r$ = damping ($r \to 1$ = less damped), $\theta_0$ = resonance frequency.
+\end{itemize}
+
+\end{document}

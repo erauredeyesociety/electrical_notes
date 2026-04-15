@@ -1,0 +1,324 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{array}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{CEC 315 --- Exam 1 Quick-Reference Notes\\\large Lectures 2--8}
+\author{CEC 315 --- Signals and Systems (Spring 2026)}
+\date{}
+
+\newcommand{\Conv}{\ast}
+\newcommand{\Real}{\operatorname{Re}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Formula Tables}
+
+\subsection{Signal Transformations (CT)}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Operation & Expression & Effect\\
+\hline
+Time shift & $x(t-t_0)$ & Delay if $t_0>0$, advance if $t_0<0$\\
+Time reversal & $x(-t)$ & Mirror about $t=0$\\
+Time scaling & $x(at)$, $a>0$ & Compress if $a>1$, stretch if $a<1$\\
+Combined & $x(at-b) = x(a(t-b/a))$ & Shift by $b/a$, then scale by $a$\\
+Even part & $x_e(t) = \tfrac12[x(t)+x(-t)]$ & Symmetric\\
+Odd part & $x_o(t) = \tfrac12[x(t)-x(-t)]$ & Anti-symmetric\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Signal Energy and Power}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Quantity & CT & DT\\
+\hline
+Energy $E_\infty$ & $\int_{-\infty}^{\infty}|x(t)|^2\,dt$ & $\sum_{n=-\infty}^{\infty}|x[n]|^2$\\
+Power $P_\infty$ & $\lim_{T\to\infty}\tfrac{1}{2T}\int_{-T}^T|x|^2\,dt$ & $\lim_{N\to\infty}\tfrac{1}{2N+1}\sum_{-N}^{N}|x|^2$\\
+Finite-energy & $E_\infty<\infty$, $P_\infty=0$ & ---\\
+Finite-power & $P_\infty<\infty$, $E_\infty=\infty$ (sinusoid) & ---\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Complex Numbers and Euler}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+Identity & Formula\\
+\hline
+Euler & $e^{j\phi} = \cos\phi + j\sin\phi$\\
+Inverse (cos) & $\cos\phi = \tfrac12(e^{j\phi}+e^{-j\phi})$\\
+Inverse (sin) & $\sin\phi = \tfrac{1}{2j}(e^{j\phi}-e^{-j\phi})$\\
+Polar to rect & $re^{j\theta} = r\cos\theta + jr\sin\theta$\\
+Magnitude & $r = \sqrt{a^2+b^2}$\\
+Angle & $\theta = \operatorname{atan2}(b,a)$\\
+Multiplication & Magnitudes multiply, angles add\\
+Division & Magnitudes divide, angles subtract\\
+CT sinusoid & $A\cos(\omega_0 t+\theta)$, $T_0 = 2\pi/|\omega_0|$\\
+Complex amplitude & $X_C = A e^{j\theta}$\\
+DT periodic iff & $\omega_0/(2\pi) \in \mathbb{Q}$\\
+Specials & $1=e^{j0},\ j=e^{j\pi/2},\ -1=e^{j\pi},\ -j=e^{-j\pi/2}$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Fundamental Functions}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Function & CT & DT\\
+\hline
+Impulse & $\delta(t)$: $\int\delta\,dt = 1$ & $\delta[n]=1$ if $n=0$\\
+Step & $u(t)=1$ if $t>0$ & $u[n]=1$ if $n\ge 0$\\
+Ramp & $r(t)=tu(t)$ & $r[n]=nu[n]$\\
+$\delta$--$u$ relation & $\delta = du/dt$; $u=\int\delta$ & $\delta[n]=u[n]-u[n-1]$\\
+Sifting (integral) & $\int x(\tau)\delta(\tau-t_0)d\tau = x(t_0)$ & $\sum_k x[k]\delta[k-n_0]=x[n_0]$\\
+Sampling (mult.) & $x(t)\delta(t-t_0) = x(t_0)\delta(t-t_0)$ & $x[n]\delta[n-k]=x[k]\delta[n-k]$\\
+Impulse scaling & $\delta(at) = \delta(t)/|a|$ & ---\\
+Doublet & $x(t)\Conv\delta'(t) = dx/dt$ & ---\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{CT/DT Analogues (LTI Systems and Convolution)}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Concept & CT & DT\\
+\hline
+Signal decomposition & $x(t)=\int x(\tau)\delta(t-\tau)d\tau$ & $x[n]=\sum_k x[k]\delta[n-k]$\\
+Impulse response & $h(t)=T\{\delta(t)\}$ & $h[n]=T\{\delta[n]\}$\\
+Convolution & $y(t)=\int x(\tau)h(t-\tau)d\tau$ & $y[n]=\sum_k x[k]h[n-k]$\\
+Identity & $x\Conv\delta = x$ & same\\
+Delay & $x\Conv\delta(t-t_0)=x(t-t_0)$ & $x\Conv\delta[n-n_0]=x[n-n_0]$\\
+Step response & $s(t)=\int_{-\infty}^t h(\tau)d\tau$ & $s[n]=\sum_{k\le n}h[k]$\\
+$h\leftrightarrow s$ & $h(t)=ds/dt$ & $h[n]=s[n]-s[n-1]$\\
+Memoryless & $h(t)=K\delta(t)$ & $h[n]=K\delta[n]$\\
+Causal & $h(t)=0$ for $t<0$ & $h[n]=0$ for $n<0$\\
+BIBO stable & $\int|h|dt<\infty$ & $\sum|h[n]|<\infty$\\
+Output length (finite) & --- & $N+M-1$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Convolution Properties}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+Property & Statement\\
+\hline
+Commutative & $x\Conv h = h\Conv x$\\
+Associative (cascade) & $(x\Conv h_1)\Conv h_2 = x\Conv(h_1\Conv h_2)$\\
+Distributive (parallel) & $x\Conv(h_1+h_2)=x\Conv h_1 + x\Conv h_2$\\
+Identity & $x\Conv\delta = x$\\
+Delay & $x\Conv\delta(t-t_0) = x(t-t_0)$\\
+Area (CT) & $\int y\,dt = (\int x\,dt)(\int h\,dt)$\\
+Sum (DT) & $\sum y = (\sum x)(\sum h)$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Standard Convolution Results}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+Pair & Result\\
+\hline
+Rect $\Conv$ rect (equal width) & Triangle\\
+Rect $\Conv$ rect (different widths) & Trapezoid\\
+$u(t)\Conv u(t)$ & $tu(t)=r(t)$\\
+$e^{-at}u(t)\Conv u(t)$ & $\tfrac{1}{a}(1-e^{-at})u(t)$\\
+$e^{-at}u(t)\Conv e^{-bt}u(t)$, $a\ne b$ & $\tfrac{1}{b-a}(e^{-at}-e^{-bt})u(t)$\\
+$u[n]\Conv u[n]$ & $(n+1)u[n]$\\
+$\alpha^n u[n]\Conv u[n]$ & $\tfrac{1-\alpha^{n+1}}{1-\alpha}u[n]$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{First-Order Systems}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Quantity & CT & DT\\
+\hline
+Standard form & $\dfrac{dy}{dt}+ay = bx$ & $y[n]=\alpha y[n-1]+bx[n]$\\
+Impulse response & $h(t) = be^{-at}u(t)$ & $h[n] = b\alpha^n u[n]$\\
+Stability & $a>0$ & $|\alpha|<1$\\
+Step response & $\tfrac{b}{a}(1-e^{-at})u(t)$ & $b\tfrac{1-\alpha^{n+1}}{1-\alpha}u[n]$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Singularity Chain}
+\[
+r(t) = tu(t) \xrightarrow{d/dt} u(t) \xrightarrow{d/dt} \delta(t) \xrightarrow{d/dt} \delta'(t)
+\]
+Reverse arrows via integration $\int_{-\infty}^t$.
+
+\section{Per-Lecture Reference}
+
+\subsection{Lecture 2 --- Signal Definitions and Transformations}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr02-sig-def-tran.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr02\_signal\_definitions\_transformations.md}
+  \item Textbook: Oppenheim \S 1.1--1.2 (pp.~1--13).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item CT $x(t)$ vs.\ DT $x[n]$; sampling $x[n]=x(nT_s)$.
+  \item Energy / power classification; rectangles are finite-energy, sinusoids are finite-power.
+  \item Transformations: shift, reversal, scaling; for $x(at-b)$ rewrite as $x(a(t-b/a))$.
+  \item Periodicity: $x(t+T_0)=x(t)$; even/odd decomposition $x=x_e+x_o$.
+\end{itemize}
+
+\subsection{Lecture 3 --- Complex Exponentials and Sinusoidal Signals}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr03-complex-nums-exp-n-sinusoidal-sigs.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr03\_complex\_exponential\_sinusoidal.md}
+  \item Textbook: \S 1.3 (pp.~14--26).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item Rectangular $a+jb$ vs.\ polar $re^{j\theta}$. Euler's identity.
+  \item CT sinusoid $A\cos(\omega_0 t+\theta)$, period $T_0=2\pi/|\omega_0|$; complex amplitude $X_C = Ae^{j\theta}$.
+  \item Product in polar: magnitudes multiply, angles add. Division: magnitudes divide, angles subtract.
+  \item DT sinusoid $\cos(\omega_0 n)$ periodic only if $\omega_0/(2\pi)$ rational. $e^{j(\omega_0+2\pi)n}=e^{j\omega_0 n}$.
+\end{itemize}
+
+\subsection{Lecture 4 --- Key Functions and System Basics}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr04-key-fns-n-sys-basics.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr04\_key\_functions\_system\_basics.md}
+  \item Textbook: \S 1.4--1.5 (pp.~30--43).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item $\delta[n]$ and $u[n]$; $\delta[n]=u[n]-u[n-1]$; $u[n]=\sum_{m\le n}\delta[m]$.
+  \item CT Dirac $\delta(t)$; $\delta=du/dt$; $u=\int\delta$.
+  \item Sifting (integral) yields a number; sampling (multiplication) yields a scaled impulse.
+  \item Impulse decompositions: $x=\sum x[k]\delta[n-k]$; $x=\int x(\tau)\delta(t-\tau)d\tau$.
+  \item Impulse responses, series/parallel/feedback interconnections.
+\end{itemize}
+
+\subsection{Lecture 5 --- Basic System Properties}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr05-basic-sys-properties.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr05\_basic\_system\_properties.md}
+  \item Textbook: \S 1.6 (pp.~44--55).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item Six properties: memoryless, invertible, causal, stable, time invariant, linear.
+  \item Linear: superposition; zero-in/zero-out necessary.
+  \item Time invariant: no explicit $t$ or $n$ coefficient.
+  \item LTI causal iff $h(t)=0$ for $t<0$; BIBO stable iff $\int|h|<\infty$.
+\end{itemize}
+
+\subsection{Lecture 6 --- DT LTI Convolution}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr06-dt-lti-convolution.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr06\_dt\_lti\_convolution.md}
+  \item Textbook: \S 2.1 (pp.~76--96).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item Convolution sum $y[n]=\sum_k x[k]h[n-k]$ by linearity + time invariance.
+  \item Flip-and-slide procedure; output length $N+M-1$ for finite sequences.
+  \item Commutative, associative (cascade), distributive (parallel); identity $x\Conv\delta=x$.
+  \item Standard results: $\alpha^n u[n]\Conv u[n]$, accumulator $x\Conv u[n]$, delay $x\Conv\delta[n-n_0]$.
+\end{itemize}
+
+\subsection{Lecture 7 --- CT LTI Properties and Convolution}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr07-ct-lti-properties.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr07\_ct\_lti\_properties.md}
+  \item Textbook: \S 2.2--2.3 (pp.~97--115).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item Convolution integral $y(t)=\int x(\tau)h(t-\tau)d\tau$; piecewise case analysis from supports.
+  \item LTI from $h(t)$: memoryless ($K\delta$), causal ($h=0,t<0$), stable ($\int|h|<\infty$).
+  \item Step response $s(t)=\int_{-\infty}^t h\,d\tau$; $h=ds/dt$.
+  \item Causality and stability are independent properties.
+\end{itemize}
+
+\subsection{Lecture 8 --- Diff Eqns and Singularity Functions}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr08-diff-eqns-singularity.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr08\_diff\_eqns\_singularity.md}
+  \item Textbook: \S 2.4--2.5 (pp.~116--140).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item CT: $dy/dt+ay=bx$ $\Rightarrow$ $h(t)=be^{-at}u(t)$, stable iff $a>0$.
+  \item DT: $y[n]=\alpha y[n-1]+bx[n]$ $\Rightarrow$ $h[n]=b\alpha^n u[n]$, stable iff $|\alpha|<1$.
+  \item Solve CT by homogeneous + jump condition; DT by iteration from initial rest.
+  \item Singularity chain $r\to u\to\delta\to\delta'$; $\delta(at)=\delta(t)/|a|$; $x\Conv\delta'=dx/dt$.
+\end{itemize}
+
+\section{Pitfalls and Tricky Edge Cases}
+
+\subsection{Signal / Transform Pitfalls}
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Affine is not linear.} Always check zero-in / zero-out.
+  \item \textbf{Transformation order.} $x(at-b) = x(a(t-b/a))$: shift by $b/a$, then scale.
+  \item \textbf{DT periodicity.} $\cos(n)$ is not periodic. Need $\omega_0/(2\pi)\in\mathbb{Q}$.
+  \item \textbf{Explicit $t$ or $n$} in the equation $\Rightarrow$ time-varying.
+\end{enumerate}
+
+\subsection{Sifting / Sampling Pitfalls}
+\begin{itemize}[leftmargin=*]
+  \item Sifting (integral) gives a number; sampling (multiplication) gives a scaled impulse.
+  \item $\int_0^5 x(t)\delta(t+2)\,dt = 0$ because the impulse at $t=-2$ is outside $[0,5]$.
+  \item $(t+1)\delta(t) = \delta(t)$; evaluate the smooth factor at the impulse location.
+\end{itemize}
+
+\subsection{Convolution Pitfalls}
+\begin{itemize}[leftmargin=*]
+  \item Forgetting to flip $h$ before shifting (the most common error).
+  \item Wrong integration/summation limits: only count where both signals are nonzero.
+  \item BIBO needs $\int|h|\,dt$, not $\int h\,dt$ (absolute value is essential).
+  \item Cascade $\to h_1\Conv h_2$; parallel $\to h_1+h_2$.
+  \item DT output length: $N+M-1$, not $\max(N,M)$.
+\end{itemize}
+
+\subsection{LTI Property Pitfalls}
+\begin{itemize}[leftmargin=*]
+  \item Causality and stability are independent. $e^{2t}u(t)$ is causal but unstable; $e^t u(-t)$ is stable but non-causal.
+  \item Memoryless LTI requires $h(t)=K\delta(t)$.
+  \item DT stability uses magnitude: $\alpha=-0.9$ is stable.
+\end{itemize}
+
+\subsection{Differential / Difference Equation Pitfalls}
+\begin{itemize}[leftmargin=*]
+  \item $dy/dt+ay=bx$ gives $e^{-at}$, not $e^{+at}$. Stable iff $a>0$.
+  \item Always multiply the impulse response by $u(t)$ or $u[n]$ for causality.
+  \item Initial rest: $y(0^-)=0$ (or $y[n]=0$ for $n<0$) unless stated.
+  \item Jump condition: $\int_{0^-}^{0^+}(dy/dt+ay)\,dt = 1$ gives $h(0^+)-h(0^-)=b$.
+\end{itemize}
+
+\subsection{Singularity Pitfalls}
+\begin{itemize}[leftmargin=*]
+  \item $\delta(at) = \delta(t)/|a|$: absolute value, and compression raises the height to preserve unit area.
+  \item $\int x(t)\delta'(t-t_0)\,dt = -x'(t_0)$ (integration by parts on the doublet).
+  \item Memorize the chain $r\to u\to\delta\to\delta'$ forward and backward.
+\end{itemize}
+
+\end{document}

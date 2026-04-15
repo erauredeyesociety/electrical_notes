@@ -1,0 +1,761 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{parskip}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  urlcolor=blue!60!black,
+  pdftitle={CEC 315 Master Transforms Reference},
+  pdfauthor={Student}
+}
+
+\newcommand{\Z}{\ensuremath{\mathcal{Z}}}
+\newcommand{\Lap}{\ensuremath{\mathcal{L}}}
+\newcommand{\Real}{\operatorname{Re}}
+\newcommand{\sinc}{\operatorname{sinc}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\ztrans}{\xleftrightarrow{\mathcal{Z}}}
+\newcommand{\ltrans}{\xleftrightarrow{\mathcal{L}}}
+\newcommand{\ftrans}{\xleftrightarrow{\mathcal{F}}}
+
+\setlength{\LTpre}{4pt}
+\setlength{\LTpost}{4pt}
+
+\title{\textbf{CEC 315 -- Master Transforms Reference}\\[4pt]
+\large Signals and Systems: Fourier, Laplace, and $z$-Transforms}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-3em}
+
+\begin{center}
+\small
+Comprehensive reference for all transforms and properties covered in CEC 315, with emphasis on Exam 3 material (Laplace, $z$-transform, sampling). Notation: $u(t)$, $u[n]$ are unit steps; $\delta(t)$, $\delta[n]$ are CT/DT unit impulses; ROC is region of convergence. Bilateral conventions unless noted.
+\end{center}
+
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+%======================================================================
+\section{CT Fourier Series (CTFS)}
+%======================================================================
+
+\subsection{Definition}
+Periodic $x(t)$ with period $T$, fundamental frequency $\omega_0 = 2\pi/T$.
+\[
+x(t) = \sum_{k=-\infty}^{\infty} a_k\, e^{jk\omega_0 t},\qquad
+a_k = \frac{1}{T}\int_T x(t)\,e^{-jk\omega_0 t}\,dt,\qquad
+a_0 = \frac{1}{T}\int_T x(t)\,dt
+\]
+
+\subsection{Common CTFS Pairs}
+\begin{longtable}{@{}ll@{}}
+\toprule
+$x(t)$ (period $T$) & $a_k$ \\
+\midrule \endfirsthead
+\toprule $x(t)$ & $a_k$ \\ \midrule \endhead
+\bottomrule \endfoot
+$1$ & $a_0 = 1$, $a_k = 0$ ($k\ne 0$) \\
+$\cos(\omega_0 t)$ & $a_1 = a_{-1} = \tfrac{1}{2}$, else $0$ \\
+$\sin(\omega_0 t)$ & $a_1 = \tfrac{1}{2j}$, $a_{-1} = -\tfrac{1}{2j}$ \\
+$e^{jN\omega_0 t}$ & $a_N = 1$, else $0$ \\
+Square wave ($\pm 1$, 50\% duty) & $a_k = \dfrac{2}{jk\pi}$, $k$ odd; $0$ else \\
+Impulse train $\sum_n \delta(t-nT)$ & $a_k = 1/T$ all $k$ \\
+Rect pulse width $2T_1$ in $T$ & $a_k = \dfrac{\sin(k\omega_0 T_1)}{k\pi} = \dfrac{2T_1}{T}\sinc\!\left(\tfrac{k\omega_0 T_1}{\pi}\right)$ \\
+\end{longtable}
+
+\subsection{CTFS Properties}
+\begin{longtable}{@{}lll@{}}
+\toprule
+Property & Time domain & Coefficients \\
+\midrule \endfirsthead
+\toprule Property & Time domain & Coefficients \\ \midrule \endhead
+\bottomrule \endfoot
+Linearity & $Ax(t) + By(t)$ & $Aa_k + Bb_k$ \\
+Time shift & $x(t - t_0)$ & $a_k\,e^{-jk\omega_0 t_0}$ \\
+Freq shift & $e^{jM\omega_0 t} x(t)$ & $a_{k-M}$ \\
+Conjugation & $x^*(t)$ & $a_{-k}^*$ \\
+Time reversal & $x(-t)$ & $a_{-k}$ \\
+Multiplication & $x(t)y(t)$ & $\sum_\ell a_\ell b_{k-\ell}$ \\
+Periodic conv. & $\int_T x(\tau)y(t-\tau)\,d\tau$ & $T a_k b_k$ \\
+Differentiation & $dx/dt$ & $jk\omega_0 a_k$ \\
+Integration ($a_0=0$) & $\int_{-\infty}^t x(\tau)d\tau$ & $a_k/(jk\omega_0)$ \\
+Real $x$ & --- & $a_{-k} = a_k^*$ \\
+Real even $x$ & --- & $a_k$ real, even \\
+Real odd $x$ & --- & $a_k$ imaginary, odd \\
+\end{longtable}
+
+\subsection{Parseval's Relation (Average Power)}
+\[
+\frac{1}{T}\int_T |x(t)|^2\,dt = \sum_{k=-\infty}^{\infty}|a_k|^2
+\]
+
+\subsection{Dirichlet Conditions}
+Absolutely integrable over one period; finite maxima/minima per period; finite jump discontinuities per period. At a jump the FS converges to $\tfrac{1}{2}[x(t_0^-) + x(t_0^+)]$. Gibbs overshoot $\approx 9\%$ of jump height, independent of $N$.
+
+%======================================================================
+\section{DT Fourier Series (DTFS)}
+%======================================================================
+
+\subsection{Definition}
+Periodic $x[n]$, period $N$, $\omega_0 = 2\pi/N$. Only $N$ distinct coefficients; $a_{k+N} = a_k$.
+\[
+x[n] = \sum_{k=\langle N\rangle} a_k\,e^{jk(2\pi/N)n},\qquad
+a_k = \frac{1}{N}\sum_{n=\langle N\rangle} x[n]\,e^{-jk(2\pi/N)n}
+\]
+
+\subsection{Common DTFS Pairs}
+\begin{longtable}{@{}ll@{}}
+\toprule $x[n]$ & $a_k$ (one period) \\ \midrule \endfirsthead
+\toprule $x[n]$ & $a_k$ \\ \midrule \endhead
+\bottomrule \endfoot
+$1$ & $a_0 = 1$, else $0$ \\
+$e^{jM(2\pi/N)n}$ & $a_M = 1$ (mod $N$), else $0$ \\
+$\cos\!\left(M(2\pi/N)n\right)$ & $a_M = a_{-M} = \tfrac{1}{2}$ \\
+$\sin\!\left(M(2\pi/N)n\right)$ & $a_M = \tfrac{1}{2j},\ a_{-M} = -\tfrac{1}{2j}$ \\
+$\sum_r \delta[n - rN]$ & $a_k = 1/N$ all $k$ \\
+\end{longtable}
+
+\subsection{DTFS Properties}
+\begin{longtable}{@{}lll@{}}
+\toprule Property & Sequence & Coefficients \\ \midrule \endfirsthead
+\toprule Property & Sequence & Coefficients \\ \midrule \endhead
+\bottomrule \endfoot
+Linearity & $Ax[n] + By[n]$ & $Aa_k + Bb_k$ \\
+Time shift & $x[n - n_0]$ & $a_k\,e^{-jk(2\pi/N)n_0}$ \\
+Freq shift & $e^{jM(2\pi/N)n} x[n]$ & $a_{k-M}$ \\
+Conjugation & $x^*[n]$ & $a_{-k}^*$ \\
+Time reversal & $x[-n]$ & $a_{-k}$ \\
+Multiplication & $x[n]y[n]$ & $\sum_{\ell=\langle N\rangle} a_\ell b_{k-\ell}$ \\
+Periodic conv. & $\sum_{r=\langle N\rangle} x[r]y[n-r]$ & $N a_k b_k$ \\
+First difference & $x[n] - x[n-1]$ & $(1 - e^{-jk(2\pi/N)})a_k$ \\
+Parseval & $\tfrac{1}{N}\sum_{n}|x[n]|^2$ & $\sum_k |a_k|^2$ \\
+\end{longtable}
+
+%======================================================================
+\section{CT Fourier Transform (CTFT)}
+%======================================================================
+
+\subsection{Definition}
+\[
+X(j\omega) = \int_{-\infty}^{\infty} x(t)\,e^{-j\omega t}\,dt,\qquad
+x(t) = \frac{1}{2\pi}\int_{-\infty}^{\infty} X(j\omega)\,e^{j\omega t}\,d\omega
+\]
+
+\subsection{Common CTFT Pairs}
+\begin{longtable}{@{}ll@{}}
+\toprule $x(t)$ & $X(j\omega)$ \\ \midrule \endfirsthead
+\toprule $x(t)$ & $X(j\omega)$ \\ \midrule \endhead
+\bottomrule \endfoot
+$\delta(t)$ & $1$ \\
+$\delta(t - t_0)$ & $e^{-j\omega t_0}$ \\
+$1$ & $2\pi\,\delta(\omega)$ \\
+$u(t)$ & $\dfrac{1}{j\omega} + \pi\delta(\omega)$ \\
+$\sgn(t)$ & $\dfrac{2}{j\omega}$ \\
+$e^{-at}u(t),\ \Real\{a\} > 0$ & $\dfrac{1}{a + j\omega}$ \\
+$t e^{-at}u(t),\ \Real\{a\} > 0$ & $\dfrac{1}{(a + j\omega)^2}$ \\
+$e^{-a|t|},\ a>0$ & $\dfrac{2a}{a^2 + \omega^2}$ \\
+$e^{j\omega_0 t}$ & $2\pi\,\delta(\omega - \omega_0)$ \\
+$\cos(\omega_0 t)$ & $\pi[\delta(\omega - \omega_0) + \delta(\omega + \omega_0)]$ \\
+$\sin(\omega_0 t)$ & $\dfrac{\pi}{j}[\delta(\omega - \omega_0) - \delta(\omega + \omega_0)]$ \\
+Rect width $2T_1$: $1$ for $|t|<T_1$ & $\dfrac{2\sin(\omega T_1)}{\omega} = 2T_1\,\sinc\!\left(\tfrac{\omega T_1}{\pi}\right)$ \\
+$\dfrac{\sin(Wt)}{\pi t}$ (ideal LPF) & $1$ for $|\omega|<W$, $0$ else \\
+Triangular pulse width $2T_1$ & $T_1\,\sinc^2\!\left(\tfrac{\omega T_1}{2\pi}\right)$ \\
+$e^{-t^2/(2\sigma^2)}$ & $\sigma\sqrt{2\pi}\,e^{-\sigma^2\omega^2/2}$ \\
+$\sum_n \delta(t - nT)$ & $\dfrac{2\pi}{T}\sum_k \delta(\omega - k\tfrac{2\pi}{T})$ \\
+Periodic $\sum_k a_k e^{jk\omega_0 t}$ & $\sum_k 2\pi a_k\,\delta(\omega - k\omega_0)$ \\
+\end{longtable}
+
+\subsection{CTFT Properties}
+\begin{longtable}{@{}lll@{}}
+\toprule Property & Time & Frequency \\ \midrule \endfirsthead
+\toprule Property & Time & Frequency \\ \midrule \endhead
+\bottomrule \endfoot
+Linearity & $ax(t) + by(t)$ & $aX(j\omega) + bY(j\omega)$ \\
+Time shift & $x(t - t_0)$ & $e^{-j\omega t_0} X(j\omega)$ \\
+Frequency shift & $e^{j\omega_0 t} x(t)$ & $X(j(\omega - \omega_0))$ \\
+Conjugation & $x^*(t)$ & $X^*(-j\omega)$ \\
+Time reversal & $x(-t)$ & $X(-j\omega)$ \\
+Time scaling & $x(\alpha t)$ & $\dfrac{1}{|\alpha|}X(j\omega/\alpha)$ \\
+Duality & $X(jt)$ & $2\pi x(-\omega)$ \\
+Differentiation in $t$ & $d^n x/dt^n$ & $(j\omega)^n X(j\omega)$ \\
+Differentiation in $\omega$ & $-jt\, x(t)$ & $dX/d\omega$ \\
+Integration & $\int_{-\infty}^t x(\tau)d\tau$ & $\dfrac{X(j\omega)}{j\omega} + \pi X(0)\delta(\omega)$ \\
+Convolution & $x(t) * y(t)$ & $X(j\omega)Y(j\omega)$ \\
+Multiplication & $x(t) y(t)$ & $\dfrac{1}{2\pi} X(j\omega) * Y(j\omega)$ \\
+Parseval & $\int |x(t)|^2 dt$ & $= \dfrac{1}{2\pi}\int |X(j\omega)|^2 d\omega$ \\
+Symmetry (real $x$) & --- & $X(-j\omega) = X^*(j\omega)$ \\
+\end{longtable}
+
+%======================================================================
+\section{DT Fourier Transform (DTFT)}
+%======================================================================
+
+\subsection{Definition}
+\[
+X(e^{j\omega}) = \sum_{n=-\infty}^{\infty} x[n]\,e^{-j\omega n},\qquad
+x[n] = \frac{1}{2\pi}\int_{2\pi} X(e^{j\omega})\,e^{j\omega n}\,d\omega
+\]
+$X(e^{j\omega})$ is periodic in $\omega$ with period $2\pi$.
+
+\subsection{Common DTFT Pairs}
+\begin{longtable}{@{}ll@{}}
+\toprule $x[n]$ & $X(e^{j\omega})$ \\ \midrule \endfirsthead
+\toprule $x[n]$ & $X(e^{j\omega})$ \\ \midrule \endhead
+\bottomrule \endfoot
+$\delta[n]$ & $1$ \\
+$\delta[n - n_0]$ & $e^{-j\omega n_0}$ \\
+$1$ & $2\pi\sum_k \delta(\omega - 2\pi k)$ \\
+$u[n]$ & $\dfrac{1}{1 - e^{-j\omega}} + \pi\sum_k\delta(\omega - 2\pi k)$ \\
+$a^n u[n],\ |a|<1$ & $\dfrac{1}{1 - a e^{-j\omega}}$ \\
+$(n+1)a^n u[n],\ |a|<1$ & $\dfrac{1}{(1 - a e^{-j\omega})^2}$ \\
+$a^{|n|},\ |a|<1$ & $\dfrac{1 - a^2}{1 - 2a\cos\omega + a^2}$ \\
+$e^{j\omega_0 n}$ & $2\pi\sum_k \delta(\omega - \omega_0 - 2\pi k)$ \\
+$\cos(\omega_0 n)$ & $\pi\sum_k[\delta(\omega - \omega_0 - 2\pi k) + \delta(\omega + \omega_0 - 2\pi k)]$ \\
+$1$ for $|n|\le N_1$ & $\dfrac{\sin[\omega(N_1 + 1/2)]}{\sin(\omega/2)}$ \\
+$\dfrac{\sin(Wn)}{\pi n}$ & $1$ for $|\omega|<W$ in $[-\pi,\pi]$, else $0$ \\
+\end{longtable}
+
+\subsection{DTFT Properties}
+\begin{longtable}{@{}lll@{}}
+\toprule Property & Sequence & Transform \\ \midrule \endfirsthead
+\toprule Property & Sequence & Transform \\ \midrule \endhead
+\bottomrule \endfoot
+Linearity & $ax[n] + by[n]$ & $aX(e^{j\omega}) + bY(e^{j\omega})$ \\
+Time shift & $x[n - n_0]$ & $e^{-j\omega n_0}X(e^{j\omega})$ \\
+Freq shift & $e^{j\omega_0 n}x[n]$ & $X(e^{j(\omega - \omega_0)})$ \\
+Conjugation & $x^*[n]$ & $X^*(e^{-j\omega})$ \\
+Time reversal & $x[-n]$ & $X(e^{-j\omega})$ \\
+Convolution & $x[n] * y[n]$ & $X(e^{j\omega})Y(e^{j\omega})$ \\
+Multiplication & $x[n]y[n]$ & $\tfrac{1}{2\pi}\int_{2\pi} X(e^{j\theta})Y(e^{j(\omega-\theta)})d\theta$ \\
+First difference & $x[n] - x[n-1]$ & $(1 - e^{-j\omega})X(e^{j\omega})$ \\
+Accumulation & $\sum_{m=-\infty}^n x[m]$ & $\dfrac{X(e^{j\omega})}{1 - e^{-j\omega}} + \pi X(e^{j0})\sum_k\delta(\omega - 2\pi k)$ \\
+Freq differentiation & $nx[n]$ & $j\,dX/d\omega$ \\
+Parseval & $\sum_n |x[n]|^2$ & $=\tfrac{1}{2\pi}\int_{2\pi}|X(e^{j\omega})|^2 d\omega$ \\
+\end{longtable}
+
+%======================================================================
+\section{Laplace Transform}
+%======================================================================
+
+\subsection{Definitions}
+\textbf{Bilateral:} $\displaystyle X(s) = \int_{-\infty}^{\infty} x(t)\,e^{-st}\,dt,\quad s = \sigma + j\omega.$
+
+\textbf{Unilateral:} $\displaystyle \mathcal{X}(s) = \int_{0^-}^{\infty} x(t)\,e^{-st}\,dt.$
+
+\textbf{Inverse (formal):} $\displaystyle x(t) = \frac{1}{2\pi j}\int_{\sigma - j\infty}^{\sigma + j\infty} X(s)\,e^{st}\,ds$ with $\sigma$ in ROC. In practice: PFE (\S\ref{sec:pfe}).
+
+\subsection{Common Laplace Pairs}
+\begin{longtable}{@{}lll@{}}
+\toprule $x(t)$ & $X(s)$ & ROC \\ \midrule \endfirsthead
+\toprule $x(t)$ & $X(s)$ & ROC \\ \midrule \endhead
+\bottomrule \endfoot
+$\delta(t)$ & $1$ & all $s$ \\
+$\delta(t - t_0)$ & $e^{-st_0}$ & all $s$ \\
+$u(t)$ & $1/s$ & $\Real\{s\} > 0$ \\
+$-u(-t)$ & $1/s$ & $\Real\{s\} < 0$ \\
+$t u(t)$ & $1/s^2$ & $\Real\{s\} > 0$ \\
+$\dfrac{t^{n-1}}{(n-1)!}u(t)$ & $1/s^n$ & $\Real\{s\} > 0$ \\
+$e^{-at}u(t)$ & $\dfrac{1}{s + a}$ & $\Real\{s\} > -\Real\{a\}$ \\
+$-e^{-at}u(-t)$ & $\dfrac{1}{s + a}$ & $\Real\{s\} < -\Real\{a\}$ \\
+$t e^{-at}u(t)$ & $\dfrac{1}{(s + a)^2}$ & $\Real\{s\} > -\Real\{a\}$ \\
+$\dfrac{t^{n-1}}{(n-1)!}e^{-at}u(t)$ & $\dfrac{1}{(s + a)^n}$ & $\Real\{s\} > -\Real\{a\}$ \\
+$\cos(\omega_0 t)u(t)$ & $\dfrac{s}{s^2 + \omega_0^2}$ & $\Real\{s\} > 0$ \\
+$\sin(\omega_0 t)u(t)$ & $\dfrac{\omega_0}{s^2 + \omega_0^2}$ & $\Real\{s\} > 0$ \\
+$e^{-at}\cos(\omega_d t)u(t)$ & $\dfrac{s + a}{(s + a)^2 + \omega_d^2}$ & $\Real\{s\} > -a$ \\
+$e^{-at}\sin(\omega_d t)u(t)$ & $\dfrac{\omega_d}{(s + a)^2 + \omega_d^2}$ & $\Real\{s\} > -a$ \\
+$t\cos(\omega_0 t)u(t)$ & $\dfrac{s^2 - \omega_0^2}{(s^2 + \omega_0^2)^2}$ & $\Real\{s\} > 0$ \\
+$t\sin(\omega_0 t)u(t)$ & $\dfrac{2\omega_0 s}{(s^2 + \omega_0^2)^2}$ & $\Real\{s\} > 0$ \\
+$\cosh(at)u(t)$ & $\dfrac{s}{s^2 - a^2}$ & $\Real\{s\} > |a|$ \\
+$\sinh(at)u(t)$ & $\dfrac{a}{s^2 - a^2}$ & $\Real\{s\} > |a|$ \\
+\end{longtable}
+
+\subsection{Laplace Properties (Bilateral)}
+Let $x(t)\ltrans X(s)$ with ROC $R_x$.
+\begin{longtable}{@{}lll@{}}
+\toprule Property & Time & $s$-domain / ROC \\ \midrule \endfirsthead
+\toprule Property & Time & $s$-domain / ROC \\ \midrule \endhead
+\bottomrule \endfoot
+Linearity & $ax(t) + by(t)$ & $aX(s) + bY(s)$, ROC $\supseteq R_x \cap R_y$ \\
+Time shift & $x(t - t_0)$ & $e^{-st_0}X(s)$, ROC $= R_x$ \\
+$s$-shift & $e^{s_0 t}x(t)$ & $X(s - s_0)$, ROC $= R_x + \Real\{s_0\}$ \\
+Time scaling & $x(\alpha t)$ & $\tfrac{1}{|\alpha|}X(s/\alpha)$, ROC $= \alpha R_x$ \\
+Conjugation & $x^*(t)$ & $X^*(s^*)$, ROC $= R_x$ \\
+Time reversal & $x(-t)$ & $X(-s)$, ROC $= -R_x$ \\
+Convolution & $x(t) * y(t)$ & $X(s)Y(s)$, ROC $\supseteq R_x \cap R_y$ \\
+$d/dt$ in $t$ & $dx/dt$ & $sX(s)$, ROC $\supseteq R_x$ \\
+$n$-th derivative & $d^n x/dt^n$ & $s^n X(s)$, ROC $\supseteq R_x$ \\
+$d/ds$ in $s$ & $-t\,x(t)$ & $dX/ds$, ROC $= R_x$ \\
+Integration & $\int_{-\infty}^t x(\tau)d\tau$ & $X(s)/s$, ROC $\supseteq R_x \cap \{\Real\{s\}>0\}$ \\
+\end{longtable}
+
+\textbf{Initial-value theorem} (causal, no impulse at $0$):
+\[
+x(0^+) = \lim_{s\to\infty} sX(s)
+\]
+\textbf{Final-value theorem} (all poles of $sX(s)$ in open LHP):
+\[
+\lim_{t\to\infty} x(t) = \lim_{s\to 0} sX(s)
+\]
+
+\subsection{Unilateral Differentiation Property (Incorporates ICs)}
+\begin{align*}
+\frac{dx}{dt} &\xleftrightarrow{\Lap_u} s\mathcal{X}(s) - x(0^-) \\
+\frac{d^2 x}{dt^2} &\xleftrightarrow{\Lap_u} s^2\mathcal{X}(s) - s x(0^-) - x'(0^-) \\
+\frac{d^n x}{dt^n} &\xleftrightarrow{\Lap_u} s^n\mathcal{X}(s) - \sum_{k=0}^{n-1} s^{n-1-k} x^{(k)}(0^-)
+\end{align*}
+\textbf{Total response} $y(t) = y_{\text{ZS}}(t) + y_{\text{ZI}}(t)$ where ZSR $= \Lap^{-1}\{H(s)X(s)\}$ (zero ICs) and ZIR comes from ICs alone (zero input).
+
+\subsection{ROC Rules (Bilateral)}
+\begin{enumerate}\setlength\itemsep{-2pt}
+\item ROC is a union of strips parallel to the $j\omega$-axis.
+\item ROC never contains a pole.
+\item Finite-duration $x(t)$: ROC is all $s$ (possibly excluding $\infty$).
+\item Right-sided, rational: ROC is $\Real\{s\} > \sigma_{\max}$ (right of rightmost pole).
+\item Left-sided, rational: ROC is $\Real\{s\} < \sigma_{\min}$ (left of leftmost pole).
+\item Two-sided: ROC is a vertical strip between consecutive poles (or empty).
+\item $j\omega$-axis $\subset$ ROC $\iff$ CTFT exists and $X(j\omega) = X(s)|_{s=j\omega}$.
+\end{enumerate}
+Causal LTI system with rational $H(s)$ is \textbf{BIBO stable} iff all poles have $\Real\{p_i\} < 0$.
+
+%======================================================================
+\section{$z$-Transform}
+%======================================================================
+
+\subsection{Definitions}
+\textbf{Bilateral:} $\displaystyle X(z) = \sum_{n=-\infty}^{\infty} x[n]\,z^{-n},\quad z = re^{j\omega}.$
+
+\textbf{Unilateral:} $\displaystyle \mathcal{X}(z) = \sum_{n=0}^{\infty} x[n]\,z^{-n}.$
+
+\textbf{Inverse (formal):} $\displaystyle x[n] = \frac{1}{2\pi j}\oint_C X(z)\,z^{n-1}\,dz.$
+
+In practice: partial fractions in $z^{-1}$, then look up each term and use the ROC to assign right-sided vs. left-sided.
+
+\subsection{Common $z$-Transform Pairs}
+\begin{longtable}{@{}lll@{}}
+\toprule $x[n]$ & $X(z)$ & ROC \\ \midrule \endfirsthead
+\toprule $x[n]$ & $X(z)$ & ROC \\ \midrule \endhead
+\bottomrule \endfoot
+$\delta[n]$ & $1$ & all $z$ \\
+$\delta[n - k],\ k\ge 0$ & $z^{-k}$ & $|z| > 0$ \\
+$\delta[n + k],\ k > 0$ & $z^{k}$ & $|z| < \infty$ \\
+$u[n]$ & $\dfrac{1}{1 - z^{-1}} = \dfrac{z}{z - 1}$ & $|z| > 1$ \\
+$-u[-n-1]$ & $\dfrac{1}{1 - z^{-1}}$ & $|z| < 1$ \\
+$a^n u[n]$ & $\dfrac{1}{1 - az^{-1}} = \dfrac{z}{z - a}$ & $|z| > |a|$ \\
+$-a^n u[-n-1]$ & $\dfrac{1}{1 - az^{-1}}$ & $|z| < |a|$ \\
+$n a^n u[n]$ & $\dfrac{az^{-1}}{(1 - az^{-1})^2}$ & $|z| > |a|$ \\
+$(n+1)a^n u[n]$ & $\dfrac{1}{(1 - az^{-1})^2}$ & $|z| > |a|$ \\
+$-n a^n u[-n-1]$ & $\dfrac{az^{-1}}{(1 - az^{-1})^2}$ & $|z| < |a|$ \\
+$\cos(\omega_0 n)u[n]$ & $\dfrac{1 - \cos\omega_0\,z^{-1}}{1 - 2\cos\omega_0\,z^{-1} + z^{-2}}$ & $|z| > 1$ \\
+$\sin(\omega_0 n)u[n]$ & $\dfrac{\sin\omega_0\,z^{-1}}{1 - 2\cos\omega_0\,z^{-1} + z^{-2}}$ & $|z| > 1$ \\
+$r^n\cos(\omega_0 n)u[n]$ & $\dfrac{1 - r\cos\omega_0\,z^{-1}}{1 - 2r\cos\omega_0\,z^{-1} + r^2 z^{-2}}$ & $|z| > r$ \\
+$r^n\sin(\omega_0 n)u[n]$ & $\dfrac{r\sin\omega_0\,z^{-1}}{1 - 2r\cos\omega_0\,z^{-1} + r^2 z^{-2}}$ & $|z| > r$ \\
+$n u[n]$ & $\dfrac{z^{-1}}{(1 - z^{-1})^2}$ & $|z| > 1$ \\
+$n^2 u[n]$ & $\dfrac{z^{-1}(1 + z^{-1})}{(1 - z^{-1})^3}$ & $|z| > 1$ \\
+$\binom{n+k-1}{k-1}a^n u[n]$ & $\dfrac{1}{(1 - az^{-1})^k}$ & $|z| > |a|$ \\
+Finite $\{x[0],\dots,x[N]\}$ & $\sum_{n=0}^N x[n]z^{-n}$ & all $z$ (except possibly $0,\infty$) \\
+\end{longtable}
+
+\subsection{$z$-Transform Properties (Bilateral)}
+Let $x[n]\ztrans X(z)$ with ROC $R_x$.
+\begin{longtable}{@{}lll@{}}
+\toprule Property & Sequence & $z$-domain / ROC \\ \midrule \endfirsthead
+\toprule Property & Sequence & $z$-domain / ROC \\ \midrule \endhead
+\bottomrule \endfoot
+Linearity & $ax_1[n] + bx_2[n]$ & $aX_1(z) + bX_2(z)$, ROC $\supseteq R_1 \cap R_2$ \\
+Time shift & $x[n - n_0]$ & $z^{-n_0}X(z)$, ROC $= R_x$ (possibly $\pm \{0,\infty\}$) \\
+$z$-scaling & $z_0^n x[n]$ & $X(z/z_0)$, ROC $= |z_0| R_x$ \\
+Time reversal & $x[-n]$ & $X(z^{-1})$, ROC $= 1/R_x$ \\
+Conjugation & $x^*[n]$ & $X^*(z^*)$, ROC $= R_x$ \\
+Convolution & $x_1[n]*x_2[n]$ & $X_1(z)X_2(z)$, ROC $\supseteq R_1 \cap R_2$ \\
+Diff. in $z$ & $n x[n]$ & $-z\,dX/dz$, ROC $= R_x$ \\
+First difference & $x[n] - x[n-1]$ & $(1 - z^{-1})X(z)$ \\
+Accumulation & $\sum_{k=-\infty}^n x[k]$ & $\dfrac{X(z)}{1 - z^{-1}}$, ROC $\supseteq R_x \cap \{|z|>1\}$ \\
+\end{longtable}
+
+\subsection{Unilateral Time-Shift Property (Incorporates ICs)}
+\textbf{Delays:}
+\begin{align*}
+x[n-1] &\xleftrightarrow{\Z_u} z^{-1}\mathcal{X}(z) + x[-1] \\
+x[n-2] &\xleftrightarrow{\Z_u} z^{-2}\mathcal{X}(z) + z^{-1}x[-1] + x[-2] \\
+x[n-m] &\xleftrightarrow{\Z_u} z^{-m}\mathcal{X}(z) + \sum_{k=1}^{m} z^{-(m-k)}x[-k]
+\end{align*}
+\textbf{Advances:}
+\[
+x[n+m] \xleftrightarrow{\Z_u} z^m\mathcal{X}(z) - \sum_{k=0}^{m-1} z^{m-k}x[k]
+\]
+
+\subsection{Initial- and Final-Value Theorems (Unilateral, Causal)}
+\[
+x[0] = \lim_{z\to\infty} X(z),\qquad
+\lim_{n\to\infty} x[n] = \lim_{z\to 1}(1 - z^{-1})X(z)
+\]
+The final-value theorem requires all poles of $(1-z^{-1})X(z)$ to lie strictly inside the unit circle.
+
+\subsection{ROC Rules}
+\begin{enumerate}\setlength\itemsep{-2pt}
+\item ROC is an annular ring centered at the origin, $r_1 < |z| < r_2$.
+\item ROC never contains a pole.
+\item Finite-duration $x[n]$: ROC is all $z$ except possibly $\{0,\infty\}$.
+\item Right-sided, rational: ROC is $|z| > r_{\max}$; if causal, $\infty \in$ ROC.
+\item Left-sided, rational: ROC is $|z| < r_{\min}$; if anticausal, $0 \in$ ROC.
+\item Two-sided: ROC is an annular ring between consecutive pole circles (or empty).
+\item Unit circle $\subset$ ROC $\iff$ DTFT exists and $X(e^{j\omega}) = X(z)|_{z = e^{j\omega}}$.
+\end{enumerate}
+Causal LTI system with rational $H(z)$ is \textbf{BIBO stable} iff $|p_i| < 1$ for every pole.
+
+%======================================================================
+\section{Connections Between Transforms}
+%======================================================================
+
+\subsection{Laplace $\leftrightarrow$ Fourier (CT)}
+CTFT is the Laplace transform on the $j\omega$-axis, provided the ROC contains that axis:
+\[
+X(j\omega) = X(s)\big|_{s = j\omega}\qquad \text{iff }\{s:\Real\{s\}=0\}\subset\text{ROC}.
+\]
+
+\subsection{$z$-Transform $\leftrightarrow$ DTFT}
+DTFT is the $z$-transform on the unit circle, provided the ROC contains that circle:
+\[
+X(e^{j\omega}) = X(z)\big|_{z = e^{j\omega}}\qquad \text{iff }\{z:|z|=1\}\subset\text{ROC}.
+\]
+
+\subsection{Laplace $\leftrightarrow$ $z$ (CT/DT Parallel)}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+& Laplace & $z$-transform \\ \midrule
+Variable & $s = \sigma + j\omega$ & $z = re^{j\omega}$ \\
+FT lives on & $j\omega$-axis & unit circle \\
+ROC shape & vertical strip & annular ring \\
+Causal + stable & poles in LHP & poles inside unit circle \\
+Convolution $\to$ & multiplication & multiplication \\
+Operator & $s \leftrightarrow d/dt$ & $z^{-1}\leftrightarrow$ unit delay \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Impulse invariance:} Set $h[n] = T h(nT)$; preserves time-domain shape but can alias.
+
+\textbf{Bilinear transform:}
+\[
+s = \frac{2}{T}\frac{1 - z^{-1}}{1 + z^{-1}},\qquad
+z = \frac{1 + (T/2)s}{1 - (T/2)s}
+\]
+maps the entire $j\omega$-axis onto the unit circle with warping $\omega_{\text{CT}} = (2/T)\tan(\omega_{\text{DT}}/2)$. LHP $\to$ interior of unit circle, so stability is preserved.
+
+\subsection{CT $\leftrightarrow$ DT via Sampling (Spectrum Replication)}
+Sampling $x_c(t)$ with period $T$, $\omega_s = 2\pi/T$:
+\[
+\boxed{\,X_p(j\omega) = \frac{1}{T}\sum_{k=-\infty}^{\infty} X_c\bigl(j(\omega - k\omega_s)\bigr)\,}
+\]
+The CT spectrum is copy-pasted at every integer multiple of $\omega_s$ and scaled by $1/T$. The DTFT of $x[n] = x_c(nT)$ is
+\[
+X(e^{j\Omega}) = \frac{1}{T}\sum_k X_c\!\left(j\,\frac{\Omega - 2\pi k}{T}\right),\qquad \Omega = \omega T
+\]
+
+\textbf{Sampling theorem (Nyquist/Shannon):} If $X_c(j\omega) = 0$ for $|\omega|>\omega_M$ and $\omega_s > 2\omega_M$ (strict), then $x_c(t)$ can be recovered via an ideal LPF of gain $T$ and cutoff $\omega_c \in (\omega_M, \omega_s - \omega_M)$.
+
+\textbf{Sinc interpolation:}
+\[
+x_r(t) = \sum_{n=-\infty}^{\infty} x(nT)\,\frac{\sin[\pi(t - nT)/T]}{\pi(t - nT)/T}
+\]
+
+%======================================================================
+\section{PFE Cookbook}\label{sec:pfe}
+%======================================================================
+
+Given a proper rational $X(s)$ or $X(z)$ (if improper, long-divide first).
+
+\subsection{Distinct Poles}
+\[
+X(s) = \frac{N(s)}{\prod_{k=1}^n (s - p_k)} = \sum_{k=1}^{n}\frac{A_k}{s - p_k},\qquad
+A_k = \bigl[(s - p_k)X(s)\bigr]_{s = p_k}
+\]
+Use the ROC to assign each term:
+\begin{itemize}\setlength\itemsep{-2pt}
+\item ROC to the right of $p_k$: right-sided $A_k e^{p_k t}u(t)$.
+\item ROC to the left of $p_k$: left-sided $-A_k e^{p_k t}u(-t)$.
+\end{itemize}
+
+\subsection{Repeated Poles}
+For a pole $p$ of multiplicity $m$:
+\[
+X(s) = \cdots + \frac{B_1}{s - p} + \frac{B_2}{(s - p)^2} + \cdots + \frac{B_m}{(s - p)^m} + \cdots,\qquad
+B_{m - k} = \frac{1}{k!}\left.\frac{d^k}{ds^k}\bigl[(s - p)^m X(s)\bigr]\right|_{s = p}
+\]
+Inversion pair:
+\[
+\frac{1}{(s + a)^n}\ \ltrans\ \frac{t^{n-1}}{(n-1)!}e^{-at}u(t)
+\]
+
+\subsection{Complex Conjugate Poles}
+Complete the square: $s^2 + bs + c = (s + a)^2 + \omega_d^2$ where $a = b/2$, $\omega_d = \sqrt{c - a^2}$. Write the numerator as $\alpha(s + a) + \beta\omega_d$ and invert via
+\[
+\frac{s + a}{(s + a)^2 + \omega_d^2}\ltrans e^{-at}\cos(\omega_d t)u(t),\quad
+\frac{\omega_d}{(s + a)^2 + \omega_d^2}\ltrans e^{-at}\sin(\omega_d t)u(t)
+\]
+Never split conjugate poles into separate first-order terms with complex coefficients.
+
+\subsection{$z$-Transform PFE (Work in $z^{-1}$)}
+\[
+X(z) = \sum_k \frac{A_k}{1 - d_k z^{-1}},\qquad
+A_k = \bigl[(1 - d_k z^{-1})X(z)\bigr]_{z = d_k}
+\]
+Use the ROC:
+\begin{itemize}\setlength\itemsep{-2pt}
+\item ROC outside $|d_k|$: right-sided $A_k\,d_k^n u[n]$.
+\item ROC inside $|d_k|$: left-sided $-A_k\,d_k^n u[-n-1]$.
+\end{itemize}
+Repeated poles of order $m$ use
+\[
+\frac{1}{(1 - dz^{-1})^k}\ztrans \binom{n + k - 1}{k - 1}d^n u[n]
+\]
+If numerator degree in $z^{-1}$ exceeds denominator degree, long-divide first.
+
+%======================================================================
+\section{Common Signal Definitions}
+%======================================================================
+
+\textbf{Unit step (CT):} $u(t) = 1$ for $t > 0$, $u(0) = 1/2$, $u(t) = 0$ for $t < 0$. $\dfrac{d}{dt}u(t) = \delta(t)$.
+
+\textbf{Unit step (DT):} $u[n] = 1$ for $n \ge 0$, else $0$. $\delta[n] = u[n] - u[n-1]$.
+
+\textbf{Dirac delta:} $\int_{-\infty}^{\infty}\delta(t)\phi(t)\,dt = \phi(0)$. \textbf{Sifting:} $\int x(\tau)\delta(t-\tau)\,d\tau = x(t)$.
+
+\textbf{Kronecker delta:} $\delta[n] = 1$ for $n = 0$, else $0$. \textbf{Sifting:} $x[n] = \sum_k x[k]\delta[n - k]$.
+
+\textbf{Rectangular pulse:} $\mathrm{rect}(t/T_1) = 1$ for $|t| \le T_1/2$, else $0$.
+
+\textbf{Normalized sinc:} $\sinc(x) = \dfrac{\sin(\pi x)}{\pi x}$, $\sinc(0) = 1$, zeros at nonzero integers.
+
+\textbf{Signum:} $\sgn(t) = +1$ ($t > 0$), $0$ ($t = 0$), $-1$ ($t < 0$). Relation: $u(t) = \tfrac{1}{2}[1 + \sgn(t)]$.
+
+\textbf{Triangular pulse width $2T_1$:} $\mathrm{tri}(t/T_1) = 1 - |t|/T_1$ for $|t| \le T_1$, else $0$.
+
+\textbf{Impulse train:} $p(t) = \sum_{n=-\infty}^{\infty}\delta(t - nT)$, period $T$.
+
+\textbf{Complex exponentials} $e^{st}$ (CT) and $z^n$ (DT) are eigenfunctions of LTI systems: input $e^{st}$ produces output $H(s)e^{st}$; input $z^n$ produces $H(z)z^n$.
+
+%======================================================================
+\section{Sampling and Reconstruction}
+%======================================================================
+
+\subsection{Impulse-Train Sampling}
+Model sampling as multiplication by a periodic impulse train
+$p(t) = \sum_{n=-\infty}^{\infty}\delta(t - nT)$:
+\[
+x_p(t) = x(t)\,p(t) = \sum_{n=-\infty}^{\infty} x(nT)\,\delta(t - nT).
+\]
+Sampling period $T$; sampling frequency $\omega_s = 2\pi/T$ (rad/s),
+$f_s = 1/T$ (Hz).
+
+\subsection{Spectrum of the Sampled Signal}
+\[
+\boxed{\,X_p(j\omega) = \frac{1}{T}\sum_{k=-\infty}^{\infty}
+X\!\bigl(j(\omega - k\omega_s)\bigr).\,}
+\]
+Sampling in time creates periodic replicas of $X(j\omega)$ at every multiple
+of $\omega_s$, each scaled by $1/T$.
+
+\subsection{Sampling Theorem (Shannon / Nyquist)}
+If $X(j\omega) = 0$ for $|\omega|>\omega_M$ (band-limited), then $x(t)$ is
+uniquely determined by its samples $x(nT)$ provided
+\[
+\boxed{\,\omega_s > 2\omega_M\,}
+\]
+\textbf{Nyquist rate:} $2\omega_M$ (minimum, \emph{strict} inequality).
+\textbf{Nyquist frequency:} $\omega_M = \omega_s/2$.
+Sampling at exactly $\omega_s = 2\omega_M$ is \emph{not} sufficient in general
+(e.g.\ $\sin(\omega_s t/2)$ samples to all zeros).
+
+\subsection{Ideal Reconstruction (Sinc Interpolation)}
+Pass $x_p(t)$ through an ideal LPF with passband gain $T$ and cutoff
+$\omega_c\in(\omega_M,\omega_s-\omega_M)$. With $\omega_c = \pi/T$:
+\[
+h(t) = \frac{\sin(\pi t/T)}{\pi t/T}.
+\]
+\[
+\boxed{\,x_r(t) = \sum_{n=-\infty}^{\infty} x(nT)\,
+\frac{\sin[\pi(t - nT)/T]}{\pi(t - nT)/T}.\,}
+\]
+Each sinc equals $1$ at its own sample instant and $0$ at every other sample instant.
+
+\subsection{Aliasing}
+If $\omega_s<2\omega_M$, the replicas of $X(j\omega)$ overlap and the original
+cannot be recovered (\emph{irreversible}). For a sinusoid
+$\cos(2\pi f_0 t)$ sampled at $f_s$ with $f_s/2 < f_0 < f_s$,
+\[
+f_{\text{alias}} = |f_s - f_0|.
+\]
+Prevent with an anti-aliasing LPF of cutoff $\omega_s/2$ \emph{before} sampling.
+
+\subsection{Practical Reconstruction Filters}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Method & Impulse response \\
+\midrule
+Ideal LPF (sinc interpolation) & $h(t) = \sin(\pi t/T)/(\pi t/T)$ \\
+Zero-order hold (staircase) & Rectangular pulse of width $T$ \\
+First-order hold (connect-the-dots) & Triangular pulse of base $2T$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{DT Processing of CT Signals}
+Cascade C/D $\to$ DT system $\to$ D/C acts as a CT LTI system provided the
+sampling theorem is met. The CT and DT angular frequencies are related by
+\[
+\Omega = \omega T.
+\]
+Thus $|\omega|<\omega_s/2 = \pi/T$ maps to $|\Omega|<\pi$.
+
+\subsection{Sampling Formula Summary}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Concept & Formula \\
+\midrule
+Sampling period / frequency & $T = 2\pi/\omega_s$, $f_s = 1/T$ \\
+Nyquist rate & $2\omega_M$ (must be strictly exceeded) \\
+Sampling condition & $\omega_s > 2\omega_M$ \\
+Sampled spectrum & $X_p(j\omega) = \tfrac{1}{T}\sum_k X(j(\omega-k\omega_s))$ \\
+Sinc interpolation & $x_r(t) = \sum_n x(nT)\sinc((t-nT)/T)$ \\
+Aliased frequency & $f_{\text{alias}} = |f_s-f_0|$ for $f_s/2<f_0<f_s$ \\
+CT $\leftrightarrow$ DT frequency & $\Omega = \omega T$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%======================================================================
+\section{Linear Feedback Systems}
+%======================================================================
+
+\subsection{Block-Diagram Building Blocks}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Interconnection & Equivalent transfer function \\
+\midrule
+Cascade $H_1\to H_2$ & $H(s) = H_1(s)H_2(s)$ \\
+Parallel $H_1+H_2$ & $H(s) = H_1(s)+H_2(s)$ \\
+Negative feedback (forward $H$, feedback $G$) & $Q(s) = H(s)/[1+G(s)H(s)]$ \\
+Positive feedback & $Q(s) = H(s)/[1-G(s)H(s)]$ \\
+Unity feedback ($G=1$) & $Q(s) = H(s)/[1+H(s)]$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Closed-Loop Transfer Function}
+For the standard negative-feedback loop with forward path $H$ and feedback
+path $G$:
+\[
+\boxed{\,Q(s) = \frac{Y(s)}{X(s)} = \frac{H(s)}{1 + G(s)H(s)}.\,}
+\]
+The product $L(s) = G(s)H(s)$ is the \textbf{loop gain}. The
+\textbf{characteristic equation}
+\[
+1 + G(s)H(s) = 0
+\]
+determines the closed-loop poles. Stability is determined by these poles,
+not by those of $G$ or $H$ individually.
+
+\subsection{Limiting Behavior of $Q = H/(1+GH)$}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Regime & Approximation & Meaning \\
+\midrule
+$|GH|\gg 1$ & $Q\approx 1/G$ & Output set by feedback path; plant variations rejected \\
+$|GH|\ll 1$ & $Q\approx H$ & Feedback has little effect \\
+$GH = -1$ at some $\omega$ & $Q\to\infty$ & Instability \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Sensitivity}
+For unity feedback ($G=1$), sensitivity of $Q$ to plant variations:
+\[
+S_H^Q = \frac{\partial Q/Q}{\partial H/H} = \frac{1}{1 + H(s)}.
+\]
+Large loop gain $\Rightarrow$ small sensitivity to plant parameter variations.
+
+\subsection{Stability Criteria}
+\textbf{Pole test.} The CT system is stable iff all roots of
+$1 + G(s)H(s) = 0$ satisfy $\Real\{s\}<0$. The DT system is stable iff all
+roots of $1 + G(z)H(z) = 0$ satisfy $|z|<1$.
+
+\textbf{Nyquist criterion (simplified, stable open-loop $GH$).} Plot
+$GH(j\omega)$ in the complex plane as $\omega$ runs from $-\infty$ to
+$+\infty$. The closed-loop system with gain $K$ is stable iff the Nyquist
+contour does \emph{not encircle} the critical point $-1/K$. The curve for
+$\omega<0$ is the mirror image (across the real axis) of the $\omega>0$ half.
+
+\textbf{Instability condition.} $GH(j\omega)=-1$, i.e.\ $|GH|=1$ (0~dB) and
+$\angle GH = -180^\circ$ \emph{simultaneously}.
+
+\subsection{Gain and Phase Margins}
+Let $\omega_1$ be the \textbf{phase crossover} ($\angle GH(j\omega_1) = -180^\circ$)
+and $\omega_2$ the \textbf{gain crossover} ($|GH(j\omega_2)| = 1$).
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Margin & Definition \\
+\midrule
+Phase margin (PM) & $\mathrm{PM} = 180^\circ + \angle GH(j\omega_2)$ \\
+Gain margin (GM) & $\mathrm{GM} = 1/|GH(j\omega_1)|$ \\
+Gain margin (dB) & $\mathrm{GM}_{\mathrm{dB}} = -20\log_{10}|GH(j\omega_1)|$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Both margins positive $\Rightarrow$ closed-loop system is stable with margin.
+Maximum tolerable extra time delay at the gain crossover:
+\[
+\tau_{\max} = \frac{\mathrm{PM}\ (\text{rad})}{\omega_2}.
+\]
+
+\subsection{CT vs.\ DT Feedback Summary}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+ & Continuous-time & Discrete-time \\
+\midrule
+Closed-loop formula & $H(s)/[1+G(s)H(s)]$ & $H(z)/[1+G(z)H(z)]$ \\
+Stability boundary & $j\omega$-axis & unit circle $|z|=1$ \\
+Stable closed-loop poles & $\Real\{s\}<0$ (open LHP) & $|z|<1$ (inside unit circle) \\
+Delay operator & $e^{-st_0}$ & $z^{-1}$ (unit delay) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Common Pitfalls}
+\begin{itemize}\setlength\itemsep{-2pt}
+\item Sign error at the summer: negative feedback $\to 1+GH$; positive $\to 1-GH$.
+\item Open-loop poles (roots of $GH$) are \emph{not} the closed-loop poles
+(roots of $1+KGH$).
+\item Read gain margin from the magnitude plot \emph{at the frequency found on
+the phase plot}, and vice versa.
+\item RHP \emph{zeros} do not cause instability (only RHP poles do for causal
+CT systems); they produce non-minimum-phase behavior.
+\item CT stability $\neq$ DT stability: LHP vs.\ inside-unit-circle. A DT pole
+at $z=-0.9$ is stable.
+\end{itemize}
+
+\vspace{1em}
+\hrule
+\vspace{0.5em}
+\centerline{\small\textit{End of Master Transforms Reference.}}
+
+\end{document}

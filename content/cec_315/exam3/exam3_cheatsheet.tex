@@ -1,0 +1,245 @@
+\documentclass[10pt,landscape]{article}
+
+\usepackage[margin=0.4in]{geometry}
+\usepackage{multicol}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{microtype}
+
+% Tight spacing
+\setlength{\columnsep}{0.35in}
+\setlength{\columnseprule}{0.2pt}
+\setlength{\parskip}{1pt}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=*,labelsep=0.3em}
+\renewcommand{\arraystretch}{1.05}
+\pagestyle{empty}
+
+% Compact section headings
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\bfseries\small}{}{0pt}{}
+\titlespacing*{\section}{0pt}{4pt}{1pt}
+\titleformat{\subsection}{\normalfont\bfseries\footnotesize}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{3pt}{1pt}
+
+% Shorthand
+\renewcommand{\Re}{\operatorname{Re}}
+\DeclareMathOperator{\sinc}{sinc}
+
+\begin{document}
+\small
+\begin{center}
+  \textbf{CEC 315 --- Exam 3 Cheatsheet (Lectures 16--23: Laplace, Z, Sampling, Feedback)}
+\end{center}
+
+\begin{multicols*}{2}
+
+\section*{Transform Definitions}
+\footnotesize
+\begin{tabular}{@{}l l@{}}
+\toprule
+\textbf{Bilat.\ Laplace} & $X(s)=\int_{-\infty}^{\infty} x(t)e^{-st}\,dt$ \\
+Inverse & $x(t)=\tfrac{1}{2\pi j}\int_{\sigma-j\infty}^{\sigma+j\infty}\! X(s)e^{st}\,ds$ \\
+\textbf{Unilat.\ Laplace} & $\mathcal{X}(s)=\int_{0^-}^{\infty} x(t)e^{-st}\,dt$ \\
+\textbf{Bilat.\ Z} & $X(z)=\sum_{n=-\infty}^{\infty} x[n]z^{-n}$ \\
+Inverse & $x[n]=\tfrac{1}{2\pi j}\oint X(z)z^{n-1}\,dz$ \\
+\textbf{Unilat.\ Z} & $\mathcal{X}(z)=\sum_{n=0}^{\infty} x[n]z^{-n}$ \\
+\bottomrule
+\end{tabular}
+
+$s=\sigma+j\omega$, $z=re^{j\Omega}$. FT exists iff $j\omega$-axis $\subset$ ROC; DTFT exists iff unit circle $\subset$ ROC.
+
+\section*{Laplace Pairs (causal unless noted)}
+\footnotesize
+\begin{tabular}{@{}l l l@{}}
+\toprule
+$x(t)$ & $X(s)$ & ROC \\
+\midrule
+$\delta(t)$ & $1$ & all $s$ \\
+$\delta(t-t_0)$ & $e^{-st_0}$ & all $s$ \\
+$u(t)$ & $1/s$ & $\Re\{s\}>0$ \\
+$tu(t)$ & $1/s^2$ & $\Re\{s\}>0$ \\
+$\tfrac{t^{n-1}}{(n-1)!}u(t)$ & $1/s^n$ & $\Re\{s\}>0$ \\
+$e^{-at}u(t)$ & $\tfrac{1}{s+a}$ & $\Re\{s\}>-a$ \\
+$te^{-at}u(t)$ & $\tfrac{1}{(s+a)^2}$ & $\Re\{s\}>-a$ \\
+$\tfrac{t^{n-1}}{(n-1)!}e^{-at}u(t)$ & $\tfrac{1}{(s+a)^n}$ & $\Re\{s\}>-a$ \\
+$\cos(\omega_0 t)u(t)$ & $\tfrac{s}{s^2+\omega_0^2}$ & $\Re\{s\}>0$ \\
+$\sin(\omega_0 t)u(t)$ & $\tfrac{\omega_0}{s^2+\omega_0^2}$ & $\Re\{s\}>0$ \\
+$e^{-at}\cos(\omega_d t)u(t)$ & $\tfrac{s+a}{(s+a)^2+\omega_d^2}$ & $\Re\{s\}>-a$ \\
+$e^{-at}\sin(\omega_d t)u(t)$ & $\tfrac{\omega_d}{(s+a)^2+\omega_d^2}$ & $\Re\{s\}>-a$ \\
+$-e^{-at}u(-t)$ & $\tfrac{1}{s+a}$ & $\Re\{s\}<-a$ \\
+\bottomrule
+\end{tabular}
+
+\section*{Laplace Properties}
+\footnotesize
+\begin{tabular}{@{}l l l@{}}
+\toprule
+Property & Time & $s$-Domain \\
+\midrule
+Linearity & $ax+by$ & $aX+bY$ \\
+Time shift & $x(t-t_0)$ & $e^{-st_0}X$ \\
+$s$-shift & $e^{s_0 t}x$ & $X(s-s_0)$ \\
+Scaling & $x(at)$ & $\tfrac{1}{|a|}X(s/a)$ \\
+Diff.\ (bilat.) & $x'$ & $sX$ \\
+Diff.\ (unilat.) & $x'$ & $sX-x(0^-)$ \\
+$x''$ (unilat.) & $x''$ & $s^2 X-sx(0^-)-x'(0^-)$ \\
+Integration & $\int_{-\infty}^{t}\!x\,d\tau$ & $X/s$ \\
+Diff.\ in $s$ & $-tx$ & $dX/ds$ \\
+Convolution & $x*y$ & $XY$ \\
+\textbf{IVT} & $x(0^+)$ & $\lim_{s\to\infty} sX(s)$ \\
+\textbf{FVT} & $x(\infty)$ & $\lim_{s\to 0} sX(s)^\ast$ \\
+\bottomrule
+\end{tabular}
+
+{\scriptsize $^\ast$ valid iff all poles of $sX(s)$ strictly in open LHP.}
+
+\section*{Laplace ROC Rules}
+\footnotesize
+\begin{itemize}
+\item Vertical strip; never contains poles.
+\item Finite duration $\Rightarrow$ entire $s$-plane.
+\item Right-sided (causal): $\Re\{s\}>\sigma_{\max}$.
+\item Left-sided (anticausal): $\Re\{s\}<\sigma_{\min}$.
+\item Two-sided: strip between poles (may be empty).
+\item Rational + causal $\Leftrightarrow M\le N$, right-sided.
+\item \textbf{BIBO stable} $\Leftrightarrow j\omega$-axis $\in$ ROC.
+\item \textbf{Causal+Stable} $\Leftrightarrow$ all poles $\Re\{p_i\}<0$.
+\end{itemize}
+
+\section*{Z-Transform Pairs}
+\footnotesize
+\begin{tabular}{@{}l l l@{}}
+\toprule
+$x[n]$ & $X(z)$ & ROC \\
+\midrule
+$\delta[n]$ & $1$ & all $z$ \\
+$\delta[n-k]$ & $z^{-k}$ & $z\ne 0$ \\
+$u[n]$ & $\tfrac{1}{1-z^{-1}}$ & $|z|>1$ \\
+$-u[-n-1]$ & $\tfrac{1}{1-z^{-1}}$ & $|z|<1$ \\
+$a^n u[n]$ & $\tfrac{1}{1-az^{-1}}$ & $|z|>|a|$ \\
+$-a^n u[-n-1]$ & $\tfrac{1}{1-az^{-1}}$ & $|z|<|a|$ \\
+$na^n u[n]$ & $\tfrac{az^{-1}}{(1-az^{-1})^2}$ & $|z|>|a|$ \\
+$(n{+}1)a^n u[n]$ & $\tfrac{1}{(1-az^{-1})^2}$ & $|z|>|a|$ \\
+$\cos(\Omega_0 n)u[n]$ & $\tfrac{1-\cos\Omega_0 z^{-1}}{1-2\cos\Omega_0 z^{-1}+z^{-2}}$ & $|z|>1$ \\
+$\sin(\Omega_0 n)u[n]$ & $\tfrac{\sin\Omega_0 z^{-1}}{1-2\cos\Omega_0 z^{-1}+z^{-2}}$ & $|z|>1$ \\
+$r^n\cos(\Omega_0 n)u[n]$ & $\tfrac{1-r\cos\Omega_0 z^{-1}}{1-2r\cos\Omega_0 z^{-1}+r^2 z^{-2}}$ & $|z|>r$ \\
+$r^n\sin(\Omega_0 n)u[n]$ & $\tfrac{r\sin\Omega_0 z^{-1}}{1-2r\cos\Omega_0 z^{-1}+r^2 z^{-2}}$ & $|z|>r$ \\
+\bottomrule
+\end{tabular}
+
+\section*{Z Properties}
+\footnotesize
+\begin{tabular}{@{}l l l@{}}
+\toprule
+Property & Sequence & $z$-Domain \\
+\midrule
+Linearity & $ax_1+bx_2$ & $aX_1+bX_2$ \\
+Time shift (bilat.) & $x[n-n_0]$ & $z^{-n_0}X$ \\
+$z$-scaling & $z_0^n x[n]$ & $X(z/z_0)$ \\
+Time reversal & $x[-n]$ & $X(z^{-1})$ \\
+Diff.\ in $z$ & $nx[n]$ & $-z\,dX/dz$ \\
+First diff. & $x[n]-x[n{-}1]$ & $(1-z^{-1})X$ \\
+Accumulation & $\sum_{k\le n}x[k]$ & $X/(1-z^{-1})$ \\
+Convolution & $x_1*x_2$ & $X_1 X_2$ \\
+\textbf{Unil.\ shift-1} & $x[n{-}1]$ & $z^{-1}X+x[-1]$ \\
+Unil.\ shift-2 & $x[n{-}2]$ & $z^{-2}X+x[-1]z^{-1}+x[-2]$ \\
+\textbf{IVT} & $x[0]$ & $\lim_{z\to\infty} X(z)$ \\
+\textbf{FVT} & $x[\infty]$ & $\lim_{z\to 1}(1-z^{-1})X(z)^\ast$ \\
+\bottomrule
+\end{tabular}
+
+{\scriptsize $^\ast$ valid iff all poles of $(1-z^{-1})X(z)$ strictly inside unit circle.}
+
+\section*{Z ROC Rules}
+\footnotesize
+\begin{itemize}
+\item Annulus $r_1<|z|<r_2$; never contains poles.
+\item Finite duration $\Rightarrow$ entire $z$-plane (maybe excl.\ $0,\infty$).
+\item Right-sided (causal): $|z|>r_{\max}$ (incl.\ $z=\infty$ if causal).
+\item Left-sided (anticausal): $|z|<r_{\min}$.
+\item Two-sided: ring between poles.
+\item \textbf{BIBO stable} $\Leftrightarrow$ unit circle $\subset$ ROC.
+\item \textbf{Causal+Stable} $\Leftrightarrow$ all poles $|p_i|<1$.
+\item LHP (CT) $\leftrightarrow$ interior of unit circle (DT).
+\end{itemize}
+
+\section*{Partial Fraction Expansion}
+\footnotesize
+\textbf{Distinct:} $X(s)=\sum_k\tfrac{A_k}{s-p_k}$, \ $A_k=(s-p_k)X(s)\big|_{s=p_k}$.
+
+\textbf{Repeated} (order $r$ at $p$): $\sum_{k=1}^{r}\tfrac{B_k}{(s-p)^k}$,
+\[
+B_k=\tfrac{1}{(r-k)!}\tfrac{d^{r-k}}{ds^{r-k}}\!\left[(s-p)^r X(s)\right]_{s=p}.
+\]
+
+\textbf{Complex conj.\ pair} $p=-a\pm j\omega_d$: complete the square; use $(s+a)^2+\omega_d^2$ with $\cos/\sin$ pairs.
+
+\textbf{Z-transform:} expand in $z^{-1}$ (NOT $z$). Improper $X(z)$: long-divide first. ROC selects right- vs.\ left-sided for each term.
+
+\section*{Unilateral System Analysis}
+\footnotesize
+\textbf{CT (ODE):} $y^{(k)}\to s^k Y-\sum_{j=0}^{k-1} s^{k-1-j} y^{(j)}(0^-)$. Solve $Y(s)=Y_{\text{zs}}+Y_{\text{zi}}$; PFE; invert. $H(s)=Y_{\text{zs}}/X$.
+
+\textbf{DT (diff.\ eq.):} $y[n-k]\to z^{-k}Y+\sum_{m=1}^{k} z^{-(k-m)}y[-m]$. Solve, PFE in $z^{-1}$, invert. $H(z)=Y_{\text{zs}}/X$.
+
+Total $=$ ZSR (ICs$=0$) $+$ ZIR (input$=0$).
+
+\section*{Sampling (Lec 22)}
+\footnotesize
+\begin{itemize}
+\item Impulse train $p(t)=\sum_n\delta(t-nT)$; $\omega_s=2\pi/T$, $f_s=1/T$.
+\item $X_p(j\omega)=\tfrac{1}{T}\sum_{k} X(j(\omega-k\omega_s))$.
+\item \textbf{Sampling Thm:} bandlimited to $\omega_M \Rightarrow$ unique recovery iff $\omega_s>2\omega_M$ (strict). Nyquist rate $=2\omega_M$.
+\item Aliasing: $f_{\text{alias}}=|f_s-f_0|$ for $f_0\in(f_s/2,f_s)$; irreversible---use anti-alias LPF first.
+\item \textbf{Ideal reconstruction:} LPF gain $T$, cutoff $\omega_c\in(\omega_M,\omega_s-\omega_M)$ (typ.\ $\omega_s/2$).
+\item \textbf{Sinc interp.:} $x_r(t)=\sum_n x(nT)\,\sinc\!\left(\tfrac{t-nT}{T}\right)$, $\sinc u=\tfrac{\sin\pi u}{\pi u}$.
+\item \textbf{ZOH:} conv.\ with rect of width $T$; $H_0(j\omega)=\tfrac{2\sin(\omega T/2)}{\omega}e^{-j\omega T/2}$.
+\item \textbf{C/D map:} $\Omega=\omega T$.
+\item Traps: $\omega_s=2\omega_M$ not enough; squaring doubles BW; time-shift preserves Nyquist rate, $x(at)$ scales it by $|a|$.
+\end{itemize}
+
+\section*{Feedback Systems (Lec 23)}
+\footnotesize
+\textbf{Negative feedback} (forward $G$, fdbk $H$):
+\[
+T(s)=\frac{G(s)}{1+G(s)H(s)},\qquad \text{unity: } T=\frac{G}{1+G}.
+\]
+Positive fdbk: $G/(1-GH)$. Loop gain $L=GH$. Closed-loop poles $=$ roots of $1+L(s)=0$ (characteristic eq.).
+
+\textbf{Nyquist criterion:} $N=Z-P$, with $N=$ CW encirclements of $-1$, $P=$ open-loop RHP poles of $L$, $Z=$ closed-loop RHP poles; need $Z=0$. If plant open-loop stable ($P=0$): closed-loop stable iff Nyquist plot of $L(j\omega)$ does not encircle $-1$ (or $-1/K$).
+
+\textbf{Gain margin} at $\omega_{180}$ (where $\angle L=-180^\circ$):
+\[
+\mathrm{GM}_{\mathrm{dB}}=-20\log_{10}|L(j\omega_{180})|.
+\]
+\textbf{Phase margin} at $\omega_{\text{gc}}$ (where $|L|=1$):
+\[
+\mathrm{PM}=180^\circ+\angle L(j\omega_{\text{gc}}).
+\]
+Both $>0 \Rightarrow$ stable. Delay tolerance $\tau_{\max}=\mathrm{PM}_{\text{rad}}/\omega_{\text{gc}}$. First-order plants: $\mathrm{GM}=\infty$ (phase never hits $-180^\circ$).
+
+\textbf{Routh--Hurwitz} for $a_n s^n+\cdots+a_0$: build Routh array; \# sign changes in first column $=$ \# RHP roots. Necessary (not sufficient): all $a_i>0$, none missing.
+
+\section*{One-Liners / Traps}
+\footnotesize
+\begin{itemize}
+\item Unil.\ Laplace diff: $sX-x(0^-)$ (\textbf{minus}). Unil.\ Z shift: $z^{-1}X+x[-1]$ (\textbf{plus}).
+\item Conv $\leftrightarrow$ multiply. ROC product $\supseteq R_x\cap R_y$.
+\item Causal+Stable $\Leftrightarrow$ LHP poles (CT) / $|p|<1$ (DT).
+\item Poles of $1/(1-az^{-1})$ at $z=a$, not $1/a$.
+\item PFE in Z: use $z^{-1}$, not $z$.
+\item Always state ROC; same $X(s)$, different ROC $=$ different signals.
+\item FVT invalid if growing/oscillating.
+\item RHP \emph{zero} $\ne$ instability (only poles matter).
+\item Marginal poles ($j\omega$-axis / unit circle) $\Rightarrow$ \emph{not} BIBO stable.
+\item $f_{\text{alias}}=|f_s-f_0|$; $\omega_s>2\omega_M$ strict.
+\item $T=G/(1+GH)$; char.\ eq.\ $1+GH=0$.
+\item Negative fdbk $\to 1+GH$; positive fdbk $\to 1-GH$.
+\end{itemize}
+
+\end{multicols*}
+\end{document}

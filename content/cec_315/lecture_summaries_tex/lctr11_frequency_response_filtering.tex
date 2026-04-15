@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\title{Lecture 11: Frequency Response and Filtering}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Frequency Response}
+
+An LTI system acts as a \textbf{frequency-by-frequency multiplier}. For a periodic input with FS coefficients $\{a_k\}$, the output coefficients are:
+
+\[b_k = a_k \cdot H(jk\omega_0)\]
+
+where $H(j\omega)$ is the \textbf{frequency response} (eigenvalue at frequency $\omega$).
+
+\subsection*{CT Frequency Response}
+
+\[H(j\omega) = \int_{-\infty}^{\infty} h(\tau) e^{-j\omega\tau} d\tau\]
+
+For causal $h(t) = e^{-at}u(t)$:
+
+\[H(j\omega) = \frac{1}{a + j\omega}\]
+
+\subsection*{DT Frequency Response}
+
+\[H(e^{j\omega}) = \sum_{n=-\infty}^{\infty} h[n] \, e^{-j\omega n}\]
+
+\section*{Output of LTI System to Periodic Input}
+
+Given input $x(t) = \sum a_k e^{jk\omega_0 t}$:
+
+\[y(t) = \sum_{k=-\infty}^{\infty} a_k \, H(jk\omega_0) \, e^{jk\omega_0 t}\]
+
+Each harmonic is independently scaled by $|H(jk\omega_0)|$ and phase-shifted by $\angle H(jk\omega_0)$.
+
+\section*{Filter Types}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Filter} & \textbf{Passes} & \textbf{Attenuates} \\
+\hline
+\textbf{Lowpass} & Low frequencies (near $\omega = 0$) & High frequencies \\
+\hline
+\textbf{Highpass} & High frequencies & Low frequencies (near $\omega = 0$) \\
+\hline
+\textbf{Bandpass} & Frequencies in a specific band & Frequencies outside the band \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{Ideal vs Real Filters}
+
+\textbf{Ideal filters:} Perfectly rectangular magnitude response (1 in passband, 0 in stopband). Physically \textbf{unrealizable} (noncausal).
+
+\textbf{Real filters:} Gradual roll-off with a \textbf{transition band} between passband and stopband.
+
+\section*{RC Circuit Example}
+
+\subsection*{Lowpass: $H(j\omega) = \frac{1}{1 + j\omega RC}$}
+
+\begin{itemize}
+  \item Cutoff frequency: $\omega_c = 1/RC$
+  \item At $\omega_c$: magnitude drops to $1/\sqrt{2}$ of DC value (-3 dB point)
+  \item Phase at cutoff: $-45^\circ$
+\end{itemize}
+
+\subsection*{Highpass: $H(j\omega) = \frac{j\omega RC}{1 + j\omega RC}$}
+
+\begin{itemize}
+  \item Same cutoff frequency $\omega_c = 1/RC$
+  \item At DC ($\omega = 0$): output is zero
+  \item At high frequencies: output approaches input
+\end{itemize}
+
+\section*{General First-Order Lowpass: $H(j\omega) = \frac{1}{a + j\omega}$}
+
+\begin{itemize}
+  \item Cutoff: $\omega_c = a$ (the pole location)
+  \item $|H(j\omega_c)| = \frac{1}{\sqrt{2}} |H(0)|$ (definition of -3 dB)
+  \item Increasing $a$ widens bandwidth (less aggressive filtering)
+\end{itemize}
+
+\section*{FIR vs IIR Filters (DT)}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Type} & \textbf{Impulse Response} & \textbf{Memory} & \textbf{Example} \\
+\hline
+\textbf{FIR} (Finite Impulse Response) & Finite duration & Finite & Moving average \\
+\hline
+\textbf{IIR} (Infinite Impulse Response) & Infinite duration & Infinite & Recursive filter \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{Time-Frequency Trade-off}
+
+Narrower filters (sharper frequency selection) require longer impulse responses (more time-domain spread). You cannot have both sharp frequency cutoff and compact time response:
+
+\[\omega_c \cdot t_r \approx \text{constant}\]
+
+\end{document}

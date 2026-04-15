@@ -1,0 +1,248 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{CEC 315 -- Mock Exam 3 Solutions}
+\fancyhead[R]{Spring 2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\definecolor{examblue}{RGB}{30, 90, 170}
+\newtcolorbox{problembox}[1]{
+    colback=examblue!10,
+    colframe=examblue!80!black,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title=#1,
+    sharp corners,
+    boxrule=0.6pt,
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    breakable
+}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{CEC 315 -- Mock Exam 3 -- Solution Key}}\\[2pt]
+    Lectures 16--23: Laplace, Z-Transform, Sampling, Feedback
+\end{center}
+
+\vspace{4pt}
+\hrule
+\vspace{10pt}
+
+\section*{Part I: Multiple Choice -- Answer Key}
+
+\paragraph{1. Answer: (b) $T = 0.5$ ms.}
+The bandlimit is $\omega_M = 1500\pi$ rad/s, i.e., $f_M = 750$ Hz. The Nyquist rate is $2f_M = 1500$ Hz, so we need $f_s > 1500$ Hz, i.e., $T < 1/1500\text{ s}\approx 0.667$ ms.
+\begin{itemize}[leftmargin=*, itemsep=0pt]
+    \item (a) $T=1.0$ ms $\Rightarrow f_s=1000$ Hz -- aliases.
+    \item (b) $T=0.5$ ms $\Rightarrow f_s=2000$ Hz -- works. \checkmark
+    \item (c) $T=2.0$ ms $\Rightarrow f_s=500$ Hz -- aliases.
+    \item (d) $T=0.75$ ms $\Rightarrow f_s\approx 1333$ Hz -- aliases.
+\end{itemize}
+
+\paragraph{2. Answer: (c) $100$ Hz.}
+The analog tone is at $f_0 = 300$ Hz. At $f_s=400$ Hz the Nyquist rate $(600$ Hz$)$ is violated, so
+\[
+f_{\text{alias}} = |f_s - f_0| = |400 - 300| = 100\text{ Hz}.
+\]
+
+\paragraph{3. Answer: (c) Unstable, because one pole is in the RHP.}
+Poles: $s=-1$ (LHP), $s=+2$ (RHP). A causal LTI system is BIBO stable iff all poles are in the open LHP. The zero location is irrelevant for BIBO stability.
+
+\paragraph{4. Answer: (b) $K > 0$.}
+The closed-loop transfer function is
+\[
+Q(s) = \frac{K/[s(s+4)]}{1 + K/[s(s+4)]} = \frac{K}{s^2 + 4s + K}.
+\]
+Stability of $s^2 + 4s + K$ requires all coefficients positive: $4>0$ always, and $K>0$.
+
+\paragraph{5. Answer: (c) $0.3 < |z| < 1.5$.}
+A two-sided signal with poles at $0.3$ and $1.5$ has an annular ROC strictly between the two poles. Options (a) and (b) would correspond to purely right- or left-sided signals respectively; option (d) does not enforce the upper bound.
+
+\vspace{8pt}
+\hrule
+\vspace{10pt}
+
+\section*{Part II: Problems -- Full Solutions}
+
+\begin{problembox}{Problem 1 -- Laplace Inverse with Bilateral ROC}
+\end{problembox}
+
+\textbf{Given.} $X(s) = \dfrac{7s+2}{(s+2)(s-1)},\ -2 < \operatorname{Re}\{s\} < 1.$
+
+\textbf{(a) Poles and ROC.}
+Poles: $s_1=-2$ and $s_2=+1$. The ROC is the vertical strip $-2 < \operatorname{Re}\{s\} < 1$, a band between the two poles (not including them).
+
+\textbf{(b) Partial fractions.} Write $X(s) = \dfrac{A}{s+2} + \dfrac{B}{s-1}$. Cover-up:
+\begin{align*}
+A &= \left.\frac{7s+2}{s-1}\right|_{s=-2} = \frac{-14+2}{-3} = \frac{-12}{-3} = 4,\\
+B &= \left.\frac{7s+2}{s+2}\right|_{s=+1} = \frac{7+2}{3} = \frac{9}{3} = 3.
+\end{align*}
+So $X(s) = \dfrac{4}{s+2} + \dfrac{3}{s-1}$.
+
+\textit{Check.} $\dfrac{4(s-1)+3(s+2)}{(s+2)(s-1)} = \dfrac{7s+2}{(s+2)(s-1)}.$ \checkmark
+
+\textbf{(c) Assigning directions.} ROC is $-2<\operatorname{Re}\{s\}<1$:
+\begin{itemize}[leftmargin=*, itemsep=0pt]
+    \item Pole at $s=-2$: ROC is to the \textbf{right} of this pole $\Rightarrow$ right-sided:\quad $\dfrac{4}{s+2}\leftrightarrow 4e^{-2t}u(t)$.
+    \item Pole at $s=+1$: ROC is to the \textbf{left} of this pole $\Rightarrow$ left-sided:\quad $\dfrac{3}{s-1}\leftrightarrow -3e^{t}u(-t)$.
+\end{itemize}
+\[
+\boxed{\,x(t) \;=\; 4e^{-2t}u(t)\;-\;3e^{t}u(-t)\,.}
+\]
+
+\textbf{(d) Fourier transform.} \textbf{Yes} -- the ROC contains the $j\omega$-axis (since $0\in(-2,1)$), so $X(j\omega) = X(s)\big|_{s=j\omega}$ exists.
+
+\vspace{10pt}
+
+\begin{problembox}{Problem 2 -- Unilateral Laplace IVP with ZSR/ZIR Split}
+\end{problembox}
+
+\textbf{Given.} $y'' + 4y' + 3y = 2u(t)$, $y(0^-)=2$, $y'(0^-)=-1$.
+
+\textbf{(a) Transform.}
+\begin{align*}
+\bigl[s^2 Y - 2s - (-1)\bigr] + 4\bigl[sY - 2\bigr] + 3Y &= \frac{2}{s}\\
+(s^2+4s+3)Y - 2s + 1 - 8 &= \frac{2}{s}\\
+(s^2+4s+3)Y &= \frac{2}{s} + 2s + 7.
+\end{align*}
+Factor $s^2+4s+3 = (s+1)(s+3)$:
+\[
+Y(s) = \frac{2s^2+7s+2}{s(s+1)(s+3)}.
+\]
+
+\textbf{(b) ZIR / ZSR split.}
+\begin{align*}
+Y_{\text{zir}}(s) &= \frac{2s+7}{(s+1)(s+3)} \quad\text{(input $= 0$, ICs kept)},\\
+Y_{\text{zsr}}(s) &= \frac{2}{s(s+1)(s+3)} \quad\text{(ICs $= 0$, input kept)}.
+\end{align*}
+Sum: $Y_{\text{zir}} + Y_{\text{zsr}} = \dfrac{s(2s+7) + 2}{s(s+1)(s+3)} = \dfrac{2s^2+7s+2}{s(s+1)(s+3)}.$ \checkmark
+
+\textbf{(c) Inversions.}
+
+\textit{ZIR PFE:} $\dfrac{2s+7}{(s+1)(s+3)} = \dfrac{A}{s+1} + \dfrac{B}{s+3}$. At $s=-1$: $A = 5/2$. At $s=-3$: $B = -1/2$.
+\[
+y_{\text{zir}}(t) = \left[\tfrac{5}{2}e^{-t} - \tfrac{1}{2}e^{-3t}\right]u(t).
+\]
+
+\textit{ZSR PFE:} $\dfrac{2}{s(s+1)(s+3)} = \dfrac{C}{s}+\dfrac{D}{s+1}+\dfrac{E}{s+3}$. At $s=0$: $C=2/3$. At $s=-1$: $D=-1$. At $s=-3$: $E=1/3$.
+\[
+y_{\text{zsr}}(t) = \left[\tfrac{2}{3} - e^{-t} + \tfrac{1}{3}e^{-3t}\right]u(t).
+\]
+
+\textbf{(d) Total response.}
+\[
+\boxed{\,y(t) = \left[\tfrac{2}{3} + \tfrac{3}{2}e^{-t} - \tfrac{1}{6}e^{-3t}\right]u(t)\,.}
+\]
+\textit{IC check:}
+\begin{align*}
+y(0) &= \tfrac{2}{3} + \tfrac{3}{2} - \tfrac{1}{6} = \tfrac{4+9-1}{6} = 2,\quad \checkmark\\
+y'(t) &= -\tfrac{3}{2}e^{-t} + \tfrac{1}{2}e^{-3t},\quad y'(0) = -\tfrac{3}{2} + \tfrac{1}{2} = -1,\quad \checkmark\\
+y(\infty) &= \tfrac{2}{3}\quad (\text{matches DC gain } H(0)\cdot 2 = \tfrac{1}{3}\cdot 2).
+\end{align*}
+
+\vspace{10pt}
+
+\begin{problembox}{Problem 3 -- Z-Transform Inverse with Annular ROC}
+\end{problembox}
+
+\textbf{Given.} $X(z) = \dfrac{1+z^{-1}}{(1-0.4z^{-1})(1+0.2z^{-1})},\ 0.2 < |z| < 0.4.$
+
+\textbf{(a) Pole-zero plot.} Poles at $z=0.4$ and $z=-0.2$. Zeros at $z=-1$ (from $1+z^{-1}$) and $z=0$. The ROC is the annulus $0.2<|z|<0.4$, lying \emph{between} the two poles; the unit circle is \emph{outside} the ROC.
+
+\textbf{(b) Partial fractions.} $X(z) = \dfrac{A}{1-0.4z^{-1}} + \dfrac{B}{1+0.2z^{-1}}$.
+
+Cover-up at $z^{-1} = 1/0.4 = 2.5$:
+\[
+A = \left.\frac{1+z^{-1}}{1+0.2z^{-1}}\right|_{z^{-1}=2.5} = \frac{1+2.5}{1+0.5} = \frac{3.5}{1.5} = \frac{7}{3}.
+\]
+Cover-up at $z^{-1} = 1/(-0.2) = -5$:
+\[
+B = \left.\frac{1+z^{-1}}{1-0.4z^{-1}}\right|_{z^{-1}=-5} = \frac{1-5}{1+2} = \frac{-4}{3}.
+\]
+
+\textit{Check numerator:} $\tfrac{7}{3}(1+0.2z^{-1}) - \tfrac{4}{3}(1-0.4z^{-1}) = 1 + z^{-1}.$ \checkmark
+
+\textbf{(c) Directions from the ROC $0.2<|z|<0.4$.}
+\begin{itemize}[leftmargin=*, itemsep=0pt]
+    \item Pole at $z=0.4$: ROC is \emph{inside} ($|z|<0.4$) $\Rightarrow$ left-sided:\quad $\dfrac{7/3}{1-0.4z^{-1}}\leftrightarrow -\tfrac{7}{3}(0.4)^n u[-n-1]$.
+    \item Pole at $z=-0.2$: ROC is \emph{outside} ($|z|>0.2$) $\Rightarrow$ right-sided:\quad $\dfrac{-4/3}{1-(-0.2)z^{-1}}\leftrightarrow -\tfrac{4}{3}(-0.2)^n u[n]$.
+\end{itemize}
+\[
+\boxed{\,x[n] \;=\; -\tfrac{7}{3}(0.4)^n u[-n-1]\;-\;\tfrac{4}{3}(-0.2)^n u[n]\,.}
+\]
+
+\textbf{(d) Absolute summability.} \textbf{No} -- the unit circle $|z|=1$ lies outside the annulus $0.2<|z|<0.4$, so the ROC does not contain the unit circle and the DTFT does not exist. Hence $x[n]$ is \emph{not} absolutely summable.
+
+\vspace{10pt}
+
+\begin{problembox}{Problem 4 -- Unilateral Z with Initial Conditions}
+\end{problembox}
+
+\textbf{Given.} $y[n] - \tfrac{1}{6}y[n-1] - \tfrac{1}{6}y[n-2] = x[n]$, $x[n]=u[n]$, $y[-1]=6$, $y[-2]=0$.
+
+\textbf{(a) Transform.}
+\begin{align*}
+Y - \tfrac{1}{6}(z^{-1}Y + 6) - \tfrac{1}{6}(z^{-2}Y + 6z^{-1} + 0) &= \frac{1}{1-z^{-1}}\\
+\bigl(1 - \tfrac{1}{6}z^{-1} - \tfrac{1}{6}z^{-2}\bigr)Y - 1 - z^{-1} &= \frac{1}{1-z^{-1}}\\
+\bigl(1 - \tfrac{1}{6}z^{-1} - \tfrac{1}{6}z^{-2}\bigr)Y &= \frac{1}{1-z^{-1}} + 1 + z^{-1}\\
+&= \frac{1 + (1+z^{-1})(1-z^{-1})}{1-z^{-1}} = \frac{2 - z^{-2}}{1-z^{-1}}.
+\end{align*}
+
+\textbf{(b) Factoring and stability.}
+\[
+1 - \tfrac{1}{6}z^{-1} - \tfrac{1}{6}z^{-2} = \bigl(1 - \tfrac{1}{2}z^{-1}\bigr)\bigl(1 + \tfrac{1}{3}z^{-1}\bigr).
+\]
+\textit{Check:} $1 + \tfrac{1}{3}z^{-1} - \tfrac{1}{2}z^{-1} - \tfrac{1}{6}z^{-2} = 1 - \tfrac{1}{6}z^{-1} - \tfrac{1}{6}z^{-2}.$ \checkmark
+
+Poles at $z=\tfrac{1}{2}$ and $z=-\tfrac{1}{3}$. Both lie inside the unit circle, so the causal system is \textbf{BIBO stable}.
+\[
+Y(z) = \frac{2 - z^{-2}}{(1-z^{-1})\bigl(1-\tfrac{1}{2}z^{-1}\bigr)\bigl(1+\tfrac{1}{3}z^{-1}\bigr)}.
+\]
+
+\textbf{(c) PFE and inversion.}
+\[
+Y(z) = \frac{A}{1-z^{-1}} + \frac{B}{1-\tfrac{1}{2}z^{-1}} + \frac{C}{1+\tfrac{1}{3}z^{-1}}.
+\]
+Cover-up:
+\begin{align*}
+A &= \left.\frac{2-z^{-2}}{(1-\tfrac{1}{2}z^{-1})(1+\tfrac{1}{3}z^{-1})}\right|_{z^{-1}=1} = \frac{2-1}{(1/2)(4/3)} = \frac{1}{2/3} = \frac{3}{2},\\
+B &= \left.\frac{2-z^{-2}}{(1-z^{-1})(1+\tfrac{1}{3}z^{-1})}\right|_{z^{-1}=2} = \frac{2-4}{(-1)(5/3)} = \frac{-2}{-5/3} = \frac{6}{5},\\
+C &= \left.\frac{2-z^{-2}}{(1-z^{-1})(1-\tfrac{1}{2}z^{-1})}\right|_{z^{-1}=-3} = \frac{2-9}{(4)(5/2)} = \frac{-7}{10}.
+\end{align*}
+\textit{Sanity check} at $z^{-1}\to 0$: $A+B+C = \tfrac{3}{2} + \tfrac{6}{5} - \tfrac{7}{10} = \tfrac{15+12-7}{10} = \tfrac{20}{10} = 2$, matching the numerator constant term. \checkmark
+
+All three terms are right-sided (causal $\Rightarrow$ ROC outside all poles):
+\[
+\boxed{\,y[n] = \left[\tfrac{3}{2} + \tfrac{6}{5}\bigl(\tfrac{1}{2}\bigr)^{n} - \tfrac{7}{10}\bigl(-\tfrac{1}{3}\bigr)^{n}\right]u[n]\,.}
+\]
+
+\textbf{(d) Verification.} From the recursion $y[n] = \tfrac{1}{6}y[n-1] + \tfrac{1}{6}y[n-2] + x[n]$:
+\begin{align*}
+y[0] &= \tfrac{1}{6}(6) + \tfrac{1}{6}(0) + 1 = 2,\\
+y[1] &= \tfrac{1}{6}(2) + \tfrac{1}{6}(6) + 1 = \tfrac{1}{3} + 1 + 1 = \tfrac{7}{3}.
+\end{align*}
+From the closed form:
+\begin{align*}
+y[0] &= \tfrac{3}{2} + \tfrac{6}{5} - \tfrac{7}{10} = 2,\quad \checkmark\\
+y[1] &= \tfrac{3}{2} + \tfrac{6}{5}\cdot\tfrac{1}{2} - \tfrac{7}{10}\cdot\bigl(-\tfrac{1}{3}\bigr) = \tfrac{3}{2} + \tfrac{3}{5} + \tfrac{7}{30} = \tfrac{45+18+7}{30} = \tfrac{70}{30} = \tfrac{7}{3}.\quad \checkmark
+\end{align*}
+
+\textit{Steady state:} $y[\infty] = 3/2$ (the two geometric terms decay).
+
+\vfill
+\begin{center}
+    \textit{End of Solution Key --- Mock Exam 3 --- CEC 315, Spring 2026.}
+\end{center}
+
+\end{document}

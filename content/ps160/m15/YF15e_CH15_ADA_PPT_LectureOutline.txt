@@ -1,0 +1,271 @@
+Learning Goals
+In this chapter, you’ll learn…
+• how to use the relationship among speed, frequency, and
+  wavelength for a periodic wave.
+• how to calculate the speed of waves on a rope or string.
+• what happens when mechanical waves overlap and
+  interfere.
+• the properties of standing waves on a string, and how to
+  analyze these waves.
+• how stringed instruments produce sounds of specific
+  frequencies.
+Introduction
+• Earthquake waves carry enormous power as they
+  travel through the earth.
+• Other types of mechanical waves, such as sound
+  waves or the vibration of the strings of a piano, carry
+  far less energy.
+• Overlapping waves
+  interfere, which
+  helps us
+  understand musical
+  instruments.
+Types of Mechanical Waves (1 of 3)
+• A wave on a string is a type of mechanical wave.
+• The hand moves the string up and then returns,
+  producing a transverse wave that moves to the right.
+Types of Mechanical Waves (2 of 3)
+• A pressure wave in a fluid is a type of mechanical
+  wave.
+• The piston moves to the right, compressing the gas or
+  liquid, and then returns, producing a longitudinal wave
+  that moves to the right.
+Types of Mechanical Waves (3 of 3)
+• A surface wave on a liquid is a type of mechanical
+  wave.
+• The board moves to the right and then returns,
+  producing a combination of longitudinal and
+  transverse waves.
+Mechanical Waves
+• “Doing the wave” at a sports stadium is an example of
+  a mechanical wave.
+• The disturbance propagates through the crowd, but
+  there is no transport of matter.
+• None of the spectators
+  moves from one seat
+  to another.
+Periodic Waves (1 of 2)
+• For a periodic wave, each particle of the medium
+  undergoes periodic motion.
+• The wavelength λ of a periodic wave is the length of
+  one complete wave pattern.
+• The speed of any periodic wave of frequency f is:
+
+
+
+
+• Video Tutor Solution: Example 15.1
+Periodic Transverse Waves
+• A mass attached to a spring undergoes simple
+  harmonic motion, producing a sinusoidal wave that
+  travels to the right on the string.
+Periodic Waves (2 of 2)
+• A series of drops falling into water produces a periodic
+  wave that spreads radially outward.
+• The wave crests and troughs are concentric circles.
+• The wavelength λ is the radial distance between
+  adjacent crests or adjacent troughs.
+Periodic Longitudinal Waves
+• Consider a long tube filled with a fluid, with a piston at
+  the left end.
+• If we push the piston in, we compress the fluid near
+  the piston, and this region then pushes against the
+  neighboring region of fluid, and so on, and a wave
+  pulse moves along the tube.
+Mathematical Description of a Wave
+• The wave function for a sinusoidal wave moving in the +x-direction is
+  given by Equation (15.7):
+
+
+
+
+• In this function, y is the displacement of a particle at time t and position x.
+
+• The quantity A is the amplitude of the wave.
+                                                                        2
+• The quantity k is called the wave number, and is defined as k =            .
+                                                                  
+• The quantity  is called the angular frequency, and is defined as
+             2 where T is the period.
+   = 2 f =   ,
+             T
+Graphing the Wave Function (1 of 2)
+Graphing the Wave Function (2 of 2)
+Particle Velocity and Acceleration in a
+Sinusoidal Wave (1 of 2)
+Particle Velocity and Acceleration in a
+Sinusoidal Wave (2 of 2)
+The Speed of a Wave on a String (1 of 2)
+• One of the key properties of any wave is the wave speed.
+• Consider a string in which the tension is F and the linear
+  mass density (mass per unit length) is μ.
+• We expect the speed of transverse waves on the string v
+  should increase when the tension F increases, but it
+  should decrease when the mass per unit length μ
+  increases.
+• It is shown in your text that the wave speed is:
+The Speed of a Wave on a String (2 of 2)
+• These transmission cables have a relatively large
+  amount of mass per unit length, and a low tension.
+• If the cables are disturbed—say, by a bird landing on
+  them—transverse waves will travel along them at a
+  slow speed.
+Power in a Wave (1 of 2)
+• Shown is the instantaneous power in a sinusoidal
+  wave.
+• The power is never
+  negative, which
+  means that energy
+  never flows opposite
+  to the direction of
+  wave propagation.
+Power in a Wave (2 of 2)
+• A wave transfers power along a string because it
+  transfers energy.
+• The average power is proportional to the square of
+  the amplitude and to the square of the frequency.
+• This result is true for all waves.
+• For a transverse wave on a string, the average power
+  is:
+Wave Intensity
+• The intensity of a wave is
+  the average power it
+  carries per unit area.
+• If the waves spread out
+  uniformly in all directions
+  and no energy is
+  absorbed, the intensity I
+  at any distance r from a
+  wave source is inversely
+  proportional to r 2 .
+• Video Tutor Solution: Example 15.5
+Reflection of a Wave Pulse at a Fixed
+End of a String (1 of 4)
+• What happens when a
+  wave pulse or a
+  sinusoidal wave arrives
+  at the end of the string?
+• If the end is fastened to a
+  rigid support, it is a fixed
+  end that cannot move.
+• The arriving wave exerts
+  a force on the support
+  (drawing 4).
+Reflection of a Wave Pulse at a Fixed
+End of a String (2 of 4)
+• The reaction to the force
+  of drawing 4, exerted by
+  the support on the string,
+  “kicks back” on the string
+  and sets up a reflected
+  pulse or wave traveling in
+  the reverse direction.
+Reflection of a Wave Pulse at a Fixed
+End of a String (3 of 4)
+• A free end is one that is
+  perfectly free to move in
+  the direction perpendicular
+  to the length of the string.
+• When a wave arrives at
+  this free end, the ring
+  slides along the rod,
+  reaching a maximum
+  displacement, coming
+  momentarily to rest
+  (drawing 4).
+Reflection of a Wave Pulse at a Fixed
+End of a String (4 of 4)
+• In drawing 4, the string is
+  now stretched, giving
+  increased tension, so the
+  free end of the string is
+  pulled back down, and
+  again a reflected pulse is
+  produced.
+Superposition (1 of 2)
+• Interference is the result of
+  overlapping waves.
+• Principle of superposition: When
+  two or more waves overlap, the total
+  displacement is the sum of the
+  displacements of the individual waves.
+• Shown is the overlap of two wave
+  pulses—one right side up, one
+  inverted—traveling in opposite
+  directions.
+• Time increases from top to bottom.
+Superposition (2 of 2)
+• Overlap of two wave pulses—both
+  right side up—traveling in opposite
+  directions.
+• Time increases from top to
+  bottom.
+Standing Waves on a String (1 of 3)
+• Waves traveling in opposite directions on a taut string
+  interfere with each other.
+• The result is a standing wave pattern that does not
+  move on the string.
+• Destructive interference occurs where the wave
+  displacements cancel, and constructive interference
+  occurs where the displacements add.
+• At the nodes no motion occurs, and at the antinodes
+  the amplitude of the motion is greatest.
+• Video Tutor Demonstration: Out-of-Phase Speakers
+Standing Waves on a String (2 of 3)
+• This is a time exposure
+  of a standing wave on a
+  string.
+• This pattern is called
+  the second harmonic.
+Standing Waves on a String (3 of 3)
+• As the frequency of the
+  oscillation of the right-hand
+  end increases, the pattern
+  of the standing wave
+  changes.
+• More nodes and antinodes
+  are present in a higher
+  frequency standing wave.
+The Mathematics of Standing Waves
+• We can derive a wave function for the standing wave by
+  adding the wave functions for two waves with equal
+  amplitude, period, and wavelength traveling in opposite
+  directions.
+• The wave function for a standing wave on a string in which
+  x = 0 is a fixed end is:
+
+
+
+
+• The standing-wave amplitude ASW is twice the amplitude A
+  of either of the original traveling waves: ASW = 2A.
+Normal Modes
+• For a taut string fixed at both
+  ends, the possible wavelengths
+           2L and the possible
+  are λn =n
+                          v
+ frequencies are fn = n      = nf1,
+                          2L
+ where n = 1, 2, 3, …
+• f1 is the fundamental frequency,
+  f2 is the second harmonic (first
+  overtone), f3 is the third harmonic
+  (second overtone), etc.
+• The figure illustrates the first four
+  harmonics.
+Standing Waves and String
+Instruments
+• When a string on a musical instrument is plucked, bowed or
+  struck, a standing wave with the fundamental frequency is
+  produced:
+
+
+
+
+• This is also the frequency of the sound wave created in the
+  surrounding air by the vibrating string.
+• Increasing the tension F increases the frequency (and the pitch).
+
+• Video Tutor Solution: Example 15.7
+

@@ -1,0 +1,293 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{array}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\title{CEC 315 --- Exam 3 Quick-Reference Notes\\\large Lectures 16--23}
+\author{CEC 315 --- Signals and Systems (Spring 2026)}
+\date{}
+
+\newcommand{\Lap}{\overset{\mathcal{L}}{\longleftrightarrow}}
+\newcommand{\Zed}{\overset{\mathcal{Z}}{\longleftrightarrow}}
+\renewcommand{\Re}{\operatorname{Re}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Formula Tables}
+
+\subsection{Laplace Transform Pairs (Causal)}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+$x(t)$ & $X(s)$ & ROC\\
+\hline
+$\delta(t)$ & $1$ & all $s$\\
+$\delta(t-t_0)$ & $e^{-st_0}$ & all $s$\\
+$u(t)$ & $1/s$ & $\Re\{s\}>0$\\
+$tu(t)$ & $1/s^2$ & $\Re\{s\}>0$\\
+$\dfrac{t^{n-1}}{(n-1)!}u(t)$ & $1/s^n$ & $\Re\{s\}>0$\\
+$e^{-at}u(t)$ & $1/(s+a)$ & $\Re\{s\}>-\Re\{a\}$\\
+$te^{-at}u(t)$ & $1/(s+a)^2$ & $\Re\{s\}>-\Re\{a\}$\\
+$\cos(\omega_0 t)u(t)$ & $s/(s^2+\omega_0^2)$ & $\Re\{s\}>0$\\
+$\sin(\omega_0 t)u(t)$ & $\omega_0/(s^2+\omega_0^2)$ & $\Re\{s\}>0$\\
+$e^{-at}\cos(\omega_d t)u(t)$ & $(s+a)/[(s+a)^2+\omega_d^2]$ & $\Re\{s\}>-a$\\
+$e^{-at}\sin(\omega_d t)u(t)$ & $\omega_d/[(s+a)^2+\omega_d^2]$ & $\Re\{s\}>-a$\\
+$-e^{-at}u(-t)$ & $1/(s+a)$ & $\Re\{s\}<-\Re\{a\}$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Laplace Properties}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Property & Time & $s$-Domain\\
+\hline
+Linearity & $ax+by$ & $aX+bY$\\
+Time shift & $x(t-t_0)$ & $e^{-st_0}X(s)$\\
+$s$-shift & $e^{s_0 t}x(t)$ & $X(s-s_0)$\\
+Scaling ($a>0$) & $x(at)$ & $X(s/a)/a$\\
+Convolution & $x*y$ & $XY$\\
+Diff. (bil.) & $dx/dt$ & $sX$\\
+Diff. (unil.) & $dx/dt$ & $sX - x(0^-)$\\
+2nd diff.\ (unil.) & $d^2x/dt^2$ & $s^2 X - sx(0^-)-x'(0^-)$\\
+Integration & $\int_{-\infty}^t x\,d\tau$ & $X/s$\\
+$s$-diff. & $-tx(t)$ & $dX/ds$\\
+IVT & $x(0^+)$ & $\lim_{s\to\infty}sX(s)$\\
+FVT & $x(\infty)$ & $\lim_{s\to 0}sX(s)$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Z-Transform Pairs}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+$x[n]$ & $X(z)$ & ROC\\
+\hline
+$\delta[n]$ & $1$ & all $z$\\
+$\delta[n-k]$ & $z^{-k}$ & $|z|>0$\\
+$u[n]$ & $1/(1-z^{-1})$ & $|z|>1$\\
+$a^n u[n]$ & $1/(1-az^{-1})$ & $|z|>|a|$\\
+$-a^n u[-n-1]$ & $1/(1-az^{-1})$ & $|z|<|a|$\\
+$na^n u[n]$ & $az^{-1}/(1-az^{-1})^2$ & $|z|>|a|$\\
+$(n+1)a^n u[n]$ & $1/(1-az^{-1})^2$ & $|z|>|a|$\\
+$r^n\cos(\omega_0 n)u[n]$ & $\dfrac{1-r\cos\omega_0\, z^{-1}}{1-2r\cos\omega_0\, z^{-1}+r^2 z^{-2}}$ & $|z|>r$\\
+$r^n\sin(\omega_0 n)u[n]$ & $\dfrac{r\sin\omega_0\, z^{-1}}{1-2r\cos\omega_0\, z^{-1}+r^2 z^{-2}}$ & $|z|>r$\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Z-Transform Properties}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Property & Sequence & z-Domain\\
+\hline
+Linearity & $ax_1+bx_2$ & $aX_1+bX_2$\\
+Time shift & $x[n-n_0]$ & $z^{-n_0}X$\\
+z-scaling & $z_0^n x[n]$ & $X(z/z_0)$\\
+Time reversal & $x[-n]$ & $X(z^{-1})$\\
+Convolution & $x_1*x_2$ & $X_1 X_2$\\
+$z$-diff. & $nx[n]$ & $-z\,dX/dz$\\
+First diff. & $x[n]-x[n-1]$ & $(1-z^{-1})X$\\
+Accumulation & $\sum_{k\le n}x[k]$ & $X/(1-z^{-1})$\\
+Unilateral shift & $x[n-1]$ & $z^{-1}X + x[-1]$\\
+Unil. shift-2 & $x[n-2]$ & $z^{-2}X + x[-1]z^{-1}+x[-2]$\\
+IVT & $x[0]$ & $\lim_{z\to\infty}X(z)$\\
+FVT & $x[\infty]$ & $\lim_{z\to 1}(1-z^{-1})X(z)$\\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Per-Lecture Reference}
+
+\subsection{Lecture 16 --- Laplace Transform and ROC}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr16-laplace-transform-roc.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr16\_laplace\_transform\_roc.md}
+  \item Textbook: Oppenheim \S 9.0--9.2 (pp.~654--670).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item $X(s) = \int_{-\infty}^\infty x(t)e^{-st}\,dt$, with $s = \sigma + j\omega$.
+  \item ROC is a vertical strip; cannot contain poles.
+  \item Right-sided $\Rightarrow$ ROC right of rightmost pole; left-sided $\Rightarrow$ left of leftmost pole.
+  \item Fourier transform exists iff $j\omega$-axis $\subset$ ROC.
+\end{itemize}
+
+\subsection{Lecture 17 --- Inverse Laplace and Properties}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr17-inverse-laplace-properties.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr17\_inverse\_laplace\_properties.md}
+  \item Textbook: \S 9.3--9.6 (pp.~670--692).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item Practical inversion = partial fractions + table lookup.
+  \item ROC determines direction of each term.
+  \item Complex conjugate poles $\Rightarrow$ complete the square, use $\cos/\sin$ pairs.
+  \item IVT/FVT give $x(0^+)$ and $x(\infty)$ directly.
+  \item Convolution $\leftrightarrow$ multiplication; differentiation $\leftrightarrow$ multiply by $s$.
+\end{itemize}
+
+\subsection{Lecture 18 --- System Analysis via Unilateral Laplace}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr18-system-analysis-unilateral-laplace.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr18\_system\_analysis\_unilateral\_laplace.md}
+  \item Textbook: \S 9.7--9.9 (pp.~693--720).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item $H(s) = Y/X$ by $d^k/dt^k \to s^k$ (zero ICs).
+  \item Causal + stable $\Leftrightarrow$ all poles in open LHP.
+  \item Block diagrams: series $\times$, parallel $+$, feedback $H/(1+GH)$.
+  \item Unilateral: $\mathcal{L}_u\{y'\} = sY - y(0^-)$; $\mathcal{L}_u\{y''\} = s^2Y - sy(0^-) - y'(0^-)$.
+  \item Total response = ZSR + ZIR.
+\end{itemize}
+
+\subsection{Lecture 19 --- Z-Transform and ROC}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr19-z-transform-roc.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr19\_z\_transform\_roc.md}
+  \item Textbook: \S 10.0--10.2 (pp.~741--757).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item $X(z) = \sum_n x[n] z^{-n}$, $z = re^{j\omega}$.
+  \item Unit circle $|z|=1$ plays the role of the $j\omega$-axis.
+  \item ROC is annular ring; right-sided exterior, left-sided interior.
+  \item DTFT exists iff unit circle $\subset$ ROC.
+\end{itemize}
+
+\subsection{Lecture 20 --- Inverse Z-Transform and Properties}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr20-inverse-z-transform-properties.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr20\_inverse\_z\_transform\_properties.md}
+  \item Textbook: \S 10.3--10.6 (pp.~757--774).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item Partial fractions in $z^{-1}$, not $z$.
+  \item ROC outside pole $\Rightarrow$ right-sided; inside $\Rightarrow$ left-sided.
+  \item Complex poles at $re^{\pm j\omega_0}$ $\Rightarrow$ damped sinusoid.
+  \item $z^{-1}$ is the unit-delay operator (DSP).
+\end{itemize}
+
+\subsection{Lecture 21 --- System Analysis via Unilateral Z}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr21-system-analysis-unilateral-z.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr21\_system\_analysis\_unilateral\_z.md}
+  \item Textbook: \S 10.7--10.9 (pp.~774--796).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item $H(z) = Y/X$ from difference equation by $y[n-k]\to z^{-k}Y$.
+  \item Causal + stable $\Leftrightarrow$ all poles inside unit circle.
+  \item Unilateral shift: $x[n-1] \to z^{-1}X + x[-1]$ (plus, not minus!).
+  \item Total = ZSR + ZIR.
+\end{itemize}
+
+\subsection{Lecture 22 --- Sampling}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr22-sampling.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr22\_sampling.md}
+  \item Textbook: Ch.~7 (pp.~514--555).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item $X_p(j\omega) = \frac{1}{T}\sum_k X(j(\omega - k\omega_s))$ (replicated spectrum).
+  \item Sampling theorem: $\omega_s > 2\omega_M$ (strict!).
+  \item Ideal reconstruction: LPF (gain $T$) + sinc interpolation.
+  \item Aliasing irreversible; use anti-aliasing filter before sampling.
+  \item $\Omega = \omega T$ (DT/CT frequency relation).
+\end{itemize}
+
+\subsection{Lecture 23 --- Linear Feedback Systems}
+\begin{itemize}[leftmargin=*]
+  \item PDF: \texttt{all\_lectures/cec315-lctr23-linear-feedback-systems.pdf}
+  \item Summary: \texttt{lecture\_summaries/lctr23\_linear\_feedback\_systems.md}
+  \item Textbook: Ch.~11 \S 11.0--11.5 (pp.~816--866).
+\end{itemize}
+\textbf{Key ideas:}
+\begin{itemize}[leftmargin=*]
+  \item $Q(s) = H/(1+GH)$; characteristic equation $1+GH = 0$.
+  \item Block diagram: series $\times$, parallel $+$, feedback $H/(1+GH)$.
+  \item Nyquist: no encirclement of $-1/K$ $\Rightarrow$ stable (assuming OL stable).
+  \item GM: dB below 0 at $\omega_1$ ($\angle GH = -180^\circ$); PM: degrees above $-180^\circ$ at $\omega_2$ ($|GH|=0$ dB).
+  \item Both positive $\Rightarrow$ stable. $\tau_{\max} = \text{PM (rad)}/\omega_2$.
+\end{itemize}
+
+\section{Pitfalls and Tricky Edge Cases}
+
+\subsection{Transform Pitfalls}
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Always state the ROC.} $1/(s+3)$ is ambiguous without it.
+  \item ROC (not pole sign) determines direction in partial-fraction inversion.
+  \item Repeated poles of order $n$ require $n$ terms $B_k/(s-p)^k$.
+  \item Complex poles: complete the square; don't split into complex partial fractions.
+  \item Poles of $1/(1-az^{-1})$ are at $z=a$, not $1/a$.
+  \item Z partial fractions: work in $z^{-1}$, not $z$.
+\end{enumerate}
+
+\subsection{Unilateral Sign Conventions}
+\begin{itemize}[leftmargin=*]
+  \item Laplace: $\mathcal{L}_u\{y'\} = sY - y(0^-)$ (\textbf{minus}).
+  \item Z: $\mathcal{Z}_u\{y[n-1]\} = z^{-1}Y + y[-1]$ (\textbf{plus}).
+\end{itemize}
+
+\subsection{Stability Confusions}
+\begin{itemize}[leftmargin=*]
+  \item CT: open LHP. DT: interior of unit circle.
+  \item $z=-0.9$ is stable (magnitude $0.9$), though on negative real axis.
+  \item Marginal stability (poles on $j\omega$-axis / unit circle) is \emph{not} BIBO stable.
+  \item RHP zeros do not cause instability; only poles matter.
+\end{itemize}
+
+\subsection{Final-Value Theorem Traps}
+Only valid if $sX(s)$ (or $(1-z^{-1})X(z)$) has all poles strictly in open LHP (inside unit circle). If the signal oscillates or grows, FVT gives meaningless result.
+
+\subsection{Sampling Traps}
+\begin{itemize}[leftmargin=*]
+  \item $\omega_s = 2\omega_M$ is \emph{not} sufficient.
+  \item Mixing Hz and rad/s causes $2\pi$ errors.
+  \item Aliasing is irreversible; anti-aliasing must happen before sampling.
+  \item Squaring a signal doubles the bandwidth.
+  \item Reconstruction LPF has gain $T$ (cancels $1/T$ scaling).
+  \item Nyquist rate of $x(t-a)$ same as $x$; Nyquist rate of $x(2t)$ is doubled.
+\end{itemize}
+
+\subsection{Feedback / Margin Traps}
+\begin{itemize}[leftmargin=*]
+  \item Negative feedback $\to 1+GH$; positive $\to 1-GH$.
+  \item Open-loop poles (of $GH$) $\neq$ closed-loop poles (roots of $1+KGH=0$).
+  \item GM on magnitude plot at $\omega_1$ where $\angle GH = -180^\circ$.
+  \item PM on phase plot at $\omega_2$ where $|GH|=0$ dB.
+  \item Feedback does not always stabilize; too much gain can destabilize.
+  \item First-order plants $\Rightarrow$ infinite gain margin.
+  \item $\tau_{\max} = \text{PM (rad)}/\omega_2$.
+\end{itemize}
+
+\subsection{ROC Reminders}
+\begin{itemize}[leftmargin=*]
+  \item ROC never contains poles.
+  \item Right-sided: right of rightmost pole (CT) / outside outermost pole (DT).
+  \item Left-sided: left of leftmost pole (CT) / inside innermost pole (DT).
+  \item Two-sided: strip/ring between consecutive poles; may be empty.
+  \item Finite-duration: entire plane (except possibly $z=0,\infty$).
+\end{itemize}
+
+\end{document}

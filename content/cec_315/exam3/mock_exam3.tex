@@ -1,0 +1,203 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{CEC 315 -- Signals and Systems}
+\fancyhead[R]{Spring 2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Problem title box
+\definecolor{examblue}{RGB}{30, 90, 170}
+\newtcolorbox{problembox}[1]{
+    colback=examblue!10,
+    colframe=examblue!80!black,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title=#1,
+    sharp corners,
+    boxrule=0.6pt,
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    breakable
+}
+
+\begin{document}
+
+% -------- Title block --------
+\begin{center}
+    {\LARGE \textbf{CEC 315 -- Signals and Systems}}\\[2pt]
+    Exam: Chapters 3 (Mock) \quad (Exam 3)
+\end{center}
+
+\noindent Rogelio Gracia Otalvaro \hfill Spring 2026
+
+\vspace{4pt}
+\hrule
+\vspace{8pt}
+
+\noindent\textbf{Name:} \rule{5cm}{0.4pt} \hfill \textbf{Date:} \rule{4cm}{0.4pt}
+
+\vspace{6pt}
+
+\noindent\textbf{Instructions:}
+\begin{itemize}[leftmargin=*, itemsep=1pt, topsep=2pt]
+    \item Total time: \textbf{60 minutes}. Total points: \textbf{100}.
+    \item Show all work clearly. Box your final answers.
+    \item Make sure your answers are clear and easy to understand.
+    \item Read the text carefully and understand the questions, there is plenty of time.
+    \item Assume all systems are causal and stable unless stated otherwise.
+\end{itemize}
+
+\noindent\textbf{Useful Formulas:}
+\begin{align*}
+&\text{Laplace pairs: } u(t)\leftrightarrow \tfrac{1}{s},\quad e^{-at}u(t)\leftrightarrow \tfrac{1}{s+a},\quad te^{-at}u(t)\leftrightarrow \tfrac{1}{(s+a)^2}\\
+&\cos(\omega_0 t)u(t)\leftrightarrow \tfrac{s}{s^2+\omega_0^2},\quad \sin(\omega_0 t)u(t)\leftrightarrow \tfrac{\omega_0}{s^2+\omega_0^2}\\
+&\text{Unilateral Laplace: } \mathcal{L}\{y'\} = sY - y(0^-),\quad \mathcal{L}\{y''\} = s^2Y - sy(0^-) - y'(0^-)\\
+&\text{Z pairs: } a^n u[n]\leftrightarrow \tfrac{1}{1-az^{-1}},\ |z|>|a|;\quad -a^n u[-n-1]\leftrightarrow \tfrac{1}{1-az^{-1}},\ |z|<|a|\\
+&(n+1)a^n u[n]\leftrightarrow \tfrac{1}{(1-az^{-1})^2}\\
+&\text{Unilateral Z shift: } \mathcal{Z}\{y[n-1]\} = z^{-1}Y + y[-1]\\
+&\mathcal{Z}\{y[n-2]\} = z^{-2}Y + z^{-1}y[-1] + y[-2]\\
+&\text{Sampling theorem: } \omega_s > 2\omega_M\\
+&\text{Closed loop (neg. feedback): } Q(s) = \dfrac{G(s)}{1+G(s)H(s)}
+\end{align*}
+
+\hrule
+\vspace{10pt}
+
+% -------- Part I: MC --------
+\section*{Part I: Multiple Choice \hfill (5 questions $\times$ 4 points = 20 points)}
+
+Circle the single best answer for each question.
+
+\begin{enumerate}[leftmargin=*, label=\textbf{\arabic*.}]
+
+\item A continuous-time signal has Fourier transform $X(j\omega)=0$ for $|\omega|>1500\pi$ rad/s. Which of the following sampling periods $T$ guarantees perfect reconstruction from the samples?
+\begin{enumerate}[label=(\alph*)]
+    \item $T = 1.0$ ms
+    \item $T = 0.5$ ms
+    \item $T = 2.0$ ms
+    \item $T = 0.75$ ms
+\end{enumerate}
+
+\item A signal $x(t) = \cos(600\pi t)$ is sampled at $f_s = 400$ Hz. The reconstructed signal after an ideal lowpass filter with cutoff $f_s/2$ is a cosine of frequency:
+\begin{enumerate}[label=(\alph*)]
+    \item $300$ Hz
+    \item $200$ Hz
+    \item $100$ Hz
+    \item $0$ Hz (DC)
+\end{enumerate}
+
+\item A causal LTI system has transfer function $H(s) = \dfrac{s+4}{(s+1)(s-2)}$. The system is:
+\begin{enumerate}[label=(\alph*)]
+    \item Stable, because it has a zero in the LHP.
+    \item Stable, because two of its three singularities lie in the LHP.
+    \item Unstable, because one pole is in the RHP.
+    \item Marginally stable, because $|{-2}|<5$.
+\end{enumerate}
+
+\item The open-loop transfer function of a unity-feedback system is $G(s) = \dfrac{K}{s(s+4)}$. For what range of $K$ is the closed-loop system stable?
+\begin{enumerate}[label=(\alph*)]
+    \item $K < 0$
+    \item $K > 0$
+    \item $0 < K < 4$
+    \item All real $K$ (it is always stable)
+\end{enumerate}
+
+\item A discrete-time signal has Z-transform $X(z)$ with poles at $z=0.3$ and $z=1.5$, and the signal is known to be two-sided (neither purely causal nor purely anti-causal). Which ROC is correct?
+\begin{enumerate}[label=(\alph*)]
+    \item $|z| > 1.5$
+    \item $|z| < 0.3$
+    \item $0.3 < |z| < 1.5$
+    \item $|z| > 0.3$
+\end{enumerate}
+
+\end{enumerate}
+
+\newpage
+
+% -------- Part II --------
+\section*{Part II: Problems \hfill (4 problems = 80 points)}
+
+\begin{problembox}{Problem 1: Laplace Transform, ROC, and Inverse via PFE \hfill (20 points)}
+\end{problembox}
+
+\vspace{4pt}
+Consider the Laplace transform
+\[
+X(s) \;=\; \frac{7s+2}{(s+2)(s-1)}, \qquad \text{ROC: } -2 < \operatorname{Re}\{s\} < 1.
+\]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{(4 pts)} Locate the poles of $X(s)$ in the $s$-plane and sketch the ROC.
+    \item \textbf{(8 pts)} Perform a partial fraction expansion of $X(s)$. Show your cover-up work.
+    \item \textbf{(6 pts)} Use the given ROC to determine whether each term corresponds to a right-sided or left-sided signal, and write the time-domain signal $x(t)$.
+    \item \textbf{(2 pts)} Does the bilateral Fourier transform $X(j\omega)$ exist? Justify in one sentence.
+\end{enumerate}
+
+\newpage
+
+\begin{problembox}{Problem 2: Unilateral Laplace -- Second-Order IVP with ZSR/ZIR \hfill (20 points)}
+\end{problembox}
+
+\vspace{4pt}
+A causal LTI system is governed by
+\[
+\frac{d^2 y}{dt^2} \;+\; 4\,\frac{dy}{dt} \;+\; 3\,y(t) \;=\; 2\,u(t),
+\]
+with initial conditions $y(0^-) = 2$ and $y'(0^-) = -1$.
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{(4 pts)} Take the unilateral Laplace transform of both sides and solve algebraically for $Y(s)$ as a single rational function.
+    \item \textbf{(4 pts)} Decompose $Y(s) = Y_{\text{zir}}(s) + Y_{\text{zsr}}(s)$, where $Y_{\text{zir}}(s)$ is the zero-input response (input set to zero, ICs kept) and $Y_{\text{zsr}}(s)$ is the zero-state response (ICs set to zero, input kept).
+    \item \textbf{(8 pts)} Invert both pieces via partial fractions and write $y_{\text{zir}}(t)$ and $y_{\text{zsr}}(t)$ as explicit functions of $t$ for $t \ge 0$.
+    \item \textbf{(4 pts)} Write the total response $y(t)$ and verify that it satisfies the initial conditions $y(0^-)=2$ and $y'(0^-)=-1$. Also state $y(\infty)$.
+\end{enumerate}
+
+\newpage
+
+\begin{problembox}{Problem 3: Z-Transform, ROC, and Inverse with Mixed ROC \hfill (20 points)}
+\end{problembox}
+
+\vspace{4pt}
+A discrete-time signal $x[n]$ has Z-transform
+\[
+X(z) \;=\; \frac{1 + z^{-1}}{\bigl(1 - 0.4\,z^{-1}\bigr)\bigl(1 + 0.2\,z^{-1}\bigr)}, \qquad \text{ROC: } 0.2 < |z| < 0.4.
+\]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{(3 pts)} Locate the poles and the zero. Sketch the pole-zero plot and shade the ROC on the complex $z$-plane.
+    \item \textbf{(9 pts)} Perform a partial fraction expansion in $z^{-1}$. Show your cover-up calculations.
+    \item \textbf{(6 pts)} Use the given annular ROC to decide whether each pole contributes a right-sided or left-sided term. Write $x[n]$ explicitly.
+    \item \textbf{(2 pts)} Is $x[n]$ absolutely summable? Justify in one sentence using the ROC.
+\end{enumerate}
+
+\newpage
+
+\begin{problembox}{Problem 4: Unilateral Z -- Difference Equation with Initial Conditions \hfill (20 points)}
+\end{problembox}
+
+\vspace{4pt}
+A causal discrete-time system satisfies
+\[
+y[n] \;-\; \tfrac{1}{6}\,y[n-1] \;-\; \tfrac{1}{6}\,y[n-2] \;=\; x[n],
+\]
+with input $x[n] = u[n]$ and initial conditions $y[-1] = 6$, $y[-2] = 0$.
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{(4 pts)} Apply the unilateral Z-transform to the difference equation, carefully accounting for the initial conditions. Solve algebraically for $Y(z)$.
+    \item \textbf{(4 pts)} Factor the characteristic polynomial and identify the system poles in the $z$-plane. Is the system stable?
+    \item \textbf{(10 pts)} Perform a partial fraction expansion and invert to obtain $y[n]$ for $n \ge 0$ as an explicit closed-form expression.
+    \item \textbf{(2 pts)} Verify your answer by computing $y[0]$ and $y[1]$ directly from the difference equation and confirming that they match your closed-form $y[n]$.
+\end{enumerate}
+
+\vfill
+\begin{center}
+    \textit{End of Exam --- Mock Exam 3 --- CEC 315, Spring 2026.}
+\end{center}
+
+\end{document}

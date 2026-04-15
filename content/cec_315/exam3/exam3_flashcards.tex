@@ -1,0 +1,584 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\title{CEC 315 --- Exam 3 Flashcards \\ \large Lectures 16--23}
+\author{Signals and Systems (Spring 2026)}
+\date{}
+
+% Q/A environment
+\newcommand{\Q}[1]{\par\medskip\noindent\textbf{Q:} #1}
+\newcommand{\A}[1]{\par\noindent\textbf{A:} #1}
+\newcommand{\Pit}[1]{\par\noindent\textit{Pitfall:} #1}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Coverage:} Laplace, Inverse Laplace, Unilateral Laplace, Z-Transform, Inverse Z, Unilateral Z, Sampling, Feedback Systems. \\
+\textbf{Format:} Front/back Q\&A for rapid memorization drilling.
+
+\tableofcontents
+
+%============================================================
+\section{Lecture 16 --- Laplace Transform and ROC}
+%============================================================
+
+\Q{Write the definition of the bilateral Laplace transform.}
+\A{$X(s) = \int_{-\infty}^{\infty} x(t)\,e^{-st}\,dt$, where $s = \sigma + j\omega$. It is the Fourier transform of $x(t)e^{-\sigma t}$; the damping factor $e^{-\sigma t}$ tames signals whose FT diverges.}
+\Pit{$X(s)$ alone is incomplete --- always state the ROC.}
+
+\Q{Why do we need the Laplace transform when we already have the Fourier transform?}
+\A{The FT fails for signals that are not absolutely integrable (e.g., $e^{2t}u(t)$). With $\sigma$ large enough, $e^{-\sigma t}$ forces convergence, so Laplace handles a strictly larger class of signals.}
+\Pit{Laplace is \textbf{not} just ``FT with $\omega\to s$''; the substitution $s=j\omega$ works only if the $j\omega$-axis lies in the ROC.}
+
+\Q{What is the Region of Convergence (ROC)?}
+\A{The set of complex $s$ for which $\int x(t)e^{-st}dt$ converges. For rational $X(s)$, it is a vertical strip in the $s$-plane bounded by poles, parallel to the $j\omega$-axis.}
+\Pit{ROC depends only on $\sigma=\operatorname{Re}\{s\}$, never on $\omega$.}
+
+\Q{State the Laplace pair for $e^{-at}u(t)$.}
+\A{$e^{-at}u(t) \overset{\mathcal{L}}{\longleftrightarrow} \dfrac{1}{s+a}$, ROC $\operatorname{Re}\{s\} > -\operatorname{Re}\{a\}$.}
+\Pit{Same algebraic expression $1/(s+a)$ is also the transform of $-e^{-at}u(-t)$ with ROC $\operatorname{Re}\{s\} < -\operatorname{Re}\{a\}$ --- only the ROC distinguishes them.}
+
+\Q{Laplace transforms of $\delta(t)$ and $u(t)$?}
+\A{$\delta(t) \leftrightarrow 1$, ROC = all $s$. $u(t) \leftrightarrow 1/s$, ROC $\operatorname{Re}\{s\}>0$.}
+\Pit{The pole of $u(t)$ sits on the $j\omega$-axis, so you cannot get the FT of $u(t)$ just by setting $s=j\omega$.}
+
+\Q{Laplace transforms of $\cos(\omega_0 t)u(t)$ and $\sin(\omega_0 t)u(t)$?}
+\A{$\cos\to\dfrac{s}{s^2+\omega_0^2}$, $\sin\to\dfrac{\omega_0}{s^2+\omega_0^2}$, both ROC $\operatorname{Re}\{s\}>0$.}
+\Pit{Poles at $\pm j\omega_0$ are on the axis --- marginally stable, so FVT doesn't apply.}
+
+\Q{Laplace pair for $\dfrac{t^{n-1}}{(n-1)!}e^{-at}u(t)$?}
+\A{$\dfrac{t^{n-1}}{(n-1)!}e^{-at}u(t) \leftrightarrow \dfrac{1}{(s+a)^n}$, same ROC as the simple pole.}
+\Pit{Repeated-pole numerators need the $(n-1)!$ normalization factor.}
+
+\Q{ROC rule for a right-sided signal?}
+\A{Right half-plane to the right of the rightmost pole: $\operatorname{Re}\{s\} > \max_i \operatorname{Re}\{p_i\}$.}
+\Pit{``Right-sided'' means $x(t)=0$ for $t<T_0$; strictly causal ($T_0=0$) is the usual case.}
+
+\Q{ROC rule for a left-sided signal?}
+\A{Left half-plane to the left of the leftmost pole: $\operatorname{Re}\{s\} < \min_i \operatorname{Re}\{p_i\}$.}
+\Pit{The ROC points \emph{away} from where the signal has its growing (``problematic'') behavior.}
+
+\Q{ROC of a finite-duration signal?}
+\A{The entire $s$-plane (possibly excluding $s=\pm\infty$) because the finite-limit integral always converges.}
+\Pit{$\delta(t)$ and truncated signals have no poles.}
+
+\Q{Can the ROC contain a pole?}
+\A{No --- at a pole $X(s)\to\infty$, so the integral cannot converge there. Poles form the \emph{boundaries} of the ROC.}
+\Pit{Never an interior point.}
+
+\Q{When does $X(j\omega) = X(s)\big|_{s=j\omega}$?}
+\A{If and only if the $j\omega$-axis lies inside the ROC, i.e., $\sigma = 0$ is a convergent line.}
+\Pit{For $e^{2t}u(t)$, ROC is $\operatorname{Re}\{s\}>2$ --- no FT exists.}
+
+\Q{Shape of the ROC for a two-sided signal?}
+\A{A vertical strip between two consecutive poles: $\sigma_- < \operatorname{Re}\{s\} < \sigma_+$. Empty if the required bounds are inconsistent.}
+\Pit{Always intersect the individual ROCs when using linearity.}
+
+\Q{What symbols mark poles and zeros in a pole-zero plot?}
+\A{$\times$ for poles (roots of denominator $D(s)$), $\circ$ for zeros (roots of numerator $N(s)$). $X(s) = K\dfrac{\prod(s-z_i)}{\prod(s-p_j)}$.}
+\Pit{Zeros don't affect stability; only poles do.}
+
+\Q{What is the Laplace transform of $\delta(t-t_0)$?}
+\A{$\delta(t-t_0) \leftrightarrow e^{-st_0}$, ROC = all $s$. Finite duration $\Rightarrow$ no poles.}
+\Pit{The shift shows up in the exponent, not in the ROC.}
+
+\Q{How does Laplace relate to eigenfunctions of LTI systems?}
+\A{$e^{st}$ is an eigenfunction: $y(t) = H(s)e^{st}$ where $H(s)=\int h(t)e^{-st}dt$ is the Laplace transform of the impulse response.}
+\Pit{Valid only for LTI systems and for $s$ in the ROC of $H(s)$.}
+
+%============================================================
+\section{Lecture 17 --- Inverse Laplace and Properties}
+%============================================================
+
+\Q{Practical method for computing an inverse Laplace transform?}
+\A{Partial-fraction expansion (PFE) + table lookup. Rewrite $X(s)$ as a sum of standard pairs; each term's direction (right- vs left-sided) is fixed by the ROC.}
+\Pit{Partial fractions alone are ambiguous --- you need the ROC to pick the correct inverse per term.}
+
+\Q{How do you handle a repeated pole of order $n$ at $s = p$ in PFE?}
+\A{Include $n$ terms $\dfrac{B_1}{s-p} + \dfrac{B_2}{(s-p)^2} + \cdots + \dfrac{B_n}{(s-p)^n}$. Invert each with $\dfrac{t^{k-1}}{(k-1)!}e^{pt}u(t)$.}
+\Pit{Forgetting any order is a common mistake --- list all orders up to $n$.}
+
+\Q{How do you invert a pair of complex-conjugate poles?}
+\A{Complete the square: $(s+a)^2 + \omega_d^2$. Use pairs $e^{-at}\cos(\omega_d t)u(t) \leftrightarrow \dfrac{s+a}{(s+a)^2+\omega_d^2}$ and $e^{-at}\sin(\omega_d t)u(t) \leftrightarrow \dfrac{\omega_d}{(s+a)^2+\omega_d^2}$.}
+\Pit{Don't split into complex PFE terms --- use the damped sinusoid pairs.}
+
+\Q{State the Laplace linearity property.}
+\A{$ax(t)+by(t) \leftrightarrow aX(s)+bY(s)$. New ROC contains $\text{ROC}_x \cap \text{ROC}_y$.}
+\Pit{If the two ROCs don't overlap, the sum has no Laplace transform.}
+
+\Q{State the time-shift property.}
+\A{$x(t-t_0) \leftrightarrow e^{-st_0}X(s)$, same ROC.}
+\Pit{Algebraic $X(s)$ picks up $e^{-st_0}$; ROC unchanged. Not to be confused with $s$-shift.}
+
+\Q{State the $s$-domain shift property.}
+\A{$e^{s_0 t}x(t) \leftrightarrow X(s-s_0)$. ROC shifts by $\operatorname{Re}\{s_0\}$.}
+\Pit{Time-shift multiplies $X(s)$; $s$-shift changes its argument --- they are duals, not the same.}
+
+\Q{State the time-scaling property.}
+\A{$x(at) \leftrightarrow \dfrac{1}{|a|}X(s/a)$. ROC scales by $|a|$.}
+\Pit{$a<0$ flips the ROC across the $j\omega$-axis.}
+
+\Q{State the differentiation-in-time property (bilateral).}
+\A{$\dfrac{dx}{dt} \leftrightarrow sX(s)$; ROC contains the original ROC.}
+\Pit{No initial-condition term --- that's unilateral only.}
+
+\Q{State the integration-in-time property.}
+\A{$\displaystyle\int_{-\infty}^{t} x(\tau)d\tau \leftrightarrow \dfrac{X(s)}{s}$; ROC $= \text{ROC}_x \cap \{\operatorname{Re}\{s\}>0\}$.}
+\Pit{Dividing by $s$ adds a pole at the origin and may shrink the ROC.}
+
+\Q{State the differentiation-in-$s$ property.}
+\A{$-tx(t) \leftrightarrow \dfrac{dX(s)}{ds}$, equivalently $tx(t) \leftrightarrow -X'(s)$.}
+\Pit{Watch the minus sign.}
+
+\Q{State the convolution property.}
+\A{$x(t)*y(t) \leftrightarrow X(s)Y(s)$; ROC contains $\text{ROC}_x\cap\text{ROC}_y$.}
+\Pit{This is why Laplace turns differential equations into algebra.}
+
+\Q{State the Initial Value Theorem (IVT).}
+\A{If $x(t)=0$ for $t<0$ and $x$ has no impulse at the origin: $x(0^+) = \lim_{s\to\infty} sX(s)$.}
+\Pit{Requires $x(t)$ causal and regular at $t=0$; impulses break it.}
+
+\Q{State the Final Value Theorem (FVT).}
+\A{$x(\infty) = \lim_{s\to 0} sX(s)$, \textbf{valid only if} all poles of $sX(s)$ are in the open LHP (one allowed at $s=0$).}
+\Pit{Applying FVT to oscillating or unstable signals gives nonsense.}
+
+\Q{How do you compute the residue at a simple pole $p$?}
+\A{$B = \lim_{s\to p}(s-p)X(s)$. That term becomes $\dfrac{B}{s-p}$.}
+\Pit{Valid only for simple poles; repeated poles require derivatives.}
+
+\Q{Residues at a repeated pole $(s-p)^n$?}
+\A{$B_k = \dfrac{1}{(n-k)!}\left.\dfrac{d^{n-k}}{ds^{n-k}}\left[(s-p)^n X(s)\right]\right|_{s=p}$ for $k=1,\dots,n$.}
+\Pit{Factorial and differentiation order --- off-by-one errors are common.}
+
+\Q{How do you evaluate $|H(j\omega)|$ geometrically from a pole-zero plot?}
+\A{$|H(j\omega_0)| = K\dfrac{\prod \text{(distances to zeros)}}{\prod \text{(distances to poles)}}$. Phase $=$ sum of zero angles $-$ sum of pole angles.}
+\Pit{A pole near the $j\omega$-axis produces a peak; a zero near the axis produces a notch.}
+
+\Q{Laplace transform of $e^{-at}\cos(\omega_d t)u(t)$?}
+\A{$\dfrac{s+a}{(s+a)^2+\omega_d^2}$, ROC $\operatorname{Re}\{s\}>-a$.}
+\Pit{Numerator is $s+a$, not $s$.}
+
+%============================================================
+\section{Lecture 18 --- System Analysis via Unilateral Laplace}
+%============================================================
+
+\Q{Given an LCCDE $\sum a_k y^{(k)}(t) = \sum b_k x^{(k)}(t)$, how do you find $H(s)$?}
+\A{Take Laplace transforms with \textbf{zero} ICs, substitute $d^k/dt^k \to s^k$: $H(s) = \dfrac{Y(s)}{X(s)} = \dfrac{\sum b_k s^k}{\sum a_k s^k}$.}
+\Pit{ICs must be zero for the transfer function; nonzero ICs give ZIR contributions, not $H(s)$.}
+
+\Q{What does the ROC of $H(s)$ tell you about causality?}
+\A{The system is causal iff $H(s)$ is rational, proper ($M\le N$), and the ROC is a right half-plane to the right of the rightmost pole.}
+\Pit{Causality is an ROC statement, not just a pole statement.}
+
+\Q{What does the ROC tell you about BIBO stability?}
+\A{BIBO stable iff the ROC contains the $j\omega$-axis (so $h(t)$ is absolutely integrable).}
+\Pit{Stability is about the impulse response, not poles alone.}
+
+\Q{State the ``Golden Rule'' for causal LTI systems.}
+\A{Causal LTI $\Rightarrow$ BIBO stable iff \emph{all} poles of $H(s)$ are strictly in the open LHP ($\operatorname{Re}\{p_i\}<0$).}
+\Pit{Poles on the $j\omega$-axis $\Rightarrow$ marginally stable, \textbf{not} BIBO stable.}
+
+\Q{Block-diagram reduction rules?}
+\A{Cascade: $H_1 H_2$. Parallel: $H_1 + H_2$. Negative feedback (forward $G$, feedback $F$): $\dfrac{G}{1+GF}$.}
+\Pit{Positive feedback uses $1-GF$; sign matters.}
+
+\Q{Define the unilateral Laplace transform.}
+\A{$\mathcal{X}(s) = \displaystyle\int_{0^-}^{\infty} x(t)e^{-st}\,dt$. The $0^-$ lower limit captures impulses and ICs at $t=0$.}
+\Pit{Always use $0^-$ vs $0^+$ if $x(t)$ has a jump or impulse at $t=0$.}
+
+\Q{Unilateral differentiation rule (first derivative)?}
+\A{$\mathcal{L}_u\{x'(t)\} = sX(s) - x(0^-)$.}
+\Pit{Sign is \textbf{minus}; contrast with the $+$ in the unilateral Z shift rule.}
+
+\Q{Unilateral differentiation rule (second derivative)?}
+\A{$\mathcal{L}_u\{x''(t)\} = s^2 X(s) - sx(0^-) - x'(0^-)$.}
+\Pit{Order matters: $sx(0^-)$ (not $x(0^-)s^2$), $x'(0^-)$ is the final term.}
+
+\Q{How do you solve an LCCDE with nonzero ICs using unilateral Laplace?}
+\A{Transform both sides, apply IC-bearing derivative formulas, solve for $Y(s)$, and invert. Output $=$ ZSR $+$ ZIR.}
+\Pit{Don't forget IC terms for each derivative.}
+
+\Q{What is the zero-state response (ZSR)?}
+\A{Response with all ICs zero: $Y_{\text{ZSR}}(s) = H(s)X(s)$.}
+\Pit{Not the full answer if ICs are nonzero.}
+
+\Q{What is the zero-input response (ZIR)?}
+\A{Response to ICs alone (input set to zero); composed entirely of natural modes of the homogeneous equation.}
+\Pit{ZIR lives on poles of $H(s)$, independent of $X(s)$.}
+
+\Q{How do you distinguish natural- vs forced-response modes?}
+\A{Natural modes $\leftarrow$ poles of $H(s)$. Forced modes $\leftarrow$ poles of $X(s)$.}
+\Pit{If they coincide, you get $t e^{pt}$-style terms.}
+
+\Q{For $y'' + 3y' + 2y = x(t)$, what is $H(s)$?}
+\A{$H(s) = \dfrac{1}{s^2+3s+2} = \dfrac{1}{(s+1)(s+2)}$. Both poles in LHP $\Rightarrow$ causal $+$ stable.}
+\Pit{Factor to read off pole locations.}
+
+\Q{For a causal LTI system with $H(s) = \dfrac{1}{s-1}$, is it stable?}
+\A{No --- pole at $s=1$ is in the RHP. Golden Rule fails.}
+\Pit{Causality alone doesn't imply stability.}
+
+\Q{Feedback transfer function with forward $G(s)$ and feedback $F(s)$ (negative feedback)?}
+\A{$\dfrac{Y(s)}{X(s)} = \dfrac{G(s)}{1+G(s)F(s)}$.}
+\Pit{Unity feedback $F=1$: $Y/X = G/(1+G)$. Don't drop the $+1$.}
+
+\Q{Why does causal $+$ stable imply the rightmost pole has $\operatorname{Re}<0$?}
+\A{Causal $\Rightarrow$ ROC is right of rightmost pole. Stable $\Rightarrow j\omega$-axis in ROC. Both $\Rightarrow$ rightmost pole in open LHP.}
+\Pit{Combines into ``all poles in open LHP.''}
+
+%============================================================
+\section{Lecture 19 --- Z-Transform and ROC}
+%============================================================
+
+\Q{Write the definition of the bilateral Z-transform.}
+\A{$X(z) = \displaystyle\sum_{n=-\infty}^{\infty} x[n]z^{-n}$, with $z = re^{j\omega}$.}
+\Pit{It is the DTFT of $x[n]r^{-n}$; when $r=1$, Z reduces to DTFT.}
+
+\Q{What replaces the $j\omega$-axis in the $z$-plane?}
+\A{The unit circle $|z|=1$. DTFT: $X(e^{j\omega}) = X(z)\big|_{z=e^{j\omega}}$.}
+\Pit{Valid only if the unit circle $\subset$ ROC.}
+
+\Q{Z-transform pair for $a^n u[n]$?}
+\A{$a^n u[n] \leftrightarrow \dfrac{1}{1-az^{-1}} = \dfrac{z}{z-a}$, ROC $|z|>|a|$. Pole at $z=a$.}
+\Pit{The pole is at $z=a$, not $z=1/a$.}
+
+\Q{Z-transform pair for $-a^n u[-n-1]$?}
+\A{$-a^n u[-n-1] \leftrightarrow \dfrac{1}{1-az^{-1}}$, ROC $|z|<|a|$.}
+\Pit{Same algebraic $X(z)$ as $a^n u[n]$ --- ROC distinguishes them.}
+
+\Q{Z-transform of $\delta[n]$ and $\delta[n-k]$?}
+\A{$\delta[n]\leftrightarrow 1$, all $z$. $\delta[n-k]\leftrightarrow z^{-k}$, $|z|>0$ ($k>0$) or $|z|<\infty$ ($k<0$).}
+\Pit{Shift introduces an exclusion at $0$ or $\infty$.}
+
+\Q{Z-transform of $u[n]$?}
+\A{$u[n]\leftrightarrow \dfrac{1}{1-z^{-1}} = \dfrac{z}{z-1}$, ROC $|z|>1$.}
+\Pit{Pole at $z=1$ is on the unit circle, so DTFT doesn't follow from plain substitution.}
+
+\Q{Shape of a Z-transform ROC?}
+\A{An annular ring $r_1 < |z| < r_2$ centered at the origin, never containing a pole.}
+\Pit{Depends only on $|z|$, not $\arg z$.}
+
+\Q{ROC rule for a right-sided (causal) sequence?}
+\A{$|z| > |p_{\max}|$, exterior of the circle through the outermost pole. May extend to $\infty$.}
+\Pit{Truly causal sequences must include $z=\infty$ in the ROC.}
+
+\Q{ROC rule for a left-sided sequence?}
+\A{$|z|<|p_{\min}|$, interior of the circle through the innermost pole.}
+\Pit{``Inside'' means smaller $|z|$, i.e., closer to the origin.}
+
+\Q{ROC for a two-sided sequence?}
+\A{Annular ring $|p_k|<|z|<|p_{k+1}|$ between two consecutive poles ordered by magnitude. May be empty.}
+\Pit{Individual ROCs must intersect.}
+
+\Q{ROC of a finite-length sequence?}
+\A{Entire $z$-plane, excluding possibly $z=0$ (positive-index samples) and/or $z=\infty$ (negative-index samples).}
+\Pit{Causal finite sequences exclude only $z=0$.}
+
+\Q{When does the DTFT exist (via ROC)?}
+\A{Iff the unit circle $|z|=1$ lies in the ROC.}
+\Pit{Pole on the unit circle $\Rightarrow$ no ordinary DTFT.}
+
+\Q{CT--DT parallel: what maps to what?}
+\A{$s$-plane LHP $\leftrightarrow$ unit-circle interior. $j\omega$-axis $\leftrightarrow$ unit circle. RHP $\leftrightarrow$ exterior.}
+\Pit{The literal map is $z=e^{sT}$; the parallel is conceptual.}
+
+\Q{How does pole magnitude relate to sequence growth?}
+\A{Causal: $|p|<1 \Rightarrow$ decay; $|p|=1 \Rightarrow$ constant amplitude; $|p|>1 \Rightarrow$ growth.}
+\Pit{Sign of a real pole controls alternation (e.g., $(-0.5)^n$ oscillates while decaying).}
+
+\Q{Z-transform of $na^n u[n]$?}
+\A{$na^n u[n]\leftrightarrow \dfrac{az^{-1}}{(1-az^{-1})^2}$, ROC $|z|>|a|$.}
+\Pit{Derived from $nx[n]\leftrightarrow -z\,dX/dz$.}
+
+\Q{Why is Z the DT analog of Laplace?}
+\A{Both generalize FT/DTFT by introducing a damping/growth factor (Laplace: $e^{-\sigma t}$; Z: $r^{-n}$). Same structure in pairs, ROC, stability.}
+\Pit{Stability region differs: LHP vs unit-circle interior.}
+
+%============================================================
+\section{Lecture 20 --- Inverse Z-Transform and Properties}
+%============================================================
+
+\Q{Standard method for inverse Z?}
+\A{Partial-fraction expansion \textbf{in $z^{-1}$} and table lookup; ROC determines the sign of each term.}
+\Pit{Work in $z^{-1}$, not $z$, or the standard form $1/(1-az^{-1})$ won't appear.}
+
+\Q{ROC \emph{outside} a pole $\Rightarrow$ which sign?}
+\A{Right-sided: $\dfrac{A}{1-az^{-1}} \rightarrow A\,a^n u[n]$.}
+\Pit{Only valid if that pole is on the inside of the ROC ring.}
+
+\Q{ROC \emph{inside} a pole $\Rightarrow$ which sign?}
+\A{Left-sided: $\dfrac{A}{1-az^{-1}} \rightarrow -A\,a^n u[-n-1]$.}
+\Pit{Forgetting the minus sign and the $-1$ shift in $u[-n-1]$ is common.}
+
+\Q{Inverse for complex-conjugate poles at $re^{\pm j\omega_0}$?}
+\A{$r^n\cos(\omega_0 n)u[n]$ or $r^n\sin(\omega_0 n)u[n]$, ROC $|z|>r$.}
+\Pit{Use real pairs; don't do complex PFE.}
+
+\Q{Z linearity?}
+\A{$ax_1[n]+bx_2[n]\leftrightarrow aX_1(z)+bX_2(z)$, ROC contains $\text{ROC}_1\cap\text{ROC}_2$.}
+\Pit{Non-overlapping ROCs $\Rightarrow$ no Z-transform of the sum.}
+
+\Q{Z time shift?}
+\A{$x[n-n_0]\leftrightarrow z^{-n_0}X(z)$, ROC unchanged (except maybe at $z=0$ or $\infty$).}
+\Pit{$z^{-1}$ is the unit delay operator.}
+
+\Q{Z-domain scaling?}
+\A{$z_0^n x[n]\leftrightarrow X(z/z_0)$. ROC bounds multiply by $|z_0|$.}
+\Pit{Special case $(-1)^n x[n]\leftrightarrow X(-z)$.}
+
+\Q{Z convolution?}
+\A{$x_1[n]*x_2[n]\leftrightarrow X_1(z)X_2(z)$.}
+\Pit{Why $H(z)=Y(z)/X(z)$ is meaningful for LTI systems.}
+
+\Q{$z$-differentiation?}
+\A{$nx[n]\leftrightarrow -z\,\dfrac{dX(z)}{dz}$.}
+\Pit{The $-z$ multiplier, not just $-d/dz$.}
+
+\Q{Time reversal?}
+\A{$x[-n]\leftrightarrow X(z^{-1})$; ROC inverts: $r_1<|z|<r_2 \to 1/r_2<|z|<1/r_1$.}
+\Pit{Causal reversed becomes anti-causal; ROC flips accordingly.}
+
+\Q{First difference and accumulation properties?}
+\A{$x[n]-x[n-1]\leftrightarrow (1-z^{-1})X(z)$. $\displaystyle\sum_{k\le n} x[k]\leftrightarrow \dfrac{X(z)}{1-z^{-1}}$.}
+\Pit{Accumulation adds a pole at $z=1$.}
+
+\Q{Z IVT (causal)?}
+\A{$x[0] = \lim_{z\to\infty} X(z)$, valid for causal $x[n]$.}
+\Pit{Causality required.}
+
+\Q{Z FVT?}
+\A{$x[\infty] = \lim_{z\to 1}(1-z^{-1})X(z)$, valid only if all poles of $(1-z^{-1})X(z)$ are strictly inside the unit circle (one allowed at $z=1$).}
+\Pit{Check pole locations before applying.}
+
+\Q{Long-division method for inverse Z?}
+\A{Polynomial long division of $X(z)$ in $z^{-1}$ yields $x[0]+x[1]z^{-1}+x[2]z^{-2}+\cdots$; coefficients are sample values.}
+\Pit{Practical only for the first few samples; direction depends on whether you divide in $z^{-1}$ or $z$.}
+
+\Q{Residue at a simple pole $p$ (in $z^{-1}$ form)?}
+\A{$A_k = (1-p_k z^{-1})X(z)\big|_{z=p_k}$.}
+\Pit{Using $z$-form yields residues with an extra factor of $z$.}
+
+\Q{Meaning of a $z^{-1}$ block in a DSP block diagram?}
+\A{Unit delay (one-sample memory element). Multiplying by $z^{-1}$ in the Z-domain $\equiv$ delay by one sample.}
+\Pit{Fundamental building block of FIR/IIR filters.}
+
+%============================================================
+\section{Lecture 21 --- System Analysis via Unilateral Z}
+%============================================================
+
+\Q{How do you derive $H(z)$ from a difference equation?}
+\A{Zero ICs, $y[n-k]\to z^{-k}Y(z)$, $x[n-k]\to z^{-k}X(z)$, solve for $Y/X$.}
+\Pit{Must use zero ICs for the transfer function.}
+
+\Q{For $y[n]-0.5y[n-1]=x[n]$, what is $H(z)$?}
+\A{$H(z) = \dfrac{1}{1-0.5z^{-1}}$. Pole at $z=0.5$ inside unit circle $\Rightarrow$ causal $+$ stable.}
+\Pit{Magnitude of the pole matters, not the sign.}
+
+\Q{Golden Rule for DT causal LTI stability.}
+\A{BIBO stable iff all poles of $H(z)$ satisfy $|p_i|<1$.}
+\Pit{Poles on the unit circle $\Rightarrow$ marginal stability only.}
+
+\Q{Causality implies what about the ROC of $H(z)$?}
+\A{Exterior of a circle: $|z|>|p_{\max}|$, extending to $\infty$; rational with $M\le N$.}
+\Pit{Causality (ROC) and stability (unit circle $\subset$ ROC) are separate.}
+
+\Q{Define the unilateral Z-transform.}
+\A{$\mathcal{X}(z) = \displaystyle\sum_{n=0}^{\infty} x[n]z^{-n}$.}
+\Pit{Ignores $n<0$; ICs enter only via shift rules.}
+
+\Q{Unilateral Z shift rule for $x[n-1]$?}
+\A{$x[n-1]\leftrightarrow z^{-1}X(z) + x[-1]$. Note the \textbf{plus}.}
+\Pit{Opposite sign from unilateral Laplace differentiation.}
+
+\Q{Unilateral Z shift rule for $x[n-2]$?}
+\A{$x[n-2]\leftrightarrow z^{-2}X(z) + x[-1]z^{-1} + x[-2]$.}
+\Pit{$x[-1]$ multiplies $z^{-1}$; $x[-2]$ stands alone.}
+
+\Q{Step response in Z-domain?}
+\A{$Y_{\text{step}}(z) = H(z)U(z) = H(z)\cdot\dfrac{1}{1-z^{-1}}$, then invert.}
+\Pit{Step response has an added pole at $z=1$; FVT applies only if system is otherwise stable.}
+
+\Q{ZSR vs ZIR decomposition (DT)?}
+\A{$Y = Y_{\text{ZSR}} + Y_{\text{ZIR}}$. ZSR from $H(z)X(z)$; ZIR from ICs with $X(z)=0$.}
+\Pit{Same decomposition as CT unilateral Laplace.}
+
+\Q{What are natural modes of a DT system?}
+\A{Terms $p_k^n$ from poles of $H(z)$; repeated poles give $n p_k^n$, etc.}
+\Pit{These are the system's free-response eigenmodes.}
+
+\Q{DT analog of an $RC$ time constant?}
+\A{For a real pole $0<p<1$, time constant $= -1/\ln|p|$ samples.}
+\Pit{Only meaningful for $|p|<1$.}
+
+\Q{Can an FIR filter be unstable?}
+\A{No --- FIR filters have poles only at $z=0$ (or $\infty$), always BIBO stable.}
+\Pit{FIR design effort is in shaping the zeros.}
+
+\Q{Pole-zero condition for real-valued impulse response?}
+\A{Poles and zeros in complex-conjugate pairs.}
+\Pit{Same rule as CT.}
+
+\Q{Steady-state sinusoidal response of a stable DT system?}
+\A{Evaluate $H(e^{j\omega_0})$; magnitude and phase give output amplitude and phase shift.}
+\Pit{Only if the unit circle $\subset$ ROC.}
+
+\Q{ZIR for $y[n]+0.9y[n-1]=x[n]$ with $y[-1]=2$, $x[n]=0$?}
+\A{$Y(z)+0.9(z^{-1}Y(z)+y[-1])=0\Rightarrow Y(z)(1+0.9z^{-1}) = -1.8\Rightarrow y[n] = -1.8(-0.9)^n u[n]$.}
+\Pit{Apply the unilateral shift rule carefully; sign of the IC on each side matters.}
+
+\Q{Open-loop vs closed-loop poles in a DT feedback system?}
+\A{Open-loop: poles of $G(z)H(z)$. Closed-loop: roots of $1+G(z)H(z)=0$.}
+\Pit{Feedback can move poles in or out of the unit circle.}
+
+%============================================================
+\section{Lecture 22 --- Sampling}
+%============================================================
+
+\Q{State the Shannon sampling theorem.}
+\A{A band-limited signal with $X(j\omega)=0$ for $|\omega|>\omega_M$ can be perfectly reconstructed from samples spaced $T$ apart provided $\omega_s = 2\pi/T > 2\omega_M$ (strict).}
+\Pit{$\omega_s = 2\omega_M$ is \textbf{not} sufficient in general.}
+
+\Q{Define the Nyquist rate.}
+\A{$\omega_{\text{Nyquist}} = 2\omega_M$ (rad/s) or $f_{\text{Nyquist}} = 2f_M$ (Hz).}
+\Pit{Nyquist \emph{rate} is a property of the signal; Nyquist \emph{frequency} ($\omega_s/2$) is a property of the sampler.}
+
+\Q{Impulse train $p(t)$ and its role in sampling?}
+\A{$p(t) = \sum_n \delta(t-nT)$, so $x_p(t) = x(t)p(t) = \sum_n x(nT)\delta(t-nT)$.}
+\Pit{Multiplication in time $\Rightarrow$ convolution in frequency $\Rightarrow$ spectral replicas.}
+
+\Q{Frequency-domain relation for impulse-train sampling?}
+\A{$X_p(j\omega) = \dfrac{1}{T}\displaystyle\sum_{k=-\infty}^{\infty} X(j(\omega-k\omega_s))$.}
+\Pit{The $1/T$ scaling must be cancelled by a gain $T$ in the reconstruction filter.}
+
+\Q{Describe ideal reconstruction.}
+\A{Pass $x_p(t)$ through an ideal LPF with gain $T$ and cutoff $\omega_c$ with $\omega_M < \omega_c < \omega_s-\omega_M$.}
+\Pit{Gain $T$, not $1$.}
+
+\Q{Write the band-limited (sinc) interpolation formula.}
+\A{$x(t) = \displaystyle\sum_{n=-\infty}^{\infty} x(nT)\,\text{sinc}\!\left(\dfrac{t-nT}{T}\right)$, $\text{sinc}(u)=\sin(\pi u)/(\pi u)$.}
+\Pit{Sinc kernels have infinite support --- practical systems truncate.}
+
+\Q{What is aliasing and when does it occur?}
+\A{If $\omega_s<2\omega_M$, spectral replicas overlap and fold back into the baseband. Aliased frequency: $f_a = |f_s-f_0|$.}
+\Pit{Aliasing is \textbf{irreversible} --- anti-alias filter must be applied before sampling.}
+
+\Q{Relation between DT and CT frequencies?}
+\A{$\Omega = \omega T$. DT band $[-\pi,\pi]$ corresponds to CT $[-\omega_s/2,\omega_s/2]$.}
+\Pit{Watch the units: rad/sample vs rad/s.}
+
+\Q{What is a zero-order hold?}
+\A{$h_{\text{ZOH}}(t)=1$ for $0\le t<T$, 0 else. $H(j\omega) = T\,\text{sinc}(\omega T/2\pi)e^{-j\omega T/2}$.}
+\Pit{Introduces amplitude droop and a half-sample delay.}
+
+\Q{What is a first-order hold?}
+\A{Linear interpolation between samples; triangular impulse response of length $2T$.}
+\Pit{Better than ZOH but still not ideal.}
+
+\Q{Nyquist rates of $x(t-a)$, $x(2t)$, $x^2(t)$?}
+\A{$x(t-a)$: unchanged. $x(2t)$: doubled. $x^2(t)$: doubled (convolution doubles spectral support).}
+\Pit{Squaring/multiplying doubles bandwidth.}
+
+\Q{What happens if you sample a 1 kHz cosine at 1.5 kHz?}
+\A{$f_s/2=750$ Hz, so 1 kHz aliases to $|1000-1500|=500$ Hz.}
+\Pit{Produces wagon-wheel / moir\'e effects.}
+
+\Q{Why does the reconstruction LPF need gain $T$?}
+\A{Because the sampling operation scales each spectral replica by $1/T$.}
+\Pit{Unit check: $T\cdot(1/T)=1$.}
+
+\Q{DSP of continuous-time signals --- block chain?}
+\A{CT anti-aliasing LPF $\to$ C/D $\to$ DT system $H(e^{j\Omega}) \to$ D/C (reconstruction LPF). Effective CT transfer: $H_{\text{eff}}(j\omega) = H(e^{j\omega T})$ for $|\omega|<\pi/T$.}
+\Pit{Valid only within the Nyquist band.}
+
+\Q{Why is the anti-aliasing filter before, not after, sampling?}
+\A{Because aliasing is irreversible --- folded content cannot be separated from true baseband content after sampling.}
+\Pit{Filtering afterward only removes (already corrupted) baseband.}
+
+\Q{Sampling theorem in Hz form?}
+\A{$f_s > 2f_M$, i.e., $T < 1/(2f_M)$.}
+\Pit{$\omega$ is rad/s; $f$ is Hz; they differ by $2\pi$.}
+
+%============================================================
+\section{Lecture 23 --- Linear Feedback Systems}
+%============================================================
+
+\Q{Closed-loop transfer function for unity feedback with forward gain $H(s)$?}
+\A{$Q(s) = \dfrac{H(s)}{1+H(s)}$.}
+\Pit{Unity case; non-unity uses $H/(1+HF)$.}
+
+\Q{Closed-loop transfer function for non-unity negative feedback ($G$ forward, $H$ feedback)?}
+\A{$Q(s) = \dfrac{G(s)}{1 + G(s)H(s)}$.}
+\Pit{Positive feedback uses $1-GH$.}
+
+\Q{Where are the closed-loop poles?}
+\A{Roots of the characteristic equation $1 + G(s)H(s) = 0$, i.e., $GH = -1$.}
+\Pit{Closed-loop poles $\ne$ open-loop poles of $GH$.}
+
+\Q{What is the sensitivity function?}
+\A{$S(s) = \dfrac{1}{1+L(s)}$ where $L = GH$. Large $|L| \Rightarrow$ low sensitivity to plant variation and disturbances.}
+\Pit{Very high gain also amplifies noise and can destabilize.}
+
+\Q{State the simplified Nyquist criterion (open-loop stable).}
+\A{Closed-loop stable iff the Nyquist plot of $L(j\omega)$ does not encircle $-1/K$ (or $-1$ if $K$ absorbed into $L$).}
+\Pit{General form counts encirclements; simplified version assumes open-loop stability.}
+
+\Q{Define gain margin (GM).}
+\A{At $\omega_1$ where $\angle L(j\omega_1) = -180^\circ$, $\text{GM} = -20\log_{10}|L(j\omega_1)|$ dB.}
+\Pit{A first-order $L(s)$ has infinite GM (never reaches $-180^\circ$).}
+
+\Q{Define phase margin (PM).}
+\A{At gain crossover $\omega_2$ where $|L(j\omega_2)|=1$, $\text{PM} = 180^\circ + \angle L(j\omega_2)$.}
+\Pit{Typical target: $45^\circ$--$60^\circ$.}
+
+\Q{When is a closed-loop stable from Bode plots alone?}
+\A{Both GM and PM positive (assuming open-loop stable, single crossover).}
+\Pit{Multiple crossovers require Nyquist.}
+
+\Q{Can feedback stabilize an unstable plant?}
+\A{Yes --- feedback relocates poles; sufficient loop gain can push RHP poles into the LHP. But excessive gain can do the opposite.}
+\Pit{Stability is nonmonotonic in gain.}
+
+\Q{Maximum tolerable time delay given PM at $\omega_2$?}
+\A{$\tau_{\max} = \dfrac{\text{PM (in radians)}}{\omega_2}$.}
+\Pit{Convert PM from degrees to radians first.}
+
+\Q{Cascade and parallel block rules?}
+\A{Cascade: $H_1 H_2$. Parallel: $H_1 + H_2$.}
+\Pit{Loading effects may invalidate cascade in physical systems.}
+
+\Q{What is the loop gain and why is it important?}
+\A{$L(s) = G(s)H(s)$. Determines sensitivity, stability margins, and closed-loop poles via $1+L=0$.}
+\Pit{Define break points and signs consistently.}
+
+\Q{How do you sketch the Nyquist plot?}
+\A{Plot $L(j\omega)$ for $\omega:0\to\infty$, reflect for $\omega:-\infty\to 0$, close with a large semicircle, and count encirclements of $-1$.}
+\Pit{Poles on the $j\omega$-axis require small indentations.}
+
+\Q{Effect of increasing forward gain $K$ on the Nyquist plot?}
+\A{Scales the plot radially by $K$; equivalently, count encirclements of $-1/K$.}
+\Pit{Large $K$ can push the plot to enclose $-1$, destabilizing the loop.}
+
+\Q{Open-loop vs closed-loop distinction?}
+\A{Open loop: $Y=GX$. Closed loop: $Y = GX - GHY \Rightarrow Y = GX/(1+GH)$.}
+\Pit{Open loop relies on accurate plant knowledge; closed loop tolerates uncertainty.}
+
+\Q{Bode stability rule of thumb for stable minimum-phase $L(s)$?}
+\A{If $|L|$ crosses $0$ dB with slope $\approx -20$ dB/dec, PM is usually adequate; $-40$ dB/dec often indicates marginal/unstable.}
+\Pit{Heuristic only --- confirm with exact GM/PM or Nyquist.}
+
+\Q{What role does feedback play in disturbance rejection?}
+\A{Output-referred disturbances are attenuated by $1/(1+L)$; high $|L|$ at disturbance frequencies gives good rejection.}
+\Pit{Rejection is frequency-dependent; shape $L(j\omega)$ accordingly.}
+
+\bigskip
+\begin{center}
+\textit{Prepared for CEC 315 Exam 3 --- Spring 2026. Drill until the questions feel boring, then take the exam.}
+\end{center}
+
+\end{document}

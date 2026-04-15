@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\title{Lecture 12: Fourier Transforms (CT and DT)}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{From Fourier Series to Fourier Transform}
+
+An aperiodic signal is a periodic signal with $T \to \infty$:
+\begin{itemize}
+  \item Harmonics $k\omega_0$ become infinitesimally close ($\omega_0 \to 0$)
+  \item Discrete spectrum becomes a \textbf{continuous spectrum}
+  \item Sum becomes an integral
+\end{itemize}
+
+\section*{CT Fourier Transform (CTFT) Pair}
+
+\subsection*{Forward Transform (Analysis): time -> frequency}
+
+\[X(j\omega) = \int_{-\infty}^{\infty} x(t) \, e^{-j\omega t} \, dt\]
+
+\subsection*{Inverse Transform (Synthesis): frequency -> time}
+
+\[x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} X(j\omega) \, e^{j\omega t} \, d\omega\]
+
+\subsection*{Convergence}
+
+Same Dirichlet conditions as CTFS, plus absolute integrability:
+
+\[\int_{-\infty}^{\infty} |x(t)| \, dt < \infty\]
+
+\section*{Basic CT FT Pairs}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Signal $x(t)$} & \textbf{Transform $X(j\omega)$} \\
+\hline
+$e^{-at}u(t), \; a > 0$ & $\dfrac{1}{a + j\omega}$ \\
+\hline
+$e^{-a\|t\|}, \; a > 0$ & $\dfrac{2a}{a^2 + \omega^2}$ \\
+\hline
+$\delta(t)$ & $1$ \\
+\hline
+$1$ & $2\pi\delta(\omega)$ \\
+\hline
+$e^{j\omega_0 t}$ & $2\pi\delta(\omega - \omega_0)$ \\
+\hline
+$\cos(\omega_0 t)$ & $\pi[\delta(\omega - \omega_0) + \delta(\omega + \omega_0)]$ \\
+\hline
+$\sin(\omega_0 t)$ & $\frac{\pi}{j}[\delta(\omega - \omega_0) - \delta(\omega + \omega_0)]$ \\
+\hline
+Rectangular pulse (width $T_1$) & $\dfrac{2\sin(\omega T_1)}{\omega} = 2T_1 \text{sinc}\left(\frac{\omega T_1}{\pi}\right)$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{FT of Periodic Signals}
+
+A periodic signal $x(t) = \sum a_k e^{jk\omega_0 t}$ has FT:
+
+\[X(j\omega) = \sum_{k=-\infty}^{\infty} 2\pi a_k \, \delta(\omega - k\omega_0)\]
+
+The spectrum is a \textbf{train of impulses} at harmonic frequencies, weighted by $2\pi a_k$.
+
+\section*{Discrete-Time Fourier Transform (DTFT)}
+
+\subsection*{DTFT Pair}
+
+\textbf{Forward:}
+\[X(e^{j\omega}) = \sum_{n=-\infty}^{\infty} x[n] \, e^{-j\omega n}\]
+
+\textbf{Inverse:}
+\[x[n] = \frac{1}{2\pi} \int_{2\pi} X(e^{j\omega}) \, e^{j\omega n} \, d\omega\]
+
+\subsection*{Key DTFT Properties}
+\begin{itemize}
+  \item $X(e^{j\omega})$ is always \textbf{periodic in $\omega$} with period $2\pi$
+  \item Only need to specify over $[0, 2\pi)$ or $[-\pi, \pi)$
+\end{itemize}
+
+\subsection*{Basic DT FT Pairs}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Signal $x[n]$} & \textbf{Transform $X(e^{j\omega})$} \\
+\hline
+$a^n u[n], \; \|a\| < 1$ & $\dfrac{1}{1 - ae^{-j\omega}}$ \\
+\hline
+$\delta[n]$ & $1$ \\
+\hline
+$1$ & $2\pi \sum_k \delta(\omega - 2\pi k)$ \\
+\hline
+$e^{j\omega_0 n}$ & $2\pi \sum_k \delta(\omega - \omega_0 - 2\pi k)$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{The Four Fourier Representations}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Signal Type} & \textbf{Time} & \textbf{Frequency} & \textbf{Representation} \\
+\hline
+CT Periodic & Continuous & Discrete & CTFS \\
+\hline
+CT Aperiodic & Continuous & Continuous & CTFT \\
+\hline
+DT Periodic & Discrete & Discrete & DTFS \\
+\hline
+DT Aperiodic & Discrete & Continuous & DTFT \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Pattern:} Discrete in one domain $\Leftrightarrow$ Periodic in the other domain.
+
+\end{document}
