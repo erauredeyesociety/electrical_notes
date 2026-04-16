@@ -331,3 +331,23 @@ Rogelio Gracia Otalvaro
 7. **Example 16.7.4 — A Growing Exponential:** Compute the Laplace transform of $x(t) = e^{2t}\,u(t)$. Result: $X(s) = \frac{1}{s-2}$, ROC $\operatorname{Re}\{s\} > 2$. Illustrates a signal with no Fourier transform but a valid Laplace transform.
 8. **Example 16.9 — Fourier from Laplace (valid case):** Given $e^{-3t}\,u(t) \leftrightarrow \frac{1}{s+3}$, ROC $\operatorname{Re}\{s\} > -3$, the $j\omega$-axis is in the ROC, so $X(j\omega) = \frac{1}{j\omega + 3}$.
 9. **Example 16.9 — Fourier from Laplace (invalid case):** Given $e^{2t}\,u(t) \leftrightarrow \frac{1}{s-2}$, ROC $\operatorname{Re}\{s\} > 2$, the $j\omega$-axis is not in the ROC, so the Fourier transform does not exist and $s = j\omega$ substitution is invalid.
+
+---
+
+## Worked Examples (from Official Solutions)
+
+**Source:** [hw5_solutions.md](../homework/hw5/hw5_solutions.md) — work through the problems before reading the solutions.
+
+- **Problem 1 (all parts):** Compute Laplace transforms and ROCs for six signal types — every answer must include the ROC.
+  - **(a)** $4e^{-2t}u(t)$ — causal exponential (right-sided pair).
+  - **(b)** $-3e^{5t}u(-t)$ — anti-causal exponential (left-sided pair, ROC $\sigma < 5$).
+  - **(c)** $7\delta(t-3)$ — shifted delta, $X(s) = 7e^{-3s}$, ROC all $s$.
+  - **(d)** $t\,e^{-4t}u(t)$ — repeated-pole pair $1/(s+a)^2$.
+  - **(e)** $2e^{-t}u(t) - 5e^{-3t}u(t)$ — sum of causal exponentials; ROC is the intersection $\sigma > -1$.
+  - **(f)** $e^{-2t}u(t) + 3e^{4t}u(-t)$ — two-sided signal with strip ROC $-2 < \sigma < 4$; Fourier transform exists because the $j\omega$-axis lies inside the strip.
+
+## Instructor Emphasis (from Official Study Guide)
+
+- **"Always state the ROC with every transform."** $1/(s+a)$ alone is ambiguous — could be $e^{-at}u(t)$ or $-e^{-at}u(-t)$.
+- ROC = vertical strip, never contains poles; right-sided $\Rightarrow$ right of rightmost pole; left-sided $\Rightarrow$ left of leftmost pole; two-sided $\Rightarrow$ strip between poles.
+- Fourier transform exists iff the $j\omega$-axis lies in the ROC.

@@ -338,3 +338,27 @@ $y_{ZI}[n]$: output due to initial conditions alone, with zero input.
 - **Full Pipeline Example (Section 21.4):** Solve $y[n] - 0.5 y[n-1] = x[n]$ with $x[n] = (0.8)^n u[n]$ end-to-end: find $H(z)$, $X(z)$, $Y(z)$, partial fractions, inversion, and numerical verification.
 - **First-Order Difference Equation with IC (Section 21.8):** Solve $y[n] - 0.6 y[n-1] = (0.5)^n u[n]$ with $y[-1] = 4$ using the unilateral z-transform, partial fractions, and verify $y[0], y[1]$.
 - **Second-Order Zero-Input Response (Section 21.8):** Solve the homogeneous $y[n] - 0.7 y[n-1] + 0.1 y[n-2] = 0$ with $y[-1] = 1, y[-2] = 0$, demonstrating a pure zero-input response.
+
+---
+
+## Worked Examples (from Official Solutions)
+
+**Source:** [hw6_official_solutions.md](../homework/hw6/hw6_official_solutions.md) — work through the problems before reading the solutions.
+
+- **Problem 4 (all parts):** System analysis of a causal second-order difference equation $y[n] - 0.9y[n-1] + 0.18y[n-2] = x[n]$.
+  - **(a)** Find $H(z) = 1/[(1-0.6z^{-1})(1-0.3z^{-1})]$, ROC $|z|>0.6$.
+  - **(b)** Stability: both poles $|0.6|<1$, $|0.3|<1$ $\Rightarrow$ BIBO stable.
+  - **(c)** Impulse response: $h[n] = [2(0.6)^n - (0.3)^n]u[n]$.
+  - **(d)** Drive with $(0.5)^n u[n]$; compute $Y(z)$, partial fractions (three terms), verify $y[0]$ and $y[1]$ against direct recursion.
+  - **(e)** Stability of $G(z) = 1/(1 - 1.5z^{-1})$: causal $\Rightarrow$ unstable (pole $z=1.5$ outside unit circle); anti-causal $\Rightarrow$ stable (unit circle in ROC $|z|<1.5$). Parallels the Laplace Problem 4(e) anti-causal result.
+- **Problem 5 (all parts):** Unilateral $z$-transform.
+  - **(a)** First-order with IC: $y[n] - 0.8y[n-1] = (0.5)^n u[n]$, $y[-1] = 3$; uses $\mathcal{Z}_u\{y[n-1]\} = z^{-1}Y + y[-1]$ (**plus** sign).
+  - **(b)** Second-order zero-input: $y[n] - 0.5y[n-1] - 0.06y[n-2] = 0$, $y[-1]=5$, $y[-2]=0$; uses $\mathcal{Z}_u\{y[n-2]\} = z^{-2}Y + y[-2] + y[-1]z^{-1}$.
+  - **(c)** ZSR/ZIR decomposition for part (a); their sum reproduces the full $y[n]$.
+
+## Instructor Emphasis (from Official Study Guide)
+
+- **Golden Rule (DT):** Causal + BIBO stable $\iff$ all poles strictly inside the unit circle ($|p_i|<1$). Note: $|a| < 1$, not $a < 1$ — e.g. $z=-0.9$ is stable.
+- **Sign trap:** Unilateral Laplace shift uses $-y(0^-)$; unilateral $z$-shift uses **$+y[-1]$**. Don't mix them up.
+- Pipeline: difference equation $\to \mathcal{Z}_u \to$ solve $Y(z) \to$ PFE $\to$ invert.
+- Total response = ZSR + ZIR.

@@ -75,7 +75,8 @@ end:
 Three files were edited:
 
 1. **`src/ge1s_more_ldr_n_str_n_mov_fns.h`** — added a prototype
-   `int32_t mp_array_pos_sum_cst_ptr_s(const int32_t *arr, int n);`
+   `int mp_array_pos_sum_cst_ptr_s(int *const pArr, int n);`
+   matching the style of the existing `mp_array_abs_sum_cst_ptr_s`.
 2. **`src/ge1s_more_ldr_n_str_n_mov_sfns.s`** — added a matching
    `.global` / `.type` declaration block and the new function body at
    the bottom of the file, mirroring the layout of `_abs_sum`.

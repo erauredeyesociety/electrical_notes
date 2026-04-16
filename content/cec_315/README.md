@@ -102,17 +102,32 @@ cec_315/
 **Coverage:** Laplace transform and ROC, inverse Laplace and properties, system analysis via unilateral Laplace, z-transform and ROC, inverse z-transform and properties, system analysis via unilateral z-transform, sampling, linear feedback systems.
 
 **Key files in [exam3/](exam3/):**
-- [exam3_study_guide.md](exam3/exam3_study_guide.md) — study guide
+
+- [SOLUTIONS_INDEX.md](exam3/SOLUTIONS_INDEX.md) — **one-stop jump table** for every Exam 3 solution set (homework, exercises, mock exam)
+- [StudyGuide_Exam3.pdf](exam3/StudyGuide_Exam3.pdf) — **official instructor study guide PDF** (authoritative)
+- [official_study_guide.md](exam3/official_study_guide.md) / [official_study_guide.tex](exam3/official_study_guide.tex) — transcribed & typeset version of the official PDF
+- [exam3_study_guide.md](exam3/exam3_study_guide.md) / [exam3_study_guide.tex](exam3/exam3_study_guide.tex) — student study guide (augmented with instructor emphasis from the official guide)
 - [exam3_notes.md](exam3/exam3_notes.md) / [exam3_notes.tex](exam3/exam3_notes.tex) — condensed notes
 - [exam3_cheatsheet.md](exam3/exam3_cheatsheet.md) / [exam3_cheatsheet.tex](exam3/exam3_cheatsheet.tex) — one-page cheatsheet
 - [exam3_sample_problems.md](exam3/exam3_sample_problems.md) / [exam3_sample_problems.tex](exam3/exam3_sample_problems.tex) — worked sample problems
+- [exam3_flashcards.md](exam3/exam3_flashcards.md) / [exam3_flashcards.tex](exam3/exam3_flashcards.tex) — flashcards
+- [exam3_pitfalls.md](exam3/exam3_pitfalls.md) / [exam3_pitfalls.tex](exam3/exam3_pitfalls.tex) — common pitfalls
+- [exam3_practice_problems.md](exam3/exam3_practice_problems.md) / [exam3_practice_problems.tex](exam3/exam3_practice_problems.tex) — practice bank
+- [mock_exam3.md](exam3/mock_exam3.md) / [mock_exam3.tex](exam3/mock_exam3.tex) + [mock_exam3_solutions.md](exam3/mock_exam3_solutions.md) / [mock_exam3_solutions.tex](exam3/mock_exam3_solutions.tex) — mock exam with solutions
 - [exam3/lectures/](exam3/lectures/) — lecture PDFs 16–23
 - [exam3/summaries/](exam3/summaries/) — markdown summaries for lectures 16–23
 
+**Official homework / exercise solutions (instructor-provided, transcribed Spring 2026):**
+
+- Laplace HW (lctr16-18): [homework/hw5/hw5_solutions.md](homework/hw5/hw5_solutions.md) / [.tex](homework/hw5/hw5_solutions.tex) — also [questions](homework/hw5/hw5_questions.md); source PDF [hw-lctr16-18-solutions.pdf](hw_practice_problems/hw-lctr16-18-solutions.pdf)
+- z-transform HW (lctr19-21): [homework/hw6/hw6_official_solutions.md](homework/hw6/hw6_official_solutions.md) / [.tex](homework/hw6/hw6_official_solutions.tex); source PDF [hw-lctr19-21-solutions.pdf](hw_practice_problems/hw-lctr19-21-solutions.pdf)
+- Lecture 22 sampling exercise: [lctr22-exercise-solutions.md](hw_practice_problems/lctr22-exercise-solutions.md) / [.tex](hw_practice_problems/lctr22-exercise-solutions.tex) + [source PDF](hw_practice_problems/lctr22-exercise-solutions.pdf)
+- Lecture 23 feedback exercise: [lctr23-exercise-solutions.md](hw_practice_problems/lctr23-exercise-solutions.md) / [.tex](hw_practice_problems/lctr23-exercise-solutions.tex) + [source PDF](hw_practice_problems/lctr23-exercise-solutions.pdf)
+
 **Relevant master docs / lecture summaries:**
 - [master_sample_problems.md](master_docs/master_sample_problems.md) (Exam 3 section)
-- [master_homework_problems.md](master_docs/master_homework_problems.md) (hw-lctr16-18, hw-lctr19-21)
-- Full summaries: [lctr16](lecture_summaries/lctr16_laplace_transform_roc.md), [lctr17](lecture_summaries/lctr17_inverse_laplace_properties.md), [lctr18](lecture_summaries/lctr18_system_analysis_unilateral_laplace.md), [lctr19](lecture_summaries/lctr19_z_transform_roc.md), [lctr20](lecture_summaries/lctr20_inverse_z_transform_properties.md), [lctr21](lecture_summaries/lctr21_system_analysis_unilateral_z.md), [lctr22](lecture_summaries/lctr22_sampling.md), [lctr23](lecture_summaries/lctr23_linear_feedback_systems.md)
+- [master_homework_problems.md](master_docs/master_homework_problems.md) (hw-lctr16-18, hw-lctr19-21, with integrated official answers)
+- Full summaries (each now cross-links to its official solutions and instructor emphases): [lctr16](lecture_summaries/lctr16_laplace_transform_roc.md), [lctr17](lecture_summaries/lctr17_inverse_laplace_properties.md), [lctr18](lecture_summaries/lctr18_system_analysis_unilateral_laplace.md), [lctr19](lecture_summaries/lctr19_z_transform_roc.md), [lctr20](lecture_summaries/lctr20_inverse_z_transform_properties.md), [lctr21](lecture_summaries/lctr21_system_analysis_unilateral_z.md), [lctr22](lecture_summaries/lctr22_sampling.md), [lctr23](lecture_summaries/lctr23_linear_feedback_systems.md)
 
 ---
 
@@ -175,9 +190,9 @@ Raw practice problem PDFs (and a few Markdown transcriptions) organized by chapt
 - [hw-chapter01.pdf](hw_practice_problems/hw-chapter01.pdf) — chapter 1 practice problems
 - [hw-lctr09-11.pdf](hw_practice_problems/hw-lctr09-11.pdf) + [hw-lctr09-11-solutions.pdf](hw_practice_problems/hw-lctr09-11-solutions.pdf)
 - [hw-lctr12-15.pdf](hw_practice_problems/hw-lctr12-15.pdf) + [hw-lctr12-15-solutions.pdf](hw_practice_problems/hw-lctr12-15-solutions.pdf)
-- [hw-lctr16-18.pdf](hw_practice_problems/hw-lctr16-18.pdf) + [hw-lctr16-18.md](hw_practice_problems/hw-lctr16-18.md) (Exam 3)
-- [hw-lctr19-21.pdf](hw_practice_problems/hw-lctr19-21.pdf) + [hw-lctr19-21.md](hw_practice_problems/hw-lctr19-21.md) (Exam 3)
-- Per-lecture exercises: [lctr03](hw_practice_problems/lctr03-exercise-euler-derivations.pdf), [lctr04](hw_practice_problems/lctr04-exercise.pdf), [lctr05](hw_practice_problems/lctr05-exercise.pdf), [lctr06](hw_practice_problems/lctr06-convolution-problems.pdf), [lctr07](hw_practice_problems/lctr07-convolution-problems.pdf), [lctr08](hw_practice_problems/lctr08-problems.pdf), [lctr22 (pdf)](hw_practice_problems/lctr22-exercise.pdf) / [lctr22 (md)](hw_practice_problems/lctr22-exercise.md), [lctr23 (pdf)](hw_practice_problems/lctr23-exercise.pdf) / [lctr23 (md)](hw_practice_problems/lctr23-exercise.md)
+- [hw-lctr16-18.pdf](hw_practice_problems/hw-lctr16-18.pdf) + [hw-lctr16-18.md](hw_practice_problems/hw-lctr16-18.md) + [hw-lctr16-18-solutions.pdf](hw_practice_problems/hw-lctr16-18-solutions.pdf) (Exam 3 — Laplace; full transcribed solutions in [homework/hw5/](homework/hw5/))
+- [hw-lctr19-21.pdf](hw_practice_problems/hw-lctr19-21.pdf) + [hw-lctr19-21.md](hw_practice_problems/hw-lctr19-21.md) + [hw-lctr19-21-solutions.pdf](hw_practice_problems/hw-lctr19-21-solutions.pdf) (Exam 3 — z-transform; official transcribed solutions in [homework/hw6/hw6_official_solutions.md](homework/hw6/hw6_official_solutions.md))
+- Per-lecture exercises: [lctr03](hw_practice_problems/lctr03-exercise-euler-derivations.pdf), [lctr04](hw_practice_problems/lctr04-exercise.pdf), [lctr05](hw_practice_problems/lctr05-exercise.pdf), [lctr06](hw_practice_problems/lctr06-convolution-problems.pdf), [lctr07](hw_practice_problems/lctr07-convolution-problems.pdf), [lctr08](hw_practice_problems/lctr08-problems.pdf), [lctr22 (pdf)](hw_practice_problems/lctr22-exercise.pdf) / [md](hw_practice_problems/lctr22-exercise.md) + [solutions pdf](hw_practice_problems/lctr22-exercise-solutions.pdf) / [solutions md](hw_practice_problems/lctr22-exercise-solutions.md) / [solutions tex](hw_practice_problems/lctr22-exercise-solutions.tex), [lctr23 (pdf)](hw_practice_problems/lctr23-exercise.pdf) / [md](hw_practice_problems/lctr23-exercise.md) + [solutions pdf](hw_practice_problems/lctr23-exercise-solutions.pdf) / [solutions md](hw_practice_problems/lctr23-exercise-solutions.md) / [solutions tex](hw_practice_problems/lctr23-exercise-solutions.tex)
 
 ### [homework/](homework/)
 
@@ -185,7 +200,8 @@ Submitted homework assignments with solutions and supporting material.
 
 - **[homework/hw1/](homework/hw1/)** — chapter 1 homework PDF
 - **[homework/hw4/](homework/hw4/)** — lectures 12–15 homework: solutions ([hw4_solutions.md](homework/hw4/hw4_solutions.md)), per-lecture summaries (lecture12–15), original lecture PDFs, and [nblm_0309.md](homework/hw4/nblm_0309.md)
-- **[homework/hw6/](homework/hw6/)** — lectures 19–21 homework: questions ([hw6_questions.md](homework/hw6/hw6_questions.md)), solutions in Markdown ([hw6_solutions.md](homework/hw6/hw6_solutions.md)) and LaTeX ([hw6_solutions.tex](homework/hw6/hw6_solutions.tex), [hw6_solutions_latex.md](homework/hw6/hw6_solutions_latex.md)), references ([hw6_references.md](homework/hw6/hw6_references.md)), and lecture summaries (lctr19–21)
+- **[homework/hw5/](homework/hw5/)** — lectures 16–18 Laplace homework (Exam 3): [hw5_questions.md](homework/hw5/hw5_questions.md), full official solutions [hw5_solutions.md](homework/hw5/hw5_solutions.md) / [hw5_solutions.tex](homework/hw5/hw5_solutions.tex)
+- **[homework/hw6/](homework/hw6/)** — lectures 19–21 z-transform homework (Exam 3): questions ([hw6_questions.md](homework/hw6/hw6_questions.md)), student solutions in Markdown ([hw6_solutions.md](homework/hw6/hw6_solutions.md)) and LaTeX ([hw6_solutions.tex](homework/hw6/hw6_solutions.tex), [hw6_solutions_latex.md](homework/hw6/hw6_solutions_latex.md)), **official instructor solutions** ([hw6_official_solutions.md](homework/hw6/hw6_official_solutions.md) / [hw6_official_solutions.tex](homework/hw6/hw6_official_solutions.tex)), references ([hw6_references.md](homework/hw6/hw6_references.md)), and lecture summaries (lctr19–21)
 
 ---
 
@@ -205,9 +221,16 @@ The same files also compile locally with `pdflatex <file>.tex` if a LaTeX distri
 
 Suggested study order for Exam 3 (lectures 16–23: Laplace, z-transform, sampling, feedback):
 
-1. **Orient** — skim [exam3/exam3_study_guide.md](exam3/exam3_study_guide.md) to see the coverage and topic priorities.
-2. **Read the notes** — work through [exam3/exam3_notes.md](exam3/exam3_notes.md) (or [.tex](exam3/exam3_notes.tex)) for the condensed theory.
-3. **Internalize the cheatsheet** — keep [exam3/exam3_cheatsheet.md](exam3/exam3_cheatsheet.md) (or [.tex](exam3/exam3_cheatsheet.tex)) nearby while solving problems; aim to reproduce every formula from memory.
-4. **Solve sample problems** — work through [exam3/exam3_sample_problems.md](exam3/exam3_sample_problems.md) (or [.tex](exam3/exam3_sample_problems.tex)); do them without looking at solutions first.
-5. **Practice with homework problems** — solidify with the hw-lctr16-18 and hw-lctr19-21 sets in [hw_practice_problems/](hw_practice_problems/) and homework in [homework/hw6/](homework/hw6/).
-6. **Refer back to lecture summaries as needed** — individual lecture summaries are in [exam3/summaries/](exam3/summaries/) and the full set in [lecture_summaries/](lecture_summaries/) (lectures 16–23).
+1. **Read the official study guide first** — [exam3/official_study_guide.md](exam3/official_study_guide.md) is the authoritative instructor-provided guide (transcribed from [StudyGuide_Exam3.pdf](exam3/StudyGuide_Exam3.pdf)). It lists topic coverage, golden rules (CT poles in LHP, DT poles inside unit circle), the "always state ROC" rule, and the exam format (50 min, 100 pts: Part I 10 MC × 4 pts = 40, Part II multi-part problems = 60).
+2. **Orient with the student study guide** — [exam3/exam3_study_guide.md](exam3/exam3_study_guide.md) (augmented with instructor emphasis from the official guide).
+3. **Read the notes** — [exam3/exam3_notes.md](exam3/exam3_notes.md) / [.tex](exam3/exam3_notes.tex) for the condensed theory.
+4. **Internalize the cheatsheet** — [exam3/exam3_cheatsheet.md](exam3/exam3_cheatsheet.md) / [.tex](exam3/exam3_cheatsheet.tex); aim to reproduce every formula from memory.
+5. **Drill flashcards and pitfalls** — [exam3/exam3_flashcards.md](exam3/exam3_flashcards.md) and [exam3/exam3_pitfalls.md](exam3/exam3_pitfalls.md).
+6. **Solve sample & practice problems** — [exam3/exam3_sample_problems.md](exam3/exam3_sample_problems.md) and [exam3/exam3_practice_problems.md](exam3/exam3_practice_problems.md) — do them without looking at solutions first.
+7. **Work the homework sets with official solutions** (do problems cold, then check):
+   - HW Lectures 16–18 (Laplace): [hw5_questions.md](homework/hw5/hw5_questions.md) → [hw5_solutions.md](homework/hw5/hw5_solutions.md)
+   - HW Lectures 19–21 (z-transform): [hw6_questions.md](homework/hw6/hw6_questions.md) → [hw6_official_solutions.md](homework/hw6/hw6_official_solutions.md)
+   - Lecture 22 Sampling exercise: [lctr22-exercise.md](hw_practice_problems/lctr22-exercise.md) → [lctr22-exercise-solutions.md](hw_practice_problems/lctr22-exercise-solutions.md)
+   - Lecture 23 Feedback exercise: [lctr23-exercise.md](hw_practice_problems/lctr23-exercise.md) → [lctr23-exercise-solutions.md](hw_practice_problems/lctr23-exercise-solutions.md)
+8. **Take the mock exam** — [mock_exam3.md](exam3/mock_exam3.md), then check [mock_exam3_solutions.md](exam3/mock_exam3_solutions.md).
+9. **Refer back to lecture summaries as needed** — each summary ends with a "Worked Examples (from Official Solutions)" and "Instructor Emphasis" section linking to the relevant solution: [exam3/summaries/](exam3/summaries/) or [lecture_summaries/](lecture_summaries/) (lectures 16–23).

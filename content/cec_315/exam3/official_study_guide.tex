@@ -1,0 +1,434 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage{parskip}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{CEC 315 --- Exam 3 Official Study Guide}
+\fancyhead[R]{Spring 2026}
+\fancyfoot[C]{\thepage}
+
+\title{CEC 315 --- Exam 3 Official Study Guide (Instructor)}
+\author{Instructor: Rogelio Gracia Otalvaro \\
+Course: CEC 315 --- Signals and Systems, Spring 2026 \\
+Coverage: Lectures 16--23}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Source:} \texttt{StudyGuide\_Exam3.pdf} (4 pages) --- instructor-provided, authoritative.
+
+\medskip
+\noindent This file is a faithful transcription of the instructor's official Exam 3 study guide. \textbf{This is the authoritative source.} See \texttt{exam3\_study\_guide.tex} for the student-compiled companion notes (expanded tables of transform pairs, extra pitfalls, worked explanations).
+
+\tableofcontents
+\newpage
+
+\section*{Exam Format}
+\begin{itemize}
+  \item \textbf{Duration:} 50 minutes
+  \item \textbf{Total points:} 100 pts
+  \item \textbf{Part I:} 10 multiple-choice, $4 \times 10 = 40$ pts
+  \item \textbf{Part II:} multi-part problems, 60 pts
+  \item \textbf{Instructor emphasis:} \emph{``Always state the ROC with every transform.''}
+\end{itemize}
+
+\section{The Laplace Transform (Lectures 16--17)}
+
+\subsection{Definition and the $s$-Plane}
+
+\textbf{Bilateral Laplace Transform:}
+\[ X(s) = \int_{-\infty}^{+\infty} x(t)\,e^{-st}\,dt, \qquad s = \sigma + j\omega \]
+
+\begin{itemize}
+  \item $\sigma = 0 \Rightarrow X(j\omega)$ (the Fourier transform).
+  \item LHP: $\sigma < 0$. RHP: $\sigma > 0$. $j\omega$-axis: FT lives here.
+\end{itemize}
+
+\subsection{Region of Convergence Rules (Memorize)}
+\begin{enumerate}
+  \item ROC = vertical strip (depends only on $\sigma$).
+  \item ROC never contains poles.
+  \item Finite-duration, absolutely integrable $\Rightarrow$ ROC = all $s$.
+  \item Right-sided $\Rightarrow \operatorname{Re}\{s\} > \max_i \operatorname{Re}\{p_i\}$.
+  \item Left-sided $\Rightarrow \operatorname{Re}\{s\} < \min_i \operatorname{Re}\{p_i\}$.
+  \item Two-sided $\Rightarrow$ strip between consecutive poles.
+  \item $j\omega$-axis $\in$ ROC $\Rightarrow$ Fourier transform exists.
+\end{enumerate}
+
+\noindent\textbf{Instructor warning:} $\dfrac{1}{s+a}$ is ambiguous without the ROC --- could be $e^{-at}u(t)$ or $-e^{-at}u(-t)$.
+
+\subsection{Laplace Transform Pairs}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+$x(t)$ & $X(s)$ & ROC \\
+\midrule
+$\delta(t)$ & $1$ & all $s$ \\
+$u(t)$ & $1/s$ & $\sigma > 0$ \\
+$e^{-at}u(t)$ & $\dfrac{1}{s+a}$ & $\sigma > -\operatorname{Re}\{a\}$ \\
+$-e^{-at}u(-t)$ & $\dfrac{1}{s+a}$ & $\sigma < -\operatorname{Re}\{a\}$ \\
+$t e^{-at}u(t)$ & $\dfrac{1}{(s+a)^2}$ & $\sigma > -\operatorname{Re}\{a\}$ \\
+$\dfrac{t^{n-1}}{(n-1)!}e^{-at}u(t)$ & $\dfrac{1}{(s+a)^n}$ & $\sigma > -\operatorname{Re}\{a\}$ \\
+$\delta(t - t_0)$ & $e^{-s t_0}$ & all $s$ \\
+$e^{-at}\cos(\omega_0 t)u(t)$ & $\dfrac{s+a}{(s+a)^2+\omega_0^2}$ & $\sigma > -a$ \\
+$e^{-at}\sin(\omega_0 t)u(t)$ & $\dfrac{\omega_0}{(s+a)^2+\omega_0^2}$ & $\sigma > -a$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Laplace Properties}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Property & Time & $s$-Domain \\
+\midrule
+Linearity & $ax_1 + bx_2$ & $aX_1 + bX_2$ \\
+Time shift & $x(t - t_0)$ & $e^{-s t_0} X(s)$ \\
+$s$-shift & $e^{s_0 t} x(t)$ & $X(s - s_0)$ \\
+Scaling & $x(at)$ & $\dfrac{1}{|a|} X(s/a)$ \\
+Convolution & $x_1 * x_2$ & $X_1 X_2$ \\
+Differentiation & $dx/dt$ & $sX(s)$ \\
+Diff.\ in $s$ & $-tx(t)$ & $dX/ds$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Inverse Laplace: Partial Fractions}
+\begin{enumerate}
+  \item Decompose $X(s)$ into $\dfrac{A_i}{s - p_i}$ terms (use \textbf{cover-up method}).
+  \item Invert each term with the table.
+  \item \textbf{ROC decides direction:} ROC right of pole $\to u(t)$; ROC left of pole $\to u(-t)$.
+\end{enumerate}
+
+\textbf{Three pole types:}
+\begin{itemize}
+  \item \emph{Distinct real:} each gives $A e^{p_i t} u(\cdot)$.
+  \item \emph{Repeated} (order $n$): need $n$ terms
+  \[ \frac{B_1}{s-p} + \frac{B_2}{(s-p)^2} + \cdots + \frac{B_n}{(s-p)^n}, \qquad \frac{1}{(s+a)^k} \leftrightarrow \frac{t^{k-1}}{(k-1)!}e^{-at}u(t). \]
+  \item \emph{Complex conjugate:} complete the square, use $\cos / \sin$ pairs.
+\end{itemize}
+
+\subsection{Initial-Value and Final-Value Theorems (Laplace)}
+\[ x(0^+) = \lim_{s \to \infty} sX(s), \qquad x(\infty) = \lim_{s \to 0} sX(s). \]
+\textbf{FVT valid only if} all poles of $sX(s)$ have $\operatorname{Re}\{p\} < 0$.
+
+\section{CT System Analysis (Lecture 18)}
+
+\subsection{Transfer Function $H(s)$}
+From an ODE $\sum a_k \dfrac{d^k y}{dt^k} = \sum b_k \dfrac{d^k x}{dt^k}$, replace $d^k/dt^k \to s^k$:
+\[ H(s) = \frac{Y(s)}{X(s)} = \frac{b_M s^M + \cdots + b_0}{a_N s^N + \cdots + a_0}. \]
+
+\subsection{Stability (CT, Causal) --- Golden Rule}
+Causal + BIBO stable $\iff$ all poles in the open LHP ($\operatorname{Re}\{p_i\} < 0 \ \forall i$).
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Pole location & Status \\
+\midrule
+All $\operatorname{Re}\{p_i\} < 0$ (LHP) & Stable \\
+Any $\operatorname{Re}\{p_i\} > 0$ (RHP) & Unstable \\
+On $j\omega$-axis, none in RHP & Marginally stable \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Block Diagrams}
+\begin{itemize}
+  \item Series: $H = H_1 \cdot H_2$. Parallel: $H = H_1 + H_2$.
+  \item Negative feedback: $Q = \dfrac{G}{1 + GF}$. Positive feedback: $Q = \dfrac{G}{1 - GF}$.
+\end{itemize}
+
+\subsection{Unilateral Laplace Transform}
+Lower limit changes to $0^-$; captures ICs.
+
+\textbf{Unilateral Differentiation Property:}
+\[ \frac{dy}{dt} \xrightarrow{\mathcal{L}_u} sY(s) - y(0^-) \]
+\[ \frac{d^2 y}{dt^2} \xrightarrow{\mathcal{L}_u} s^2 Y(s) - s y(0^-) - y'(0^-) \]
+
+\textbf{Total response} = ZSR (input, zero ICs) + ZIR (ICs, zero input).
+
+\section{The $z$-Transform (Lectures 19--20)}
+
+\subsection{Definition}
+\[ X(z) = \sum_{n=-\infty}^{+\infty} x[n]\,z^{-n}, \qquad z = re^{j\omega} \]
+
+\begin{itemize}
+  \item $|z| = 1 \Rightarrow X(e^{j\omega})$ (the DTFT).
+  \item Unit circle replaces the $j\omega$-axis.
+\end{itemize}
+
+\subsection{ROC Properties (DT)}
+\begin{itemize}
+  \item ROC = annular ring $r_1 < |z| < r_2$.
+  \item Right-sided: $|z| > \max |d_i|$ (exterior).
+  \item Left-sided: $|z| < \min |d_i|$ (interior).
+  \item DTFT exists $\iff$ unit circle $\subset$ ROC.
+\end{itemize}
+
+\subsection{$z$-Transform Pairs}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+$x[n]$ & $X(z)$ & ROC \\
+\midrule
+$\delta[n]$ & $1$ & all $z$ \\
+$u[n]$ & $\dfrac{1}{1 - z^{-1}}$ & $|z| > 1$ \\
+$a^n u[n]$ & $\dfrac{1}{1 - a z^{-1}}$ & $|z| > |a|$ \\
+$-a^n u[-n-1]$ & $\dfrac{1}{1 - a z^{-1}}$ & $|z| < |a|$ \\
+$n a^n u[n]$ & $\dfrac{a z^{-1}}{(1 - a z^{-1})^2}$ & $|z| > |a|$ \\
+$\delta[n - k]$ & $z^{-k}$ & $|z| > 0$ \\
+$r^n \cos(\omega_0 n)u[n]$ & $\dfrac{1 - r\cos\omega_0\,z^{-1}}{1 - 2r\cos\omega_0\,z^{-1} + r^2 z^{-2}}$ & $|z| > r$ \\
+$r^n \sin(\omega_0 n)u[n]$ & $\dfrac{r\sin\omega_0\,z^{-1}}{1 - 2r\cos\omega_0\,z^{-1} + r^2 z^{-2}}$ & $|z| > r$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{$z$-Transform Properties}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Property & Sequence & $z$-Domain \\
+\midrule
+Linearity & $ax_1 + bx_2$ & $aX_1 + bX_2$ \\
+Time shift & $x[n - n_0]$ & $z^{-n_0}X(z)$ \\
+$z$-scaling & $z_0^n x[n]$ & $X(z/z_0)$ \\
+Convolution & $x_1 * x_2$ & $X_1 X_2$ \\
+Diff.\ in $z$ & $n\,x[n]$ & $-z\,\dfrac{d}{dz}X(z)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Inverse $z$-Transform}
+\begin{enumerate}
+  \item Make $X(z)$ proper in $z^{-1}$; long-divide if needed.
+  \item Partial fractions: $\dfrac{A_i}{1 - d_i z^{-1}}$.
+  \item ROC outside $|d_i| \to d_i^n u[n]$; inside $\to -d_i^n u[-n-1]$.
+\end{enumerate}
+
+\subsection{IVT / FVT ($z$-domain)}
+\[ x[0] = \lim_{z \to \infty} X(z), \qquad \lim_{n \to \infty} x[n] = \lim_{z \to 1}(1 - z^{-1}) X(z). \]
+\textbf{FVT valid only if} all poles of $(1 - z^{-1})X(z)$ are inside the unit circle.
+
+\section{DT System Analysis (Lecture 21)}
+
+\subsection{Transfer Function $H(z)$}
+From a difference equation $\sum a_k y[n-k] = \sum b_k x[n-k]$, replace each delay $\to z^{-k}$:
+\[ H(z) = \frac{b_0 + b_1 z^{-1} + \cdots + b_M z^{-M}}{a_0 + a_1 z^{-1} + \cdots + a_N z^{-N}}. \]
+
+\subsection{Stability (DT, Causal) --- Golden Rule}
+Causal + BIBO stable $\iff$ all poles strictly inside the unit circle ($|p_i| < 1\ \forall i$).
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Pole location & Status \\
+\midrule
+All $|p_i| < 1$ & Stable \\
+Any $|p_i| > 1$ & Unstable \\
+On unit circle, none outside & Marginally stable \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Unilateral $z$-Transform}
+\[ y[n-1] \xrightarrow{\mathcal{Z}_u} z^{-1} Y(z) + y[-1] \]
+\[ y[n-2] \xrightarrow{\mathcal{Z}_u} z^{-2} Y(z) + y[-2] + y[-1] z^{-1} \]
+
+\noindent\textbf{Sign trap (instructor warning):} Laplace uses $-y(0^-)$; the $z$-transform uses $+y[-1]$.
+
+\textbf{Pipeline:} difference eq.\ $\to \mathcal{Z}_u \to$ solve $Y(z) \to$ PFE $\to$ invert. \\
+\textbf{Total response} = ZSR + ZIR.
+
+\section{Sampling (Lecture 22)}
+
+\subsection{Impulse-Train Sampling}
+Multiply $x(t)$ by $p(t) = \sum \delta(t - nT)$. In frequency:
+\[ X_p(j\omega) = \frac{1}{T} \sum_{k=-\infty}^{+\infty} X\bigl(j(\omega - k\omega_s)\bigr), \qquad \omega_s = \frac{2\pi}{T}. \]
+Sampling = ``copy-paste the spectrum at every multiple of $\omega_s$, scaled by $1/T$.''
+
+\subsection{Sampling Theorem (Shannon / Nyquist)}
+Perfect reconstruction from $x(nT)$ requires $\omega_s > 2\omega_M$ (\textbf{strict inequality}). $2\omega_M$ = Nyquist rate. Reconstruct with ideal LPF (gain $T$, cutoff $\omega_M < \omega_c < \omega_s - \omega_M$).
+
+\subsection{Key Sampling Formulas}
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Concept & Formula \\
+\midrule
+Sampling period & $T = 2\pi / \omega_s$ \\
+Nyquist rate & $2\omega_M$ (must be exceeded) \\
+Aliased frequency & $f_\text{alias} = |f_s - f_0|$ ($f_s/2 < f_0 < f_s$) \\
+CT $\leftrightarrow$ DT freq. & $\Omega = \omega T$ \\
+Reconstruction & $x_r(t) = \sum_n x(nT)\,\operatorname{sinc}\!\left(\dfrac{t - nT}{T}\right)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Aliasing and Practical Notes}
+\textbf{Aliasing is irreversible.} Overlapping replicas cannot be separated. Prevent with an \textbf{anti-aliasing LPF before} the sampler.
+\begin{itemize}
+  \item Squaring a signal \textbf{doubles} its bandwidth.
+  \item $\omega_s = 2\omega_M$ is \textbf{not} sufficient (e.g.\ $\sin(\omega_s t/2)$ sampled at $\omega_s$ gives all-zero samples).
+  \item ZOH / FOH are practical but \textbf{inexact} approximations of sinc interpolation.
+\end{itemize}
+
+\section{Linear Feedback Systems (Lecture 23)}
+
+\subsection{Closed-Loop Transfer Function}
+\[ Q(s) = \frac{H(s)}{1 + G(s)H(s)} \qquad \text{(negative feedback)} \]
+Positive feedback: replace $+$ with $-$ in the denominator. $1 + GH = 0 \Rightarrow$ closed-loop poles (determines stability).
+
+\subsection{Block Diagram Rules}
+\begin{itemize}
+  \item Cascade $\to$ multiply. Parallel $\to$ add. Feedback $\to H/(1+GH)$.
+  \item \textbf{Strategy:} simplify innermost loop first, work outward.
+\end{itemize}
+
+\subsection{Stability via Closed-Loop Poles}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Condition on $GH$ & $Q \approx$ & Meaning \\
+\midrule
+$|GH| \gg 1$ & $1/G$ & Feedback dominates \\
+$|GH| \ll 1$ & $H$ & Feedback negligible \\
+$GH = -1$ & $\infty$ & \textbf{Instability} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Nyquist Plot and Criterion}
+Plot $G(j\omega)H(j\omega)$ in the complex plane ($\omega : -\infty \to +\infty$).
+
+\noindent\textbf{Nyquist Criterion (simplified):} Open-loop stable $\Rightarrow$ closed-loop with gain $K$ is stable iff the Nyquist contour \textbf{does not encircle} $-1/K$.
+
+\subsection{Gain Margin and Phase Margin}
+Instability $= |GH| = 1$ (0 dB) and $\angle GH = -180^\circ$ \textbf{simultaneously}.
+
+\textbf{GM:} At $\omega_1$ where $\angle GH = -180^\circ$: $\mathrm{GM}_\text{dB} = 0 - |GH(\omega_1)|_\text{dB}$. \\
+\textbf{PM:} At $\omega_2$ where $|GH| = 0$ dB: $\mathrm{PM} = 180^\circ + \angle GH(\omega_2)$. \\
+Both positive $\Rightarrow$ stable. Max delay: $\tau_\text{max} = \mathrm{PM\,(rad)} / \omega_2$.
+
+\noindent\textbf{Reading Bode plots (instructor warning):} GM is read from the \emph{magnitude} plot at the $-180^\circ$ frequency. PM is read from the \emph{phase} plot at the 0 dB frequency. \textbf{Don't mix them up!}
+
+\section{CT vs.\ DT Quick Reference}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & Laplace (CT) & $z$ (DT) \\
+\midrule
+Variable & $s = \sigma + j\omega$ & $z = re^{j\omega}$ \\
+FT on & $j\omega$-axis & unit circle \\
+ROC shape & strip & ring \\
+Right-sided & $\sigma > \sigma_\text{max}$ & $|z| > r_\text{max}$ \\
+Stable (causal) & poles in LHP & poles $|p| < 1$ \\
+Basic pair & $\dfrac{1}{s+a}$ & $\dfrac{1}{1-az^{-1}}$ \\
+Delay & $e^{-s t_0}$ & $z^{-n_0}$ \\
+Unil.\ IC & $sY - y(0^-)$ & $z^{-1}Y + y[-1]$ \\
+IVT & $\lim_{s\to\infty} sX$ & $\lim_{z\to\infty} X$ \\
+FVT & $\lim_{s\to 0} sX$ & $\lim_{z\to 1}(1 - z^{-1})X$ \\
+Feedback & $H/(1+GH)$ & (same form) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Common Mistakes to Avoid (Instructor's List)}
+\begin{enumerate}
+  \item \textbf{Omitting the ROC} --- the transform is ambiguous without it.
+  \item \textbf{ROC direction:} right-sided $\to$ right/outside; left $\to$ left/inside.
+  \item Repeated pole of order $n$ needs $n$ partial-fraction terms.
+  \item Complex poles: complete the square, don't split conjugates.
+  \item FVT requires all poles of $sX(s)$ in LHP (or $(1 - z^{-1})X(z)$ inside unit circle).
+  \item DT stability: check $|a| < 1$, not $a < 1$ (pole at $z = -0.9$ is stable).
+  \item Unilateral sign: Laplace $-y(0^-)$; $z$-transform $+y[-1]$.
+  \item Don't mix Hz and rad/s ($\omega = 2\pi f$).
+  \item $\omega_s = 2\omega_M$ is \textbf{not enough}; need strict $>$.
+  \item Negative feedback $\to 1 + GH$; positive $\to 1 - GH$.
+  \item GM from magnitude plot; PM from phase plot.
+\end{enumerate}
+
+\section{Practice Questions (Instructor-Provided)}
+
+\subsection{Lecture 22 --- Sampling}
+\begin{enumerate}
+  \item $X(j\omega) = 0$ for $|\omega| > 5000\pi$. Find the Nyquist rate and the max allowable $T$.
+  \item True or false: $\omega_s = 2\omega_M$ guarantees perfect reconstruction.
+  \item In one sentence, why does sampling in time create copies of the spectrum?
+  \item Overlapping replicas appear in $X_p(j\omega)$. Can a filter undo this? Why or why not?
+  \item What is an anti-aliasing filter? Does it go before or after the sampler?
+  \item Nyquist rate of $x(t) = \cos(600\pi t) + \cos(1800\pi t)$?
+  \item $\omega_M = 3000\pi$, $T = 2 \times 10^{-4}$\,s. Compute $\omega_s$; does aliasing occur?
+  \item $x(t) = \cos(2\pi \cdot 900\,t)$, $f_s = 1000$\,Hz. Reconstructed frequency?
+  \item Same signal, $f_s = 1500$\,Hz. Reconstructed frequency?
+  \item Signal has Nyquist rate $\omega_0$. Nyquist rate of $x(t - 5)$? Of $x(2t)$?
+  \item Why does the ideal reconstruction LPF have gain $T$?
+  \item Is ZOH reconstruction exact? What error does it introduce?
+  \item Camera at 24 fps, blade at 25 rev/s. What does the blade look like on film?
+  \item $X(j\omega) = 0$ for $|\omega| > 10{,}000\pi$; $f_s = 8000$\,Hz. Is the theorem satisfied? Min $f_s$?
+  \item $x(t)$ is not band-limited. Can we ever sample it? What do real systems do?
+\end{enumerate}
+
+\subsection{Lecture 23 --- Linear Feedback Systems}
+
+\textbf{Block Diagram Simplification}
+\begin{enumerate}
+  \item Cascade + unity negative feedback: $H_1 = \dfrac{2}{s+1}$, $H_2 = \dfrac{1}{s+4}$. Find $Q(s)$.
+  \item Parallel forward path $\dfrac{3}{s+2} + \dfrac{1}{s+5}$, feedback $G = 4$. Find $Q(s)$.
+  \item Nested loops: inner forward $1/s$, inner feedback $3$; outer unity feedback. Find $Q(s)$.
+\end{enumerate}
+
+\textbf{Closed-Loop Poles and Stability}
+\begin{enumerate}\setcounter{enumi}{3}
+  \item $H(s) = K/(s+5)$, $G = 1$.
+    \begin{enumerate}
+      \item Closed-loop TF and pole?
+      \item Stable for which $K$?
+      \item $K$ for pole at $s = -10$?
+    \end{enumerate}
+  \item $H(s) = K/[(s+1)(s+2)]$, $G = 1$.
+    \begin{enumerate}
+      \item Characteristic equation?
+      \item Range of $K$ for stability?
+    \end{enumerate}
+  \item DT: $H(z) = Kz^{-1}/(1 - 0.8 z^{-1})$, $G = 1$.
+    \begin{enumerate}
+      \item Closed-loop pole vs.\ $K$?
+      \item $K > 0$ range for stability?
+    \end{enumerate}
+\end{enumerate}
+
+\textbf{Gain and Phase Margins}
+\begin{enumerate}\setcounter{enumi}{6}
+  \item Bode data: at $\omega_2 = 5$ ($|GH| = 0$\,dB): $\angle GH = -150^\circ$. At $\omega_1 = 20$ ($\angle GH = -180^\circ$): $|GH| = -8$\,dB.
+    \begin{enumerate}
+      \item Phase margin?
+      \item Gain margin?
+      \item Stable?
+      \item Max tolerable time delay?
+    \end{enumerate}
+\end{enumerate}
+
+\textbf{True / False}
+\begin{enumerate}\setcounter{enumi}{7}
+  \item Negative feedback always stabilizes a system.
+  \item Phase margin of $60^\circ$ $\Rightarrow$ stable.
+  \item A Nyquist plot is $G(j\omega)H(j\omega)$ plotted in the complex plane.
+\end{enumerate}
+
+\vspace{1em}
+\begin{center}
+\emph{``Good luck on the exam!'' --- R. Gracia Otalvaro}
+\end{center}
+
+\end{document}

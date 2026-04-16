@@ -396,3 +396,27 @@ Rogelio Gracia Otalvaro
 4. **Example: First-Order ODE with Nonzero Initial Condition** (Section 18.11) — Solve $\dfrac{dy}{dt} + 3y = 0$ with $y(0^-) = 5$ using the unilateral Laplace transform; obtain $y(t) = 5e^{-3t}u(t)$.
 5. **Example: Second-Order ODE with Initial Conditions** (Section 18.11) — Solve $\dfrac{d^2y}{dt^2} + 5\dfrac{dy}{dt} + 6y = 2u(t)$ with $y(0^-) = 1$, $y'(0^-) = 0$; obtain $y(t) = \left[\tfrac{1}{3} + 2e^{-2t} - \tfrac{4}{3}e^{-3t}\right]u(t)$, with verification of initial and steady-state values.
 6. **Example: ZSR + ZIR Decomposition** (Section 18.12) — For the second-order ODE above, separate the total response into zero-state response $Y_{\text{ZS}}(s) = \dfrac{2}{s(s+2)(s+3)}$ and zero-input response $Y_{\text{ZI}}(s) = \dfrac{s+5}{(s+2)(s+3)}$, and confirm that their sum equals the total response.
+
+---
+
+## Worked Examples (from Official Solutions)
+
+**Source:** [hw5_solutions.md](../homework/hw5/hw5_solutions.md) — work through the problems before reading the solutions.
+
+- **Problem 4 (all parts):** System analysis of a causal second-order ODE $y'' + 6y' + 8y = 2x$.
+  - **(a)** Find $H(s) = 2/[(s+2)(s+4)]$; ROC $\sigma > -2$ (causal).
+  - **(b)** Pole-zero plot — both poles in LHP $\Rightarrow$ BIBO stable.
+  - **(c)** Impulse response: $h(t) = (e^{-2t} - e^{-4t})u(t)$.
+  - **(d)** Drive with $x(t) = e^{-t}u(t)$; compute $Y(s) = H(s)X(s)$ and invert.
+  - **(e)** Stability of $G(s) = 3/(s-1)$: causal $\Rightarrow$ unstable; anti-causal $\Rightarrow$ stable. Stability depends on ROC, not pole location alone.
+- **Problem 5 (all parts):** Unilateral Laplace transform and IVPs.
+  - **(a)** First-order IVP $y' + 4y = 3e^{-t}u(t)$, $y(0^-) = 2$; use $\mathcal{L}_u\{y'\} = sY - y(0^-)$.
+  - **(b)** Second-order zero-input $y'' + 3y' + 2y = 0$, $y(0^-)=1$, $y'(0^-)=-1$; IC chosen so one mode cancels, giving $y(t) = e^{-t}u(t)$.
+  - **(c)** ZSR/ZIR decomposition for part (a): $y_{\text{ZS}}(t) = (e^{-t} - e^{-4t})u(t)$, $y_{\text{ZI}}(t) = 2e^{-4t}u(t)$; their sum reproduces the full response.
+
+## Instructor Emphasis (from Official Study Guide)
+
+- **Golden Rule (CT):** Causal + BIBO stable $\iff$ all poles strictly in the open LHP.
+- Unilateral differentiation sign: $\mathcal{L}_u\{y'\} = sY - y(0^-)$ (minus sign). This is the opposite sign convention from the $z$-transform's $+y[-1]$.
+- Total response = ZSR (input, zero ICs) + ZIR (ICs, zero input).
+- Negative feedback: $Q = G/(1+GF)$; positive: $Q = G/(1-GF)$.

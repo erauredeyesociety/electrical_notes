@@ -474,7 +474,36 @@ $H(j\omega) = \dfrac{\omega_n^2}{(j\omega)^2 + 2\zeta\omega_n(j\omega) + \omega_
 ## HW Lectures 16-18 — Laplace Transform
 
 **Source:** `hw_practice_problems/hw-lctr16-18.pdf` (extracted text `hw-lctr16-18.md`)
-**Solutions available:** No dedicated solutions PDF; worked solutions below are condensed derivations consistent with the course's lecture material.
+**Solutions available:** **Yes — full official solutions in [`homework/hw5/hw5_solutions.md`](../homework/hw5/hw5_solutions.md)** (transcribed from `hw-lctr16-18-solutions.pdf`).
+
+### Solutions Summary
+
+Full official solutions with all algebra: [`hw5_solutions.md`](../homework/hw5/hw5_solutions.md).
+
+- **P1(a)** — $\boxed{X_1(s) = \dfrac{4}{s+2},\; \Re\{s\}>-2}$ — standard causal $e^{-at}u(t)$ pair.
+- **P1(b)** — $\boxed{X_2(s) = \dfrac{3}{s-5},\; \Re\{s\}<5}$ — anti-causal pair $-e^{-at}u(-t)\!\leftrightarrow\!1/(s+a)$.
+- **P1(c)** — $\boxed{X_3(s) = 7e^{-3s},\; \text{all } s}$ — time-shifted impulse pair.
+- **P1(d)** — $\boxed{X_4(s) = \dfrac{1}{(s+4)^2},\; \Re\{s\}>-4}$ — $t\,e^{-at}u(t)$ pair.
+- **P1(e)** — $\boxed{X_5(s) = \dfrac{-3s+1}{(s+1)(s+3)},\; \Re\{s\}>-1}$ — linearity, common denominator; poles $-1,-3$, zero $1/3$.
+- **P1(f)** — $\boxed{X_6(s) = \dfrac{-2(s+5)}{(s+2)(s-4)},\; -2<\Re\{s\}<4}$ — two-sided strip ROC contains $j\omega$-axis, so FT exists.
+- **P2(a)** — $\boxed{x(t) = \tfrac{2}{3}e^{-t}u(t) + \tfrac{7}{3}e^{-4t}u(t)}$ — partial fractions, distinct real poles, right-sided.
+- **P2(b)** — $\boxed{x(t) = \tfrac{8}{5}e^{-2t}u(t) - \tfrac{2}{5}e^{3t}u(-t)}$ — strip ROC splits into right- and left-sided terms.
+- **P2(c)** — $\boxed{x(t) = [-\tfrac{2}{3}e^{-2t} + 2te^{-2t} + \tfrac{2}{3}e^{-5t}]u(t)}$ — repeated pole at $-2$; cover-up + $s^2$-coefficient matching.
+- **P2(d)** — $\boxed{x(t) = e^{-3t}\cos(4t)u(t)}$ — complete the square $(s+3)^2+4^2$; damped cosine pair.
+- **P3(a)** — $\boxed{F(s) = \dfrac{s+2}{(s+2)^2+25},\; \Re\{s\}>-2}$ — $s$-domain shift $s\!\to\!s+2$.
+- **P3(b)** — $\boxed{Y(s) = s/(s+3) = 1 - 3/(s+3)}$ — differentiation property; $y(t)=\delta(t)-3e^{-3t}u(t)$.
+- **P3(c)** — $\boxed{h(t) = \tfrac{3}{5}(e^{-t}-e^{-6t})u(t)}$ — convolution property, PFE.
+- **P3(d)** — $\boxed{x(0^+)=0,\; x(\infty)=1,\; x(t) = [1 + 2e^{-2t} - 3e^{-4t}]u(t)}$ — IVT/FVT + full PFE.
+- **P4(a)** — $\boxed{H(s) = \dfrac{2}{(s+2)(s+4)}}$ — substitute $d/dt\!\to\!s$.
+- **P4(b)** — **BIBO stable** (both poles in open LHP, causal).
+- **P4(c)** — $\boxed{h(t) = (e^{-2t}-e^{-4t})u(t)}$ — PFE of $H$.
+- **P4(d)** — $\boxed{y(t) = [\tfrac{2}{3}e^{-t} - e^{-2t} + \tfrac{1}{3}e^{-4t}]u(t)}$ — convolve with $e^{-t}u(t)$; three-pole PFE.
+- **P4(e)** — Causal $G=3/(s-1)$: **unstable** ($j\omega$-axis not in ROC). Anti-causal: **stable**.
+- **P5(a)** — $\boxed{y(t) = (e^{-t}+e^{-4t})u(t)}$ — unilateral transform, $y(0^-)=2$.
+- **P5(b)** — $\boxed{y(t) = e^{-t}u(t)}$ — pole-zero cancellation suppresses $e^{-2t}$ mode; pure ZIR.
+- **P5(c)** — $\boxed{y_{\text{ZS}} = (e^{-t}-e^{-4t})u(t),\; y_{\text{ZI}} = 2e^{-4t}u(t)}$ — ZSR/ZIR sum = P5(a).
+
+---
 
 ### Problem 1 — Computing Laplace Transforms and ROCs (Lecture 16)
 
@@ -623,7 +652,37 @@ Causal LTI: $y'' + 6y' + 8y = 2x$.
 ## HW Lectures 19-21 — z-Transform
 
 **Source:** `hw_practice_problems/hw-lctr19-21.pdf` (extracted text `hw-lctr19-21.md`)
-**Solutions:** `homework/hw6/hw6_solutions.md` (full) and `homework/hw6/hw6_solutions.tex`.
+**Solutions available:** **Yes — full official solutions in [`homework/hw6/hw6_official_solutions.md`](../homework/hw6/hw6_official_solutions.md)** (transcribed from `hw-lctr19-21-solutions.pdf`); student-made alternative in [`homework/hw6/hw6_solutions.md`](../homework/hw6/hw6_solutions.md).
+
+### Solutions Summary
+
+Full official solutions: [`hw6_official_solutions.md`](../homework/hw6/hw6_official_solutions.md).
+
+- **P1(a)** — $\boxed{X_1(z) = \dfrac{5}{1-0.7z^{-1}},\; |z|>0.7}$ — causal geometric pair.
+- **P1(b)** — $\boxed{X_2(z) = \dfrac{1}{1-4z^{-1}},\; |z|<4}$ — anti-causal pair $-a^n u[-n-1]$.
+- **P1(c)** — $\boxed{X_3(z) = 3 - 2z^{-1} + z^{-4},\; |z|>0}$ — finite-length polynomial.
+- **P1(d)** — $\boxed{X_4(z) = \dfrac{0.5z^{-1}}{(1-0.5z^{-1})^2},\; |z|>0.5}$ — $n\,a^n u[n]$ pair.
+- **P1(e)** — $\boxed{X_5(z) = \dfrac{6-3z^{-1}}{(1-0.3z^{-1})(1-0.9z^{-1})},\; |z|>0.9}$ — linearity + common denom.
+- **P1(f)** — $\boxed{X_6(z) = \dfrac{1}{1-0.6z^{-1}} + \dfrac{3}{1-2z^{-1}},\; 0.6<|z|<2}$ — annular ROC contains unit circle; DTFT exists.
+- **P1(g)** — $\boxed{X_7(z) = \dfrac{1-0.5657 z^{-1}}{1 - 1.1314 z^{-1} + 0.64 z^{-2}},\; |z|>0.8}$ — damped cosine pair, poles $0.8e^{\pm j\pi/4}$.
+- **P2(a)** — $\boxed{x[n] = [-8(0.2)^n + 9(0.6)^n]u[n]}$ — PFE with distinct real poles, right-sided.
+- **P2(b)** — $\boxed{x[n] = -0.8(0.5)^n u[n] - 4.8(3)^n u[-n-1]}$ — annular ROC: right/left split.
+- **P2(c)** — $\boxed{x[n] = 2n(0.5)^n u[n]}$ — double-pole pair, rewrite factor 2.
+- **P2(d)** — $\boxed{x[n] = (0.9)^n \cos(0.3\pi n)u[n]}$ — damped-cosine table lookup, $r=0.9$.
+- **P3(a)** — $\boxed{Y(z) = \dfrac{z^{-2}}{1-0.8z^{-1}},\; |z|>0.8}$ — time shift by 2 adds $z^{-2}$.
+- **P3(b)** — $\boxed{F(z) = \dfrac{1}{1-0.5z^{-1}},\; |z|>0.5}$ — z-domain scaling $z_0=0.5$.
+- **P3(c)** — $\boxed{h[n] = [-\tfrac{3}{4}(0.3)^n + \tfrac{7}{4}(0.7)^n]u[n]}$ — convolution via $H_1 H_2$ + PFE.
+- **P3(d)** — $\boxed{x[0]=3,\; x[n] = \tfrac{2}{9}(0.4)^n u[n] + \tfrac{25}{9}(-0.5)^n u[n]}$ — IVT + PFE.
+- **P4(a)** — $\boxed{H(z) = \dfrac{1}{(1-0.3z^{-1})(1-0.6z^{-1})}}$ — factor $z^2-0.9z+0.18$; poles $0.3, 0.6$.
+- **P4(b)** — **BIBO stable** (both poles inside unit circle).
+- **P4(c)** — $\boxed{h[n] = [2(0.6)^n - (0.3)^n]u[n]}$ — PFE of $H$.
+- **P4(d)** — $\boxed{y[n] = [12(0.6)^n + 1.5(0.3)^n - 12.5(0.5)^n]u[n]}$ — three-pole PFE from $Y=HX$.
+- **P4(e)** — Causal $G=1/(1-1.5z^{-1})$: **unstable**, DTFT DNE. Anti-causal: **stable**, DTFT exists.
+- **P5(a)** — $\boxed{y[n] = [-\tfrac{5}{3}(0.5)^n + \tfrac{76}{15}(0.8)^n]u[n]}$ — unilateral $y[-1]=3$; $y[0]=3.4$ ✓.
+- **P5(b)** — $\boxed{y[n] = [\tfrac{18}{7}(0.6)^n - \tfrac{1}{14}(-0.1)^n]u[n]}$ — pure ZIR with poles $0.6, -0.1$.
+- **P5(c)** — $\boxed{y_{\text{ZS}}[n] = [-\tfrac{5}{3}(0.5)^n + \tfrac{8}{3}(0.8)^n]u[n],\; y_{\text{ZI}}[n] = 2.4(0.8)^n u[n]}$ — sum matches P5(a).
+
+---
 
 ### Problem 1 — Computing z-Transforms and ROCs (Lecture 19)
 
@@ -764,7 +823,29 @@ $$h[n] = [-\,(0.3)^n + 2(0.6)^n]\,u[n].$$
 ## Lecture 22 Exercise — Sampling
 
 **Source:** `hw_practice_problems/lctr22-exercise.pdf` (extracted text `lctr22-exercise.md`)
-**Solutions:** Short answers provided inline below (standard sampling-theorem reasoning).
+**Solutions available:** **Yes — full official solutions in [`hw_practice_problems/lctr22-exercise-solutions.md`](../hw_practice_problems/lctr22-exercise-solutions.md)** (transcribed from `lctr22-exercise-solutions.pdf`).
+
+### Solutions Summary
+
+Full solutions with reasoning: [`lctr22-exercise-solutions.md`](../hw_practice_problems/lctr22-exercise-solutions.md).
+
+- **P1** — $\boxed{\text{Nyquist rate} = 10{,}000\pi \text{ rad/s} = 5\text{ kHz};\; T_{\max}<0.2\text{ ms}}$ — $\omega_s > 2\omega_M$.
+- **P2** — $\boxed{\text{False}}$ — strict inequality $\omega_s>2\omega_M$ required (sine sampled at $2\omega_M$ hits zeros).
+- **P3** — Time-domain multiplication by impulse train ↔ frequency-domain convolution with impulse train → replicas.
+- **P4** — $\boxed{\text{No}}$ — overlapped spectra add irreversibly; aliasing cannot be undone.
+- **P5** — Anti-aliasing filter: analog LPF with cutoff $\le\omega_s/2$ placed **before** the sampler.
+- **P6** — $\boxed{\text{Nyquist rate} = 3600\pi \text{ rad/s} = 1800\text{ Hz}}$ — $\omega_M = 1800\pi$.
+- **P7** — $\boxed{\omega_s = 10{,}000\pi > 2\omega_M = 6000\pi;\; \text{no aliasing}}$.
+- **P8** — $\boxed{f_{\text{alias}} = |1000-900| = 100\text{ Hz}}$ — fold-down via $f_s/2 = 500<900$.
+- **P9** — $\boxed{f_{\text{alias}} = |1500-900| = 600\text{ Hz}}$ — still aliases at $f_s=1500$.
+- **P10** — $\boxed{x(t-5)\!:\omega_0;\quad x(2t)\!:2\omega_0}$ — shift preserves spectrum magnitude; compression stretches it.
+- **P11** — Each replica is scaled by $1/T$ from the sampling operation; reconstruction filter multiplies by $T$ to undo this.
+- **P12** — ZOH is **not exact**: $H_0(j\omega) = e^{-j\omega T/2}\cdot 2\sin(\omega T/2)/\omega$ — sinc-droop in passband + residual images.
+- **P13** — $\boxed{\text{Blade appears to rotate slowly backward at 1 rev/s}}$ — alias $= f_s-f_0 = 24-25 = -1$ Hz.
+- **P14** — $\boxed{\text{Not satisfied};\; f_s>10\text{ kHz required}}$ — $f_s=8$ kHz $<2f_M=10$ kHz.
+- **P15** — $\boxed{\text{Yes, with anti-aliasing LPF}}$ — trade high-frequency loss for aliasing-free passband.
+
+---
 
 ### Problem 1
 A signal $x(t)$ has $X(j\omega)=0$ for $|\omega|>5000\pi$. Nyquist rate? Max sampling period $T$?
@@ -846,7 +927,24 @@ Non-band-limited signals: can we sample in practice?
 ## Lecture 23 Exercise — Feedback Systems
 
 **Source:** `hw_practice_problems/lctr23-exercise.pdf` (extracted text `lctr23-exercise.md`)
-**Solutions:** Worked out below (standard block-diagram algebra + stability analysis).
+**Solutions available:** **Yes — full official solutions in [`hw_practice_problems/lctr23-exercise-solutions.md`](../hw_practice_problems/lctr23-exercise-solutions.md)** (transcribed from `lctr23-exercise-solutions.pdf`).
+
+### Solutions Summary
+
+Full solutions with block-diagram algebra: [`lctr23-exercise-solutions.md`](../hw_practice_problems/lctr23-exercise-solutions.md).
+
+- **P1** — $\boxed{Q(s) = \dfrac{2}{(s+2)(s+3)}}$ — cascade $\times$ unity feedback; stable (poles $-2, -3$).
+- **P2** — $\boxed{Q(s) = \dfrac{4s+17}{s^2+23s+78}}$ — parallel sum then feedback $G=4$; stable (roots $\approx-4.14, -18.87$).
+- **P3** — $\boxed{Q(s) = \dfrac{1}{s+4}}$ — collapse inner loop to $1/(s+3)$ then outer unity feedback.
+- **P4(a)** — $\boxed{Q(s) = \dfrac{K}{s+5+K},\; s_{\text{cl}} = -(5+K)}$; **(b)** $\boxed{K>-5}$; **(c)** $\boxed{K=5}$ gives pole at $-10$.
+- **P5(a)** — Characteristic equation $\boxed{s^2 + 3s + (2+K) = 0}$; **(b)** $\boxed{K>-2}$ (Routh: all coeffs positive).
+- **P6(a)** — DT closed-loop pole $\boxed{z_{\text{cl}} = 0.8-K}$; **(b)** stable range $\boxed{0<K<1.8}$ for $|z|<1$.
+- **P7(a)** — $\boxed{\text{PM} = 30^\circ}$ at $\omega_{gc}=5$; **(b)** $\boxed{\text{GM}=8\text{ dB}}$ at $\omega_{pc}=20$; **(c)** both positive → **stable**; **(d)** $\boxed{\tau_{\max} = \text{PM(rad)}/\omega_{gc} \approx 0.105\text{ s}}$.
+- **P8** — $\boxed{\text{FALSE}}$ — negative feedback with high loop gain can destabilize (audio squeal example).
+- **P9** — $\boxed{\text{TRUE}}$ — positive PM $=60^\circ$ with positive GM ⇒ stable (well-damped design target).
+- **P10** — $\boxed{\text{TRUE}}$ — Nyquist plot is locus of $GH(j\omega)$ in the complex plane; encirclements of $-1$ diagnose instability.
+
+---
 
 ### Problem 1 — Cascade + Unity Feedback
 

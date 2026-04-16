@@ -157,6 +157,58 @@ Both margins $>0\Rightarrow$ stable. Max delay: $\tau_{\max}=\mathrm{PM}_{\text{
 
 **Routh-Hurwitz** (for $a_ns^n+\cdots+a_0$): build array; # sign changes in first column $=$ # RHP roots. Necessary (not sufficient) condition: all $a_i>0$ with same sign; missing term $\Rightarrow$ unstable/marginal.
 
+## Procedures (Step-by-Step Recipes)
+
+**Inverse Laplace (causal/two-sided):**
+
+1. Make $X(s)$ proper (polynomial + strictly-proper part) if needed.
+2. Factor denominator $\Rightarrow$ PFE in $s$ (distinct, repeated, or complex-conj).
+3. For complex-conj pair, **complete the square**: $(s+a)^2+\omega_d^2$.
+4. Use ROC to pick right- vs. left-sided for each pole.
+5. Look up each term in the pair table; sum.
+
+**Inverse Z (in $z^{-1}$):**
+
+1. If numerator order $\ge$ denominator order, **long-divide** first to pull out a polynomial part (finite-duration).
+2. Factor denom; PFE in $z^{-1}$: $\sum A_k/(1-d_k z^{-1})$ + repeated-pole terms.
+3. ROC outside $|d_k|$ $\Rightarrow$ right-sided $d_k^n u[n]$; inside $\Rightarrow -d_k^n u[-n-1]$.
+4. For complex-conj pair with $p = r e^{\pm j\Omega_0}$: use $r^n\cos/\sin$ pair.
+
+**Unilateral Laplace IVP (ODE + ICs):**
+
+1. Transform: $y^{(k)} \to s^k Y - \sum_{j=0}^{k-1} s^{k-1-j}\,y^{(j)}(0^-)$.
+2. Solve algebraically for $Y(s)$; separate $Y_{\text{ZS}}$ (input only) + $Y_{\text{ZI}}$ (ICs only) if asked.
+3. PFE; invert.
+4. Check $y(0^+)$ vs. given IC; check $y(\infty)$ via FVT if all $sX$ poles in LHP.
+
+**Unilateral Z (difference eqn + ICs):**
+
+1. Transform: $y[n-1]\to z^{-1}Y + y[-1]$; $y[n-2]\to z^{-2}Y + z^{-1}y[-1] + y[-2]$ (**plus** sign).
+2. Solve for $Y(z)$; split ZSR / ZIR if asked.
+3. PFE in $z^{-1}$; invert.
+4. Sanity-check $y[0], y[1]$ from the difference equation directly.
+
+**Block-diagram simplification:**
+
+1. Reduce innermost feedback loop $\to H/(1+GH)$.
+2. Replace it with a single block; re-draw.
+3. Combine cascades (multiply) and parallel paths (add).
+4. Final form: $Q = Y/X$; poles = roots of $1+GH = 0$.
+
+**Aliased-frequency mapping** (pure sinusoid $f_0$, sample rate $f_s$):
+
+- Define principal alias $f_a = |f_0 \bmod f_s|$, then fold: if $f_a > f_s/2$, reflect to $f_s - f_a$.
+- Common shortcut for $f_s/2 < f_0 < f_s$: $f_{\text{alias}} = f_s - f_0$.
+- In radians: $\omega_{\text{alias}} = \omega_0 - k\omega_s$ chosen so $|\omega_{\text{alias}}| \le \omega_s/2$.
+- Sign flip $\Rightarrow$ reversed apparent direction (helicopter blade effect).
+
+**Gain/Phase margin from Bode data:**
+
+1. Read $\omega_{gc}$ at $|GH|=0$ dB $\Rightarrow \mathrm{PM} = 180^\circ + \angle GH(\omega_{gc})$.
+2. Read $\omega_{pc}$ at $\angle GH = -180^\circ$ $\Rightarrow \mathrm{GM}_{\mathrm{dB}} = -|GH(\omega_{pc})|_{\mathrm{dB}}$.
+3. Stable iff both $> 0$.
+4. Max added delay: $\tau_{\max} = \mathrm{PM}_{\mathrm{rad}}/\omega_{gc}$.
+
 ## One-Liners / Traps
 
 - $\delta\!\leftrightarrow\!1$; $u(t)\!\leftrightarrow\!1/s$; $e^{-at}u\!\leftrightarrow\!1/(s+a)$.
@@ -172,3 +224,26 @@ Both margins $>0\Rightarrow$ stable. Max delay: $\tau_{\max}=\mathrm{PM}_{\text{
 - Marginal poles ($j\omega$-axis / unit circle) $\Rightarrow$ **not** BIBO stable.
 - $f_{\text{alias}}=|f_s-f_0|$; $\omega_s>2\omega_M$ strict.
 - $T=G/(1+GH)$; char. eq. $1+GH=0$.
+
+## Coverage Checklist (Exam 3 Question Bank → Section)
+
+| Topic / technique | Covered in |
+| --- | --- |
+| Compute $X(s)$ for causal/anti-causal/two-sided exponentials, shifted $\delta$, $te^{-at}$, sum of causal exponentials | Laplace Pairs, Laplace ROC |
+| Inverse $X(s)$: distinct real, two-sided (annular), repeated, complex-conjugate via completing the square | PFE, Procedures — Inverse Laplace |
+| $s$-shift, differentiation, convolution, IVT/FVT | Laplace Properties |
+| $H(s)$ from ODE; pole-zero plot; causal vs anti-causal stability of $G(s)=3/(s-1)$ | Laplace ROC, One-Liners |
+| Unilateral Laplace IVPs, ZSR/ZIR decomposition | Procedures — Unil. Laplace IVP |
+| $X(z)$ for causal/anti-causal geometrics, $\delta[n-k]$, $na^n u[n]$, damped cos, two-sided | Z-Transform Pairs |
+| Inverse $X(z)$: distinct, annular ROC, repeated, complex-conj damped cos | PFE, Procedures — Inverse Z |
+| Time shift, $z$-scaling, convolution, IVT | Z Properties |
+| $H(z)$ from difference eq; BIBO via unit circle; pole at $\|z\|>1$ causal vs anti-causal | Z ROC Rules |
+| Unilateral Z with $y[-1],y[-2]$, ZSR/ZIR | Procedures — Unil. Z |
+| Nyquist rate, max $T$, $\omega_s>2\omega_M$ strict, $\omega_s=2\omega_M$ failure | Sampling |
+| Aliasing of cosines, helicopter-blade fold | Procedures — Aliased-frequency mapping |
+| Anti-aliasing filter placement, reconstruction gain $T$, ZOH sinc droop | Sampling |
+| Nyquist rate transforms under $x(t-t_0)$ and $x(at)$ | Sampling / One-Liners |
+| Block diagram: cascade, parallel, nested feedback $\to Q=H/(1+GH)$ | Feedback, Procedures |
+| Closed-loop pole vs $K$, stable range of $K$ (CT and DT) | Feedback |
+| GM, PM, stability, max tolerable delay from Bode data | Procedures — GM/PM |
+| T/F: negative feedback stabilizes? PM of 60° $\Rightarrow$ stable? Nyquist plot = $GH(j\omega)$? | Feedback, One-Liners |

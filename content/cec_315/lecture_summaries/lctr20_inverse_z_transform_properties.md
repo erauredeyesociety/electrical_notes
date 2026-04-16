@@ -326,3 +326,27 @@ Rogelio Gracia Otalvaro
 - **Example (Section 20.6) — Complex Conjugate Poles:** Invert a second-order $X(z)$ with complex conjugate poles at $0.8 e^{\pm j 0.4\pi}$ to get the damped sinusoid $x[n] = (0.8)^n \cos(0.4\pi n) u[n]$.
 - **Example (Section 20.8.2) — Time Shifting:** Apply the time-shift property to $x[n] = (0.5)^n u[n]$ with a 3-sample delay to obtain $Y(z) = \frac{z^{-3}}{1 - 0.5 z^{-1}}$.
 - **Example (Section 20.8.4) — Initial and Final Value Theorems:** For $X(z) = \frac{5}{(1 - z^{-1})(1 - 0.6 z^{-1})}$, apply both theorems to show $x[0] = 5$ and $x[\infty] = 12.5$.
+
+---
+
+## Worked Examples (from Official Solutions)
+
+**Source:** [hw6_official_solutions.md](../homework/hw6/hw6_official_solutions.md) — work through the problems before reading the solutions.
+
+- **Problem 2 (all parts):** Inverse $z$-transform via partial fractions; ROC decides direction ($u[n]$ vs. $-u[-n-1]$).
+  - **(a)** Distinct real poles, causal (ROC $|z|>0.6$): cover-up at $z^{-1} = 1/d_i$.
+  - **(b)** Distinct real poles, two-sided annulus $0.5<|z|<3$: inner pole $\to$ right-sided, outer pole $\to$ left-sided with the characteristic negative sign ($-a^n u[-n-1]$).
+  - **(c)** Repeated poles: $z^{-1}/(1-0.5z^{-1})^2$ — rewrite to match pair and get $2n(0.5)^n u[n]$.
+  - **(d)** Complex-conjugate poles: damped-cosine pair $r^n \cos(\omega_0 n)u[n]$ with $r = 0.9$, $\omega_0 = 0.3\pi$.
+- **Problem 3 (all parts):** $z$-transform properties.
+  - **(a)** Time shift: $x[n-2] \to z^{-2}X(z)$; ROC unchanged.
+  - **(b)** $z$-scaling: $(0.5)^n u[n]$ obtained from $u[n]$ via $X(z/0.5)$.
+  - **(c)** Convolution: cascade of two causal geometrics $\to$ $H(z) = H_1 H_2$; verify via direct convolution ($h[0]$, $h[1]$).
+  - **(d)** IVT and full inversion: $x[0] = \lim_{z\to\infty} X(z) = 3$; then partial fractions to recover $x[n]$.
+
+## Instructor Emphasis (from Official Study Guide)
+
+- Partial fractions in DT use the form $A_i/(1 - d_i z^{-1})$, not $A_i/(z - d_i)$.
+- ROC **outside** the pole circle $\to d_i^n u[n]$; ROC **inside** $\to -d_i^n u[-n-1]$ (negative sign is part of the pair).
+- Repeated pole of order $n$ needs $n$ partial-fraction terms, just like Laplace.
+- IVT: $x[0] = \lim_{z\to\infty} X(z)$ (for causal signals). FVT requires all poles of $(1 - z^{-1})X(z)$ inside the unit circle.

@@ -224,6 +224,56 @@ Both $>0 \Rightarrow$ stable. Delay tolerance $\tau_{\max}=\mathrm{PM}_{\text{ra
 
 \textbf{Routh--Hurwitz} for $a_n s^n+\cdots+a_0$: build Routh array; \# sign changes in first column $=$ \# RHP roots. Necessary (not sufficient): all $a_i>0$, none missing.
 
+\section*{Procedures (Step-by-Step Recipes)}
+\footnotesize
+\textbf{Inverse Laplace.}
+\begin{enumerate}
+\item Make $X(s)$ proper (pull out polynomial part if needed).
+\item Factor denom; PFE in $s$ (distinct / repeated / complex-conj).
+\item Complex-conj pair: \emph{complete the square} $(s+a)^2+\omega_d^2$.
+\item ROC picks right- vs.\ left-sided for each pole.
+\item Sum table entries.
+\end{enumerate}
+
+\textbf{Inverse Z (in $z^{-1}$).}
+\begin{enumerate}
+\item If num order $\ge$ den, \emph{long-divide} first.
+\item PFE in $z^{-1}$: $\sum A_k/(1-d_k z^{-1})$ + repeated-pole terms.
+\item ROC outside $|d_k|\to d_k^n u[n]$; inside $\to -d_k^n u[-n-1]$.
+\item Complex-conj $p=re^{\pm j\Omega_0}$: use $r^n\cos/\sin$ pair.
+\end{enumerate}
+
+\textbf{Unil.\ Laplace IVP.}
+\begin{enumerate}
+\item $y^{(k)}\!\to\! s^kY-\sum_{j=0}^{k-1}s^{k-1-j}y^{(j)}(0^-)$.
+\item Solve for $Y(s)$; split $Y_{\text{ZS}}+Y_{\text{ZI}}$ if asked.
+\item PFE; invert. Check $y(0^+)$, $y(\infty)$.
+\end{enumerate}
+
+\textbf{Unil.\ Z (diff eqn + ICs).}
+\begin{enumerate}
+\item $y[n{-}1]\!\to\! z^{-1}Y+y[-1]$; $y[n{-}2]\!\to\! z^{-2}Y+z^{-1}y[-1]+y[-2]$ (\textbf{plus}).
+\item Solve $Y(z)$; split ZSR / ZIR.
+\item PFE in $z^{-1}$; invert. Sanity-check $y[0],y[1]$ from diff eqn.
+\end{enumerate}
+
+\textbf{Block diagram.}
+\begin{enumerate}
+\item Reduce innermost loop $\to H/(1+GH)$.
+\item Replace with single block; redraw.
+\item Combine cascades (multiply) \& parallel (add).
+\item Poles = roots of $1+GH=0$.
+\end{enumerate}
+
+\textbf{Aliased-frequency mapping.} For sinusoid $f_0$ at rate $f_s$: reduce $f_0 \bmod f_s$, then fold to $[0,f_s/2]$. Shortcut if $f_s/2<f_0<f_s$: $f_{\text{alias}}=f_s-f_0$. Rad: pick integer $k$ so $|\omega_0-k\omega_s|\le\omega_s/2$. Sign flip $\Rightarrow$ reversed apparent rotation.
+
+\textbf{GM/PM from Bode.}
+\begin{enumerate}
+\item $\omega_{gc}$ where $|L|=0$ dB $\Rightarrow \mathrm{PM}=180^\circ+\angle L(\omega_{gc})$.
+\item $\omega_{pc}$ where $\angle L=-180^\circ$ $\Rightarrow \mathrm{GM}_\mathrm{dB}=-|L(\omega_{pc})|_\mathrm{dB}$.
+\item Both $>0 \Rightarrow$ stable; $\tau_{\max}=\mathrm{PM}_\mathrm{rad}/\omega_{gc}$.
+\end{enumerate}
+
 \section*{One-Liners / Traps}
 \footnotesize
 \begin{itemize}
@@ -240,6 +290,33 @@ Both $>0 \Rightarrow$ stable. Delay tolerance $\tau_{\max}=\mathrm{PM}_{\text{ra
 \item $T=G/(1+GH)$; char.\ eq.\ $1+GH=0$.
 \item Negative fdbk $\to 1+GH$; positive fdbk $\to 1-GH$.
 \end{itemize}
+
+\section*{Coverage Checklist (Q-bank $\to$ Section)}
+\footnotesize
+\begin{tabular}{@{}p{1.85in} p{1.15in}@{}}
+\toprule
+\textbf{Topic / technique} & \textbf{Covered in} \\
+\midrule
+Compute $X(s)$: causal/anti-causal exp., $\delta(t-t_0)$, $te^{-at}$, sum of causal exps, two-sided & Laplace Pairs, Laplace ROC \\
+Inverse $X(s)$: distinct real, annular ROC, repeated, complex-conj (complete the square) & PFE, Procedures \\
+$s$-shift, diff., convolution, IVT/FVT & Laplace Properties \\
+$H(s)$ from ODE; pole-zero plot; causal vs.\ anti-causal stability of $G=3/(s-1)$ & Laplace ROC, Traps \\
+Unil.\ Laplace IVPs, ZSR/ZIR & Procedures \\
+$X(z)$: causal/anti-causal geom., $\delta[n-k]$, $na^n u[n]$, damped cos, two-sided & Z-Transform Pairs \\
+Inverse $X(z)$: distinct, annular, repeated, complex-conj damped cos & PFE, Procedures \\
+Time shift, $z$-scaling, conv., IVT & Z Properties \\
+$H(z)$ from diff eq; BIBO via unit circle; pole outside, causal vs.\ anti-causal & Z ROC Rules \\
+Unil.\ Z with $y[-1],y[-2]$, ZSR/ZIR & Procedures \\
+Nyquist rate, max $T$, strict $\omega_s>2\omega_M$, $\omega_s=2\omega_M$ failure & Sampling \\
+Aliasing of cosines; helicopter-blade fold & Procedures \\
+AAF placement, reconstruction gain $T$, ZOH sinc droop & Sampling \\
+Nyquist rate of $x(t-t_0)$, $x(at)$ & Sampling, Traps \\
+Block diagram: cascade, parallel, nested fdbk $\to Q=H/(1+GH)$ & Feedback, Procedures \\
+Closed-loop pole vs.\ $K$; stable range of $K$ (CT, DT) & Feedback \\
+GM, PM, stability, max delay from Bode data & Procedures \\
+T/F on feedback, PM, Nyquist plot & Feedback, Traps \\
+\bottomrule
+\end{tabular}
 
 \end{multicols*}
 \end{document}

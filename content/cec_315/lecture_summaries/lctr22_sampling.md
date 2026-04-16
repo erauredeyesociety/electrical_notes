@@ -332,3 +332,34 @@ Test your understanding with these quick questions. Answers are at the bottom of
 - **Practice Question 13:** Qualitatively describe the appearance of a 25 rev/s helicopter blade filmed at 24 fps.
 - **Practice Question 14:** Determine whether $f_s = 8000$ Hz satisfies the sampling theorem for $\omega_M = 10{,}000\pi$, and find the minimum valid $f_s$.
 - **Practice Question 15:** Explain how non-band-limited signals are handled in practice.
+
+---
+
+## Worked Examples (from Official Solutions)
+
+**Source:** [lctr22-exercise-solutions.md](../hw_practice_problems/lctr22-exercise-solutions.md) — work through the problems before reading the solutions.
+
+- **Problem 1:** Nyquist rate and max $T$ for $\omega_M = 5000\pi$: rate $= 10{,}000\pi$ rad/s, $T < 0.2$ ms.
+- **Problem 2:** True/False — $\omega_s = 2\omega_M$ is **not** sufficient (strict inequality required; counterexample $\sin(\omega_M t)$ sampled at $2\omega_M$ gives all zeros).
+- **Problem 3:** Why sampling creates spectral copies — multiplication by impulse train $\leftrightarrow$ convolution with impulse train in frequency.
+- **Problem 4:** Aliasing is irreversible — overlapped replicas cannot be separated by any filter.
+- **Problem 5:** Anti-aliasing filter is a lowpass, placed **before** the sampler, cutoff $\leq \omega_s/2$.
+- **Problem 6:** Nyquist rate of $\cos(600\pi t) + \cos(1800\pi t)$: $2\omega_M = 3600\pi$ rad/s $= 1800$ Hz.
+- **Problem 7:** Aliasing check — $\omega_M = 3000\pi$, $T = 2\times 10^{-4}$ gives $\omega_s = 10{,}000\pi > 6000\pi$, so no aliasing.
+- **Problem 8:** $f_0 = 900$ Hz cosine at $f_s = 1000$ Hz $\to$ alias at $|f_s - f_0| = 100$ Hz.
+- **Problem 9:** Same signal at $f_s = 1500$ Hz $\to$ alias at $600$ Hz.
+- **Problem 10:** Nyquist rate invariance: $x(t-5)$ keeps $\omega_0$; $x(2t)$ doubles to $2\omega_0$.
+- **Problem 11:** Reconstruction LPF gain $= T$ (to cancel the $1/T$ factor on each spectral replica).
+- **Problem 12:** ZOH is **not** exact — sinc-shaped magnitude causes passband droop and imperfect replica suppression.
+- **Problem 13:** Helicopter blade at 25 rps filmed at 24 fps $\to$ apparent slow backward rotation at 1 rps (negative alias).
+- **Problem 14:** $f_s = 8000$ Hz with $\omega_M = 10{,}000\pi$ (i.e. $f_M = 5000$ Hz) — theorem fails; need $f_s > 10{,}000$ Hz.
+- **Problem 15:** Non-band-limited signals: band-limit via anti-aliasing filter before the sampler; passband is preserved exactly.
+
+## Instructor Emphasis (from Official Study Guide)
+
+- The sampling theorem requires the **strict inequality** $\omega_s > 2\omega_M$; equality is not enough.
+- Aliasing is irreversible. Prevent with an anti-aliasing LPF **before** the sampler.
+- Squaring a signal doubles its bandwidth.
+- ZOH and FOH are practical but inexact approximations of sinc interpolation.
+- Don't mix Hz and rad/s: $\omega = 2\pi f$.
+- Aliased frequency rule (for $f_s/2 < f_0 < f_s$): $f_{\text{alias}} = |f_s - f_0|$.

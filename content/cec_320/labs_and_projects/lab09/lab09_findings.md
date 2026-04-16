@@ -14,10 +14,10 @@
 
 | ID | Type | Description | Required For | Status |
 |----|------|-------------|--------------|--------|
-| A1 | Screenshot | Renode UART — all 5 tests pass (F412dsc Unity) | PT1-PT3 (80 pts) | [ ] |
-| A2 | Screenshot | Serial — all 5 tests pass on real G431 Nucleo-32 | Submission | [ ] |
-| C1 | Code | `mp_apsr_to_ccs` body in `fo4b_ccs_n_cond_branch_cfns.c` | PT1 (30 pts) | [ ] |
-| C2 | Code | `mp_max_ab_i_s` + `mp_range_square_sum_standard_while_s` in `_sfns.s` | PT2+PT3 (50 pts) | [ ] |
+| A1 | Screenshot | Renode UART — all 5 tests pass (F412dsc Unity) | PT1-PT3 (80 pts) | [x] |
+| A2 | Screenshot | Serial — all 5 tests pass on real G431 Nucleo-32 | Submission | [x] |
+| C1 | Code | `mp_apsr_to_ccs` body in `fo4b_ccs_n_cond_branch_cfns.c` | PT1 (30 pts) | [x] |
+| C2 | Code | `mp_max_ab_i_s` + `mp_range_square_sum_standard_while_s` in `_sfns.s` | PT2+PT3 (50 pts) | [x] |
 
 ---
 

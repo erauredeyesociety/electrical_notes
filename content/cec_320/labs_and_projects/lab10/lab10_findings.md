@@ -13,14 +13,11 @@
 
 ---
 
-## ⚠️ Blocker on resume
+## Blocker cleared (2026-04-15)
 
-The base project **`ge1s_more_ldr_n_str_n_mov.zip` is not on disk**. The
-manual instructs the student to download it from the course materials. The
-LLM searched `lab10/`, `/opt/proj_mp/`, `~`, and `/tmp` — not present.
-
-**Action required from the human:** download the zip and drop it into
-`lab10/`, then resume.
+Base zip received, extracted to `/opt/proj_mp/ge1s_more_ldr_n_str_n_mov/`
+with a single-level layout (no flattening needed). All Task 8 code edits
+are applied and verified with `arm-none-eabi-as`.
 
 ---
 
@@ -37,44 +34,24 @@ LLM searched `lab10/`, `/opt/proj_mp/`, `~`, and `/tmp` — not present.
 | A7 | Screenshot | Expression view: `regs` + first 10 of `reservation` | Task 7 | [ ] |
 | A8 | Screenshot | Unity test pass with new `_pos_sum` test included | Task 8 | [ ] |
 | A9 | Screenshot | Editor view of new asm function | Task 8 | [ ] |
-| C1 | Code | New `mp_array_pos_sum_cst_ptr_s` in `_sfns.s` | Task 8 | [ ] |
+| C1 | Code | New `mp_array_pos_sum_cst_ptr_s` in `_sfns.s` | Task 8 | [x] |
 
 All 9 screenshots are required for the (optional) submission PDF.
 
 ---
 
-## Resume State (as of 2026-04-14)
+## Resume State (as of 2026-04-15)
 
 **LLM work done:**
 
-- Read PDF and identified the structure (7 debug-GUI tasks + 1 small asm task)
-- Confirmed `ge1s_more_ldr_n_str_n_mov` base zip is **not** on the system
-- Drafted [task8_draft.s](./task8_draft.s) — a placeholder
-  `mp_array_pos_sum_cst_ptr_s` template using a `blt skip_neg` to skip the
-  add for negative elements. The draft assembles cleanly with
-  `arm-none-eabi-as -mcpu=cortex-m4 -mthumb`.
-- Created the procedure + findings + report skeletons noting the blocker
-
-**LLM work remaining (after the human supplies the zip):**
-
-1. Extract `lab10/ge1s_more_ldr_n_str_n_mov.zip` to
-   `/opt/proj_mp/ge1s_more_ldr_n_str_n_mov/`
-2. Read the **real** `mp_array_abs_sum_cst_ptr_s` from
-   `src/ge1s_more_ldr_n_str_n_mov_sfns.s` to confirm its register usage,
-   label naming, and `.global`/`.type` declarations
-3. Reconcile the draft with the real `_abs_sum` style (the manual is
-   explicit: "copy and rename" — the new function should mirror the
-   structure of the existing one)
-4. Apply the edits to **three files**:
-   - `src/ge1s_more_ldr_n_str_n_mov_fns.h` — add prototype
-   - `src/ge1s_more_ldr_n_str_n_mov_sfns.s` — add `.global`/`.type` block + body
-   - `test/test_ge1s_more_ldr_n_str_n_mov.c` — add new test function and
-     `RUN_TEST(test_mp_array_pos_sum_cst_ptr_s);` in `mp_unity()`. Compute
-     `exp[]` for the same `arr[]` used by the abs-sum test, but as the sum
-     of positive elements only.
-5. Re-verify with `arm-none-eabi-as` and (if possible) host-compile the new
-   test logic to confirm `exp[]` is correct
-6. Save the edited file as `lab10/c1.s`
+- Zip extracted to `/opt/proj_mp/ge1s_more_ldr_n_str_n_mov/` (single-level, no flattening required)
+- Read the real `mp_array_abs_sum_cst_ptr_s` and mirrored its style for the new function
+- Applied Task 8 edits to all three files:
+  - [`src/ge1s_more_ldr_n_str_n_mov_fns.h`](/opt/proj_mp/ge1s_more_ldr_n_str_n_mov/src/ge1s_more_ldr_n_str_n_mov_fns.h): added `int mp_array_pos_sum_cst_ptr_s(int *const pArr, int n);` prototype
+  - [`src/ge1s_more_ldr_n_str_n_mov_sfns.s`](/opt/proj_mp/ge1s_more_ldr_n_str_n_mov/src/ge1s_more_ldr_n_str_n_mov_sfns.s): added `.global`/`.type` block and full function body using `blt` skip-on-negative pattern
+  - [`test/test_ge1s_more_ldr_n_str_n_mov.c`](/opt/proj_mp/ge1s_more_ldr_n_str_n_mov/test/test_ge1s_more_ldr_n_str_n_mov.c): added `test_mp_array_pos_sum_cst_ptr_s` with `exp = {0, 9}` (first 3 elements all negative → 0; full 7 elements → 0+1+3+5 = 9) and `RUN_TEST` line
+- Verified with `arm-none-eabi-as -mcpu=cortex-m4 -mthumb` — assembles cleanly; objdump shows the expected instruction stream
+- Code artifact saved to [c1.s](./c1.s)
 
 **Human work — debugger walkthrough (Tasks 1–7):**
 

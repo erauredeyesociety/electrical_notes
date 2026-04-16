@@ -378,3 +378,27 @@ Rogelio Gracia Otalvaro
 6. **Example (17.8.2) — $s$-Domain Shifting:** Find the Laplace transform of $x(t) = e^{-3t} \cos(5t) u(t)$. Answer: $\dfrac{s+3}{(s+3)^2 + 25}$, $\text{Re}\{s\} > -3$.
 7. **Example (17.8.3) — Differentiation in $s$:** Derive the Laplace transform of $t\, e^{-2t} u(t)$ using the differentiation-in-$s$ property. Answer: $\dfrac{1}{(s+2)^2}$, $\text{Re}\{s\} > -2$.
 8. **Example (17.9) — Initial and Final Value Theorems:** For $X(s) = \dfrac{10}{s(s+2)(s+5)}$, $\text{Re}\{s\} > 0$, find $x(0^+)$ and $x(\infty)$. Answer: $x(0^+) = 0$, $x(\infty) = 1$.
+
+---
+
+## Worked Examples (from Official Solutions)
+
+**Source:** [hw5_solutions.md](../homework/hw5/hw5_solutions.md) — work through the problems before reading the solutions.
+
+- **Problem 2 (all parts):** Inverse Laplace via partial fractions; the ROC decides direction (right-sided $u(t)$ vs. left-sided $-u(-t)$).
+  - **(a)** Distinct real poles, right-sided: $X(s) = (3s+5)/[(s+1)(s+4)]$, ROC $\sigma>-1$ — both poles right-sided, cover-up method.
+  - **(b)** Distinct real poles, two-sided strip ROC $-2<\sigma<3$ — pole at $-2$ gives right-sided term, pole at $3$ gives left-sided term ($-e^{3t}u(-t)$).
+  - **(c)** Repeated poles: $6/[(s+2)^2(s+5)]$ — three partial-fraction terms including $B/(s+2)^2 \to t\,e^{-2t}u(t)$.
+  - **(d)** Complex conjugate poles: $(s+3)/(s^2+6s+25)$ — complete the square to $(s+3)^2 + 4^2$, invert to $e^{-3t}\cos(4t)u(t)$.
+- **Problem 3 (all parts):** Laplace properties.
+  - **(a)** $s$-domain shift: $e^{-2t}\cos(5t)u(t) \to (s+2)/[(s+2)^2+25]$, ROC shifts from $\sigma>0$ to $\sigma>-2$.
+  - **(b)** Differentiation in time: $sX(s)$; verify via direct differentiation (produces $\delta(t)$ term).
+  - **(c)** Convolution: cascade of two causal exponentials; partial fractions give $h(t) = (3/5)(e^{-t} - e^{-6t})u(t)$.
+  - **(d)** Initial/Final value theorems: $x(0^+) = \lim_{s\to\infty} sX(s) = 0$; $x(\infty) = \lim_{s\to 0} sX(s) = 1$ (poles of $sX(s)$ in LHP, so FVT valid).
+
+## Instructor Emphasis (from Official Study Guide)
+
+- Repeated pole of order $n$ needs $n$ partial-fraction terms; the highest-order term pairs with $t^{n-1}/(n-1)!\,e^{-at}u(t)$.
+- Complex poles: complete the square, don't split into conjugate fractions.
+- Left-sided inversion: $1/(s-a)$ with ROC $\sigma < a$ gives $-e^{at}u(-t)$ — the negative sign is part of the pair, not an error.
+- FVT is valid only when all poles of $sX(s)$ lie in the open LHP.

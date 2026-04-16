@@ -19,12 +19,26 @@ Coverage: Lectures 16--23 (Laplace, Z-Transform, Sampling, Feedback)}
 
 \begin{document}
 \maketitle
+
+\begin{center}
+\fbox{\parbox{0.92\textwidth}{%
+\textbf{\large AUTHORITATIVE SOURCE: Official Instructor Study Guide}\\[4pt]
+The instructor released an \textbf{official Exam 3 study guide} (\texttt{StudyGuide\_Exam3.pdf}). A faithful transcription is in \texttt{official\_study\_guide.md} (LaTeX: \texttt{official\_study\_guide.tex}). \textbf{Treat that file as authoritative} --- this companion guide is supplementary.\\[4pt]
+\textbf{Exam format (from official guide):} 50 minutes, 100 pts total. Part I: 10 multiple choice ($4\times 10 = 40$ pts). Part II: multi-part problems (60 pts).\\[4pt]
+\textbf{Instructor's \#1 emphasis:} \emph{``Always state the ROC with every transform.''}\\[4pt]
+The official guide also includes \textbf{25 practice questions} (15 sampling, 10 feedback) --- review them before the exam.
+}}
+\end{center}
+
 \tableofcontents
 \newpage
 
 \section{Topic Overview by Lecture}
 
 \subsection*{Lecture 16 --- Laplace Transform and ROC (\S9.0--9.2)}
+
+\noindent\emph{Instructor emphasis (official guide):} ROC is a vertical strip (depends only on $\sigma$), never contains poles, and $\dfrac{1}{s+a}$ is \emph{ambiguous without the ROC} --- could be $e^{-at}u(t)$ or $-e^{-at}u(-t)$.
+
 \begin{itemize}
   \item Motivation: Fourier transform fails for growing signals (e.g., $e^{2t}u(t)$).
   \item Definition of the bilateral Laplace transform $X(s) = \int_{-\infty}^{\infty} x(t) e^{-st}\,dt$.
@@ -47,6 +61,9 @@ Coverage: Lectures 16--23 (Laplace, Z-Transform, Sampling, Feedback)}
 \end{itemize}
 
 \subsection*{Lecture 18 --- System Analysis via Unilateral Laplace (\S9.7--9.9)}
+
+\noindent\emph{Instructor ``Golden Rule'' (CT) from official guide:} Causal + BIBO stable $\iff$ all poles in the open LHP ($\operatorname{Re}\{p_i\} < 0\ \forall i$). Unilateral differentiation uses \textbf{$-y(0^-)$}.
+
 \begin{itemize}
   \item Deriving $H(s) = Y(s)/X(s)$ from a differential equation.
   \item Causality $\Leftrightarrow$ ROC is a right half-plane (and $M \le N$).
@@ -82,6 +99,9 @@ Coverage: Lectures 16--23 (Laplace, Z-Transform, Sampling, Feedback)}
 \end{itemize}
 
 \subsection*{Lecture 21 --- System Analysis via Unilateral Z (\S10.7--10.9)}
+
+\noindent\emph{Instructor ``Sign trap'' (official guide):} Laplace uses $-y(0^-)$; the $z$-transform uses \textbf{$+y[-1]$}. Don't mix them up. \emph{Golden Rule (DT):} causal + BIBO stable $\iff$ all poles strictly inside the unit circle ($|p_i| < 1$).
+
 \begin{itemize}
   \item Deriving $H(z) = Y(z)/X(z)$ from a difference equation (replace $y[n-k] \to z^{-k}Y(z)$).
   \item Causality $\Leftrightarrow$ ROC is exterior of a circle; $M \le N$.
@@ -94,6 +114,9 @@ Coverage: Lectures 16--23 (Laplace, Z-Transform, Sampling, Feedback)}
 \end{itemize}
 
 \subsection*{Lecture 22 --- Sampling (Ch.\ 7)}
+
+\noindent\emph{Instructor emphasis:} ``Sampling = copy-paste the spectrum at every multiple of $\omega_s$, scaled by $1/T$.'' $\omega_s = 2\omega_M$ is \textbf{not sufficient} (strict $>$ required; e.g.\ $\sin(\omega_s t/2)$ sampled at $\omega_s$ gives all-zero samples). \textbf{Squaring a signal doubles its bandwidth.} The official guide includes 15 practice questions for this lecture --- work through them.
+
 \begin{itemize}
   \item Impulse-train sampling: $x_p(t) = x(t) p(t)$, $p(t) = \sum_n \delta(t-nT)$.
   \item Frequency-domain effect: spectrum replicated at multiples of $\omega_s$, scaled by $1/T$.
@@ -107,6 +130,9 @@ Coverage: Lectures 16--23 (Laplace, Z-Transform, Sampling, Feedback)}
 \end{itemize}
 
 \subsection*{Lecture 23 --- Linear Feedback Systems (\S11.0--11.5)}
+
+\noindent\emph{Instructor emphasis (official guide):} Know the three regimes of $|GH|$ --- $|GH|\gg 1 \Rightarrow Q\approx 1/G$ (feedback dominates); $|GH|\ll 1 \Rightarrow Q\approx H$ (feedback negligible); $GH=-1 \Rightarrow$ instability. \emph{Strategy:} simplify innermost loop first. \emph{Reading Bode plots:} GM from the \emph{magnitude} plot at the $-180^\circ$ frequency; PM from the \emph{phase} plot at the 0 dB frequency --- don't mix them up! Official guide has 10 feedback practice questions (block diagram simplification, closed-loop stability, GM/PM).
+
 \begin{itemize}
   \item Open-loop vs.\ closed-loop system structure.
   \item Closed-loop transfer function: $Q(s) = H/(1+GH)$ for negative feedback.

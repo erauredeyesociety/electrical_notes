@@ -1,0 +1,94 @@
+\documentclass[9pt,landscape]{extarticle}
+\usepackage[margin=0.35in]{geometry}
+\usepackage{multicol}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{microtype}
+
+\setlength{\columnsep}{0.25in}
+\setlength{\columnseprule}{0.2pt}
+\setlength{\parskip}{1pt}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=*,labelsep=0.3em}
+\renewcommand{\arraystretch}{1.0}
+\pagestyle{empty}
+
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\bfseries\footnotesize}{}{0pt}{}
+\titlespacing*{\section}{0pt}{3pt}{1pt}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\DeclareMathOperator{\sinc}{sinc}
+
+\begin{document}
+\scriptsize
+\begin{center}\textbf{CEC 315 --- Exam 3 Concise Cheatsheet (Lec 16--23)}\end{center}
+
+\begin{multicols*}{3}
+
+\section*{Definitions \& ROC}
+Laplace: $X(s)=\!\int x(t)e^{-st}dt$; FT exists iff $j\omega\!\subset\!$ROC.
+Z: $X(z)=\!\sum x[n]z^{-n}$; DTFT iff unit circle $\subset$ ROC.
+ROC: no poles inside; right-sided $\Rightarrow \sigma>\sigma_{\max}$ / $|z|>r_{\max}$; left $\Rightarrow$ reverse; two-sided $\Rightarrow$ strip / annulus. \textbf{Causal + stable} $\Leftrightarrow$ LHP / $|p|<1$.
+
+\section*{Laplace Pairs (causal)}
+$\delta\!\to\!1$; $u\!\to\!1/s$; $e^{-at}u\!\to\!\tfrac{1}{s+a}$; $te^{-at}u\!\to\!\tfrac{1}{(s+a)^2}$; $\tfrac{t^{n-1}}{(n-1)!}e^{-at}u\!\to\!\tfrac{1}{(s+a)^n}$; $\cos(\omega_0 t)u\!\to\!\tfrac{s}{s^2+\omega_0^2}$; $\sin(\omega_0 t)u\!\to\!\tfrac{\omega_0}{s^2+\omega_0^2}$; $e^{-at}\cos(\omega_d t)u\!\to\!\tfrac{s+a}{(s+a)^2+\omega_d^2}$; $e^{-at}\sin(\omega_d t)u\!\to\!\tfrac{\omega_d}{(s+a)^2+\omega_d^2}$; $\delta(t{-}t_0)\!\to\!e^{-st_0}$. Anti-causal: $-e^{-at}u(-t)\!\to\!\tfrac{1}{s+a}$, $\sigma<-a$.
+
+\section*{Z Pairs (causal)}
+$\delta[n]\!\to\!1$; $u[n]\!\to\!\tfrac{1}{1-z^{-1}}$; $a^nu[n]\!\to\!\tfrac{1}{1-az^{-1}}$, $|z|>|a|$; $na^nu[n]\!\to\!\tfrac{az^{-1}}{(1-az^{-1})^2}$; $(n{+}1)a^nu[n]\!\to\!\tfrac{1}{(1-az^{-1})^2}$; $\delta[n-k]\!\to\!z^{-k}$; $r^n\cos(\Omega_0 n)u\!\to\!\tfrac{1-r\cos\Omega_0 z^{-1}}{1-2r\cos\Omega_0 z^{-1}+r^2z^{-2}}$. Anti-causal: $-a^nu[-n{-}1]\!\to\!\tfrac{1}{1-az^{-1}}$, $|z|<|a|$.
+
+\section*{Properties}
+Linearity; $x*y\leftrightarrow XY$; $e^{s_0 t}x\!\to\!X(s{-}s_0)$; $x(t{-}t_0)\!\to\!e^{-st_0}X$; $x(at)\!\to\!\tfrac{1}{|a|}X(s/a)$; $-tx\!\to\!dX/ds$; $x[n{-}n_0]\!\to\!z^{-n_0}X$; $z_0^nx[n]\!\to\!X(z/z_0)$; $nx[n]\!\to\!-z\,dX/dz$.
+
+\section*{IVT / FVT}
+$x(0^+)\!=\!\lim_{s\to\infty}sX$; $x(\infty)\!=\!\lim_{s\to 0}sX$ (valid iff poles of $sX$ in LHP).
+$x[0]\!=\!\lim_{z\to\infty}X$; $x[\infty]\!=\!\lim_{z\to 1}(1{-}z^{-1})X$ (valid iff $(1{-}z^{-1})X$ poles in $|z|<1$).
+
+\section*{Unilateral (sign trap)}
+Laplace (\textbf{minus}): $y'\!\to\!sY-y(0^-)$; $y''\!\to\!s^2Y-sy(0^-)-y'(0^-)$.
+Z (\textbf{plus}): $y[n{-}1]\!\to\!z^{-1}Y+y[-1]$; $y[n{-}2]\!\to\!z^{-2}Y+z^{-1}y[-1]+y[-2]$.
+Total = ZSR (input only) + ZIR (IC only).
+
+\section*{PFE Recipe}
+Distinct: $\sum A_k/(s{-}p_k)$, $A_k=(s{-}p_k)X|_{p_k}$.
+Repeated (order $r$): $\sum_{k=1}^{r}B_k/(s{-}p)^k$, $B_k=\tfrac{1}{(r-k)!}\tfrac{d^{r-k}}{ds^{r-k}}[(s{-}p)^r X]|_{p}$.
+Complex-conj: complete the square $(s+a)^2+\omega_d^2$; use $\cos/\sin$ pairs.
+\textbf{Z:} always in $z^{-1}$; long-divide if improper; ROC picks direction per pole.
+
+\section*{Sampling}
+$X_p(j\omega)=\tfrac{1}{T}\sum_k X(j(\omega{-}k\omega_s))$, $\omega_s=2\pi/T$.
+\textbf{Thm:} $\omega_s>2\omega_M$ strict; Nyquist rate $2\omega_M$.
+\textbf{Reconstr.:} LPF gain $T$, cutoff $\in(\omega_M,\omega_s{-}\omega_M)$; $x_r=\sum x(nT)\sinc((t{-}nT)/T)$.
+\textbf{Aliased freq:} $f_{\text{alias}}=|f_s-f_0|$ for $f_s/2<f_0<f_s$ (sign $\Rightarrow$ reversed direction). In rad: pick $k$ so $|\omega_0-k\omega_s|\le\omega_s/2$.
+Aliasing irreversible $\Rightarrow$ AAF \emph{before} sampler. $\omega_s=2\omega_M$ not sufficient. ZOH droop: $H_0=\tfrac{2\sin(\omega T/2)}{\omega}e^{-j\omega T/2}$. $x(t{-}t_0)$ keeps Nyquist; $x(at)$ scales by $|a|$.
+
+\section*{Feedback}
+$T=\dfrac{G}{1+GH}$ (neg), $\dfrac{G}{1-GH}$ (pos). Closed-loop poles = roots of $1+GH=0$.
+Cascade $\times$, parallel $+$; nested: innermost loop first.
+Instability: $GH=-1$ (0 dB AND $-180^\circ$).
+
+$\mathrm{PM}=180^\circ+\angle GH(\omega_{gc})$ at $|GH|=0$ dB.
+$\mathrm{GM}_\mathrm{dB}=-|GH(\omega_{pc})|_\mathrm{dB}$ at $\angle GH=-180^\circ$.
+Both $>0 \Rightarrow$ stable; $\tau_{\max}=\mathrm{PM}_\mathrm{rad}/\omega_{gc}$.
+Nyquist: plot $GH(j\omega)$; no encirclement of $-1/K$ $\Rightarrow$ stable (open-loop stable).
+First-order plants: $\mathrm{GM}=\infty$.
+
+\section*{Top Traps}
+\begin{itemize}
+\item Always state ROC. Same $X$, different ROC $=$ different signal.
+\item Unil.\ L: \textbf{--}$y(0^-)$. Unil.\ Z: \textbf{+}$y[-1]$.
+\item Repeated pole order $n$ needs $n$ PFE terms.
+\item DT: $|a|<1$, not $a<1$ (pole at $z=-0.9$ stable).
+\item FVT invalid if unstable / $j\omega$-axis poles.
+\item $\omega_s>2\omega_M$ strict; aliasing irreversible.
+\item AAF \emph{before} sampler, not after.
+\item GM $\leftarrow$ magnitude at $-180^\circ$; PM $\leftarrow$ phase at 0 dB.
+\item Poles of $1/(1-az^{-1})$ at $z=a$, not $1/a$.
+\item RHP \emph{zero} $\ne$ instability (only poles matter).
+\item Negative fdbk $\to 1+GH$; positive $\to 1-GH$.
+\end{itemize}
+
+\end{multicols*}
+\end{document}

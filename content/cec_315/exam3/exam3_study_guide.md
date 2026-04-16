@@ -6,6 +6,21 @@
 
 ---
 
+> ## AUTHORITATIVE SOURCE: Official Instructor Study Guide
+>
+> The instructor released an **official Exam 3 study guide** (`StudyGuide_Exam3.pdf`). A faithful transcription lives in **[`official_study_guide.md`](official_study_guide.md)** (LaTeX: [`official_study_guide.tex`](official_study_guide.tex)). **Treat that file as authoritative** — this companion guide is supplementary.
+>
+> **Exam format (from official guide):**
+> - 50 minutes, 100 pts total
+> - Part I: 10 multiple choice ($4 \times 10 = 40$ pts)
+> - Part II: multi-part problems (60 pts)
+>
+> **Instructor's #1 emphasis:** *"Always state the ROC with every transform."*
+>
+> The official guide also includes **25 practice questions** (15 sampling, 10 feedback) — review them before the exam.
+
+---
+
 ## Table of Contents
 
 1. [Topic Overview by Lecture](#1-topic-overview-by-lecture)
@@ -21,6 +36,9 @@
 ## 1. Topic Overview by Lecture
 
 ### Lecture 16 — Laplace Transform and ROC (§9.0–9.2)
+
+> **Instructor emphasis (official guide):** ROC is a vertical strip (depends only on $\sigma$), never contains poles, and $\dfrac{1}{s+a}$ is *ambiguous without the ROC* — could be $e^{-at}u(t)$ or $-e^{-at}u(-t)$.
+
 - Motivation: Fourier transform fails for growing signals (e.g., $e^{2t}u(t)$).
 - Definition of the bilateral Laplace transform $X(s) = \int_{-\infty}^{\infty} x(t) e^{-st}\,dt$.
 - The complex variable $s = \sigma + j\omega$ and the $s$-plane.
@@ -39,6 +57,9 @@
 - Final-value theorem: $x(\infty) = \lim_{s\to 0} s X(s)$ (only when valid).
 
 ### Lecture 18 — System Analysis via Unilateral Laplace (§9.7–9.9)
+
+> **Instructor "Golden Rule" (CT) from official guide:** Causal + BIBO stable $\iff$ all poles in the open LHP ($\operatorname{Re}\{p_i\} < 0\ \forall i$). Unilateral differentiation uses **$-y(0^-)$**.
+
 - Deriving $H(s) = Y(s)/X(s)$ from a differential equation.
 - Causality $\Leftrightarrow$ ROC is a right half-plane (and $M \le N$).
 - BIBO stability $\Leftrightarrow$ ROC includes the $j\omega$-axis.
@@ -68,6 +89,9 @@
 - Final-value theorem: $x[\infty] = \lim_{z\to 1}(1-z^{-1})X(z)$.
 
 ### Lecture 21 — System Analysis via Unilateral Z (§10.7–10.9)
+
+> **Instructor "Sign trap" (official guide):** Laplace uses $-y(0^-)$; the $z$-transform uses **$+y[-1]$**. Don't mix them up. **Golden Rule (DT):** causal + BIBO stable $\iff$ all poles strictly inside the unit circle ($|p_i| < 1$).
+
 - Deriving $H(z) = Y(z)/X(z)$ from a difference equation (replace $y[n-k] \to z^{-k}Y(z)$).
 - Causality $\Leftrightarrow$ ROC is exterior of a circle; $M \le N$.
 - BIBO stability $\Leftrightarrow$ ROC includes the unit circle.
@@ -78,6 +102,9 @@
 - Solving difference equations with initial conditions; ZSR + ZIR.
 
 ### Lecture 22 — Sampling (Ch. 7)
+
+> **Instructor emphasis:** "Sampling = copy-paste the spectrum at every multiple of $\omega_s$, scaled by $1/T$." $\omega_s = 2\omega_M$ is **not sufficient** (strict $>$ required; e.g. $\sin(\omega_s t/2)$ sampled at $\omega_s$ gives all-zero samples). **Squaring a signal doubles its bandwidth.** The official guide includes 15 practice questions for this lecture — work through them.
+
 - Impulse-train sampling: $x_p(t) = x(t) p(t)$, $p(t) = \sum_n \delta(t-nT)$.
 - Frequency-domain effect: spectrum replicated at multiples of $\omega_s$, scaled by $1/T$.
 - Sampling theorem: $\omega_s > 2\omega_M$ for perfect reconstruction (strict inequality!).
@@ -89,6 +116,9 @@
 - Discrete-time processing of CT signals: $\Omega = \omega T$.
 
 ### Lecture 23 — Linear Feedback Systems (§11.0–11.5)
+
+> **Instructor emphasis (official guide):** Know the three regimes of $|GH|$ — $|GH|\gg 1 \Rightarrow Q\approx 1/G$ (feedback dominates); $|GH|\ll 1 \Rightarrow Q\approx H$ (feedback negligible); $GH=-1 \Rightarrow$ instability. **Strategy:** simplify innermost loop first. **Reading Bode plots:** GM from the *magnitude* plot at the $-180°$ frequency; PM from the *phase* plot at the 0 dB frequency — don't mix them up! Official guide has 10 feedback practice questions (block diagram simplification, closed-loop stability, GM/PM).
+
 - Open-loop vs. closed-loop system structure.
 - Closed-loop transfer function: $Q(s) = H/(1+GH)$ for negative feedback.
 - Block diagram simplification: cascade, parallel, feedback.

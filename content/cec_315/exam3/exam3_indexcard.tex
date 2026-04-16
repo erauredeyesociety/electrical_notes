@@ -1,0 +1,160 @@
+% CEC 315 — Exam 3 Index Card (4x6 in, 2 pages = one physical card, both sides)
+% Paper: 6in wide x 4in tall (landscape). Compile with pdflatex or on Overleaf.
+% Uses extarticle to allow 8pt. If further shrinkage is needed, change \scriptsize to \tiny.
+
+\documentclass[8pt]{extarticle}
+\usepackage[paperwidth=6in,paperheight=4in,margin=0.15in]{geometry}
+\usepackage{multicol}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{microtype}
+
+\setlength{\columnsep}{0.12in}
+\setlength{\columnseprule}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=*,labelsep=0.25em}
+\renewcommand{\arraystretch}{0.95}
+\pagestyle{empty}
+
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\bfseries\scriptsize}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.5pt}{0.5pt}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\DeclareMathOperator{\sinc}{sinc}
+
+% Save vertical space
+\AtBeginDocument{\abovedisplayskip=2pt \belowdisplayskip=2pt
+\abovedisplayshortskip=1pt \belowdisplayshortskip=1pt}
+
+\begin{document}
+\scriptsize
+
+% ============================================================
+% FRONT — Transforms, Pairs, Properties, PFE, Unilateral
+% ============================================================
+\begin{center}\textbf{\footnotesize CEC 315 Exam 3 --- FRONT} \hfill \emph{Lec 16--23}\end{center}
+\vspace{-4pt}
+
+\begin{multicols*}{3}
+
+\section*{ROC Rules}
+No poles in ROC. Right-sided: $\sigma>\sigma_{\max}$ / $|z|>r_{\max}$. Left: reverse. Two-sided: strip / annulus. FT/DTFT exists iff $j\omega$ / $|z|{=}1$ in ROC. \textbf{Causal+stable $\Leftrightarrow$} LHP (CT) / $|p|{<}1$ (DT).
+
+\section*{Laplace pairs}
+$\delta\!\leftrightarrow\!1$;
+$u\!\leftrightarrow\!\tfrac1s$;
+$e^{-at}u\!\leftrightarrow\!\tfrac{1}{s+a}$;
+$te^{-at}u\!\leftrightarrow\!\tfrac{1}{(s+a)^2}$;
+$\tfrac{t^{n-1}}{(n-1)!}e^{-at}u\!\leftrightarrow\!\tfrac{1}{(s+a)^n}$;
+$\cos(\omega_0 t)u\!\leftrightarrow\!\tfrac{s}{s^2+\omega_0^2}$;
+$\sin(\omega_0 t)u\!\leftrightarrow\!\tfrac{\omega_0}{s^2+\omega_0^2}$;
+$e^{-at}\cos(\omega_d t)u\!\leftrightarrow\!\tfrac{s+a}{(s+a)^2+\omega_d^2}$;
+$e^{-at}\sin(\omega_d t)u\!\leftrightarrow\!\tfrac{\omega_d}{(s+a)^2+\omega_d^2}$;
+$\delta(t{-}t_0)\!\leftrightarrow\!e^{-st_0}$.
+Anti-causal: $-e^{-at}u(-t)\!\leftrightarrow\!\tfrac{1}{s+a}$, $\sigma<-a$.
+
+\section*{Z pairs}
+$\delta[n]\!\leftrightarrow\!1$;
+$u[n]\!\leftrightarrow\!\tfrac{1}{1-z^{-1}}$, $|z|{>}1$;
+$a^nu[n]\!\leftrightarrow\!\tfrac{1}{1-az^{-1}}$, $|z|{>}|a|$;
+$na^nu[n]\!\leftrightarrow\!\tfrac{az^{-1}}{(1-az^{-1})^2}$;
+$(n{+}1)a^nu[n]\!\leftrightarrow\!\tfrac{1}{(1-az^{-1})^2}$;
+$\delta[n{-}k]\!\leftrightarrow\!z^{-k}$;
+$r^n\!\cos(\Omega_0 n)u\!\leftrightarrow\!\tfrac{1-r\cos\Omega_0 z^{-1}}{1-2r\cos\Omega_0 z^{-1}+r^2 z^{-2}}$;
+$r^n\!\sin(\Omega_0 n)u\!\leftrightarrow\!\tfrac{r\sin\Omega_0 z^{-1}}{1-2r\cos\Omega_0 z^{-1}+r^2 z^{-2}}$.
+Anti-causal: $-a^nu[-n{-}1]\!\leftrightarrow\!\tfrac{1}{1-az^{-1}}$, $|z|{<}|a|$.
+
+\section*{Properties}
+Linear; $x*y\!\leftrightarrow\!XY$;
+$e^{s_0t}x\!\to\!X(s{-}s_0)$;
+$x(t{-}t_0)\!\to\!e^{-st_0}X$;
+$x(at)\!\to\!\tfrac{1}{|a|}X(s/a)$;
+$-tx\!\to\!dX/ds$;
+$x[n{-}n_0]\!\to\!z^{-n_0}X$;
+$z_0^n x[n]\!\to\!X(z/z_0)$;
+$nx[n]\!\to\!-z\,dX/dz$.
+
+\section*{IVT / FVT}
+$x(0^+){=}\lim_{s\to\infty}sX$;
+$x(\infty){=}\lim_{s\to 0}sX$ (valid iff $sX$ poles in LHP).
+$x[0]{=}\lim_{z\to\infty}X$;
+$x[\infty]{=}\lim_{z\to 1}(1{-}z^{-1})X$ (iff poles $|z|{<}1$).
+
+\section*{Unilateral --- sign trap!}
+L (\textbf{--}): $y'\!\to\!sY{-}y(0^-)$;
+$y''\!\to\!s^2Y{-}sy(0^-){-}y'(0^-)$.
+Z (\textbf{+}): $y[n{-}1]\!\to\!z^{-1}Y{+}y[-1]$;
+$y[n{-}2]\!\to\!z^{-2}Y{+}z^{-1}y[-1]{+}y[-2]$.
+Total $=$ ZSR (input only) $+$ ZIR (IC only).
+
+\section*{PFE}
+Distinct: $\sum A_k/(s{-}p_k)$, $A_k{=}(s{-}p_k)X|_{p_k}$.
+Repeated order $r$ at $p$: $\sum B_k/(s{-}p)^k$, $B_k{=}\tfrac{1}{(r-k)!}\tfrac{d^{r-k}}{ds^{r-k}}[(s{-}p)^rX]|_p$; pair $\tfrac{1}{(s+a)^k}\!\leftrightarrow\!\tfrac{t^{k-1}}{(k-1)!}e^{-at}u$.
+Complex-conj: complete square $(s{+}a)^2{+}\omega_d^2$.
+\textbf{Z:} in $z^{-1}$; long-divide if improper; ROC $\to$ direction.
+
+\end{multicols*}
+
+\newpage
+
+% ============================================================
+% BACK — Sampling, Feedback, Recipes, Traps
+% ============================================================
+\begin{center}\textbf{\footnotesize CEC 315 Exam 3 --- BACK} \hfill \emph{Lec 16--23}\end{center}
+\vspace{-4pt}
+
+\begin{multicols*}{3}
+
+\section*{Sampling (Lec 22)}
+$X_p(j\omega){=}\tfrac{1}{T}\sum_k X(j(\omega{-}k\omega_s))$, $\omega_s{=}\tfrac{2\pi}{T}$.
+\textbf{Theorem:} $\omega_s>2\omega_M$ \emph{strict}; Nyquist rate $=2\omega_M$.
+\textbf{Reconstr:} LPF gain $T$, cutoff $\in(\omega_M,\omega_s{-}\omega_M)$; $x_r(t){=}\sum x(nT)\sinc(\tfrac{t-nT}{T})$.
+\textbf{Alias:} $f_{\text{alias}}{=}|f_s{-}f_0|$ for $f_s/2{<}f_0{<}f_s$; sign $\Rightarrow$ reversed direction. Rad: pick $k$ so $|\omega_0-k\omega_s|{\le}\omega_s/2$.
+Irreversible $\Rightarrow$ AAF \emph{before} sampler.
+$\omega_s=2\omega_M$ \textbf{not} enough.
+ZOH: $H_0{=}\tfrac{2\sin(\omega T/2)}{\omega}e^{-j\omega T/2}$ (sinc droop).
+$x(t{-}t_0)$ keeps rate; $x(at)$ scales by $|a|$.
+
+\section*{Feedback (Lec 23)}
+$T{=}\dfrac{G}{1{+}GH}$ neg; $\dfrac{G}{1{-}GH}$ pos.
+Closed-loop poles $=$ roots of $1{+}GH{=}0$.
+Cascade $\times$, parallel $+$, nested: innermost first.
+Instability: $GH{=}{-}1$ (0 dB AND $-180^\circ$).
+
+$\mathrm{PM}{=}180^\circ{+}\angle GH(\omega_{gc})$ at $|GH|{=}0$ dB.
+$\mathrm{GM}_\mathrm{dB}{=}{-}|GH(\omega_{pc})|_\mathrm{dB}$ at $\angle GH{=}{-}180^\circ$.
+Both $>0 \Rightarrow$ stable; $\tau_{\max}{=}\mathrm{PM}_\mathrm{rad}/\omega_{gc}$.
+Nyquist: plot $GH(j\omega)$; no encirclement of $-1/K$ $\Rightarrow$ stable (open-loop stable).
+First-order plant: $\mathrm{GM}{=}\infty$.
+Routh: \# sign changes in 1st column $=$ \# RHP roots; necessary: all $a_i>0$.
+
+\section*{Procedures}
+\textbf{Inv Laplace:} proper? $\Rightarrow$ PFE in $s$; ROC picks direction; invert via table.
+\textbf{Inv Z:} long-divide if improper; PFE in $z^{-1}$; ROC outside $|d|{\to}d^nu[n]$, inside ${\to}{-}d^nu[-n{-}1]$.
+\textbf{Unil L:} transform ODE w/ ICs $\to$ solve $Y$ $\to$ ZSR$+$ZIR $\to$ PFE $\to$ check $y(0^+),y(\infty)$.
+\textbf{Unil Z:} transform diff eqn w/ $+y[-k]$ $\to$ solve $Y$ $\to$ PFE $z^{-1}$ $\to$ check $y[0],y[1]$ vs.\ diff eqn.
+\textbf{Block diag:} innermost loop $H/(1{+}GH)$ $\to$ replace $\to$ combine cascades/parallel.
+\textbf{GM/PM:} $\omega_{gc}$ at 0 dB $\to$ PM from phase; $\omega_{pc}$ at $-180^\circ$ $\to$ GM from $|L|$; $\tau_{\max}{=}\mathrm{PM}_\mathrm{rad}/\omega_{gc}$.
+
+\section*{Top Traps}
+\begin{itemize}
+\item Always state ROC.
+\item Unil L: \textbf{--}$y(0^-)$; Unil Z: \textbf{+}$y[-1]$.
+\item Repeated pole order $n$ $\to$ $n$ PFE terms.
+\item DT: $|a|<1$ (pole $z{=}{-}0.9$ \emph{stable}).
+\item FVT invalid if unstable / marginal.
+\item $\omega_s>2\omega_M$ strict; AAF \emph{before} sampler.
+\item GM from $|L|$ at $-180^\circ$; PM from $\angle L$ at 0 dB.
+\item Poles of $\tfrac{1}{1-az^{-1}}$ at $z{=}a$, not $1/a$.
+\item RHP \emph{zero} $\ne$ instability.
+\item Marginal poles $\Rightarrow$ not BIBO stable.
+\item Neg fdbk $\to 1{+}GH$; pos $\to 1{-}GH$.
+\item PFE in $z^{-1}$, never $z$.
+\end{itemize}
+
+\end{multicols*}
+\end{document}

@@ -314,3 +314,41 @@ Feedback is not automatically good. Two classic scenarios:
 8. **Problem 8 (True/False):** Evaluate whether negative feedback always stabilizes a system.
 9. **Problem 9 (True/False):** Evaluate whether a phase margin of $60°$ implies the system is stable.
 10. **Problem 10 (True/False):** Evaluate whether a Nyquist plot is constructed by evaluating $G(j\omega)H(j\omega)$ and plotting it in the complex plane.
+
+---
+
+## Worked Examples (from Official Solutions)
+
+**Source:** [lctr23-exercise-solutions.md](../hw_practice_problems/lctr23-exercise-solutions.md) — work through the problems before reading the solutions.
+
+- **Problem 1 (Block diagram — cascade + unity feedback):** $H_1 = 2/(s+1)$, $H_2 = 1/(s+4)$ $\to$ $Q(s) = 2/[(s+2)(s+3)]$; both poles in LHP $\Rightarrow$ stable.
+- **Problem 2 (Parallel + feedback):** Parallel $3/(s+2) + 1/(s+5)$, feedback $G = 4$ $\to$ $Q(s) = (4s+17)/(s^2 + 23s + 78)$; stable.
+- **Problem 3 (Nested loops):** Simplify innermost first — inner forward $1/s$, inner feedback $3$ gives $1/(s+3)$; then outer unity feedback gives $Q(s) = 1/(s+4)$.
+- **Problem 4 (Unity feedback, $H = K/(s+5)$):**
+  - **(a)** $Q(s) = K/(s + 5 + K)$, pole at $-(5+K)$.
+  - **(b)** Stable for $K > -5$.
+  - **(c)** $K = 5$ places the pole at $s = -10$.
+- **Problem 5 (Second-order, $H = K/[(s+1)(s+2)]$):**
+  - **(a)** Characteristic equation: $s^2 + 3s + (2+K) = 0$.
+  - **(b)** Stable for $K > -2$ (second-order Routh: both coeffs positive).
+- **Problem 6 (DT feedback, $H(z) = Kz^{-1}/(1 - 0.8z^{-1})$):**
+  - **(a)** Closed-loop pole at $z = 0.8 - K$.
+  - **(b)** Stable ($|z_{\text{cl}}|<1$) for $0 < K < 1.8$.
+- **Problem 7 (Margins from Bode data):** At $\omega_{gc}=5$ (0 dB), $\angle GH = -150^\circ$; at $\omega_{pc}=20$ ($-180^\circ$), $|GH| = -8$ dB.
+  - **(a)** PM $= 180^\circ + (-150^\circ) = 30^\circ$.
+  - **(b)** GM $= 0 - (-8) = 8$ dB.
+  - **(c)** Both positive $\Rightarrow$ stable.
+  - **(d)** $\tau_{\max} = \text{PM(rad)}/\omega_{gc} = 0.524/5 \approx 105$ ms.
+- **Problem 8 (T/F):** "Negative feedback always stabilizes" — **FALSE** (enough loop gain pushes poles into the RHP).
+- **Problem 9 (T/F):** "PM of $60^\circ$ $\Rightarrow$ stable" — **TRUE** (assuming positive GM too; $60^\circ$ is a well-damped design target).
+- **Problem 10 (T/F):** Nyquist plot is $G(j\omega)H(j\omega)$ plotted in the complex plane — **TRUE**.
+
+## Instructor Emphasis (from Official Study Guide)
+
+- **Feedback formula:** $Q = H/(1 + GH)$ (negative feedback); $1 - GH$ in the denominator for positive feedback.
+- **Strategy:** simplify innermost loop first, then work outward.
+- Closed-loop stability: all closed-loop poles in LHP (CT) or inside unit circle (DT).
+- Instability $\iff$ $GH = -1$ (i.e., $|GH| = 0$ dB **and** $\angle GH = -180^\circ$ simultaneously).
+- **Reading Bode plots (instructor warning):** GM from the **magnitude** plot at the $-180^\circ$ frequency; PM from the **phase** plot at the 0-dB frequency. Don't mix them up.
+- $\tau_{\max} = \text{PM(rad)}/\omega_{gc}$ — maximum tolerable pure delay.
+- Nyquist criterion (simplified): open-loop stable $\Rightarrow$ closed-loop (gain $K$) stable iff the Nyquist contour does not encircle $-1/K$.

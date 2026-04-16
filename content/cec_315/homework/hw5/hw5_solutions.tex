@@ -1,0 +1,553 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{CEC 315 --- Signals and Systems}
+\rhead{Homework 5 Solutions}
+\cfoot{\thepage}
+
+\title{\textbf{CEC 315 Homework 5 Solutions} \\ \large Laplace Transform: Lectures 16--18}
+\author{}
+\date{}
+
+\newcommand{\lt}{\xleftrightarrow{\mathcal{L}}}
+\newcommand{\ltu}{\xleftrightarrow{\mathcal{L}_u}}
+\newcommand{\Res}{\mathrm{Re}}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\noindent\emph{These solutions are the official instructor solutions transcribed from
+\texttt{hw-lctr16-18-solutions.pdf} (Rogelio Gracia Otalvaro, Spring 2026).
+Steps and explanatory commentary have been preserved; minor LaTeX formatting enhancements
+have been applied for clarity.}
+
+%=============================================================
+\section*{Problem 1: Computing Laplace Transforms and ROCs}
+%=============================================================
+
+\subsection*{(a) $x_1(t) = 4 e^{-2t}\,u(t)$}
+
+Apply the standard pair $e^{-at}\,u(t) \lt \dfrac{1}{s+a}$, ROC: $\Res\{s\} > -a$. Here $a=2$:
+
+\begin{equation*}
+\boxed{X_1(s) = \frac{4}{s+2}, \qquad \Res\{s\} > -2}
+\end{equation*}
+
+\subsection*{(b) $x_2(t) = -3 e^{5t}\,u(-t)$}
+
+Rewrite as $-3\cdot\bigl[-e^{-(-5)t}u(-t)\bigr]\cdot(-1)$. Using $-e^{-at}u(-t) \lt \dfrac{1}{s+a}$, ROC: $\Res\{s\} < -a$. Here $a=-5$:
+\[
+-e^{5t}u(-t) \lt \frac{1}{s-5}, \qquad \Res\{s\} < 5
+\]
+
+Multiply by $3$:
+
+\begin{equation*}
+\boxed{X_2(s) = \frac{3}{s-5}, \qquad \Res\{s\} < 5}
+\end{equation*}
+
+\subsection*{(c) $x_3(t) = 7\,\delta(t-3)$}
+
+Use $\delta(t-t_0) \lt e^{-st_0}$, ROC: all $s$:
+
+\begin{equation*}
+\boxed{X_3(s) = 7\,e^{-3s}, \qquad \text{ROC: all } s}
+\end{equation*}
+
+\subsection*{(d) $x_4(t) = t\,e^{-4t}\,u(t)$}
+
+Use $t\,e^{-at}\,u(t) \lt \dfrac{1}{(s+a)^2}$, ROC: $\Res\{s\} > -a$. With $a=4$:
+
+\begin{equation*}
+\boxed{X_4(s) = \frac{1}{(s+4)^2}, \qquad \Res\{s\} > -4}
+\end{equation*}
+
+\subsection*{(e) $x_5(t) = 2 e^{-t}u(t) - 5 e^{-3t}u(t)$}
+
+\textbf{Step 1: Transform each term.}
+\begin{align*}
+2 e^{-t}u(t) &\lt \frac{2}{s+1}, \quad \Res\{s\} > -1 \\
+-5 e^{-3t}u(t) &\lt \frac{-5}{s+3}, \quad \Res\{s\} > -3
+\end{align*}
+
+\textbf{Step 2: Common denominator.}
+\[
+X_5(s) = \frac{2}{s+1} - \frac{5}{s+3}
+= \frac{2(s+3) - 5(s+1)}{(s+1)(s+3)}
+= \frac{2s+6-5s-5}{(s+1)(s+3)}
+= \frac{-3s+1}{(s+1)(s+3)}
+\]
+
+\textbf{Step 3: ROC} is the intersection $\Res\{s\}>-1 \cap \Res\{s\}>-3 = \Res\{s\}>-1$.
+
+\begin{equation*}
+\boxed{X_5(s) = \frac{-3s+1}{(s+1)(s+3)}, \qquad \Res\{s\} > -1}
+\end{equation*}
+
+Poles: $s = -1$ and $s = -3$. \quad Zero: $s = 1/3$.
+
+\subsection*{(f) $x_6(t) = e^{-2t}u(t) + 3 e^{4t}u(-t)$}
+
+\textbf{Step 1: Transform each term.}
+\begin{align*}
+e^{-2t}u(t) &\lt \frac{1}{s+2}, \quad \Res\{s\} > -2 \\
+3 e^{4t}u(-t) &= -3\cdot\bigl[-e^{4t}u(-t)\bigr] \lt \frac{-3}{s-4}, \quad \Res\{s\} < 4
+\end{align*}
+
+\textbf{Step 2: Add.}
+\[
+X_6(s) = \frac{1}{s+2} - \frac{3}{s-4}
+= \frac{(s-4)-3(s+2)}{(s+2)(s-4)}
+= \frac{-2s-10}{(s+2)(s-4)}
+\]
+
+\textbf{Step 3: ROC} is the intersection $\sigma > -2 \cap \sigma < 4$:
+
+\begin{equation*}
+\boxed{X_6(s) = \frac{-2s-10}{(s+2)(s-4)} = \frac{-2(s+5)}{(s+2)(s-4)}, \qquad -2 < \Res\{s\} < 4}
+\end{equation*}
+
+\textbf{Step 4:} The $j\omega$-axis ($\sigma=0$) lies in the strip $-2 < \sigma < 4$, so the
+Fourier transform of $x_6(t)$ \textbf{does exist}.
+
+\medskip
+\noindent\textit{Key Point.} The Fourier transform exists whenever the $j\omega$-axis is contained in the
+ROC. For this two-sided signal the ROC is a strip, and $\sigma = 0$ falls inside it.
+
+%=============================================================
+\section*{Problem 2: Inverse Laplace Transform via Partial Fractions}
+%=============================================================
+
+\subsection*{(a) Distinct Real Poles, Right-Sided}
+
+Given: $X(s) = \dfrac{3s+5}{(s+1)(s+4)}$, ROC: $\Res\{s\} > -1$.
+
+\textbf{Step 1: Partial fractions.}
+\[
+\frac{3s+5}{(s+1)(s+4)} = \frac{A}{s+1} + \frac{B}{s+4}
+\]
+Cover-up:
+\begin{itemize}[leftmargin=2em]
+\item $s=-1$: $3(-1)+5 = A(-1+4) \Rightarrow 2 = 3A \Rightarrow A = 2/3$.
+\item $s=-4$: $3(-4)+5 = B(-4+1) \Rightarrow -7 = -3B \Rightarrow B = 7/3$.
+\end{itemize}
+
+\textbf{Step 2: Directions.} ROC is $\sigma > -1$. Both poles ($s=-1$ and $s=-4$) are to the
+left of the ROC boundary, so both terms are right-sided.
+
+\textbf{Step 3: Invert.}
+\begin{equation*}
+\boxed{x(t) = \tfrac{2}{3}\,e^{-t}\,u(t) + \tfrac{7}{3}\,e^{-4t}\,u(t)}
+\end{equation*}
+
+\textbf{Check:} $x(0^+) = 2/3 + 7/3 = 3$. Initial value theorem:
+$\displaystyle\lim_{s\to\infty}sX(s) = \lim_{s\to\infty}\frac{3s^2+5s}{s^2+5s+4} = 3$. \checkmark
+
+\subsection*{(b) Distinct Real Poles, Two-Sided}
+
+Given: $X(s) = \dfrac{2s-4}{(s+2)(s-3)}$, ROC: $-2 < \Res\{s\} < 3$.
+
+\textbf{Step 1: Partial fractions.}
+\[
+\frac{2s-4}{(s+2)(s-3)} = \frac{A}{s+2} + \frac{B}{s-3}
+\]
+\begin{itemize}[leftmargin=2em]
+\item $s=-2$: $2(-2)-4 = A(-2-3) \Rightarrow -8 = -5A \Rightarrow A = 8/5$.
+\item $s=3$: $2(3)-4 = B(3+2) \Rightarrow 2 = 5B \Rightarrow B = 2/5$.
+\end{itemize}
+
+\textbf{Step 2: Directions from the ROC strip $-2 < \sigma < 3$.}
+\begin{itemize}[leftmargin=2em]
+\item Pole at $s=-2$: ROC to the \textbf{right} of the pole $\Rightarrow$ right-sided.
+\item Pole at $s= 3$: ROC to the \textbf{left}  of the pole $\Rightarrow$ left-sided.
+\end{itemize}
+
+\textbf{Step 3: Invert.}
+\begin{align*}
+\frac{8/5}{s+2}\ (\text{right-sided}) &\;\longrightarrow\; \tfrac{8}{5}\,e^{-2t}\,u(t) \\
+\frac{2/5}{s-3}\ (\text{left-sided})  &\;\longrightarrow\; -\tfrac{2}{5}\,e^{3t}\,u(-t)
+\end{align*}
+
+\begin{equation*}
+\boxed{x(t) = \tfrac{8}{5}\,e^{-2t}\,u(t) - \tfrac{2}{5}\,e^{3t}\,u(-t)}
+\end{equation*}
+
+\medskip
+\noindent\textit{Key Point.} The left-sided term uses the pair $\dfrac{1}{s-a}$ with ROC
+$\sigma < a \longleftrightarrow -e^{at}u(-t)$. That negative sign in front is part of the pair,
+not an error.
+
+\subsection*{(c) Repeated Poles}
+
+Given: $X(s) = \dfrac{6}{(s+2)^2(s+5)}$, ROC: $\Res\{s\} > -2$.
+
+\textbf{Step 1: Partial fractions.}
+\[
+\frac{6}{(s+2)^2(s+5)} = \frac{A}{s+2} + \frac{B}{(s+2)^2} + \frac{C}{s+5}
+\]
+Multiply through by $(s+2)^2(s+5)$:
+\[
+6 = A(s+2)(s+5) + B(s+5) + C(s+2)^2
+\]
+\begin{itemize}[leftmargin=2em]
+\item \textbf{Find $C$:} set $s=-5$: $6 = C(-5+2)^2 = 9C \Rightarrow C = 2/3$.
+\item \textbf{Find $B$:} set $s=-2$: $6 = B(-2+5) = 3B \Rightarrow B = 2$.
+\item \textbf{Find $A$:} compare $s^2$ coefficients: $0 = A + C \Rightarrow A = -C = -2/3$.
+\end{itemize}
+
+\textbf{Step 2:} All poles at $\sigma \le -2$, ROC to the right, so all terms right-sided.
+
+\textbf{Step 3: Invert} using $\dfrac{1}{(s+a)^2} \leftrightarrow t\,e^{-at}u(t)$:
+\begin{equation*}
+\boxed{x(t) = \left[-\tfrac{2}{3}\,e^{-2t} + 2t\,e^{-2t} + \tfrac{2}{3}\,e^{-5t}\right]u(t)}
+\end{equation*}
+
+\textbf{Check:} $x(0^+) = -2/3 + 0 + 2/3 = 0$. Initial value theorem:
+$\displaystyle\lim_{s\to\infty}sX(s) = \lim_{s\to\infty}\frac{6s}{(s+2)^2(s+5)} = 0$. \checkmark
+
+\subsection*{(d) Complex Conjugate Poles}
+
+Given: $X(s) = \dfrac{s+3}{s^2+6s+25}$, ROC: $\Res\{s\} > -3$.
+
+\textbf{Step 1: Complete the square.}
+\[
+s^2 + 6s + 25 = (s+3)^2 + 16 = (s+3)^2 + 4^2
+\]
+Poles at $s = -3 \pm j4$. Damping rate: $\sigma_0 = 3$. Oscillation frequency: $\omega_d = 4$ rad/s.
+
+\textbf{Step 2: Rewrite the numerator.} $s+3 = (s+3) + 0$, so:
+\[
+X(s) = \frac{(s+3)}{(s+3)^2 + 4^2}
+\]
+
+\textbf{Step 3: Invert} using $\dfrac{s+a}{(s+a)^2 + \omega_d^2} \leftrightarrow e^{-at}\cos(\omega_d t)\,u(t)$:
+
+\begin{equation*}
+\boxed{x(t) = e^{-3t}\cos(4t)\,u(t)}
+\end{equation*}
+
+This is a damped sinusoid decaying with time constant $\tau = 1/3$ s, oscillating at $4$ rad/s.
+
+%=============================================================
+\section*{Problem 3: Laplace Transform Properties}
+%=============================================================
+
+\subsection*{(a) $s$-Domain Shift}
+
+Given: $\cos(5t)u(t) \lt \dfrac{s}{s^2+25}$, ROC: $\sigma > 0$. The $s$-domain shift
+property says multiplying by $e^{-2t}$ in time replaces $s$ by $s+2$ in the transform.
+
+\begin{equation*}
+\boxed{F(s) = \frac{s+2}{(s+2)^2 + 25}, \qquad \Res\{s\} > -2}
+\end{equation*}
+
+The ROC shifts from $\sigma > 0$ to $\sigma > 0 - 2 = -2$.
+
+\subsection*{(b) Differentiation in Time}
+
+Given: $X(s) = \dfrac{1}{s+3}$, ROC: $\sigma > -3$, so $x(t) = e^{-3t}u(t)$.
+
+\textbf{Step 1:} By the differentiation property:
+\[
+Y(s) = sX(s) = \frac{s}{s+3} = 1 - \frac{3}{s+3}
+\]
+(polynomial division: $\dfrac{s}{s+3} = \dfrac{(s+3)-3}{s+3}$). ROC: $\Res\{s\} > -3$ (at least).
+
+\textbf{Step 2: Verify} by computing $y(t) = dx/dt$ explicitly. $x(t) = e^{-3t}u(t)$, so:
+\[
+y(t) = \frac{d}{dt}\bigl[e^{-3t}u(t)\bigr] = -3e^{-3t}u(t) + e^{-3\cdot 0}\delta(t) = -3e^{-3t}u(t) + \delta(t)
+\]
+
+Taking the Laplace transform:
+\[
+Y(s) = \frac{-3}{s+3} + 1 = \frac{-3 + (s+3)}{s+3} = \frac{s}{s+3} \checkmark
+\]
+
+\subsection*{(c) Convolution Property}
+
+\textbf{Step (i):} $H_1(s) = \dfrac{1}{s+1}$, ROC: $\sigma > -1$. \quad
+$H_2(s) = \dfrac{3}{s+6}$, ROC: $\sigma > -6$.
+
+\textbf{Step (ii):}
+\[
+H(s) = H_1(s)H_2(s) = \frac{3}{(s+1)(s+6)}, \qquad \Res\{s\} > -1
+\]
+
+\textbf{Step (iii): Partial fractions.}
+\[
+\frac{3}{(s+1)(s+6)} = \frac{A}{s+1} + \frac{B}{s+6}
+\]
+$s=-1$: $3 = A(5) \Rightarrow A = 3/5$. \quad
+$s=-6$: $3 = B(-5) \Rightarrow B = -3/5$.
+
+\begin{equation*}
+\boxed{h(t) = \tfrac{3}{5}e^{-t}u(t) - \tfrac{3}{5}e^{-6t}u(t) = \tfrac{3}{5}\bigl(e^{-t} - e^{-6t}\bigr)u(t)}
+\end{equation*}
+
+\textbf{Check:} $h(0^+) = 3/5 - 3/5 = 0$ \checkmark\ (convolution of two causal signals starts at zero).
+
+\subsection*{(d) Initial and Final Value Theorems}
+
+Given: $X(s) = \dfrac{8(s+1)}{s(s+2)(s+4)}$, ROC: $\sigma > 0$.
+
+\textbf{(i) Initial value:}
+\[
+x(0^+) = \lim_{s\to\infty} sX(s) = \lim_{s\to\infty}\frac{8s(s+1)}{s(s+2)(s+4)}
+= \lim_{s\to\infty}\frac{8s^2+8s}{s^3+6s^2+8s} = 0
+\]
+\begin{equation*}
+\boxed{x(0^+) = 0}
+\end{equation*}
+
+\textbf{(ii) Final value check:} $sX(s) = \dfrac{8(s+1)}{(s+2)(s+4)}$ has poles at $s=-2$ and
+$s=-4$, both in the LHP. The theorem applies. \checkmark
+\[
+x(\infty) = \lim_{s\to 0}\frac{8(s+1)}{(s+2)(s+4)} = \frac{8(1)}{(2)(4)} = 1
+\]
+\begin{equation*}
+\boxed{x(\infty) = 1}
+\end{equation*}
+
+\textbf{(iii) Full inversion.}
+\[
+\frac{8(s+1)}{s(s+2)(s+4)} = \frac{A}{s} + \frac{B}{s+2} + \frac{C}{s+4}
+\]
+\begin{itemize}[leftmargin=2em]
+\item $s= 0$: $8(1)  = A(2)(4) \Rightarrow A = 1$.
+\item $s=-2$: $8(-1) = B(-2)(2) \Rightarrow -8 = -4B \Rightarrow B = 2$.
+\item $s=-4$: $8(-3) = C(-4)(-2) \Rightarrow -24 = 8C \Rightarrow C = -3$.
+\end{itemize}
+
+\begin{equation*}
+\boxed{x(t) = \bigl[1 + 2 e^{-2t} - 3 e^{-4t}\bigr]u(t)}
+\end{equation*}
+
+\textbf{Verify:} $x(0^+) = 1 + 2 - 3 = 0$ \checkmark. \quad $x(\infty) = 1 + 0 - 0 = 1$ \checkmark.
+
+%=============================================================
+\section*{Problem 4: System Analysis with $H(s)$}
+%=============================================================
+
+\textbf{System:} $\dfrac{d^2 y}{dt^2} + 6\dfrac{dy}{dt} + 8y = 2x(t)$.
+
+\subsection*{(a) System Function}
+
+Replace $d^k/dt^k \to s^k$:
+\[
+s^2Y + 6sY + 8Y = 2X \;\Rightarrow\; H(s) = \frac{2}{s^2+6s+8} = \frac{2}{(s+2)(s+4)}
+\]
+
+Poles: $s=-2$ and $s=-4$. No finite zeros. Gain constant: $K = 2$.
+
+\begin{equation*}
+\boxed{H(s) = \frac{2}{(s+2)(s+4)}, \qquad \Res\{s\} > -2\ \text{(causal)}}
+\end{equation*}
+
+\subsection*{(b) Pole-Zero Plot and Stability}
+
+\begin{center}
+\begin{tabular}{c}
+\begin{tabular}{c}
+$j\omega$ \\
+$\big|$ \\
+$\times$ \qquad\qquad $\times$ \qquad\qquad $\longrightarrow \sigma$ \\
+$-4$ \qquad\qquad $-2$ \qquad\qquad \\
+$\big|$ \\
+\end{tabular}
+\end{tabular}
+\end{center}
+
+Both poles are in the open LHP ($\Res\{p_i\} < 0$). Since the system is causal, it is
+\textbf{BIBO stable}. \checkmark
+
+\subsection*{(c) Impulse Response}
+\[
+\frac{2}{(s+2)(s+4)} = \frac{A}{s+2} + \frac{B}{s+4}
+\]
+$s=-2$: $2 = A(2) \Rightarrow A = 1$. \quad $s=-4$: $2 = B(-2) \Rightarrow B = -1$.
+
+\begin{equation*}
+\boxed{h(t) = \bigl(e^{-2t} - e^{-4t}\bigr)u(t)}
+\end{equation*}
+
+\subsection*{(d) Output for $x(t) = e^{-t}u(t)$}
+
+\textbf{(i)} $X(s) = \dfrac{1}{s+1}$, ROC: $\sigma > -1$.
+\[
+Y(s) = H(s)X(s) = \frac{2}{(s+1)(s+2)(s+4)}, \qquad \Res\{s\} > -1
+\]
+
+\textbf{(ii) Partial fractions.}
+\[
+\frac{2}{(s+1)(s+2)(s+4)} = \frac{A}{s+1} + \frac{B}{s+2} + \frac{C}{s+4}
+\]
+\begin{itemize}[leftmargin=2em]
+\item $s=-1$: $2 = A(1)(3) \Rightarrow A = 2/3$.
+\item $s=-2$: $2 = B(-1)(2) \Rightarrow B = -1$.
+\item $s=-4$: $2 = C(-3)(-2) \Rightarrow C = 1/3$.
+\end{itemize}
+
+\begin{equation*}
+\boxed{y(t) = \left[\tfrac{2}{3}e^{-t} - e^{-2t} + \tfrac{1}{3}e^{-4t}\right]u(t)}
+\end{equation*}
+
+\textbf{(iii) Verify:}
+\begin{itemize}[leftmargin=2em]
+\item $y(0^+) = 2/3 - 1 + 1/3 = 0$ \checkmark\ (initially at rest).
+\item $y(\infty) = 0$ \checkmark\ (all exponentials decay).
+\item Final-value theorem: $\displaystyle\lim_{s\to 0}sY(s) = \lim_{s\to 0}\frac{2s}{(s+1)(s+2)(s+4)} = 0$ \checkmark.
+\end{itemize}
+
+\subsection*{(e) Stability of $G(s) = 3/(s-1)$}
+
+The pole is at $s=1$ (in the RHP).
+
+\textbf{If causal:} ROC is $\Res\{s\} > 1$. The $j\omega$-axis ($\sigma=0$) is \textbf{not} in the ROC, so the system is \textbf{unstable}. The impulse response $g(t) = 3e^{t}u(t)$ grows without bound.
+
+\textbf{If anti-causal (left-sided):} ROC is $\Res\{s\} < 1$. The $j\omega$-axis ($\sigma=0$) \textbf{is} in the ROC, so the system is \textbf{BIBO stable}. The impulse response $g(t) = -3e^{t}u(-t)$ decays for $t<0$.
+
+\medskip
+\noindent\textit{Key Point.} Stability depends on the ROC, not just the pole location. A pole in
+the RHP makes a \emph{causal} system unstable, but the same pole is compatible with a stable
+\emph{anti-causal} system. This is why specifying causality (or the ROC) matters.
+
+%=============================================================
+\section*{Problem 5: The Unilateral Laplace Transform}
+%=============================================================
+
+\subsection*{(a) First-Order IVP}
+
+\textbf{System:} $y' + 4y = 3e^{-t}u(t)$, $\;y(0^-) = 2$.
+
+\textbf{(i) Transform both sides.}
+Left: $\mathcal{L}_u\{y'\} + 4\mathcal{L}_u\{y\} = [sY - y(0^-)] + 4Y = sY - 2 + 4Y$.
+Right: $\mathcal{L}_u\{3e^{-t}u(t)\} = \dfrac{3}{s+1}$.
+So:
+\[
+(s+4)Y(s) - 2 = \frac{3}{s+1}
+\]
+
+\textbf{(ii) Solve for $Y(s)$.}
+\[
+Y(s) = \frac{3}{(s+1)(s+4)} + \frac{2}{s+4}
+= \frac{3 + 2(s+1)}{(s+1)(s+4)}
+= \frac{2s+5}{(s+1)(s+4)}
+\]
+
+\textbf{(iii) Partial fractions.}
+\[
+\frac{2s+5}{(s+1)(s+4)} = \frac{A}{s+1} + \frac{B}{s+4}
+\]
+$s=-1$: $2(-1)+5 = A(3) \Rightarrow A = 1$. \quad $s=-4$: $2(-4)+5 = B(-3) \Rightarrow B = 1$.
+
+\begin{equation*}
+\boxed{y(t) = \bigl(e^{-t} + e^{-4t}\bigr)u(t)}
+\end{equation*}
+
+\textbf{(iv) Verify:}
+\begin{itemize}[leftmargin=2em]
+\item $y(0) = 1 + 1 = 2 = y(0^-)$ \checkmark.
+\item $y(\infty) = 0 + 0 = 0$ \checkmark\ (both exponentials decay).
+\item Extra check: $y'(0^+) = -1 - 4 = -5$. From the ODE: $y'(0^+) = -4y(0) + 3e^0 = -8+3 = -5$ \checkmark.
+\end{itemize}
+
+\subsection*{(b) Second-Order IVP}
+
+\textbf{System:} $y'' + 3y' + 2y = 0$, $\;y(0^-)=1$, $\;y'(0^-)=-1$.
+
+\textbf{(i) Transform:}
+\begin{align*}
+\mathcal{L}_u\{y''\} &= s^2Y - sy(0^-) - y'(0^-) = s^2Y - s + 1 \\
+\mathcal{L}_u\{3y'\} &= 3[sY - y(0^-)] = 3sY - 3 \\
+\mathcal{L}_u\{2y\}  &= 2Y
+\end{align*}
+
+Combine:
+\[
+s^2Y - s + 1 + 3sY - 3 + 2Y = 0 \;\Rightarrow\; (s^2+3s+2)Y = s+2
+\]
+\[
+Y(s) = \frac{s+2}{s^2+3s+2} = \frac{s+2}{(s+1)(s+2)} = \frac{1}{s+1}
+\]
+
+\textbf{(ii) Invert:}
+\begin{equation*}
+\boxed{y(t) = e^{-t}u(t)}
+\end{equation*}
+
+\textbf{Verify:} $y(0) = 1$ \checkmark. \quad $y'(t) = -e^{-t}u(t) + \delta(t)$, so $y'(0^-) = -1$ \checkmark.
+
+\textbf{(iii)} The input is zero ($x(t)=0$), so there is no zero-state response. This is
+\textbf{purely a zero-input response}: the output is entirely due to the initial conditions.
+
+\medskip
+\noindent\textit{Key Point.} The cancellation of the $(s+2)$ factor between numerator and
+denominator is not a coincidence. It happens because the initial conditions were chosen so that
+only one of the two natural modes ($e^{-t}$ and $e^{-2t}$) is excited. The IC $y'(0^-) = -1 = -y(0^-)$
+exactly suppresses the $e^{-2t}$ mode.
+
+\subsection*{(c) ZSR/ZIR Decomposition for Part (a)}
+
+From part (a): $Y(s) = \dfrac{2s+5}{(s+1)(s+4)}$.
+
+\textbf{Zero-state response} (set $y(0^-)=0$, keep input):
+\[
+Y_{\mathrm{ZS}}(s) = \frac{3}{(s+1)(s+4)}
+\]
+Partial fractions: $s=-1$: $3 = A(3) \Rightarrow A=1$. \quad $s=-4$: $3 = B(-3) \Rightarrow B=-1$.
+
+\begin{equation*}
+\boxed{y_{\mathrm{ZS}}(t) = \bigl(e^{-t} - e^{-4t}\bigr)u(t)}
+\end{equation*}
+
+\textbf{Zero-input response} (set input to 0, keep $y(0^-)=2$):
+\[
+(s+4)Y_{\mathrm{ZI}} = 2 \;\Rightarrow\; Y_{\mathrm{ZI}}(s) = \frac{2}{s+4}
+\]
+
+\begin{equation*}
+\boxed{y_{\mathrm{ZI}}(t) = 2 e^{-4t}u(t)}
+\end{equation*}
+
+\textbf{Verify the sum:}
+\[
+y_{\mathrm{ZS}}(t) + y_{\mathrm{ZI}}(t) = \bigl(e^{-t} - e^{-4t}\bigr)u(t) + 2 e^{-4t}u(t)
+= \bigl(e^{-t} + e^{-4t}\bigr)u(t) = y(t) \checkmark
+\]
+
+\medskip
+\noindent\textit{Key Point.} The ZSR starts at zero ($y_{\mathrm{ZS}}(0)=0$) because the system
+is initially at rest. The ZIR carries the initial condition ($y_{\mathrm{ZI}}(0)=2$). Their sum
+gives the full response.
+
+%=============================================================
+\section*{Problem Index}
+%=============================================================
+
+\begin{itemize}[leftmargin=2em]
+\item \textbf{Problem 1:} Compute Laplace transforms and ROCs of six signals: causal exponential,
+anti-causal exponential, shifted delta, $t\,e^{-at}$, sum of two causal exponentials as a rational
+function, and a two-sided signal.
+\item \textbf{Problem 2:} Inverse Laplace transforms via partial fractions for four cases: distinct
+real poles causal, distinct real poles two-sided, repeated poles, and complex conjugate poles
+(completing the square).
+\item \textbf{Problem 3:} Laplace transform properties --- $s$-domain shift (damped cosine),
+differentiation in time, convolution (cascade of two causal exponentials), and initial/final value
+theorems.
+\item \textbf{Problem 4:} System analysis of a second-order causal LTI ODE: find $H(s)$, plot
+poles/zeros, check stability, compute $h(t)$, drive with $e^{-t}u(t)$, and analyze a second system
+$G(s) = 3/(s-1)$ causal vs anti-causal.
+\item \textbf{Problem 5:} Unilateral Laplace transform: first-order IVP, second-order zero-input
+IVP, and ZSR/ZIR decomposition.
+\end{itemize}
+
+\end{document}

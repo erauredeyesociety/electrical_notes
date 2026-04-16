@@ -358,3 +358,25 @@ Rogelio Gracia Otalvaro
 8. **§19.4.5 Two-Sided Signal with Annular ROC** — Transform $x[n] = (0.5)^n u[n] + 2(3)^n u[-n-1]$; intersect ROCs to obtain annular ring $0.5 < |z| < 3$.
 9. **§19.4.6 Combining Two Right-Sided Terms** — Transform $x[n] = 3(0.4)^n u[n] - 2(0.8)^n u[n]$; combine over common denominator, identify poles at $z = 0.4, 0.8$ and zero at $z = 1.6$; verify via $X(1) = -5$.
 10. **§19.4.7 Finite-Duration Sequence** — Transform $x[n] = \{2, -1, 3, 0, 4\}$ as a polynomial in $z^{-1}$; ROC is all $z \neq 0$; verify $X(1) = \sum_n x[n] = 8$.
+
+---
+
+## Worked Examples (from Official Solutions)
+
+**Source:** [hw6_official_solutions.md](../homework/hw6/hw6_official_solutions.md) — work through the problems before reading the solutions.
+
+- **Problem 1 (all parts):** Compute the $z$-transform and ROC for seven signals; every answer must include the ROC. Includes the sanity check $X(1) = \sum x[n]$.
+  - **(a)** $5(0.7)^n u[n]$ — causal geometric, ROC $|z| > 0.7$.
+  - **(b)** $-(4)^n u[-n-1]$ — anti-causal geometric, ROC $|z| < 4$.
+  - **(c)** $3\delta[n] - 2\delta[n-1] + \delta[n-4]$ — finite-duration, ROC all $z \neq 0$.
+  - **(d)** $n(0.5)^n u[n]$ — repeated-pole pair $az^{-1}/(1-az^{-1})^2$.
+  - **(e)** Sum of two causal geometrics — combine over common denominator; ROC = intersection $|z| > 0.9$.
+  - **(f)** $(0.6)^n u[n] - 3(2)^n u[-n-1]$ — two-sided, ROC is an annulus $0.6 < |z| < 2$; DTFT exists because unit circle lies in the annulus.
+  - **(g)** $(0.8)^n \cos(0.25\pi n)u[n]$ — damped cosine pair, complex-conjugate poles at $0.8 e^{\pm j0.25\pi}$.
+
+## Instructor Emphasis (from Official Study Guide)
+
+- **"Always state the ROC with every transform."** Same warning as Laplace — $1/(1-az^{-1})$ alone is ambiguous.
+- ROC shapes in DT are **annular rings** (circles replacing the lines of Laplace). Right-sided $\Rightarrow$ $|z| >$ max pole magnitude; left-sided $\Rightarrow$ $|z| <$ min pole magnitude.
+- DTFT exists $\iff$ the **unit circle** lies in the ROC.
+- $X(1) = \sum x[n]$ is a useful arithmetic sanity check.
