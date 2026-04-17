@@ -8,7 +8,9 @@ See also:
 - [latex_layout_tips.md](../latex_layout_tips.md) — research: layout/rotation/packing tricks
 - [latex_sidebyside_layout.md](../latex_sidebyside_layout.md) — research: tables-on-left / prose-on-right patterns (wrapfig vs paracol vs minipage)
 - [html_pagination_tips.md](../html_pagination_tips.md) — research: Paged.js, `@page` sizing, index-card printing (may still be in-progress; see file)
-- [estimate_pages.py](estimate_pages.py) — page-count heuristic
+- [html_copy_to_clipboard_tips.md](../html_copy_to_clipboard_tips.md) — research: DOM → PNG → clipboard for per-page copy buttons (may still be in-progress; see file)
+- [estimate_pages.py](estimate_pages.py) — page-count heuristic (LaTeX)
+- [check_pages.sh](check_pages.sh) — actual page count for v10 HTML via headless Chromium + pdfinfo
 - [cheatsheet_fitter.py](cheatsheet_fitter.py) — experimental auto-packer
 
 ---
@@ -49,7 +51,7 @@ See also:
 
 3. **Multi-page flow with `\raggedcolumns` + `multicols*`.** Observed: page ~N-1 sometimes has short column (large gap) before page N starts fresh. Not critical for screenshot workflow; flagged as a LaTeX behaviour that can't be fully fixed without hand-tuning `\columnbreak`.
 
-4. **Chrome Ctrl+P fills Letter paper, not 6×4** (v10 HTML). Root cause: `@page size: 6in 4in` is a *hint* — Chrome's print dialog defaults to system paper size and may scale content up to fit. **Workaround:** Ctrl+P → Destination: "Save as PDF" → More settings → Paper size: Custom 6×4 in → Margins: None → Scale: Default → Save. The resulting PDF is a genuine 6×4. For physical print, either (a) save-PDF first then print with "Fit to page" on Letter, or (b) use a printer that accepts 6×4 index cards with the paper tray configured. Not a CSS bug.
+4. **Chrome Ctrl+P fills Letter paper, not the configured index card** (v10 HTML). Root cause: `@page size: Win Hin` is a *hint* — Chrome's print dialog defaults to system paper size and may scale content up to fit. **Workaround:** Ctrl+P → Destination: "Save as PDF" → More settings → Paper size: Custom → enter current page size (e.g., 5×3 in or 6×4 in, matching whatever the `@page` rule says) → Margins: None → Scale: Default → Save. The resulting PDF is a genuine index-card-sized file. For physical print, either (a) save-PDF first then print with "Fit to page" on Letter, or (b) use a printer that accepts index cards with the paper tray configured. Not a CSS bug.
 
 ## Pending ideas
 
@@ -104,6 +106,59 @@ See also:
 - 2026-04-17 — **Trade-off accepted:** lose the "prose physically wraps around narrow side tables" behavior from the float version. Gain: multi-page overflow, consistent per-section layout, page numbers, predictable Paged.js compatibility. User-stated priority was multi-page flow to the second page — prose-wrap was the nice-to-have, now dropped.
 - 2026-04-17 — User feedback on per-section alternating grid: "it just alternates table on one side then paragraph, then table on the other side — filling up the HTML page, 3 full pages when printed. If anything it is worse." Pivot: drop per-section grid, switch to **two hand-authored `<div class="page">` wrappers**, each a single 3-column CSS Grid (`1.4in 1fr 1.4in`) matching the v6/v9 look. `.page + .page { break-before: page }` forces the hard break. Content manually split: page 1 = Laplace focus, page 2 = Z / Sampling / Feedback / Traps. Prose heavily abbreviated to fit the 6×4 real estate.
 - 2026-04-17 — User confirmed two-page grid is "near perfect." Remaining issue: "when I go to print it takes up the whole page in landscape mode in the printer thing." Diagnosis: this is Chrome's default print behavior — `@page size: 6in 4in` is a HINT, not a forced paper size. Chrome honors it only when output is "Save as PDF" OR when the user manually selects a matching paper size in the print dialog. By default, Chrome uses the system's default paper size (Letter) and scales content to fit. Not a CSS bug. Workaround documented in conversation: Ctrl+P → Destination: Save as PDF → More settings → Paper size: Custom 6×4 → Margins: None → Scale: Default → Save.
+- 2026-04-17 — User request: swap page size from 6×4 to **3×5 index card** (5×3 landscape). Applied proportional shrinks: `@page` and `.page` dimensions 6×4 → 5×3; padding 0.15in → 0.1in; grid table columns 1.4in → 1.15in; grid gap 0.1in → 0.08in; base font 6.5pt → 5pt; table font 5.5pt → 4.3pt; h2 7.5pt → 6pt; h3 7pt → 5.5pt; inter-block margin 3pt → 2pt; preview zoom 1.6× → 2×. Going from 24 sq in to 15 sq in per page is a 37% area reduction — content may need to split across 3 pages or shrink further if it overflows at 5×3.
+- 2026-04-17 — Built [check_pages.sh](check_pages.sh): renders v10 via headless Chromium, runs `pdfinfo` to report page count + paper size, runs `pdftotext -layout` per page for a rough content-per-page report. KaTeX math renders as images/SVG so pdftotext sees empty pages for pure-math content — the page count is still authoritative.
+- 2026-04-17 — `check_pages.sh` revealed v10 was only producing **1 page** instead of 2. Root cause: **Paged.js was collapsing the two explicit `<div class="page">` wrappers into a single Paged.js page** — it doesn't recognize author-provided `.page` as a pagination signal and tries to own pagination itself, ignoring `.page + .page { break-before: page }`. Fix: **removed Paged.js entirely**. With native CSS pagination, both `break-before: page` and `@page size` work correctly; Chromium produces 2 pages at 360×216 pts (5×3 in). Kept KaTeX (still needed for math).
+- 2026-04-17 — User request: review official study guide for content missing from v10, add in paragraph form. Compared [official_study_guide.md](official_study_guide.md) to current v10. Additions (page 2 middle column):
+  - **Three $|GH|$ regimes** ($|GH|{\gg}1 \Rightarrow Q{\approx}1/G$; $|GH|{\ll}1 \Rightarrow Q{\approx}H$; $GH{=}{-}1 \Rightarrow$ unstable) — key feedback concept the official guide highlights.
+  - **Marginal stability** defined (poles on $j\omega$/unit circle → not BIBO stable; impulse response doesn't decay).
+  - **ZOH, FOH are inexact** (not just ZOH; both are sinc-droop practical approximations).
+  - **Nyquist criterion** refined to "no encirclement of $-1/K$" (not just $-1$).
+  - **Top Traps** gains: "complex conj: complete square, don't split"; "don't mix Hz and rad/s ($\omega=2\pi f$)".
+- 2026-04-17 — Re-ran `check_pages.sh` after additions: still 2 pages, no overflow. v10 stable.
+- 2026-04-17 — User feedback: "bottom half of the first page is whitespace ... we are missing the remaining content or something?" Diagnosis: page 1 middle column had only 3 short blocks (Transforms & ROC, PFE, Sign Trap) while left/right columns had tall tables (Laplace Pairs 13 rows, Laplace Props 12 rows). The 3-column grid's row flows independently per column, so the short middle column left dead space at the bottom of page 1. Additions to page 1 middle (filling the gap):
+  - **CT System Analysis** block: ODE → H(s) replacement rule, Golden Rule, marginal stability category, block-diagram cheats, unil. L IVP pipeline.
+  - **IVT/FVT (Laplace)** block with explicit FVT-validity rule ("all poles of sX(s) in open LHP, else formula returns garbage").
+  - **PFE expanded** with $t^{k-1}/(k-1)!$ repeated-pole pair formula, "don't split conjugates" call-out, and an "Improper (both)" mini-recipe.
+  - ROC rules block gained "Finite duration" clause and explicit BIBO stable $\Leftrightarrow$ axis-in-ROC.
+  - Page 2 left: **Damped cos/sin** block (both $r^n\cos$ and $r^n\sin$ pair formulas) — was missing entirely from v10.
+- 2026-04-17 — `check_pages.sh` re-verified: 2 pages, 360×216 pts. Content additions fit without spilling.
+- 2026-04-17 — User feedback: "IVT/FVT (Laplace) and everything below is cutoff and goes off page... we need to add detections for things like this and automatically just feed it to the next page." Implemented **JS auto-pagination + overflow detection** in v10 HTML:
+  - `autoPaginate()` function runs after KaTeX. For each column on each page, if `scrollHeight > clientHeight`, pops the last block and re-inserts it at the TOP of the next page's same column (creating a new page if needed). Cascades until no column overflows.
+  - `detectOverflow()` runs after auto-paginate. Any column still overflowing (single block too tall to fit) gets a red outline + `console.warn('OVERFLOW: ...')`.
+  - `.overflow-warning { outline: 2px solid red; }` CSS rule; hidden in `@media print`.
+  - Two `requestAnimationFrame`s between KaTeX render and the scan so layout settles before measurement.
+  - Enhanced `check_pages.sh` to capture Chrome console output via `--enable-logging=stderr --v=1`, greps for `AUTO_PAGINATE:` / `OVERFLOW:` markers, and returns exit code 2 if any overflow. Future v10 edits can run `./check_pages.sh` and know instantly if content overflows.
+- 2026-04-17 — Filled remaining left/right whitespace with additional tables; auto-paginate absorbed into a 3rd page:
+  - Page 1 left: added **ROC shapes** mini-table (Right / Left / Two-sided / Finite-duration).
+  - Page 1 right: added **CT Stability** mini-table (LHP / RHP / jω-axis → stable / unstable / marginal).
+  - Page 2 right: added **DT Stability** mini-table (analogous to CT Stability but for unit circle).
+- 2026-04-17 — Mid-iteration `check_pages.sh` result: 3 pages (auto-paginate was catching overflow from added prose); subsequent prose-spacing compaction brought it back to **2 pages** (see next entry).
+- 2026-04-17 — User request: "I want buttons to be able to copy images of individual pages to the clipboard, so I don't have to take screenshots." Implemented:
+  - Loaded `html-to-image@1.11.11` from unpkg CDN (chosen over `html2canvas` for better modern-CSS + SVG support; KaTeX uses inline SVG).
+  - `buildCopyControls()` runs after `autoPaginate()` finishes — enumerates final `.page` elements and injects one "Copy Page N" button per page into a screen-only control panel (top-right).
+  - `copyPageToClipboard(idx)`: renders `.page[idx]` via `htmlToImage.toBlob({ pixelRatio: 3, backgroundColor: '#ffffff', cacheBust: true })` (≈300 dpi, ~1500×900 PNG), writes to `navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])`.
+  - Fallback: if clipboard API is unavailable or blocked (common on `file://` without a user gesture), auto-triggers a PNG download named `cheatsheet-page-N.png`.
+  - Status readout: success, blocked-but-downloaded, or error message shown inline next to the buttons.
+  - All UI wrapped in `class="no-print"` so buttons don't appear in the printed PDF.
+  - Launched research agent for `html_copy_to_clipboard_tips.md` to document library tradeoffs, file:// gotchas, KaTeX-in-canvas quirks. Will integrate findings when returned.
+- 2026-04-17 — `check_pages.sh` re-verified: still 2 pages, no overflow. Print-only content unchanged (the copy buttons live in a fixed `no-print` div).
+- 2026-04-17 — Research agent returned [html_copy_to_clipboard_tips.md](../html_copy_to_clipboard_tips.md) (301 lines). Critical findings surfaced three bugs in the first-pass implementation:
+  1. **file:// breaks `navigator.clipboard` in all 2026 browsers** (Chrome, Firefox, Safari — not a secure context). User MUST serve via `python3 -m http.server`. Added a proactive yellow banner (`#file-proto-banner`) shown only when `location.protocol === 'file:'` with the exact command to run.
+  2. **KaTeX webfonts don't auto-embed into the foreignObject SVG** used by html-to-image. Two fixes applied:
+     - Added `crossorigin="anonymous"` to the KaTeX CSS `<link>` so font CSS rules are CORS-readable and embedded.
+     - `await document.fonts.ready` before `htmlToImage.toBlob` so the capture happens only after KaTeX_Main/Math/Size fonts are loaded.
+  3. **Safari requires `ClipboardItem({'image/png': PROMISE<Blob>})`**, not a resolved blob. Refactored to pass `htmlToImage.toBlob(...)` promise DIRECTLY inside `ClipboardItem`; Chrome/Firefox accept this form too.
+  - Added `filter: n => !(n.classList && n.classList.contains('no-print'))` to render options so buttons/banners never appear in the captured PNG.
+  - Bumped html-to-image 1.11.11 → 1.11.13 (research-recommended).
+  - Switched CDN from unpkg to jsDelivr (smaller/faster per research).
+- 2026-04-17 — `check_pages.sh` re-re-verified after research-driven patches: still 2 pages, no overflow. Copy buttons and banner are `no-print` so print output is unaffected.
+- 2026-04-17 — User feedback: table font too small, hard to read. Bumped global table 4.3pt → 5pt; added `.damped` class at 5.5pt for the Damped cos/sin table.
+- 2026-04-17 — User feedback after compile: "Top Traps, Sampling, and DT Stability are overflowing to a third page... maybe we don't need to make the font sizes in the tables as large as what I initially expected." Two-step walkback:
+  - Step 1: table fonts 5pt → 4.5pt, damped 5.5pt → 5pt. Still 3 pages.
+  - Step 2: tables back to 4.3pt (original), damped 4.8pt (just a touch bigger than surrounding tables). Still 3 pages — the page-count problem wasn't really the table font; it was the accumulated prose additions (CT System Analysis block, IVT/FVT, expanded PFE, etc.).
+  - Step 3: tightened **prose** compacting — body font 5pt → 4.5pt; h2 6pt → 5.5pt; h3 5.5pt → 5pt; paragraph margin 1pt → 0.5pt; block spacing 2pt → 1pt; heading top margin 1.5pt → 1pt. Reached **2 pages, no overflow** — goal achieved.
+  - Net lesson: auto-paginate is a safety net, not a solution to content volume. When you add significant prose, expect to tighten ALL spacing proportionally, not just table fonts. `check_pages.sh` gives immediate feedback to iterate.
 
 ## Alternative layouts explored
 
@@ -203,15 +258,16 @@ v10 was first built as a LaTeX file (`exam3_cheatsheet_v10_packed.tex`) that tig
 
 After two earlier architectures failed (float + wrap-around → Paged.js can't multi-page; per-section alternating grid → zig-zag that user disliked), v10 landed on deterministic composition: two hand-authored page divs, each a single 3-column grid matching the v6/v9 look the user liked.
 
-- Page size: **6×4 in landscape index card**, enforced via `@page { size: 6in 4in; margin: 0; }` AND explicit `.page { width: 6in; height: 4in; padding: 0.15in; }`. `@page` doesn't eval CSS vars reliably; both must be in sync.
-- **Two `<div class="page">` wrappers.** The second has `break-before: page` via adjacent-sibling selector `.page + .page { break-before: page; }` so it starts on a new printed sheet.
-- Each page is itself a CSS Grid: `grid-template-columns: 1.4in 1fr 1.4in` — left tables column, middle prose column, right tables column. Same visual as v6/v9 but per-page so it fits a 6×4 card.
+- Page size: **5×3 in landscape (standard 3×5 index card)**, enforced via `@page { size: 5in 3in; margin: 0; }` AND explicit `.page { width: 5in; height: 3in; padding: 0.1in; }`. `@page` doesn't eval CSS vars reliably; both must be in sync.
+- **Two `<div class="page">` wrappers.** The second has `break-before: page` via adjacent-sibling selector `.page + .page { break-before: page; }` so it starts on a new printed sheet. Native CSS handles pagination; **no Paged.js** (Paged.js conflicts with author-provided `.page` wrappers).
+- Each page is itself a CSS Grid: `grid-template-columns: 1.15in 1fr 1.15in` — left tables column, middle prose column, right tables column. Same visual as v6/v9 but per-page so it fits a 5×3 card.
 - Content split across the two pages:
   - Page 1 (Laplace focus): L = Laplace Pairs; M = Transforms & ROC intro + PFE + sign trap; R = Laplace Props.
-  - Page 2 (Z / Sampling / Feedback): L = Z Pairs + Sampling table; M = System Analysis + Sampling + Feedback + Top Traps prose; R = Z Props + Feedback + CT vs DT.
-- **KaTeX** for math, loaded first (`window.load`), then Paged.js injected. Paged.js renders both `<div class="page">`s into `.pagedjs_page` frames with dashed border + drop shadow on screen, stripped for print.
+  - Page 2 (Z / Sampling / Feedback): L = Z Pairs + Sampling table; M = System Analysis + Sampling + Feedback (3 regimes, marginal stability) + Top Traps prose; R = Z Props + Feedback + CT vs DT.
+- **KaTeX** for math, loaded first (`window.load`). No other JS pagination libs; native CSS is sufficient and more reliable.
 - Page numbers in bottom-right via `@page @bottom-right`.
-- Preview zoom button (1.6×) — 6×4 is tiny on screen; zoom makes it readable without affecting print.
+- Preview zoom button (2×) — 5×3 is tiny on screen; zoom makes it readable without affecting print.
+- Verification: [check_pages.sh](check_pages.sh) renders via headless Chromium and confirms 2 pages at 360×216 pts (5×3 in).
 
 **Content volume constraint.** A 6×4 page at 6.5pt has limited real estate. The prose has been heavily abbreviated vs. the LaTeX versions (many sentences trimmed to phrases). If content grows, either (a) shrink font further, (b) add a 3rd `<div class="page">`, or (c) upgrade page size to e.g. letter landscape and accept the non-index-card output.
 

@@ -1,0 +1,246 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\title{Region of Convergence (ROC) --- Clear Explanation}
+\author{CEC 315 Signals and Systems}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{For:} Laplace ($s$-domain) and $z$-transform ($z$-domain).\\
+\textbf{What you'll get:} enough understanding of ROC that the rules stop feeling arbitrary. Most of the confusion around ROC comes from treating it as a list of facts to memorize. It's one idea (an integral has to converge) with a bunch of consequences.
+
+\tableofcontents
+\newpage
+
+\section{The 30-second version}
+
+The Laplace transform is an integral:
+\[
+X(s) = \int_{-\infty}^{\infty} x(t)\, e^{-st}\, dt
+\]
+
+\textbf{That integral doesn't always converge.} For some values of $s$ it gives a finite number; for others it blows up to infinity. The \textbf{Region of Convergence (ROC)} is the set of complex numbers $s$ where the integral actually converges.
+
+Same idea for the $z$-transform: $X(z) = \sum_n x[n] z^{-n}$ only converges for some values of $z$. That set is the ROC.
+
+\textbf{Why this matters:} a transform formula $X(s) = \tfrac{1}{s+3}$ without an ROC is \emph{ambiguous} --- it can represent two completely different signals. The ROC is how you pick which one.
+
+That's the whole thing. Everything else is mechanics.
+
+\section{Why does ROC exist at all? The integral must converge}
+
+Take a concrete signal and try to transform it by hand:
+\[
+x(t) = e^{-3t}\, u(t) \ \Rightarrow\ X(s) = \int_{0}^{\infty} e^{-3t}\, e^{-st}\, dt = \int_{0}^{\infty} e^{-(s+3)t}\, dt
+\]
+This integral converges \textbf{only if} the exponent is negative as $t \to \infty$, which means we need $\operatorname{Re}\{s+3\} > 0$, i.e., $\operatorname{Re}\{s\} > -3$. Evaluate for $s$ in that region:
+\[
+X(s) = \left[\frac{e^{-(s+3)t}}{-(s+3)}\right]_0^{\infty} = \frac{1}{s+3}, \quad \text{ROC: } \operatorname{Re}\{s\} > -3.
+\]
+
+The \emph{formula} $\tfrac{1}{s+3}$ is defined for any $s \ne -3$. But the transform \emph{as an integral} is only defined where the integral converges. For $s$ with $\operatorname{Re}\{s\} \le -3$ the integral diverges. We can analytically continue the formula past the ROC, but the resulting expression doesn't correspond to the Laplace transform of $e^{-3t}u(t)$ anymore.
+
+\textbf{Takeaway:} ROC is not a rule tacked on at the end. It's where the transform integral actually makes sense.
+
+\section{The killer insight: same formula, different signals}
+
+Now take a different signal:
+\[
+y(t) = -e^{-3t}\, u(-t) \qquad \text{(exists only for } t<0 \text{, with a negative sign)}
+\]
+Compute:
+\[
+Y(s) = -\int_{-\infty}^{0} e^{-3t}\, e^{-st}\, dt = -\int_{-\infty}^{0} e^{-(s+3)t}\, dt
+\]
+This integral converges as $t \to -\infty$ only if $\operatorname{Re}\{s+3\} < 0$, i.e., $\operatorname{Re}\{s\} < -3$. Evaluating:
+\[
+Y(s) = \frac{1}{s+3}, \quad \text{ROC: } \operatorname{Re}\{s\} < -3.
+\]
+
+\textbf{Same formula.} Completely different signal ($x$ lives on $t>0$ and decays; $y$ lives on $t<0$ and grows backwards). \textbf{Only the ROC distinguishes them.}
+
+If someone hands you $X(s) = \tfrac{1}{s+3}$ without an ROC, you literally cannot tell whether they mean $x(t) = e^{-3t}u(t)$ or $y(t) = -e^{-3t}u(-t)$.
+
+This is why every ROC rule, theorem, and warning keeps saying: \textbf{always state the ROC}.
+
+\section{Why is the ROC a vertical strip (Laplace) or annular ring (Z)?}
+
+Convergence of the Laplace integral depends only on how $|e^{-st}|$ behaves, because everything else is bounded by $|x(t)|$. And:
+\[
+|e^{-st}| = |e^{-(\sigma + j\omega)t}| = e^{-\sigma t}.
+\]
+It only depends on $\sigma = \operatorname{Re}\{s\}$. So whether the integral converges is purely a question of $\sigma$ --- and the set of $s$ with $\sigma$ in some range is a \textbf{vertical strip} in the $s$-plane.
+
+For the $z$-transform, the analogue: $|z^{-n}| = |re^{j\omega}|^{-n} = r^{-n}$ where $r = |z|$. Convergence depends only on $r$, so the ROC is an \textbf{annular ring}.
+
+\textbf{Takeaway:} the shape of the ROC isn't arbitrary; it follows directly from what variable actually controls convergence.
+
+\section{Why doesn't the ROC contain poles?}
+
+A pole is a value of $s$ (or $z$) where the transform formula evaluates to infinity. If the integral converged at a pole, the resulting number would be finite --- contradicting the pole. So the ROC and the poles are disjoint by construction.
+
+\section{Rules for which side of the pole}
+
+\subsection{Laplace}
+
+\begin{center}
+\begin{tabular}{@{}l l@{}}
+\toprule
+Signal type & ROC shape \\
+\midrule
+Finite duration & All of $s$-plane \\
+Right-sided (nonzero only for $t \ge T_0$) & $\operatorname{Re}\{s\} > \sigma_{\max}$ \\
+Left-sided (nonzero only for $t \le T_0$) & $\operatorname{Re}\{s\} < \sigma_{\min}$ \\
+Two-sided & Vertical strip between two poles (may be empty) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Why ``right of rightmost pole'' for right-sided signals?} A right-sided signal's integral from $0$ to $\infty$ converges when the decay rate of $e^{-\sigma t}$ is faster than the signal's growth. The most-restrictive pole is the one with the largest real part. To kill that mode, you need $\sigma$ larger than it. So ROC is $\sigma > \sigma_{\max}$.
+
+For left-sided, the integral runs from $-\infty$ to $0$; convergence as $t \to -\infty$ needs $\sigma < \sigma_{\min}$.
+
+\subsection{$z$-Transform}
+
+\begin{center}
+\begin{tabular}{@{}l l@{}}
+\toprule
+Signal type & ROC shape \\
+\midrule
+Finite duration & Entire $z$-plane (maybe except $0$ or $\infty$) \\
+Right-sided (causal) & $|z| > r_{\max}$ (outside outermost pole) \\
+Left-sided (anti-causal) & $|z| < r_{\min}$ (inside innermost pole) \\
+Two-sided & Annular ring $r_1 < |z| < r_2$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Finite-duration rule (both)}
+
+A finite-duration signal has a transform that converges for any $s$ (resp.\ $z$), because a finite integral of a finite signal is finite. ROC is the entire plane. ($z$-transform may exclude $z=0$ and/or $\infty$ because $z^{-k}$ blows up there for certain $k$.)
+
+\section{ROC and signal properties (the three-way relationship)}
+
+\subsection{Fourier transform exists iff ROC contains the imaginary axis / unit circle}
+
+The Fourier transform is the Laplace evaluated at $s = j\omega$ (or the $z$-transform at $z = e^{j\omega}$). That evaluation is valid only where the Laplace / $z$-transform converges.
+\begin{itemize}
+  \item Laplace: FT exists $\iff$ $j\omega$-axis $\subset$ ROC.
+  \item Z: DTFT exists $\iff$ unit circle $\subset$ ROC.
+\end{itemize}
+
+\subsection{BIBO stable iff FT exists iff ROC contains axis / unit circle}
+
+A BIBO-stable system has a bounded Fourier transform (frequency response):
+\begin{itemize}
+  \item CT: BIBO stable $\iff$ ROC of $H(s)$ contains $j\omega$-axis.
+  \item DT: BIBO stable $\iff$ ROC of $H(z)$ contains unit circle.
+\end{itemize}
+
+\subsection{Causal iff ROC is right half-plane / exterior of circle}
+
+A causal signal is right-sided. From \S6:
+\begin{itemize}
+  \item Causal CT $\iff$ ROC is $\operatorname{Re}\{s\} > \sigma_{\max}$.
+  \item Causal DT $\iff$ ROC is $|z| > r_{\max}$ (and includes $z = \infty$).
+\end{itemize}
+
+\subsection{Causal + Stable $=$ ``all poles in LHP / inside unit circle''}
+
+This is the ``Golden Rule.'' It follows from the other two:
+\begin{itemize}
+  \item Causal puts the ROC right of every pole.
+  \item Stable requires the ROC to include the $j\omega$-axis.
+  \item Both: every pole must be to the left of the $j\omega$-axis, i.e.\ $\operatorname{Re}\{p_i\}<0$.
+\end{itemize}
+
+Analogously in DT: poles outside the ROC means poles inside the unit circle, so $|p_i|<1$.
+
+\textbf{Key insight:} the Golden Rule isn't a separate fact to memorize. It's forced by combining the causal-ROC rule and the stable-ROC rule.
+
+\section{How to determine the ROC in practice}
+
+Given a signal, ROC is determined by time-domain shape:
+\begin{itemize}
+  \item Right-sided? $\Rightarrow$ ROC right of rightmost pole.
+  \item Left-sided? $\Rightarrow$ ROC left of leftmost pole.
+  \item Two-sided? $\Rightarrow$ strip between two specific poles.
+  \item ``Stable''? $\Rightarrow$ ROC includes axis.
+  \item ``Causal''? $\Rightarrow$ ROC is right-sided.
+\end{itemize}
+
+Given just the transform formula (no ROC), the signal is ambiguous --- and they must tell you which of these applies.
+
+\subsection{Worked example: given a formula, list the possibilities}
+
+\[
+X(s) = \frac{1}{(s+1)(s-2)}
+\]
+Poles at $s = -1$ and $s = 2$. Three possible ROCs:
+\begin{enumerate}
+  \item $\operatorname{Re}\{s\} > 2$: right-sided (causal). Signal grows (has $e^{2t}$ term). Not stable.
+  \item $\operatorname{Re}\{s\} < -1$: left-sided (anti-causal). Signal grows as $t \to -\infty$.
+  \item $-1 < \operatorname{Re}\{s\} < 2$: two-sided. ROC includes $j\omega$-axis $\Rightarrow$ stable.
+\end{enumerate}
+All three have the same $X(s)$ formula. The ROC picks which one.
+
+\section{The most common ROC mistakes (and the fix)}
+
+\begin{enumerate}
+  \item \textbf{``I computed X(s), I'm done.''} Ambiguous signal (\S3). Fix: always write the ROC.
+  \item \textbf{``The pole is at $s=-3$, so the ROC is $\operatorname{Re}\{s\} > -3$.''} Assuming right-sided without being told. Fix: use the problem's statement about signal shape to pick ROC.
+  \item \textbf{Picking direction of each PFE term from the pole's sign.} Direction comes from ROC, not pole sign. $\tfrac{1}{s+2}$ can be $e^{-2t}u(t)$ (ROC right of $-2$) or $-e^{-2t}u(-t)$ (ROC left of $-2$). Fix: for each pole, check which side of it the ROC is on.
+  \item \textbf{``ROC touches $j\omega$-axis so it's stable.''} Axis must be strictly inside, not on the boundary. A pole on the $j\omega$-axis gives only marginal stability. Fix: check poles strictly in open LHP / strictly inside unit circle.
+  \item \textbf{Computing Z partial fractions in $z$ instead of $z^{-1}$.} All standard $z$-pairs are in $z^{-1}$. Pole at $z=a$ is factor $(1-az^{-1})$, not $(z-a)$. Fix: always set up PFE in $z^{-1}$.
+\end{enumerate}
+
+\section{Quick reference card}
+
+\begin{center}
+\begin{tabular}{@{}l l l@{}}
+\toprule
+Fact & Laplace & Z \\
+\midrule
+Variable & $s = \sigma + j\omega$ & $z = re^{j\omega}$ \\
+ROC shape & vertical strip (in $\sigma$) & annular ring (in $r$) \\
+FT lives on & $j\omega$-axis & unit circle \\
+Right-sided ROC & $\sigma > \sigma_{\max}$ & $|z| > r_{\max}$ \\
+Left-sided ROC & $\sigma < \sigma_{\min}$ & $|z| < r_{\min}$ \\
+Two-sided ROC & strip between poles & ring between pole radii \\
+Finite-duration ROC & all of $s$-plane & all of $z$-plane (maybe not $0, \infty$) \\
+FT exists & $j\omega \subset$ ROC & unit circle $\subset$ ROC \\
+BIBO stable & $j\omega \subset$ ROC & unit circle $\subset$ ROC \\
+Causal & rightmost half-plane & exterior of a circle \\
+Causal $+$ stable & all poles $\operatorname{Re}\{p_i\} < 0$ & all poles $|p_i| < 1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Summary}
+
+\begin{enumerate}
+  \item \textbf{ROC = where the transform integral/sum converges.} Not a tacked-on rule; it's the domain of the definition.
+  \item \textbf{A transform formula without an ROC is ambiguous.}
+  \item \textbf{ROC shape is forced} by what variable controls convergence ($\sigma$ or $|z|$) $\Rightarrow$ strip / annulus.
+  \item \textbf{ROC excludes poles.}
+  \item \textbf{Rules for which side of the pole} follow from whether the signal is right-sided, left-sided, two-sided, or finite.
+  \item \textbf{FT exists $\iff$ $j\omega$-axis (unit circle) $\subset$ ROC $\iff$ BIBO stable.}
+  \item \textbf{Causal $\iff$ ROC right half-plane / exterior of circle.}
+  \item \textbf{Causal + Stable $\iff$ poles in LHP / inside unit circle.} A consequence of (6)+(7), not a separate rule.
+  \item In partial fractions, \textbf{ROC picks direction} of each term, not the pole's sign.
+  \item Z partial fractions go in $z^{-1}$, not $z$.
+\end{enumerate}
+
+If you can reproduce the reasoning behind points 1--5 from scratch, the rest falls out.
+
+\end{document}

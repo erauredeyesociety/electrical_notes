@@ -30,12 +30,35 @@
     user liked.
   -->
 
-  <!-- KaTeX first; load Paged.js after math is rendered. -->
+  <!-- KaTeX for math. NOTE: Paged.js was removed — it collapsed our
+       explicit <div class="page"> wrappers into a single page instead
+       of honoring `break-before: page`. We don't need Paged.js since
+       the two pages are hand-authored; native CSS page breaks handle
+       both on-screen and print correctly. -->
+  <!-- crossorigin="anonymous" on KaTeX CSS so its webfonts can be
+       serialized into the copy-to-image PNG. Without it, foreignObject
+       SVG (used by html-to-image) can't embed the font faces and math
+       collapses to a fallback font. -->
   <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+        crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+  <!-- html-to-image: converts a DOM element to a PNG blob via
+       foreignObject SVG. Renders modern CSS (grid, custom props, KaTeX
+       inline SVG) more faithfully than html2canvas. ~17KB. -->
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.js"></script>
   <script>
+    // Pipeline:
+    //   1. KaTeX renders math synchronously
+    //   2. Two RAFs to let layout settle
+    //   3. autoPaginate(): scan each column; if it overflows, move the last
+    //      block to the next page's same column (create new page if needed).
+    //      Cascades until no column overflows OR a single block is too tall
+    //      to fit (in which case, red-outline warning + console.log).
+    //   4. detectOverflow(): final pass — any column that's still over
+    //      gets outline + warn log, used by check_pages.sh to flag issues.
     window.addEventListener('load', function () {
       renderMathInElement(document.body, {
         delimiters: [
@@ -44,23 +67,240 @@
         ],
         throwOnError: false
       });
-      var s = document.createElement('script');
-      s.src = 'https://unpkg.com/pagedjs/dist/paged.polyfill.js';
-      document.head.appendChild(s);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          autoPaginate();
+          detectOverflow();
+          buildCopyControls();         // Copy-to-clipboard buttons
+          showFileProtocolWarning();   // banner if loaded via file://
+        });
+      });
     });
+
+    // -----------------------------------------------------------------
+    // Copy-page-to-clipboard. Uses html-to-image to render a .page as PNG,
+    // then writes to the system clipboard via the Clipboard API. Falls
+    // back to downloading the PNG if the clipboard write is blocked
+    // (common on file:// in some browsers, or without a user gesture).
+    //
+    // Buttons are generated dynamically AFTER autoPaginate so the page
+    // count reflects any JS-created overflow pages.
+    // -----------------------------------------------------------------
+    function buildCopyControls() {
+      var host = document.getElementById('copy-controls');
+      if (!host) return;
+      var pages = document.querySelectorAll('.page');
+      host.innerHTML = '';
+      pages.forEach(function (page, idx) {
+        var btn = document.createElement('button');
+        btn.textContent = 'Copy Page ' + (idx + 1);
+        btn.style.cssText = 'display:block;margin:2px 0;padding:4px 8px;' +
+                            'cursor:pointer;font-family:sans-serif;font-size:11px;width:100%';
+        btn.onclick = function () { copyPageToClipboard(idx, btn); };
+        host.appendChild(btn);
+      });
+
+      // Status readout
+      var status = document.createElement('div');
+      status.id = 'copy-status';
+      status.style.cssText = 'margin-top:4px;font-family:sans-serif;font-size:10px;color:#555;min-height:14px';
+      host.appendChild(status);
+    }
+
+    // Build the render options.
+    //   - pixelRatio 3 → ~300dpi on a 5x3in page (~1500x900 PNG)
+    //   - width/height PINNED to the actual CSS dimensions (5in = 480px,
+    //     3in = 288px at 96 CSS-dpi). Without this, html-to-image uses
+    //     getBoundingClientRect which reports the *transformed* rect if
+    //     `body.zoom` is on (scale 2.0), producing a 960x576 capture
+    //     where only the left half is the page — user reported
+    //     "everything to the right of the index card page element".
+    //   - cacheBust: false — appending ?<timestamp> to CDN URLs can
+    //     trigger CORS failures and leave stylesheets un-inlined (blank
+    //     output). jsDelivr and unpkg cache-headers are fine without it.
+    //   - filter excludes no-print nodes (buttons, banner, status).
+    function renderOpts() {
+      return {
+        pixelRatio: 3,
+        backgroundColor: '#ffffff',
+        cacheBust: false,
+        width: 480,     // 5in * 96 CSS-dpi
+        height: 288,    // 3in * 96 CSS-dpi
+        filter: function (node) {
+          return !(node.classList && node.classList.contains('no-print'));
+        }
+      };
+    }
+
+    function copyPageToClipboard(idx, btn) {
+      var pages = document.querySelectorAll('.page');
+      var page = pages[idx];
+      var status = document.getElementById('copy-status');
+      if (!page) {
+        if (status) status.textContent = 'Page ' + (idx + 1) + ' not found.';
+        return;
+      }
+
+      var originalLabel = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = '...'; }
+      if (status) { status.textContent = 'Rendering page ' + (idx + 1) + '...'; status.style.color = '#555'; }
+
+      // Wait for KaTeX webfonts to finish loading — otherwise the
+      // foreignObject SVG in the screenshot loses the custom glyphs and
+      // math degrades to a fallback font.
+      document.fonts.ready
+        .then(function () {
+          // Safari requires ClipboardItem to receive a Promise<Blob>,
+          // not a resolved Blob. Chrome/Firefox accept both, so we
+          // always pass the promise — works everywhere.
+          if (!navigator.clipboard || !window.ClipboardItem) {
+            throw new Error('Clipboard API unavailable (likely file:// — serve via http://localhost instead)');
+          }
+          var blobPromise = htmlToImage.toBlob(page, renderOpts());
+          return navigator.clipboard.write([
+            new ClipboardItem({ 'image/png': blobPromise })
+          ]);
+        })
+        .then(function () {
+          if (status) {
+            status.textContent = '✓ Page ' + (idx + 1) + ' copied to clipboard.';
+            status.style.color = '#080';
+          }
+        })
+        .catch(function (err) {
+          // Fallback: download the PNG file instead of copying.
+          console.warn('Clipboard write failed:', err);
+          htmlToImage.toBlob(page, renderOpts())
+            .then(function (blob) {
+              var url = URL.createObjectURL(blob);
+              var a = document.createElement('a');
+              a.href = url;
+              a.download = 'cheatsheet-page-' + (idx + 1) + '.png';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+              if (status) {
+                if (location.protocol === 'file:') {
+                  status.innerHTML = 'Downloaded PNG. For clipboard, serve via <code>python3 -m http.server</code> and open via <code>http://localhost:8000/...</code>';
+                } else {
+                  status.textContent = 'Clipboard blocked; downloaded PNG instead.';
+                }
+                status.style.color = '#a60';
+              }
+            })
+            .catch(function (e2) {
+              if (status) {
+                status.textContent = 'Copy AND download failed: ' + e2.message;
+                status.style.color = '#c00';
+              }
+            });
+        })
+        .finally(function () {
+          if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+        });
+    }
+
+    // Show a one-line banner if we detect file:// loading: clipboard is
+    // guaranteed blocked there (Chrome/Firefox/Safari 2026). The Copy
+    // buttons will fall back to downloading PNG, but the user should
+    // know they can get true clipboard with localhost.
+    function showFileProtocolWarning() {
+      if (location.protocol !== 'file:') return;
+      var banner = document.getElementById('file-proto-banner');
+      if (!banner) return;
+      banner.style.display = 'block';
+      banner.innerHTML =
+        '<b>file:// detected.</b> Copy-to-clipboard won\'t work (browser security rule). ' +
+        'Copy buttons will download PNG as fallback. ' +
+        'For real clipboard, run <code style="background:#fff3;padding:0 3px">python3 -m http.server 8000</code> ' +
+        'in this folder, then open <code style="background:#fff3;padding:0 3px">http://localhost:8000/exam3_cheatsheet_v10.html</code>.';
+    }
+
+    function createPage() {
+      var page = document.createElement('div');
+      page.className = 'page';
+      ['col-left', 'col-mid', 'col-right'].forEach(function (cls) {
+        var col = document.createElement('div');
+        col.className = 'col ' + cls;
+        page.appendChild(col);
+      });
+      return page;
+    }
+
+    function autoPaginate() {
+      var COLS = ['col-left', 'col-mid', 'col-right'];
+      var changed = true;
+      var safety = 50;
+
+      while (changed && safety-- > 0) {
+        changed = false;
+        var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+        for (var i = 0; i < pages.length; i++) {
+          var page = pages[i];
+          for (var c = 0; c < COLS.length; c++) {
+            var col = page.querySelector('.' + COLS[c]);
+            if (!col) continue;
+            if (col.scrollHeight <= col.clientHeight + 1) continue;
+
+            // Column overflows. Move last block to next page (or new page).
+            var blocks = Array.prototype.filter.call(
+              col.children,
+              function (el) { return el.classList && el.classList.contains('block'); }
+            );
+            if (blocks.length <= 1) break;     // can't split a single block
+
+            var nextPage = pages[i + 1];
+            if (!nextPage) {
+              nextPage = createPage();
+              page.parentNode.insertBefore(nextPage, page.nextSibling);
+              pages.push(nextPage);
+            }
+            var nextCol = nextPage.querySelector('.' + COLS[c]);
+            if (!nextCol) break;
+
+            var lastBlock = blocks[blocks.length - 1];
+            nextCol.insertBefore(lastBlock, nextCol.firstChild);
+            changed = true;
+          }
+        }
+      }
+    }
+
+    function detectOverflow() {
+      var pages = document.querySelectorAll('.page');
+      console.log('AUTO_PAGINATE: final page count =', pages.length);
+      var anyOverflow = false;
+      document.querySelectorAll('.col').forEach(function (col) {
+        if (col.scrollHeight > col.clientHeight + 1) {
+          col.classList.add('overflow-warning');
+          console.warn('OVERFLOW: column still overflowing',
+                       col.className,
+                       'scroll=' + col.scrollHeight,
+                       'client=' + col.clientHeight);
+          anyOverflow = true;
+        }
+      });
+      if (!anyOverflow) {
+        console.log('AUTO_PAGINATE: no overflow detected.');
+      }
+    }
   </script>
 
   <style>
     /* ================================================================
-       PAGE SIZE: 6 x 4 in landscape index card.
+       PAGE SIZE: 5 x 3 in landscape (standard 3x5 index card).
        @page and .page dimensions must match.
+       Swap back to 6 x 4 by changing BOTH the @page size AND the
+       .page width/height below, plus you may want to reverse the
+       font-size/grid-column shrinks.
        ================================================================ */
     @page {
-      size: 6in 4in;
+      size: 5in 3in;
       margin: 0;
       @bottom-right {
         content: counter(page) " / " counter(pages);
-        font: 5pt sans-serif;
+        font: 4pt sans-serif;
         color: #888;
       }
     }
@@ -70,8 +310,8 @@
       padding: 0;
       font-family: "Latin Modern Roman", "Computer Modern", "CMU Serif",
                    Georgia, serif;
-      font-size: 6.5pt;
-      line-height: 1.1;
+      font-size: 4.5pt;
+      line-height: 1.05;
       color: #000;
     }
 
@@ -81,12 +321,12 @@
       padding: 0.4in 0;
     }
 
-    /* -------- Page: explicit 6x4 card, 3-column grid ------------- */
+    /* -------- Page: explicit 5x3 card, 3-column grid ------------- */
     .page {
       box-sizing: border-box;
-      width: 6in;
-      height: 4in;
-      padding: 0.15in;
+      width: 5in;
+      height: 3in;
+      padding: 0.1in;
       margin: 0 auto 0.4in;
       background: #fff;
       border: 1px dashed #888;
@@ -94,17 +334,12 @@
       overflow: hidden;
 
       display: grid;
-      grid-template-columns: 1.4in 1fr 1.4in;
+      grid-template-columns: 1.15in 1fr 1.15in;
       grid-template-rows: 1fr;
-      gap: 0 0.1in;
+      gap: 0 0.08in;
     }
     .page + .page {
       break-before: page;
-    }
-    /* Paged.js pages */
-    .pagedjs_page {
-      margin: 0 auto 0.4in;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
     }
 
     @media print {
@@ -113,10 +348,8 @@
         margin: 0;
         border: none;
         box-shadow: none;
-        width: auto;
-        height: auto;
+        /* Keep explicit width/height so @page and content size match */
       }
-      .pagedjs_page { box-shadow: none; margin: 0; }
     }
 
     /* -------- Columns inside a page ------------------------------- */
@@ -130,51 +363,77 @@
 
     /* -------- Table block ----------------------------------------- */
     .col h3 {
-      font-size: 7pt;
+      font-size: 5pt;
       font-weight: bold;
-      margin: 0 0 1pt 0;
+      margin: 0 0 0.3pt 0;
       break-after: avoid;
     }
     .col-mid h2 {
-      font-size: 7.5pt;
+      font-size: 5.5pt;
       font-weight: bold;
-      margin: 2pt 0 1pt 0;
+      margin: 1pt 0 0.3pt 0;
       break-after: avoid;
     }
-    .col-mid p { margin: 0 0 1.5pt 0; }
+    .col-mid p { margin: 0 0 0.5pt 0; }
     .col + .col h3:first-child { margin-top: 0; }
 
-    .col > .block + .block { margin-top: 3pt; }
+    .col > .block + .block { margin-top: 1pt; }
 
     table {
       border-collapse: collapse;
       width: 100%;
-      font-size: 5.5pt;
-      line-height: 1.05;
+      font-size: 4.3pt;
+      line-height: 1.03;
+    }
+    /* Damped cos/sin formulas are long but stack vertically with
+       colspan=2, so they can afford a slightly bigger font without
+       competing for horizontal space against a neighbor cell. */
+    table.damped {
+      font-size: 4.8pt;
+      line-height: 1.1;
     }
     td {
-      padding: 0.2pt 2pt;
+      padding: 0.1pt 1.5pt;
       vertical-align: top;
     }
-    tr.rule-top    td { border-top: 0.5pt solid #000; }
-    tr.rule-mid    td { border-top: 0.3pt solid #000; }
-    tr.rule-bottom td { border-bottom: 0.5pt solid #000; }
+    tr.rule-top    td { border-top: 0.4pt solid #000; }
+    tr.rule-mid    td { border-top: 0.25pt solid #000; }
+    tr.rule-bottom td { border-bottom: 0.4pt solid #000; }
+
+    /* -------- Overflow warning (set by autoPaginate/detectOverflow) -- */
+    .col.overflow-warning {
+      outline: 2px solid red;
+      outline-offset: -2px;
+    }
+    @media print {
+      .col.overflow-warning { outline: none; }
+    }
 
     /* -------- Screen zoom toggle ---------------------------------- */
-    body.zoom .page,
-    body.zoom .pagedjs_page {
-      transform: scale(1.6);
+    body.zoom .page {
+      transform: scale(2.0);
       transform-origin: top center;
-      margin-bottom: 3in;
+      margin-bottom: 3.5in;
     }
   </style>
 </head>
 <body>
 
-<div style="position:fixed;top:6px;right:8px;z-index:10;font-family:sans-serif;font-size:11px"
+<!-- Screen-only file:// warning banner. Shown by showFileProtocolWarning()
+     only when the page is loaded via file://. Hidden otherwise / in print. -->
+<div id="file-proto-banner" class="no-print"
+     style="display:none;position:sticky;top:0;z-index:20;background:#a60;color:#fff;padding:6px 10px;font:12px/1.3 sans-serif">
+</div>
+
+<!-- Screen-only control panel: zoom toggle + per-page Copy buttons.
+     Hidden in print via @media rule below. -->
+<div style="position:fixed;top:6px;right:8px;z-index:10;font-family:sans-serif;font-size:11px;background:#fff;border:1px solid #ccc;border-radius:4px;padding:6px;box-shadow:0 2px 6px rgba(0,0,0,0.15);min-width:150px"
      class="no-print">
   <button onclick="document.body.classList.toggle('zoom')"
-          style="padding:4px 8px;cursor:pointer">Toggle 1.6x preview zoom</button>
+          style="display:block;width:100%;padding:4px 8px;cursor:pointer;margin-bottom:4px">Toggle 2x preview zoom</button>
+  <div id="copy-controls">
+    <!-- Copy Page 1 / Copy Page 2 / ... buttons injected here after autoPaginate -->
+  </div>
 </div>
 <style>@media print { .no-print { display: none !important; } }</style>
 
@@ -205,6 +464,16 @@
         <tr class="rule-bottom"><td>$-e^{-at}u(-t)$</td><td>$\tfrac{1}{s{+}a}$</td><td>$\sigma{<}{-}a$</td></tr>
       </table>
     </div>
+    <div class="block">
+      <h3>ROC shapes</h3>
+      <table>
+        <tr class="rule-top"><td>Signal</td><td>ROC</td></tr>
+        <tr class="rule-mid"><td>Right</td><td>$\sigma{>}\sigma_{\max}$ / $|z|{>}r_{\max}$</td></tr>
+        <tr><td>Left</td><td>$\sigma{<}\sigma_{\min}$ / $|z|{<}r_{\min}$</td></tr>
+        <tr><td>Two-sided</td><td>strip / annulus</td></tr>
+        <tr class="rule-bottom"><td>Finite dur.</td><td>all $s$ / $z$</td></tr>
+      </table>
+    </div>
   </div>
 
   <div class="col col-mid">
@@ -212,18 +481,31 @@
       <h2>Transforms &amp; ROC</h2>
       <p><b>L.</b> $X(s)=\int x(t)e^{-st}dt$. FT iff $j\omega\subset$ROC.</p>
       <p><b>Z.</b> $X(z)=\sum x[n]z^{-n}$. DTFT iff $|z|{=}1\subset$ROC.</p>
-      <p><b>ROC rules (both).</b> No poles. Right: $\sigma{>}\sigma_{\max}$ / $|z|{>}r_{\max}$. Left: reverse. Two-sided: strip / annulus. <b>Causal+stable</b> $\Leftrightarrow$ LHP / $|p|{<}1$.</p>
+      <p><b>ROC rules (both).</b> No poles. Right: $\sigma{>}\sigma_{\max}$ / $|z|{>}r_{\max}$. Left: reverse. Two-sided: strip / annulus. Finite duration: all $s$ / all $z$ (maybe not $0,\infty$). <b>Causal+stable</b> $\Leftrightarrow$ LHP / $|p|{<}1$. BIBO stable $\Leftrightarrow$ $j\omega$-axis / unit circle $\subset$ ROC.</p>
     </div>
     <div class="block">
       <h2>PFE</h2>
-      <p><b>Distinct:</b> $\sum A_k/(s{-}p_k)$, $A_k{=}(s{-}p_k)X|_{p_k}$.</p>
-      <p><b>Repeated:</b> order $r$ at $p$: $\sum B_k/(s{-}p)^k$, $B_k{=}\tfrac{1}{(r-k)!}\tfrac{d^{r-k}}{ds^{r-k}}[(s{-}p)^rX]|_p$.</p>
-      <p><b>Complex conj.:</b> $p{=}{-}a\pm j\omega_d$: complete square $(s{+}a)^2{+}\omega_d^2$, use cos/sin.</p>
+      <p><b>Distinct:</b> $\sum A_k/(s{-}p_k)$, cover-up $A_k{=}(s{-}p_k)X|_{p_k}$.</p>
+      <p><b>Repeated:</b> order $r$ at $p$: $\sum B_k/(s{-}p)^k$, $B_k{=}\tfrac{1}{(r-k)!}\tfrac{d^{r-k}}{ds^{r-k}}[(s{-}p)^rX]|_p$. Pair $\tfrac{1}{(s+a)^k}\leftrightarrow \tfrac{t^{k-1}}{(k-1)!}e^{-at}u$.</p>
+      <p><b>Complex conj.:</b> $p{=}{-}a\pm j\omega_d$: complete square $(s{+}a)^2{+}\omega_d^2$, use cos/sin; don't split conjugates.</p>
       <p><b>Z:</b> always in $z^{-1}$. ROC picks right/left per pole. Improper: long-divide first.</p>
+      <p><b>Improper (both):</b> $\deg{\rm num}\ge\deg{\rm den}$ $\Rightarrow$ long-divide. L: const $\to\delta(t)$; poly $\to\delta^{(k)}(t)$. Z: poly in $z^{-1}$ $\to$ finite $\delta[n{-}k]$.</p>
+    </div>
+    <div class="block">
+      <h2>CT System Analysis (Lec 18)</h2>
+      <p>From ODE $\sum a_k y^{(k)}{=}\sum b_k x^{(k)}$, replace $d^k/dt^k\to s^k$: $H(s){=}\tfrac{\sum b_k s^k}{\sum a_k s^k}$.</p>
+      <p><b>Golden rule (CT):</b> causal + BIBO stable $\Leftrightarrow$ all poles $\Re\{p_i\}{<}0$ (open LHP). Pole in RHP $\Rightarrow$ unstable. Pole on $j\omega$-axis, none in RHP $\Rightarrow$ marginally stable.</p>
+      <p><b>Blocks:</b> series $H_1H_2$; parallel $H_1{+}H_2$; feedback $H/(1{+}GH)$ (neg), $H/(1{-}GH)$ (pos).</p>
+      <p><b>Unil L IVP:</b> transform ODE w/ ICs (minus) $\to$ solve $Y$ $\to$ ZSR+ZIR $\to$ PFE $\to$ invert $\to$ verify $y(0^+)$, $y(\infty)$. Total = ZSR + ZIR.</p>
+    </div>
+    <div class="block">
+      <h2>IVT / FVT (Laplace)</h2>
+      <p>$x(0^+){=}\lim_{s\to\infty}sX(s)$; $x(\infty){=}\lim_{s\to 0}sX(s)$.</p>
+      <p><b>FVT valid only if</b> all poles of $sX(s)$ have $\Re\{p\}{<}0$ (open LHP). Otherwise the formula returns garbage.</p>
     </div>
     <div class="block">
       <h2>Sign Trap</h2>
-      <p>Unil. L: <b>$-y(0^-)$</b>. Unil. Z: <b>$+y[-1]$</b>. Opposite.</p>
+      <p>Unil. L: <b>$-y(0^-)$</b>. Unil. Z: <b>$+y[-1]$</b>. Opposite signs.</p>
     </div>
   </div>
 
@@ -242,6 +524,15 @@
         <tr><td>Diff in $s$</td><td>$-tx\!\to\!dX/ds$</td></tr>
         <tr><td>IVT</td><td>$\lim_{s\to\infty}\!sX$</td></tr>
         <tr class="rule-bottom"><td>FVT</td><td>$\lim_{s\to 0}\!sX$</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <h3>CT Stability</h3>
+      <table>
+        <tr class="rule-top"><td>Poles</td><td>Status</td></tr>
+        <tr class="rule-mid"><td>all LHP</td><td>stable</td></tr>
+        <tr><td>any RHP</td><td>unstable</td></tr>
+        <tr class="rule-bottom"><td>$j\omega$ only</td><td>marginal</td></tr>
       </table>
     </div>
   </div>
@@ -272,6 +563,16 @@
       </table>
     </div>
     <div class="block">
+      <h3>Damped cos/sin</h3>
+      <table class="damped">
+        <tr class="rule-top"><td colspan="2">$r^n\cos(\Omega_0 n)u \leftrightarrow$</td></tr>
+        <tr><td colspan="2">$\tfrac{1-r\cos\Omega_0 z^{-1}}{1-2r\cos\Omega_0 z^{-1}+r^2 z^{-2}}$</td></tr>
+        <tr class="rule-mid"><td colspan="2">$r^n\sin(\Omega_0 n)u \leftrightarrow$</td></tr>
+        <tr><td colspan="2">$\tfrac{r\sin\Omega_0 z^{-1}}{1-2r\cos\Omega_0 z^{-1}+r^2 z^{-2}}$</td></tr>
+        <tr class="rule-bottom"><td colspan="2">ROC $|z|{>}r$; $r{=}1$ undamped</td></tr>
+      </table>
+    </div>
+    <div class="block">
       <h3>Sampling</h3>
       <table>
         <tr class="rule-top"><td>$X_p$</td><td>$\tfrac{1}{T}\!\sum_k X(j(\omega{-}k\omega_s))$</td></tr>
@@ -295,13 +596,15 @@
     <div class="block">
       <h2>Sampling &amp; Feedback</h2>
       <p><b>Thm.</b> Recovery iff $\omega_s{>}2\omega_M$ strict. Reconstruct: LPF gain $T$; sinc interp $x_r{=}\sum x(nT)\,{\rm sinc}(\tfrac{t{-}nT}{T})$.</p>
-      <p><b>Aliasing irreversible.</b> AAF <i>before</i> sampler. $x(t{-}t_0)$ keeps rate; $x(at)$ scales by $|a|$. BW product: $\le\omega_{M,1}{+}\omega_{M,2}$.</p>
-      <p><b>Feedback.</b> CL poles = roots of $1{+}GH{=}0$. Nyquist: $N{=}Z{-}P$; OL-stable $\Rightarrow$ CL-stable iff no encirclement of $-1$.</p>
+      <p><b>Aliasing irreversible.</b> AAF <i>before</i> sampler. $x(t{-}t_0)$ keeps rate; $x(at)$ scales by $|a|$. BW product: $\le\omega_{M,1}{+}\omega_{M,2}$. ZOH, FOH: practical but inexact (sinc droop).</p>
+      <p><b>Feedback regimes.</b> $|GH|{\gg}1 \Rightarrow Q{\approx}1/G$ (fdbk dominates); $|GH|{\ll}1 \Rightarrow Q{\approx}H$ (fdbk negligible); $GH{=}{-}1 \Rightarrow$ unstable.</p>
+      <p><b>CL poles</b> = roots of $1{+}GH{=}0$. Nyquist: $N{=}Z{-}P$; OL-stable $\Rightarrow$ CL-stable iff no encirclement of $-1/K$.</p>
       <p><b>PM:</b> $180^\circ{+}\angle L$ at $|L|{=}1$. <b>GM:</b> ${-}|L|_{\rm dB}$ at $\angle L{=}{-}180^\circ$. Both $>0$: stable. $\tau_{\max}{=}{\rm PM}_{\rm rad}/\omega_{gc}$. 1st-order: GM $=\infty$.</p>
+      <p><b>Marginal stability:</b> poles on $j\omega$-axis (CT) or unit circle (DT) $\Rightarrow$ not BIBO stable; impulse response doesn't decay.</p>
     </div>
     <div class="block">
       <h2>Top Traps</h2>
-      <p>Always state ROC. Repeated pole $n$: $n$ PFE terms. DT: $|a|{<}1$, not $a{<}1$. FVT invalid if unstable/marginal. GM from $|L|$ at $-180^\circ$; PM from $\angle L$ at 0 dB. Poles of $\tfrac{1}{1{-}az^{-1}}$ at $z{=}a$. PFE in Z: $z^{-1}$ only. RHP <i>zero</i> $\ne$ unstable. Neg fdbk doesn't always stabilize (excess gain destabilizes).</p>
+      <p>Always state ROC. Repeated pole $n$: $n$ PFE terms. DT: $|a|{<}1$, not $a{<}1$. FVT invalid if unstable/marginal. GM from $|L|$ at $-180^\circ$; PM from $\angle L$ at 0 dB. Poles of $\tfrac{1}{1{-}az^{-1}}$ at $z{=}a$. PFE in Z: $z^{-1}$ only. Complex conj.: complete square, don't split. RHP <i>zero</i> $\ne$ unstable. Don't mix Hz and rad/s ($\omega{=}2\pi f$). Neg fdbk doesn't always stabilize (excess gain destabilizes).</p>
     </div>
   </div>
 
@@ -341,6 +644,15 @@
         <tr><td>Stable</td><td>LHP</td><td>$|p|{<}1$</td></tr>
         <tr><td>Unil IC</td><td>$-y(0^-)$</td><td>$+y[-1]$</td></tr>
         <tr class="rule-bottom"><td>Fdbk</td><td colspan="2">$H/(1{+}GH)$</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <h3>DT Stability</h3>
+      <table>
+        <tr class="rule-top"><td>Poles</td><td>Status</td></tr>
+        <tr class="rule-mid"><td>all $|p|{<}1$</td><td>stable</td></tr>
+        <tr><td>any $|p|{>}1$</td><td>unstable</td></tr>
+        <tr class="rule-bottom"><td>on $|z|{=}1$</td><td>marginal</td></tr>
       </table>
     </div>
   </div>

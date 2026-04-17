@@ -44,6 +44,7 @@ cec_315/
 │   └── summaries/                   <- markdown summaries for lectures 16-23
 │
 ├── master_docs/                     <- canonical homework + sample problem banks (md + tex)
+├── clear_explanations/              <- deep-dive intuition-first explanations (md + tex)
 ├── lecture_summaries/               <- all 22 lecture summaries in Markdown
 ├── lecture_summaries_tex/           <- all 22 lecture summaries in LaTeX (Overleaf-ready)
 ├── all_lectures/                    <- complete archive of lecture PDFs (02-23)
@@ -128,6 +129,14 @@ cec_315/
 - [master_sample_problems.md](master_docs/master_sample_problems.md) (Exam 3 section)
 - [master_homework_problems.md](master_docs/master_homework_problems.md) (hw-lctr16-18, hw-lctr19-21, with integrated official answers)
 - Full summaries (each now cross-links to its official solutions and instructor emphases): [lctr16](lecture_summaries/lctr16_laplace_transform_roc.md), [lctr17](lecture_summaries/lctr17_inverse_laplace_properties.md), [lctr18](lecture_summaries/lctr18_system_analysis_unilateral_laplace.md), [lctr19](lecture_summaries/lctr19_z_transform_roc.md), [lctr20](lecture_summaries/lctr20_inverse_z_transform_properties.md), [lctr21](lecture_summaries/lctr21_system_analysis_unilateral_z.md), [lctr22](lecture_summaries/lctr22_sampling.md), [lctr23](lecture_summaries/lctr23_linear_feedback_systems.md)
+
+---
+
+## Clear Explanations
+
+Deep-dive, intuition-first explanations of concepts that routinely trip students up. Written to answer "why" and "what does this actually mean" questions. Each topic has a Markdown and LaTeX version. See [clear_explanations/README.md](clear_explanations/README.md) for the index.
+
+- Region of Convergence (ROC): [md](clear_explanations/roc.md) / [tex](clear_explanations/roc.tex)
 
 ---
 
