@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CEC 315 Exam 3 Cheatsheet</title>
+
+  <!--
+    v10 (third architecture — two explicit 3-column pages).
+    Rejected: alternating per-section grid (user feedback 2026-04-17:
+      "it just alternates table on one side then paragraph, then table on
+      the other side — filling up the HTML page, 3 full pages when printed.
+      If anything it is worse.").
+    Kept goals: index-card page size, tables-on-both-sides + prose-in-middle
+      (the v6/v9 look), browser preview showing actual print pages,
+      print output at 6x4 physical size, KaTeX math.
+
+    Architecture:
+      - Two explicit <div class="page"> wrappers.
+      - Each wrapper is a CSS Grid with 3 columns:
+          grid-template-columns: 1.4in 1fr 1.4in
+        Left column = stacked tables. Middle = prose. Right = stacked tables.
+      - `break-after: page` on the first wrapper forces the 2nd onto a new
+        printed page. Paged.js renders both pages in the browser preview.
+      - Content is split ~half/half; page 1 = Laplace focus, page 2 = Z /
+        Sampling / Feedback focus.
+
+    Why not Paged.js auto-overflow? Paged.js pagination fights our grid
+    layout (grid cells don't split cleanly). Explicit page divs with
+    fixed grid per page avoids that and matches the v6/v9 visual the
+    user liked.
+  -->
+
+  <!-- KaTeX first; load Paged.js after math is rendered. -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$',  right: '$',  display: false }
+        ],
+        throwOnError: false
+      });
+      var s = document.createElement('script');
+      s.src = 'https://unpkg.com/pagedjs/dist/paged.polyfill.js';
+      document.head.appendChild(s);
+    });
+  </script>
+
+  <style>
+    /* ================================================================
+       PAGE SIZE: 6 x 4 in landscape index card.
+       @page and .page dimensions must match.
+       ================================================================ */
+    @page {
+      size: 6in 4in;
+      margin: 0;
+      @bottom-right {
+        content: counter(page) " / " counter(pages);
+        font: 5pt sans-serif;
+        color: #888;
+      }
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Latin Modern Roman", "Computer Modern", "CMU Serif",
+                   Georgia, serif;
+      font-size: 6.5pt;
+      line-height: 1.1;
+      color: #000;
+    }
+
+    /* Screen-only: gray backdrop around the pages */
+    body {
+      background: #e5e5e5;
+      padding: 0.4in 0;
+    }
+
+    /* -------- Page: explicit 6x4 card, 3-column grid ------------- */
+    .page {
+      box-sizing: border-box;
+      width: 6in;
+      height: 4in;
+      padding: 0.15in;
+      margin: 0 auto 0.4in;
+      background: #fff;
+      border: 1px dashed #888;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+
+      display: grid;
+      grid-template-columns: 1.4in 1fr 1.4in;
+      grid-template-rows: 1fr;
+      gap: 0 0.1in;
+    }
+    .page + .page {
+      break-before: page;
+    }
+    /* Paged.js pages */
+    .pagedjs_page {
+      margin: 0 auto 0.4in;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page {
+        margin: 0;
+        border: none;
+        box-shadow: none;
+        width: auto;
+        height: auto;
+      }
+      .pagedjs_page { box-shadow: none; margin: 0; }
+    }
+
+    /* -------- Columns inside a page ------------------------------- */
+    .page > .col {
+      min-width: 0;        /* prevent grid cells from pushing wider than track */
+      overflow: hidden;
+    }
+    /* .col-left and .col-mid inherit from .col; .col-right only needs
+       text-align override (kept in case we want a right-align variant). */
+    .col-right { text-align: left; }
+
+    /* -------- Table block ----------------------------------------- */
+    .col h3 {
+      font-size: 7pt;
+      font-weight: bold;
+      margin: 0 0 1pt 0;
+      break-after: avoid;
+    }
+    .col-mid h2 {
+      font-size: 7.5pt;
+      font-weight: bold;
+      margin: 2pt 0 1pt 0;
+      break-after: avoid;
+    }
+    .col-mid p { margin: 0 0 1.5pt 0; }
+    .col + .col h3:first-child { margin-top: 0; }
+
+    .col > .block + .block { margin-top: 3pt; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 5.5pt;
+      line-height: 1.05;
+    }
+    td {
+      padding: 0.2pt 2pt;
+      vertical-align: top;
+    }
+    tr.rule-top    td { border-top: 0.5pt solid #000; }
+    tr.rule-mid    td { border-top: 0.3pt solid #000; }
+    tr.rule-bottom td { border-bottom: 0.5pt solid #000; }
+
+    /* -------- Screen zoom toggle ---------------------------------- */
+    body.zoom .page,
+    body.zoom .pagedjs_page {
+      transform: scale(1.6);
+      transform-origin: top center;
+      margin-bottom: 3in;
+    }
+  </style>
+</head>
+<body>
+
+<div style="position:fixed;top:6px;right:8px;z-index:10;font-family:sans-serif;font-size:11px"
+     class="no-print">
+  <button onclick="document.body.classList.toggle('zoom')"
+          style="padding:4px 8px;cursor:pointer">Toggle 1.6x preview zoom</button>
+</div>
+<style>@media print { .no-print { display: none !important; } }</style>
+
+
+<!-- =======================================================
+     PAGE 1 of 2
+     Left   : Laplace Pairs
+     Middle : Transforms & ROC intro + PFE
+     Right  : Laplace Props
+     ======================================================= -->
+<div class="page">
+
+  <div class="col col-left">
+    <div class="block">
+      <h3>Laplace Pairs</h3>
+      <table>
+        <tr class="rule-top"><td>$x(t)$</td><td>$X(s)$</td><td>ROC</td></tr>
+        <tr class="rule-mid"><td>$\delta$</td><td>$1$</td><td>all</td></tr>
+        <tr><td>$\delta(t{-}t_0)$</td><td>$e^{-st_0}$</td><td>all</td></tr>
+        <tr><td>$u(t)$</td><td>$1/s$</td><td>$\sigma{>}0$</td></tr>
+        <tr><td>$tu$</td><td>$1/s^2$</td><td>$\sigma{>}0$</td></tr>
+        <tr><td>$e^{-at}u$</td><td>$\tfrac{1}{s{+}a}$</td><td>$\sigma{>}{-}a$</td></tr>
+        <tr><td>$te^{-at}u$</td><td>$\tfrac{1}{(s{+}a)^2}$</td><td>$\sigma{>}{-}a$</td></tr>
+        <tr><td>$\cos\omega_0 t\,u$</td><td>$\tfrac{s}{s^2{+}\omega_0^2}$</td><td>$\sigma{>}0$</td></tr>
+        <tr><td>$\sin\omega_0 t\,u$</td><td>$\tfrac{\omega_0}{s^2{+}\omega_0^2}$</td><td>$\sigma{>}0$</td></tr>
+        <tr><td>$e^{-at}\!\cos\omega_d t\,u$</td><td>$\tfrac{s{+}a}{(s{+}a)^2{+}\omega_d^2}$</td><td>$\sigma{>}{-}a$</td></tr>
+        <tr><td>$e^{-at}\!\sin\omega_d t\,u$</td><td>$\tfrac{\omega_d}{(s{+}a)^2{+}\omega_d^2}$</td><td>$\sigma{>}{-}a$</td></tr>
+        <tr class="rule-bottom"><td>$-e^{-at}u(-t)$</td><td>$\tfrac{1}{s{+}a}$</td><td>$\sigma{<}{-}a$</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col col-mid">
+    <div class="block">
+      <h2>Transforms &amp; ROC</h2>
+      <p><b>L.</b> $X(s)=\int x(t)e^{-st}dt$. FT iff $j\omega\subset$ROC.</p>
+      <p><b>Z.</b> $X(z)=\sum x[n]z^{-n}$. DTFT iff $|z|{=}1\subset$ROC.</p>
+      <p><b>ROC rules (both).</b> No poles. Right: $\sigma{>}\sigma_{\max}$ / $|z|{>}r_{\max}$. Left: reverse. Two-sided: strip / annulus. <b>Causal+stable</b> $\Leftrightarrow$ LHP / $|p|{<}1$.</p>
+    </div>
+    <div class="block">
+      <h2>PFE</h2>
+      <p><b>Distinct:</b> $\sum A_k/(s{-}p_k)$, $A_k{=}(s{-}p_k)X|_{p_k}$.</p>
+      <p><b>Repeated:</b> order $r$ at $p$: $\sum B_k/(s{-}p)^k$, $B_k{=}\tfrac{1}{(r-k)!}\tfrac{d^{r-k}}{ds^{r-k}}[(s{-}p)^rX]|_p$.</p>
+      <p><b>Complex conj.:</b> $p{=}{-}a\pm j\omega_d$: complete square $(s{+}a)^2{+}\omega_d^2$, use cos/sin.</p>
+      <p><b>Z:</b> always in $z^{-1}$. ROC picks right/left per pole. Improper: long-divide first.</p>
+    </div>
+    <div class="block">
+      <h2>Sign Trap</h2>
+      <p>Unil. L: <b>$-y(0^-)$</b>. Unil. Z: <b>$+y[-1]$</b>. Opposite.</p>
+    </div>
+  </div>
+
+  <div class="col col-right">
+    <div class="block">
+      <h3>Laplace Props</h3>
+      <table>
+        <tr class="rule-top"><td>Linearity</td><td>$aX{+}bY$</td></tr>
+        <tr class="rule-mid"><td>Shift</td><td>$e^{-st_0}X$</td></tr>
+        <tr><td>$s$-shift</td><td>$X(s{-}s_0)$</td></tr>
+        <tr><td>Scale</td><td>$\tfrac{1}{|a|}X(s/a)$</td></tr>
+        <tr><td>Diff</td><td>$sX$</td></tr>
+        <tr><td><b>Unil diff</b></td><td>$sX{-}x(0^-)$</td></tr>
+        <tr><td>$x''$ unil</td><td>$s^2X{-}sx_0{-}x_0'$</td></tr>
+        <tr><td>Conv</td><td>$XY$</td></tr>
+        <tr><td>Diff in $s$</td><td>$-tx\!\to\!dX/ds$</td></tr>
+        <tr><td>IVT</td><td>$\lim_{s\to\infty}\!sX$</td></tr>
+        <tr class="rule-bottom"><td>FVT</td><td>$\lim_{s\to 0}\!sX$</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /page 1 -->
+
+
+<!-- =======================================================
+     PAGE 2 of 2
+     Left   : Z Pairs, Sampling
+     Middle : System Analysis + Sampling + Feedback + Traps
+     Right  : Z Props, Feedback, CT vs DT
+     ======================================================= -->
+<div class="page">
+
+  <div class="col col-left">
+    <div class="block">
+      <h3>Z Pairs</h3>
+      <table>
+        <tr class="rule-top"><td>$x[n]$</td><td>$X(z)$</td><td>ROC</td></tr>
+        <tr class="rule-mid"><td>$\delta[n]$</td><td>$1$</td><td>all</td></tr>
+        <tr><td>$\delta[n{-}k]$</td><td>$z^{-k}$</td><td>$z{\ne}0$</td></tr>
+        <tr><td>$u[n]$</td><td>$\tfrac{1}{1{-}z^{-1}}$</td><td>$|z|{>}1$</td></tr>
+        <tr><td>$a^n u$</td><td>$\tfrac{1}{1{-}az^{-1}}$</td><td>$|z|{>}|a|$</td></tr>
+        <tr><td>$-a^n u[{-}n{-}1]$</td><td>$\tfrac{1}{1{-}az^{-1}}$</td><td>$|z|{<}|a|$</td></tr>
+        <tr><td>$na^n u$</td><td>$\tfrac{az^{-1}}{(1{-}az^{-1})^2}$</td><td>$|z|{>}|a|$</td></tr>
+        <tr class="rule-bottom"><td>$(n{+}1)a^n u$</td><td>$\tfrac{1}{(1{-}az^{-1})^2}$</td><td>$|z|{>}|a|$</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <h3>Sampling</h3>
+      <table>
+        <tr class="rule-top"><td>$X_p$</td><td>$\tfrac{1}{T}\!\sum_k X(j(\omega{-}k\omega_s))$</td></tr>
+        <tr class="rule-mid"><td>$\omega_s$</td><td>$2\pi/T$</td></tr>
+        <tr><td>Nyquist</td><td>$2\omega_M$ (strict)</td></tr>
+        <tr><td>LPF</td><td>gain $T$, cut $\in(\omega_M,\omega_s{-}\omega_M)$</td></tr>
+        <tr><td>ZOH</td><td>$\tfrac{2\sin(\omega T/2)}{\omega}e^{-j\omega T/2}$</td></tr>
+        <tr><td>Alias</td><td>$|f_s{-}f_0|$</td></tr>
+        <tr class="rule-bottom"><td>C/D</td><td>$\Omega{=}\omega T$</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col col-mid">
+    <div class="block">
+      <h2>System Analysis</h2>
+      <p><b>CT.</b> $y^{(k)}{\to}s^kY{-}\sum s^{k-1-j}y^{(j)}(0^-)$. Solve $Y{=}Y_{\rm ZS}{+}Y_{\rm ZI}$; PFE; invert. $H(s){=}Y_{\rm ZS}/X$.</p>
+      <p><b>DT.</b> $y[n{-}k]{\to}z^{-k}Y{+}\sum z^{-(k-m)}y[-m]$. PFE in $z^{-1}$; invert.</p>
+      <p>Total = ZSR + ZIR.</p>
+    </div>
+    <div class="block">
+      <h2>Sampling &amp; Feedback</h2>
+      <p><b>Thm.</b> Recovery iff $\omega_s{>}2\omega_M$ strict. Reconstruct: LPF gain $T$; sinc interp $x_r{=}\sum x(nT)\,{\rm sinc}(\tfrac{t{-}nT}{T})$.</p>
+      <p><b>Aliasing irreversible.</b> AAF <i>before</i> sampler. $x(t{-}t_0)$ keeps rate; $x(at)$ scales by $|a|$. BW product: $\le\omega_{M,1}{+}\omega_{M,2}$.</p>
+      <p><b>Feedback.</b> CL poles = roots of $1{+}GH{=}0$. Nyquist: $N{=}Z{-}P$; OL-stable $\Rightarrow$ CL-stable iff no encirclement of $-1$.</p>
+      <p><b>PM:</b> $180^\circ{+}\angle L$ at $|L|{=}1$. <b>GM:</b> ${-}|L|_{\rm dB}$ at $\angle L{=}{-}180^\circ$. Both $>0$: stable. $\tau_{\max}{=}{\rm PM}_{\rm rad}/\omega_{gc}$. 1st-order: GM $=\infty$.</p>
+    </div>
+    <div class="block">
+      <h2>Top Traps</h2>
+      <p>Always state ROC. Repeated pole $n$: $n$ PFE terms. DT: $|a|{<}1$, not $a{<}1$. FVT invalid if unstable/marginal. GM from $|L|$ at $-180^\circ$; PM from $\angle L$ at 0 dB. Poles of $\tfrac{1}{1{-}az^{-1}}$ at $z{=}a$. PFE in Z: $z^{-1}$ only. RHP <i>zero</i> $\ne$ unstable. Neg fdbk doesn't always stabilize (excess gain destabilizes).</p>
+    </div>
+  </div>
+
+  <div class="col col-right">
+    <div class="block">
+      <h3>Z Props</h3>
+      <table>
+        <tr class="rule-top"><td>Linearity</td><td>$aX_1{+}bX_2$</td></tr>
+        <tr class="rule-mid"><td>Shift</td><td>$z^{-n_0}X$</td></tr>
+        <tr><td>$z$-scale</td><td>$X(z/z_0)$</td></tr>
+        <tr><td>$nx[n]$</td><td>$-z\,dX/dz$</td></tr>
+        <tr><td>Conv</td><td>$X_1X_2$</td></tr>
+        <tr><td><b>Unil sh-1</b></td><td>$z^{-1}X{+}x[-1]$</td></tr>
+        <tr><td>Unil sh-2</td><td>$z^{-2}X{+}z^{-1}x[-1]{+}x[-2]$</td></tr>
+        <tr><td>IVT</td><td>$\lim X$</td></tr>
+        <tr class="rule-bottom"><td>FVT</td><td>$\lim(1{-}z^{-1})X$</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <h3>Feedback</h3>
+      <table>
+        <tr class="rule-top"><td>Neg</td><td>$\tfrac{G}{1{+}GH}$</td></tr>
+        <tr class="rule-mid"><td>Pos</td><td>$\tfrac{G}{1{-}GH}$</td></tr>
+        <tr><td>CL poles</td><td>$1{+}L{=}0$</td></tr>
+        <tr><td>Unstable</td><td>$L{=}{-}1$</td></tr>
+        <tr><td>PM</td><td>$180^\circ{+}\angle L_{gc}$</td></tr>
+        <tr><td>GM dB</td><td>${-}|L_{pc}|_{\rm dB}$</td></tr>
+        <tr class="rule-bottom"><td>Routh 2nd</td><td>$b,c{>}0$</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <h3>CT vs DT</h3>
+      <table>
+        <tr class="rule-top"><td></td><td>CT</td><td>DT</td></tr>
+        <tr class="rule-mid"><td>Var</td><td>$s$</td><td>$z$</td></tr>
+        <tr><td>FT</td><td>$j\omega$</td><td>$|z|{=}1$</td></tr>
+        <tr><td>Stable</td><td>LHP</td><td>$|p|{<}1$</td></tr>
+        <tr><td>Unil IC</td><td>$-y(0^-)$</td><td>$+y[-1]$</td></tr>
+        <tr class="rule-bottom"><td>Fdbk</td><td colspan="2">$H/(1{+}GH)$</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /page 2 -->
+
+</body>
+</html>

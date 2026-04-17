@@ -1,0 +1,255 @@
+% v8: v7 with two compile-time bug fixes:
+%
+% 1. Z Props wrapfigure misplacement (v7 bug)
+%    Root cause: {0pt} natural-width wrapfigure inside paracol is fragile.
+%    The Shift-2 row `z^{-2}X+z^{-1}x[-1]+x[-2]` made the table wide
+%    enough to trip a paracol+wrapfig interaction bug; the float escaped
+%    the paracol right column and floated into the left column's region.
+%    Fix: explicit wrapfigure widths (2.8in) instead of {0pt}, AND split
+%    Shift-2 across two table rows so cell width stays bounded.
+%
+% 2. Content running off bottom of page (v7 bug)
+%    Root cause: geometry margin=0.3in applied to all sides, but paracol
+%    + wrapfigure combined float placement can push content past the
+%    explicit bottom margin. Plus user wants tighter top/bottom: 0.25in.
+%    Fix: explicit top=0.25in, bottom=0.25in in geometry, plus
+%    `\raggedbottom` so LaTeX doesn't stretch content to fill.
+%
+% Compile on Overleaf.
+
+\documentclass[11pt]{extarticle}
+
+% Explicit top + bottom + side margins all 0.25in.
+\usepackage[letterpaper,landscape,
+            top=0.25in,bottom=0.25in,left=0.25in,right=0.25in]{geometry}
+\usepackage{paracol}
+\usepackage{wrapfig}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,array}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{titlesec}
+
+\setlength{\parskip}{0pt plus 0.5pt}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=1em,labelsep=0.3em,itemsep=1pt,topsep=1pt}
+\renewcommand{\arraystretch}{1.0}
+\pagestyle{empty}
+\raggedbottom  % don't stretch to fill; respect natural content height
+
+\AtBeginDocument{%
+  \abovedisplayskip=2pt \belowdisplayskip=2pt
+  \abovedisplayshortskip=1pt \belowdisplayshortskip=1pt}
+
+\titleformat{\section}{\normalfont\bfseries\footnotesize}{}{0pt}{}
+\titlespacing*{\section}{0pt}{4pt}{1pt}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\DeclareMathOperator{\sinc}{sinc}
+
+\columnratio{0.21}
+\setlength{\columnsep}{0.15in}
+
+% wrapfig tuning
+\setlength{\intextsep}{3pt}
+
+% CAP wrapfigure widths: {2.8in} fixed, NOT {0pt} natural. This prevents
+% the paracol+wrapfig interaction bug where a wider table escapes its
+% paracol column.
+\newlength{\wrapwidth}
+\setlength{\wrapwidth}{2.8in}
+
+\begin{document}
+\begin{paracol}{2}
+
+%====================== LEFT: stacked reference tables =================
+\section*{Laplace Pairs}
+\begin{tabular}{@{}l l l@{}}
+\toprule
+$x(t)$ & $X(s)$ & ROC \\
+\midrule
+$\delta(t)$ & $1$ & all \\
+$\delta(t{-}t_0)$ & $e^{-st_0}$ & all \\
+$u(t)$ & $1/s$ & $\sigma{>}0$ \\
+$tu(t)$ & $1/s^2$ & $\sigma{>}0$ \\
+$\tfrac{t^{n-1}}{(n-1)!}u$ & $1/s^n$ & $\sigma{>}0$ \\
+$e^{-at}u$ & $\tfrac{1}{s{+}a}$ & $\sigma{>}{-}a$ \\
+$te^{-at}u$ & $\tfrac{1}{(s{+}a)^2}$ & $\sigma{>}{-}a$ \\
+$\tfrac{t^{n-1}}{(n-1)!}e^{-at}u$ & $\tfrac{1}{(s{+}a)^n}$ & $\sigma{>}{-}a$ \\
+$\cos\omega_0 t\,u$ & $\tfrac{s}{s^2{+}\omega_0^2}$ & $\sigma{>}0$ \\
+$\sin\omega_0 t\,u$ & $\tfrac{\omega_0}{s^2{+}\omega_0^2}$ & $\sigma{>}0$ \\
+$e^{-at}\!\cos\omega_d t\,u$ & $\tfrac{s{+}a}{(s{+}a)^2{+}\omega_d^2}$ & $\sigma{>}{-}a$ \\
+$e^{-at}\!\sin\omega_d t\,u$ & $\tfrac{\omega_d}{(s{+}a)^2{+}\omega_d^2}$ & $\sigma{>}{-}a$ \\
+$-e^{-at}u(-t)$ & $\tfrac{1}{s{+}a}$ & $\sigma{<}{-}a$ \\
+\bottomrule
+\end{tabular}
+
+\vspace{6pt}
+\section*{Z Pairs}
+\begin{tabular}{@{}l l l@{}}
+\toprule
+$x[n]$ & $X(z)$ & ROC \\
+\midrule
+$\delta[n]$ & $1$ & all \\
+$\delta[n{-}k]$ & $z^{-k}$ & $z{\ne}0$ \\
+$u[n]$ & $\tfrac{1}{1-z^{-1}}$ & $|z|{>}1$ \\
+$-u[-n{-}1]$ & $\tfrac{1}{1-z^{-1}}$ & $|z|{<}1$ \\
+$a^n u[n]$ & $\tfrac{1}{1-az^{-1}}$ & $|z|{>}|a|$ \\
+$-a^n u[-n{-}1]$ & $\tfrac{1}{1-az^{-1}}$ & $|z|{<}|a|$ \\
+$na^n u$ & $\tfrac{az^{-1}}{(1-az^{-1})^2}$ & $|z|{>}|a|$ \\
+$(n{+}1)a^n u$ & $\tfrac{1}{(1-az^{-1})^2}$ & $|z|{>}|a|$ \\
+\bottomrule
+\end{tabular}
+
+\vspace{6pt}
+\section*{Sampling}
+\begin{tabular}{@{}l l@{}}
+\toprule
+$X_p$ & $\tfrac{1}{T}\!\sum_k X(j(\omega{-}k\omega_s))$ \\
+$\omega_s$ & $2\pi/T$ \\
+Nyquist & $2\omega_M$ \\
+Thm & $\omega_s{>}2\omega_M$ \\
+LPF & $T$, $\omega_c{\in}(\omega_M,\omega_s{-}\omega_M)$ \\
+ZOH & $\tfrac{2\sin(\omega T/2)}{\omega}e^{-j\omega T/2}$ \\
+Alias & $|f_s{-}f_0|$ \\
+C/D & $\Omega{=}\omega T$ \\
+\bottomrule
+\end{tabular}
+
+%==================== RIGHT: prose + wrapfigure-right tables ==========
+\switchcolumn
+
+% Laplace Props as wrapfigure-right; prose wraps to its left.
+\begin{wrapfigure}[13]{r}{\wrapwidth}
+\centering
+\begin{tabular}{@{}l l@{}}
+\toprule
+\multicolumn{2}{@{}l}{\textbf{\footnotesize Laplace Props}} \\
+\midrule
+Linearity & $aX{+}bY$ \\
+Shift & $e^{-st_0}X$ \\
+$s$-shift & $X(s{-}s_0)$ \\
+Scale & $\tfrac{1}{|a|}X(s/a)$ \\
+Diff & $sX$ \\
+\textbf{Unil diff} & $sX{-}x(0^-)$ \\
+$x''$ unil & $s^2X{-}sx_0{-}x_0'$ \\
+Integ & $X/s$ \\
+$-tx$ & $dX/ds$ \\
+Conv & $XY$ \\
+IVT & $\lim sX$ \\
+FVT & $\lim sX$ \\
+\bottomrule
+\end{tabular}
+\end{wrapfigure}
+\textbf{Laplace.} $X(s)=\!\int x(t)e^{-st}dt$, $s=\sigma+j\omega$. Unilateral: lower limit $0^-$. FT exists iff $j\omega$-axis $\subset$ ROC.
+\textbf{Z.} $X(z)=\!\sum x[n]z^{-n}$, $z=re^{j\Omega}$. Unilateral: $n\ge 0$. DTFT exists iff unit circle $\subset$ ROC.
+\textbf{ROC rules (both).} Never contain poles. Right-sided: $\sigma>\sigma_{\max}$ / $|z|>r_{\max}$. Left: reverse. Two-sided: strip / annulus. Finite-duration: entire $s$/$z$ plane (except $0,\infty$). \textbf{Causal+stable} $\Leftrightarrow$ LHP poles (CT) / $|p|<1$ (DT).
+\textbf{PFE --- Distinct:} $\sum A_k/(s-p_k)$ with cover-up $A_k=(s-p_k)X|_{p_k}$.
+\textbf{Repeated} order $r$ at $p$: $\sum B_k/(s-p)^k$ with $B_k=\tfrac{1}{(r-k)!}\tfrac{d^{r-k}}{ds^{r-k}}[(s-p)^r X]|_p$.
+\textbf{Complex conj.} $p=-a\pm j\omega_d$: complete square $(s+a)^2+\omega_d^2$, use $\cos/\sin$ pairs.
+\textbf{Z:} always in $z^{-1}$ (never $z$); ROC selects right/left per pole.
+\textbf{Improper rationals.} Long-divide first. Laplace: const remainder $\to\delta(t)$; higher polynomial $\to\delta^{(k)}(t)$; PFE strictly-proper. Z: polynomial in $z^{-1}$ $\to$ finite-duration samples $\delta[n{-}k]$.
+
+\vspace{3pt}
+
+% Z Props as wrapfigure-right. Shift-2 split across two rows to bound
+% the natural width, even though {\wrapwidth} cap would also enforce.
+\begin{wrapfigure}[14]{r}{\wrapwidth}
+\centering
+\begin{tabular}{@{}l l@{}}
+\toprule
+\multicolumn{2}{@{}l}{\textbf{\footnotesize Z Props}} \\
+\midrule
+Linearity & $aX_1{+}bX_2$ \\
+Shift & $z^{-n_0}X$ \\
+$z$-scale & $X(z/z_0)$ \\
+Reversal & $X(z^{-1})$ \\
+$nx[n]$ & $-z\,dX/dz$ \\
+First diff & $(1{-}z^{-1})X$ \\
+Accum & $X/(1{-}z^{-1})$ \\
+Conv & $X_1X_2$ \\
+\textbf{Unil shift-1} & $z^{-1}X{+}x[-1]$ \\
+\textbf{Unil shift-2} & $z^{-2}X{+}z^{-1}x[-1]$ \\
+ & $\quad{+}\,x[-2]$ \\
+IVT & $\lim X$ \\
+FVT & $\lim(1{-}z^{-1})X$ \\
+\bottomrule
+\end{tabular}
+\end{wrapfigure}
+\textbf{CT (ODE).} $y^{(k)}\!\to\! s^k Y - \sum_{j=0}^{k-1}\! s^{k-1-j} y^{(j)}(0^-)$. Solve $Y=Y_{\text{ZS}}+Y_{\text{ZI}}$; PFE; invert. $H(s)=Y_{\text{ZS}}/X$.
+\textbf{DT (diff.\ eq.).} $y[n{-}k]\to z^{-k}Y + \sum_{m=1}^k z^{-(k-m)}y[-m]$. Solve; PFE in $z^{-1}$; invert. $H(z)=Y_{\text{ZS}}/X$.
+Total = ZSR (ICs$=0$, input only) + ZIR (input$=0$, ICs only).
+\textbf{Unilateral Laplace IVP.} Transform ICs (\textbf{minus}) $\to$ solve $Y$ $\to$ split ZSR+ZIR $\to$ PFE $\to$ invert $\to$ verify $y(0^+)$, $y(\infty)$.
+\textbf{Unilateral Z diff eqn.} Transform ICs (\textbf{plus}) $\to$ solve $Y$ $\to$ PFE in $z^{-1}$ $\to$ invert $\to$ check $y[0], y[1]$ from diff eqn.
+\textbf{Sign trap.} Unil.\ L: $\mathbf{-}y(0^-)$. Unil.\ Z: $\mathbf{+}y[-1]$. Opposite signs.
+\textbf{Theorem (sampling).} Bandlimited to $\omega_M$ $\Rightarrow$ perfect recovery iff $\omega_s>2\omega_M$ (\emph{strict}). $\omega_s=2\omega_M$ can fail (sine at zero crossings).
+
+\vspace{3pt}
+
+% Feedback table as wrapfigure-right
+\begin{wrapfigure}[11]{r}{\wrapwidth}
+\centering
+\begin{tabular}{@{}l l@{}}
+\toprule
+\multicolumn{2}{@{}l}{\textbf{\footnotesize Feedback}} \\
+\midrule
+Neg fdbk & $\tfrac{G}{1{+}GH}$ \\
+Pos fdbk & $\tfrac{G}{1{-}GH}$ \\
+Unity & $G/(1{+}G)$ \\
+Loop $L$ & $GH$ \\
+CL poles & $1{+}L{=}0$ \\
+Unstable & $L{=}{-}1$ \\
+PM & $180^\circ{+}\angle L_{gc}$ \\
+GM$_\mathrm{dB}$ & ${-}|L_{pc}|_\mathrm{dB}$ \\
+$\tau_{\max}$ & $\mathrm{PM}_\mathrm{rad}/\omega_{gc}$ \\
+Routh 2nd & $b,c{>}0$ \\
+\bottomrule
+\end{tabular}
+\end{wrapfigure}
+\textbf{Reconstruction.} Pass $X_p$ through LPF with passband gain $T$, cutoff in $(\omega_M,\omega_s{-}\omega_M)$; equivalent time-domain: sinc interpolation $x_r=\sum x(nT)\sinc(\tfrac{t-nT}{T})$. ZOH is NOT exact --- sinc-shaped droop.
+\textbf{Aliasing is irreversible.} Use anti-aliasing LPF \emph{before} the sampler, never after. For a pure tone $f_0>f_s/2$: aliased frequency is $|f_s-f_0|$; sign flip means reversed apparent direction (helicopter blade).
+\textbf{Nyquist rate transforms.} Time-shift $x(t-t_0)$ keeps rate. Time-scale $x(at)$ scales rate by $|a|$.
+\textbf{Bandwidth of products.} $x_1 x_2$ has BW $\le \omega_{M,1}+\omega_{M,2}$; squaring doubles BW.
+\textbf{Feedback.} Closed-loop poles = roots of $1+GH=0$. Cascade multiplies, parallel adds, nested loops reduce innermost first.
+\textbf{Nyquist criterion.} $N=Z-P$: $N$ CW encirclements of $-1$, $P$ open-loop RHP poles, $Z$ closed-loop RHP poles. Need $Z=0$. Open-loop stable ($P=0$): closed-loop stable iff Nyquist plot does \emph{not} encircle $-1$ (or $-1/K$).
+\textbf{Gain/phase margins.} $\omega_{gc}$ is where $|L|=1$; PM is phase lead there. $\omega_{pc}$ is where $\angle L=-180^\circ$; GM is magnitude-below-0-dB there. Both $>0 \Rightarrow$ stable. Delay tolerance $\tau_{\max}=\mathrm{PM}_\mathrm{rad}/\omega_{gc}$.
+\textbf{Routh--Hurwitz.} Sign changes in first column $=$ \# RHP roots. Necessary: all $a_i>0$, none missing.
+\textbf{First-order plants.} GM $=\infty$.
+
+\vspace{3pt}
+
+% CT vs DT table as wrapfigure-right
+\begin{wrapfigure}[10]{r}{\wrapwidth}
+\centering
+\begin{tabular}{@{}l l l@{}}
+\toprule
+\multicolumn{3}{@{}l}{\textbf{\footnotesize CT vs DT}} \\
+\midrule
+ & CT & DT \\
+Var & $s$ & $z$ \\
+FT & $j\omega$ & $|z|{=}1$ \\
+ROC & strip & annulus \\
+Stable & LHP & $|p|{<}1$ \\
+Pair & $\tfrac{1}{s+a}$ & $\tfrac{1}{1-az^{-1}}$ \\
+Delay & $e^{-st_0}$ & $z^{-n_0}$ \\
+Unil & $sY{-}y_0$ & $z^{-1}Y{+}y_{-1}$ \\
+Fdbk & \multicolumn{2}{l}{$H/(1{+}GH)$} \\
+\bottomrule
+\end{tabular}
+\end{wrapfigure}
+\textbf{Top traps.}
+\textbf{Always state ROC.} Same $X$, different ROC = different signal.
+Unil.\ L: $\mathbf{-}y(0^-)$. Unil.\ Z: $\mathbf{+}y[-1]$. Opposite signs.
+Repeated pole order $n$ needs $n$ PFE terms.
+DT: $|a|<1$, not $a<1$. Pole at $z=-0.9$ IS stable.
+FVT invalid if unstable or marginal (poles on $j\omega$ or unit circle).
+$\omega_s>2\omega_M$ strict; aliasing irreversible; AAF \emph{before} sampler.
+GM read from $|L|$ at $-180^\circ$; PM from $\angle L$ at 0 dB. Don't swap.
+Poles of $\tfrac{1}{1-az^{-1}}$ at $z=a$, not $1/a$.
+PFE in Z: use $z^{-1}$, never $z$.
+RHP \emph{zero} $\ne$ instability (only poles).
+Neg fdbk $\to 1+GH$; pos $\to 1-GH$.
+Negative feedback does \emph{not} always stabilize (too much gain $\to$ unstable).
+
+\end{paracol}
+\end{document}

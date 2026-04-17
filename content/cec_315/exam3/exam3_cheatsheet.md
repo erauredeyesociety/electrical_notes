@@ -114,7 +114,9 @@ $s=\sigma+j\omega$; $z=re^{j\Omega}$. FT exists iff $j\omega$-axis $\subset$ ROC
 
 **Complex conj. pair** $p=-a\pm j\omega_d$: complete the square; use $(s+a)^2+\omega_d^2$ denominator with $\cos/\sin$ pairs.
 
-**Z-transform:** expand in $z^{-1}$, NOT $z$. For improper $X(z)$ (num order $\ge$ den), long-divide first. ROC decides right- vs. left-sided for each term.
+**Z-transform:** expand in $z^{-1}$, NOT $z$. ROC decides right- vs. left-sided for each term.
+
+**Improper rationals (both $s$- and $z$-domain):** if $\deg(\text{num}) \ge \deg(\text{den})$, long-divide first to split into polynomial + strictly-proper. For **Laplace:** constant remainder $\to \delta(t)$, higher polynomial $\to \delta^{(k)}(t)$ (derivatives of $\delta$); PFE the strictly-proper part. For **Z:** polynomial piece in $z^{-1}$ corresponds to finite-duration samples (scaled $\delta[n-k]$); PFE the strictly-proper part in $z^{-1}$.
 
 ## Unilateral System Analysis
 
@@ -135,7 +137,8 @@ $s=\sigma+j\omega$; $z=re^{j\Omega}$. FT exists iff $j\omega$-axis $\subset$ ROC
 - **Sinc interp.:** $x_r(t)=\sum_n x(nT)\,\operatorname{sinc}\!\left(\tfrac{t-nT}{T}\right)$, $\operatorname{sinc}(u)=\tfrac{\sin\pi u}{\pi u}$.
 - **ZOH:** conv with rect width $T$; spectrum $H_0(j\omega)=\tfrac{2\sin(\omega T/2)}{\omega}e^{-j\omega T/2}$.
 - **C/D mapping:** $\Omega=\omega T$ (rad/sample $=$ rad/s $\times T$).
-- **Pitfall:** $\omega_s=2\omega_M$ not sufficient. Squaring doubles BW. Shift preserves Nyquist rate; $x(at)$ scales it by $|a|$.
+- **Pitfall:** $\omega_s=2\omega_M$ not sufficient. Shift preserves Nyquist rate; $x(at)$ scales it by $|a|$.
+- **Time multiplication $\to$ frequency convolution $\Rightarrow$ bandwidths add:** $x_1(t)x_2(t)$ has bandwidth $\le \omega_{M,1} + \omega_{M,2}$, so Nyquist rate of product $\le 2(\omega_{M,1} + \omega_{M,2})$. Special case: squaring doubles BW.
 
 ## Feedback Systems (Lec 23)
 
@@ -228,7 +231,7 @@ Both margins $>0\Rightarrow$ stable. Max delay: $\tau_{\max}=\mathrm{PM}_{\text{
 ## Coverage Checklist (Exam 3 Question Bank → Section)
 
 | Topic / technique | Covered in |
-| --- | --- |
+|---|---|
 | Compute $X(s)$ for causal/anti-causal/two-sided exponentials, shifted $\delta$, $te^{-at}$, sum of causal exponentials | Laplace Pairs, Laplace ROC |
 | Inverse $X(s)$: distinct real, two-sided (annular), repeated, complex-conjugate via completing the square | PFE, Procedures — Inverse Laplace |
 | $s$-shift, differentiation, convolution, IVT/FVT | Laplace Properties |
