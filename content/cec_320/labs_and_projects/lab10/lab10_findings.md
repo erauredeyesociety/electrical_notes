@@ -53,6 +53,23 @@ All 9 screenshots are required for the (optional) submission PDF.
 - Verified with `arm-none-eabi-as -mcpu=cortex-m4 -mthumb` — assembles cleanly; objdump shows the expected instruction stream
 - Code artifact saved to [c1.s](./c1.s)
 
+## Pause Point (2026-04-17)
+
+**Human is partway through the debugger walkthrough, paused to work on proj05.**
+
+- Project imported in CubeIDE, Debug perspective used
+- Breakpoints set at `_app.c` lines **18, 22, 31** (one each for A2, A5 setup, A6)
+- No screenshots captured yet — A1 through A9 still pending
+- Detailed step-by-step walkthrough for A1–A9 is in the chat history; also summarized in [lab10_procedure.md](./lab10_procedure.md) §B.1–B.9
+
+**Resume path when returning to lab10:**
+
+1. Start at **A1** — build Debug, Run As, capture PuTTY/tio output
+2. Debug As → resume once (halts at main) → Resume again → lands on line-18 breakpoint → **A2**
+3. Continue through A3–A7 (Memory, Registers, Variables, Expressions views)
+4. Terminate debug session, switch to Unity build, Run As → **A8**
+5. Editor screenshot of new asm function → **A9**
+
 **Human work — debugger walkthrough (Tasks 1–7):**
 
 This is unavoidably manual; the debugger views (Memory, Registers,
