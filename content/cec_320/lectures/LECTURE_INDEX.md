@@ -30,6 +30,7 @@ A master navigation document for all CEC 320 lecture slide decks. Each entry lis
 | 24 | Combination Branching and Conditional Execution | [lctr24](mp-hc-lctr24-combo-branch-n-cond-execution-slides-26-04.pdf) |
 | 25 | Selection Control in C and ASM (If-Based Flow Control) | [lctr25](mp-he-lctr25-if-based-flow-control-in-asm-slides-26-04.pdf) |
 | 26 | Implementing C's Loop Control in ASM | [lctr26](mp-hg-lctr26-impl-c-loops-in-asm-26-04.pdf) |
+| 27 | Complex Flow Control in C and ASM | [lctr27](mp-hi-lctr27-complex-flow-control-in-c-n-asm-26-04.pdf) |
 
 > Gap: Lectures 10, 11, 12 are not currently present in the `lectures/` folder (likely exam week or not-yet-added decks).
 
@@ -377,6 +378,26 @@ A master navigation document for all CEC 320 lecture slide decks. Each entry lis
 
 ---
 
+### Lctr 27 — Complex Flow Control in C and ASM
+
+**Core concepts**
+- The `break` and `continue` keywords in C and their implementation in ASM (`while (1)` + conditional branch idiom).
+- The `switch` construct in C, including fall-through via stacked case labels and the role of `break`.
+- Naive ASM `switch` (compare-and-branch ladder) vs. the table-based `TBB` approach.
+- The `ADR` instruction for PC-relative label loading (position-independent code).
+- The `TBB` (table branch byte) and `TBH` (table branch halfword) instructions for constant-time switch dispatch.
+
+**Demo project**
+- `mp_swap_pairs_in_str_break`: removes loop-setup code repetition via `while (1)` + `break`.
+- `mp_count_non_space_chars_in_str`: combined `break` + `continue` inside `while (1)`.
+- `mp_letter_grade_to_pass_or_fail`: letter-grade-to-pass/fail switch in C, then translated to ASM twice (naive and TBB-based).
+- Exercise: swap first and third letters of each trio in a string.
+
+**C and ASM programming**
+- `ADR{cond} Rd, label` and the `TBB [Rn, Rm]` branch target formula (`PC + 4 + 2 * table[Rm]`).
+
+---
+
 ## Topic Clusters (Cross-Cutting View)
 
 **Peripherals and HAL**
@@ -392,4 +413,4 @@ A master navigation document for all CEC 320 lecture slide decks. Each entry lis
 - Lctr 20 (immediate offset), Lctr 21 (register offset, pseudo `LDR`), Lctr 22 (increment ops for vars and pointers), Lctr 23 (function calls + `LDRD`/`STRD`).
 
 **Control flow in ASM**
-- Lctr 19 (CCSs and conditional branch), Lctr 24 (combination branch + IT + conditional execution), Lctr 25 (if-else / if-else-if / compound tests), Lctr 26 (loops).
+- Lctr 19 (CCSs and conditional branch), Lctr 24 (combination branch + IT + conditional execution), Lctr 25 (if-else / if-else-if / compound tests), Lctr 26 (loops), Lctr 27 (complex flow: `break` / `continue` / `switch`, `ADR`, `TBB` / `TBH`).
