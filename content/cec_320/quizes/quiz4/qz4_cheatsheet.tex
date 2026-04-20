@@ -1,0 +1,838 @@
+\documentclass[8pt,landscape]{extarticle}
+\usepackage[letterpaper,landscape,margin=0.2in,top=0.2in,bottom=0.2in]{geometry}
+\usepackage{multicol}
+\usepackage{amsmath,amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ---------- Size override: 7pt via scaling ----------
+% extarticle supports 8pt as smallest; use \small globally to approximate 7pt feel
+\AtBeginDocument{\small}
+
+% ---------- Spacing / layout ----------
+\setlength{\columnsep}{0.3em}
+\setlength{\columnseprule}{0.15pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1pt}
+\setlist{nosep,leftmargin=0.9em,itemsep=0pt,topsep=0.5pt,parsep=0pt,partopsep=0pt}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.0}
+\pagestyle{empty}
+\raggedcolumns
+
+% ---------- Section styling (tight) ----------
+\titleformat{\section}{\normalfont\bfseries\footnotesize\color{blue!60!black}}
+  {\thesection.}{0.25em}{}
+\titlespacing*{\section}{0pt}{3pt}{0.5pt}
+\titleformat{\subsection}{\normalfont\bfseries\scriptsize}{}{0em}{}
+\titlespacing*{\subsection}{0pt}{2pt}{0.2pt}
+
+% ---------- ARM listings ----------
+\lstdefinelanguage{arm}{
+  morekeywords={ldr,ldrb,ldrh,ldrsb,ldrsh,ldrd,str,strb,strh,strd,mov,movw,movt,%
+    add,adds,sub,subs,cmp,cmn,tst,teq,bl,bx,b,beq,bne,bgt,bge,blt,ble,bhi,bhs,%
+    blo,bls,bcs,bcc,push,pop,cbz,cbnz,it,itt,ite,itte,itet,itee,ittt,ittee,%
+    iteee,ittte,itttt,tbb,tbh,adr,lsl,lsr,asr,ror,and,orr,eor,bic,%
+    mul,mla,mls,udiv,sdiv,nop,wfi,wfe,svc,lslge,lslgt,lsllt,lslle,asrge,asrgt,%
+    asrlt,asrle,ldrle,ldrgt,ldrlt,ldrge,ldrshgt,ldrshlt,ldrhge,ldrlt,%
+    lslge,lslgt,lsrlt,lsrge},
+  morecomment=[l]{@},
+  sensitive=false
+}
+\lstset{
+  language=arm,
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{blue!70!black}\bfseries,
+  commentstyle=\color{green!40!black}\itshape,
+  breaklines=false,
+  frame=none,
+  aboveskip=0.5pt,
+  belowskip=0.5pt,
+  columns=fullflexible,
+  keepspaces=true,
+  xleftmargin=0.25em,
+  showstringspaces=false
+}
+\newcommand{\asm}[1]{\texttt{\scriptsize #1}}
+\newcommand{\cee}[1]{\texttt{\scriptsize #1}}
+
+% Example tag for worked HW problems (environment so lstlisting can nest inside)
+\newenvironment{ex}
+  {\par\smallskip\noindent{\scriptsize\color{red!55!black}\textbf{Ex.}}\,\scriptsize\ignorespaces}
+  {\par}
+
+\begin{document}
+\begin{center}
+  \textbf{\footnotesize CEC 320 --- Quiz 4 Cheatsheet} \;
+  \scriptsize HW 9--12 \textbullet{} Lctr 20--27
+\end{center}
+\vspace{-8pt}
+
+\begin{multicols*}{4}
+\scriptsize
+
+% ==========================================================
+\section{LDR/STR Matrix (L20--21)}
+Two regs: \texttt{Ra}=addr, \texttt{Rv}=data.
+
+\subsection{LOAD suffixes}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Suf & Size & Ext & C type \\
+\midrule
+--- & word  & --- & \cee{(u)int32\_t} \\
+B   & ubyte & zero & \cee{uint8\_t} \\
+SB  & sbyte & sign & \cee{int8\_t} \\
+H   & uhalf & zero & \cee{uint16\_t} \\
+SH  & shalf & sign & \cee{int16\_t} \\
+\bottomrule
+\end{tabular}
+
+\textbf{STORE has NO sign variant} --- \texttt{STR/STRH/STRB} only.
+
+\subsection{Three addressing modes}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Mode & Effect \\
+\midrule
+\asm{[Ra,\#os]}   & load from Ra+os; Ra unchanged \\
+\asm{[Ra,\#os]!}  & Ra+=os, then load \\
+\asm{[Ra],\#os}   & load, then Ra+=os \\
+\bottomrule
+\end{tabular}
+
+\textit{Mnemonic:} \texttt{!}\,=\,update BEFORE; trailing \texttt{\#os}\,=\,update AFTER.
+
+\subsection{Register-offset (L21)}
+\begin{lstlisting}
+ldr  Rv,[Ra,Ri,LSL #2]  @ word, Ra+4*Ri
+ldrh Rv,[Ra,Ri,LSL #1]  @ half, Ra+2*Ri
+ldrb Rv,[Ra,Ri]          @ byte, Ra+Ri
+\end{lstlisting}
+Shift $=\log_2$(elem size). No writeback form.
+
+\subsection{LDRD / STRD --- 64-bit (L23)}
+\begin{lstlisting}
+ldrd Rv_L,Rv_H,[Ra,#os]   @ basic
+ldrd Rv_L,Rv_H,[Ra,#os]!  @ pre
+ldrd Rv_L,Rv_H,[Ra],#os   @ post
+\end{lstlisting}
+L=LSW (lower addr), H=MSW. \textbf{No reg-offset form.}
+
+\begin{ex}\textbf{HW9 P1} (16 bytes 0x00..0x0F @ 0x2000\_0000):\\
+\asm{ldr r4,=0x20000000} $\to$ r4=base.\\
+\asm{ldr r0,[r4,\#4]}: basic $\to$ r0=0x07060504.\\
+\asm{ldr r1,[r4,\#2]!}: pre $\to$ r4=0x20000002, r1=0x05040302.\\
+\asm{ldr r2,[r4],\#4}: post $\to$ r2=0x05040302 first, then r4=0x20000006.\\
+\asm{ldr r3,[r4]}: r3=0x09080706.\end{ex}
+
+\begin{ex}\textbf{HW10 P2 T1:} \asm{ldrd r2,r3,[r0,\#8]!} on \texttt{ipt[i]=i<<4} $\to$ r0+=8; r2=0xB0A09080, r3=0xF0E0D0C0.\end{ex}
+
+% ==========================================================
+\section{C Pointer $\to$ ASM (L20, 22)}
+
+\subsection{32-bit ptr: step=4}
+\begin{tabular}{@{}lll@{}}
+\toprule
+C & LDR & STR \\
+\midrule
+\cee{*(p+k)} & \asm{[r1,\#4k]}  & \asm{[r1,\#4k]} \\
+\cee{*++p}   & \asm{[r1,\#4]!}  & \asm{[r1,\#4]!} \\
+\cee{*p++}   & \asm{[r1],\#4}   & \asm{[r1],\#4}  \\
+\cee{*--p}   & \asm{[r1,\#-4]!} & \asm{[r1,\#-4]!}\\
+\cee{*p-{}-} & \asm{[r1],\#-4}  & \asm{[r1],\#-4} \\
+\bottomrule
+\end{tabular}
+
+\subsection{16-bit signed: step=2 $\to$ LDRSH}
+\cee{*(p+k)} $\to$ \asm{ldrsh r0,[r1,\#2k]}\\
+\cee{*++p}\;   $\to$ \asm{ldrsh r0,[r1,\#2]!}\\
+\cee{*p++}\;   $\to$ \asm{ldrsh r0,[r1],\#2}
+
+Unsigned: swap LDRSH$\to$LDRH. STRH for stores (no sign).
+
+\subsection{8-bit: step=1 $\to$ LDRB/LDRSB}
+\cee{*(p+k)} $\to$ \asm{ldrb r0,[r1,\#k]}\\
+\cee{*p++}\;   $\to$ \asm{ldrb r0,[r1],\#1}\\
+\cee{*++p}\;   $\to$ \asm{ldrb r0,[r1,\#1]!}
+
+\subsection{Array indexing (const ptr, index i)}
+\begin{lstlisting}
+ldr  r4,[r0,r3,lsl #2]  @ 32b: pArr[i]
+ldrh r4,[r0,r3,lsl #1]  @ 16b
+ldrb r4,[r0,r3]          @  8b
+\end{lstlisting}
+
+\begin{ex}\textbf{HW9 P2 mp\_task1:} \asm{ldrsh r2,[r0],\#4} / \asm{str r2,[r1,\#0]} $\to$ \cee{*p32 = (int32\_t)*p16s; p16s+=2;} --- post-index \texttt{\#4} on an int16 ptr skips one element (reads every other halfword).\end{ex}
+
+\begin{ex}\textbf{HW9 P2 mp\_task2:} \asm{ldrh r2,[r0,\#2]!} / \asm{str r2,[r1,\#0]} $\to$ \cee{p16u++; *p32=(int32\_t)*p16u;} --- pre-index reads consecutive halfwords, skipping first.\end{ex}
+
+\begin{ex}\textbf{HW10 P2 T4:} \asm{ldrh r3,[r0,r2,LSL \#1]} with r2=1,2,3 $\to$ \cee{iptr[1]=0x3020, iptr[2]=0x5040}; equivalent to \cee{uint16\_t *iptr=(uint16\_t*)ipt; opt[j]=iptr[i++];}.\end{ex}
+
+% ==========================================================
+\section{Sign-Extension Pitfalls}
+
+\begin{tabular}{@{}lll@{}}
+\toprule
+Insn & Byte 0x80 $\to$ & Half 0xB0A0 $\to$ \\
+\midrule
+LDRB  & 0x00000080          & --- \\
+LDRSB & \textbf{0xFFFFFF80} & --- \\
+LDRH  & ---                 & 0x0000B0A0 \\
+LDRSH & ---                 & \textbf{0xFFFFB0A0} \\
+\bottomrule
+\end{tabular}
+
+\begin{ex}\textbf{HW10 P2 T2:} \asm{ldrsb r2,[r0,\#4]!} then \asm{ldrsb r3,[r0,\#4]!} on \texttt{ipt[i]=i<<4} $\to$ r2=0x40 (byte 0x40 zero-ext'd since \texttt{bit7=0}), but r3=\textbf{0xFFFFFF80} (byte 0x80 sign-ext'd: bit7=1).\end{ex}
+
+\begin{ex}\textbf{HW10 P2 T3:} \asm{ldrsh r2,[r0],\#10} $\to$ r2=0x1000 (pos); \asm{ldrsh r3,[r0],\#4} on 0xB0A0 $\to$ r3=\textbf{0xFFFFB0A0}. Check the MSBit of the loaded byte/half to predict extension.\end{ex}
+
+% ==========================================================
+\section{Inc/Dec --- Values vs. Ptrs (L22)}
+\textbf{C precedence:}
+\begin{itemize}
+\item L1 (LTR): postfix \texttt{++/-{}-}, \texttt{[]}, \texttt{()}
+\item L2 (RTL): prefix \texttt{++/-{}-}, \texttt{*}, \texttt{\&}, cast, \texttt{sizeof}
+\end{itemize}
+
+\cee{p++} happens before adjacent \texttt{*} or prefix \texttt{++} (binds tighter), but its side effect (incrementing p) happens after the original p is used.
+
+\subsection{Prefix vs. postfix on a value}
+\cee{B[0] = ++A[0];} $\to$ inc A[0] first, then assign:
+\begin{lstlisting}
+ldr r2,[r0] / add r2,#1
+str r2,[r0] / str r2,[r1]
+\end{lstlisting}
+
+\cee{B[1] = A[1]++;} $\to$ assign old, then inc:
+\begin{lstlisting}
+ldr r2,[r0,#4] / str r2,[r1,#4]
+add r2,#1 / str r2,[r0,#4]
+\end{lstlisting}
+
+\subsection{Composite patterns}
+\begin{tabular}{@{}ll@{}}
+\toprule
+C expr & ASM \\
+\midrule
+\cee{*p++}     & \asm{ldrb r2,[r0],\#1} \\
+\cee{*++p}     & \asm{ldrb r2,[r0,\#1]!} \\
+\cee{*p++=v}   & \asm{strb r2,[r0],\#1} \\
+\cee{++*p}     & ldrb / add\#1 / strb \\
+\cee{++*p++}   & ldrb[r0],\#1 / add / strb[r0,\#-1] \\
+\cee{*p=*q++}  & ldrb [r1],\#1 / strb [r0] \\
+\bottomrule
+\end{tabular}
+
+\begin{ex}\textbf{HW10 P1 L5:} \cee{*p8b++ = ++*(p8a+4);} --- inc byte at p8a+4 in memory (0x08$\to$0x09), write back, then store to *p8b and advance:
+\begin{lstlisting}
+ldrb r2,[r0,#4]
+add  r2,r2,#1
+strb r2,[r0,#4]    @ write-back!
+strb r2,[r1],#1
+\end{lstlisting}\end{ex}
+
+\begin{ex}\textbf{HW10 P1 L6:} \cee{*p8b++ = ++*p8a++;} --- postfix p8a returns old, deref old, inc value, write back to original addr, store at *p8b:
+\begin{lstlisting}
+ldrb r2,[r0],#1    @ r0 now at old+1
+add  r2,r2,#1
+strb r2,[r0,#-1]   @ back to old addr
+strb r2,[r1],#1
+\end{lstlisting}\end{ex}
+
+\textbf{Ptr arithmetic:} p8++$\to$+1, p16++$\to$+2, p32++$\to$+4. \cee{p-arr} typed $\to$ \textbf{elements}; \cee{(void*)p-(void*)arr} $\to$ \textbf{bytes}.
+
+% ==========================================================
+\section{CCS: Signed vs. Unsigned (L18--19)}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+C test & Signed & Unsigned \\
+\midrule
+\cee{==} & EQ & EQ \\
+\cee{!=} & NE & NE \\
+\cee{>}  & GT & HI \\
+\cee{>=} & GE & HS(CS) \\
+\cee{<}  & LT & LO(CC) \\
+\cee{<=} & LE & LS \\
+\bottomrule
+\end{tabular}
+
+Signed for \cee{int*\_t}; unsigned for \cee{uint*\_t} / addrs. \textbf{Shifts:} signed\,$/2$\,=\,ASR; unsigned\,$/2$\,=\,LSR.
+
+\textbf{Pseudo:} \asm{cmp r0,\#-5} assembles as \asm{CMN r0,\#5}. Signed CCS still valid (CMN sets flags for \texttt{r0+5}).
+
+% ==========================================================
+\section{Function Calls (L23)}
+
+\textbf{AAPCS/EABI regs:}
+\begin{itemize}
+\item \textbf{R0--R3}: args 1--4, ret (R0 or R1:R0); caller-saved.
+\item \textbf{R12 (IP)}: scratch; caller-saved.
+\item \textbf{R4--R11}: general; \textbf{callee-saved} (push/pop if used).
+\item \textbf{LR}: ret addr; save only if stem.
+\end{itemize}
+
+\textbf{Leaf} (no \asm{bl}): \asm{bx lr}; no LR push.\\
+\textbf{Stem} (calls another): \asm{push \{lr\}} + \asm{pop \{pc\}}.
+
+\textbf{BL:} \asm{bl tgt} $\Rightarrow$ LR=PC\_next; PC=tgt.
+
+\subsection{Stem template}
+\begin{lstlisting}
+my_stem:
+  push {r4-r7,lr}
+  mov  r4,r0          @ stash args
+  mov  r5,r1
+  mov  r6,r2
+  mov  r7,r3
+  @ prep R0-R3, bl inner, save ret
+  pop  {r4-r7,pc}
+\end{lstlisting}
+
+\subsection{Load args by C type}
+\begin{tabular}{@{}ll@{}}
+\toprule
+C type & Load \\
+\midrule
+\cee{(u)int32\_t / *} & \asm{ldr} \\
+\cee{int16\_t}     & \asm{ldrsh} \\
+\cee{uint16\_t}    & \asm{ldrh} \\
+\cee{int8\_t/char} & \asm{ldrsb} \\
+\cee{uint8\_t}     & \asm{ldrb} \\
+\cee{(u)int64\_t}  & \asm{ldrd rL,rH,...} \\
+\bottomrule
+\end{tabular}
+
+\textbf{Return:} $\le$32b $\to$ str/strh/strb on R0. 64b $\to$ \asm{strd r0,r1,...}.
+
+\subsection{Array loop + call}
+\begin{lstlisting}
+  ldr r8,=0
+lp:
+  cmp r8,r7
+  bge end
+  ldr r0,[r4,r8,lsl #2]  @ x[i]
+  ldr r1,[r5,r8,lsl #2]  @ y[i]
+  bl  mp_umod_32bit_s
+  str r0,[r6,r8,lsl #2]  @ z[i]
+  add r8,#1
+  b   lp
+end:
+\end{lstlisting}
+64-bit elements: \asm{ldrd r0,r1,[r4],\#8} / \asm{ldrd r2,r3,[r5],\#8} / \asm{bl ...} / \asm{strd r0,r1,[r6],\#8}.
+
+% ==========================================================
+\section{IT Blocks \& CBZ/CBNZ (L24)}
+
+\asm{IT\{x\{y\{z\}\}\} cond} --- up to 4 slots. First=T. Later T=cond, E=inverse. Forms: IT, ITT, ITE, ITTT, ITTE, ITEE, ITTEE, ITTTT.
+
+\subsection{Hard rules}
+\begin{enumerate}
+\item Max \textbf{4} cond instrs.
+\item First slot = cond; T=cond, E=inverse.
+\item \textbf{Cond branch (\asm{Bcc}) only in LAST slot.}
+\item \textbf{CBZ/CBNZ FORBIDDEN inside IT.}
+\item CBZ/CBNZ: forward only ($\le$126 B), Rn=R0--R7, no flags.
+\end{enumerate}
+
+\subsection{CBZ/CBNZ}
+\begin{lstlisting}
+cbz  Rn,label   @ if Rn==0
+cbnz Rn,label   @ if Rn!=0
+\end{lstlisting}
+Replaces \asm{cmp Rn,\#0 / beq}. Perfect for null-terminator after \asm{ldrb}.
+
+\subsection{CEX if/else (L25 Ex.2)}
+\cee{if (x>=0) x<<=1; else x>>=4;}
+\begin{lstlisting}
+  cmp   r0,#0
+  ite   ge
+  lslge r0,#1   @ then (ge)
+  asrlt r0,#4   @ else (lt)
+  bx    lr
+\end{lstlisting}
+
+\subsection{CEX, 2 instrs / branch}
+\begin{lstlisting}
+  cmp     r0,r1
+  ittee   le       @ T,T=le ; E,E=gt
+  ldrle   r0,[r3],#4
+  asrle   r0,r0,#1
+  ldrshgt r0,[r2,#2]!
+  lslgt   r0,r0,#1
+  bx      lr
+\end{lstlisting}
+\begin{ex}\textbf{HW11 P1 P3:} above pattern exactly --- \asm{ITTEE le} packs 2-instr else + 2-instr then.\end{ex}
+
+\subsection{Cond-B to short-circuit IT (L25 Ex.4)}
+\begin{lstlisting}
+  cmp   r0,#-5      @ = CMN r0,#5
+  itt   lt
+  ldrlt r1,=-10    @ T1
+  blt   end_label  @ T2: LAST slot
+\end{lstlisting}
+Then fresh \asm{cmp} + new IT for remaining cases.
+
+\begin{ex}\textbf{HW11 P2 P3} (piecewise $f(x)$):
+\begin{lstlisting}
+  cmp   r0,#-5
+  itt   lt
+  ldrlt r1,=-10
+  blt   end
+  cmp   r0,#5
+  ite   ge
+  ldrge r1,=10
+  lsllt r1,r0,#1   @ else: 2*x
+end:
+  mov   r0,r1
+  bx    lr
+\end{lstlisting}\end{ex}
+
+% ==========================================================
+\section{If/If-Else (L25)}
+
+\subsection{Positive Logic (PL)}
+Branch-to-then on C TRUE. \textbf{Same} CCS as C test.
+\begin{lstlisting}
+  cmp r0,r1
+  bgt pl_then      @ same as C
+pl_else:
+  @ else
+  b  pl_end
+pl_then:
+  @ then
+pl_end:
+  bx lr
+\end{lstlisting}
+Layout: cmp $\to$ same-CCS branch $\to$ else first, b end, then, end.
+
+\subsection{Negative Logic (NL)}
+Branch-to-else on C FALSE. \textbf{Opposite} CCS.
+\begin{lstlisting}
+  cmp r0,r1
+  ble nl_else      @ opp (LE = !GT)
+nl_then:
+  @ then
+  b  nl_end
+nl_else:
+  @ else
+nl_end:
+  bx lr
+\end{lstlisting}
+Layout: cmp $\to$ opposite-CCS branch $\to$ then first, b end, else, end. NL reads closer to C.
+
+\begin{ex}\textbf{HW11 P1} --- same C in three styles:
+\cee{if (x>y) return *(++ptrA)*2; else return *(ptrB++)/2;}\\
+\textbf{Part 1 PL:} \asm{cmp r0,r1 / bgt pl\_then} ; else (ldr/asr) b pl\_end; then (ldrsh/lsl); pl\_end:bx lr.\\
+\textbf{Part 2 NL:} \asm{cmp r0,r1 / ble nl\_else} ; then (ldrsh/lsl) b nl\_end; else (ldr/asr); nl\_end.\\
+\textbf{Part 3 CEX:} see ITTEE example above --- \cee{int16\_t *} so \asm{ldrsh}, signed \asm{asr r0,\#1} for $/2$.\end{ex}
+
+\subsection{If-elseif-else (CMP chain)}
+\begin{lstlisting}
+  cmp r0,#-5
+  bge elseif       @ NL: x<-5
+then:
+  ldr r0,=-10
+  b   end
+elseif:
+  cmp r0,#5
+  blt else_blk     @ NL: x>=5
+  ldr r0,=10
+  b   end
+else_blk:
+  lsl r0,r0,#1     @ 2*x
+end:
+  bx  lr
+\end{lstlisting}
+\begin{ex}\textbf{HW11 P2 P2:} exactly this 3-way cascade for $f(x)$.\end{ex}
+
+\subsection{Compound OR (L25 Ex.6)}
+\cee{if (x<=20 || x>=25) then else else}
+\begin{lstlisting}
+  cmp r0,#20
+  ble then_block   @ 1st TRUE -> then
+  cmp r0,#25
+  bge then_block   @ 2nd TRUE -> then
+  b   else_block   @ both F -> else
+\end{lstlisting}
+\begin{ex}\textbf{HW11 P3 P1:} literal of this --- \cee{*++ptrA}$\to$\asm{ldrh r0,[r1,\#2]!}; \texttt{*4}$\to$\asm{lsl\#2}; \cee{*++ptrB}$\to$\asm{ldr r0,[r2,\#4]!}; unsigned \texttt{/4}$\to$\asm{lsr\#2}.\end{ex}
+
+\subsection{Compound AND (De Morgan)}
+\cee{if (x>0 \&\& x<8) then else else}
+\begin{lstlisting}
+  cmp r0,#0
+  ble else_block   @ x<=0 -> else
+  cmp r0,#8
+  bge else_block   @ x>=8 -> else
+  @ fall through = then
+\end{lstlisting}
+
+\begin{ex}\textbf{HW11 P3 P2 CEX:} first sub-test can't fit inside IT (cond B only last); use \asm{bgt check25}, then for second test \asm{ITTEE ge} packing then/else:
+\begin{lstlisting}
+  cmp   r0,#20
+  bgt   check25
+  ldrh  r0,[r1,#2]!   @ x<=20 path
+  lsl   r0,r0,#2
+  bx    lr
+check25:
+  cmp   r0,#25
+  ittee ge
+  ldrhge r0,[r1,#2]!
+  lslge  r0,r0,#2
+  ldrlt  r0,[r2,#4]!
+  lsrlt  r0,r0,#2
+  bx     lr
+\end{lstlisting}\end{ex}
+
+% ==========================================================
+\section{Loops (L26)}
+
+Labels: \texttt{\_lp}=top, \texttt{\_end}=after.
+
+\subsection{while (top-tested)}
+\begin{lstlisting}
+  ldrb r2,[r1],#1   @ PRIMING
+lp:
+  cbz  r2,end
+  @ body
+  ldrb r2,[r1],#1   @ in-loop (DUP)
+  b    lp
+end:
+  @ post-loop (e.g. store term)
+\end{lstlisting}
+
+\subsection{do-while (bottom-tested)}
+\begin{lstlisting}
+lp:
+  @ body
+  cmp r0,r1
+  blt lp
+\end{lstlisting}
+
+\subsection{for loop}
+\begin{lstlisting}
+  mov r4,#0
+lp:
+  cmp r4,r5
+  bge end
+  @ body
+  add r4,#1
+  b   lp
+end:
+\end{lstlisting}
+
+\subsection{while(1) + break (no priming dup)}
+\begin{lstlisting}
+lp:
+  ldrb r2,[r1],#1   @ SINGLE read
+  cbz  r2,end
+  @ body
+  b    lp
+end:
+\end{lstlisting}
+
+\begin{ex}\textbf{HW12 P2 P1 (plain while):} lowercase$\to$uppercase copy --- priming \asm{ldrb} + in-loop \asm{ldrb}, with \asm{sub r2,\#0x20} and \asm{strb r2,[r0],\#1} between. Terminator written at \texttt{\_end}.\end{ex}
+
+\begin{ex}\textbf{HW12 P2 P3 (while(1)+break):} same task, single in-loop \asm{ldrb} only:
+\begin{lstlisting}
+lp:
+  ldrb r2,[r1],#1
+  cbz  r2,end
+  sub  r2,r2,#0x20
+  strb r2,[r0],#1
+  b    lp
+end:
+  strb r2,[r0],#1  @ '\0' store
+  bx   lr
+\end{lstlisting}\end{ex}
+
+\begin{ex}\textbf{HW12 P1 (swap last-2-of-3 in string):} r12=pair counter (scratch, no push); every 3 chars, swap offsets -2 and -1 from advanced r0:
+\begin{lstlisting}
+  mov  r12,#0
+lp:
+  ldrb r1,[r0],#1
+  cbz  r1,end
+  ldrb r2,[r0],#1
+  cbz  r2,end
+  ldrb r3,[r0],#1
+  cbz  r3,end
+  strb r3,[r0,#-2]   @ *(s-2)=c3
+  strb r2,[r0,#-1]   @ *(s-1)=c2
+  add  r12,r12,#1
+  b    lp
+end:
+  mov  r0,r12
+  bx   lr
+\end{lstlisting}
+3 \asm{cbz} after 3 post-index \asm{ldrb} catches early null.\end{ex}
+
+\subsection{while-using-CEX (rarely needed)}
+\begin{lstlisting}
+lp:
+  cmp  r0,r1
+  it   lt
+  blt  body_in_it   @ last slot
+  b    end
+body_in_it:
+  @ body
+  b lp
+end:
+\end{lstlisting}
+
+% ==========================================================
+\section{break, continue (L27)}
+\begin{itemize}
+\item \cee{break} = forward \asm{b <end>} (or inline cbz/cbnz).
+\item \cee{continue} in while/do-while = back \asm{b <lp>}.
+\item \cee{continue} in \texttt{for} = branch to \textbf{update}, not top.
+\item CBZ/CBNZ can't live in IT; free-standing is preferred null-test.
+\end{itemize}
+
+\subsection{switch: CMP/BEQ ladder (27.4.2)}
+\begin{lstlisting}
+  cmp r0,#65        @ 'A'
+  beq case_a
+  cmp r0,#66
+  beq case_b
+  b   default_lbl
+case_a:
+case_b:             @ stacked = fall-through
+  ldr r0,=80        @ 'P'
+  b   end
+default_lbl:
+  ldr r0,=69        @ 'E'
+end:
+  bx lr
+\end{lstlisting}
+
+\subsection{switch: ADR+TBB (27.4.3, O(1))}
+\begin{lstlisting}
+  adr r1,table
+  tbb [r1,r0]       @ PC=PC+4+2*table[r0]
+case_a:
+  ...
+table:
+  .byte 0
+  .byte (case_b-case_a)/2
+\end{lstlisting}
+
+% ==========================================================
+\section{ASM Quick Ref}
+
+\subsection{Immediate loads}
+\begin{lstlisting}
+ldr   r0,[r1]          @ *r1
+ldr   r0,[r1,#4]       @ *(r1+4)
+ldr   r0,[r1,#4]!      @ r1+=4; *r1
+ldr   r0,[r1],#4       @ *r1; r1+=4
+ldrb  r0,[r1]          @ u8 zero-ext
+ldrsb r0,[r1]          @ s8 sign-ext
+ldrh  r0,[r1]          @ u16 zero-ext
+ldrsh r0,[r1]          @ s16 sign-ext
+ldrd  r0,r1,[r2,#8]!   @ 64b
+\end{lstlisting}
+
+\subsection{Register-offset / stores}
+\begin{lstlisting}
+ldr  r0,[r1,r2,lsl #2] @ u32[]
+ldrh r0,[r1,r2,lsl #1]
+ldrb r0,[r1,r2]
+str  r0,[r1,#4]!
+strb r0,[r1],#1
+strh r0,[r1,#-2]
+strd r0,r1,[r2],#8
+\end{lstlisting}
+
+\subsection{MOV \& pseudo-LDR}
+\begin{lstlisting}
+mov  r0,r1
+mov  r0,#42           @ small imm
+movw r0,#0xBEEF       @ low16
+movt r0,#0xDEAD       @ high16
+ldr  r0,=0x12345678   @ pseudo
+\end{lstlisting}
+
+\subsection{Stack}
+\begin{lstlisting}
+push {r4-r7,lr}  @ SP-=20; sorted low->hi
+pop  {r4-r7,pc}  @ restore + return
+\end{lstlisting}
+
+% ==========================================================
+\section{Checklist}
+For each C statement:
+\begin{enumerate}
+\item \textbf{Data type?} $\to$ LDR variant + offset mult.
+\item \textbf{Inc order?} $\to$ pre (\texttt{!}) vs post vs none.
+\item \textbf{What's modified?} value in mem (needs store-back), ptr, or both.
+\item \textbf{Signed/unsigned?} $\to$ CCS (GT/LT vs HI/LO), shift (ASR vs LSR), load suf (SB/SH vs B/H).
+\item \textbf{Single vs branch?} single$\to$Op2 or cond exec; multi$\to$labeled branch.
+\item \textbf{Leaf or stem?} any \asm{bl} $\to$ push LR + callee-saved.
+\end{enumerate}
+
+% ==========================================================
+\section{Barrel Shifter / Op2 (L15--16)}
+Op2 (``flexible second operand'') may be: (a) immediate; (b) \texttt{Rm}; (c) \texttt{Rm,\{LSL/LSR/ASR/ROR\} \#n}. \textbf{Shift count MUST be imm in Op2 form} --- cannot be a register (standalone LSL/LSR can use Rm for count).
+
+\textbf{GNU quirk:} in \asm{Rm,shift \#n} form, destination register cannot be omitted even if it equals source --- else syntax error.
+
+\subsection{S-suffix \& RRX}
+\begin{itemize}
+\item S-variants of LSL/LSR/ASR/ROR update \textbf{C from last bit shifted out}; also N,Z.
+\item \textbf{RRX}: rotate right 1 bit, C$\to$b31; \asm{RRXS} takes b0$\to$C. No count.
+\end{itemize}
+
+\subsection{Shifted-Op2 scaling idioms}
+\begin{tabular}{@{}ll@{}}
+\toprule
+ASM & C equiv \\
+\midrule
+\asm{add r1,r0,r0,lsl \#1} & \cee{3*r0} (signed or unsigned) \\
+\asm{add r1,r0,r0,lsr \#1} & \cee{r0 + r0/2} \textbf{unsigned only} \\
+\asm{sub r1,r0,r0,asr \#2} & \cee{3*r0/4} \textbf{signed only} \\
+\asm{rsb r1,r0,r0,asr \#2} & \cee{-3*r0/4} signed \\
+\bottomrule
+\end{tabular}
+
+\textbf{Rule:} LSR $\Rightarrow$ unsigned-only. ASR $\Rightarrow$ signed-only. LSL $\Rightarrow$ both.
+
+% ==========================================================
+\section{Flags \& Flag-Setters (L17--18)}
+
+\textbf{APSR bits:} N=31, Z=30, C=29, V=28 (Q=27 unused in class).
+\textbf{N,Z} used for signed \& unsigned. \textbf{C} = unsigned. \textbf{V} = signed.
+
+\textbf{Instructor "no-borrow" rule:} after unsigned SUB, \textbf{C=1 means NO borrow} (i.e. \cee{u1>=u2}); C=0 means borrow.
+
+\textbf{Arithmetic only updates flags with S suffix:}\\
+\asm{add r0,r1,r2} does NOT set flags; \asm{adds r0,r1,r2} does.\\
+\texttt{MUL} $\to$ only MULS updates N,Z (no C/V). \texttt{UDIV/SDIV} $\to$ \textbf{no S version, never update flags.}
+
+\subsection{CMP / CMN / TST / TEQ}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Insn & Operation (discarded) & Flags \\
+\midrule
+CMP Rn,Op2 & Rn $-$ Op2 & N,Z,C,V \\
+CMN Rn,Op2 & Rn $+$ Op2 & N,Z,C,V \\
+TST Rn,Op2 & Rn \,\&\, Op2 & N,Z,C \\
+TEQ Rn,Op2 & Rn \,$\oplus$\, Op2 & N,Z,C \\
+\bottomrule
+\end{tabular}
+TST/TEQ \textbf{do NOT affect V} (logic ops). C from Op2 shift, if any. CMP $\equiv$ SUBS no-writeback; CMN $\equiv$ ADDS no-writeback.
+
+\textbf{APSR access:} \asm{mrs r0, apsr} (read, no mask); \asm{msr apsr\_nzcvq, r0} (write, mask req'd).
+
+\textbf{CCS mnemonic:} ``HiLow unSun'' --- Higher/Lower/Same $=$ unsigned (can't see the Sun above/below).
+
+% ==========================================================
+\section{LDR Pseudo Resolution (L20)}
+\asm{ldr Rd,=expr} is resolved by the assembler:
+\begin{itemize}
+\item 8-bit imm $\to$ \asm{mov.w Rd,\#expr}
+\item 16-bit imm $\to$ \asm{movw Rd,\#expr} (zeros high half)
+\item 32-bit imm $\to$ PC-relative \asm{ldr Rd,[pc,\#off]} + \texttt{.word} in literal pool
+\end{itemize}
+\textbf{Use LDR =expr whenever unsure} --- MOV imm only accepts 8-bit or rotated modified-immediates (class skips the rotated-8 encoding details).
+
+\asm{movw Rd,\#hw}: low 16, zero upper. \asm{movt Rd,\#hw}: upper 16, low unchanged. Pair $\to$ any 32-bit const.
+
+% ==========================================================
+\section{More Bitwise / Multiply (L14--16)}
+
+\begin{tabular}{@{}ll@{}}
+\toprule
+Insn & Effect \\
+\midrule
+\asm{ORN Rd,Rn,Op2}   & \cee{Rd = Rn | \textasciitilde Op2} \\
+\asm{BIC Rd,Rn,Op2}   & \cee{Rd = Rn \& \textasciitilde Op2} (bit clear) \\
+\asm{BFC Rd,\#s,\#w}  & zero w bits starting at bit s \\
+\asm{BFI Rd,Rn,\#s,\#w} & insert Rn[w-1:0] into Rd[s+w-1:s] \\
+\asm{MUL Rd,Rn,Rm}    & Rd = Rn*Rm (32-bit, truncated) \\
+\asm{MLA Rd,Rn,Rm,Ra} & Rd = Ra + Rn*Rm (FIR accum) \\
+\asm{MLS Rd,Rn,Rm,Ra} & Rd = Ra $-$ Rn*Rm \\
+\asm{UMULL/SMULL}     & 64-bit product RdLo:RdHi \\
+\asm{UDIV/SDIV Rd,Rn,Rm} & unsigned/signed divide \\
+\bottomrule
+\end{tabular}
+
+% ==========================================================
+\section{Registers \& Exception}
+
+\textbf{Low R0--R7} (some 16-bit Thumb insns restrict to these).\\
+\textbf{High R8--R12.}\\
+\texttt{R13=SP}, \texttt{R14=LR}, \texttt{R15=PC}, \texttt{R12=IP}.
+
+\textbf{xPSR} = \{APSR, IPSR, EPSR\} --- overlapping views, selectable as one or parts.
+
+\textbf{Exception entry auto-stack:} HW pushes 8 regs in order --- \texttt{R0, R1, R2, R3, R12, LR, PC, PSR} --- before calling the handler. Handler prologue need NOT re-save these.
+
+% ==========================================================
+\section{Directives \& File Header}
+\begin{lstlisting}
+.section .text
+.syntax unified
+.thumb
+.align 2
+.global my_fn
+.type   my_fn, %function
+my_fn:
+  @ ...
+  bx  lr
+.end
+\end{lstlisting}
+\texttt{.word}/\texttt{.byte}/\texttt{.asciz} emit literals (TBB table, vector table). \texttt{.weak name} = placeholder (Default\_Handler overrides). \texttt{.thumb\_set alias,target} = symbol alias. \texttt{.fnstart}/\texttt{.fnend} optional.
+
+% ==========================================================
+\section{Instructor Idioms / Style}
+\begin{itemize}
+\item Labels: \texttt{<fn>\_lp}, \texttt{<fn>\_end}, \texttt{<fn>\_then}, \texttt{\_elseif}, \texttt{\_else}.
+\item Every ASM fn has: (1) C-prototype comment, (2) In/Out/Other register block, (3) \asm{.global}/\asm{.type}.
+\item GNU syntax: \textbf{lowercase insns in code}; uppercase only in prose. Comments use \texttt{@}.
+\item Return idioms: \asm{bx lr} (leaf) \textbf{or preferred} \asm{pop \{r4,pc\}} (folds return into pop).
+\item Test harness: FUT = Function Under Test, CFN = C Fn, AFN = ASM Fn, UTF = Unit Test Fn.
+\item \textbf{ITTTT} = 4-cond max (e.g. \asm{itttt lt / ldrlt / addlt / addlt / blt}).
+\end{itemize}
+
+% ==========================================================
+\section{Glossary}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Term & Meaning \\
+\midrule
+\textbf{CCS}   & Condition Code Suffix (\texttt{eq,ne,gt,...}) \\
+\textbf{CEX}   & Conditional EXecution (IT-based, no branch) \\
+\textbf{Op2}   & ``Flexible second operand'' (imm/Rm/Rm+shift) \\
+\textbf{CP range} & Common Positive [0, $2^{N-1}-1$]; signed/unsigned agree \\
+\textbf{NUT}   & Number Under Test (flag-update analysis) \\
+\textbf{OUT}   & Operation Under Test \\
+\textbf{FUT}   & Function Under Test \\
+\textbf{Pseudo LDR} & \asm{ldr Rd,=expr} (assembler synthesizes) \\
+\textbf{Leaf/Stem} & leaf = no BL; stem = calls another fn \\
+\textbf{AAPCS} & ARM Arch. Procedure Call Standard \\
+\bottomrule
+\end{tabular}
+
+% ==========================================================
+\section{Last-Minute Traps}
+\begin{itemize}
+\item \textbf{Sign-ext on byte/half with MSbit=1:} LDRSB 0x80$\to$0xFFFFFF80, LDRSH 0xB0A0$\to$0xFFFFB0A0. LDRB/LDRH zero-ext.
+\item \textbf{STRD / register-offset:} neither exists. Don't write \asm{strd rL,rH,[Ra,Ri,LSL\#3]}.
+\item \textbf{CBZ/CBNZ in IT:} illegal. And Rn must be R0--R7.
+\item \textbf{Cond B in IT:} legal ONLY as final slot.
+\item \textbf{\#-imm in \asm{cmp}:} \asm{cmp r0,\#-5} silently becomes \asm{CMN r0,\#5}. Signed CCS still work.
+\item \textbf{Prefix \texttt{++} on \cee{*p}:} must STRB/STR/STRH write-back the incremented value. Easy to forget.
+\item \textbf{Pointer arith is scaled:} \cee{p32+1} is \textbf{+4 bytes}, not +1. \cee{(void*)p32+1} is +1 byte.
+\item \textbf{Flag updates:} ADD $\ne$ ADDS. Unit-test expect S suffix for anything affecting a later CMP-less branch.
+\item \textbf{Signed vs unsigned divide:} \asm{asr} for int/2, \asm{lsr} for uint/2. Using ASR on \cee{uint32\_t} with MSbit=1 gives wrong answer.
+\end{itemize}
+
+\end{multicols*}
+\end{document}
