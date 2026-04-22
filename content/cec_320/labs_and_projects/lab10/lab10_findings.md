@@ -25,15 +25,15 @@ are applied and verified with `arm-none-eabi-as`.
 
 | ID | Type | Description | Required For | Status |
 |----|------|-------------|--------------|--------|
-| A1 | Screenshot | Debug build running in PuTTY (real G431) | Task 1 | [ ] |
-| A2 | Screenshot | Debugger halted at `_app.c` line 18 | Task 2 | [ ] |
-| A3 | Screenshot | Memory view at `0x20000200` before init | Task 3 | [ ] |
-| A4 | Screenshot | Same memory after init (line 22) | Task 4 | [ ] |
-| A5 | Screenshot | R0–R6 inside `mp_initialize_r1_to_r6_s` | Task 5 | [ ] |
-| A6 | Screenshot | Variable view: `p32, var32 (hex), i` | Task 6 | [ ] |
-| A7 | Screenshot | Expression view: `regs` + first 10 of `reservation` | Task 7 | [ ] |
-| A8 | Screenshot | Unity test pass with new `_pos_sum` test included | Task 8 | [ ] |
-| A9 | Screenshot | Editor view of new asm function | Task 8 | [ ] |
+| A1 | Screenshot | Debug build running in PuTTY (real G431) | Task 1 | [x] |
+| A2 | Screenshot | Debugger halted at `_app.c` line 18 | Task 2 | [x] |
+| A3 | Screenshot | Memory view at `0x20000200` before init | Task 3 | [x] |
+| A4 | Screenshot | Same memory after init (line 22) | Task 4 | [x] |
+| A5 | Screenshot | R0–R6 inside `mp_initialize_r1_to_r6_s` | Task 5 | [x] |
+| A6 | Screenshot | Variable view: `p32, var32 (hex), i` | Task 6 | [x] |
+| A7 | Screenshot | Expression view: `regs` + first 10 of `reservation` | Task 7 | [x] |
+| A8 | Screenshot | Unity test pass with new `_pos_sum` test included | Task 8 | [x] |
+| A9 | Screenshot | Editor view of new asm function | Task 8 | [x] |
 | C1 | Code | New `mp_array_pos_sum_cst_ptr_s` in `_sfns.s` | Task 8 | [x] |
 
 All 9 screenshots are required for the (optional) submission PDF.
