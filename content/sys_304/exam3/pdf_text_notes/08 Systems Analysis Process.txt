@@ -1,0 +1,149 @@
+SYS 304
+Trade Studies, Risk, and Decision Analysis
+
+
+    Applications to Systems
+          Engineering
+
+
+     Systems Analysis Process
+Systems Analysis
+ Decision analysis is an important part of systems
+  analysis.
+ Studying systems analysis.
+  ◼ Mathematics can be studied for its intrinsic truth and
+    beauty.
+  ◼ Systems analysis is different: it exists to solve real
+    problems for real customers.
+  ◼ Tools of systems analysis are important, but they are not
+    the product.
+  ◼ The product is obtained by using systems analysis tools
+    for solving real-world problems.
+Rules for Systems Analysis
+ Rule 1: There always is a client.
+   ◼ It is easy to get subjective.
+   ◼ It is easy to carve the system problem to fit your tools
+     and to suit yourself.
+   ◼ Client provides necessary input.
+   ◼ Client-focused analysis provides a reality check.
+Rules for Systems Analysis
+ Rule 2: Your client does not understand his own
+  problem.
+  ◼ Client is part of the problem and knows that.
+  ◼ It is human nature for the client to attempt to cover up his
+    mistakes.
+  ◼ Client lies accidentally or unconsciously even more often.
+  ◼ Systems analyst is called upon when there is a problem.
+  ◼ If the client knew what the problem is, he would fix it
+    without seeking the analyst’s advice.
+Rules for Systems Analysis
+ Rule 3: The original problem statement is too
+  specific; you must generalize the problem to give it
+  contextual integrity.
+  ◼ Discussions between analyst and client lead to a mutual
+    understanding of the client’s problem, which usually is too
+    specific.
+  ◼ Analyst must generalize client’s problem first to arrive at a
+    better understanding of the client’s needs.
+  ◼ Generalizing too far broadens the topic to the point that it
+    is difficult to solve it in the time and with the money
+    available.
+Rules for Systems Analysis
+ Rule 4: The client does not understand the concept
+  of the index of performance.
+  ◼ System analysts go about optimizing things (maximize
+    profit, maximize mean time between failures, minimize
+    cost, minimize installation time).
+  ◼ Truth is, almost no one optimizes anything in real life.
+  ◼ In real life, we try to behave so as to avoid major risks.
+  ◼ In real life, we seek merely to better things incrementally.
+  ◼ The index of performance is the tool used for measuring
+    the progress the system is making toward the optimum.
+Rules for Systems Analysis
+ Rule 5: You are the analyst, not the decision-maker.
+  ◼ Standard cycle of emotions through which system analysts
+    put themselves as they deal with an assignment.
+  ◼ First is fear: the client organization is often well known and
+    thought to be competent.
+  ◼ Second is arrogance: how could the client be so stupid as to
+    get himself in this?
+  ◼ Third is the maturation: analyst begins to identify closely to
+    client’s problem. But remember, you are the analyst not the
+    decision maker.
+Rules for Systems Analysis
+ Rule 6: Meet the time deadline and the cost budget.
+  ◼ Clients go into hysterics if they are told we need to
+    generalize the problem and take a top-down approach,
+    because they suspect this is a trick to avoid facing hard
+    reality, and the study won’t finish on time and as budgeted.
+  ◼ But, generalizing is way of coming to grips with the actual
+    problem.
+  ◼ The problem probably is ill-defined, or the system analyst
+    wouldn’t have been hired in the first place.
+Rules for Systems Analysis
+ Rule 7: Take a goal-centered approach to the
+  problem, not a technology-centered or chronological
+  approach.
+  ◼ Chronological approach seems so logical and
+    straightforward that it might be called part of the folk
+    wisdom of mankind.
+  ◼ Chronological approach requires exploration of many blind
+    alleys.
+  ◼ Technological approach tends to produce an artificially
+    narrow options field and may result in exclusion of superior
+    solutions.
+Rules for Systems Analysis
+ Rule 8: Non-users must be considered in the
+  analysis and in the final recommendations.
+  ◼ System analyst should respect the value system if non-
+    users and not project his/her value system on others.
+  ◼ Also, we have to recognize that non-users and sometimes
+    unreasonable.
+Rules for Systems Analysis
+ Rule 9: Computer simulations are not a solve all
+  solution.
+  ◼ You cannot get out of a computer model any more than
+    you put into it.
+  ◼ This does not mean, however, that you can not learn
+    some surprising things from a computer model.
+  ◼ All of the solutions of a mathematical relationship are
+    implied by the relationship itself.
+  ◼ It does not mean that you know all of the solutions when
+    you write the mathematical equation.
+  ◼ The same is true of a computer model.
+Rules for Systems Analysis
+ Rule 10: The role of decision-maker in public
+  systems is often a confused one.
+  ◼   It is true that role titles are sometimes used
+      interchangeably.
+ Analyst
+  ◼ Professional who aids those involved with a problem to
+    order the alternatives and decide on a course of action.
+  ◼ Should be neutral and objective and should have no stake
+    in the outcome.
+Rules for Systems Analysis
+ Rule 10: The role of decision-maker in public
+  systems is often a confused one.
+ Client
+  ◼ Person or group with whom the analyst interacts during
+    goal definition.
+  ◼ Receives final report and sometimes pays the bill.
+  ◼ Affected by the outcome and thus is a stakeholder.
+  ◼ May be empowered to choose from among the options
+    and thus is a decision maker, but not always.
+ Stakeholders
+  ◼ All those affected by the system.
+  ◼ May be users or non-users.
+  ◼ Need not be clients or decision makers.
+Rules for Systems Analysis
+ Rule 10: The role of decision-maker in public
+  systems is often a confused one.
+ Sponsor
+  ◼ Pays the bill.
+  ◼ May or may not be the client.
+  ◼ Usually a stakeholder.
+
+ Decision maker
+  ◼ Chooses from among the options.
+  ◼ Must choose the particular index of performance.
+

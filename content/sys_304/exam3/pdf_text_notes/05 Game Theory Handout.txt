@@ -1,0 +1,336 @@
+                                                               evo lu t i o n
+
+
+
+
+                                                       why
+
+
+                               We
+
+                                                   HELP
+                                  Far from being a nagging exception to the rule of evolution,
+                                       cooperation has been one of its primary architects
+                                                       By Martin A. Nowak
+
+               34 Scientific American, July 2012                                     Illustration by Noma Bar
+
+
+
+
+sad0712Nowa4p.indd 34                                                                                   5/21/12 5:15 PM
+sad0712Nowa4p.indd 35   5/21/12 5:15 PM
+                                                                                                                    Martin A. Nowak is a professor of biology and math-
+                                                                                                                    ematics at Harvard University and director of the Pro-
+                                                                                                                    gram for Evolutionary Dynamics. His research focuses
+                                                                                                                    on the mathematical underpinnings of evolution.
+
+
+
+
+           L
+                         AST APRIL, AS REACTORS AT JAPAN’S FUKUSHIMA DAIICHI NUCLEAR POWER PLANT WERE MELTING
+                         down following a lethal earthquake and tsunami, a maintenance worker in his 20s was
+                         among those who volunteered to reenter the plant to try to help bring things back under
+                         control. He knew the air was poisoned and expected the choice would keep him from
+                         ever marrying or having children for fear of burdening them with health consequences.
+                         Yet he still walked back through Fukushima’s gates into the plant’s radiation-infused air
+                         and got to work—for no more compensation than his usual modest wages. “There are
+               only some of us who can do this job,” the worker, who wished to remain anonymous, told the Inde-
+               pendent last July. “I’m single and young, and I feel it’s my duty to help settle this problem.”
+                   Although they may not always play out on such an epic scale,                       non? Over the past two decades I have been using the tools of
+               examples of selfless behavior abound in nature. Cells within an                        game theory to study this apparent paradox. My work indicates
+               organism coordinate to keep their division in check and avoid                          that instead of opposing competition, cooperation has operated
+               causing cancer, worker ants in many species sacrifice their own                        alongside it from the get-go to shape the evolution of life on
+               fecundity to serve their queen and colony, female lions within a                       earth, from the first cells to Homo sapiens. Life is therefore not
+               pride will suckle one another’s young. And humans help other                           just a struggle for survival—it is also, one might say, a snuggle
+               humans to do everything from obtaining food to finding mates                           for survival. And in no case has the evolutionary influence of co-
+               to defending territory. Even if the helpers may not necessarily                        operation been more profoundly felt than in humans. My find-
+               be putting their lives on the line, they are risking lowering their                    ings hint at why this should be the case and underscore that just
+               own reproductive success for the benefit of another individual.                        as helping one another was the key to our success in the past, so,
+                   For decades biologists have fretted over cooperation, scram-                       too, is it poised to be vital to our future.
+               bling to make sense of it in light of the dominant view of evolu-
+               tion as “red in tooth and claw,” as Alfred, Lord Tennyson so viv-                                            FROM ADVERSARY TO ALLY
+               idly described it. Charles Darwin, in making his case for evolu-                       I FIRST BECAME INTERESTED in cooperation back in 1987, as a grad-
+               tion by natural selection—wherein individuals with desirable                           uate student studying mathematics and biology at the Univer-
+               traits reproduce more often than their peers and thus contrib-                         sity of Vienna. While on a retreat with some fellow students
+               ute more to the next generation—called this competition the                            and professors in the Alps, I learned about a game theory para-
+               “struggle for life most severe.” Taken to its logical extreme, the                     dox called the Prisoner’s Dilemma that elegantly illustrates
+               argument quickly leads to the conclusion that one should never                         why cooperation has so flummoxed evolutionary biologists.
+               ever help a rival and that an individual might in fact do well to                      The dilemma goes like this: Imagine that two people have been
+               lie and cheat to get ahead. Winning the game of life—by hook or                        arrested and are facing jail sentences for having conspired to
+               by crook—is all that matters.                                                          commit a crime. The prosecutor questions each one privately
+                   Why, then, is selfless behavior such a pervasive phenome-                          and lays out the terms of a deal. If one person rats on the other
+
+
+                                                                                             IN BRIEF
+
+                 People tend to think of evolution as a strictly dog-      There are ﬁve mechanisms by which cooperation          Humans are especially helpful because of the mech-
+                 eat-dog struggle for survival. In fact, cooperation has   may arise in organisms ranging from bacteria to hu-    anism of indirect reciprocity, which is based on repu-
+                 been a driving force in evolution.                        man beings.                                            tation and leads us to help those who help others.
+
+
+
+
+               36 Scientific American, July 2012
+
+
+
+
+sad0712Nowa4p.indd 36                                                                                                                                                                 5/21/12 5:15 PM
+        and the other remains silent, the incriminator gets just one             could prevail in evolution, all the scenarios they describe fall
+        year of jail time, whereas the silent person gets slammed with a         into one or more of these five categories.
+        four-year sentence. If both parties cooperate and do not rat on              A second means by which cooperation may find a foothold in
+        each other, both get reduced sentences of two years. But if both         a population is if cooperators and defectors are not uniformly
+        individuals incriminate each other, they both receive three-             distributed in a population—a mechanism termed spatial selec-
+        year sentences.                                                          tion. Neighbors (or friends in a social network) tend to help one
+            Because each convict is consulted separately, neither knows          another, so in a population with patches of cooperators, these
+        whether his or her partner will defect or cooperate. Plotting the        helpful individuals can form clusters that can then grow and
+        possible outcomes on a payoff matrix [see box below], one can see        thus prevail in competition with defectors. Spatial selection also
+        that from an individual’s standpoint, the best bet is to defect and      operates among simpler organisms. Among yeast cells, coopera-
+        incriminate one’s partner. Yet because both parties will follow          tors make an enzyme used to digest sugar. They do this at a cost
+        that same line of reasoning and choose defection, both will re-          to themselves. Defector yeast, meanwhile, mooch off the cooper-
+        ceive the third-best outcome (three-year sentences) instead of the       ators’ enzymes instead of making their own. Studies conducted
+        two-year sentences they could get by cooperating with each other.        by Jeff Gore of the Massachusetts Institute of Technology and, in-
+            The Prisoner’s Dilemma seduced me immediately with its               dependently, by Andrew Murray of Harvard University have
+        power to probe the relation between conflict and cooperation.            found that among yeast grown in well-mixed populations, the
+        Eventually my Ph.D. adviser, Karl Sigmund, and I developed               defectors prevailed. In populations with clumps of cooperators
+        techniques to run computer simulations of the dilemma using              and defectors, in contrast, the cooperators won out.
+        large communities rather than limiting ourselves to two prison-              Perhaps one of the most immediately intuitive mechanisms for
+        ers. Taking these approaches, we could watch as the strategies of        the evolution of selflessness concerns cooperation among geneti-
+        the individuals in these communities evolved from defection to           cally related individuals, or kin selection. In this situation, indi-
+        cooperation and back to defection through cycles of growth and           viduals make sacrifices for their relatives because those relatives
+        decline. Through the simulations, we identified a mechanism              share their genes. Thus, although one may be reducing one’s own
+        that could overcome natural selection’s predilection for selfish         direct reproductive fitness by assisting a relative in need, one is
+        behavior, leading would-be defectors to instead lend helping             still fostering the spread of those genes the helper shares with re-
+        hands.                                                                   cipients. As 20th-century biologist J.B.S. Haldane, who first men-
+            We started with a random distribution of defectors and coop-
+        erators, and after each round of the game the winners would go                                                           basics
+        on to produce offspring who would participate in the next round.
+        The offspring mostly followed their parents’ strategy, although
+        random mutations could shift their strategy. As the simulation
+                                                                                                      Natural Defection
+        ran, we found that within just a few generations all the individu-
+                                                                                   A game theory paradox called the Prisoner’s Dilemma illustrates
+        als in the population were defecting in every round of the game.
+                                                                                   why the existence of cooperation in nature is unexpected. Two
+        Then, after some time, a new strategy suddenly emerged: players
+                                                                                   people face jail sentences for conspiring to commit a crime.
+        would start by cooperating and then mirror their opponents’
+                                                                                   Their sentences depend on whether they elect to cooperate and
+        moves, tit for tat. The change quickly led to communities domi-
+                                                                                   remain silent or defect and confess to the crime [see payoff table
+        nated by cooperators.
+                                                                                   below]. Because neither knows what the other will do, the rational
+            This mechanism for the evolution of cooperation among in-
+                                                                                   choice—the one that always offers the better payoff—is to defect.
+        dividuals who encounter one another repeatedly is known as di-
+        rect reciprocity. Vampire bats offer a striking example. If a bat
+        misses a chance to feed directly on prey one day, it will beg from                                           individual 2
+        its sated peers back at the roost. If it is lucky, one of its roost
+                                                                                                                         Cooperate                Defect
+        mates will share its blood meal by regurgitating it into the hun-
+                                                                                                                          (remain silent)         (confess)
+        gry bat’s mouth. The vampires live in stable groups and return
+                                                                                       Individual 1
+
+
+
+
+        to the roost every day after hunting, so group members routine-
+                                                                                                      Cooperate
+
+
+
+
+        ly encounter one another. Studies have shown that the bats re-
+                                                                                                       (remain silent)
+
+
+
+
+        member which bats have helped them in times of need, and                                                         2 years in jail       4 years in jail
+        when the day comes that the generous bat finds itself in need of                                                 2 years in jail        1 year in jail
+        food, the bat it helped earlier is likely to return the favor.
+            What made our early computer simulations even more inter-
+        esting was the revelation that there are different kinds of direct
+        reciprocity. Within 20 generations the initial tit-for-tat strategy
+        had given way to a more generous strategy in which players might
+                                                                                                      Defect
+
+
+
+
+                                                                                                                          1 year in jail       3 years in jail
+                                                                                                      (confess)
+
+
+
+
+        still cooperate even if their rival defected. We had, in essence, wit-
+        nessed the evolution of forgiveness—a direct-reciprocity strategy                                                4 years in jail       3 years in jail
+        that allows players to overlook the occasional mistake.
+            In addition to direct reciprocity, I later identified four more
+        mechanisms for the evolution of cooperation. In the several
+        thousand papers scientists have published on how cooperators
+
+
+                                                                                                                                     July 2012, ScientificAmerican.com 37
+
+
+
+
+sad0712Nowa5p.indd 37                                                                                                                                                       5/22/12 3:11 PM
+               tioned the idea of kin selection, put it: “I will jump into the river to
+               save two brothers or eight cousins,” referring to the fact that our
+               siblings share 50 percent of our DNA, whereas our first cousins
+               share 12.5 percent. (It turns out that calculating the fitness effects
+               of kin selection is a rather complicated task that has misled many
+               researchers. My colleagues and I are now engaged in an intense
+               debate about the underlying mathematics of kin selection theory.)
+                   The fourth mechanism that fosters the emergence of cooper-
+               ation is indirect reciprocity, which is quite distinct from the di-
+               rect variety that Sigmund and I studied initially. In indirect rec-
+               iprocity, one individual decides to aid another based on the
+               needy individual’s reputation. Those who have a reputation for
+               assisting others who fall on hard times might even find them-              1
+               selves on the receiving end of goodwill from strangers when
+               their own luck takes a turn for the worse. Thus, instead of the
+               “I’ll scratch your back if you scratch my mine” mentality, the co-
+               operator in this situation might be thinking, “I’ll scratch your
+               back, and someone will scratch mine.” Among Japanese ma-
+               caques, for example, low-ranking monkeys that groom high-
+               ranking ones (which have good reputations) may better their
+               own reputations—and hence receive more grooming—simply by
+               being seen with the top brass.
+                   Last, individuals may perform selfless acts for the greater
+               good, as opposed to abetting a single peer. This fifth means by
+               which cooperation may take root is known as group selection.
+               Recognition of this mechanism dates back to Darwin himself,
+               who observed in his 1871 book The Descent of Man that “a tribe
+               including many members who ... were always ready to aid one
+               another, and to sacrifice themselves for the common good,
+               would be victorious over most other tribes; and this would be
+               natural selection.” Biologists have since argued fiercely over this
+               idea that natural selection can favor cooperation to improve the
+               reproductive potential of the group. Mathematical modeling by
+               researchers, including me, however, has helped show that selec-            3
+               tion can operate at multiple levels, from individual genes to
+               groups of related individuals to entire species. Thus, the em-
+               ployees of a company compete with one another to move up the
+                                                                                          HELPING OUT: Leaf-cutter ants work together to carry
+               corporate ladder, but they also cooperate to ensure that the
+                                                                                          foliage back to their nest (1). Cells regulate their own division
+               business succeeds in its competition with other companies.
+                                                                                          to avoid causing cancer (2). Lionesses cooperatively rear their
+                                                                                          young (3). Japanese macaques groom each other and thus
+                                          ONE FOR ALL
+                                                                                          burnish their reputations in their social group (4).
+               THE FIVE MECHANISMS governing the emergence of cooperation ap-
+               ply to all manner of organisms, from amoebas to zebras (and
+               even, in some cases, to genes and other components of cells). This         Why? Because only humans have full-blown language—and, by
+               universality suggests that cooperation has been a driving force in         extension, names for one another—which allows us to share in-
+               the evolution of life on earth from the beginning. Moreover, there         formation about everyone from our immediate family members
+               is one group in which the effects of cooperation have proved es-           to complete strangers on the other side of the globe. We are ob-
+               pecially profound: humans. Millions of years of evolution trans-           sessed with who does what to whom and why—we have to be to
+                                                                                                                                                                 TIM FLACH Getty Images (ants); REBECCA YALE Getty Images (lions)
+
+
+
+
+               formed a slow, defenseless ape into the most influential creature          best position ourselves in the social network around us. Studies
+               on the planet, a species capable of inventing a mind-boggling ar-          have shown that people decide on everything from which chari-
+               ray of technologies that have allowed our kind to plumb the                ties to sponsor to which corporate start-ups to fund based in part
+               depths of the ocean, explore outer space and broadcast our                 on reputation. My Harvard colleague Rebecca Henderson, an ex-
+               achievements to the world in an instant. We have accomplished              pert on competitive strategy in the business world, notes that
+               these monumental feats by working together. Indeed, humans                 Toyota gained a competitive edge over other car manufacturers
+               are the most cooperative species—supercooperators, if you will.            in the 1980s in part because of its reputation for treating suppli-
+                   Given that the five mechanisms of cooperation occur through-           ers fairly.
+               out nature, the question is: What makes humans, in particular, the             The interplay between language and indirect reciprocity leads
+               most helpful of all? As I see it, humans, more than any other crea-        to rapid cultural evolution, which is central to our adaptability as
+               ture, offer assistance based on indirect reciprocity, or reputation.       a species. As the human population expands and the climate
+
+
+               38 Scientific American, July 2012
+
+
+
+
+sad0712Nowa5p.indd 38                                                                                                                                     5/22/12 3:26 PM
+                                                                                                                                                                            All for One
+                                                                                                                                          thankfully, not all hope is lost. A series of computerized experi-
+                                                                                                                                          ments conducted by Manfred Milinski of the Max Planck Insti-
+                                                                                                                                          tute for Evolutionary Biology in Plön, Germany, and his col-
+                                                                                                                                          leagues have revealed several factors that motivate people to be
+                                                                                                                                          good stewards of the commons in public goods games. The re-
+                                                                                                                                          searchers gave each subject ¤40 and had them play a game via
+                                                                                                                                          computer in which the object was to use the money to keep the
+                                                                                                                                          earth’s climate under control. Participants were told that for
+                                                                                                                                          each round of the game, they had to donate some of their money
+                                                                                                                                          into a common pool. If at the end of 10 rounds there was ¤120 or
+                                                                                                                                          more in the common pool, then the climate was safe and the
+                                                                                                                                      2   players would go home with the money they had left over. If
+                                                                                                                                          they raised less than ¤120, then the climate would break down
+                                                                                                                                          and everyone would lose all their money.
+                                                                                                                                              Although the players often failed to save the climate, missing
+                                                                                                                                          the mark by a few euros, the investigators observed differences
+                                                                                                                                          in their behavior from round to round that hint at what inspires
+                                                                                                                                          generosity. The researchers found that players were more altru-
+                                                                                                                                          istic when they received authoritative information about cli-
+                                                                                                                                          mate research, indicating that people need to be convinced that
+                                                                                                                                          there really is a problem to make sacrifices for the greater good.
+                                                                                                                                          They also acted more generously when they were allowed to
+                                                                                                                                          make their contributions publicly rather than anonymously—
+                                                                                                                                          that is, when their reputation was on the line. Another study by
+                                                                                                                                          researchers at Newcastle University in England underscored
+                                                                                                                                          the importance of reputation by finding that people are more
+                                                                                                                                          generous when they feel they are being watched.
+                                                                                                                                              These factors come into play every month when I receive my
+                                                                                                                                          home’s gas bill. The bill compares my household’s consumption
+                                                                                                                                          with both the average household gas consumption in my neigh-
+                                                                                                                                          borhood outside Boston and that of the most efficient homes.
+                                                                                                                                          Seeing how our usage stacks up against our neighbors’ motivates
+                                                                                                                                      4   my family to use less gas: every winter we try to lower the tem-
+                                                                                                                                          perature in the house by one degree Fahrenheit.
+                                                                                                                                              Evolutionary simulations indicate that cooperation is intrin-
+                                                                                                                                          sically unstable; periods of cooperative prosperity inevitably
+                                                                                                                                          give way to defective doom. And yet the altruistic spirit always
+                                                                   changes, we will need to harness that adaptability and figure out      seems to rebuild itself; our moral compasses somehow realign.
+                                                                   ways to work together to save the planet and its inhabitants. Giv-     Cycles of cooperation and defection are visible in the ups and
+                                                                   en our current environmental track record, our odds of meeting         downs of human history, the oscillations of political and finan-
+                                                                   that goal do not look great. Here, too, game theory offers insights.   cial systems. Where we humans are in this cycle right now is un-
+                                                                   Certain cooperative dilemmas that involve more than two players        certain, but clearly we could be doing a better job of working to-
+                                                                   are called public goods games. In this setting, everyone in the        gether to solve the world’s most pressing problems. Game theory
+                                                                   group benefits from my cooperation, but all else being equal, I in-    suggests a way. Policy makers should take note of indirect reci-
+                                                                   crease my payoff by switching from cooperation to defection.           procity and the importance of information and reputation in
+                                                                   Thus, although I want others to cooperate, my “smart” choice is to     keeping defectors in check. And they should exploit the capacity
+                                                                   defect. The problem is that everyone in the group thinks the same      of these factors to make better cooperators of us all in the moth-
+    Getty Images (cells); Oscar Tarneberg Getty Images (monkeys)
+
+
+
+
+                                                                   way, and so what begins as cooperation ends in defection.              er of all public goods games: the seven-billion-person mission to
+                                                                      In the classic public goods scenario known as the Tragedy of        conserve the rapidly dwindling resources of planet Earth.
+                                                                   the Commons, described in 1968 by the late ecologist Garrett
+                                                                                                                                                                          more to explore
+                                                                   Hardin, a group of livestock farmers who share grazing land al-
+                                                                   low their animals to overgraze on the communal turf, despite              Five Rules for the Evolution of Cooperation. Martin A. Nowak in Science, Vol. 314, pages
+                                                                                                                                             1560–1563; December 8, 2006.
+                                                                   knowing that they are ultimately destroying everyone’s re-
+                                                                                                                                             Super Cooperators: Altruism, Evolution, and Why We Need Each Other to Succeed.
+                                                                   source, including their own. The analogies to real-world con-             Martin A. Nowak, with Roger Highfield. Free Press, 2012.
+                                                                   cerns about natural resources—from oil to clean drinking wa-
+                                                                                                                                             SCIENTIFIC AMERICAN ONLINE
+                                                                   ter—are obvious. If cooperators tend to defect when it comes to           View a slide show of cooperative species at
+                                                                   custodianship of communal assets, how can we ever hope to                 ScientificAmerican.com/jul2012/cooperation
+                                                                   preserve the planet’s ecological capital for future generations?
+
+
+                                                                                                                                                                                    July 2012, ScientificAmerican.com 39
+
+
+
+
+sad0712Nowa4p.indd 39                                                                                                                                                                                                                   5/21/12 5:15 PM
+

@@ -1,0 +1,176 @@
+SYS 304
+Trade Studies, Risk, and Decision Analysis
+
+
+    Advanced Trade Studies
+     and Decision Analysis
+           Methods
+
+     Simulation Approaches 1
+Spreadsheet Simulation
+ Popular, very used tool.
+ Can be used for simple simulation models.
+  ◼   Typically, static models.
+        Risk analysis, financial/investment scenarios.
+
+  ◼   Only the simplest of dynamic models.
+ Two examples:
+  ◼ Newsvendor problem.
+  ◼ Waiting times in single-server queue.
+        Special recursion valid only in this case.
+Newsvendor Problem – Setup
+ Newsvendor sells newspapers on the street.
+   ◼   Buys for c = $0.55 each, sells for r = $1.00 each.
+ Each morning, buys q copies.
+   ◼   q is a fixed number, same every day.
+ Demand during a day:              D = max (X, 0).
+   ◼   X ~ normal ( = 135.7,  = 27.1), from historical data.
+         X rounds X   to nearest integer.
+ If D  q, satisfy all demand, and q – D  0 left
+  over, sell for scrap at s = $0.03 each.
+ If D > q, sells out (sells all q copies), no scrap.
+   ◼   But missed out on D – q > 0 sales.
+ What should q be?
+Newsvendor Problem – Formulation
+ Choose q to maximize expected profit per day.
+   ◼ q too small – sell out, miss $0.45 profit per paper.
+   ◼ q too big – have left over, scrap at a loss of $0.52 per
+     paper.
+ Classic operations-research problem.
+   ◼ Many versions, variants, extensions, applications.
+   ◼ Much research on exact solution in certain cases.
+   ◼ But easy to simulate, even in a spreadsheet.
+
+ Profit in a day, as a function of q:
+   W(q) = r min (D, q) + s max (q – D, 0) – cq.
+              Sales revenue        Scrap revenue           Cost
+        W(q) is a random variable – profit varies from day to day.
+
+ Maximize E(W(q)) over nonnegative integers q.
+Newsvendor Problem – Simulation
+ Set trial value of q, generate demand D, compute
+  profit for that day.
+  ◼   Then repeat this for many days independently, average
+      to estimate E(W(q)).
+        Also get confidence interval, estimate of P(loss), histogram
+         of W(q).
+  ◼   Try for a range of values of q.
+ Need to generate demand D = max (X, 0).
+  ◼   So need to generate X ~ normal ( = 135.7,  = 27.1).
+        (Much) ahead - generating random variates.
+
+  ◼   In this case, generate X     = −,(U).
+       U is a random number distributed uniformly on [0, 1].
+       −,(U) is cumulative distribution function of normal (, )
+         distribution.
+Newsvendor Problem – Excel
+ File Newsvendor.xls
+ Input parameters in cells B4 – B8 (blue).
+ Trial values for q in row 2 (pink).
+ Day number (1, 2, ..., 30) in column D.
+ Demands in column E for each day:
+      = MAX(ROUND(NORMINV(RAND(), $B$7, $B$8), 0), 0)
+
+        Rounding          1         U(0, 1)                  
+         function                 random number
+
+                                    X ~ normal (, )
+                                                        Round to
+  RAND() is “volatile”   $ pins down following           nearest
+  so regenerates on      column or row when                         MAX 2nd
+                                                          integer
+  any edit, or F9 key    copying                                    argument
+Newsvendor Problem – Excel (cont’d.)
+ For each q:
+  ◼ “Sold” column: number of papers sold that day.
+  ◼ “Scrap” column: number of papers scrapped that day.
+  ◼ “Profit” column: profit (+, –, 0) that day.
+  ◼ Placement of “$” in formulas to facilitate copying.
+ At bottom of “Profit” columns (green):
+  ◼ Average profit over 30 days.
+  ◼ Half-width of 95% confidence interval on E(W(q)).
+        Value 2.045 is upper 0.975 critical point of t distribution
+         with 29 d.f.
+        Plot confidence intervals as “I-beams” on left edge.
+
+  ◼   Estimate of P(W(q) < 0).
+        Uses COUNTIF function.
+
+ Histograms of W(q) at bottom.
+  ◼   Vertical red line at 0, separates profits, losses.
+Newsvendor Problem – Results
+ Fine point – used same daily demands (column E)
+  for each day, across all trial values of q.
+  ◼ Would have been valid to generate them independently.
+  ◼ Why is it better to use the same demands for all q?
+
+ Results:
+  ◼ Best q is about 140, maybe a little less.
+  ◼ Randomness in all the results (tap F9 key).
+        All demands, profits, graphics change.
+
+        Confidence-interval, histogram plots change.
+
+        Reminder that these are random outputs, random plots.
+
+  ◼   Higher q  more variability in profit.
+        Histograms at bottom are wider for larger q.
+
+        Higher chance of both large profits, but higher chance of
+         loss, too.
+        Risk/return tradeoff can be quantified – risk taker vs. risk-
+         averse.
+Single-Server Queue – Setup
+ Like hand simulation, but:
+   ◼ Interarrival times ~ exponential with mean 1/ = 1.6 min.
+   ◼ Service times ~ uniform on [a, b] = [0.27, 2.29] min.
+   ◼ Stop when 50th waiting time in queue is observed.
+         i.e., when 50th customer begins service, not exits system.
+
+ Watch waiting times in queue WQ1, WQ2, ..., WQ50.
+   ◼   Important – not watching anything else, unlike before.
+ Si = service time of customer i.
+ Ai = interarrival time between custs. i and i+1.
+ Lindley’s recursion (1952): Initialize WQ1 = 0,
+  Wqi+1 = max (WQi + Si – Ai, 0), i = 2, 3, ...
+Single-Server Queue – Simulation
+ Need to generate random variates: let U ~ U[0, 1].
+  ◼ Exponential (mean 1/): Ai = –(1/) ln(1 – U)
+  ◼ Uniform on [a, b]: Si = a + (b – a) U
+ File MU1.xls
+ Input parameters in cells B4 – B6 (blue).
+  ◼   Some theoretical outputs in cells B8 – B10.
+ Customer number (i = 1, 2, ..., 50) in column D.
+ Five IID replications (three columns for each).
+  ◼ IA = interarrival times, S = service times.
+  ◼ WQ = waiting times in queue (plot, thin curves).
+        First one initialized to 0, remainder use Lindley’s recursion.
+           ▪ Curves rise from 0, variation increases toward right.
+        Creates positive autocorrelation down the WQ columns.
+           ▪ Curves have less abrupt jumps than if WQi’s were
+             independent.
+Single-Server Queue – Results
+ Column averages (green).
+  ◼ Average interarrival, service times close to expectations.
+  ◼ Average WQi within each replication.
+        Not too far from steady-state expectation.
+
+        Considerable variation.                        Var ( Si ) + ( E ( Si )) 2
+                                           E (WQ ) = 
+        Many are below it (why?).                        2(1 − E ( Si ))
+ Cross-replication (by customer) averages.
+  ◼   Column T, thick line in plot to dampen noise.
+ Why no sample variance, histograms of WQi’s?
+  ◼ Could have computed both, as in newsvendor.
+  ◼ Nonstationarity – what is a “typical” WQi here?
+  ◼ Autocorrelation – biases variance estimate, may bias
+    histogram if run is not “long enough”.
+Spreadsheet Simulation Software
+ Popular for static models.
+  ◼   Add-ins to Excel: @RISK, Crystal Ball, RiskSim (TreePlan).
+ Inadequate tool for dynamic simulations if there’s
+  any complexity.
+  ◼ Extremely easy to simulate the single-server queue in
+    Arena.
+  ◼ Can build very complex dynamic models with Arena.
+

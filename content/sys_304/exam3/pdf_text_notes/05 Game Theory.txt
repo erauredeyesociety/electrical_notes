@@ -1,0 +1,525 @@
+SYS 304
+Trade Studies, Risk, and Decision Analysis
+
+
+    Advanced Trade Studies
+     and Decision Analysis
+           Methods
+
+            Game Theory
+Game Theory
+ Life is full of conflict and competition.
+   ◼ Adversaries in conflict include parlor games, military
+     battles, political campaigns, advertising and marketing
+     campaigns by competing business firms, etc.
+   ◼ Final outcome depends primarily upon the combination of
+     strategies selected by the adversaries.
+ Game theory is a mathematical theory that deals
+  with the general features of competitive situations
+  in a formal, abstract way.
+   ◼   Applications in various areas, including decision making.
+Game Theory
+ Simple case: two-person, zero-sum games.
+  ◼ Involves only two adversaries or players.
+  ◼ Called zero-sum games because one player wins whatever
+    the other one loses, so that the sum of their net winnings
+    is zero.
+Two-Person, Zero-Sum Games
+ Odds and evens.
+  ◼ Two players.
+  ◼ Each player simultaneously selects number 1 or 2.
+  ◼ The numbers from both players are added together.
+  ◼ Consider player 1 wins when the outcome is even.
+  ◼ Then, player 2 wins when the outcome is odd.
+  ◼ The bet is $1.
+  ◼ If the total number is even, then player 1 wins.
+  ◼ If the total number is odd, then player 2 wins.
+Two-Person, Zero-Sum Games
+ Odds and evens.
+  ◼ Each player has two strategies: choose number 1 or 2.
+  ◼ Payoff table:
+
+                                   Player 2
+      Strategy
+                             1                  2
+
+                 1           1                  -1
+ Player 1
+                 2          -1                  1
+
+                                   Player 1
+      Strategy
+                             1                  2
+
+                 1          -1                  1
+ Player 2
+                 2           1                  -1
+Two-Person, Zero-Sum Games
+ Characterized by:
+  ◼ Strategies of player 1.
+  ◼ Strategies of player 2.
+  ◼ Payoff table.
+
+
+
+ Before the game begins, each player knows the
+  available strategies, the ones the opponent has
+  available, and the payoff table.
+ Actual play of the game consists of each player
+  simultaneously choosing a strategy without
+  knowing the opponent’s choice.
+Two-Person, Zero-Sum Games
+ Strategies:
+  ◼ One simple action.
+  ◼ Predetermined rule that specifies completely how one
+    intends to respond to each possible circumstance at each
+    stage of the game.
+ Payoff table:
+  ◼   Shows the gain (positive or negative) that would result
+      from each combination of strategies for the two players.
+Two-Person, Zero-Sum Games
+ Rational criteria for selecting a strategy.
+   ◼ Both players are rational.
+   ◼ Both players choose their strategies solely to promote their
+     own welfare (no compassion for the component).
+Example – Problem Formulation
+ Two players and three identical strategies for each
+  player.
+ Both players use the same formulation for choosing
+  their strategies.
+ Payoff table: value of choosing one of the strategy
+  for a player when the other player chooses their
+  own strategies.
+Example – Payoff Table
+ From Player 1 viewpoint.
+
+
+                                 Player 2
+      Strategy
+                        1         2           3
+
+                 1
+
+  Player 1       2
+
+                 3
+
+
+
+ Use 3 alternative sets of data for the payoff table to
+  illustrate how to solve 3 different types of games.
+Example – Dominated Strategies
+ A strategy is dominated by a second strategy if the
+  second strategy is always at least as good (and
+  sometimes better) regardless of what the opponent
+  does.
+  ◼   A dominated strategy can be eliminated immediately from
+      further consideration.
+
+                                      Player 2
+          Strategy
+                             1          2            3
+                     1       1          2            4
+                     2       1          0            5
+      Player 1
+                     3       0          1           -1
+Example – Dominated Strategies
+ From Player 1 viewpoint:
+  ◼   Strategy 3 is dominated by Strategy 1.
+                                      Player 2
+        Strategy
+                            1          2         3
+                   1        1          2         4
+   Player 1        2        1          0         5
+
+ From Player 2 viewpoint:
+  ◼   No dominated strategies.
+Example – Dominated Strategies
+ Reduced payoff table:
+
+
+
+                       1           2          3
+            1          1           2          4
+            2          1           0          5
+
+
+
+ Because both players are assumed to be rational,
+  Player 2 also can deduce that Player 1 has only
+  these 2 strategies remaining.
+  ◼ Player 2 now does have a dominated strategy.
+  ◼ Strategy 3 is dominated by both Strategy 1 and Strategy 2
+Example – Dominated Strategies
+ Reduced payoff table:
+
+
+                                1          2
+                    1           1          2
+                    2           1          0
+
+
+  ◼   Strategy 2 for Player 1 is dominated by Strategy 1.
+Example – Dominated Strategies
+ Reduced payoff table:
+
+
+
+                                 1           2
+                    1            1           2
+
+
+ Strategy 2 for Player 2 is now dominated by
+  Strategy 1.
+ Both players should select their Strategy 1.
+  ◼   Player 1 will receive a payoff of 1 from Player 2.
+Dominated Strategies
+ Very useful for reducing the size of the payoff
+  table.
+ Can also help in identifying the optimal solution for
+  the game.
+Game Theory
+ Value of the game.
+  ◼ Payoff to one player when both players play optimally.
+  ◼ A game with a value of zero is called fair game.
+Example
+ Suppose the payoff table for Player 1 is as follows.
+
+
+                                  Player 2
+        Strategy
+                          1        2           3
+                   1     -3        -2          6
+                   2      2        0           2
+    Player 1
+                   3      5        -2         -4
+
+
+
+
+ No dominated strategies.
+Example – Player 1 Thinking
+ Select 1: could win 6, but could lose as much as 3.
+  ◼   Player 2 is rational and such will seek a strategy that will
+      protect him from large payoffs to Player 1.
+ Select 3: could win 5, but could lose as much as 4.
+  ◼   Player 2 is rational and such will seek a strategy that will
+      protect him from large payoffs to Player 1.
+
+                                           Player 2
+          Strategy
+                                 1          2              3
+                      1         -3          -2             6
+                      2          2          0              2
+      Player 1
+                      3          5          -2            -4
+Example – Player 1 Thinking
+ Select 2: guaranteed to not to lose anything, and
+  even could win something.
+  ◼ Rational choice for Player 1 against his rational opponent.
+  ◼ Provides the best guarantee (a payoff of 0).
+
+
+
+
+                                       Player 2
+          Strategy
+                             1           2            3
+                     1       -3         -2            6
+                     2       2           0            2
+      Player 1
+                     3       5          -2            -4
+Example – Player 2 Thinking
+ Select 1: could lose as much as 5.
+ Select 3: could lose as much as 6.
+ Select 2: guaranteed to break even.
+  ◼ Rational choice for Player 2.
+  ◼ Seek the best guarantee against a rational opponent.
+
+
+
+                                      Player 2
+          Strategy
+                             1          2            3
+                     1      -3         -2            6
+                     2       2          0            2
+      Player 1
+                     3       5         -2           -4
+Example – Minimax Criterion
+ Minimize the maximum losses whenever the
+  resulting choice of strategy cannot be exploited by
+  his opponent to improve their position.
+  ◼   Select a strategy that would be best even if the selection
+      were being announced to the opponent before the
+      opponent chooses a strategy.
+
+                                         Player 2
+          Strategy
+                               1           2            3
+                     1         -3         -2            6
+                     2         2           0            2
+      Player 1
+                     3         5          -2            -4
+Example – Minimax Criterion
+ Player 1 should select the strategy whose minimum
+  payoff is largest.
+  ◼   Maximin strategy.
+ Player 2 should select the strategy whose
+  maximum payoff to Player 1 is the smallest.
+  ◼   Minimax strategy.
+                                  Player 2
+   Strategy
+                       1     2           3      Min
+              1      -3      -2          6       -3
+              2        2     0           2    0 Maximin
+Player 1
+              3        5     -2          -4      -4
+            Max        5      0          6
+                           Minimax
+Example – Saddle Point
+ Same entry in the payoff table yields both the
+  maximin and the minimax values.
+   ◼   Both the minimum in its row and maximum in its column.
+ Neither player can take advantage of the
+  opponent’s strategy to improve own position.
+ Neither player has any motive to consider changing
+  strategies, either to take advantage of the
+  opponent or to prevent the opponent to take
+  advantage.
+ Stable position (also called equilibrium position) in
+  which players should use their maximin and
+  minimax strategies, respectively.
+Example
+ Suppose the payoff table for Player 1 changed to:
+
+
+                                 Player 2
+        Strategy
+                         1        2             3
+                   1     0        -2            2
+                   2     5        4             -3
+    Player 1
+                   3     2        3             -4
+
+
+
+
+ No dominated strategies.
+ Players attempt to apply minimax criterion.
+Example – Apply Minimax Criterion
+ Player 1 can guarantee a loss of no more than 2 by
+  playing Strategy 1.
+ Player 2 can guarantee a loss of no more than 2 by
+  playing Strategy 3.
+  ◼   No saddle point.
+                                  Player 2
+   Strategy
+                         1   2           3         Min
+              1          0   -2          2      -2 Maximin
+              2          5   4           -3         -3
+Player 1
+              3          2   3           -4         -4
+            Max          5   4           2
+                                      Minimax
+Example – Apply Minimax Criterion
+ If both players play their minimax strategies.
+   ◼ Player 1 would win 2 from Player 2, which would make
+     Player 2 unhappy.
+   ◼ Because Player 2 is rational and can therefore foresee the
+     outcome, he would then conclude that he can do much
+     better, actually winning 2 rather than losing 2, by choosing
+     Strategy 2 instead.
+   ◼ Because Player 1 is also rational, he would anticipate the
+     switch and conclude that he can improve considerably,
+     from -2 to 4, by changing to Strategy 2.
+   ◼ Realizing this, Player 2 would then consider switching back
+     to Strategy 3 to convert a loss of 4 to a gain of 3.
+   ◼ The possibility of a switch would cause Player 1 to consider
+     again using Strategy 1, after which the whole cycle would
+     start over again.
+Example – Unstable Solution
+ Even though this game is played only once, any
+  tentative choice of a strategy leaves the player with
+  a motive to consider changing strategies, either to
+  take advantage of his opponent or to prevent the
+  opponent from taking advantage of him.
+ The suggested solution (Player 1 plays Strategy 1
+  and Player 2 plays Strategy 3) is an unstable
+  solution.
+   ◼   Need a more satisfactory solution.
+Example – Finding a Solution
+ Whenever one player’s strategy is predictable, the
+  opponent can take advantage of this information to
+  improve his position.
+  ◼ Therefore, an essential feature of a rational plan for
+    playing a game such as this one is that neither player
+    should be able to deduce which strategy the other one will
+    use.
+  ◼ Rather than applying some known criterion for determining
+    a single strategy that will definitely be used, it is necessary
+    to choose among alternative acceptable strategies on some
+    kind of random basis.
+  ◼ Neither player knows in advance which of his own
+    strategies will be used, let alone what his opponent will do.
+Games With Mixed Strategies
+ Whenever a game does not have a saddle point,
+  game theory advises each player to assign a
+  probability distribution over the set of strategies.
+
+xi = probability that player 1 will use strategy i (i = 1, 2, …, m)
+m = number of available strategies to player 1
+x1 + x2 + … + xm = 1; x1, x2, … xm ≥ 0
+yi = probability that player 2 will use strategy j (j = 1, 2, …, n)
+n = number of available strategies to player 2
+y1 + y2 + … + ym = 1 ; y1 , y2 , … ym ≥ 0
+   (x1, x2, … xm) and (y1, y2, … ym) are called mixed strategies
+   Also, original strategies are called pure strategies
+Games With Mixed Strategies
+ When the game is actually played, each player
+  uses one of the pure strategies.
+ But, the pure strategy is chosen by using some
+  random device to obtain a random observation
+  from the probability distribution specified by the
+  mixed strategy, where the observation indicates
+  which particular pure strategy to use.
+Games With Mixed Strategies
+ Mixed strategies:
+  ◼ (x1, x2, … xm) = (0.5, 0.5, 0)
+  ◼ Player 1 randomly selects between strategies 1 and 2.
+  ◼ (y1, y2, … ym) = (0, 0.5, 0.5)
+  ◼ Player 2 randomly selects between strategies 2 and 3.
+
+
+
+                                    Player 2
+       Strategy
+                           1          2            3
+                  1        0          -2           2
+                  2        5          4            -3
+   Player 1
+                  3        2          3            -4
+Games With Mixed Strategies
+ There is no completely satisfactory measure of
+  performance available for evaluating mixed
+  strategies.
+  ◼   An expected one is the expected value (payoff):
+
+
+ Expected payoff for player 1 =
+
+
+  ◼   pij = payoff if player 1 uses pure strategy i and player 2
+      uses pure strategy j.
+
+  ◼ Expected payoff for player 1 = (0.25)(-2+2+4-3) = 0.25
+  ◼ Average payoff of the game is played many times.
+  ◼ No information about the risk involved.
+Games With Mixed Strategies
+ Extension of Minimax Criterion to games that lack
+  a saddle point.
+  ◼ A given player should select the mixed strategy that
+    minimizes the maximum expected loss to himself (from
+    Player 2 perspective).
+       Maximum expected loss = largest possible expected
+        payoff that can be administered by any of the
+        opponent’s mixed strategies.
+  ◼ A given player should select the mixed strategy that
+    maximizes the minimum expected payoff to the player
+    (from Player 1 perspective).
+       Minimum expected payoff = smallest possible
+        expected payoff that can result from any mixed
+        strategy with which the opponent can counter.
+More on Minimax Criterion
+ Odds and Evens Game.
+  ◼ No saddle point – unstable solution.
+  ◼ Rational way to play is to make the choice completely
+    randomly each time.
+
+
+                                    Player 2
+         Strategy
+                          1            2           Min
+
+                    1     1            -1           -1
+      Player 1
+                    2     -1           1            -1
+
+                 Max      1            1
+More on Minimax Criterion
+ Example:
+  ◼   Value of the game = 3
+
+                                    Player 2
+      Strategy
+                          1            2         Min
+
+                 1        3            5          3
+ Player 1            Saddle point              Maximin
+                 2        1           -2         -2
+
+             Max         3             5
+                      Minimax
+More on Mixed Strategies
+ If X chooses X1, then P percent of the time the payoff for Y
+  will be Y1, and (1-P) percent of the time, the payoff will be Y2
+ If X chooses X2, then P percent of the time the payoff for Y
+  will be Y1, and (1-P) percent of the time, the payoff will be Y2
+ If the expected values for Y are the same, then the expected
+  value for Y will not depend on the strategy chosen by X.
+
+
+                                           Player Y
+               Strategy
+                                      Y1               Y2
+                                      P               1-P
+                          X1          4               2
+         Player X         Q
+                         X2           1               10
+                        1-Q
+More Complicated Games
+ Two-person, constant sum-game.
+  ◼ Sum of payoffs to the two player is a fixed constant
+    (positive or negative) regardless which combination of
+    strategies is selected.
+  ◼ The two players may share some reward or some cost for
+    participating in the game.
+  ◼ Zero-sum game approach applies.
+
+ n-person game.
+  ◼ More than 2 players may participate in the game.
+  ◼ In many competitive situations, frequently more than 2
+    competitors are involved.
+  ◼ Theory is more complicated and less satisfactory.
+More Complicated Games
+ Nonzero-sum game.
+  ◼ Sum of payoffs to the players need not be 0 (or any other
+    fixed constant).
+  ◼ Many competitive situations include noncompetitive
+    aspects that contribute to the mutual advantage or
+    mutual disadvantage of the players.
+  ◼ Size of mutual gain (or loss) to players depends on the
+    combination of strategies chosen.
+More Complicated Games
+ Nonzero-sum game.
+  ◼ Because mutual gain is possible, nonzero-sum games are
+    further classified in terms of the degree to which the
+    players are permitted to cooperate.
+  ◼ At one extreme is the non-cooperative game, where there
+    is no preplay communication between the players.
+  ◼ At the other extreme is the cooperative game, where
+    preplay discussions and binding agreements are
+    permitted.
+  ◼ Competitive situations involving trade regulations
+    between countries, or collective bargaining between labor
+    and management.
+  ◼ For two or more players, cooperative games allow some
+    of the players to form coalitions.
+More Complicated Games
+ Infinite games.
+  ◼ The players have an infinite number of pure strategies
+    available to them.
+  ◼ The strategy can be represented by a continuous decision
+    variable.
+Prisoner’s
+Dilemma
+

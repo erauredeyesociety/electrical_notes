@@ -1,0 +1,231 @@
+SYS 304
+Trade Studies, Risk, and Decision Analysis
+
+
+    Advanced Trade Studies
+     and Decision Analysis
+           Methods
+
+   Quality Function Deployment
+Quality Function Deployment
+ Introduced by Yoji Akao, 1966.
+  ◼ Kobe Shipyard of Mitsubishi Heavy Industries, Ltd., Japan.
+  ◼ Used in manufacturing, heavy industry, and systems
+    engineering.
+  ◼ Also applied to software engineering by IBM, HP, Texas
+    Instruments, etc.
+ Supports information transformation.
+  ◼   Customer requirements into product attributes.
+ Mechanism can be extended and deployed
+  successively across multiple levels of system
+  decomposition and definition.
+Quality Function Deployment
+ Technique for discovering customer requirements
+  and defining major quality assurance points to be
+  used throughout the production phase.
+  ◼   Provides a structure for ensuring that customers’ needs
+      and desires are acknowledged and directly translated into
+      technical requirements, from analysis through
+      implementation to deployment.
+ Constructs relationship matrices between customer
+  needs, technical requirements, priorities, and (if
+  needed) competitor assessment.
+Quality Function Deployment
+ Methodology for translating customer needs into
+  specific system or product characteristics, and then
+  for specifying the processes and tasks needed to
+  produce that system or product.
+  ◼ Requires that the project team articulate the means by
+    which the product or system designed will achieve
+    customer requirements.
+  ◼ Process starts with market needs and then uses a
+    planning matrix called the house of quality to translate the
+    needs or requirements into the necessary technical
+    requirements.
+Graphical Representation
+ House of Quality
+House of Quality
+ Uses expert opinion to facilitate and document
+  relevant information transformation.
+  ◼   Transformation of customer requirements (“What’s”)
+      into product attributes (“How’s”).
+ Requirements can be issued using a top-down or
+  a bottom-up approach.
+  ◼ Tree diagram for top-down approach.
+  ◼ Affinity diagram for bottom-up approach.
+  ◼ Prioritization matrix to enable prioritization of
+    requirements.
+Supporting Tools for QFD
+House of Quality
+ Customer Requirements: “What’s”
+  ◼ Customer requirements competitive assessment.
+  ◼ Tree diagram for top-down decomposition.
+  ◼ Affinity diagram for bottom-up composition.
+
+ Importance Ranking.
+  ◼   Prioritization matrix to support prioritization of
+      requirements.
+ Correlation Matrix (Greenhouse).
+  ◼ Measure correlation among customer requirements.
+  ◼ Supports execution of trade-off studies in the design
+    process.
+  ◼ Can help in identifying conflicting requirements.
+  ◼ Use of the greenhouse is optional.
+House of Quality
+ System Requirements: “How’s”
+   ◼ Technical competitive assessment.
+   ◼ Tree diagram for top-down decomposition.
+   ◼ Affinity diagram for bottom-up composition.
+
+ Technical Importance.
+   ◼   Estimated for each system attribute as a weighted sum
+       of all customer requirements relationship values, for
+       that attribute, where the weights are the importance
+       ratings for the customer requirements.
+ Technical Difficulty.
+   ◼ Design requirement assessed and documented for each
+     system attribute with a discrete scale.
+   ◼ Combination of technical importance and difficulty
+     provides a measure of technical risk.
+House of Quality
+ Direction of Improvement.
+  ◼ An upward arrow indicates “higher is better”
+  ◼ Downward arrow indicates “lower is better”
+  ◼ Zero denoted a target value.
+
+ Correlation Matrix (Roof).
+  ◼ Indicates whether an increase in a system attribute is
+    accompanied by an increase (positive correlation), no
+    change (zero correlation), or a decrease (negative
+    correlation) on another system attribute.
+      {positive, zero, negative}
+
+      {strong positive, weak positive, zero, weak
+       negative, strong negative}
+  ◼ Generation supported by expert opinion or tools such
+    as the interrelationship diagram.
+House of Quality
+ Correlation Matrix.
+House of Quality
+ Relationship Matrix (Main Room).
+  ◼ Captures the relational structure between the two sets of
+    attributes.
+  ◼ Importance of each system attribute relative to attaining
+    the different customer requirements.
+  ◼ More importance denotes a stronger relationship.
+
+ Customer Requirements Competitive Assessment.
+  ◼ Set of existing system is identified as competitors.
+  ◼ Based on experts assessment.
+
+ Technical Competitive Assessment.
+  ◼   Assessment done for competitive systems relative to
+      system attributes.
+House of Quality
+ Levels of decomposition.
+Quality Function Deployment
+ Advantages
+  ◼ Improves the involvement of users and managers.
+  ◼ Shortens the development lifecycle and improves overall
+    project development.
+  ◼ Supports team involvement by structuring communication
+    processes.
+  ◼ Provides a preventive tool that avoids the loss of
+    information.
+Quality Function Deployment
+ Disadvantages
+  ◼ Difficulty in expressing temporal requirements.
+  ◼ Difficulty in use with an entirely new project type.
+       How do you discover customer requirements for
+        something that does not exist?
+       How do you build and analyze the competitive
+        products?
+  ◼ Sometimes it is hard to find measurements for certain
+    functions and to keep the level of abstraction uniform.
+  ◼ As the feature list grows uncontrollably, the house of
+    quality can become a “mansion”
+Quality Function Deployment
+ Example:
+  ◼ House of Quality for a Television Remote Control
+    Switch.
+Television Remote Control Switch
+ Rows: Customer Requirements (Needs).
+  ◼ What the customers think is important for the product.
+  ◼ Product “what’s”
+  ◼ Importance to customer: requirements have been rank
+    ordered 1-6 by customer preference.
+      “Multifunction buttons” is rated the highest.
+
+      “RC easy to see/find” is rated the lowest.
+
+ Columns: Technical Requirements.
+  ◼ Requirements or attributes of the product, the ways that
+    the product meets customer requirements.
+  ◼ Product “how’s”
+Television Remote Control Switch
+ Central matrix: Relationships between the “what’s”
+  and “how’s”
+  ◼ Show the strength of the relationships: strong positive,
+    positive, negative, strong negative.
+  ◼ “Buttons easy to use” has a strong positive relationship to
+    the “Size of buttons” and “Color of buttons”
+  ◼ “Buttons easy to use” has a positive relationship to the
+    “Dimensions of the RC chassis”
+  ◼ Each relationship has a numerical weighting of 1, 3, or 9.
+Television Remote Control Switch
+ Importance weighting.
+  ◼ Weights of the symbols in each column are summed to
+    determine the relative importance of the technical
+    attributes.
+  ◼ Most important technical attribute is “Dimensions of RC
+    chassis”
+      Weight = 9 + 3 + 1 + 9 = 22
+
+  ◼ Next most important attributes is “Size of buttons” and
+    “Color of RC chassis”
+      Weight = 9 + 3 = 12
+Television Remote Control Switch
+ Roof: Correlation matrix among the technical
+  attributes.
+  ◼ “Dimensions of RC chassis” has a strong positive
+    correlation with “Size of buttons” and “Number of buttons”
+  ◼ “Size of buttons” has a strong negative correlation with
+    “Number of buttons”
+      Smaller buttons allow space for more buttons; large
+       buttons, space for fewer.
+ Target values.
+  ◼ Numerical or qualitative descriptions are design target set
+    for the technical attributes.
+  ◼ One target of the design is to keep the “Dimensions of RC
+    chassis” within “6 x 18 x 2”
+Television Remote Control Switch
+ Technical evaluation.
+  ◼ Graph compares the company on the technical attributes.
+  ◼ X = “us” against two of its competitors, A and B.
+  ◼ The company’s current product does relatively poorly on
+    the attributes of “Dimensions of RC chassis” and “Color of
+    buttons”
+  ◼ The company’s current product fares well on “Color of RC
+    chassis” and “Button press/return mechanism”
+  ◼ These evaluations are based on test results and opinions
+    of engineers.
+Television Remote Control Switch
+ Competitive evaluation.
+  ◼ Graph rates the company and its competitors in terms of
+    customer requirements based on customer surveys.
+  ◼ Customers think the company does best in “RC easy to
+    hold” but worst in terms of “Buttons easy to see”
+  ◼ Suggests areas in which designers might focus the effort
+    to gain a market niche.
+  ◼ Rating indicates that no company does well on “Buttons
+    easy to see” despite the fact that customers rank that
+    requirement second in importance.
+  ◼ A requirement that customers rank high, yet on which
+    they rank all companies low, suggests a design feature
+    that could be exploited to improve a company’s
+    competitive standing.
+Quality Function Deployment
+ Example:
+  ◼ House of Quality for a Steam Iron.
+Steam Iron Example
+

@@ -1,0 +1,778 @@
+SYS 304
+Trade Studies, Risk, and Decision Analysis
+
+
+    Advanced Trade Studies
+     and Decision Analysis
+           Methods
+
+Fuzzy Theory in Decision Analysis
+Fuzziness, Chaos, and Uncertainty
+ Think of the most of real-world things handled
+  daily.
+  ◼ They are fuzzy and highly uncertain in nature.
+  ◼ We need our knowledge and experience to handle them.
+  ◼ The methods and/or solutions to handle them are usually
+    highly dynamic (or sometimes chaotic) in nature.
+Fuzzy
+ Definition:
+   ◼ Something blurred or indistinct, in shape or outline
+     (Oxford English Dictionary).
+   ◼ Lacking in clarity or definition (Webster).
+
+
+
+ Means of specifying how well an object or property
+  satisfies a vague description.
+   ◼   “Lack of crispness” considered to be the state of a real-
+       world object or property.
+Fuzzy
+ Example:
+
+
+     “John is tall”
+
+     Is this true if John is 5’10”?
+     Most people would hesitate to answer “true” or “false”
+     preferring to say, “sort of”
+     This is not a question of uncertainty about the external
+     world, as we are sure of John’s height.
+     The term “tall” does not refer to a sharp demarcation of
+     objects into two classes.
+     We consider that there are degrees of tallness.
+Fuzzy Set Theory
+ L. A. Zadeh, Fuzzy Sets, Information and Control,
+  1965.
+  ◼   Describes the degree of belonging of an individual
+      member, which can exist as any real number between 0
+      and 1, instead of just either 0 or 1.
+ Fuzzy Set vs. Crisp Set.
+  ◼ “Lack of crispness” is in most cases the truth of a real-
+    world property.
+  ◼ Cannot determine exactly (100%) a certain characteristic.
+  ◼ All the measured qualities appearing in our world of
+    perception are fuzzy in the sense that it is not the quality
+    itself that is fuzzy, but rather that we cannot always
+    measure these physical qualities with 100% certainty.
+Fuzzy Set Theory
+ Extension of classic set theory.
+   ◼   Classic set theory: elements of fuzzy set theory either are
+       or are not members of the set.
+ Example:
+   ◼ Set of even natural positive numbers less than 10 is a
+     precise collection of four elements {2, 4, 6, 8}.
+   ◼ The set could be described as a membership function mA(x)
+     defined over some “universe of discourse,” where the
+     function takes on the value 1 when the argument x is an
+     element of set A, and 0 otherwise.
+   ◼ A fuzzy set offers the possibility for mA(x) to take on values
+     other than {0, 1}, say in the range (0, α), where the value
+     assumed indicates the degree of membership of x in A.
+   ◼ For consistency, the possible range of values is often
+     scaled to the real numbers between 0 and 1, inclusive.
+Fuzzy Set Theory
+ Example:
+  ◼ A membership mA(x) = 1 indicates that the element x is
+    definitely a member of A.
+  ◼ A membership mA(x) = 0 indicates that the element x is not
+    a member of A.
+  ◼ Intermediate values indicate intermediate degrees of
+    membership.
+  ◼ This intermediate range represents the extension of fuzzy
+    sets beyond the classic “crisp” sets.
+Fuzzy Set Theory
+ Back to the example:
+  ◼ Treat Tall as a fuzzy predicate.
+  ◼ The truth value of Tall(John) is a number between 0 and 1,
+    rather than being just true or false.
+ The name “fuzzy set” derives from the
+  interpretation of the predicate as implicitly
+  defining a set of its members.
+Fuzzy Set Operations
+ A fuzzy set is said to be empty if and only if its
+  membership function is identically 0 on the entire
+  universe of discourse X (all possible arguments to
+  the function).
+ Two fuzzy sets A and B are equal, A = B, if and only if
+  mA(x) = mB(x), for all x  X. This can be written mA = mB
+ The complement of a fuzzy set A is denoted A’ and
+  defined as mA’ = 1 – mA
+ The fuzzy set A is contained in or is a subset of B if
+  and only if mA ≤ mB
+Fuzzy Set Operations
+ The union of two fuzzy sets A and B is a fuzzy set
+  C = A  B with a membership function
+  mC(x) = max{mA(x), mB(x)}, x  X
+ The intersection of two fuzzy sets A and B is a
+  fuzzy set C = A  B with a membership function
+  mC(x) = min{mA(x), mB(x)}, x  X
+Fuzzy Set Operations
+ Example: flower that is yellow and fragrant.
+  ◼ mYellow(x) = 0.8
+  ◼ mFragrant(x) = 0.9
+  ◼ Flower membership in the fuzzy set of yellow and
+    fragrant flowers is min{0.8, 0.9} = 0.8
+  ◼ Flower membership in the fuzzy set of yellow or fragrant
+    flowers set is max{0.8, 0.9} = 0.9
+  ◼ Flower membership in the fuzzy set of flowers that are
+    not yellow is 1 – 0.8 = 0.2
+Fuzzy Relationships
+ Conditional Statements.
+  ◼   If the road is icy, then driving is dangerous.
+
+
+       If A then B
+
+  ◼ Universe of discourse for A and B need not be the same.
+  ◼ Universe of discourse that describes the relationship
+    between A and B is a Cartesian product A  B of all pairs
+    (a, b) where a  A and b  B
+  ◼ If R is a fuzzy relation from the fuzzy set A to the fuzzy
+    set B, R is a fuzzy subset of A  B, where every pair (a, b)
+    has some associated membership value mR(a, b)
+Fuzzy Relationships
+  ◼ Suppose A = small numbers, over a universe of discourse
+    U = {1, 2} and B = large numbers, over a universe of
+    discourse V = {1, 2, 3}
+  ◼ Membership values for elements in A are given in ordered
+    pairs (a, mA(x)) as (1, 1), (2, 0.6)
+  ◼ Membership values for elements in B are given as ordered
+    pairs (b, mB(x)) as (1, 0.2), (2, 0.5), (3, 1)
+  ◼ Then R = A  B is defined to take on a membership that
+    equals the min{mA(x), mB(x)} for each pair (a, b)
+  ◼ R is the fuzzy subset of U  V that describes the
+    membership of each of its constituent elements (u, v) in
+    terms of the relationship between fuzzy sets A and B
+                           1          2           3
+               1          0.2        0.5         1.0
+               2          0.2        0.5         0.6
+Fuzzy Relationships
+ Fuzzy relationship can be chained together.
+  ◼   If R is a fuzzy relation from X to Y and S is a fuzzy relation
+      from Y to Z, then the composition of fuzzy relations R and
+      S is defined over the pairs (x, z)  X  Z as
+        R  S = maxij[min{mR(x, y), mS(y, z)}]
+Fuzzy Control
+ By aggregating fuzzy rules it is possible to design
+  complex algorithms for fuzzy control.
+ Applications:
+   ◼ Maintain an airplane in straight-and-level flight.
+   ◼ Hold the temperature of a room at 68 degrees.
+   ◼ Keep a car engine at 800 revolutions per minute at idle,
+     even when the air conditioner is turned on or off.
+   ◼ Dispatch the elevators in a building to respond to all
+     requests in minimum time.
+Fuzzy Logic
+ Propositional logic:
+
+       P     Q        P       P Q     P Q     PQ      PQ
+  false    false       true     false    false   true     true
+  false    true        true     false    true    true     false
+  true     false       false    false    true    false    false
+  true     true        false    true     true    true     true
+   ◼ P ⇒ Q means if P is true then Q is also true; if P is false
+     then nothing is said about Q
+   ◼ P ⇔ Q means P is true if Q is true and P is false if Q is false
+Fuzzy Logic
+ Method for reasoning with logical expressions
+  describing membership in fuzzy sets.
+ Example:    Tall( John)  Heavy( John)
+   ◼   Statement has a fuzzy truth value that is function of the
+       truth value of its components.
+ Standard rules for evaluating the fuzzy truth, T, of
+  a complex sentence:
+                T ( A  B) = min(T ( A), T ( B))
+               T ( A  B) = max( T ( A), T ( B))
+               T (A) = 1 − T ( A)
+
+   ◼   Truth-functional system.
+Fuzzy Logic
+ Truth-functional system example:
+  ◼   If
+
+           T (Tall( Nate)) = 0.6
+           T ( Heavy( Nate)) = 0.4
+
+       then,
+
+       𝑇(𝑇𝑎𝑙𝑙 𝑁𝑎𝑡𝑒 ) ∧ 𝑇(𝐻𝑒𝑎𝑣𝑦(𝑁𝑎𝑡𝑒) = 0.4    reasonable
+          𝑇(𝑇𝑎𝑙𝑙 𝑁𝑎𝑡𝑒 ) ∧ ¬𝑇𝑎𝑙𝑙(𝑁𝑎𝑡𝑒) = 0.4   not reasonable
+
+       Inability of the truth-functional approach to take into
+       account the correlations or anti-correlations among the
+       component properties.
+Fuzzy Logic
+ Reflects the reality of our world of experience (our
+  perceived world), which is uncertain and fuzzy.
+ Convert the “precise” values and measurements
+  in the machine world (digital world) to the
+  “imprecise” values in the real world (perceived
+  world) which is full of fuzziness and uncertainty.
+   ◼ Forward operation is called fuzzification scheme.
+   ◼ Reverse operation is called defuzzification scheme.
+
+
+                                          Fuzzification
+
+       Real world                 Fuzzy              Machine world
+  Fuzzy perceived world           Logic           Precise digital world
+
+                Defuzzification
+Fuzzy Logic
+ Can be decomposed into four basic components.
+  ◼   ICMR structural framework of fuzzy logic.
+
+
+ Fuzzy Identification Module (FIM).
+ Fuzzy Categorization Module (FCM).
+ Fuzzy Modeling Module (FMM).
+ Fuzzy Reasoning Module (FRM).
+Fuzzy Identification Module
+ Determination and identification of the fuzzy
+  variable (FV) being used by the system.
+ Statement: “John is tall”
+ FV = “height”
+   ◼ The quality that describes one of John’s physical
+     characteristics.
+   ◼ Does not appear explicitly in the statement.
+   ◼ Inferred using common sense or prior knowledge.
+
+ Statement: “Most students in the class are tall”
+ FV = “most”
+ It is not the quality “height” as before.
+   ◼   The quality that describes the proportion of students that
+       are tall in the class.
+Fuzzy Characterization Module
+ Categorize the chosen FV(s) into different fuzzy sets.
+ FV = “height”
+ Possible fuzzy sets having a range of values:
+   ◼ “short” – for student height below 1.60 m
+   ◼ “average” – for student height between 1.55 m and 1.70 m
+   ◼ “tall” – for student height over 1.65 m
+
+ Fuzziness in the boundaries.
+   ◼ No strict criteria to decide the number, type, and nature of
+     the fuzzy sets.
+   ◼ No clear boundary between one fuzzy set and another,
+     which is totally unacceptable in a traditional crisp set.
+   ◼ Possible fuzzy sets: “very short”, “short”, “average”, “tall”, “very
+     tall”
+Fuzzy Modeling Module
+ Define the Membership Function (MF) for each
+  fuzzy set.
+ MP defines the fuzzy mapping – the fuzzy
+  belonging of each element to its fuzzy set.
+ Let X be a collection of objects denoted by
+
+              {x | x  X }
+   ◼   Called universe of discourse.
+ Fuzzy set A in this universe of discourse X is
+  characterized by a membership function μA(x)
+  which takes values in the interval [0, 1].
+            A = (x,  A ( x) | x  X )
+Fuzzy Modeling Module
+ If X is continuous, the fuzzy set is written as:
+
+              A =   A ( x)dx
+                   X
+
+
+ If X is discrete, the fuzzy set is written as:
+
+             A =   A ( xi ) / xi
+                  N
+
+   ◼   N is the total number of possible discrete values of A.
+Fuzzy Modeling Module
+ Fuzzy Membership Functions.
+
+μA(x)
+
+  1.0
+
+
+ 0.63
+               Short                 Average            Tall
+
+ 0.23
+    0
+        1.50           1.55   1.60        1.65   1.70     1.75
+
+                                     Height(x)
+Fuzzy Modeling Module
+ Example: “the height of student(Jack) is 1.68”
+ Membership functions for fuzzy sets will be:
+
+
+   ◼ “Average” μA(x) = 0.23
+   ◼ “Tall” μA(x) = 0.63
+
+
+
+   ◼ Jack is tall, but he is not among the tallest one in the
+     class.
+   ◼ Overall speaking, Jack is taller than the average
+     students in the class.
+Fuzzy Reasoning Module
+ Computational component that aims at the
+  exploration of the heuristics of the system.
+ Apply the fuzzy reasoning technique.
+
+
+ Three main processes:
+   ◼ Fuzzy Rules Construction Process (FRCP).
+   ◼ Fuzzy Knowledge Base Process (FKBP).
+   ◼ Fuzzy Inference Process (FIP).
+Fuzzy Rules Construction Process
+ Fuzzy rules are sets of fuzzy relations (FR), which
+  normally appear in the form of “if-then”
+  propositions.
+   ◼   Also called fuzzy implications functions (FIF).
+ If x is A, then y is B
+   ◼   where    x, A  X and y, B  Y
+
+ Or it can be written as: R = A → B
+   ◼   where R is the fuzzy rule.
+Fuzzy Knowledge Base Process
+ The fuzzy knowledge base if the knowledge
+  center of the fuzzy system.
+ Collection of fuzzy rules to represent a particular
+  domain of knowledge.
+              Rk = Ak → Bk , k  [1... N ]
+
+   ◼   where N is the total number of fuzzy rules.
+
+ Various approaches to implement the fuzzy
+  relation operations.
+ Fuzzy Knowledge Base Process
+  Fuzzy rules implementation schemes.
+
+
+ Method Used                            Fuzzy Rule
+                  “If x is A then y is B” where x, A  X , y, B  Y
+Mini Rule         RMini = A  B =      A ( x)   B ( y) /(x, y)
+                                    X Y
+
+Product Rule      R product = A  B =      A ( x) •  B ( y) /(x, y)
+                                        X Y
+
+Max-Min Rule      RMax− Min = ( A  B)  (A  Y ) =        ( A ( x)   B ( y))  (1 −  A ( x)) /(x, y)
+                                                          X Y
+
+Arithmetic Rule   R Arithmetic = (A  Y )  ( X  B) =      1  (1 −  A ( x) +  B ( y)) /(x, y)
+                                                           X Y
+Fuzzy Inference Process
+ Fuzzy inference refers to the fuzzy reasoning
+  operations based on the knowledge in the fuzzy
+  system.
+   ◼ Given two groups of fuzzy sets A, A' X and B, B' Y
+  ◼   Direct Reasoning:
+        For any two variables x and y:
+
+        Implication: If x is A, then y is B
+
+        Premise: x is A’
+
+        Conclusion: y is B’
+
+        This can be denoted as: B’ = A’        R (where R is the relation)
+  ◼   Indirect Reasoning:
+        For any two variables x and y:
+
+        Implication: If x is A, then y is B
+
+        Premise: y is B’
+
+        Conclusion: x is A’
+
+        This can be denoted as: A’ = R         B’ (where R is the relation)
+Fuzzy Inference Process
+ Fuzzy compositional rule for fuzzy inference.
+  ◼   When there is a complex knowledge base containing a
+      list of fuzzy rules (Rk) with the corresponding input
+      signals A’k for each fuzzy set Ak.
+
+       X = (A’1, A’2, …, A’k, …, A’n)
+       Y = B’j, j = [1 … n]
+
+  ◼   Using direct reasoning, the fuzzy variable B’ can be
+      inferred as the composition operation between fuzzy
+      set Ak and the fuzzy relation R, as follows:
+
+       B’ = (A’1, A’2, …, A’k, ..., A’n)  R
+Fuzzy Inference Process
+ Fuzzy compositional rule for fuzzy inference.
+  ◼   Two composition schemes are commonly used.
+       Sup-min operation.
+       Sup-product operation.
+
+  ◼   Composite fuzzy reasoning consists of the following steps:
+       1. Identify each fuzzy rule and determine the
+       “connectives” for each condition in the rule base, in
+       which an “OR” clause represents a union operation and
+       an “AND” clause represents an intersection operation.
+       2. For each fuzzy rule (Rk), locate the αk.
+       3. Using either the sup-min operation or sup-product
+       operation method, infer the overall defuzzification
+       control action.
+Fuzzy Air-Conditioning System
+   System can vary its power control (Power) by two
+    environmental factors of the surrounding air condition,
+    namely air temperature (Temp) and relative humidity (RH),
+    which are given by two sets of fuzzy variables:
+     ◼ Temp = {Very Cold, Cold, Cool, Mild, Warm, Hot, Very Hot}
+     ◼ RH = {Very Dry, Dry, Moderate, Humid, Very Humid}
+
+
+
+ Temp description    Fuzzy Temp            RH           Fuzzy RH range
+(fuzzy variables)    range (°C)     (fuzzy variables)        (%)
+       Mild             17-25             Dry                ≤ 60
+      Warm              23-31           Moderate            55-85
+       Hot              25-33            Humid              65-95
+     Very Hot           ≥ 28           Very Humid            > 75
+Fuzzy Air-Conditioning System
+ Fuzzy Membership Functions - Temp
+
+ μ(x)
+              Mild   Warm       Hot   Very Hot
+   1.0
+
+
+
+
+    0
+         15   20     25          30   35
+
+                            Temp(x)
+Fuzzy Air-Conditioning System
+ Fuzzy Membership Functions - RV
+
+ μ(y)
+         Dry        Moderate Humid   Very Humid
+   1.0
+
+
+
+
+    0
+         50    60     70       80     90      100
+
+                           RV(y)
+Fuzzy Air-Conditioning System
+ Power has three different fuzzy states:
+   ◼ Power = {Low, Medium, High}
+ Fuzzy Membership Functions - Power
+ μ(z)
+
+   1.0
+
+                Low   Medium    High
+
+
+
+
+    0
+         6000           8000                10000
+                         Power(z)
+Fuzzy Air-Conditioning System
+ The power switch is controlled by the following
+  fuzzy rules:
+  ◼ Rule 1: If Temp is “Very Hot” AND RH is “Very Humid”, then switch
+    to “High”
+  ◼ Rule 2: If Temp is “Hot” AND RH is “Humid”, then switch to
+    “Medium”
+  ◼ Rule 3: If Temp is “Warm” OR RH is “Moderate”, then switch to
+    “Low”
+ Let Temp = 30°C and RH = 80%
+  ◼ Sup-min method defuzzification scheme.
+  ◼ Sup-product method defuzzification scheme.
+Sup-Min Operation Method
+1.0           Very Hot          1.0              Very Humid          1.0        High
+
+μ(x)                            μ(y)                                 μ(z)
+
+
+  0                               0                                    0
+       15   20 25 30       35          50   60    70 80       90   100 6000     8000     10000
+              Temp(x)                            RH(y)                        Power(z)
+1.0                             1.0                                  1.0
+                         Hot                              Humid                       Medium
+μ(x)                            μ(y)                                 μ(z)
+
+
+  0                               0                                    0
+       15   20 25 30       35          50   60    70 80       90   100 6000     8000     10000
+              Temp(x)                            RH(y)                        Power(z)
+1.0                             1.0                                  1.0
+                    Warm                              Moderate
+                                                                                Low
+μ(x)                            μ(y)                                 μ(z)
+
+
+  0                               0                                    0
+       15   20 25 30       35          50   60    70 80       90   100 6000     8000     10000
+              Temp(x)                            RH(y)                        Power(z)
+Sup-Min Operation Method
+ Control Action Rules:
+
+
+           1.0
+
+
+           μ(z)
+
+
+
+             0
+                  6000    8000      10000
+                         Power(z)
+Sup-Product Operation Method
+1.0           Very Hot          1.0              Very Humid          1.0        High
+
+μ(x)                            μ(y)                                 μ(z)
+
+
+  0                               0                                    0
+       15   20 25 30       35          50   60    70 80       90   100 6000     8000     10000
+              Temp(x)                            RH(y)                        Power(z)
+1.0                             1.0                                  1.0
+                         Hot                              Humid                       Medium
+μ(x)                            μ(y)                                 μ(z)
+
+
+  0                               0                                    0
+       15   20 25 30       35          50   60    70 80       90   100 6000     8000     10000
+              Temp(x)                            RH(y)                        Power(z)
+1.0                             1.0                                  1.0
+                    Warm                              Moderate
+                                                                                Low
+μ(x)                            μ(y)                                 μ(z)
+
+
+  0                               0                                    0
+       15   20 25 30       35          50   60    70 80       90   100 6000     8000     10000
+              Temp(x)                            RH(y)                        Power(z)
+Sup-Product Operation Method
+ Control Action Rules:
+
+
+
+          1.0
+
+
+
+          μ(z)
+
+
+
+
+            0
+                6000    8000      10000
+                       Power(z)
+Fuzzy Systems Applications
+ Fuzzy electronic appliances.
+  ◼   Fuzzy cookers, fuzzy air-conditioners, fuzzy washing-
+      machines.
+ Control systems.
+  ◼ Fuzzy robotics, fuzzy automated braking systems.
+  ◼ Fuzzy systems for active suspension, automatic
+    transmission, engine control emissions.
+
+
+ Fuzzy expert system.
+ Integration of fuzzy logic with expert knowledge in
+  classical expert systems.
+  ◼   Fuzzy systems can handle imprecise concepts and values.
+Fuzzy-Neuro Systems
+ Major drawback of fuzzy systems is their lack of
+  learning capabilities.
+ Solution:
+   ◼ Hybridization with other computational intelligence models
+     that provide automatic machine learning.
+   ◼ Ex: Neural networks.
+
+ Outcome:
+   ◼ Fuzzy-Neuro Systems.
+   ◼ Used for solving problems such as stock prediction, severe
+     weather forecasting, robot vision.
+FuzzyNet Model
+ Consists of:
+  ◼ Membership Function Generator (MFG).
+      Provided by domain experts, or automatically
+       generated by using some statistical methods based on
+       historical data.
+  ◼ Fuzzy Information Processor (FIP).
+      Accepts three types of information from the database,
+       fuzzy rules and initial weights indicating the “credibility”
+       of rules, historical data, and current data.
+  ◼ Back-Propagation Neural Network (BPN).
+      Similar to conventional BPNs.
+
+      Processing elements used are neural gates generated
+       by the FIP module.
+  FuzzyNet Model
+   Schematic Diagram
+
+Membership Function
+Generator (MFG)       Fuzzy Information   If     Then     BackPropagation
+                      Processing (FIP)    Clause Clause   Neural Network (BPN)
+
+                       Fuzzy Rules
+
+
+                       Historical Data
+
+
+                       Desired Targets
+
+
+
+                                                                      Final Decision/
+                                                                      Forecast
+Using Fuzzy Logic
+ When the inputs or model parameters are
+  uncertain but not random.
+ Fuzzy numbers have a range; the larger the range,
+  the more uncertainty.
+ Fuzzy numbers have a degree of belief
+  (membership function) between 0 and 1 associated
+  with each point in the range.
+  ◼ The degree of belief is not a probability of occurrence.
+  ◼ The degree of belief curve does not integrate to 1, and
+    integrating it does not produce a CDF.
+Using Fuzzy Logic
+ Triangular fuzzy number <l, m, h>
+
+
+ Degree of belief is 0 from -∞ to 1 and from h to ∞.
+ Degree of belief at m is 1, from which the degree of
+  belief varies linearly to 0 at both l and h.
+ Number “5” can be represented as: <3, 5, 9>, <4, 5, 6>,
+  <5, 5, 5.5>, or <5, 5, 5> depending on the potential
+  values the number might have other than exactly 5.
+Using Fuzzy Logic
+ Triangular fuzzy number <l, m, h>
+
+
+       a  <l, m, h> + b = <al + b, am + b, ah + b>
+       <l1, m1, h1> + <l2, m2, h2> = <l1 + l2, m1 + m2, h1 + h2>
+       <l1, m1, h1>  <l2, m2, h2> = <l1  l2, m1  m2, h1  h2>
+
+ When a deterministic number is needed to implement the
+  result of an analysis, the fuzzy output must be defuzzified.
+ An appropriate deterministic representation is considered the
+  centroid of the fuzzy range.
+ Defuzzified value for <l, m, h> is (l + m + h)/3
+Using Fuzzy Logic for Prediction
+ Develop a new system.
+  ◼ Both developer and customer want to estimate the cost
+    and schedule with some margin to compensate for the
+    risks associated with making the system operational.
+  ◼ If some aspect of the system has never been done before,
+    both the cost and the time to complete are uncertain, but
+    not random.
+  ◼ Many times, probability theory is used to estimate the
+    risk-adjusted cost and schedule.
+Using Fuzzy Logic for Prediction
+ Factors responsible for uncertainty.
+ Item technical maturity: is it something done
+  before or just an idea?
+  ◼   Define a scale to quantify an item’s technical maturity, at
+      least in a fuzzy sense.
+ Certainty with the estimate, named proposal risk.
+  ◼   Define a scale to enable it to be quantified.
+ Cost margin is determined based on fuzzy rules
+  concerning technical maturity and proposal risk.
+Using Fuzzy Logic for Prediction
+ Identify the fuzzy technical maturity level.
+
+             Technical Maturity Definition            Technical Maturity Level
+  Successfully operating                                         8
+  Qualified but not yet used operationally                       7
+  Prototype demonstrated in operational environment              6
+  Prototype demonstrated in relevant environment                 5
+  Portions validated by analysis or in laboratory                4
+  Analysis or experiments show concept could work                3
+  Concept defined                                                2
+  Solution scientifically feasible                               1
+  No known approach to meet requirements                         0
+Using Fuzzy Logic for Prediction
+ Identify the fuzzy technical maturity level.
+   ◼   Suppose the system needs a new propellant tank with
+       twice the volume as any previously made tank, but to be
+       built exactly the same way as the smaller tanks that have
+       been successfully operated.
+         Item maturity level is less than 8.
+         Item has a known approach to meet requirements, so maturity level
+          is more than 0.
+         Consider a degree of belief related to the technical maturity <3, 5, 7>
+
+         If analysis can prove that the item meets its requirements (maturity
+          level of 3).
+         If consider that previously smaller items were qualified and
+          successfully operated (maturity level of 7).
+         If consider that the previous smaller items are effectively the
+          prototype for the new item (maturity level of 5).
+Using Fuzzy Logic for Prediction
+ Identify the fuzzy technical maturity level.
+
+
+    Fuzzy Technical Maturity Definition   Fuzzy Technical Maturity Level
+  Very mature                                       <6, 8, 8>
+  Mature                                            <3, 5, 7>
+  Immature                                          <1, 2, 4>
+  Very immature                                     <0, 0, 2>
+Using Fuzzy Logic for Prediction
+ Identify the fuzzy cost estimates.
+
+
+        Cost Estimate Certainty Definition             Cost Estimate Certainty Level
+  No prior similar efforts and for many reasons                     0
+  actual cost may be different than predicted
+  Mostly never done before with more cost                           1
+  uncertainties than certainties
+  Similar to prior efforts with reasonable certainty                2
+  that costs can be predicted accurately
+  Nearly identical to prior efforts and costs are                   3
+  highly predictable
+Using Fuzzy Logic for Prediction
+ Identify the fuzzy cost estimates.
+   ◼ If we are very certain our estimate has little certainty, the
+     proposal risk can be categorized as <1, 1, 1>
+   ◼ If we have some fear our estimate is off, the proposal risk
+     can be categorized as <1, 2, 3>
+Using Fuzzy Logic for Prediction
+ Identify the fuzzy cost estimates.
+
+
+
+    Fuzzy Proposal Risk Definition   Cost Uncertainty Level
+  Low                                      <1, 2, 3>
+  Medium                                 <0.5, 1.5, 2.5>
+  High                                     <0, 0, 2>
+   Using Fuzzy Logic for Prediction
+    Define fuzzy rules.
+        IF Technical_Maturity_Level AND Proposal_Risk_Level, THEN
+        Margin_Recommended
+
+Proposal  High    <0.25, 0.75, 1.50>   <0.25, 0.50, 1.00>   <0.10, 0.25, 0.75>    <0.00, 0.15, 0.25>
+  Risk
+         Medium   <0.25, 0.50, 0.75>   <0.10, 0.25, 0.75>   <0.00, 0.15, 0.50>    <-0.05, 0.05, 0.25>
+ Level
+          Low     <0.10, 0.25, 0.75>   <0.00, 0.15, 0.25>   <-0.10, 0.05, 0.25>   <-0.10, 0.00, 0.15>
+  Fuzzy Margin     Very Immature           Immature              Mature              Very Mature
+                                              Technical Maturity Level
+Using Fuzzy Logic for Prediction
+ Calculate fuzzy cost estimate.
+
+
+
+  CWBS    Technical    Cost estimate   Cost certainty    Cost estimate
+          maturity         ($K)                         with margin ($K)
+   1       <6, 7, 8>       1500          <1, 3, 3>           1550
+   2       <3, 5, 8>       200           <1, 2, 3>            228
+   3       <1, 3, 5>       2000          <0, 1, 2>           2950
+   4       <7, 7, 7>       500           <2, 3, 3>            508
+  Total        -           4200              -               5237
+
