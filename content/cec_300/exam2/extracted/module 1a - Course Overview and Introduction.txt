@@ -1,0 +1,364 @@
+--- Page 1 ---
+Course Overview
+
+
+--- Page 2 ---
+Syllabus Review
+
+
+--- Page 3 ---
+Course Information
+• Academic Term: Daytona Beach Spring 2026
+• Term Dates: January 7, 2026 - April 30, 2026
+• Credit Hours: 3
+• Mode of Delivery: In Person
+• Meeting(s): 11:00 AM - 11:50 AM Monday,Wednesday,Friday
+• Location(s): Lehman Building 367
+
+
+--- Page 4 ---
+Office Hours
+• In-Person:
+• Monday, Wednesday, and Friday from 12:30-1:30pm in LB 346
+• Virtual:
+• Book a meeting for a time that we both have available using Microsoft 
+Booking.
+• URL: 
+https://outlook.office.com/bookwithme/user/968bb865d5e84a2fa1ec48f
+65352cdb2@erau.edu
+
+
+--- Page 5 ---
+Course Description
+Computer engineering aspects; embedded sensor and actuator 
+controllers; high-performance computing systems for air traffic 
+control and weather systems; critical design factors including 
+technological, economic, social, and professional considerations; 
+techniques and practices in database management, human-
+computer interaction, and system networks.
+
+
+--- Page 6 ---
+Course Goals
+Students will learn to critically analyze how aviation regulations 
+influence system design and evaluate the effectiveness of various 
+navigation and communication technologies. They will develop the 
+ability to model representative aviation systems using tools such as 
+simulations or hardware to translate technical concepts into clear, 
+actionable designs that address real-world aerospace challenges.
+
+
+--- Page 7 ---
+Student Learning Outcomes
+1. Describe the breadth of computing systems and practices used in 
+aerospace and aviation, including their technological and 
+engineering components.
+2. Analyze the performance of aerospace/aviation computing systems.
+3. Evaluate the historical perspectives on computing in aerospace and 
+aviation and their impact on current aviation systems.
+4. Engage in debates/discussions about critical computing topics such 
+as digital avionics, flight control systems, and air traffic 
+management.
+5. Design fault-tolerant computing systems, flight management 
+systems, or human-computer interfaces (e.g., Glass cockpits, HUDs) 
+using principles learned from case studies.
+6. Implement models of avionics systems in simulation or hardware.
+
+
+--- Page 8 ---
+Reading Materials
+• Most reading material will be made available.
+• Optional Textbook: 
+• Title: Aircraft Systems
+• Authors: Chis Binns
+• Publisher: IEEE Press
+• Publication Date: 2018
+• Link: https://learning.oreilly.com/library/view/aircraft-systems/9781119259541/
+• Note:
+• The textbook is free under ERAU's license with O'Reilly books. When prompted to log in, 
+use your ERAU email address. Then, select the option for SSO Sign-In. From there, you 
+will sign on through the ERAU sign-in page. 
+• This service provides access to a wealth of online textbooks and programming guides
+
+
+--- Page 9 ---
+Assessment Activities and Grading
+• Grade Distribution
+• Participation: 20%
+• Homework: 20%
+• Project: 20%
+• Exam 1: 20%
+• Exam 2: 20%
+• Participation grades shall be 
+assessed through participation in 
+individual and group in-class 
+activities including pop quizzes.
+• Homework shall be assigned for each 
+module.
+• Exam grades shall be assessed by two 
+exams, a midterm through module 5 
+and a non-comprehensive final exam, 
+exam 2. Exam 2 is scheduled during the 
+final timeslot, Saturday, April 25, 2026 
+12:30pm-2:30pm.
+• Project grades shall be assessed 
+through preliminary project milestones, 
+a final presentation, and a report. 
+Module 10 is set aside for relevant 
+tutorials, time to work on your project 
+in-class and final presentations.
+• NOTE: Attendance is not explicitly 
+graded; however, if you miss class you 
+will potentially/likely miss an in-class 
+activity that counts toward your 
+participation grade.
+
+
+--- Page 10 ---
+AI Policy
+• In addition to the University’s basic policy as shown in the 
+syllabus, the additional statement applies to this course.
+For CEC 300, please feel free to use ChatGPT for studying purposes
+(e.g. exploring topics, reviewing materials, etc.). However, all written
+content that you submit for homework, exams, and presentations
+should be compiled, organized, and written by you. Use of external
+sources must also be cited. See honor code violation policy
+(below).
+
+
+--- Page 11 ---
+Policies
+• Late Policy: Assignments are expected to be submitted on time. An 8-
+hour grace period is permitted for all homework or project deliverables 
+without penalty. From 8 hours-48 hours, you receive a 2.5 percent 
+deduction for every hour that it remains late. After 48 hours, the 
+assignment will be awarded a zero (0). Exceptions include exam 
+absences and presentation absences.
+• Exam Absence: An unexcused absence to an exam will result in a zero. 
+Under rare circumstances, Dr. Stansbury has the discretion to excuse 
+an exam absence under a significant hardship with documentation.
+• IMPORANT NOTE: personal travel is not and will not be an excuse for missing an 
+exam. The final exam (exam 2) is scheduled for April 25 from 12:30-2:30pm.
+
+
+--- Page 12 ---
+Policies (continued)
+• Presentation Absence: Once you / your group has signed up for a 
+presentation time slot, you are expected to present at that time. Only 
+under significant hardship will a makeup opportunity be granted. 
+Otherwise, a zero is issued.
+• Changes to Course Schedule or Module Topics: The following 
+schedule represents the tentative schedule for which we will complete 
+this course. The dates and order of materials are subject to change, but 
+notice will be given via Canvas Announcement when such changes are 
+to be made.
+• KEEP IN MIND: this is the second time Dr. Stansbury has taught this course and 
+the program outcomes have changed for this term. Entire modules are being 
+created or rebuilt. Some grace with regard to schedule adjustments is 
+requested and appreciated.
+
+
+--- Page 13 ---
+Policies (continued)
+• Honor Code Violations: All students are expected to follow the ERAU 
+honor code and the expectations laid out above regarding the use of 
+AI/ML technology usage. Dr. Stansbury has established the following 
+guidelines regarding honor code violations. All cases shall follow the 
+University's due process procedures as laid out in the student 
+handbook.
+• First-time, minor infractions can result in a warning and/or loss of points for all or 
+part of the assignment.
+• Multiple and/or more server infractions could result in a zero for an assignment, 
+a drop in course letter grade, or failure for the course based upon the 
+circumstances of the violation.
+• SAS Testing Center and Exams: If you receive accommodations on 
+your exam by Student Accessibility Services, you must submit your 
+request at least one week prior to the exam.
+
+
+--- Page 17 ---
+Questions?
+
+
+--- Page 19 ---
+Module 1
+•
+Establishes a foundation for where we are today.  
+•
+The history of computing for aviation and aerospace are intertwined.
+•
+Standards define the requirements for aircraft or spacecraft components, systems, and systems of 
+systems.
+•
+System certification must be addressed for airworthiness or “spaceworthiness” following processes 
+established by a governing agency.  In the United States, this is the Federal Aviation Administration.
+
+
+--- Page 20 ---
+Module 2
+•
+Sensors provide the necessary inputs to enable guidance, navigation, and control of aviation and 
+aerospace systems (e.g. Inertial Navigation Systems (INS), gyroscopes, magnetometers, 
+compasses, air pressure systems, etc.)
+•
+Guidance Navigation (GNC) and INS must work together to maintain a control loop with sensor 
+inputs being translated to vehicle actuation.
+•
+Signal processing techniques like Kalman Filters provides a means of estimating vehicle state based 
+upon multiple sensory inputs.
+
+
+--- Page 21 ---
+Module 3
+•
+Avionics architectures can be classified as:
+•
+Federated (each function is its own line replaceable unit)
+•
+Distributed (integrated network connecting processors working on shared computing tasks)
+•
+Integration Modular Avionics (multiple functions integrated into common hardware)
+•
+Databuses enable communication and transfer of data between avionic systems.
+•
+ARINC is one of several agencies that produce databus standards used in aviation.
+•
+Timing and latency of a databus architecture must be approximated and improved to meet 
+performance requirements of the air or space vehicle.
+
+
+--- Page 22 ---
+Module 4
+•
+Flight control has evolved to eliminate the risk of mechanical failures, reduce size, weight, 
+and power known as Fly-by-Wire
+•
+Fly-by-Wireless uses similar concepts with wireless communication
+•
+Control systems enable flight stability and control of the vehicle.
+•
+Spacecraft attitude control will be examined in this topic.
+•
+Case studies of flight control computing will be examined investigating the flight control 
+systems of the Airbus A320, the F-16 fighter jet, and Falcon 9 rocket.
+
+
+--- Page 23 ---
+Module 5
+•
+Flight management systems are onboard computers that support flight operations and reduce pilot 
+workload.
+•
+Management of flight plans
+•
+Lateral Navigation (LNAV) and Vertical Navigation (VNAV) Guidance
+•
+FMS integrates inputs from GPS, INS, and radio navigation sytems.
+•
+FMS interfaces with with
+•
+Cockpit interfaces – provide situational awareness and guidance to pilot
+•
+Autopilot – enables efficiency, safety, and precision of part of or entire flight.
+
+
+--- Page 24 ---
+Module 6
+•
+Computing in aviation and aerospace is not limited to vehicle-based systems.
+•
+Air Traffic Management requires significant infrastructure (primarily ground-based, but some space-
+based systems)
+•
+Includes:
+•
+ERAM – enroute airspace management
+•
+STARS – standard terminal automation replacement system
+•
+SWIM – system wide information management (infrastructure and standards for 
+information to be exchanged across FAA systems)
+•
+Automatic Dependent Broadcast – Surveillance – tracks aircraft through a network of ground-based 
+terminals.
+•
+UAS Traffic Management and AAM/UAM Traffic Management strategies require significant 
+interconnectivity including a SWIM-like network backbone and vehicle-to-vehicle communications.
+
+
+--- Page 25 ---
+Module 7
+•
+Module explores topics for space-based systems including:
+•
+Spacecraft Onboard Computing: architecture, hardware, and software.
+•
+Deep Space Navigation and Communications are substantially different that aviation-based 
+strategies
+•
+No compass or GPS to guide the system
+•
+Latency of communications increases proportionally with distance
+•
+Launch vehicles require their own computing systems to automate launch functions, monitor 
+vehicle health, maintain desired trajectory, etc.
+•
+Autonomous docking & rendezvous.
+•
+In space, automation often guides a space craft’s rendezvous with satellites, space 
+stations, etc. and in some cases dock with those systems.
+•
+Automated return and landing on ground-based or sea-based platforms
+
+
+--- Page 26 ---
+Module 8 
+This module addresses more systems engineering focused topics applicable.
+•
+Design Assurance Levels are a means of identifying the criticality of hardware or software systems 
+under development.
+•
+Standards define the development practice, documentation, verification, and validation of onboard 
+systems.
+•
+Robustness is achieved through fault-tolerant design and redundancy.
+•
+Case studies shall be explored for failure cases in aviation and aerospace.
+•
+Safety assessment techniques are necessary for ensuring risk is sufficiently mitigated.  
+•
+Common approaches include:
+•
+Fault Tree Analysis
+•
+Failure Modes and Effects Analysis
+•
+Functional Hazard Assessment
+
+
+--- Page 27 ---
+Module 9
+• Cybersecurity has become a major consideration for air and space-born 
+systems.
+• Objective to preserve confidentiality, integration, and availability.
+• Must be considered across systems and systems of systems:
+• Flight hardware and software,
+• Communications hardware, software, and protocols, and
+• Supporting infrastructure.
+
+
+--- Page 28 ---
+Summary 
+• Course syllabus including policies are reviewed
+• Each module addresses one or multiple learning outcomes (see 
+schedule for mapping)
+• Computing in Aviation and Aerospace encompasses a variety of 
+systems:
+• Airborne systems (e.g. aircraft), Space-based systems (e.g. spacecraft), 
+and Enabling systems (e.g. ATM, Deep Space Network, etc.)
+• The course is under continual improvement such that some 
+modules will be completed as the term progresses.
+
+
+--- Page 29 ---
+Questions?

@@ -1,0 +1,1012 @@
+--- Page 1 ---
+Artificial Intelligence and 
+Machine Learning 
+What is it? What does it do? What are the risks?
+Richard S. Stansbury, PhD
+Associate Professor, Computer Engineering and Computer Science
+October 30, 2023
+College of Engineering, Daytona Beach, FL
+1
+
+
+--- Page 2 ---
+What is artificial intelligence (AI)?
+• Merriam-Webster: Intelligence
+• (1) the ability to learn or understand or to deal with 
+new or trying situations : reason; also : the skilled 
+use of reason 
+• (2) the ability to apply knowledge to manipulate 
+one's environment or to think abstractly as 
+measured by objective criteria (as tests)
+• Weak AI systems can solve specific problems 
+that would require human intelligence or 
+greater to solve.
+• Artificial General Intelligence systems would 
+be capable of intelligently solving all problems 
+that humans can solve.
+CEC 300
+College of Engineering, Daytona Beach, FL
+2
+Machines that mimic human intelligence
+
+
+--- Page 3 ---
+Everyday AI
+CEC 300
+College of Engineering, Daytona Beach, FL
+3
+
+
+--- Page 4 ---
+Machine Learning Defined
+• Webster-Miriam: 
+• “A computational method that is a 
+subfield of artificial intelligence and 
+that enables a computer to learn to 
+perform tasks by analyzing a large 
+dataset without being explicitly 
+programmed.
+• Using historically collected data or 
+past states of a system, an ML 
+model is trained to solve a problem. 
+• Three major types:
+• Supervised Learning.
+• Unsupervised Learning
+• Reinforcement Learning
+CEC 300
+College of Engineering, Daytona Beach, FL
+4
+
+
+--- Page 5 ---
+The Power of Data
+• Machine learning models largely are 
+data-driven.
+• Insufficient data for a model can result in 
+overfitting to only the cases given to it.
+• Data needs scale with model complexity
+• Exploration of data should be done with a 
+plan and purpose in mind.
+• Across many industries, data is a 
+commodity.
+• Challenge: Garbage In→Garbage Out
+• Missing data
+• Imbalanced Data
+• Outliers
+• Noisy data
+• Scaling
+• Redundancy
+• Lack of Diversity
+• Poor data labeling
+• Ethical and legal considerations
+CEC 300
+College of Engineering, Daytona Beach, FL
+5
+
+
+--- Page 6 ---
+How Machine Learning Works
+Model Deployment
+Model Testing
+Model Validation
+Model Training
+Select the ML Model 
+Split data for training, testing, and validation
+Collect Data
+Define the problem
+CEC 300
+College of Engineering, Daytona Beach, FL
+6
+
+
+--- Page 7 ---
+Supervised Learning
+• Training using labeled data (inputs and 
+expected outputs) to 
+• Make a prediction
+• Determine the measure of error or loss
+• Make corrections based upon the errors
+• Classification – determines the category of a 
+given input (e.g. classify a radar target by 
+aircraft type)
+• Regression – fits the model to the data to 
+produce a continuous value (e.g. 
+predicting house prices)
+CEC 300
+College of Engineering, Daytona Beach, FL
+7
+
+
+--- Page 8 ---
+Unsupervised Learning
+• Unsupervised Learning – learning is performed on unlabeled data in which the underlying structure is not 
+previously known.
+• Clustering is an example of unsupervised learning where data is grouped based on its internal 
+structure/features
+• Anomaly Detection analyzes some stream of input data to identify outliners in the data set
+• Dimension reduction used to narrow/clean data sets for tasks such as visualization or to improve the 
+performance of other algorithms.
+CEC 300
+College of Engineering, Daytona Beach, FL
+8
+
+
+--- Page 9 ---
+Reinforcement Learning
+• Reinforcement Learning – learns to respond to its state and stimuli through the 
+reinforcement of which actions provided favorable results vs. which options provided 
+less favorable results.
+CEC 300
+College of Engineering, Daytona Beach, FL
+9
+
+
+--- Page 10 ---
+Deep Learning
+• Modern approach to ML that leverages “deep” neural networks to learn to 
+both extract features from the source data and learn from the extracted 
+features.
+• Traditional image-based classification vs. Deep image-based classification
+• Applications include:
+• Image processing
+• Speech recognition
+• Natural Language Processing
+• Healthcare
+• Recommendations
+• Fraud detection 
+CEC 300
+College of Engineering, Daytona Beach, FL
+10
+
+
+--- Page 11 ---
+Generative AI
+• Generative AI can generate text, 
+images, video, and other media 
+types by learning the 
+characteristics of the training 
+input and then producing an 
+output with similar features
+• e.g. Generative Adversarial 
+Networks (GANs) are a common 
+example.
+• Applications:
+• Synthetic data generation
+• Image correction
+• Deep fakes (for good and for bad)
+• AI art
+CEC 300
+College of Engineering, Daytona Beach, FL
+11
+
+
+--- Page 12 ---
+Benefits of AI/ML
+Improved Data 
+Analysis and 
+Prediction 
+Healthcare
+Finance
+Improved 
+Automation 
+Manufacturing
+Customer 
+Service
+Personalization 
+Retail
+Media 
+Streaming
+Education
+Adaptability 
+Navigation 
+Systems
+Natural 
+Language 
+Processing
+Enhanced 
+Decision 
+Making 
+Investment 
+Planning
+Healthcare 
+Diagnostics
+CEC 300
+College of Engineering, Daytona Beach, FL
+12
+
+
+--- Page 13 ---
+Ethical Considerations
+Bias and 
+Fairness
+Job 
+Displacement
+Environmental 
+Impact
+Consent and 
+Data 
+Ownership
+Transparency 
+and 
+Explainability
+Privacy
+Accountability 
+and 
+Responsibility
+Safety
+Global 
+Collaboration 
+and Regulation
+CEC 300
+College of Engineering, Daytona Beach, FL
+13
+
+
+--- Page 14 ---
+AI/ML in Aviation and Aerospace
+Aviation & 
+Aerospace
+Weather 
+prediction
+Training
+Automated 
+flight 
+controls
+Collision 
+avoidance
+Anomaly 
+detection
+Aircraft 
+design
+Preventative 
+Maintenance
+Route 
+planning
+Security
+CEC 300
+College of Engineering, Daytona Beach, FL
+14
+
+
+--- Page 15 ---
+The Future of AI
+Transportation
+Computing & 
+Technology
+Finance
+Health Care
+Education
+Marketing
+Law Enforcement
+Academia
+Customer Service
+• Impacts many sectors
+• Examples of emerging use cases
+• AAM: Drone Delivery, Air-Taxi & Air-Metro Services
+• Medical imaging diagnostics
+• Tutoring and learning software (e.g., Duo Lingo)
+• Weather prediction/forecast
+• Automated design
+• Automated vehicles
+• Pursuit of AGI
+• Cybersecurity across all sectors
+CEC 300
+College of Engineering, Daytona Beach, FL
+15
+
+
+--- Page 16 ---
+Clustering
+CS 455/CS 595a: Introduction to Artificial 
+Intelligence
+16
+
+
+--- Page 17 ---
+Reinforcement Learning
+• Typically explained using agent paradigm
+• Agent must learn a policy, which dictates actions given state
+• Learning encourages maximization of rewards and/or 
+minimization of penalties
+• Both supervised and unsupervised RL techniques exist
+• Reinforcement Learning Algorithms:
+• Monte Carlo
+• Q-Learning
+• Markov Decision Modeling (MDM)
+CS 455/CS 595a: Introduction to Artificial 
+Intelligence
+17
+
+
+--- Page 18 ---
+Instance-based Algorithms
+• Learn examples by heart
+• Generalizes new data based upon some similarity metric
+• Example
+• k-Nearest Neighbors utilizes the data and labels from past examples to identify the k neighbors of 
+“smallest distance away” from a new input and use their labels to facilitate classification and/or 
+prediction.
+CS 455/CS 595a: Introduction to Artificial 
+Intelligence
+18
+
+
+--- Page 19 ---
+Model-based Learning
+• From a set of examples, a model is constructed to make predictions based 
+upon new input cases
+• Model Elements:
+• Model selection
+• Model parameters
+• Utility or fitness function (positive evaluation)
+• Or, cost function (negative evaluation)
+• Training is performed by feeding it data and adjusting its parameters to 
+improve the model’s fit to the data.
+CS 455/CS 595a: Introduction to Artificial 
+Intelligence
+19
+
+
+--- Page 20 ---
+Pilot Program: ATCT AI @ Heathrow
+• AI System "Amy": Tested at Heathrow Airport to assist air 
+traffic controllers.
+• Purpose: Manage UK's most congested airspace efficiently.
+• System Features
+•
+Data Integration: Combines radar and video data for holistic 
+aircraft visualization.
+•
+Digital Control Tower: Replaces traditional tower view with 
+digital processing.
+•
+Real-Time Data: Provides flight number, aircraft type, and 
+status (inbound/outbound).
+• Testing: Over 40,000 flights tested.
+• Future Plans: Fully operational digital contingency tower 
+by 2027.
+• Limitations: Lack of contextual judgment and data 
+limitations.
+• Human Collaboration: AI works alongside human 
+controllers for better results.
+CEC 300
+College of Engineering, Daytona Beach, FL
+20
+London's Heathrow Airport trials AI technology to enhance air 
+traffic control operations - YouTube
+
+
+--- Page 21 ---
+Air Traffic Management (ATM):
+• Innovations leading to more efficient, safer, and environmentally conscious 
+aviation.
+• Better management of complex air traffic flow, optimizing, sequencing and 
+routing for efficiency and capacity.
+• Adoption in air traffic management.
+• Analysis of surveillance data to detect conflicts and improve controller 
+awareness using neural networks.
+• Aviation weather prediction
+
+
+--- Page 22 ---
+GE Aviation Predictive Maintenance
+• Two remote monitoring diagnostic centers provide round-the-clock monitoring of 
+engine data.
+• Approx. 44,000 in-service engines monitored during flight
+• Example 1: Anomaly Detection algorithm flags a fault oil sensor.  
+• Alerts generated and dispatched to appropriate maintenance team(s)
+• Reduces lifecycle costs
+• Reduces high-cost repairs/replacement
+• Less downtime
+• Example 2: AI-Enhanced Inspection
+• Inspection robots collect imagery of system elements
+• Optical imagery
+• X-ray fluorescence spectroscopy (XFS) on metal components
+• Imagery used to train models to detect part defects for improved future inspections
+CEC 300
+College of Engineering, Daytona Beach, FL
+22
+Source: GE Aerospace Expands Scope of Artificial Intelligence Support | Aviation International News
+
+
+--- Page 23 ---
+Predictive Maintenance
+• Improvement of aviation services and guarantee of uniformity, including 
+aircraft maintenance.
+• Prediction of aircraft maintenance needs.
+• Analysis of sensor data and prediction of equipment malfunctions for proactive 
+maintenance.
+• Anticipation of potential failures by monitoring aircraft system’s performance and 
+usage data.
+
+
+--- Page 24 ---
+Advanced Space: AI/ML for Space GNC
+• Cislunar Autonomous Positioning System 
+Technology Operations and Navigation 
+Experiment (CAPSTONE) spacecraft 
+• AI Systems
+• SigmaZero – anomaly detection and 
+classification
+• e.g. identifying acceleration anomalies that might 
+add error to course tracking.
+• Neural network driven
+• CAPS
+• Position system for cislunar travel in Earth-Moon 
+system
+• Leverages Lunar Reconnaissance Orbiter and 
+Deep Space Network from NASA
+• Measures gravity insatiability between Earth and 
+moon.
+• NNEP
+• Enables optimal satellite maneuvering 
+• Maneuver integrity with real-time monitoring 
+• Electrical or chemical propulsion
+CEC 300
+College of Engineering, Daytona Beach, FL
+24
+
+
+--- Page 25 ---
+Flight Control and Navigation:
+• Analysis of sensor data, weather, and traffic for pilot assistance and route 
+optimization.
+• Enhancement of spaceship navigation and control by processing sensor data 
+and orbital mechanics.
+• Optimization of flight trajectories using machine learning.
+• Enhancement of cockpit automation.
+
+
+--- Page 26 ---
+AI for CFD
+CEC 300
+College of Engineering, Daytona Beach, FL
+26
+Nemati, M., & Jahangirian, A. (2023). 
+
+
+--- Page 27 ---
+Aircraft Design and Optimization:
+• Acceleration of the design and testing of aircraft and spacecraft by evaluating 
+simulations and optimizing aerodynamics.
+• Design of more efficient aircraft.
+• Enhancement of aerodynamics and aid in aircraft design.
+• Structural and design optimization of aircraft components using machine 
+learning.
+• Application of deep learning in areas like aircraft design.
+• Potential revolution in aircraft optimization for efficiency and aerodynamics.
+
+
+--- Page 28 ---
+Fuel Efficiency Optimization:
+
+
+--- Page 29 ---
+Passenger Experience and Customer Service
+• Personalized 
+Recommendations
+• Customer Service 
+Automation
+• Behavior Analysis
+• Improved airport 
+operations to reduce 
+arrival and departure 
+delays
+CEC 300
+College of Engineering, Daytona Beach, FL
+29
+
+
+--- Page 30 ---
+Aerospace Manufacturing
+• Automation of manufacturing.
+• Application in smart manufacturing within the aerospace industry.
+• IoT components to monitor elements of manufacturing process, detecting faults in 
+automated manufacturing systems and alert appropriate personnel.
+• Simplification of previously intractable issues in areas like production using 
+deep learning.
+• Big data enables optimization in tool life cycles, supply chain management, 
+production forecasting, throughput, etc.
+
+
+--- Page 31 ---
+Cybersecurity
+• Enhancement of detection, 
+prevention, and response to 
+aerospace security risks, 
+including aircraft asset 
+protection.
+• Monitoring of aviation and 
+spacecraft systems for hostile 
+behavior.
+• Enhancement of cybersecurity 
+protocols by identifying and 
+reducing possible risks in aircraft 
+communication systems.
+
+
+--- Page 32 ---
+Aviation Safety and Accident Investigation
+• Analyze flight recorder data to identify safety risks and aid in accident investigations.
+• Examine accident data to foresee safety concerns and assist in creating safety protocols 
+and emergency plans.
+• Implement natural language processing (NLP) for aviation safety.
+• Improve airport and aircraft security through equipment health monitoring.
+• Leverage machine learning and NLP to anticipate human factors in aviation incident 
+reports.
+• Use NLP and machine learning to categorize human factor issues in incident reports.
+• Identify anomalies in go-arounds by recognizing patterns with machine learning.
+• Extract insights from aviation safety narratives using NLP and clustering techniques.
+• Evaluate risk factors during flights using the SAFE methodology and machine learning.
+
+
+--- Page 33 ---
+UAV/Drone Applications
+• Integration in UAVs and ATM systems significantly influencing unmanned 
+aircraft.
+• Enhancement of the performance of autonomous UAV networks.
+• Facilitation of aircraft inspections using AI-driven UAVs.
+• Automation of drone inspections, exams, and analysis of flight data.
+• Automation of aircraft maintenance visual inspections using autonomous 
+drones.
+
+
+--- Page 34 ---
+Pilot Training
+• Optimization of flight paths and simulation of conditions for pilot training.
+• Assistance with real-time decision-making during flights.
+• Personalization of learning, provision of VR training, identification of 
+weaknesses, and tracking of progress in aviation education.
+• Offering of objective performance evaluation and personalized feedback in 
+simulator-based pilot training using machine learning frameworks.
+• Prediction of flight skills.
+
+
+--- Page 35 ---
+Thank you, any questions?
+CEC 300
+College of Engineering, Daytona Beach, FL
+35
+
+
+--- Page 36 ---
+Backup Slides
+CEC 300
+College of Engineering, Daytona Beach, FL
+36
+
+
+--- Page 37 ---
+Other Use Cases as Identified by 
+Google Gemini
+Warning – Gemini doesn’t have a good filter, outputs in random order, and some non-sense errors coming after this 
+point.
+Why include this?  I hope this provides some ideas that might spare your future goals, ambitions, or studies in the AI 
+and Aviation world.
+CEC 300
+College of Engineering, Daytona Beach, FL
+37
+
+
+--- Page 38 ---
+Other Applications:
+• AI is used in the design and analysis of digital multiphase material 
+microstructures.
+• AI contributes to automation in executing flight routes.
+• AI is being explored for collision avoidance in air traffic.
+• AI can be used for predicting aircraft moving speed using inertial navigation.
+• AI algorithms analyze reliability of predictive algorithms in aerospace.
+
+
+--- Page 39 ---
+Other Applications (continued)
+• AI supports digitalization in aerospace composites.
+• AI is explored for remote assistance in industrial purposes.
+• AI is used in man-machine air combat systems.
+• AI can be applied for bus voltage compensation and power-sharing 
+coefficient designs.
+• AI aids the development of computing platforms using blockchain in 
+aerospace.
+• AI is incorporated for DoS detection in UAV systems.
+• AI assists in downlink interference control in dense unmanned networks.
+
+
+--- Page 40 ---
+Other Applications (continued)
+• Machine learning can predict when computation offloading would be helpful 
+for deep learning in networks.
+• AI models can help in cooperatively getting context data in vehicular 
+communication networks.
+• AI can guide the development of data for thermal insulators.
+• Deep neural networks are used for design space exploration for DNN 
+inference.
+• Machine learning algorithms can improve resource allocation.
+• Extreme learning machines offer high-performance, low-power hardware for 
+machine learning.
+
+
+--- Page 41 ---
+Other Applications (continued)
+• AI-based methods are used to reduce the number of robots required for a 
+performance level in multi-robot systems.
+• Ant colony optimization can reduce the number of planes needed by 
+calculating efficient flight paths.
+• IoT-based data-driven models offer PHM solutions for aircraft maintenance.
+• NLP is used to predict failure of infrastructure.
+• AI can support operational-level decision-making for aviation routes.
+
+
+--- Page 42 ---
+Other Applications (continued)
+• Recurrent neural networks categorize error patterns and monitor air traffic.
+• AI can automate ATC systems for safe aircraft grouping and sequencing.
+• Machine learning enables prediction of failures hundreds of seconds in 
+advance.
+• Computer vision and deep learning improve visual bridge inspection accuracy 
+for UAVs.
+• AI can be used in water management process systems via remote sensing.
+• Environmental drones with AI can do spot checks on air quality.
+
+
+--- Page 43 ---
+Other Applications (continued)
+• Metaheuristic algorithms aid in aircraft maintenance time and cost 
+optimization.
+• Explainable reinforcement learning contributes to fully automated and 
+dependable autonomous aircraft.
+• Particle swarm optimization optimizes fleet assignment, reducing daily costs.
+• Neural networks power morphing unmanned aerial vehicles.
+• Machine learning algorithms using the shortest path method help airlines 
+save money on fuel, time, and seat capacity.
+
+
+--- Page 44 ---
+Other Applications (continued)
+• Recurrent Neural Networks (LSTM) predict turboprop engine exhaust 
+emissions and combustion efficiency.
+• AI is transforming the aircraft sector by enhancing various operations, 
+including maintenance, air traffic control, and customer experience.
+• AI-driven threat detection systems assess data from various sensors for 
+enhanced security.
+• AI can operate and manage autonomous defense systems to neutralize aerial 
+threats.
+• AI offers decision assistance to security professionals in high-pressure 
+scenarios.
+• AI integrates data from multiple sources to provide a comprehensive 
+perspective on potential dangers.
+
+
+--- Page 45 ---
+Other Applications (continued)
+• AI optimizes launch trajectories, improves spacecraft health monitoring, and 
+customizes experiences for space travelers.
+• AI-powered robots can perform tasks like satellite repairs and asteroid 
+maneuvering with high accuracy.
+• AI-powered training programs revolutionize preparation for space tourists 
+and explorers using VR and AR.
+• AI is expected to foster innovation and breakthroughs in space travel and 
+exploration.
+• AI advancements can help hypersonic aircraft travel vast distances rapidly.
+
+
+--- Page 46 ---
+Other Applications (continued)
+• Data mining methods on big data can optimize in-flight costs for air traffic 
+flow management.
+• AI can aid beyond visual range target allocation and multi-aircraft 
+collaborative decision-making.
+• Self-driving aircraft towing vehicles are being explored.
+• Data-driven methods using probabilistic clustering and dimensionality 
+reduction can monitor satellite housekeeping data.
+• AI is being used to evaluate and analyze augmented reality for remote help in 
+the workplace, reducing production stoppages.
+
+
+--- Page 47 ---
+Other Applications (continued)
+• Deep Q-Networks are used for controlling aircraft landing.
+• Reinforcement learning has demonstrated capability in man-machine air 
+combat systems.
+• AI design approaches are suggested for optimal bus voltage compensation 
+and power sharing.
+• AI can be combined with ACARS signals for enhanced data transmission.
+• Blockchain technology in aerospace is being explored with AI aiding its 
+development.
+
+
+--- Page 48 ---
+Other Applications (continued)
+• Machine learning techniques are used for IoT intrusion detection.
+• SVM is a classifier used for minimized classification risk.
+• Feature extraction is a key step in data pre-processing for machine learning.
+• Various features are extracted from network data for intrusion detection.
+• AI competency frameworks are being developed for aviation education.
+• Current aviation bachelor's programs may not sufficiently develop needed AI 
+competencies.
+
+
+--- Page 49 ---
+Other Applications (continued)
+• Dimensionality reduction simplifies variables while capturing essential 
+variations.
+• Tensor decomposition is a dimension reduction technique.
+• Expert participation and verbal scales are important in evaluating complex 
+technical objects with uncertainty.
+• Interval type-II fuzzy sets help in aggregating individual expert information 
+for a generalized model.
+• Methods for formalizing group expert information based on interval type-II 
+fuzzy sets have been developed.
+• Regression models based on interval type-II fuzzy sets are used for predicting 
+expert evaluations.
+
+
+--- Page 50 ---
+Other Applications (continued)
+• Aviation educators need to make evidence-based changes to curricula based 
+on AI integration.
+• Competency frameworks for AI in aviation are developed using inductive 
+analysis.
+• Analyzing existing aviation curricula is a key step in integrating AI education.
+• Integrating AI in aviation requires building critical sets of competencies.
+• Text analysis tools can visualize word frequencies and co-occurrences in 
+aviation engineering corpora.
+• Learning outcomes should demonstrate both conceptual knowledge and 
+practical application of AI in aviation.
+
+
+--- Page 51 ---
+Other Applications (continued)
+• The annotation of AI/ML key terms can involve subjectivity due to natural 
+language ambiguity.
+• PCA assumes linearity and may overestimate dimensions in non-linear data.
+• Non-linear dimensionality reduction methods like Kernel PCA can address 
+PCA limitations.
+• A structured literature review, analysis of aviation authority documents, and 
+expert interviews are used to identify AI competency needs.
+• Keywords like "Aerospace Engineering," "Artificial Intelligence," and related 
+terms are used to identify relevant research.
+• Challenges in aerospace include optimizing competing goals and managing 
+dynamic, unpredictable air traffic situations.
+
+
+--- Page 52 ---
+Other Applications (continued)
+• AI can enhance automation, pilot-AI interaction, and situational awareness.
+• Limited understanding of aviation-specific jargon can hinder AI in 
+communication analysis.
+• AI needs to handle real-time dynamic scenarios like sudden weather 
+disasters.
+• The adoption of aerospace AI necessitates investments in hardware, 
+software, and data, along with a data governance framework.
+• A culture fostering creativity and cooperation is needed for aerospace AI 
+adoption.
+
+
+--- Page 53 ---
+Other Applications (continued)
+• Collaboration with research institutes and academic experts can help stay updated 
+with AI advancements.
+• A comprehensive approach integrating AI, process innovation, and other factors 
+enhances global competitiveness for aerospace companies.
+• Proper data governance and quality are essential for the dependability and 
+trustworthiness of AI systems in aerospace.
+• International cooperation can speed up development in AI safety and security for 
+aerospace.
+• AI presents diverse functionalities that can significantly enhance defense 
+mechanisms against various threats.
+• The convergence of factors is leading to innovative concepts in space tourism.
+• I will now save this outline as a PowerPoint presentation.
+
+
+--- Page 54 ---
+Asdf
+• Design and analysis of digital multiphase material microstructures.
+• Automation in executing flight routes.
+• Exploration for collision avoidance in air traffic.
+• Prediction of aircraft moving speed using inertial navigation.
+• Analysis of reliability of predictive algorithms in aerospace.
+• Support for digitalization in aerospace composites.
+• Exploration for remote assistance in industrial purposes.
+
+
+--- Page 55 ---
+Other Applications: Continued
+• Application in man-machine air combat systems.
+• Application for bus voltage compensation and power-sharing coefficient 
+designs.
+• Aid in the development of computing platforms using blockchain in 
+aerospace.
+• Incorporation for DoS detection in UAV systems.
+• Assistance in downlink interference control in dense unmanned networks.
+
+
+--- Page 56 ---
+Other Applications: Continued
+• Prediction of when computation offloading would be helpful for deep 
+learning in networks using machine learning.
+• Cooperative context data acquisition in vehicular communication networks.
+• Guidance in the development of data for thermal insulators.
+• Design space exploration for DNN inference using deep neural networks.
+• Improvement of resource allocation using machine learning algorithms.
+
+
+--- Page 57 ---
+Other Applications: Continued
+• Offering of high-performance, low-power hardware for machine learning 
+using extreme learning machines.
+• Reduction of the number of robots required for a performance level in multi-
+robot systems using AI-based methods.
+• Reduction of the number of planes needed by calculating efficient flight 
+paths using ant colony optimization.
+• Offering of PHM solutions for aircraft maintenance using IoT-based data-
+driven models.
+• Prediction of failure of infrastructure using NLP.
+
+
+--- Page 58 ---
+Other Applications: Continued
+• Support for operational-level decision-making for aviation routes.
+• Categorization of error patterns and monitoring of air traffic using recurrent 
+neural networks.
+• Automation of ATC systems for safe aircraft grouping and sequencing.
+• Prediction of failures hundreds of seconds in advance using machine 
+learning.
+• Improvement of visual bridge inspection accuracy for UAVs using computer 
+vision and deep learning.
+
+
+--- Page 59 ---
+Other Applications: Continued
+• Application in water management process systems via remote sensing.
+• Spot checks on air quality using environmental drones with AI.
+• Use for artificial air monitoring.
+• Aid in aircraft maintenance time and cost optimization using metaheuristic 
+algorithms.
+• Contribution to fully automated and dependable autonomous aircraft using 
+explainable reinforcement learning.
+
+
+--- Page 60 ---
+Other Applications: Continued
+• Optimization of fleet assignment, reducing daily costs using particle swarm 
+optimization.
+• Powering of morphing unmanned aerial vehicles using neural networks.
+• Saving money on fuel, time, and seat capacity using machine learning 
+algorithms with the shortest path method.
+• Prediction of turboprop engine exhaust emissions and combustion efficiency 
+using recurrent neural networks (LSTM).
+
+
+--- Page 61 ---
+Other Applications: Continued
+• Transformation of the aircraft sector by enhancing various operations, 
+including maintenance, air traffic control, and customer experience.
+• Assessment of data from various sensors for enhanced security using AI-
+driven threat detection systems.
+• Operation and management of autonomous defense systems to neutralize 
+aerial threats.
+• Offering of decision assistance to security professionals in high-pressure 
+scenarios.
+• Integration of data from multiple sources to provide a comprehensive 
+perspective on potential dangers.
+
+
+--- Page 62 ---
+Other Applications: Continued
+• Optimization of launch trajectories, improvement of spacecraft health 
+monitoring, and customization of experiences for space travelers.
+• Performance of tasks like satellite repairs and asteroid maneuvering with 
+high accuracy using AI-powered robots.
+• Revolutionization of preparation for space tourists and explorers using VR 
+and AR with AI-powered training programs.
+• Fostering of innovation and breakthroughs in space travel and exploration.
+
+
+--- Page 63 ---
+Other Applications: Continued
+• Assistance in hypersonic aircraft travel over vast distances rapidly.
+• Optimization of in-flight costs for air traffic flow management using data 
+mining methods on big data.
+• Aid in beyond visual range target allocation and multi-aircraft collaborative 
+decision-making.
+• Exploration of self-driving aircraft towing vehicles.
+• Monitoring of satellite housekeeping data using data-driven methods with 
+probabilistic clustering and dimensionality reduction.
+
+
+--- Page 64 ---
+Other Applications: Continued
+• Evaluation and analysis of augmented reality for remote help in the 
+workplace, reducing production stoppages.
+• Control of aircraft landing using deep Q-networks.
+• Demonstration of capability in man-machine air combat systems using 
+reinforcement learning.
+• Suggestion of design approaches for optimal bus voltage compensation and 
+power sharing.
+• Combination with ACARS signals for enhanced data transmission.
+
+
+--- Page 65 ---
+Other Applications: Continued
+• Exploration of blockchain technology in aerospace with AI aiding its 
+development.
+• Use of machine learning techniques for IoT intrusion detection.
+• Classification using SVM for minimized classification risk.
+• Extraction of features from network data for intrusion detection.
+• Development of AI competency frameworks for aviation education.
+
+
+--- Page 66 ---
+Other Applications: Continued
+• Insufficient development of needed AI competencies in current aviation 
+bachelor's programs.
+• Simplification of variables while capturing essential variations using 
+dimensionality reduction.
+• Use of tensor decomposition as a dimension reduction technique.
+• Importance of expert participation and verbal scales in evaluating complex 
+technical objects with uncertainty.
+
+
+--- Page 67 ---
+Other Applications: Continued
+• Aggregation of individual expert information for a generalized model using 
+interval type-II fuzzy sets.
+• Formalization of group expert information based on interval type-II fuzzy 
+sets.
+• Prediction of expert evaluations using regression models based on interval 
+type-II fuzzy sets.
+• Need for aviation educators to make evidence-based changes to curricula 
+based on AI integration.
+• Development of competency frameworks for AI in aviation using inductive 
+analysis.
+
+
+--- Page 68 ---
+Other Applications: Continued
+• Analysis of existing aviation curricula as a key step in integrating AI 
+education.
+• Building of critical sets of competencies for integrating AI in aviation.
+• Visualization of word frequencies and co-occurrences in aviation engineering 
+corpora using text analysis tools.
+• Demonstration of both conceptual knowledge and practical application of AI 
+in aviation through learning outcomes.
+• Subjectivity in the annotation of AI/ML key terms due to natural language 
+ambiguity.
+
+
+--- Page 69 ---
+Other Applications: Continued
+• Overestimation of dimensions in non-linear data using PCA.
+• Addressing of PCA limitations using non-linear dimensionality reduction 
+methods like Kernel PCA.
+• Identification of AI competency needs using a structured literature review, 
+analysis of aviation authority documents, and expert interviews.
+• Identification of relevant research using keywords like "Aerospace 
+Engineering," "Artificial Intelligence," and related terms.
+• Optimization of competing goals and management of dynamic, unpredictable 
+air traffic situations as challenges in aerospace.
+
+
+--- Page 70 ---
+Other Applications: Continued
+• Enhancement of automation, pilot-AI interaction, and situational awareness.
+• Hindrance in communication analysis due to limited understanding of 
+aviation-specific jargon.
+• Handling of real-time dynamic scenarios like sudden weather disasters.
+• Necessity of investments in hardware, software, and data, along with a data 
+governance framework for the adoption of aerospace AI.
+• Need for a culture fostering creativity and cooperation for aerospace AI 
+adoption.
+• Collaboration with research institutes and academic experts to stay updated 
+with AI advancements.
+
+
+--- Page 71 ---
+Other Applications: Continued
+• Enhancement of global competitiveness for aerospace companies through a 
+comprehensive approach integrating AI, process innovation, and other 
+factors.
+• Speeding up of development in AI safety and security for aerospace through 
+international cooperation.
+• Enhancement of defense mechanisms against various threats using diverse AI 
+functionalities.

@@ -1,0 +1,293 @@
+--- Page 1 ---
+ADS-B:
+Automatic Dependent Surveillance - Broadcast
+Course: CEC300
+Department of Electrical, Computer, Software, and Systems Engineering 
+Notes based of “Digital Avionics Handbook” by Spitzer, Ferrell, Ferrell; 
+and different FAA and ICAO documents.
+
+
+--- Page 2 ---
+What is ADS-B?
+•
+As an alternative to secondary surveillance radar, ADS-B broadcasts 
+information about an aircraft’s state within the airspace or on an airport 
+surface.
+o
+Position, Horizontal Velocity, Vertical Velocity, Altitude (barometric and 
+geodetic), and status information.
+•
+Part of a collection of related tools to ensure interoperability between 
+different aircraft types and their equipage.
+•
+Provides position and velocity update information at 1 Hz.
+•
+Two types in the United States:
+o
+1090 Extended Squitter – over 18,000 ft.  (uses Mode S transponder)
+o
+978 MHz Universal Access Transceiver (UAT)
+
+
+--- Page 3 ---
+What is ADS-B?  Continued…
+•
+Automatic – does not require an interrogation, automatically broadcast 
+during a specific time window each second.
+•
+Dependent – enables cooperative sharing of aircraft information between 
+airspace users 
+•
+Surveillance – used to identify aircraft within the airspace and the 
+attributes about it (position, altitude, horizontal velocities, vertical 
+velocities, etc.)
+•
+Broadcast – information is broadcast such that a UAT or 1090 ES receiver 
+can receive the information
+
+
+--- Page 4 ---
+Benefits of ADS-B
+•
+Provides more information about the aircraft state and the estimated 
+accuracy and integrity of the information shared.
+•
+Informs not only ATC (like primary radar) but also other aircraft that can 
+receive ADS-B input (ADS-B IN)
+•
+Less expensive: 
+•
+ADS-B System at airport is at least an order of magnitude cheaper than (e.g. 
+$400k to $4M.
+•
+Less maintenance
+•
+Lower cost set up
+•
+Leverage existing infrastructure such as NDB towers
+•
+Smaller “error tails” than radar.
+
+
+--- Page 5 ---
+Why is ADS-B?
+ADS-B vs. RADAR
+
+
+--- Page 6 ---
+Why is ADS-B?
+Can be installed in existing VHF/Navaid sites?
+• Source: 
+MITRE
+Slide courtesy of Nickolas Demidovich, FAA AST (Office of Commercial Space)
+
+
+--- Page 7 ---
+ADS-B Ground Station Equipment
+Primarily it is a radio receiver that listens 
+for ADS-B message and relays the 
+information to the ADS-B infrastructure.
+
+
+--- Page 8 ---
+ADS-B In vs. Out Transponders
+ADS-B OUT
+•
+Messages are sent from the aircraft, but no ADS-B messages are not received.
+•
+Required for compliance so that ATC systems and suitably equipped aircraft can use the information for 
+situational awareness and collision avoidance
+ADS-B In
+•
+Transponder receives the ADS-B messages from local air traffic, processes them, and displays this 
+information on a suitable display such as:
+•
+Glass cockpit display such as Garmin G1000 connected to a Garmin GDL 90 or GDL88 Transponder.
+BOTH Require:
+•
+Antennas at the top and bottom of the aircraft for broadcast and receipt.
+•
+GPS hardware including antenna.
+
+
+--- Page 9 ---
+Other ADS-B Group Messages
+ADS-R (Automatic Dependent Surveillance –Re-broadcast)
+•
+Enables aircraft on 1090ES to see UAT aircraft updates, and vice-versa.
+•
+Ground station receives each frequency and rebroadcasts messages to the other frequency.
+TIS-B (Traffic Information System – Broadcast)
+•
+Broadcasts traffic information collected by ATC from non-ADS-B equipped aircraft
+•
+Includes ground-based traffic with the ASDE-X (Airport Surface Detection System – Model X)
+FIS-B (Flight Information Services – Broadcast
+•
+Ground-based system information is broadcast to suitably equipped UAT aircraft
+•
+Includes aeronautical data, weather data, and information related to the status of the national airspace to 
+keep pilots informed.
+
+
+--- Page 12 ---
+Where is ADS-B Out Required? - AOPA
+
+
+--- Page 13 ---
+ADS-B OUT
+
+
+--- Page 14 ---
+ADS-B OUT
+
+
+--- Page 15 ---
+1030 MHz
+Receiver
+ATCRBS - Background
+1090 MHz
+Transmitter
+
+
+--- Page 16 ---
+1030 MHz
+Receiver
+Mode S - Background
+1090 MHz
+Transmitter
+Readout:
+Registers
+
+
+--- Page 17 ---
+1030 MHz
+Receiver
+TCAS - Background
+1090 MHz
+Transmitter
+Readout:
+Registers
+Transmits 
+DF11
+1090 MHz
+Receiver
+Receives Mode C replies
+Receive DF11
+Receive DF0
+1030 MHz
+Transmitter
+Mode C interrogation
+Mode S interrogation (UF0)
+TCAS LOGIC
+and Display
+
+
+--- Page 18 ---
+1030 MHz
+Receiver
+ADS-B - Background
+1090 MHz
+Transmitter
+Readout:
+Registers
+Transmits 
+DF17/18
+ADS-B
+1090 MHz
+Receiver
+Receives DF17, DF18
+ADS-B
+1030 MHz
+Transmitter
+Mode C interrogation
+Mode S interrogation (UF0)
+TCAS LOGIC
+and Display
+GNSS
+
+
+--- Page 19 ---
+ADS-B
+1090 MHz
+Transmitter
+Transmits
+ADS-B
+1090 MHz
+Receiver
+Receives
+ADS-B
+Applications
+GNSS
+ADS-B IN
+ADS-B OUT
+
+
+--- Page 20 ---
+1090ES 
+Message 
+Specification
+
+
+--- Page 21 ---
+UAT Message Formats
+Out of date: See next Slide for the current DO-282B
+defined UAT Message.
+
+
+--- Page 22 ---
+UAT ADS-B Out Payload
+22
+Primary and Auxiliary Message Payload shown
+Message Broadcast once per second
+Defined in: 
+RTCA DO-282B: Minimum Operational 
+Performance Standards for Universal Access 
+Transceiver (UAT) Automatic Dependent 
+Surveillance – Broadcast
+
+
+--- Page 23 ---
+Quality Values in UAT Message
+From: https://www.icao.int/NACC/Documents/Meetings/2023/ECARNTG12/ECARRD10-03.pdf 
+
+
+--- Page 24 ---
+ADS-B IN Applications
+
+
+--- Page 25 ---
+ADS-B IN Applications
+
+
+--- Page 27 ---
+ADS-B Challenges
+1- Spectrum congestion at 1090 MHz 
+Hybrid system can help reducing congestion (ADS-B + TCAS).
+2- GNSS not available
+Have backup surveillance systems such as Mode S.
+Airlines will be required to check GNSS coverage before taking off.
+3- Privacy of operations
+ADS-B standards for anonymous identifiers.
+4- Malicious spoofing
+Have backup surveillance systems such as Mode S.
+
+
+--- Page 28 ---
+Current Issue
+• Lack of privacy – ADS-B messages are not encrypted
+o This is good news for sites like FlightRadar24.
+• Dependent upon status of GPS and its reception by aircraft
+• 1 Hz is too slow
+• 1090ES congestion (must deal with Mode A/C and Mode S transponders)
+• Easy to spoof
+• Expanding to more types of operations
+
+
+--- Page 29 ---
+ADS-B 
+using 
+Satellites
+Back-to-Basics (Part 2): All Things Automatic Dependent 
+Surveillance-Broadcast (ADS-B) - Aireon - Space-Based ADS-B 
+Global Air Traffic Surveillance and Tracking

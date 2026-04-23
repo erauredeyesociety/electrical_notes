@@ -1,0 +1,234 @@
+--- Page 1 ---
+Databuses: MIL-STD-1553
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+•
+Background
+•
+Physical Layer
+o
+Hardware
+o
+Signals
+•
+Components
+o
+Bus Controller 
+o
+Bus Monitor
+o
+Remote Terminal
+•
+Redundancy
+•
+Message Types and Formats
+Outline
+
+
+--- Page 3 ---
+•
+First adopted by the US Air Force in 1973 
+o
+Version B adopted 1978
+o
+Version C adopted 2018
+•
+Applications in military aircraft, civilian aircraft, and spacecraft
+o
+Spacecraft include the James Webb Telescope and the International Space Station
+•
+Topology: Bus
+•
+Key Components:
+o
+Transmission line(s)
+o
+Bus Controller
+o
+Remote Terminals (up to 25– 2 or 30 remote terminals or monitors)
+o
+Bus Monitor
+Background
+Link to Standard Version B: nepp.nasa.gov/docuploads/43745C0A-323E-4346-A434F4342178CD0E/MIL-STD-1553.pdf
+
+
+--- Page 4 ---
+Physical Layer
+MIL-STD-1553B Avionic Data Bus
+(Helfrick, 2007)
+
+
+--- Page 5 ---
+Physical Layer and Manchester Encoding
++V
++V
++V
+-V
+-V
+-V
+Two Pulses
+Clock
+NRZ
+Mancheste
+encoding
+1                    0
+•
+Bus cable / transmission line – coaxial or twisted-pair
+•
+Transformer couplers for (1) connection of remote terminal to 
+stub and (2) cable extension.
+•
+Manchester encoding
+•
+Codes signal such that regardless of the number of 1s or 0s, 
+the average voltage will remain at zero.
+•
+Easy to discern logic value
+MIL-STD-1553B Avionic Data Bus
+
+
+--- Page 6 ---
+Components
+Mapping of Function to Components
+
+
+--- Page 7 ---
+Component: Bus Controller / Bus Monitor
+4 - Hardware - MIL-STD-1553
+
+
+--- Page 8 ---
+•
+Remote Terminals
+o
+Terminals that are not a bus controller or monitor
+•
+Coupling to bus:
+o
+Transformer Coupling
+•
+Long-Stub > 1ft
+•
+Isolation of main bus from faults on stub
+•
+Reduce signal distortion by increasing stub’s 
+effective impedance
+o
+Direct Coupling
+•
+Short-Stub < 1ft
+Component: Remote Terminals
+MIL-HDBK-1553A
+Transformer Coupling
+
+
+--- Page 9 ---
+•
+Discussed in later video.
+•
+Integrated into the bus controller
+o
+Enables deterministic, time-division multiplexing
+o
+Pre-determined priority schema 
+o
+Frame and sub-frame time scheduling
+•
+Major frames can contain multiple minor frames
+o
+Supports both periodic and aperiodic messages
+•
+Scheduling mechanism is not prescribed.  Up to the developer.
+Scheduler
+
+
+--- Page 10 ---
+Redundancy
+•
+To address the risk of failure, the network can use redundancy to mitigate the risk of system failure.  
+•
+The figure shows the addition of a backup or fallback bus controller and a fallback channel.
+•
+Terminals and monitors are connected to both the primary and secondary bus (channels).
+•
+If the primary bus or its controller fails, the system can identify the fault and switch to the fallback controller and 
+bus.
+Also, while not redundancy, it should be noted a systems using MIL-STD-1553 can utilize one 
+or multiple buses.  
+MIL-STD-1553B Avionic Data Bus
+
+
+--- Page 11 ---
+Message Formats
+Broadcast Messages
+Information Transfer Messages
+MIL-STD-1553B Avionic Data Bus
+
+
+--- Page 12 ---
+Communication Words
+MIL-STD-1553 Tutorial and Reference - Aerospace DAQ, Test, HIL - UEI
+
+
+--- Page 13 ---
+Word Types:  Command
+MIL-STD-1553 Tutorial and Reference - Aerospace DAQ, Test, HIL - UEI
+
+
+--- Page 14 ---
+Command – Mode Codes 
+The default mode is 00000, but the following codes can be used to send commands.
+MIL-STD-1553 Tutorial and Reference - Aerospace DAQ, Test, HIL - UEI
+
+
+--- Page 15 ---
+Word Types:  Data
+MIL-STD-1553 Tutorial and Reference - Aerospace DAQ, Test, HIL - UEI
+
+
+--- Page 16 ---
+Video Review
+MIL-STD-1553 Tutorial and Reference - Aerospace DAQ, Test, HIL - UEI
+
+
+--- Page 17 ---
+Wrapping Up
+Last Time: 
+Learned about the major avionic systems 
+associated with GNC
+Today:
+Discussed the motivation for the use of 
+Avionics Databuses and Architectures.
+ Introductory concepts were covered.
+Coming up: 
+Aviation Bus Standards: ARINC 429, ARINC 
+629, ARINC 664
+
+
+--- Page 18 ---
+Questions?
+
+
+--- Page 19 ---
+•
+Past Presentations
+o
+Lecture slides prepared and reused from Dr. Timothy Wilson.
+o
+Lecture slides prepared and reused from Dr. Eduardo A. Rojas-Nastrucci.
+•
+“Principals of Avionic Systems” by Al Helfrick, 4th edition.
+•
+“Digital Avionics Handbook” by Spitzer, Ferrell, Ferrell.
+•
+“Avionics Full Duplex Ethernet and the Time Sensitive Networking Standard” by 
+Pasquier and Schneele, Airbus.
+•
+MIL-STD-1553, nepp.nasa.gov/docuploads/43745C0A-323E-4346-
+A434F4342178CD0E/MIL-STD-1553.pdf
+•
+MIL-HDBK-1553, MIL-HDBK-1553 A MULTIPLEX APPLICATIONS
+Module References

@@ -1,0 +1,547 @@
+--- Page 1 ---
+Gale UAS: Case Study
+UASE 501: Unmanned Aircraft Design
+Instructor: Richard S. Stansbury
+College of Engineering
+Embry-Riddle Aeronautical University, Daytona Beach, FL
+UAS 501
+College of Engineering, Daytona Beach, FL
+1
+
+
+--- Page 2 ---
+Lecture Outline
+• Gale Mission Overview
+• Airframe and propulsion
+• Avionics and Communication
+• Payloads
+• Flight Testing
+• Post-test system upgrades.
+UAS 501
+College of Engineering, Daytona Beach, FL
+2
+
+
+--- Page 3 ---
+Payload: GPS Dropsond
+UAS 501
+College of Engineering, Daytona Beach, FL
+3
+
+
+--- Page 4 ---
+Dropsonde and Hurricane Hunters
+UAS 501
+College of Engineering, Daytona Beach, FL
+4
+
+
+--- Page 5 ---
+Background
+• Previous NOAA successes with UAS in hurricanes
+UAS 501
+College of Engineering, Daytona Beach, FL
+5
+Tropical Storm Ophelia, 
+2005
+Hurricane Nole, 2007
+
+
+--- Page 6 ---
+Aerosonde Mk II Hurricane Missions
+UAS 501
+College of Engineering, Daytona Beach, FL
+6
+
+
+--- Page 7 ---
+Other Hurricane UAS: Aerosonde
+UAS 501
+College of Engineering, Daytona Beach, FL
+7
+Aspect
+Details
+(a) System Developer
+Aerosonde Pty Ltd (now Textron Systems)
+(b) Sponsor
+NOAA (in conjunction with NASA for some deployments)
+(c) Storm Flown
+* Tropical Storm Ophelia (2005, flown before becoming a hurricane) * Tropical 
+Storm Noel (2007)
+(d) Date Flown
+* Ophelia: 2005; * Noel: November 2, 2007
+(e) Summary of Results
+•
+Tropical Storm Ophelia (2005): This was the first deployment of an Aerosonde 
+into a tropical cyclone. It gathered data in the storm's boundary layer, at altitudes 
+as low as 1,200 feet (366m), which is too dangerous for manned aircraft.
+•
+Tropical Storm Noel (2007): The Aerosonde successfully flew into the eye of the 
+storm, encountering hurricane-force winds. It reached a low altitude of 300 feet 
+(91 meters). The UAS encountered 80 knots (40 m/s) of wind during its flight.
+•
+General Results: The Aerosonde deployments aimed to gather data from the 
+lower parts of hurricanes, documenting and analyzing mesoscale circulations and 
+improving understanding of the high-wind boundary layer. The data included 
+temperature, wind speed, and atmospheric pressure. This data helps in better 
+predicting the development of tropical depressions and storms into hurricanes.
+
+
+--- Page 8 ---
+Background
+• ERAU began work with NOAA’s UAS Hurricane Research Division (HRD) out of 
+Miami in 2009
+• NOAA project sponsor – Joe Cione
+• NOAA outreach and science – Sara Summers
+• Goal
+• Provide WP-3D Orion deployable UAS that can be launched from one of NOAA’s 
+Hurricane Hunter P-3s into a tropical cyclone
+• Provide in situ measurement of meteorological data
+• Collect boundary layer data at low altitudes
+• Generate a vertical profile of atmospheric data
+• Summary: Create a smart flyable dropsonde
+UAS 501
+College of Engineering, Daytona Beach, FL
+8
+
+
+--- Page 9 ---
+Background
+• Challenges to Aerosonde Campaign:
+• Airspace access
+• Previous Aerosonde mission ended with loss of aircraft in order to collect further data in storm
+• Difficult to obtain a Certificate of Authorization
+• Opportunities in:
+• Naval Warning Area off of Key West in Gulf of Mexico
+• Barbados in non-FAA flight information region
+• Long ingress/egress – costal launch and transition to storm presented challenges
+• Greater likelihood of aircraft loss / damage due to high winds 
+• Much of vehicle’s endurance lost in transition
+• Aerosonde is supposed to be recoverable, which means operation at very low altitudes was 
+discouraged
+• Cost
+• Cost of platform
+• Insurance underwriting
+• Operational costs – flown by a team from AAI out of Australia
+UAS 501
+College of Engineering, Daytona Beach, FL
+9
+
+
+--- Page 10 ---
+Key Requirements
+• Shall deploy from P-3 free-fall chute into hurricane and operate for 60 min
+• Shall acquire data from the sensor board at a rate of 2Hz for:
+•  Air pressure with an accuracy of +/- 0.5 mb or better
+•  Air temperature with an accuracy of +- 0.5 C
+•  Relative humidity with an accuracy of +/- 5%
+•  GPS position with error < 10 meters RMS
+•  3-axis GPS velocity with error of 0.5 m/sec RMS
+
+
+--- Page 11 ---
+Hurricane Eyewall CONOP #1
+P3 – Flight Path
+Gale UAS – Flight Path
+Launch at 10,000 ft.   Enter mission flight regime by 5,000 ft.
+Spiral, Step Descent through storm until reaching 200 ft.  Then, enter eyewall.
+
+
+--- Page 12 ---
+Hurricane Eye CONOP #2
+P3 – Flight Path
+Gale UAS – Flight Path
+Launch at 10,000 ft.   Spiral descent to 2500 ft.
+Then, enter the eyewall and step descend to 200 ft.
+After 200 ft, it will maintain that altitude until the aircraft is destroyed from the environment or power is lost.
+
+
+--- Page 13 ---
+Deployment
+UAS 501
+College of Engineering, Daytona Beach, FL
+13
+
+
+--- Page 14 ---
+Airframe and Aircraft Design
+UAS 501
+14
+Design evolution from:
+•
+CAD and CFD analysis
+•
+Wind tunnel analysis
+•
+Avionics and Payload integration
+•
+Ground tests
+•
+Ground launch
+•
+“Dress Rehearsal” P3 deployment
+
+
+--- Page 15 ---
+CFD and CAD Analysis
+UAS 501
+College of Engineering, Daytona Beach, FL
+15
+ 
+ 
+ 
+
+
+--- Page 16 ---
+Wind Tunnel Analysis
+UAS 501
+College of Engineering, Daytona Beach, FL
+16
+
+
+--- Page 17 ---
+Repair of Stress Factures Issues
+Problems
+Solutions
+• Repeated insertion and removal of Gale 
+from sabot tube resulted in some 
+fatigue damage
+• When collapsed, tensile and shear 
+stresses applied to screws and 
+mounting plates
+• Redesigned mounting plates out of 
+aluminum
+• Latch points added to body to ensure 
+screws secure fit of mounting screws
+• Note: aircraft weight increased as a 
+result
+• Resulted in cancelation of 2011 clear air 
+flight test and 1-year to accommodate 
+re-design and new flight window 
+
+
+--- Page 18 ---
+Avionics and Communications
+UAS 501
+College of Engineering, Daytona Beach, FL
+18
+
+
+--- Page 19 ---
+Piccolo SL Autopilot
+UAS 501
+College of Engineering, Daytona Beach, FL
+19
+
+
+--- Page 20 ---
+Power Requirements
+UAS 501
+College of Engineering, Daytona Beach, FL
+20
+
+
+--- Page 21 ---
+Batteries
+UAS 501
+College of Engineering, Daytona Beach, FL
+21
+Note: 
+LiPo: Lithium Polymer
+ 
+LiFePO4: Lithium Iron Phosphate
+ 
+LiS: Lithium Sulphate
+ 
+LiSOCl2: Lithium Thionyl Chloride
+
+
+--- Page 22 ---
+GPS Dropsonde Payload
+UAS 501
+College of Engineering, Daytona Beach, FL
+22
+
+
+--- Page 23 ---
+Data Collection and Processing
+UAS 501
+23
+Sensor fusion 
+required:
+MIST Sonde (via 
+AVAPS)
+-
+Temperature
+-
+Pressure
+-
+Humidity
+Piccolo SL (via C2 
+RF LOS/BLOS data 
+link)
+-
+GPS
+-
+Wind 
+estimation data
+
+
+--- Page 24 ---
+Ground Tests of Payload
+UAS 501
+College of Engineering, Daytona Beach, FL
+24
+
+
+--- Page 25 ---
+Integration Prototyping
+UAS 501
+College of Engineering, Daytona Beach, FL
+25
+
+
+--- Page 26 ---
+Deployment
+• Sabot Tube 
+• Parachute held on by a plastic flap
+• When entering wind stream, the flap is 
+pulled away deploying the parachute.
+• Process
+• Deployment
+• Sabot Tube Pulled Away
+• Falls like a dart (ballistic)
+• Wings deploy and lock into place
+• Automation takes over flight controls
+• Remote pilot can also control during clear 
+air flights
+• All of this done using timers and 
+configured for 10,000 ft deployment.
+UAS 501
+College of Engineering, Daytona Beach, FL
+26
+
+
+--- Page 27 ---
+Ground Launch Test
+UAS 501
+College of Engineering, Daytona Beach, FL
+27
+Build – Test - Fly
+Ground testing provided an ability to prove flight concept:
+•
+Tune autopilot
+•
+Identify issues with current model
+•
+Initially problems encountered with torque roll upon 
+liftoff
+Vehicle launch proved problematic
+•
+Issues of damage during control system tuning
+Transitioned to a tensioned line launch 
+Vehicle inherently difficult to launch as designed for 
+operation at higher altitudes and gradual descent.  Not 
+designed for climb.
+Note: unable to secure non-P3 option for airborne 
+deployment test
+
+
+--- Page 28 ---
+Torque Roll and Yaw Stability
+Problems
+Solutions
+• Analysis determined two stability 
+control issues as a result of added 
+aircraft weight
+• Increased torque roll
+• Increased P-factor
+•
+Due to high angle of attack
+• CFD, wind tunnel, and direct 
+analysis
+• Constructed model of aircraft for 
+HIL testing for autopilot tuning
+• Second vertical stabilizer added to 
+improve lateral stability
+
+
+--- Page 29 ---
+UAS 501
+Aeronautical Science, Daytona Beach, FL
+29
+
+
+--- Page 30 ---
+Airframe Updated 
+UAS 501
+College of Engineering, Daytona Beach, FL
+30
+
+
+--- Page 31 ---
+Gale Flies!
+UAS 501
+College of Engineering, Daytona Beach, FL
+31
+
+
+--- Page 32 ---
+Clear Air Flight - Overview
+• Prior to operation within a tropical 
+cyclone a clear air flight is required
+• Goals
+• End-to-end pre-flight analysis onboard P-3 
+(RFI, AVAPS testing, fit check, etc.)
+• Full, but abbreviated, mission profile 
+execution
+• Validation of science payload using GPS 
+dropsondes
+• Success criteria
+• Collected data meets the payload 
+performance requirements
+• Aircraft completes entire mission
+• Preparations
+• Site selection
+• AVON Park MOA
+• Final airworthiness review by NOAA 
+engineers 
+• Requirements inspection
+• Design inspection
+• Vehicle inspection
+• Mission CONOP Development
+• Waypoints
+• Geofence
+• Contingency management plan
+• Checklists
+• Water survival training for ERAU personnel 
+on P-3
+• Final mission brief with flight crew
+
+
+--- Page 33 ---
+NOAA Sky Hopper WD-P3
+UAS 501
+College of Engineering, Daytona Beach, FL
+33
+
+
+--- Page 34 ---
+Avon Park MOA
+UAS 501
+College of Engineering, Daytona Beach, FL
+34
+
+
+--- Page 35 ---
+Detailed View of Airspace Configuration
+
+
+--- Page 36 ---
+Clear Air Flight
+UAS 501
+College of Engineering, Daytona Beach, FL
+36
+
+
+--- Page 37 ---
+Results
+• Deployment successful
+• Only 90% of wing deployment 
+(technical fault)
+• UAS climb-out of dive started
+• Ground impact not observed
+• Unable to recovery from ballistic 
+trajectory and enter flight regime
+• Belly strike
+• Impact with palmetto on ground 
+ruptured battery pack resulting in fire
+• Total hull loss 
+UAS 501
+College of Engineering, Daytona Beach, FL
+37
+
+
+--- Page 38 ---
+Post-Flight System Upgrades
+• New release mechanism
+• Once sabot tube reaches terminal velocity 
+under drogue chute, released.
+• Gale tethered in tube by wire.  Wire heated 
+to break away and release for flight
+• Lower cost autopilot 
+• Pixhawk Autopilot
+• Significantly lower cost compared with 
+Piccolo SL
+• Airframe redesign
+• Lighter airframe
+• 3D printing using biodegradable polymers
+• Waiting for future flight opportunities
+UAS 501
+College of Engineering, Daytona Beach, FL
+38
+
+
+--- Page 39 ---
+Other Hurricane UAS  - Coyote
+Aspect
+Details
+(a) System Developer
+Raytheon  (acquired from BAE Systems Inc)
+(b) Sponsor
+NOAA (National Oceanic and Atmospheric Administration)
+(c) Storm Flown
+* Hurricane Edouard (2014), * Maria (2017) and * Michael (2018)
+(d) Date Flown
+September 2014 (Edouard), 2017 (Maria), 2018 (Michael)
+(e) Summary of Results
+•
+The Coyote was air-launched from a NOAA P-3 Orion research plane. It collected 
+wind, humidity, and pressure readings in the intense section of the hurricane
+UAS 501
+College of Engineering, Daytona Beach, FL
+39
+
+
+--- Page 40 ---
+Coyote
+UAS 501
+College of Engineering, Daytona Beach, FL
+40
+
+
+--- Page 41 ---
+Other Hurricane UAS: Altuis-600
+Aspect
+Details
+(a) System Developer
+Black Swift Technologies
+(b) Sponsor
+NOAA (National Oceanic and Atmospheric Administration)
+(c) Storm Flown
+* Hurricane Helene * Tropical Storm Tammy * Hurricane Ernesto * Hurricane Ian
+(d) Date Flown
+* Hurricane Helene: August 2024 * Tropical Storm Tammy: 2023 * Hurricane 
+Ernesto: 2024 * Hurricane Ian: 2022
+(e) Summary of Results
+•
+Hurricane Ian: The Altius-600 drone was flown for the first time in Hurricane Ian 
+in 2022, and a team from NOAA's Aircraft Operations Center and its Acquisition 
+and Grants Office won a Department of Commerce Gold Medal for that work.
+•
+Tropical Storm Tammy: Used to measure parts of the storm too dangerous for 
+humans to go.
+•
+Hurricane Helene: Successfully launched from a NOAA P-3 aircraft to sample the 
+eye, eyewall, and storm's lowest layers, breaking records in flight time, 
+communications range, and maximum recorded wind speed.
+UAS 501
+College of Engineering, Daytona Beach, FL
+41
+
+
+--- Page 42 ---
+Altius-600
+UAS 501
+College of Engineering, Daytona Beach, FL
+42

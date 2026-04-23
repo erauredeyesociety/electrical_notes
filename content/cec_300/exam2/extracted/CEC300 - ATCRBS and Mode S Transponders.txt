@@ -1,0 +1,472 @@
+--- Page 1 ---
+ATCRBS and Mode S Transponder
+CEC300: Computing in Aviation and Aerospace
+Where is the airplane?
+
+
+--- Page 2 ---
+ATCRBS and Mode S Transponders
+•
+Secondary Radar
+•
+Instead of using primary radar, which relies on reflected energy to 
+locate a target.
+•
+Ground Station Interrogates Aircraft (1030 MHz), and Aircraft reply to 
+interrogation (1090 MHz) for mode A, C.
+•
+ATCRBS – Air Traffic Control Radar Beacon system.
+•
+Mode A – broadcasts IDENT
+•
+Mode C – broadcasts Altitude
+•
+Mode S – addresses some of the limitations of Mode A and C
+•
+Additional information transmitted
+•
+e.g. Squitter and Extended Squitter
+•
+Supports air-to-air interrogation and replies
+
+
+--- Page 3 ---
+ATCRBS – Air Traffic Control Radar Beacon System
+Developed in 1956, ATCRBS was the first air route surveillance radar system 
+developed and purchased for the purposes of air traffic control. The 
+technology was based closely on that of the military's IFF (Identification 
+Friend or Foe) system.
+Interrogation from ground– 1030 MHz
+Reply from airplane – 1090 MHz
+
+
+--- Page 4 ---
+ATCRBS – Air Traffic Control Radar Beacon System
+On the ground:
+In the airplane:
+
+
+--- Page 7 ---
+ATCRBS Interrogations
+(from Binns, 5 Primary and Secondary Radar | Aircraft Systems)
+
+
+--- Page 8 ---
+Sidelobe Suppression Pulse
+If P1 > P2, then Respond
+Otherwise, ignore
+Omni directional antenna for P2 has a power 
+greater than the energy of the sidelobes.
+(from Binns, 5 Primary and Secondary Radar | Aircraft Systems)
+
+
+--- Page 9 ---
+When Reply to Interrogation
+ATCRBS Transponder replies to an interrogation so long as:
+1.
+Transmission of P1 to P2 is 2𝜇𝑠 apart
+2.
+P1 > P2 signal
+3.
+Delay of 8 𝜇𝑠 if Mode A or 21𝜇𝑠 if Mode C from P1 rising edge to rising 
+edge of P3
+Once a valid interrogation is received, the turnaround time for reply is 3𝜇𝑠.
+The next slide reviews the reply message and its respective timing.
+
+
+--- Page 10 ---
+ATCRBS Reply Format
+(from Binns, 5 Primary and Secondary Radar | Aircraft Systems)
+
+
+--- Page 11 ---
+ATCRBS Transponder Mount Types
+NXT-600/-700/800  | Mode S Transponders | L3Harris
+File:Transponder 2.jpg - Wikimedia Commons
+
+
+--- Page 12 ---
+ATCRBS Transponder Block Diagram
+Source: Helfrick, 2010
+
+
+--- Page 13 ---
+Logarithmic Amplifier 
+Purpose: Obtain similar output for extreme changes in input power
+
+
+--- Page 14 ---
+Transponder Sensitivity and Power Output
+Transponder Minimum Triggering Level is Set to -73 dBm +/- 4 dB at the 
+Transponder Input/Output Connector
+Power Output for Class 1A or 2A ATCRBS Transponders is 125 Watts
+Power Output for Class 1B and 2B ATCRBS Transponders is 70 Watts
+No Class of Transponder may Exceed 500 Watts
+
+
+--- Page 15 ---
+Encoding Altimeter
+•
+An encoding altimeter is used to transmit the barometric altitude of an 
+aircraft for a Mode C and Mode S transponders.
+•
+Mode C – altitudes are encoded in 100 ft increments.
+•
+Mode S – altitudes are encoded in 25 ft increments
+•
+Gilham Codes – a type of “gray code” is used to encode the altitude into 
+the appropriate 11-bit sequence
+
+
+--- Page 16 ---
+The Gillham Code
+A form of Gray code
+Range: -1200’ to 126,700’
+100’ increments
+Uses 11 of the available 12 bits
+D1 is not used
+It is used to transmit uncorrected barometric altitude between an 
+encoding altimeter or analog air data computer and a digital 
+transponder.
+Altimeter Encoder
+
+
+--- Page 17 ---
+The Gillham Code
+Gillham binary code 
+[D124 A124 B124 C124]
+Squawk octal code [ABCD]
+Height [m]
+Height [ft]
+000 000 000 001
+0040
+−365.76
+−1200
+000 000 000 011
+0060
+−335.28
+−1100
+000 000 000 010
+0020
+−304.8
+−1000
+000 000 000 110
+0030
+−274.32
+−900
+000 000 000 100
+0010
+−243.84
+−800
+000 000 001 100
+0410
+−213.36
+−700
+000 000 001 110
+0430
+−182.88
+−600
+000 000 001 010
+0420
+−152.4
+−500
+000 000 001 011
+0460
+−121.92
+−400
+000 000 001 001
+0440
+−91.44
+−300
+…
+010 000 000 110
+0032
+126400
+010 000 000 010
+0022
+126500
+010 000 000 011
+0062
+126600
+010 000 000 001
+0042
+126700
+
+
+--- Page 18 ---
+The Need to Use Pressure Altitude
+
+
+--- Page 19 ---
+Issues with ATCRBS
+•
+Garble / Fruit
+o
+Wasteful of Spectrum
+o
+Required Repeated 
+Interrogations
+•
+Limited Info: altitude and IDENT
+•
+No guarantees of receipt or 
+integrity (no means to mitigate TX 
+error)
+
+
+--- Page 20 ---
+Mode S Technology attempts to mitigate ATCRBS
+•
+All Call  to request all aircraft to reply with a specified probability that they 
+should respond, e.g. ½, ¼, 1/8, 1/16 chance to reply
+•
+After several attempts, the majority of traffic should be detected at the 
+ground station.
+•
+Stochastic acquisition
+•
+Selective Interrogations (aka “roll call” – once local aircraft are known, 
+interrogate those aircraft.  
+•
+Lock out aircraft that have responded with updates to avoid unnecessary 
+replies to all-call.
+
+
+--- Page 21 ---
+Mode S (Select)
+•
+Developed to provide more modern enhancements and reduce the amount 
+of over interrogation occurring.
+•
+Built to be backward compatible with ATCRBS air/ground systems.
+•
+Common Features with ATCRBS: 
+•
+1030 MHz (interrogation) and 1090 MHz (reply)
+•
+Vertically polarized
+•
+Same signal levels
+
+
+--- Page 22 ---
+Mode Select, Mode-S, 
+Transponder
+
+
+--- Page 23 ---
+ICAO 24-Bit Aircraft Address
+•
+Instead of using ATC 
+assigned transponder 
+codes…
+•
+Registered aircraft are 
+assigned a 24-Bit 
+address (ICAO 
+Address)
+•
+With 24-bit, enough 
+addresses to support 
+2^24 or approx. 16.7 
+million
+https://www.icao.int/WACAF/Documents/Meetings/2023/Workshop-24-
+Bits/Guidelines%20for%20ICAO%2024%20Bits%20Adresses%20Assignment.pdf 
+
+
+--- Page 24 ---
+Image Source: Bodart, 2019
+
+
+--- Page 25 ---
+All-Call and Roll Call
+All-Call – identifies aircraft within the vicinity (1/3 of interrogations)
+Roll-Call  - Interrogation identified aircraft for data (2/3 of interrogations)
+(Image source: 5 Primary and Secondary Radar | Aircraft Systems )
+
+
+--- Page 26 ---
+All-Call Signal Timing
+•
+Signal transmitted with P1, P2, and P3 (like ATCRBS)
+•
+Additional P4 signal alternates between 0.8 𝜇𝑠 to 1.6 𝜇𝑠 pulse width  (all other pulses in the 
+interrogation are 0.8 𝜇𝑠
+•
+0.8 𝜇𝑠 ignored by Mode S, but will trigger Mode A and C transponders
+•
+1.6 𝜇𝑠 triggers Mode S transponders to respond
+•
+Enables backward compatibility 
+•
+Reply includes ICAO address and interrogators identifier.
+•
+Aircraft replies that are received without garble are considered “locked” or “acquired”.
+(Image source: 5 Primary and Secondary Radar | Aircraft Systems )
+
+
+--- Page 27 ---
+Selective Call Interrogation
+“Roll Call”
+•
+Pulse format
+•
+When P1 and P2 are the same strength (Mode A/C ignore)
+•
+Reference pulse of 1.25 𝜇𝑠 issued at start of data word called “sync”
+•
+Data word is either 56 bits or 112 bits (between 0.5 𝜇𝑠 framing pulses)
+•
+0.25 𝜇𝑠 with per bit
+•
+Data block includes 
+•
+24-bit ICAO address
+•
+Interrogator identity
+•
+All call if ICAO address all 1s
+(Image Source: 
+5 Primary and Secondary Radar | Aircraft Systems)
+Parity
+Address
+
+
+--- Page 28 ---
+Image Source: Bodart, 2019
+
+
+--- Page 29 ---
+Locking Out
+•
+After All-Call, Mode S radar will only interrogate the known aircraft with the 
+SELECT(Roll Call) interrogation.
+•
+Lockout message sent with the first SELECT Message.
+•
+Aircraft transponders lock out replies to the station’s ALL Call interrogations 
+until SELECT Message indicating lock out has ended.
+
+
+--- Page 30 ---
+Stochastic Acquisition
+•
+Mitigate garbling by not having each aircraft respond to every all call.
+•
+With less aircraft responding, there is less likelihood of garble
+•
+Set by the ground-station’s interrogation, the aircraft are told to respond 
+with one of the following probabilities:  100%, 50%, 25%, 6.25%, 0%.
+•
+After several all-calls the neighboring aircraft should be acquired.
+
+
+--- Page 31 ---
+Image Source: Bodart, 2019
+
+
+--- Page 32 ---
+Mode S, Select Reply
+Data block uses pulse position modulation.
+Reply is 56 or 112 microseconds long
+Data block contains 
+•
+All Messages -  aircraft address, parity, 
+control bits  
+•
+Long Message – Additional Flight 
+Information
+Weather
+(Image Source: 5 Primary and Secondary Radar | Aircraft Systems)
+
+
+--- Page 33 ---
+Squitter
+Aircraft replying to nothing.  
+It broadcasts its:
+•
+Same preamble as Mode S reply
+•
+8-Bit control code,
+•
+24-Bit aircraft address
+•
+24-bit parity
+Extended Squitter will be discussed with ADS-B
+(Image Source: 5 Primary and Secondary Radar | Aircraft Systems)
+
+
+--- Page 34 ---
+Reducing Errors
+•
+Parity Check:
+•
+Cyclic Redundant Check (CRC) used to provide a sequency of parity bits, 
+which are appended to the transmitted message. 
+•
+Polynomial, iterative XOR process
+•
+Receiver can perform same CRC then compare the results.
+•
+In response, the system can re-interrogate the aircraft that produced an 
+error message.
+•
+ATC can be notified of aircraft with recurring errors (might be faulty or 
+dealing with local interference impacting ground or aircraft).
+
+
+--- Page 35 ---
+Air-to-Air Mode S
+An advantage of Mode S is that it can support not only ground-to-air SSR.
+It also supports Air-to-Air!
+•
+Aircraft can send ALL CALL and suitably equipped aircraft will respond 
+(Mode A, Mode C, and other Mode S).
+•
+With aircraft acquired, it can then use the SELECT message to request 
+updates from the detected aircraft.
+•
+Having antenna on top and bottom of aircraft enable trans and receipt to 
+aircraft above it.
+
+
+--- Page 36 ---
+Example of Mode S Hardware
+
+
+--- Page 37 ---
+Mode S – Radar Display
+Mode-S [ADS-B] (SSR) Radar Camera Overlay
+
+
+--- Page 38 ---
+Antenna Configuration
+•
+Blade antennas are installed on 
+the top and bottom of the aircraft
+•
+Each has its own receiver and 
+decoder.
+•
+Best signal wins – the signal with 
+the least error is selected (via 
+error checking).  Tie break:  Pick 
+the signal with the highest signal 
+strength. 
+(Image Source: 5 Primary and Secondary Radar | Aircraft Systems)
+
+
+--- Page 39 ---
+Review
+1.Describe the function of a transponder in an SSR system.
+2.Explain the purpose(s) of the P2 pulse in Mode A and Mode C interrogations, and 
+how are they different for Mode S?.
+3.How does the aircraft determine if an interrogation pulse sequence is coming 
+from a side lobe?
+4.What information does a Mode A reply from an aircraft provide?
+5.What additional information is included in a Mode C reply, compared to a Mode 
+A reply?
+6.How did Mode S aim to improve upon the limitations of Mode A and Mode C 
+systems?
+7.Describe the three fundamental interrogation modes of Mode S.
+8.Explain how Mode S enables traffic surveillance independent of primary radar.

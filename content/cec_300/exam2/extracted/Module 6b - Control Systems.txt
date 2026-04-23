@@ -1,0 +1,648 @@
+--- Page 1 ---
+Aircraft Controls
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+•
+Introduction to Control Systems
+•
+Flight Control Systems
+o
+PID Controller
+o
+Class Activity – observing PID controller performance.
+o
+Lateral control
+o
+Longitudinal control
+Outline
+
+
+--- Page 3 ---
+•
+Consider: How do pilots control their aircraft? How does it move from point A-to-B or a long a waypoint 
+path?
+o
+Inputs?
+o
+Outputs?
+•
+Uncrewed Aircraft Systems and Advanced Air Mobility aircraft reallocates many functions previously 
+performed by the pilot into an overall control architecture.
+•
+This unit focuses on flight control with a review of PID controllers. 
+Introduction of Control System
+CEC 300
+College of Engineering, Daytona Beach, FL
+3
+
+
+--- Page 4 ---
+Recap: UAS States Parameters and Control Channels
+CEC 300
+College of Engineering, Daytona Beach, FL
+4
+Four common control channels:  
+•
+throttle (T channel),
+•
+elevator (𝛿𝐸 channel), 
+•
+aileron (𝛿𝐴 channel), and
+•
+rudder (𝛿𝐸 channel)
+
+
+--- Page 5 ---
+•
+Intelligence, Surveillance, and Reconnaissance (ISR) Applications:
+o
+Special care required to ensure stability of the camera to reduce demand for a 
+high-bandwidth turret / gimbal
+•
+MicroUAS
+o
+Robust controls to handle wind gusts and navigate wind fields.
+o
+Camera stability is also desired (typically no gimbal)
+o
+Low cost
+•
+UAS Flying into Targets (e.g. arresting cable or net recovery)
+o
+Precision 3D positioning along flight path
+•
+UCAV
+o
+Typically built with less stable or unstable design (flying wing) putting higher 
+demand on control system
+•
+Faster update rates
+•
+High reliability - failure (even temporary) could have more drastic impact on 
+flight safety.
+Examples of mission / class requirements:
+CEC 300
+College of Engineering, Daytona Beach, FL
+5
+
+
+--- Page 6 ---
+•
+Control system design depends upon:
+o
+Characteristics of the aircraft
+•
+Type (fixed-wing, rotorcraft, multirotor, etc.)
+•
+Class (Group 1, Group 2, …)
+•
+Sensors
+•
+Control surfaces / channels available
+o
+Desired level of autonomy (more on this later)
+o
+Mission specific requirements or target mission sets
+Control system design considerations
+
+
+--- Page 7 ---
+FLIGHT CONTROL SYSTEM
+CEC 300
+College of Engineering, Daytona Beach, FL
+7
+
+
+--- Page 8 ---
+•
+Flight control algorithms typically decouple 
+lateral control from longitudinal control.
+o Lateral control - route or steering
+o Longitudinal control – altitude and speed
+•
+Classic control theory achieved by the 
+automatic adjustment of control signal(s) to 
+minimize the feedback error.
+o Common method is a proportional-integral-
+derivative (PID) control algorithm.  
+• A feedforward or trim value can also be 
+used.
+•
+Modern control theory 
+o e.g. AE 527
+o State-based Controls
+o Utilizes a variety of airframe / aerodynamic 
+parameters to develop model of state 
+changes given control inputs and such
+o Book tries to discuss this method, but poorly
+•
+We will first go over the PID at a high-level and 
+cover specific examples of control system 
+configurations utilizing block diagrams.
+o See Barton for full details.
+Flight Control Algorithms Overview
+CEC 300
+College of Engineering, Daytona Beach, FL
+8
+
+
+--- Page 9 ---
+Flight Control Software – Block Diagram
+CEC 300
+College of Engineering, Daytona Beach, FL
+9
+
+
+--- Page 10 ---
+PID Controller Overview Video
+
+
+--- Page 11 ---
+• Core Components
+o Proportional (P) (𝑲𝒑): Reacts to the current error. If the error is large, the control action is large. 
+• It provides immediate reaction but cannot eliminate the error on its own.
+o Integral (I) (𝑲𝒊): Accounts for past errors. 
+• It accumulates the error over time, forcing the system to eliminate the residual steady-state error that a P-
+controller cannot.
+o Derivative (D) (𝑲𝒅): Predicts future errors based on the rate of change.
+•  It acts as a damper, reducing overshoot and improving stability
+PID Controller
+𝑒𝑡= 𝑟𝑡−𝑦(𝑡)
+
+
+--- Page 12 ---
+Demo of a PID Controller – Click for Demo
+Luke Scholler
+Activity:  Open the demo page: 
+https://lukescholler.com/codes/pidemo
+Partner up with someone that has brought their 
+computer or join Dr. Stansbury at the podium.
+1.  Observe the relationship between your mouse 
+movement vs. the change. 
+•
+Vary the distance
+•
+Vary the speed of your movement.
+2. It is time to begin varying the controller’s gains.
+•
+Observe what happens when you vary each of the 
+gains one at a time.
+•
+Set: Kd=1.5
+             Ki=0.000004
+•
+Write down your observations.
+3. Continue to tune your controller.  Try to find a set of 
+gains that results in a fast response, with little to zero 
+overshoot, and few oscillations.
+
+
+--- Page 13 ---
+Throttle Controls: Walk through of a PID controller with Feed Forward and Trim 
+controls
+CEC 300
+College of Engineering, Daytona Beach, FL
+13
+
+
+--- Page 14 ---
+Comments on the PID model shown…
+CEC 300
+College of Engineering, Daytona Beach, FL
+14
+What does the proportional element of 
+the controller do?
+The proportional unit is the largest driver of 
+change within the control system.  
+Simply put, its output is the error multiplied 
+by the proportional coefficient.
+Limitation: Steady-state error. 
+As the error shrinks, the amount of 
+power to deliver the change persists 
+resulting in a solution that is near, but 
+not quite at the commanded state.
+
+
+--- Page 15 ---
+Comments on the PID model shown…
+CEC 300
+College of Engineering, Daytona Beach, FL
+15
+What does the integral do?
+The integral is the accumulated error at the 
+current time step.  i.e., it sums the error 
+over time.
+If error persists (even small error) from the 
+proportional controller, the integral 
+becomes larger meaning there is a greater 
+“push” driving the error toward zero.
+However, if the value of 𝐾𝑖 is too high, 
+either the system becomes sluggish or it 
+begins to overshoot.
+
+
+--- Page 16 ---
+Comments on the PID model shown…
+CEC 300
+College of Engineering, Daytona Beach, FL
+16
+What does the derivative do?
+The derivative acts like a dampener or 
+limiter, which limits the rate of change 
+more as the output reaches the set point, 
+i.e. as error approaches zero.
+This mitigates cases where the controller’s 
+response overshoots the set point.
+However, if the measurements/state 
+estimates are noisy, which appear as small 
+but significant change in error, which can 
+cause the control system to likewise 
+twitch/jitter.
+
+
+--- Page 17 ---
+Comments on the PID model shown…
+CEC 300
+College of Engineering, Daytona Beach, FL
+17
+What does Feed Forward do?
+It serves several purposes:
+•
+Reduces lag in response because the 
+control’s output will be tuned around 
+the commanded state.
+e.g. If the vehicle needs to slow by 0.5 
+of throttle’s airspeed command, then the 
+feed forward path will add the target, 0.5 
+as a starting point for the output and the 
+PID will fine tune the system response.
+Note that the feedforward terms are not 
+part of the PID control loop.
+
+
+--- Page 18 ---
+Comments on the PID model shown…
+CEC 300
+College of Engineering, Daytona Beach, FL
+18
+What does  𝑻𝒕𝒓𝒊𝒎 do?
+It represents the desired steady state for 
+the controller’s output. 
+As startup, with 𝑇𝑡𝑟𝑖𝑚 and the 𝐾𝐹𝐹, dials in 
+the expected state to achiever the desired 
+set point.
+This reduces the efforts of the PID 
+controller to identifying the small 
+corrections that need to be made.
+It effectively puts the center of the 
+controller’s range at a particular value such 
+that the controller does not become 
+saturated.
+A saturated controller is similar to a saturated reaction wheel.
+It has made enough correction to the maximum or minimum 
+such that it can no longer increase or decrease.
+
+
+--- Page 19 ---
+Lateral Control
+CEC 300
+College of Engineering, Daytona Beach, FL
+19
+A desired trajectory segment is given to the autopilot (e.g. a waypoint-defined path or loiter circle)
+•
+In the figure, the UAS is commanded to (a) fly toward the next waypoint or (b) fly a path trajectory between waypoints.
+•
+The course command (𝜒𝑐𝑚𝑑) is given as a function of the heading error (𝜀𝑥) and the crosstrack error (𝜀𝐶𝑇) 
+
+
+--- Page 20 ---
+Lateral Control Block Diagram
+CEC 300
+College of Engineering, Daytona Beach, FL
+20
+•
+Trajectory control algorithm converts trajectory errors into heading commands
+•
+Heading command is compared with estimated heading and generates a roll command
+•
+Roll command feeds the horizontal stability control algorithm
+o Using roll and possibly roll rate as feedback, it generates an aileron and/or rudder command.
+o Note: If manual control (with airspeed and altitude maintained with a closed longitudinal control loop), the 
+outer loop is overridden with the commanded roll or heading commands from the pilot, which is fed to the 
+stability control to be executed.
+
+
+--- Page 21 ---
+•
+Combination of elevator and throttle used to control altitude and airspeed.
+o
+Algorithms for altitude and airspeed can be decoupled, but airframe response is 
+coupled.
+•
+Change in altitude through an elevator control will impact airspeed.
+•
+A reduction in airspeed will result in a loss of altitude given reduction in lift 
+produced by  wings resulting from the airspeed change.
+•
+Two control algorithm concepts will be covered. 
+o
+Altitude hold mode (i.e. cruise) 
+•
+Current altitude and roll are used to determine commanded pitch and airspeed 
+is used to adjust throttle.
+o
+Climb / Descent mode
+•
+Current airspeed is used to control pitch and altitude is used to control throttle.
+•
+Inner loop for stability control for both is the same
+o
+Throttle command is passed through
+o
+Pitch command is translated to elevator setting
+Longitudinal Control
+CEC 300
+College of Engineering, Daytona Beach, FL
+21
+
+
+--- Page 22 ---
+Longitudinal – Altitude Hold
+CEC 300
+College of Engineering, Daytona Beach, FL
+22
+•
+Example of Longitudinal flight control using airspeed to determine throttle and a altitude to pitch (used for 
+altitude hold) (figure from Barton). 
+•
+Altitude to Pitch Control - determines changes to pitch given altitude and roll versus the commanded 
+altitude. 
+•
+Airspeed to Throttle Control – determines the change in throttle given the error between the current 
+and command velocity
+Inner loop (stability control)
+•
+Receives current pitch and state 
+estimates for pitch and angular rate in 
+the y axes (pitch rotational rate)
+
+
+--- Page 23 ---
+Tuning PID-based Control System
+•
+Tuning for a small UAS is typically achieved through an experienced pilot flying the 
+vehicle and making observations.
+•
+First tune for stable level flight
+•
+Then tune for lateral and longitudinal flight by adjusting the gains of the PID 
+controller.
+•
+Some level of tuning can be handled through simulation
+•
+Software in the Loop
+•
+Simulate environment, aircraft dynamics model, and runs virtual control 
+system
+•
+Sensor data is simulated based upon simulation state
+•
+Command influences vehicle in simulation given dynamics model 
+•
+Hardware in the loop
+•
+Similar to SIL
+•
+Hardware controller is connected, but utilizing simulation’s sensor inputs and 
+commands are handled by simulation and not actual aircraft systems
+CEC 300
+College of Engineering, Daytona Beach, FL
+23
+
+
+--- Page 24 ---
+AUTONOMY
+CEC 300
+College of Engineering, Daytona Beach, FL
+24
+
+
+--- Page 25 ---
+•
+FAA avoids use of “autonomy” in preference for “automated” or “automation” in 
+discussing UAS
+o
+An autonomous system would be capable of operating on its own without human 
+intervention to perform high-level mission objectives.
+•
+What are some automated tasks?  Possible automated tasks
+o
+Flight stability control
+o
+Waypoint navigation
+o
+Vehicle health recovery system (adapt control system based upon degradation)
+o
+Contingency management
+o
+Detect-and-avoid
+o
+Auto-takeoff/launch
+o
+Auto-land/recovery
+o
+Aerodynamic termination
+Automation and Autonomy
+CEC 300
+College of Engineering, Daytona Beach, FL
+25
+
+
+--- Page 26 ---
+Autonomy Definitions
+•
+No common definition
+•
+A definition or further guidance is needed to help refine the safety case for a 
+UAS
+•
+Higher levels of automation require higher assurance of safety critical 
+elements of the system that replaces the role of the pilot (perception and 
+control)
+•
+Examples of autonomy / automation definitions given:
+o
+NIST
+o
+NATO STANAG 4586
+o
+JARUS II’s Acceptable Means of Compliance for 23.130 (EASA)
+o
+ICAO Circular 328
+o
+UAS S&T Roadmap
+o
+Gundlach
+CEC 300
+College of Engineering, Daytona Beach, FL
+26
+
+
+--- Page 27 ---
+•
+ALFUS defined by NIST
+o
+Autonomy levels determined based upon weighted 
+metrics:
+•
+Mission Complexity
+•
+Environment Complexity
+•
+Human Intervention
+o
+Method of assessing tasks and conditions of operation 
+to determine level of autonomy needed.
+NIST Levels of Autonomy for Unmanned Systems
+CEC 300
+College of Engineering, Daytona Beach, FL
+27
+
+
+--- Page 28 ---
+NATO STANAG 4586
+CEC 300
+College of Engineering, Daytona Beach, FL
+28
+NATO STANAG 4586 defines interoperability between 
+the unmanned aircraft and the surface component 
+(ground control station and other command, control, 
+communication and intelligence (C4I) systems.
+Defines levels of interoperability based upon the 
+distribution of tasks between unmanned aircraft and 
+flight crew.
+Not autonomy per se, but defines some granularity
+
+
+--- Page 29 ---
+ICAO Circular 328 Definitions
+CEC 300
+College of Engineering, Daytona Beach, FL
+29
+
+
+--- Page 30 ---
+US Army S&T Roadmap
+CEC 300
+College of Engineering, Daytona Beach, FL
+30
+US Army S&T 
+Five domains:
+•
+Think – Advanced Tactical Reasoning
+•
+Look – Focused Situational Awareness
+•
+Move – safe, secure, and adaptive 
+movement
+•
+Talk – efficient proactive interaction with 
+humans
+•
+Work - Interaction with the physical world
+Figure shows Army’s vision for each of these 
+areas.
+Source: DOD Unmanned Systems Integrated 
+Roadmap (2013-2015) 
+
+
+--- Page 31 ---
+Contingency Management
+•
+Autonomous operations to support the 
+resolution of a safety critical failure
+o Attempts to mitigate risk, and
+o Allow time for recovery
+•
+Examples:
+o Lost communications
+•
+Fly to rally point and loiter
+•
+Fly home and land
+o Onboard fire
+•
+Fly to suitable landing site and land
+o Lost GPS
+•
+Loiter until manual control
+•
+Capabilities can be built in
+o Some systems have simple automated routines
+o Others have complex “trees” of actions based 
+upon mission and pre-planned contingency actions
+•
+E.g. Global Hawk contingency management (see figure to 
+right)
+CEC 300
+College of Engineering, Daytona Beach, FL
+31
+
+
+--- Page 32 ---
+Contingency Management (2)
+CEC 300
+College of Engineering, Daytona Beach, FL
+32
+
+
+--- Page 33 ---
+•
+The autopilot is responsible for the estimation of state and control of the aircraft to 
+some degree
+•
+Levels of automation and autonomy are not clearly defined, but some automation 
+necessary as pilot is physically separated from aircraft control
+•
+State estimation is a critical element of flight control
+•
+Flight control software can utilize classical control theory (e.g. PID controllers) or 
+modern control theory (state space controls)
+Review
+CEC 300
+College of Engineering, Daytona Beach, FL
+33
+
+
+--- Page 34 ---
+•
+Gundlach, J. (2014). Designing Unmanned Aircraft Systems.. 
+https://doi.org/10.2514/4.102615.
+•
+Jeffrey D. Barton – Fundamentals of Small Unmanned Aircraft Flight
+o
+Johns Hopkins Apl Technical Digest 31(2):132-149 · January 2012
+•
+NIST Special Publication 1011-II-1.0 Autonomy Levels for Unmanned Systems (ALFUS) 
+Framework – Volume II
+•
+Department of Defense Unmanned Systems Integration Roadmap (2013-2038)
+•
+ICAO Circular 328 “Unmanned Aircraft Systems”
+•
+NATO STANAG 4586 – “Standard interfaces of UAV Control System (UCS) For NATO 
+UAV Interoperability
+•
+Stansbury and Wilson, “Technology Survey and Regulatory Gap Analyses of UAS Sub-
+Systems toward Access to NAS” Handbook of Unmanned Aerial Vehicles, 2014.
+References
+CEC 300
+College of Engineering, Daytona Beach, FL
+34
+
+
+--- Page 35 ---
+Questions?

@@ -1,0 +1,1055 @@
+--- Page 1 ---
+Introduction to Aviation Cybersecurity
+CEC 300: Computing in Aviation and Aerospace
+Prepared by Dr. Richard S. Stansbury
+
+
+--- Page 2 ---
+Introduction to Aviation Cybersecurity
+• Modern aircraft and aerospace systems blend digital, physical, and 
+network elements.
+• Safety and operational reliability depend on robust cybersecurity
+• Vulnerabilities exist from sensors onboard to air traffic 
+management centers to airlines to airports.
+– Cyber adversaries target both legacy and state-of-the-art technologies.
+– Integration of heterogeneous systems increases risk.
+– Continuous innovation in defenses is essential.
+
+
+--- Page 3 ---
+Brainstorm: 
+What are some aviation cybersecurity concerns?
+What are some potential targets?
+What types of cyberattacks could be applied 
+against those targets?
+
+
+--- Page 4 ---
+Threats to Aviation Cybersecurity
+• Potential targets:
+– Aircraft / aircraft systems
+– Air Traffic Management
+– Airlines
+– Airport Operations
+– Passengers
+– Manufacturers
+– Infrastructure
+– Communication systems
+– Ground components of 
+satellite-based systems
+• Approaches
+– Unauthorized access
+– Denial-of-service
+– Man-in-the-middle
+– Data breaches
+– Malware 
+– Ransomware
+– Spoofing
+– Social engineering
+– Supply chain attacks
+
+
+--- Page 5 ---
+Distribution of Attacks from 2000 to 2024
+
+
+--- Page 6 ---
+Categories of cyberattacks
+• Confidentiality: Attacks aimed at 
+unauthorized viewing of sensitive 
+information, such as passenger data 
+and flight plans.
+• Integrity: Attacks focused on 
+improper or malicious modification 
+of data, such as ATM system 
+information or aircraft control 
+systems.
+• Availability: Attacks intended to 
+disrupt access to critical systems 
+and services, such as denial-of-
+service attacks on airport networks.
+Imagan 3 AI (cannot spell)
+
+
+--- Page 7 ---
+Threat Actors and Motivation
+•
+Terrorist Organizations: Aim to cause financial losses, 
+create widespread fear, and disrupt critical infrastructure.
+•
+Cybercriminals: Seek to instill fear, intimidate, steal, and 
+engage in various forms of criminal activities.
+•
+Nation-State Actors and Advanced Persistent Threat 
+(APT) Groups: Often collaborate to steal intellectual 
+property and intelligence to advance their domestic 
+aerospace capabilities, as well as monitor, infiltrate, and 
+subvert other nations' capabilities. Their attacks are often 
+sophisticated and hard to detect.
+•
+Malicious Insiders: Airline employees or individuals with 
+knowledge of protocols and vulnerabilities can pose a 
+significant threat.
+
+
+--- Page 8 ---
+Impact of Aviation Cyber-Attacks
+Safety Compromises: Unauthorized access or manipulation of critical systems can directly impact flight safety and 
+potentially lead to catastrophic events.
+Financial Losses: Attacks can cause significant economic damage through operational disruptions, theft of financial 
+data, and damage to reputation.
+Data Breaches: Sensitive passenger data and intellectual property can be compromised.
+Operational Disruptions: Attacks can lead to flight delays, cancellations, and overall chaos in airport operations.
+Reputational Damage: Cyber incidents can erode public trust and damage the reputation of airlines and airports.
+Theft of Intellectual Property and Intelligence: State-sponsored actors target the aviation industry to acquire 
+valuable information.
+
+
+--- Page 9 ---
+Vulnerabilities Exist Across Systems and Sub Systems.
+Here are a few to consider.
+•
+Flight Systems:
+–
+Software-intensive systems like flight control (including autopilot), displays, navigation, communication, engine control, landing 
+gear, and collision avoidance systems can contain vulnerabilities introduced through human error, lack of quality control, 
+malicious code, supply chain of software components.
+–
+Potential for unauthorized access and tampering with flight control systems.
+•
+Communications:
+–
+Unencrypted communication protocols, such as ADS-B, are susceptible to spoofing and manipulation and do not maintain 
+confidentiality.
+–
+Vulnerabilities in Controller Pilot Data Link Communications (CPDLC) could be exploited.
+–
+Lack of (strong) authentication on critical data flows like data link can be exploited.
+–
+Weak integrity control on communication data flows allows for potential undetected modifications.
+•
+Surveillance:
+–
+Spoofing of ADS-B radio signals can present false aircraft information.
+–
+Spoofing of radar data over interconnection networks can mislead air traffic controllers.
+–
+Signal jamming of surveillance systems like Primary Surveillance Radar (PSR) and Secondary Surveillance Radar (SSR) can disrupt 
+air traffic monitoring.
+•
+Navigation:
+–
+GPS spoofing or jamming can provide erroneous navigation information to aircraft.
+–
+Vulnerabilities in navigation aids like VOR and ILS could be exploited (though the technical difficulty varies).
+
+
+--- Page 10 ---
+EXAMPLES OF AVIATION CYBERATTACKS.
+
+
+--- Page 11 ---
+Timeline of Cyber Attacks
+Year
+Events
+2003
+•
+The Slammer Worm attack compromised one of the FAA’s administrative servers.
+2006
+•
+US Federal Aviation Administration (FAA) internet services forced the shutdown of some of its ATC systems
+2012
+•
+Canadian infrastructure, including passenger and cargo flights, as well as airport facilities, targeted in acts of 
+terrorism conducted by al-Qaeda.
+2013
+•
+A security consultant claimed to have hacked into an aircraft’s control system using his PlainSploit Android app.
+•
+A malware attack led to the shutdown of the passport control system at the departure terminals of Istanbul 
+Ataturk and Sabiha Gokcen airports, causing flight delays.
+•
+Malicious hacking and phishing attacks allegedly carried out by a nation-state targeted about 75 US airports in an 
+attempt to breach US commercial aviation networks.
+2015
+•
+In January, a group calling themselves the 'Lizard Squad – Official Cyber Caliphate' claimed responsibility for 
+breaching the website of Malaysia Airlines.
+•
+A Distributed Denial-of-Service (DDoS) attack by cyber-criminals affected LOT Polish Airlines' flight-plan IT Network 
+systems at the Warsaw Chopin airport, grounding at least 10 flights.
+2016
+•
+More than 60 new ransomware variants appeared. Ransomware attacks targeted entities within the aviation 
+sector, including a UK Airport where screens were blacked out, and Civil Aviation Authorities.
+•
+Hacking and phishing attacks led to the defacement of a website belonging to Vietnam Airlines and flight 
+information screens at Ho Chi Minh City and Hanoi.
+
+
+--- Page 12 ---
+Timeline of Cyber Attacks (2)
+Year
+Events
+2018
+•
+Boeing was hit by the WannaCry computer virus, although it was reported to have caused minimal damage to the 
+company’s internal systems.
+•
+A cyber-attack allegedly launched by the Russian APT group (APT28) blocked Sweden’s air traffic control 
+capabilities, grounding hundreds of flights over a 5-day period.
+•
+A crypto-mining malware was discovered infecting more than 50% of the European airport workstations.
+2019
+•
+About 3 million bot attacks were blocked in a single day by Israel’s Ben Gurion Airport authority as they attempted 
+to breach airport systems.
+•
+A cyber incident resulted in unauthorized access to Airbus’ “Commercial Aircraft business” information systems.
+•
+Albany International Airport experienced a ransomware attack that encrypted its entire database.
+2020
+•
+EasyJet Data Breach: Cyberattack exposed the personal information of approximately 9 million customers.
+2021
+•
+SITA Data Breach: Data breach affecting frequent flyer data of multiple airlines. 
+•
+Air India Data Breach: Data breach compromised the personal data of about 4.5 million passengers.
+2022
+•
+Los Angeles Airport DDoS Attack: Website taken offline for several hours due to a DDoS attack.
+2024
+•
+Cathay Pacific Breach: Breach affected more than 9 million passengers' personal information.
+
+
+--- Page 13 ---
+Unauthorized Access
+Unauthorized access refers to gaining access to systems, networks, or data without 
+permission. This can involve exploiting software vulnerabilities, using stolen credentials, 
+or bypassing security measures.
+•
+Event: RwandAir Cyberattack
+•
+Type: Unauthorized access
+•
+Actors Involved: SilitNetwork (suspected)
+•
+Description: Hackers gained unauthorized access to RwandAir's systems, exploiting 
+weaknesses in the airline's cyber defenses. Used a combination of social engineering, 
+phishing, and software exploits.  Loss of confidentiality and integrity of passenger 
+data.  Near loss of critical operational functions.
+•
+Future Mitigations: Implementing stronger access controls, regular security audits, 
+and employee training on cybersecurity
+Resecurity | The Aviation and Aerospace Sectors Face Skyrocketing Cyber Threats
+
+
+--- Page 14 ---
+Denial-of-Service Atack (DOS)
+Denial-of-service attacks aim to make systems or networks unavailable 
+to users by overwhelming them with traffic or exploiting vulnerabilities.
+• Event: Japan Airlines DDoS Attack
+• Type: Denial-of-service
+• Actors Involved: Unknown
+• Description: A DDoS attack on Japan Airlines caused significant flight 
+delays and temporary suspension of ticket sales.
+• Future Mitigations: Enhancing network infrastructure, implementing 
+DDoS protection services, and conducting regular penetration testing.
+Japan Airlines Cyberattack Causes Flight Delays - Security Spotlight 
+
+
+--- Page 15 ---
+Data Breaches
+Data breaches involve unauthorized access to sensitive information, 
+leading to its exposure or theft.
+• Event: ICAO Data Breach (2025)
+• Type: Data breaches
+• Actors Involved: Unknown
+• Description: The International Civil Aviation Organization experienced a 
+significant data breach, compromising personal information of 11,929 
+individuals.
+• Future Mitigations: Strengthening data encryption, implementing multi-
+factor authentication, and conducting regular security audits.
+Resecurity | ICAO and ACAO Breached: Cyberespionage Groups Targeting Aviation Safety Specialists
+
+
+--- Page 16 ---
+Malware
+Malware refers to malicious software designed to disrupt, damage, or gain 
+unauthorized access to systems.
+• Event: Continental Aerospace Technologies Cyberattack (2024)
+• Type: Malware (also a case of ransomware)
+• Actors Involved: PLAY ransomware group
+• Description: Continental Aerospace Technologies was targeted by a severe 
+malware attack, disrupting manufacturing operations, and  compromising 
+intellectual property.
+• Future Mitigations: ”Robust threat-modeling and the implementation of 
+corresponding measures to protect intellectual property, maintain operational 
+continuity, and ensure the safety of aerospace supply chains.”
+Resecurity | The Aviation and Aerospace Sectors Face Skyrocketing Cyber Threats
+
+
+--- Page 17 ---
+Ransomware
+Ransomware is a type of malware that encrypts data and demands a 
+ransom for its release.
+• Event: AerCap Ransomware Attack
+• Type: Ransomware
+• Actors Involved: Slug
+• Description: AerCap, a global aviation leasing giant, was hit by 
+ransomware, impacting its IT systems. Over 1TB leak, as claimed by Slug.
+• Future Mitigations: Regular data backups, implementing strong 
+encryption, and conducting cybersecurity training
+AerCap ransomware attack latest to hit aviation sector | Cybernews
+
+
+--- Page 18 ---
+Spoofing
+Spoofing involves falsifying data or signals to 
+deceive systems or users.
+•
+Event: GPS Spoofing in the Middle East
+•
+Type: Spoofing
+•
+Actors Involved: Unknown
+•
+Description: 20+ civilian aircraft were 
+misled by GPS spoofing, resulting flights 
+approaching Iranian airspace without 
+clearance.
+•
+Future Mitigations: Industry has adopted 
+various anti-jammer and anti-spoof 
+technologies to mitigate likelihood of 
+disruptive jamming.
+GPS Spoofing: New Electronic Threat in Civilian Airspace - IEEE Spectrum
+
+
+--- Page 19 ---
+Social Engineering
+• Social engineering involves manipulating individuals to gain unauthorized 
+access or information.
+• Event: British Airways Data Breach
+• Type: Social engineering
+• Actors Involved: Cybercriminals
+• Description: In 2018, British Airways suffered a data breach where attackers used 
+social engineering techniques to trick employees into revealing sensitive 
+information. This led to the theft of personal and financial data of around 
+380,000 customers.
+• Future Mitigations: Implementing comprehensive employee training programs, 
+enhancing phishing detection systems, and conducting regular security audits.
+Resecurity | The Aviation and Aerospace Sectors Face Skyrocketing Cyber Threats
+
+
+--- Page 20 ---
+Supply Chain Attacks
+Supply chain attacks target vulnerabilities in the supply 
+chain to compromise systems or data.
+•
+Event: SolarWinds Attack Impact on Aviation
+•
+Type: Supply chain attacks
+•
+Actors Involved: Russia’s Foreign Intelligence Service 
+(SVR)
+•
+Description: The SolarWinds attack in 2020 
+compromised numerous organizations, including 
+those in the aviation sector. Hackers infiltrated the 
+SolarWinds software update process, allowing them to 
+access sensitive data and systems of various 
+companies, including aviation-related entities.
+•
+Future Mitigations: Implementing stringent vetting 
+processes for suppliers, enhancing software update 
+security, and adopting SBOM (Software Bill of 
+Materials) practices.
+Resecurity | The Aviation and Aerospace Sectors Face Skyrocketing Cyber Threats
+Note US-CERT: United States Computer Emergency Readiness Team
+
+
+--- Page 21 ---
+SOFTWARE CYBERSECURITY IN AVIATION
+
+
+--- Page 22 ---
+Software Challenges – Overview
+Challenges:
+Software controls flight management, navigation, and 
+communication
+Many aircraft systems use custom, legacy code alongside 
+modern software
+Complex code integration increases the risk of hidden 
+vulnerabilities
+Regulatory delays sometimes impede prompt software 
+updates
+Maintaining secure software under 
+dynamic threat environments is essential
+
+
+--- Page 23 ---
+Issue: Legacy Software
+• Legacy avionics may have been certified under outdated 
+security standards
+– These systems are prone to exploitation due to unpatched 
+vulnerabilities
+– Upgrading legacy software is challenging and costly in aviation
+– Modernization requires balancing safety, performance, and 
+regulatory compliance
+• Older flight control programs often lack modern encryption or 
+authentication
+
+
+--- Page 24 ---
+Issue: Firmware Vulnerabilities & Code Injection
+• Firmware governs low-level hardware behavior in self-
+contained avionics
+• Unprotected firmware may be exploited via code injection 
+or buffer overflows
+– Example: Attacks against flight computer firmware can compromise 
+control logic Secure boot processes and digital firmware signing 
+mitigate these risks
+• Strict code reviews and testing are applied in critical 
+avionics systems
+• Regular firmware updates are integral to maintaining 
+operational security
+
+
+--- Page 25 ---
+Issue: Insider Threats & Malicious Updates
+• Challenges:
+– Insider actions can lead to unauthorized software modifications
+– Compromised update channels risk widespread exploitation in connected 
+systems
+• Mitigations:
+– Aviation firms enforce strict access control and audit trails for updates
+– Digital signatures verify the authenticity of software updates
+– Continuous monitoring of update channels is vital
+– Training staff to recognize social engineering increases overall security
+
+
+--- Page 26 ---
+Issue: Complexity in Software Integration
+• Challenges:
+– Modern aircraft integrate software modules from various vendors
+– Integration issues can expose unforeseen vulnerabilities
+• Mitigations:
+– Interfaces between flight management, navigation, and control systems 
+must be rigorously tested
+– Standardized APIs and secure data exchange protocols are adopted
+– Collaborative design practices improve software robustness in avionics
+– Thorough threat modeling ensures compatibility and security
+
+
+--- Page 27 ---
+Issue: Resource Constraints in Avionics Software
+• Embedded avionics systems have limited CPU and memory 
+resources
+– Lightweight cryptographic functions and minimal IDS are necessary
+– Example: Resource-constrained flight control software balances 
+performance with security
+• Mitigations
+– Optimized algorithms are developed specifically for aerospace applications
+– Trade-offs are made to maintain real-time operational performance
+– Efficient software design is essential to protect safety-critical systems
+
+
+--- Page 28 ---
+Example: Integrated Modular Avionics
+• Defined in RTCA DO-297/EUROCAE ED-
+124
+• Enables: availability, integrity, safety, 
+health monitoring and fault 
+management, composability
+• Characteristics:
+– Module network with common API for 
+SW/HW resource access
+– Simplified integration
+– Shared components between modules 
+means easier maintenance
+– Developers focus on application layer 
+relying upon the
+– Modules can use own data bus or share 
+aircraft data bus such as AFDX
+
+
+--- Page 29 ---
+NETWORKING AND COMMUNICATIONS 
+CYBERSECURITY IN AVIATION
+
+
+--- Page 30 ---
+Complex Communication and Networking Environment
+
+
+--- Page 31 ---
+Cyber Threats to…
+Air-Ground Communications
+Navigation Aids
+Surveillance
+
+
+--- Page 32 ---
+System Wide Information Management (SWIM)
+SWIM provides a single point of access for near real-time, 
+relevant, and reliable aeronautical, flight, weather, and 
+surveillance information.
+•
+Infrastructure and Standards: SWIM delivers the necessary 
+infrastructure, standards, and services to optimize the secure exchange 
+of relevant data across the National Airspace System (NAS) and the 
+aviation community.
+•
+Data Sharing: It facilitates the data sharing requirements for NextGen, 
+enabling increased common situational awareness and improved NAS 
+agility.
+•
+Single Access Point: SWIM offers a single point of access for aviation 
+data, allowing producers to publish data once and users to access the 
+information they need through a single connection.
+•
+Operational Excellence: As the digital data-sharing backbone of 
+NextGen, SWIM supports operational excellence and innovation in 
+aviation.
+
+
+--- Page 33 ---
+Issue: Vulnerabilities in Wireless & Satellite Links
+Wireless channels are 
+susceptible to 
+interception, jamming, 
+and spoofing
+Satellite communication 
+links face interference 
+and cyber manipulation 
+risks
+Aviation networks must 
+secure both ground and 
+in-flight communications
+Examples include attacks 
+on ADS-B and GPS signals 
+affecting unmanned 
+aerial vehicles
+Advanced encryption 
+standards and secure 
+modems are used
+Continuous monitoring in 
+ground stations mitigates 
+these risks 
+
+
+--- Page 34 ---
+Issue: ADS-B & GPS Spoofing Attacks
+•
+ADS-B transmits flight positions without strong authentication 
+•
+GPS spoofing can create “ghost” aircraft or falsify navigation data
+•
+Experimental attacks have demonstrated the potential for real-world disruption
+•
+Cross-checking with additional sensors (e.g., radar, inertial navigation) is essential
+•
+Mitigation involves cryptographic signing of messages and anomaly detection
+•
+Lessons learned from avionics testbeds guide secure system designs 
+
+
+--- Page 35 ---
+Issue: Data 
+Injection in Air 
+Traffic Systems
+False data injection can alter flight paths and impact 
+air traffic control
+Unsecured interfaces of air traffic management 
+systems are vulnerable
+Simulated attacks expose the effectiveness of robust 
+data validation methods
+Continuous security audits are applied by aviation 
+authorities
+Immediate isolation of compromised subsystems 
+minimizes potential damage
+Real-time threat detection is critical to maintaining 
+safe operations 
+
+
+--- Page 36 ---
+Issue: IoT & 
+SCADA in 
+Aviation 
+Systems
+Modern airports use IoT sensors and SCADA systems for 
+monitoring infrastructure
+Insecure IoT devices may be exploited to disrupt airport 
+operations
+Example: Smart sensors in airfield lighting and 
+environmental systems are networked
+Interconnected devices require standard security 
+protocols and access controls
+Advanced IDS, sometimes using ensemble learning 
+techniques, enhance detection Jayalatchumy et al. 
+Close coordination between IT and operational groups 
+improves resilience
+
+
+--- Page 37 ---
+Ways of 
+Mitigating 
+Communication 
+Vulnerabilities
+Apply state-of-the-art encryption (TLS/SSL) 
+to secure data in transit
+Use digital certificates and key exchange 
+protocols (e.g., Diffie–Hellman)
+Implement strict network segmentation to 
+isolate critical aviation channels
+Regular update of communication 
+protocols to patch known vulnerabilities
+Real-time monitoring systems flag 
+anomalies in data transmission 
+Anomaly detection 
+systems help identify 
+spoofing and 
+injection attacks
+Advanced machine 
+learning algorithms 
+monitor for 
+abnormal data 
+patterns
+Statistical models 
+establish baselines 
+of normal network 
+behavior
+Continuous learning 
+improves detection 
+accuracy over time
+
+
+--- Page 38 ---
+HARDWARE CYBERSECURITY
+
+
+--- Page 40 ---
+Hardware 
+Challenges – 
+Overview
+Critical components: sensors, 
+embedded controllers, 
+actuators in aircraft
+Examples: Integrated Modular 
+Avionics (IMA) systems require 
+high integrity
+Physical hardware failures can compromise flight safety
+Exposure to direct tampering or environmental 
+interference
+Strict certification processes in aviation demand high 
+assurance
+Hardware security is a foundational component of overall 
+safety
+
+
+--- Page 41 ---
+Issue: Embedded Systems Vulnerabilities
+AIRCRAFT USE EMBEDDED 
+DEVICES WITH LIMITED 
+COMPUTATIONAL 
+RESOURCES
+LEGACY 
+MICROCONTROLLERS MAY 
+LACK ADVANCED SECURITY 
+FEATURES
+VULNERABILITIES CAN LEAD 
+TO UNAUTHORIZED 
+FIRMWARE MODIFICATION
+RESOURCE CONSTRAINTS 
+LIMIT THE IMPLEMENTATION 
+OF COMPLEX 
+CRYPTOGRAPHY
+SECURE DEVELOPMENT 
+PRACTICES MUST ACCOUNT 
+FOR THESE LIMITATIONS
+
+
+--- Page 42 ---
+Issue: Sensor & 
+Actuator 
+Integrity
+Sensors (altimeters, gyroscopes) deliver 
+critical flight data
+Actuators (control surfaces, engine 
+controllers) rely on accurate commands
+Incorrect sensor readings may trigger unsafe 
+responses
+Spoofing of sensor outputs can lead to false 
+control inputs
+Regular calibration and redundancy ensure 
+reliability
+
+
+--- Page 43 ---
+Issue: 
+Physical 
+Tampering 
+& Side-
+Channel 
+Risks
+Direct access to hardware (flight computers, 
+wiring) poses serious risks
+Aviation systems often use tamper-resistant 
+enclosures
+Side-channel attacks exploit power consumption 
+or electromagnetic emissions
+Continuous monitoring of physical integrity is 
+recommended
+Preventive measures are essential in high-
+security areas such as cockpit electronics
+
+
+--- Page 44 ---
+Mitigations for Physical Hardware Threats
+•
+Risks:
+– Direct access to hardware (flight computers, wiring) poses serious 
+risks
+– Aviation systems often use tamper-resistant enclosures
+– Side-channel attacks exploit power consumption or electromagnetic 
+emissions
+– Continuous monitoring of physical integrity is recommended
+•
+Mitigations
+– Hardened Enclosures: Using robust materials like steel or specialized 
+alloys to make it difficult to physically access the components.
+– Security Screws/Locks: Employing screws that require special tools to 
+remove or locks that prevent unauthorized access.
+– Encapsulation/Sealing: Covering components with a sealant or 
+coating that becomes evident if tampered with.
+– Ultrasonic Welding: Joining enclosure parts in a way that is difficult to 
+reverse.
+
+
+--- Page 45 ---
+Issue: 
+Counterfeit & 
+Untrusted 
+Components
+Supply chains in 
+aerospace may include 
+components from 
+diverse sources
+Counterfeit or 
+malicious parts can 
+undermine hardware 
+integrity
+Verifying component 
+authenticity is critical 
+for flight-critical 
+systems
+Blockchain traceability 
+can be applied to parts 
+and other system 
+components
+Strict vendor audits 
+and certification 
+procedures are 
+required
+Ensuring trusted 
+hardware mitigates 
+downstream risks
+
+
+--- Page 46 ---
+Securing Aviation Manufacturing Facilities
+
+
+--- Page 47 ---
+Hardware Mitigation Strategies
+• Implement secure boot mechanisms to ensure firmware authenticity
+• Use hardware roots of trust and cryptographic modules in avionics
+• Apply tamper-resistant coatings, secure enclosures, and physical access controls
+• Employ sensor fusion to validate heterogeneous data sources
+• Regular diagnostics and integrity verifications maintain long-term security
+• Best practices from aerospace certification standards guide implementation
+
+
+--- Page 48 ---
+AIR TRAFFIC MANAGEMENT
+
+
+--- Page 49 ---
+Importance of ATM Cybersecurity
+•
+Air Traffic Management (ATM) and Air 
+Traffic Control (ATC) systems are 
+fundamental to ensuring the safety of air 
+transportation.
+•
+These systems process critical information 
+essential for maintaining aircraft separation 
+and preventing ground collisions.
+•
+Compromise of these systems can lead to 
+significant safety hazards and potential loss 
+of life.
+•
+Unauthorized actions, including disruption, 
+interception, or manipulation of ATM/ATC 
+information, pose severe operational and 
+security risks.
+
+
+--- Page 50 ---
+Cyber Threats Targeting ATM/ATC Systems
+•
+Attacks on Availability:
+–
+Signal jamming targeting ADS-B, radar or communication system,
+•
+Impede communication between controllers and pilots 
+•
+Disrupt traffic flow.
+–
+Denial-of-Service (DoS) or Distributed Denial-of-Service (DDoS)
+•
+Overload networked or internet connected critical 
+infrastructure, leading to system failures
+•
+Attacks on Integrity:
+–
+Spoofing of ADS-B or radar data 
+•
+False aircraft positions or 
+•
+Conceal actual traffic from air traffic controllers.
+–
+Disrupt GNSS and/or WAAS signals 
+–
+Injection of false data or commands into communication 
+systems 
+•
+Could lead to incorrect instructions being relayed to 
+pilots or controllers.
+–
+Manipulation of flight plan data
+•
+Cause operational confusion
+•
+Potentially hazardous situations
+•
+Attacks on Confidentiality: 
+•
+Mechanisms to obtain private or sensitive information
+•
+Example: Leaking information regarding 
+owner/operator/passengers on a private flight, 
+military operations, etc.
+
+
+--- Page 51 ---
+Mitigation 
+Strategies
+Establishing a process for continuous vulnerability 
+management, including regular scanning and 
+remediation of identified weaknesses.
+Deployment of strong authentication mechanisms for 
+all critical data flows to verify the identity of 
+communicating entities.
+Employing robust integrity controls, such as 
+cryptographic hashing, to detect any unauthorized 
+data alteration.
+Utilizing Intrusion Detection and Prevention Systems 
+(IDPS) to monitor network traffic for malicious activity 
+and automatically block detected threats.
+
+
+--- Page 52 ---
+UAM and UTM: 
+Extensible Traffic Management (xTM)
+
+
+--- Page 53 ---
+SYSTEMS-LEVEL CYBERSECURITY 
+
+
+--- Page 54 ---
+System-Level 
+Challenges – 
+Overview
+•
+System-level security covers 
+integration of hardware, software, 
+and communications
+•
+Modern aircraft are cyber-physical 
+systems (CPS) with interdependent 
+components
+•
+Cascading failures in one module can 
+jeopardize entire aircraft operation
+•
+Complex interconnectivity requires 
+holistic risk management
+•
+Coordinated defenses across layers 
+are a necessity
+
+
+--- Page 55 ---
+Example: Space Mission Delay Cybersecurity 
+Considerations
+
+
+--- Page 56 ---
+Issue: Integration & Interconnectivity Risks
+• Multiple avionics subsystems operate in tightly integrated 
+environments.
+• Failure in one module may trigger cascading effects across the aircraft.
+• Unsecured interfaces between legacy and modern systems are 
+vulnerable.
+• Rigorous system architecture reviews and threat modeling are applied.
+• Interoperability testing helps reveal integration weaknesses.
+
+
+--- Page 57 ---
+Issue: Global Standards & Regulatory Variations
+• Aviation operates internationally, with diverse cybersecurity 
+regulations
+• Inconsistent policies leave gaps in threat mitigation across borders
+• Mitigations:
+– Organizations like ICAO work to harmonize aviation cybersecurity 
+standards
+– Regulatory frameworks guide aircraft manufacturers and operators
+– Global information sharing improves incident response coordination
+– Standardized certification processes drive uniform security measures
+
+
+--- Page 58 ---
+Cyber-Physical System Integration Challenges
+• Modern aircraft exemplify cyber-physical integration with real-time 
+control systems
+– e.g. Integrated Modular Avionics (IMA) systems combine hardware, 
+software, and networks
+– Fault propagation can occur, impacting multiple interconnected systems
+• Recommended solution:
+– Continuous risk assessments and dynamic defense strategies are needed
+– Collaborative engineering practices ensure comprehensive system security
+
+
+--- Page 59 ---
+Incident Response & Recovery Challenges
+• Timely detection and response to cyber incidents are vital in 
+aviation
+• Breaches in air traffic or flight management can disrupt operations 
+dramatically
+• Coordinated incident response requires global collaboration among 
+stakeholders
+• Real-time monitoring and automated alerts minimize downtime 
+Ismail et al. Detailed recovery plans and regular simulation 
+exercises build resilience
+• High-assurance communication with regulatory bodies enhances 
+response efforts
+
+
+--- Page 60 ---
+MANAGING CYBERSECURITY
+
+
+--- Page 61 ---
+Organization
+Standard Number
+Standard Title
+Description
+RTCA / EUROCAE
+DO-326A / ED-
+202A
+Airworthiness Security Process Specification
+This document provides a process specification for security aspects of 
+airborne systems throughout their lifecycle. It complements DO-178C 
+and DO-254 by addressing security concerns.
+RTCA / EUROCAE
+DO-356A / ED-
+203A
+Airworthiness Security Methods and 
+Considerations
+This document provides methods and considerations for addressing 
+security within airborne systems. It offers guidance on how to apply 
+the processes defined in DO-326A.
+SAE International
+AS9100
+Quality Management Systems - Requirements 
+for Aviation, Space, and Defense Organizations
+While primarily a quality management standard, AS9100 includes 
+requirements related to product safety and security, which implicitly 
+touches upon cybersecurity in connected systems and data 
+management.
+SAE International
+ARP4754B
+Guidelines For Development Of Civil Aircraft 
+and Systems
+This aerospace recommended practice provides guidelines for the 
+development of civil aircraft and systems. While not solely focused on 
+cybersecurity, it addresses safety-critical aspects, which increasingly 
+involve security considerations for electronic systems.
+SAE International
+ARP4761
+Guidelines and Methods for Conducting the 
+Safety Assessment Process on Civil Airborne 
+Systems and Equipment
+Similar to ARP4754B, this document focuses on safety assessments. 
+Modern safety assessments for complex electronic systems in 
+aerospace must consider potential security threats and their impact on 
+safety.
+ISO
+ISO/SAE 
+21434:2021
+Road vehicles — Cybersecurity engineering
+Although primarily focused on the automotive industry, ISO/SAE 21434 
+provides a comprehensive framework for cybersecurity engineering 
+throughout the lifecycle of road vehicles. Its principles and processes 
+can offer valuable insights and potentially be adapted for certain 
+aspects of aerospace ground systems and connected aircraft 
+components.
+NIST
+NIST Cybersecurity 
+Framework (CSF)
+Framework for Improving Critical 
+Infrastructure Cybersecurity
+While not specific to aviation or aerospace, the NIST CSF is a widely 
+recognized and adopted framework for managing and reducing 
+cybersecurity risks. Aerospace organizations can leverage its principles 
+and best practices to enhance their cybersecurity posture across 
+various domains.
+NIST
+NIST 800-53
+Security and Privacy Controls for Information 
+Systems and Organizations
+This publication provides a catalog of security and privacy controls that 
+can be applied to U.S. federal information systems and organizations. 
+Aerospace organizations, particularly those working with government 
+contracts or handling sensitive data, may need to align with or 
+reference these controls.
+Cybersecurity and 
+Infrastructure Security 
+Agency (CISA)
+Cybersecurity Guidance for the Aviation Sector
+CISA provides sector-specific cybersecurity guidance and resources for 
+the aviation industry in the United States. This includes best practices, 
+alerts, and incident response information.
+Standards
+
+
+--- Page 62 ---
+A Framework to Establish Cybersecurity for Aviation Systems
+
+
+--- Page 63 ---
+Consideration for Risk Management
+
+
+--- Page 64 ---
+AI/ML for Cybersecurity
+
+
+--- Page 65 ---
+Questions

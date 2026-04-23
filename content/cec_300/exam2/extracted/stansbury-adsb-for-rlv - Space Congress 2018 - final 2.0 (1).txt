@@ -1,0 +1,822 @@
+--- Page 1 ---
+Progress and Future Development toward a UAT 
+ADS-B Transmitter for Space Operations
+Space Congress 2018
+Presenter: Richard S. Stansbury
+College of Engineering
+Embry-Riddle Aeronautical University, Daytona Beach, FL
+March 1, 2018
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+1
+
+
+--- Page 2 ---
+Acknowledgements
+• NASA Flight Opportunities Program 
+• Up Aerospace, Inc
+• Near Space Corporation
+• Terminal Velocity Aerospace
+• FAA Office of Commercial Space Transportation (AST) and sponsor 
+Nickolas Demidovich
+• FAA William J. Hughes Technical Center 
+• Chuck Greenlow and John Dinofrio
+• MITRE Corporation 
+Resources, support and cooperation from all were vital for this 
+opportunity to flight test the payload!
+This presentation presents a work in progress funded by the FAA, but 
+does not reflect any official views/conclusions from the sponsor.
+
+
+--- Page 3 ---
+Lecture Outline
+• Background
+• ADS-B Overview
+• MITRE UBR-TX
+• UBR-ERAU ADS-B Payload
+• Requirements
+• Design and Implementation
+• System Qualification
+• Ground tests
+• Near Space Corporation’s Nano Balloon System
+• Terminal Velocity Aerospace’s RED-4U prototype spacecraft
+• Path Forward
+• Conclusion
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+3
+
+
+--- Page 4 ---
+Background
+• ADS-B Overview
+• MITRE UBR-TX
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+4
+
+
+--- Page 5 ---
+Automatic Dependent Surveillance - Broadcast
+• Also known as ADS-B
+• Utilizes GPS position instead of 
+Radar-based interrogation to 
+identify location
+• Additional information:
+• Aircraft ID (callsign and ICAO address)
+• Altitude (geodetic and/or pressure)
+• Velocity
+• Emergency 
+• Climb rate
+• Quality and integrity of data
+• Two standards:
+• Universal Access Transceiver
+• Frequency: 978 MHz
+• Common for general aviation
+• < 17,999 ft.
+• 1090 MHz Extended Squitter (ES) 
+Mode-S transponder
+• More common for transport 
+category aircraft
+• > 18,000 ft.
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+5
+2020 mandate for all aircraft equipped with mode C transponder to be upgraded to ADS-B out
+
+
+--- Page 6 ---
+FAA ADS-B Deployment
+• Baseline deployment of 634 radio stations is complete
+• Each radio station has a minimum line-of-sight range requirement (i.e., radius) of 
+250 NM based on latitude/ longitude distance (altitude is not limiting factor)
+• Actual coverage may be up to 300 NM radius (currently limited by radio 
+station software configuration)
+•Source: MITRE
+Slide courtesy of Nickolas Demidovich, FAA AST (project sponsor)
+
+
+--- Page 7 ---
+ADS-B Operations
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+7
+Source: Aviation Week
+Image Source: learntoflyblog.com
+
+
+--- Page 8 ---
+Bit
+1
+2
+3
+4
+5
+6
+7
+8
+Byte
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+Alt Type
+11
+12
+13
+14
+15
+16
+17
+UTC
+18
+19
+20
+21
+22
+23
+24
+25
+26
+NICbaro
+27
+CSID
+SILsup
+28
+SA Flag
+NICsup
+29
+30
+31
+32
+33
+34
+Reserved
+Secondary Altitude
+Reserved
+NACp
+NACv
+Capability Codes
+Operational Modes
+Geo Vert Acc
+Call Sign / Flight Plan ID Characters #6, #7, #8
+Emergency/Priority Status
+UAT MOPS Version
+SIL
+Transmit MSO
+SDA
+Call Sign / Flight Plan ID Characters #3, #4, #5
+Altitude
+NIC
+A/G State
+Horizontal Velocity
+Vertical Velocity or A/V Size
+Uplink Feedback
+Emitter Category and Call Sign / Flight Plan ID Characters #1 and #2
+Longitude
+Payload Type
+Address Qualifier
+ICAO Address
+Lattitude
+UAT Message Specification
+8
+Primary and Auxiliary Message Payload shown
+Message Broadcast once per second
+Defined in: 
+RTCA DO-282B: Minimum Operational 
+Performance Standards for Universal Access 
+Transceiver (UAT) Automatic Dependent 
+Surveillance – Broadcast
+
+
+--- Page 9 ---
+Purpose of Task
+• Support of suborbital reusable launch vehicles (sRLVs) for commercial 
+space transportation requires considerations for safe integration into 
+the national airspace system (NAS)
+• ADS-B technology is used for surveillance by air traffic control  and 
+situational awareness for pilots 
+• This research presents the potential  for adaptation of existing ADS-B 
+technology to support operations for sRLVs operations  exceeding 
+current technology limits (primarily altitude, velocity and 
+acceleration) 
+
+
+--- Page 10 ---
+Ground Launch
+  
+Air Launch 
+Suborbital Rockets
+Stratospheric Manned Balloons*  
+Sea Launch 
+Reusable  Launch Vehicles
+US Commercial Space Transportation
+Diversity of Vehicles and Operations
+Over 200 licensed commercial launches safely conducted since 1987
+* With Environmental Control and Life Support System (ECLSS) 
+Slide courtesy of Nickolas Demidovich, FAA AST (project sponsor)
+
+
+--- Page 11 ---
+Research Goals
+Enhance tracking of vehicles as they traverse through the national airspace system to 
+mitigate the impact of commercial space operations on routine aviation operations by 
+leveraging existing FAA infrastructure 
+• Sub-goals:
+• Determine suitability for ADS-B for commercial space
+• Determine boundary conditions of system performance
+• Assess performance of prototypes on space vehicles and suitable analogues
+• Identify areas of improvement in ADS-B standard to accommodate suborbital 
+space operations
+• Provide stakeholders with information regarding suitability of ADS-B as a primary 
+or secondary tracking source
+
+
+--- Page 12 ---
+MITRE UBR-TX
+• UAT Beacon Radio – Transmit Only (UBR-TX)
+• Broadcasts state vector once per second
+• Supports both barometric and GPS-based altitudes
+• Balloon / Rocket Flight Tests
+• 2008 Red Glare V (amateur rocket)
+• 2009 Red Glare VII (amateur rocket)
+• 2010 AFRL research balloon
+• 2010 NASA Wallops sounding rocket
+• 2012 Up Aerospace Spaceloft 6
+• 2012 Team America Rocket Challenge
+• 2013 Up Aerospace Spaceloft 7
+• 2013 Masten Xombie
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+12
+Limitations for space missions based upon altitude and velocity limits 
+of GPS and limitations of ADS-B message, but not built for this purpose.
+
+
+--- Page 13 ---
+UBR-ERAU ADS-B Payload
+• Requirements
+• Design and Implementation
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+13
+
+
+--- Page 14 ---
+High-Level Requirements
+• The enhanced ADS-B prototype shall:
+• Build upon the hardware and software firmware provided by MITRE for UBR-TX payload,
+• Support altitudes in excess of 60,000 ft and velocities greater than 1000 knots (i.e. in 
+excess of COCOM/Export Control Limits),
+• Address altitude limits of UAT ADS-B standard (101,337.5 ft MSL),
+• Address climb rate limits of UAT ADS-B standard (roughly 320 knots), and
+• Be configured to support integration onto a variety of suborbital space vehicles / space 
+vehicle surrogates with only minimal customization.
+The project team shall:
+• Design and implement the enhanced UBR payload (UBR-ERAU), and 
+• Produce nine (9) UBR-ERAU prototypes,
+• Support validation and demonstration through flight test onboard a variety of suborbital 
+space vehicles and space vehicle surrogates.
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+14
+
+
+--- Page 15 ---
+Parameter
+Specification
+Length
+5.75” (14.6 cm)
+Width
+2.5” (6.35 cm)
+Height
+2.5” (6.35 cm)
+Weight 
+(UBR board, daughter board, GPS, 
+battery, and enclosure)
+790 g
+Weight (cables, antennas, etc.)
+85-300g est.
+Nominal power Consumption
+110mA @ 26 VDC 
+Hardware Upgrades
+Hardware Upgrades
+• GPS Upgrade:
+• Old GPS: SiRF GPS chipset
+• New GPS: Javad TR-G2 L1 with space 
+altitude/velocity enabled
+• GPS Integration Daughter Board:
+• Power regulation
+• Logic conversion
+• UBR Board
+• Replaced components with milspec equivalents 
+(when possible)
+• UAT (978 MHz) Antennas:
+• Balloon: omnidirectional monopole antenna 
+aimed nadir (Antcom)
+• Rocket: blade antenna (UB Corp)
+• Window placed: patch (Antcom)
+• Ruggedization:
+• New enclosure
+• Epoxy
+• Neoprene
+• Ecosorb EMI/RFI 
+15
+
+
+--- Page 16 ---
+UBR-ERAU Hardware
+16
+
+
+--- Page 17 ---
+UBR-ERAU Enclosure
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+17
+
+
+--- Page 18 ---
+Parameter
+Specification
+Length
+5.75” (14.6 cm)
+Width
+2.5” (6.35 cm)
+Height
+2.5” (6.35 cm)
+Weight 
+(UBR board, daughter board, GPS, 
+battery, and enclosure)
+790 g (27.9 oz)
+Weight (cables, antennas, etc.)
+85-300g est.
+Nominal power Consumption
+840mA @ 3VDC
+Nominal battery capacity
+7.75 Ah
+Software Upgrades
+Software Upgrades
+• Reuse of MITRE developed software:
+•
+Message assembly
+•
+Transmission of message
+• GPS Parser:
+•
+Old: SiRF binary protocol
+•
+New: Javad GREIS binary protocol
+• Addressing maximum altitude and climb rate limits of 
+UAT message format:
+•
+Implemented “roll-over” over feature wherein modulo of value 
+with limit is used
+•
+Temporary solution to permit continued use of GBT network
+• Provided general debugging of legacy code
+18
+Parameter
+Specification
+Length
+5.75” (14.6 cm)
+Width
+2.5” (6.35 cm)
+Height
+2.5” (6.35 cm)
+Weight 
+(UBR board, daughter board, GPS, 
+battery, and enclosure)
+790 g
+Weight (cables, antennas, etc.)
+85-300g est.
+Nominal power Consumption
+110mA @ 26 VDC 
+
+
+--- Page 19 ---
+System Qualification
+• Near Space Corporation’s Nano Balloon System
+• Up Aerospace SpaceLoft XL 
+• Terminal Velocity Aerospace RED4U Prototype Spacecraft
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+19
+
+
+--- Page 20 ---
+Technology maturation plan
+• System tested at WJH Technical Center for verification and validation using GNSS 
+simulator on high-altitude balloon and rocket flight path simulations
+• Verification of valid ADS-B message reflecting current state of simulated trajectory
+• Project goal to demonstrate viability and test functional envelope of experimental 
+ADS-B payload for sub-orbital commercial space operations
+• TRL-7, proven within its operational environment
+• Initial flights are summarized within this presentation
+• Additional flights needed before transition to TRL-8 (i.e. move out of prototype 
+phase)
+• Diversity of new vehicles is desirable to get operator feedback
+20
+
+
+--- Page 21 ---
+NSC NBS Balloon Flight
+Provider: Near Space Corporation
+Vehicle: Nano Balloon System (NBS)
+Flown under NASA Flight Opportunities Program
+Milestones:
+• Flights funded under NASA Flight Opportunities 
+Program AFO1 and AFO5
+• Near Space Corporation Nano Balloon System 
+(NBS), 22 Jan 2013
+• Achieved altitude near 59,000 ft
+• NSC NBS Flight #2, 15 Feb 2013
+• Achieved altitude near 94,000 ft
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+21
+
+
+--- Page 22 ---
+NSC NBS Payload Integration
+• Foam enclosure houses payload for NBS
+• Internal power via onboard batteries
+• Netting material used to secure payload 
+enclosure to balloon and its telemetry 
+unit
+• Cable from NBS telemetry unit routed 
+to payload for remote enable/disable 
+capability
+• Telemetry unit also provides 
+position, altitude, and pressure data
+
+
+--- Page 23 ---
+NSC NBS Flight Details
+Maximum Altitude
+Geometric, MSL
+94,025 ft.
+Pressure, MSL
+94,200 ft.
+Flight Time
+Ascent
+116 min
+Float
+58 min
+Descent
+38 min
+Total
+212 min
+Tracking
+Total Number of Unique GBTs Receiving Data
+31 (available in post-processing)
+Number of GBTs Receiving at Float
+11 (available in post-processing)
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+23
+Flight: 15 February 2013
+
+
+--- Page 24 ---
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+24
+0
+10000
+20000
+30000
+40000
+50000
+60000
+70000
+80000
+90000
+100000
+60000
+64000
+68000
+72000
+76000
+80000
+84000
+Altitude (ft)
+Time (s)
+NBS Flight Path (reported by ADS-B)
+
+
+--- Page 25 ---
+NSC NBS –Lessons Learned
+• Successful demonstration of payload
+• Terrain had a major impact on ability to track unit at launch and 
+recovery sites
+• Minimum temperature (courtesy of NSC): -20.6 degrees C
+• Inside foam container
+• Timing accuracy indicated no uncompensated clock drift 
+• Most data points fall within +/- 1us of UAT specs
+• Emitter category 15 (space/trans-atmospheric vehicle) data is not 
+smoothed resulting in “noisy” vertical rate information
+• Exelis GBT systems currently filter out targets with a ground distance 
+of 300 nautical miles from the receiver. 
+• Prevented an adequate analysis of achievable range
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+25
+
+
+--- Page 26 ---
+Up Aerospace SpaceLoft XL
+• Provider: Up Aerospace
+• Vehicle: SpaceLoft XL Sounding Rocket
+• Supported by NASA Flight Opportunities Program
+• Milestones:
+• MITRE UBR-TX ADS-B flights for SL-6 and SL-7 mission
+• UBR-ERAU flight for SL-8 mission– November 2013
+• Apogee: 384,100 ft. MSL
+• Planned Flights
+• SL-11
+• SL-12
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+26
+
+
+--- Page 27 ---
+UP Aerospace SpaceLoft XL Integration
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+27
+
+
+--- Page 28 ---
+SL-8 Flight Profile
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+28
+Event
+Time 
+(seconds)
+Launch
+T + 0 
+Despin initiated
+T + 55
+Apogee (384,100 ft.)
+T + 162
+Payload separation
+T + 240
+Drogue deployment
+T + 442
+Chute Deployment
+T + 452
+Touchdown
+T + 751
+Typical Spaceloft  Flight Profile
+
+
+--- Page 29 ---
+SL-8 Flight Analysis
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+29
+Phase of flight
+Metric
+Result
+Full flight
+% tracked by ADS-B
+73.8%
+Launch to T + 62
+(7 seconds post-
+despin initiation) 
+% of flight tracked by ADS-B
+80.5
+Avg. time between message
+1.27 s
+Max. time between message
+8.00 s
+Max receivers tracking
+(Ground-based Transceivers GBTs only)
+8
+Max receivers tracking (GBTs and portable)
+10
+Avg. latitude error
+16.145E-05 deg.
+Avg. longitude error
+9.170E-05 deg.
+Avg. altitude error (below 101,350 ft.)
+54.31 ft.
+Post T+315
+(descent and 
+deceleration to 
+less than 1000 
+ft./sec)
+% of flight tracked by ADS-B
+95.9%
+Avg. time between message
+1.04 s
+Max. time between message
+3.00 s
+Apogee: 384,100 ft. MSL
+
+
+--- Page 30 ---
+SL-8 Performance vs. Success Criteria
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+30
+Criteria
+Pass / Fail
+Comments
+Broadcasts well-formed 
+messages
+Pass
+GBTs and two portable Garmin GDL 90 
+successfully parsed data
+Vehicle tracking for 90% of 
+flight
+Fail
+73.8% of full flight, 80.5% post-despin, and 
+95.9% on descent.  
+Characterization of data loss
+Pass
+Primary characterization of data loss was 
+configuration onboard spacecraft and NOT 
+ADS-B unit itself.
+Correlated with other data 
+sources
+Pass
+Utilized truth data from WSMR primary radar.  
+Position/altitude accuracy measured.
+
+
+--- Page 31 ---
+Lessons learned
+• Two prior flights with “basic”  MITRE ADS-B payload minimized risk of vehicle integration 
+and site support 
+• Payload demonstrated to be viable for tracking sub-orbital RLV or sounding rocket of this 
+velocity, altitude and range
+• Additional transmit antennas and transmission power desirable for longer range, 
+higher altitude flights
+• Single transmit antenna briefly blocked by rocket body at apogee
+• Current GPS antenna and amplifier may not be sufficient to maintain lock through all 
+phases of flight 
+• Desirable for future missions to have onboard inertial measurement unit with payload 
+and/or telemetry to correlate with data received (future SL missions will have telemetry)
+• Desirable to equip future vehicles that host payload  with GPS translator (s)
+•  record raw GPS data for post-flight analysis / truth data
+
+
+--- Page 32 ---
+Terminal Velocity Aerospace
+• Partner: Terminal Velocity Aerospace
+• Vehicle: RED-4U Reentry Vehicle
+• Provider: Near Space Corporation
+• Integration of Advanced ADS-B Unit onboard 
+prototype reentry vehicle
+• Funded by NASA Ames
+• Proof-of-concept flight onboard high-altitude 
+balloon
+• Goals:
+• Evaluate performance of ADS-B broadcasting 
+through experimental TPS material
+• Demonstration of UBR on new vehicle type
+
+
+--- Page 33 ---
+Antenna Options
+• Antenna Selection and RF Analysis
+• Limited space for antennas
+• Aluminum foreshell with windows for 
+UAT and GPS antennas
+• Experimental RF transparent thermal 
+protection system substrate for windows
+• NASA Ames
+• Material or its RF characteristics not 
+available
+• Option #1: Antcom off-the-shelf patch 
+antenna tuned to 978MHz
+• Less costly
+• Faster turn around time
+• Option #2: Custom patch antenna
+• Designed and tuned to RF environment of 
+the spacecraft and the TPS materials
+• Option #1 was selected given budget, scope, 
+and time
+
+
+--- Page 34 ---
+Terminal Velocity Aerospace Reentry Vehicle 
+Drop from stratospheric balloon
+
+
+--- Page 35 ---
+System Integration Ground Test
+• Performed by ANG-33 Surveillance Branch, Engineering Development Services 
+Development from FAA WJH Technical Center
+• Location: Oregon, May 2015
+• Near Space Corporation Facility
+• Integration with stratospheric balloon
+• UBR-ERAU (ERAU0002) onboard balloon gondola
+• UBR-ERAU (ERAU0005) onboard TVA RED-4U
+• Hoisted by crane to replicate flight configuration
+• Data received by portable Garmin GDL-88
+
+
+--- Page 36 ---
+Flight Test June 21, 2015
+
+
+--- Page 37 ---
+ERAU0002 (blue) and ERAU0005 (red) flight path 
+captured by FAA GBTs
+TVA RED-4U provided opportunity to operate two ADS-B payloads simultaneously.  One 
+tracked gondola while other tracked RED-4U spacecraft
+
+
+--- Page 38 ---
+Lessons Learned
+• ERAU0005 performed well throughout flight 
+onboard RED-4U
+• RED-4U parachute did not deploy
+• Tracked ERAU0005 along ballistic descent trajectory
+• Exceeded maximum climb/descent rate of UAT standard 
+and “rolled-over” 
+• ERAU0005 was total loss
+• ERAU0002 on gondola lost GPS lock for part of 
+ascent due to faulty connector.  
+• Connector damaged during Near Space Corporation 
+High Altitude Shuttle System flight (rough landing)
+• Regained during descent under parachute.
+• ERAU0002 payload has been replaced for all future use
+
+
+--- Page 39 ---
+Path Forward
+• Future upgrades
+• Future Flights
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+39
+
+
+--- Page 40 ---
+Proposed Future Upgrades
+• Dual antenna configuration
+• UBR-TX design supported only one antenna
+• Payload hardening and size reduction
+• Unit designed as a proof-of-concept, but further hardening of payload needed for wider use 
+in space applications
+• Payload size is a limiting factor for finding suitable test platforms
+• Increase output rate of ADS-B message
+• Power amplification to support future use in LEO flight opportunities 
+• Doppler shift impact and mitigation
+• RF modeling and radio tuning need to be investigated
+• Reduce system startup time
+• Reduce 15-30 second startup time
+
+
+--- Page 41 ---
+Future Flights
+• Near Space Corporation’s High Altitude Shuttle System
+• Surrogate winged suborbital vehicle performing a descent into 
+NAS (from above 60, 000 feet)
+• Up Aerospace SL-11 and SL-12
+• TBD 2018
+• New GPS antenna and IMU to log vehicle acceleration and 
+orientation
+• Coordination with NASA FOP and other flight providers for future 
+flights
+• Future announcements pending
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+41
+Source: Near Space Corporation
+
+
+--- Page 42 ---
+Summary
+• ADS-B provides a suitable means for the real-time tracking of commercial 
+space vehicles to mitigate the impact to routine operations within the 
+National Airspace System
+• MITRE UBR-TX provided a sufficient platform to evaluate this opportunity 
+through upgrades to hardware and software
+• Flight demonstration has provided
+• Opportunities to further develop and refine payload
+• Address payload integration issues across flight providers
+• Receive input from future users (i.e. flight providers)
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+42
+
+
+--- Page 43 ---
+Questions
+• Any questions?
+Space Congress 2018
+College of Engineering, Daytona Beach, FL
+43

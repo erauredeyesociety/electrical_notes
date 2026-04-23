@@ -1,0 +1,687 @@
+--- Page 1 ---
+Introduction to Detect-and-Avoid 
+(DAA)
+CEC 300: Unmanned Aircraft Design
+Instructor: Richard S. Stansbury
+College of Engineering
+Embry-Riddle Aeronautical University, Daytona Beach, FL
+CEC 300
+College of Engineering, Daytona Beach, FL
+1
+
+
+--- Page 2 ---
+Lecture Outline
+• Learning Outcomes
+• Overview of DAA and key terminology
+• Regulatory basis for DAA
+• Part 91
+• Part 107
+• Elements of DAA
+• Challenges of DAA
+• Path Forward
+• Review
+CEC 300
+College of Engineering, Daytona Beach, FL
+2
+
+
+--- Page 3 ---
+Learning Outcomes
+• Define the role of detect-and-avoid for a UAS system.
+• Explain the regulatory need for a detect-and-avoid system to maintain 
+desired level of safety including UAS.
+• Identify the major elements of a DAA system
+• Identify major challenges with DAA system requirements, design, and 
+capability.
+CEC 300
+College of Engineering, Daytona Beach, FL
+3
+
+
+--- Page 4 ---
+What is Detect and Avoid?
+CEC 300
+College of Engineering, Daytona Beach, FL
+4
+
+
+--- Page 5 ---
+Detect and Avoid
+• UAS must be capable of detect and avoiding a 
+potential collision
+• Layered approach:
+• Conflict Avoidance
+•
+Procedural – procedures in place to avoid collision scenarios 
+within ATC
+•
+Air Traffic Management – provide instruction such as 
+heading or altitude change to avoid a future collision
+•
+Pilot or Automation – remain well clear
+• Collision Avoidance
+•
+Traditional aircraft – pilot using sight, collision avoidance 
+system (e.g. TCAS II, ACAS X, etc.)
+•
+Uncrewed – automated or remotely piloted avoidance
+•
+ACAS Xu
+• UAS Detect-and-Avoid addresses the cooperative 
+and non-cooperative collision avoidance through 
+• Remain Well Clear  - changes to course to avoid a 
+collision avoidance maneuver
+• Collision avoidance – a maneuver to mitigate the risk 
+of a mid-air collision
+CEC 300
+College of Engineering, Daytona Beach, FL
+5
+Image Source: NASA Access 5, Collision Avoidance: 
+Functional Requirements (2006)
+
+
+--- Page 6 ---
+Types of Collisions
+• Mid-Air Collision (MAC) – PRIMARY FOCUS
+• Most collision avoidance systems seek to avoid a condition called a Near Mid-Air 
+Collision (NMAC) 
+• Terrain Collision (see TAWS)
+• Collision between the aircraft  and ground
+• Runway Incursion
+• Collision between aircraft on runway
+• Collision with Objects on Ground
+CEC 300
+College of Engineering, Daytona Beach, FL
+6
+Detect and Avoid is a safety critical function of the system.
+Degree of criticality is dependent upon several factors.
+
+
+--- Page 7 ---
+Notes on Terminology
+• For manned aviation, the term “see and avoid” is used within the 
+regulations
+• Qualitative
+• For UAS, the “equivalent” capability’s terminology has evolved over 
+time: 
+• “see and avoid (SAA)”
+• ”detect, sense, and avoid (DSA)”
+• “sense and avoid (SAA)”
+• “sense & avoid (S&A)”
+• “detect and avoid (DAA)”
+• DAA is the official terminology recognized by the FAA (but they 
+sometimes goof) and we will use it for this course.
+CEC 300
+College of Engineering, Daytona Beach, FL
+7
+
+
+--- Page 8 ---
+Notes on terminology (2)
+• From RTCA DO-365:
+• Collision Avoidance:
+• “Upper case” – “A last-resort method of preventing mid-air collisions between aircraft, as directed 
+by a Collision Avoidance System.”
+• “Lower case” – “A general term referring to the act of maneuvering to prevent mid-air collisions, not 
+tied to any specific Collision Avoidance System”
+• Collision Avoidance Function – function performed to achieve lower case definition of 
+collision avoidance
+• Collision Avoidance System – a system that produces directive guidance in the for of 
+Resolution Advisories to avoid mid-air collision with other aircraft.
+• E.g. TCAS, TCAS II, ACAS X, etc.  - more on these later
+CEC 300
+College of Engineering, Daytona Beach, FL
+8
+
+
+--- Page 9 ---
+Notes on terminology (3)
+• More from RTCA DO-365
+• Self-Separation – “a system function where the UA maneuvers within a sufficient 
+timeframe to remain well clear.”
+• Legacy terminology replaced with the more quantitatively based…
+• Remain Well Clear (RWC) – “the ability to detect, analyze and maneuver to avoid 
+potential conflicting traffic by applying adjustments to the current flight path in 
+order to prevent the conflict from developing into a collision hazard”
+• Two aspects:
+• Maintain DWC
+• Regain DWC
+• DAA Well Clear (DWC) – a temporal and/or spatial boundary around the aircraft 
+intended to be an electronic means of avoiding conflicting traffic.
+• We shall discuss what well clear means later in this module.
+• Systems like TCAS use some definition of tau (𝜏), an estimate of time to collision.
+CEC 300
+College of Engineering, Daytona Beach, FL
+9
+
+
+--- Page 10 ---
+Notes on terminology (4)
+• In DAA terminology, we separate “our” aircraft from other aircraft with the 
+following terminology:
+• Ownship – in a DAA system, ownship refers to the aircraft that will be performing in 
+the detect and avoid functions relative to other aircraft.
+• Intruder – in a DAA system, intruder refers to the other aircraft within close enough 
+proximity such that it is tracked and potentially avoiding (RWC or CA).
+CEC 300
+College of Engineering, Daytona Beach, FL
+10
+
+
+--- Page 11 ---
+Example: TCAS II
+CEC 300
+College of Engineering, Daytona Beach, FL
+11
+Images from Binns
+ @ https://learning.oreilly.com/library/view/aircraft-systems/9781119259541/c05.xhtm 
+From: NIAG Report SG-205
+TCAS will be discussed further in Part II.
+
+
+--- Page 12 ---
+Airspace
+Airspace
+ATC Services
+A
+•
+IFR only unless authorized
+B
+•
+IFR and VFR (with clearance)
+•
+VFR sequencing and separation (limits based upon size) – pilot must still see and avoid
+•
+Must have equipage of two-way radio and transponder (unless otherwise authorized)
+C
+•
+IFR and VFR (with clearance)
+•
+Must have equipage of two-way radio and Mode C or higher transponder (unless otherwise authorized)
+•
+VFR sequencing and ATC radar services (radar services outside of boundary if workload permits)
+D
+•
+Must have equipage of a two-way radio
+•
+No separation services provided to VFR
+E
+•
+No specified equipment
+G
+•
+Uncontrolled
+•
+Supports IFR and VFR operation
+CEC 300
+College of Engineering, Daytona Beach, FL
+12
+New entrants include UAS and UAM
+
+
+--- Page 13 ---
+What about segregated airspace?
+• The broad consensus from FAA and other CAAs is to avoid implementing UAS or UAM segregated airspace 
+•
+Avoid showing favoritism to one user class
+•
+Potentially harmful impact to commercial operations
+• NASA’s UAS Traffic Management (UTM) program has explored low-altitude airspace that may be segregated 
+for UAS operation
+•
+Looking at < 400 ft. (primarily)
+•
+e.g. UAS lanes of travel (vertical and horizontal)
+•
+Still in early technology readiness level (TRL) – concept phase
+•
+Must identify how to integrate with other low altitude users:
+•
+Helicopter
+•
+Ultralight
+•
+Model aircraft
+•
+Etc.
+• Advanced Air Mobility (AAM) and Urban Air Mobility (UAM) have similar challenges and receive support 
+through Providers of Service for UAM (PSUs) building upon the UTM concepts developed for UAS.
+•
+No segregation, but coordination for non-UAM to enter UAM corridor and vice versa.
+CEC 300
+College of Engineering, Daytona Beach, FL
+13
+
+
+--- Page 14 ---
+Need for UAS DAA
+CEC 300
+College of Engineering, Daytona Beach, FL
+14
+
+
+--- Page 15 ---
+Regulatory Basis from Manned
+• Title 14 Code of Federal Regulations Part 91, sections:
+• 91.111 Operating near other aircraft
+• 91.113 Right-of-way rules: except water operations
+• 91.115 Right of way rules: water operations
+• 91.181 Course to be flown
+• For uncrewed systems (UAS and UAM), the function must be 
+reallocated from an onboard pilot to human-in-the-loop or human-
+on-the-loop automation, and autonomous mode under lost link 
+conditions.  
+• An equivalent level of safety is required to be certifiable.
+CEC 300
+College of Engineering, Daytona Beach, FL
+15
+
+
+--- Page 16 ---
+Section 91.111
+CEC 300
+College of Engineering, Daytona Beach, FL
+16
+• Forbids operator of controlling their aircraft in close proximity to other aircraft.
+• Maneuver cannot be made if a collision hazard exists.
+• Impact:
+• Manned aviation requires self-separation by pilot to mitigate risk of collision
+• Unmanned aviation requires some self-separation mechanism built into the UAS to mitigate risk of collision
+o Sufficient accuracy and resolution 
+o Operator or automation must be able to determine:
+▪Location of ownship
+▪Location and trajectory of intruder
+▪Pilot/automation must maneuver aircraft to maintain safe separation
+• Qualitative and quantitative requirements and data for DAA avionic components to ensure sufficient level of safety
+
+
+--- Page 17 ---
+Section 91.113
+CEC 300
+College of Engineering, Daytona Beach, FL
+17
+•
+Addresses necessary vigilance required by the 
+system (operator and/or automation) to see and 
+avoid other aircraft.
+•
+Identifies right-of-way requirements concerning a 
+variety of airborne platforms
+•
+Technology is needed to determine two aircraft's 
+flight paths are converging unsafely
+•
+Current gaps for automated operations:
+•
+Landing requirements state that lower aircraft 
+has right of way
+o Must be able to determine intent to 
+land from other aircraft
+o Must have a sensing field of view that 
+includes a sufficient vertical 
+component to detect aircraft above and 
+below
+•
+Distress situations give right-of-way to 
+aircraft in distress
+o Automation or PIC must have 
+sufficient situational awareness (e.g. 
+voice communications) to be informed 
+of the distress situation.
+o Sensing must be capable of allowing 
+automation or PIC to identify the 
+distressed aircraft and yield
+
+
+--- Page 18 ---
+Section 91.115
+CEC 300
+College of Engineering, Daytona Beach, FL
+18
+• Similar to 91.113, but also addresses right-of-way for water operations including non-aircraft vessels
+• Head-on, crossing, and overtaking conditions
+• Must be addressed for UAS designed for water takeoff/landing
+• Visual observation can be more difficult with water operations
+• Identifying surface vessel capabilities and intent is also required by sensors, visual observers, or PIC.
+
+
+--- Page 19 ---
+Section 91.181
+CEC 300
+College of Engineering, Daytona Beach, FL
+19
+•
+Addresses permission of a pilot to maneuver to pass ”well clear” of other air traffic within controlled airspace.
+
+
+--- Page 20 ---
+Other FAA Documents
+• Advisory Circulars
+• AC 90-48c – Pilot’s role in collision avoidance
+• AC 91-73c – Single pilot taxi operations
+• FAA Orders
+• FAA Order 7610.4k – Military operations, includes requirements for equivalent level 
+of safety in see and avoid
+• FAA Order 8130.34 – UAS airworthiness, includes requirements for visual observation
+• Other:
+• FAA Aeronautical Information Manual (AIM)
+• FAA-H-8083-3A: Airplane Flying Handbook (see and avoid, runway incursion 
+avoidance)
+CEC 300
+College of Engineering, Daytona Beach, FL
+20
+
+
+--- Page 21 ---
+DAA Requirement
+CEC 300
+College of Engineering, Daytona Beach, FL
+21
+
+
+--- Page 22 ---
+Visual Line of Sight / Observers
+CEC 300
+College of Engineering, Daytona Beach, FL
+22
+
+
+--- Page 23 ---
+FAA Part 108 (pending)
+• An aviation rule making committee provided a report with 
+recommendations for Beyond Visual Line of Sight Operations (BVLOS).
+• Expectation of equipage with either ADS-B or TABS (Traffic Awareness Beacon 
+System)
+• Identifies rules and procedures for BVLOS including
+• Shielded operations – operations in which the aircraft is shielded from other aircraft 
+based on the environment, e.g. urban canyons.
+• Non-shielded operations – typical operations
+CEC 300
+College of Engineering, Daytona Beach, FL
+23
+
+
+--- Page 24 ---
+Elements of DAA and Definitions
+CEC 300
+College of Engineering, Daytona Beach, FL
+24
+
+
+--- Page 25 ---
+Pilot’s Role
+• We cannot assume that the human operator (pilot in command) does not have a role in 
+DAA.
+• Notional examples:
+• Human-in-the-loop:
+• Processes sensor inputs
+• Command aircraft to performance avoidance
+• Human-on-the-loop:
+• DAA system detects potential collision threat and notifies pilot
+• Pilot approves recommended course of action and/or inputs a corrective action given the alert
+• Automated:
+• DAA system detects potential collision and takes corrective action
+• PIC is notified of the course change (ability to override?)
+• Necessary to support contingency operations
+• Visual observers may be employed instead of sensors as recommended under Part 107
+• Ground-based
+• Airborne
+• Pilot in command has final legal authority of the actions of the aircraft
+• In manned aviation, pilot can choose to justifiably disregard a resolution advisory or ATC 
+instruction if they feel it jeopardizes flight safety
+CEC 300
+College of Engineering, Daytona Beach, FL
+25
+
+
+--- Page 26 ---
+Notional Taxonomy and Generic Architecture
+CEC 300
+College of Engineering, Daytona Beach, FL
+26
+
+
+--- Page 27 ---
+Sense / Detect
+• Detect – identification of a collision 
+risk through sensor data
+• Human
+• Machine
+• Human augmenting machine
+CEC 300
+College of Engineering, Daytona Beach, FL
+27
+Human 
+Detection
+(Detect)
+ 
+The ability of the human operator to 
+harness their five senses in an effort to 
+detect aircraft.  This includes visual 
+detection and noise detection. 
+Machine 
+Detection
+ 
+The incorporation of machine-based 
+systems that enhance the operator’s 
+situational awareness in an effort to 
+prevent collisions. 
+
+
+--- Page 28 ---
+Sense / Detect (2)
+• Cooperative vs. Non-Cooperative Aircraft
+• One major distinction in modalities for detection is whether or not the “intruder” is a 
+cooperative aircraft vs. a non-cooperative aircraft
+• Cooperative aircraft:
+• Equipped with a form of cooperative technology such as:
+• Transponder
+• ADS-B
+• TCAS /ACAS I or II
+• Identify, Friend, or Foe System
+• Etc.
+• Note: more on these later
+• Required for operation in controlled airspace / under an instrument flight rules (IFR) flight plan
+• Non-cooperative aircraft:
+• Not equipped with a technology that aids in detection through traditional air traffic management 
+system, transponder system, etc.
+• Non-cooperative can utilize other means to help ”be seen”
+• Permissible for some aircraft types and/or some airspace categories
+• Non-cooperative aircraft are one of the great challenges of UAS integration
+CEC 300
+College of Engineering, Daytona Beach, FL
+28
+
+
+--- Page 29 ---
+Sense / Detect: Airborne
+CEC 300
+College of Engineering, Daytona Beach, FL
+29
+• Sensors are integrated into the UAS
+• Cooperative vs. non-cooperative sensing 
+options
+• Advantages:
+• Mature for larger systems
+• Opportunity for greater independence with 
+control station
+• Supports a broader area of operation
+• Disadvantages:
+• Size, weight, and power restrictions can limit 
+options for small UAS
+• Small UAS technologies typically have a lower 
+technical readiness level (TRL)
+
+
+--- Page 30 ---
+Sense / Detect: Ground-based
+CEC 300
+College of Engineering, Daytona Beach, FL
+30
+• Sensors are located on the ground
+• Fixed 
+• UAS specific
+• Existing infrastructure
+• Portable
+• Advantages:
+• Reduces/eliminates SWAP constraints
+• Can leverage existing technologies
+• Disadvantage:
+• System now dependent upon command-and-
+control data link
+
+
+--- Page 31 ---
+Avoid
+CEC 300
+College of Engineering, Daytona Beach, FL
+31
+• UAS must make corrective action:
+• Remain Well Clear
+• Maintaining a safe separation with other aircraft 
+• Can be handled procedurally (e.g. ATC controlled 
+airspace)
+• Collision avoidance
+• Maneuver is made to ensure the UAS remains 
+well clear of other aircraft
+• The delineation between these activities 
+varies significantly between proposed 
+approaches
+• Standardization of “well clear” is vital 
+element, which will be discussed further
+
+
+--- Page 32 ---
+Be Seen
+CEC 300
+College of Engineering, Daytona Beach, FL
+32
+• Current regulatory trends toward UAS 
+detect-and-avoid falling under 
+responsibility of UAS
+• However, the ability of the UAS to be seen 
+is of key importance:
+• Be seen by other air traffic
+• Be seen by visual observers
+• Approaches:
+• Equipage: make the UAS a cooperative 
+aircraft
+• Conspicuity: enhance the UAS to aid in 
+detection
+• Paint, lights, RF reflecting paint/materials, etc.
+
+
+--- Page 33 ---
+Other Elements of Consideration
+• Architecture
+• Ground-based, Airborne, or Mixed
+• Pilot-in-the-loop, Pilot-on-the-loop, Automated
+• Sensor fusion
+• Intruder tracking
+CEC 300
+College of Engineering, Daytona Beach, FL
+33
+
+
+--- Page 34 ---
+Challenges of DAA
+CEC 300
+College of Engineering, Daytona Beach, FL
+34
+
+
+--- Page 35 ---
+Challenges for UAS DAA
+• Creating quantifiable requirements for UAS DAA
+• How do we create an “equivalent level of safety” when Part 91 criteria are subjective?
+• Includes:
+• Human-based
+• Machine-based
+• Sensing requirements
+• Definition of “well clear”
+• Identify requirements of UAS DAA Architecture(s)
+• Address architectural needs and requirements of UAS DAA
+• Ground-based
+• Airborne
+• Mixed Air/Ground
+• Understanding the limits of sensor types and creating a complimentary suite 
+of sensors
+CEC 300
+College of Engineering, Daytona Beach, FL
+35
+
+
+--- Page 36 ---
+“Swiss Cheese” Analogy
+• Detect and avoid sensing has been described as working with “swiss 
+cheese”
+• Sensors and tracking software might have “holes” in its safety 
+function.
+• Detection limits can include, but are not limited to: range, minimum target 
+size, minimum target velocity, altitude of ownship, altitude of intruder, etc.
+• A goal of DAA sensor selection is to find the right layers of “cheese” 
+such that when stacked together no holes remain.
+CEC 300
+College of Engineering, Daytona Beach, FL
+36
+
+
+--- Page 37 ---
+Road Ahead for DAA Lecture
+CEC 300
+College of Engineering, Daytona Beach, FL
+37
+
+
+--- Page 38 ---
+Path forward for DAA Lectures
+Upcoming Topics:
+• Sensor Technologies
+• Airborne Sensors
+• Ground-based Sensors
+• Defining Well Clear
+• Avoidance Algorithms
+• DAA Architectural 
+Considerations
+• Regulatory Considerations
+CEC 300
+College of Engineering, Daytona Beach, FL
+38
+
+
+--- Page 39 ---
+Review
+• A DAA system is designed to ensure that a UAS remains well clear of other 
+aircraft, and performs collision avoidance maneuvers if a well clear 
+violation occurs or is eminent.
+• DAA requirements must be developed to meet the expectations of 14 CFR 
+Part 91 to see-and-avoid and follow right-of-way rules within air traffic.
+• Part 107 for small UAS relies upon visual observers, but waivers permit 
+beyond visual line of sight operations, which require a DAA system
+• Elements of the DAA system were summarized with more detail ahead
+• Numerous challenges exist with DAA systems including establishing 
+performance metrics, defining system requirements, and ensuring 
+adequate detection capabilities.
+CEC 300
+College of Engineering, Daytona Beach, FL
+39
+
+
+--- Page 40 ---
+References
+• FAA Aeronautical Information Manual: 
+https://www.faa.gov/air_traffic/publications/media/aim.pdf
+• RTCA DO-365: Minimum Operational Performance Standards (MOPS) for 
+Detect and Avoid (DAA) Systems
+• Title 14 CFR Part 91
+• Title 14 CFR Part 107
+• NATO Industrial Advisory Group (NIAG) Study Group 205, “Final Report on 
+NIAG Study Group 205 on Sense and Avoid Feasibility and Certification for 
+UAS Flight in Non-Segregated Airspace”
+• Stansbury and Wilson, “Technology Surveys and Regulatory Gap Analyses 
+of UAS Sub-Systems toward Access to the NAS,” In the Handbook for 
+Unmanned Aerial Vehicles, 2014.
+CEC 300
+College of Engineering, Daytona Beach, FL
+40

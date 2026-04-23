@@ -1,0 +1,367 @@
+--- Page 1 ---
+Databuses: ARINC 664 / AFDX
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+•
+Bandwidth: the amount of data generated in airplanes have 
+considerably increased in recent years.  
+•
+Need for bidirectional communication to support complex protocol.
+•
+Increase the sharing of data: interdependence of systems is increasing 
+(data bases, clocks).
+•
+Flexibility of communication architectures.
+•
+Use of standards protocols of communications:
+•
+Aircraft are connected with a large network
+Needs
+
+
+--- Page 3 ---
+•
+Airbus proposed a solution called Avionics Full Duplex Ethernet (AFDX®)
+•
+Avionics: Network adapted to avionics constraints
+•
+Full Duplex: The subscriber transmits and receives at the same time
+•
+Switched: The data are switched, necessary to use AFDX switch to 
+connect to subscriber.
+•
+Ethernet: conformity to the standard Ethernet 802.3
+•
+Ready for safety critical functions
+•
+Standardized as ARINC 664 Part 7
+One solution…
+
+
+--- Page 4 ---
+•
+A deterministic network
+•
+For each VL in RX the transfer time of the data is bounded and 
+computed by a formal approach (network calculus) (formal methods).
+•
+Virtual Link (VL)
+•
+Channel between one transmitter and several receptors with:
+•
+Guaranteed bandwidth
+•
+Limited latency and jitter
+•
+Static path
+AFDX properties
+
+
+--- Page 5 ---
+AFDX Standardization
+
+
+--- Page 6 ---
+Redundancy – Independent networks
+
+
+--- Page 7 ---
+AFDX – Enforcement
+
+
+--- Page 8 ---
+DAL A – Design Assurance Level A. Catastrophic (failure can cause death).
+AFDX – Enforcement
+
+
+--- Page 9 ---
+𝜇𝐴𝐹𝐷𝑋 
+
+
+--- Page 10 ---
+ADCN- Avionics Data Communication Network
+
+
+--- Page 11 ---
+Key Inventions and Benefits
+
+
+--- Page 12 ---
+Who uses AFDX?
+
+
+--- Page 13 ---
+Course Title
+ADDITIONAL AFDX DETAILS
+
+
+--- Page 14 ---
+Physical vs. Logical Architecture
+Image Source: https://web.archive.org/web/20150618140031/http://www.techsat.com/fileadmin/media/pdf/infokiosk/TechSAT_TUT-AFDX-EN.pdf 
+
+
+--- Page 15 ---
+VL Scheduling
+•
+Located at the End Systems
+o
+Traffic shaping via VL Scheduler
+o
+Multiplexes frames from all VLs onto the physical layer
+o
+VL provides a stream of frames.
+•
+Regulated by the Bandwidth Allocation Gap (BAG)
+•
+Minimum space between messages
+o
+1 – 128 ms (value must be power of 2)
+o
+Jitter is the upperbound on transmit latency (frame time offset)
+Image Source: https://web.archive.org/web/20150618140031/http://www.techsat.com/fileadmin/media/pdf/infokiosk/TechSAT_TUT-AFDX-EN.pdf 
+
+
+--- Page 16 ---
+Sub Virtual Link
+•
+Regulates flow of frames onto the VL
+•
+Enables optimization of the VL’s bandwidth
+•
+Supports at least 4 FIFO queues to ensure 
+frames are evenly distributed across the 
+stream
+Image Source: https://web.archive.org/web/20150618140031/http://www.techsat.com/fileadmin/media/pdf/infokiosk/TechSAT_TUT-AFDX-EN.pdf 
+
+
+--- Page 17 ---
+Communication Port Types
+•
+Receive Sampling Ports
+•
+Buffer sufficient for one message.
+•
+Incoming messages overwrite previous 
+message
+•
+Read at any time, always receive the 
+most recent message.
+•
+Transmit Sampling Ports
+•
+Continuously transmits the most recent 
+message until new message received.
+•
+Then, new message is continuously 
+transmitted.
+•
+Receive Queueing Ports
+•
+FIFO queue for received messages
+•
+Application can read at any time, 
+dequeuing and returning the message 
+at the front of the queue.
+•
+Transmit Queueing Ports
+•
+Transmits new messages in the queue 
+port as fast as it can.
+•
+Each message is dequeued before 
+transmission.
+•
+New messages are appended to the 
+back of the queue.
+Image Source: https://web.archive.org/web/20150618140031/http://www.techsat.com/fileadmin/media/pdf/infokiosk/TechSAT_TUT-AFDX-EN.pdf 
+
+
+--- Page 18 ---
+AFDX Protocol Stack
+• OSI Model
+• AFDX
+•
+Data Link Layer - AFDX Media Access Control 
+(MAC) 
+•
+Like Ethernet MAC, but optional service 
+number (SN) can be appended to the end of 
+Ethernet Payload (used with integrity 
+monitoring)
+•
+Network Layer: Internet Protocol (IP) Layer
+•
+Transport Layer: User Datagram Protocol (UDP) 
+or Transmission Control Protocol (TCP)
+Image Source: https://web.archive.org/web/20150618140031/http://www.techsat.com/fileadmin/media/pdf/infokiosk/TechSAT_TUT-AFDX-EN.pdf 
+
+
+--- Page 19 ---
+Reference: TCP vs. UDP Transport Layer Types
+•
+UDP
+o
+IP-based
+o
+Connectionless
+o
+Does not guarantee delivery or order of 
+received data packets
+o
+Fast and Efficient
+o
+Supports Multicast and Broadcast
+•
+TCP
+o
+Connect-Oriented
+o
+Dedicated connection prior to data 
+transfer
+o
+Flow control
+o
+Congestion Control
+o
+Slower but reliable than UDP
+Differences Between TCP and UDP
+
+
+--- Page 20 ---
+AFDX Frame Structure
+Image Source: https://web.archive.org/web/20150618140031/http://www.techsat.com/fileadmin/media/pdf/infokiosk/TechSAT_TUT-AFDX-EN.pdf 
+•
+FCS – Frame Check Sequence (4-byte)
+•
+Used to determine transmission 
+error
+•
+Uses Cyclic Redundancy Check 
+(CRC) checksum on data frame
+•
+Determine if frame is well formed
+•
+SFD - Start frame delimiter (1 byte)
+•
+Indicates the start of the ethernet 
+frame
+•
+IFG – Interframe Gap (12 bytes)
+•
+Enforces minimum idle period 
+between frames
+
+
+--- Page 21 ---
+Integrity Checking / Redundancy Management
+•
+Transmitting Mode:
+o
+Each frame is given a number from 0-
+255 with each frame number being 
+1+previous frame’s SN
+•
+Receiving Mode:
+o
+The IC algorithm accepts all frames that 
+comply with one of the following 
+criteria:
+▪
+SN = 0 (The transmitting ES is 
+started or reset)
+▪
+SN = Previous SN + 1
+▪
+SN = Previous SN + 2
+▪
+All frames not complying with 
+these criteria are discarded.
+•
+SN = Sequence number (8-bit)
+•
+Unique to each VL
+•
+Integrity Checking
+o
+Done for each network, one per VL, of End System 
+nodes
+o
+Independent of Redundancy Management
+o
+Applied on the MAC layer using the SN of the 
+ethernet frame
+Image Source: https://web.archive.org/web/20150618140031/http://www.techsat.com/fileadmin/media/pdf/infokiosk/TechSAT_TUT-AFDX-EN.pdf 
+
+
+--- Page 22 ---
+Switch Architecture
+•
+Filtering
+o Confirm destination address
+o Received message on valid 
+destination port
+o FCS validity
+o Ethernet frame size alignment
+o Ethernet frame size range
+o Adherence to MTU (maximum 
+transfer unit in bytes) per VL
+•
+Traffic Policing
+o Byte-based: filters out VL in 
+terms of bandwidth usage
+o Frame-based: filters out VL in 
+terms of bandwidth in frames 
+per second.
+Image Source: https://web.archive.org/web/20150618140031/http://www.techsat.com/fileadmin/media/pdf/infokiosk/TechSAT_TUT-AFDX-EN.pdf 
+•
+Virtual Link Routing – uses a 16-bit Virtual Link ID (VL ID) with frame 
+as address for End System nodes (unlike MAC, used for Ethernet)
+•
+Configuration Tables – define routing paths including input ports, 
+output ports of a given VL ID.
+
+
+--- Page 23 ---
+Bandwidth allocation - Overhead
+Image Source: https://web.archive.org/web/20150618140031/http://www.techsat.com/fileadmin/media/pdf/infokiosk/TechSAT_TUT-AFDX-EN.pdf 
+
+
+--- Page 24 ---
+Wrapping Up
+Last Time: 
+Learned about MIL-STD-1553 a bus-based 
+avionics architecture.
+This Unit
+Addresses the AFDX/ARINC 664 Standard 
+created by Airbus, which utilizes ethernet 
+and time-division multiplexing.
+Coming up: 
+Discussion of space-based databuses and 
+architectures.
+What parts of aviation and space 
+databuses are common and what are 
+different given the application type?
+
+
+--- Page 25 ---
+Questions?
+
+
+--- Page 26 ---
+•
+Past Presentations
+o
+Lecture slides prepared and reused from Dr. Timothy Wilson.
+o
+Lecture slides prepared and reused from Dr. Eduardo A. Rojas-Nastrucci.
+•
+“Principals of Avionic Systems” by Al Helfrick, 4th edition.
+•
+“Digital Avionics Handbook” by Spitzer, Ferrell, Ferrell.
+•
+“Avionics Full Duplex Ethernet and the Time Sensitive Networking Standard” by 
+Pasquier and Schneele, Airbus.
+Module References

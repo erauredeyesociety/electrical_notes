@@ -1,0 +1,209 @@
+--- Page 1 ---
+Apollo Case Study: GNC Sensors 
+and Guidance Computer
+Richard S. Stansbury
+CEC 300: Computing in 
+Aviation and Aerospace
+
+
+--- Page 2 ---
+Flight computing hardware
+
+
+--- Page 4 ---
+Command Module Block Diagram
+
+
+--- Page 5 ---
+Lunar Module
+
+
+--- Page 6 ---
+Computational Building Block: NOR Gate
+
+
+--- Page 7 ---
+Building Logical Circuits using NOR Gates
+
+
+--- Page 8 ---
+Environmental specifications
+
+
+--- Page 9 ---
+Types of Memory
+
+
+--- Page 11 ---
+Building the Computer (From the Vault of MIT: Computer for Apollo)
+
+
+--- Page 12 ---
+•
+Method: Welding & Wire-Wrapping
+o Gas-Tight
+o Vibration resistance (no soldering)
+•
+Wire-Wrapping
+o ~1km of wire
+o Gardner-Dever Automatic Wrapping Machine
+•
+Screening
+o Examine component reliability based on sampling of 
+lots of components.
+o Corrosion: 1 failure due to corrosion, discard.
+o Typical: 100 failures
+Computer construction
+
+
+--- Page 13 ---
+•
+Maturity and reliability
+o
+Current hardware packaging does not permit repair.
+o
+Software in core rope immutable.
+o
+Avoids unexpected interaction between component types
+o
+Better test coverage
+•
+NOR is the first “Universal Gate.”
+o
+Universal gates like NAND and NOR can be used to build 
+complex logic circuits.
+•
+NAND is also a Universal Gate AND his better performance.
+•
+So why not NAND?  Too early!
+o
+1961-62 DTL NOR reached a sufficient level of maturity and 
+reliability
+o
+1963  AGC Design Freeze
+o
+Late 1960s, TTL NAND maturing and becoming dominant of the 
+two in industry
+o
+1970s, CMOS NAND Gates become dominant
+Why NOR vs. NAND?
+
+
+--- Page 14 ---
+• Issues with can
+o Bulky and tall
+o Heavy (metal can)
+o Longer leads are more susceptible to vibration stress
+o Greater risk of inductance
+• Benefits of Flat Pack
+o Less weight and volume
+o Improved power and thermal limits
+Why change from can-style NOR to flat pack?
+
+
+--- Page 15 ---
+Modules
+
+
+--- Page 16 ---
+• Small flakes of filment found in the 
+circuits
+• Resulted in intermittent failure
+• Determined not to be component 
+caused
+• Cause of flaking was result of handling
+• Solution:
+o Carefully clean and inspect assembly to remove any 
+flakes from the hardware.
+Issue: Filament Flaking
+
+
+--- Page 17 ---
+•
+Mercury Mission – Gordon Cooper
+o
+During 19th orbit, automatic control system 
+failed
+o
+Cooper flew three remaining orbits manually
+•
+Cause:
+o
+Corrosion caused by humidity and human 
+caused contamination in cabin
+•
+Resolution:
+o
+Strict quality control, i.e. one failure due to 
+corrosion will result in entire lot discarded
+o
+Hardware must be sealed for moisture
+•
+Consequence: no repairs possible due to seals.
+•
+Therefore, Failure is not an option.
+Why sealed?
+
+
+--- Page 19 ---
+The interpreter
+
+
+--- Page 20 ---
+DSKY
+
+
+--- Page 21 ---
+Onboard cheet sheet
+
+
+--- Page 22 ---
+Resillence
+
+
+--- Page 23 ---
+Apollo 14 Radar Failure
+
+
+--- Page 24 ---
+Apollo 14 Abort Error
+
+
+--- Page 25 ---
+Resolving Abort Button Error
+• Step 1: Spoof the Mode (The Hack).
+◦ Action: The crew must manually overwrite the Major Mode Register to display "71" (Program 
+71).
+◦ Why: Routine R11 checks the physical abort button. However, the logic dictates that if an abort 
+is already in progress (P71), checking the button is unnecessary. By spoofing P71, R11 
+"terminate[s]" its check, effectively silencing the broken button,.
+• Step 2: Force the Throttle (The Consequence).
+◦ Action: The crew must manually throttle up the engine and set the ZOOMBIT flag.
+◦ Why: Because the computer thinks it is in an abort (P71) rather than a landing (P63), it does 
+not automatically throttle up the descent engine. The crew must manually advance the throttle, 
+then set ZOOMBIT to tell the guidance equations to take over control.
+• Step 3: Cleanup (The Safety).
+◦ Action: Reset the LETABBIT flag/register.
+◦ Why: Once the critical phase is over or the landing is secure, the system must be restored so 
+that a legitimate abort can be triggered if necessary.
+
+
+--- Page 26 ---
+•
+The Issue: While over 10 miles from the landing site, the radar prematurely switched to 
+short-range mode, becoming "nearsighted" and unable to lock onto the lunar surface.
+•
+Immediate Field Fix: Following a suggestion from Mission Control, the crew pulled the 
+radar’s circuit breaker and then powered the system back on.
+•
+Operational Result: This "power cycle" reset the system, allowing solid radar data to 
+begin flowing into the computer for a successful touchdown.
+•
+Mission Rule Contingency: If the fix had failed, rules permitted a landing without radar if 
+the primary (AGC) and backup (AGS) altitude readings had less than a 1,000-foot 
+disagreement.
+•
+Permanent Post-Mission Fix: To prevent noise-induced switching, range selection circuits 
+were modified so the radar could only change modes when physically in the correct 
+position.
+Spoofing the Radar

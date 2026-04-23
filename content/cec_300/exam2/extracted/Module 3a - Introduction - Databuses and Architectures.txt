@@ -1,0 +1,283 @@
+--- Page 1 ---
+Databuses and Architectures
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+•
+Focus on how the systems come together to achieve the guidance, navigation, control, and mission 
+execution of an aircraft or spacecraft.
+•
+Databuses – ensure the transferability of data between avionic components and vehicle systems.
+o
+Wires or wireless
+o
+Topologies include
+•
+Point-to-point
+•
+Ring
+•
+Star
+•
+Networked
+•
+Architectures – Integration of flight control system, mission systems, sensors, actuators, computing, 
+internal communication, external communication, etc. 
+o
+Databuses are a major consideration with an architecture and vice-versa.
+o
+Aircraft / spacecraft specific
+o
+Standard architectures
+About this Module
+
+
+--- Page 3 ---
+• Electromagnetic Compatibility 
+(EMC) and Interference (EMI)
+• Bandwidth and data rates
+• Deterministic behavior
+• Signal Integrity
+• Reliability
+• Fault Tolerance
+• Scalability (new/upgrade 
+appointments)
+• Quality of Service
+• Communication protocols
+• Environment
+• Miniaturization
+• SWAP-C
+oSize
+oWeight
+oPower
+oComputing
+Major Considerations
+Different vehicles, platforms, shapes, and sizes all 
+influence the architecture and its databuses
+
+
+--- Page 4 ---
+Course Title
+AVIATION DATABUSES
+PART I: INTRODUCTION
+
+
+--- Page 5 ---
+How did we get from this?
+Cessna 172
+Introduction
+
+
+--- Page 6 ---
+Boeing 707-329
+Introduction
+And this…
+
+
+--- Page 7 ---
+F 104
+And this…
+Introduction
+
+
+--- Page 8 ---
+To this…
+Cessna 172 with Garmin G1000
+Introduction
+
+
+--- Page 9 ---
+Boeing 787
+and this…
+Introduction
+
+
+--- Page 10 ---
+To this…
+F 35
+Introduction
+
+
+--- Page 11 ---
+These changes are possible thanks to major advancements in:
+•
+Sensors’ accuracy, precision, size, weight, and power.
+•
+Display size, weight, and power.
+•
+Processor and memory capacity, size, weight, and power.
+•
+Evolution from analog to digital electronics.
+The data traffic within the aircraft has increase from none to large.
+Therefore, Data Buses play a big role in modern avionics.
+Introduction
+
+
+--- Page 12 ---
+General Time Sensitive Network (TSN) goals:
+Network!
+• Reliable communication over Ethernet
+• Ultra-low latency
+• Deterministic end-to-end latency
+• Secure
+Introduction
+
+
+--- Page 13 ---
+•
+Aircraft are still using analog signals and some digital busses such as ARINC 419/429, MIL-
+STD 1553 and ARINC 629.
+o
+These buses offer low bandwidths (12 kbps -2 Mbps)
+o
+Extensive wiring is required
+o
+Limited data formats. Difficulties to support sophisticated communication protocols.
+Introduction
+By the End of 90’s…
+
+
+--- Page 14 ---
+Needs
+•
+Bandwidth: the amount of data generated in airplanes have 
+considerably increased in recent years.  
+•
+Need for bidirectional communication to support complex protocol.
+•
+Increase the sharing of data: interdependence of systems is increasing 
+(data bases, clocks).
+•
+Flexibility of communication architectures.
+•
+Use of standards protocols of communications:
+•
+Aircraft are connected with a large network
+Introduction
+
+
+--- Page 15 ---
+OSI Network Model
+What is OSI Model in Computer Network | 7 Layers Explained - CodeRepublics
+
+
+--- Page 16 ---
+•
+Application Layer
+o Requests issued to presentation layer
+o Receives responses to requests from the presentation 
+layer
+o Examples: HTTP, FTP, POP, etc.
+•
+Presentation Layer
+o Provides a common interface to a variety of different 
+application layer entities.
+o Enables encryption/decryption and 
+compression/decompression
+•
+Session Layer
+o Establishes, manages, and terminates sessions
+o Enables synchronization (e.g. streaming)
+•
+Transport Layer
+o Responsible for the transportation of data packets 
+between entities.
+o Port addressing, segmentation/reassembly, connection 
+management, reliability and error control.
+o e.g. Transportation control protocol (TCP) and User 
+Datagram Protocol (UDP)
+•
+Network Layer
+o Constructing data packets
+o Routing
+o Local addressing (e.g. Internet Protocol (IP))
+o Traffic control and congestion management
+•
+Data Link Layer
+o Node-to-Node data transfer
+o Organizing raw physical bits into frames
+o Medium Access Control (MAC) addresses for local 
+delivery
+o Error control (e.g. CRC)
+•
+Physical Layer
+o Bits to signals / signals to bits
+o Physical medium & topology
+o Data rates
+o Transmission modes
+o Hardware components (Cables, network cards, hubs, 
+repeaters, etc.)
+Layer Types
+
+
+--- Page 17 ---
+Transmission Lines
+How to differentiate the types of network cables? - 
+Readytogocables
+Electromagnetic Interference:
+•
+Consider:
+•
+Line-to-line
+•
+External-to-line
+•
+Line-to-external
+•
+Signals can ingress/egress to/from a 
+transmission line
+•
+If you block one, you block both.
+•
+Mitigations:
+•
+Twisted-Pair – two transmission lines 
+with the signal on one and its inverse 
+on the other produce B-fields that 
+cancel each other.
+•
+Shielding
+•
+Braided/mesh shield
+•
+If multiple twisted pairs, each 
+pair can be shielded and then 
+the all pairs are shielded 
+together.
+
+
+--- Page 18 ---
+Wrapping Up
+Last Time: 
+Learned about the major avionic systems 
+associated with GNC
+Today:
+Discussed the motivation for the use of 
+Avionics Databuses and Architectures.
+ Introductory concepts were covered.
+Coming up: 
+Aviation Bus Standards: ARINC 429, ARINC 
+629, ARINC 664
+
+
+--- Page 19 ---
+Questions?
+
+
+--- Page 20 ---
+•
+Past Presentations
+o
+Lecture slides prepared and reused from Dr. Timothy Wilson.
+o
+Lecture slides prepared and reused from Dr. Eduardo A. Rojas-Nastrucci
+•
+“Principals of Avionic Systems” by Al Helfrick
+•
+“Digital Avionics Handbook” by Spitzer, Ferrell, Ferrell.
+•
+“Avionics Full Duplex Ethernet and the Time Sensitive Networking Standard” by 
+Pasquier and Schneele, Airbus.
+Module References

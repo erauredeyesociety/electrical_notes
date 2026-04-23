@@ -1,0 +1,365 @@
+--- Page 1 ---
+Regulation Landscape
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+Terminology
+Airworthiness Certificate: 
+•
+a certificate stating an aircraft has been deemed airworthy, which includes conformance to 
+its type certificate and continued airworthiness (maintenance, repair, etc.)
+•
+Standard
+•
+Special: primary, restricted, limited, light-sport, and experimental (i.e., R&D, crew training, 
+exhibition, marketing)
+Type Certificate (TC):  a certificate acknowledging airworthiness compliance for an aircraft 
+type.
+Production Certificate:  a certificate authorizing production of aircraft based upon a type 
+certificate.
+Special Conditions:  can be designated by the FAA for an aircraft type that does not conform to 
+existing airworthiness standards of 14 CFR because of novel / unique design features. 
+UAS 501
+College of Engineering, Daytona Beach, FL
+2
+
+
+--- Page 3 ---
+Terminology
+Airworthiness Directive (AD): 
+•
+“Airworthiness Directives (ADs) are legally enforceable rules issued by the FAA in accordance with 14 CFR part 39 to 
+correct an unsafe condition in a product. 14 CFR part 39 defines a product as an aircraft, aircraft engine, propeller, or 
+appliance.” (FAA)
+•
+Responsibility of aircraft owner / operator to take action
+Advisory Circular (AC): 
+•
+FAA published documents that provide guidance regarding acceptable means of compliance for FAA standards such as 
+airworthiness
+•
+Not binding and not the sole means of compliance
+•
+Sometimes reference industry-base standards (RTCA, ASTM, etc.)
+Technical Standard Order (TSO):
+•
+“A TSO is a minimum performance standard for specified materials, parts, and appliances used on civil aircraft. When 
+authorized to manufacture a material, part, or appliances to a TSO standard, this is referred to as TSO authorization. 
+Receiving a TSO authorization is both design and production approval.”
+•
+A manufacturer can obtain a TSO authorization for a product indicating that their product meets the standards and is 
+authorized to produce the product
+Orders:
+•
+Documents defining FAA policy and procedures for FAA personnel and representatives
+•
+Sometimes the orders can provide guidance to developers, operators, etc. on how regulation is interpreted and 
+compliance is assessed.
+UAS 501
+College of Engineering, Daytona Beach, FL
+3
+
+
+--- Page 4 ---
+From CAB to FAA
+• 1938 Civil Aeronautics Board Created
+• Civil Aeronautics Act (52 Statute 973)
+• 1958 Becomes the Federal Aviation Agency 
+• CARs become FARs
+• 1966 Federal Aviation Administration
+
+
+--- Page 5 ---
+FAA Regulations, Title 14 Code of Federal Regulations
+5
+Generating new laws can be cumbersome.  
+General Process:
+•
+Aviation rulemaking committees (ARCs) can assist in developing new rules
+•
+A draft rule must be vetted by FAA and DOT
+•
+A notice of public rulemaking is issued
+•
+A period of public comment occurs
+•
+FAA must address all comments
+•
+Revision is made toward final regulation
+•
+Approval through FAA and DOT before becoming a new regulatory law.
+Under public statutory law, the authority for 
+lawmaking with respect to the regulation of 
+aviation was granted to the FAA so that it can 
+write regulatory laws with defined enforcement 
+procedures (fines, loss of certificates, etc.)
+
+
+--- Page 6 ---
+Title 14 CFR Part 21
+Foundational Standard for Airworthiness Requirement
+Aircraft designers seek a Type Certificate (TC) certifying the aircraft design is airworthy. 
+•
+Entire aircraft certified under a TC
+•
+Onboard equipment cannot be modified under a type certificate.
+•
+Does not certify the individual components.
+Supplementary type certificates (STCs) can be issued for aircraft that are modifications to 
+an existing TC’d aircraft.
+•
+Approves airworthiness
+•
+Operational limits of the modified aircraft
+Airworthiness Certification determined based upon the safety case put forward by design 
+engineers.  Must meet hardware and software Design Assurance Levels.
+
+
+--- Page 7 ---
+Delegates the airworthiness certification requirements of 
+airworthiness to aircraft and operational type via additional 
+Parts of Title 14 CFR: 
+• 14 CFR Part 23 (general aviation), 
+• 14 CFR Part 25 (transport category), 
+• 14 CFR Part 27 (general aviation rotorcraft), and 
+• 14 CFR Part 29 (transport category).
+
+
+--- Page 8 ---
+Snippets from 14 CFR Part 23
+Each part is divided into:
+Subparts: a grouping of related sections.
+Sections: a grouping of paragraphs that define a rule, 
+definition, or guidance for regulation
+Paragraphs and sub-paragraphs: provide specific details
+14 CFR § 23.2105(b)
+Interpret as
+Title 14 of Code of Federal Reg.
+Part 23
+Section 2105
+Paragraph b
+§§ is used if discussing multiple sections.
+Note: Part 23 was updated in 2017, which included a 
+significant rework to be less prescriptive with design 
+requirements and focus upon performance-based 
+airworthiness standards.
+i.e. what must be achieved, but not how.
+8
+
+
+--- Page 9 ---
+TSOs
+• Technical Standard Orders 
+(TSOs) are issued for 
+standard components 
+that are interchangeable 
+such as altimeters.
+• The performance 
+standards are defined in 
+the TSO and the 
+equipment is marked with 
+a TSO number. 
+
+
+--- Page 10 ---
+SAE standard for 
+Altimeters
+•
+TSO shows FAA acceptance
+Later, CARs updated with section 514.20.
+
+
+--- Page 11 ---
+Airworthiness Directives
+Legally enforceable directives issued by the FAA to correct an unsafe condition in 
+a product.
+•
+Identifies the issue
+•
+Defines the required procedure to address the issue
+•
+Applicable toward aircraft, aircraft engines, propellers, or appliances
+•
+Types include: 
+•
+Notice of Public Rulemaking (NPRM), 
+•
+Final Rule – Public Comment, and 
+•
+Emergency NPRM
+
+
+--- Page 12 ---
+Battery Damage in the 787
+Resulted in 2013 grounding of the Boeing 787
+
+
+--- Page 14 ---
+Airworthiness directive’s sections serve specific 
+purposes:
+•
+When and under what conditions is it applicable.
+•
+Impacted component
+•
+Safety issue
+•
+Corrective action
+•
+AMOC required if following a different approach to 
+address the equipment and unsafe condition.
+
+
+--- Page 15 ---
+Other Agencies
+•
+ICAO, a United Nations Organization 
+•
+Coordinates aviation standards across the world adopting and harmonizing 
+standards and practices including navigation systems, infrastructure, 
+aircraft identifiers, and many other regulations that need harmonization 
+across borders. 
+•
+Civil Aviation Authorities (CAAs)
+•
+CAAs are the analogue to the FAA in other countries or regions 
+throughout the world.
+•
+Examples:
+•
+Europe: European Aviation Safety Agency (EASA)
+•
+Australia: Civilization Aviation Safety Agency (CASA)
+
+
+--- Page 16 ---
+Other Regulatory Bodies
+•
+International Telecommunication Union (ITU):
+•
+International body that establishes RF frequency allocations across 
+regions.
+•
+Includes RF communication with satellites orbiting the Earth
+•
+Federal Communication Commission (FCC):
+•
+Oversees standards for radio transmissions with categories of ground-
+based fixed and mobile ground transmitters and aeronautical 
+radionavigation signals, and mobile aeronautical transmitters.
+
+
+--- Page 18 ---
+Radio 
+Spectrum
+
+
+--- Page 19 ---
+Aviation/Aerospace Standards
+•
+Standards Development Organizations produce aviation and aerospace 
+standards that address safety, reliability, and interoperability of 
+aircraft/spacecraft systems.
+•
+Produce industry-supported consensus standards.
+•
+RTCA, Inc. produce a variety of aviation standards used within this industry 
+and relevant to this course. 
+•
+e.g RTCA DO-178c: Airborne Software Certification defines standards to 
+develop software to meet design assurance level based on system 
+criticality and failure risk.
+
+
+--- Page 20 ---
+Other SDOs
+•
+International Organization for Standards (ISO) – operations, data, 
+production, operation, and disposal
+•
+ASTM International – materials used in spacecraft
+•
+SAE International – space technologies, components, and materials
+•
+IEEE – wired and wireless communication standards
+•
+Consultative Committee for Space Data Styems (CCSDS) – data and 
+communication protocols to ensure interoperability between organizations 
+and nations.
+•
+American Institute of Aeronautics and Astronautics (AIAA) – national 
+aerospace standards and support of some ISO technical groups
+
+
+--- Page 21 ---
+MOPS and MASPS
+MASPS specify characteristics that are useful to designers, installers, manufacturers, 
+service providers and users of systems intended for operational use within a defined 
+airspace. Where the systems are global in nature, international applications are 
+taken into consideration (often working with European Organisation for Civil 
+Aviation Equipment (EUROCAE) and/or International Civil Aviation Organization 
+(ICAO)). MASPS describe the system (subsystems / functions) and provide 
+information needed to understand the rationale for system characteristics, 
+operational goals, requirements and typical applications. Definitions and 
+assumptions essential to proper understanding of MASPS are provided as well as 
+minimum system test procedures to verify system performance compliance (e.g., 
+end-to-end performance verification).
+From RTCA’s website
+MASPS Minimum Aviation System Performance Standards  
+
+
+--- Page 22 ---
+MOPS and MASPS
+MOPS provide standards for specific equipment(s) useful to designers, manufacturers, 
+installers and users of the equipment. The word "equipment" used in MOPS includes all 
+components and units necessary for the system to properly perform its intended 
+function(s). MOPS provide the information needed to understand the rationale for 
+equipment characteristics and requirements stated, describe typical equipment 
+applications and operational goals, and establish the basis for required performance under 
+the standard. Definitions and assumptions essential to proper understanding are provided 
+as well as installed equipment tests and operational performance characteristics for 
+equipment installations.
+From RTCA’s website
+MOPS Minimum Operational Performance Standards
+
+
+--- Page 23 ---
+MOPS and MASPS
+Minimum Aviation System Performance Standards (MASPS) for 
+Traffic Information Service – Broadcast (TIS-B) 
+DO #:
+DO-286B
+Title:
+Minimum Operational Performance Standards (MOPS) for Helicopter 
+Terrain Awareness and Warning System (HTAWS) Airborne 
+Equipment
+DO #:
+DO-309
+
+
+--- Page 24 ---
+Testing
+Title:
+Environmental Conditions and Test Procedures for Airborne Equipment
+DO #:
+DO-160G
+Issued:
+12/08/2010
+Committee:
+SC-135
+Description:
+DO-160G provides standard procedures and environmental test criteria for testing 
+airborne equipment for the entire spectrum of aircraft from light general aviation 
+aircraft and helicopters through the "jumbo jets" and SST categories of aircraft. The 
+document includes 26 Sections and three Appendices. Examples of tests covered 
+include vibration, power input, radio frequency susceptibility, lightning and 
+electrostatic discharge. Coordinated with EUROCAE, RTCA/DO-160G and 
+EUROCAE/ED-14G are identically worded. DO-160G is recognized by the 
+International Organization for Standardization (ISO) as de facto international 
+standard ISO- 7137.
+
+
+--- Page 25 ---
+Questions?

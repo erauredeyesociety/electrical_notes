@@ -1,0 +1,544 @@
+--- Page 1 ---
+Aircraft State Estimation
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+•
+State variables
+•
+State Transformations
+•
+State Estimation
+Outline
+
+
+--- Page 3 ---
+•
+Within this module, you shall learn how unmanned aircraft and spacecraft are 
+controlled utilizing a control system.
+o
+Requirements must be derived from the mission profile to determine the control 
+modes that must be supported by the control system.
+o
+Onboard sensors combined with sensor fusion provides robust estimates of the 
+vehicle’s state.
+•
+Kalman Filters will be discussed as one such technique.
+o
+Control systems will be reviewed for:
+•
+Aircraft lateral and vertical control for Uncrewed Aircraft Systems.
+•
+Attitude control of a spacecraft through an Attitude Detection and Control 
+System (ADCS).
+Module Introduction
+
+
+--- Page 4 ---
+Example: UAS States Parameters and Control Channels
+CEC 300
+College of Engineering, Daytona Beach, FL
+4
+Four common control channels:  
+•
+throttle (T channel),
+•
+elevator (𝛿𝐸 channel), 
+•
+aileron (𝛿𝐴 channel), and
+•
+rudder (𝛿𝐸 channel)
+
+
+--- Page 5 ---
+Example UAS Flight Control Software Block Diagram
+CEC 300
+College of Engineering, Daytona Beach, FL
+5
+
+
+--- Page 6 ---
+•
+As discussed earlier in the course, there are a 
+variety of sensors whose inputs provide a 
+partial picture at the aircraft’s state.
+o Position – GPS, Accelerometer, Air data 
+system
+o Velocity – GPS, Air Data System, 
+accelerometer
+o Acceleration – Accelerometer
+o Roll – Accelerometer, thermopile, multiple 
+GPS receivers
+o Yaw – magnetometer and/or gyroscope
+o Pitch – Altimeter and accelerometer
+o Encoders – measure actual position of 
+rudder, aileron, flaps, etc.
+•
+For a control system to work accurately, an 
+approach is needed to combine the data from 
+the various data sources to improve the 
+estimated state of the aircraft (i.e. sensor 
+fusion)
+•
+Motivation for multi-sensor fusion: 
+o Redundancy
+o State estimation error reduction
+o Different update rates
+Lesson Introduction
+
+
+--- Page 7 ---
+STATE PARAMETERS AND ESTIMATION
+
+
+--- Page 8 ---
+o
+Body-Frame:
+•
+𝑥𝑏 - vector from the aircraft’s center of gravity to the nose.
+•
+𝑦𝑏 - vector perpendicular to 𝑥𝑏 along the plane made by the aircraft’s horizontal 
+body toward wings.
+•
+𝑧𝑏 - vector pointing down from the aircraft’s body perpendicular to the 𝑥𝑏 and 
+𝑦𝑏 plane
+Body-Frames
+
+
+--- Page 9 ---
+Origin at the a local point on the Earth Surface.
+•
+𝑥𝐸 - points to True North
+•
+𝑦𝐸 - perpendicular to the 𝑥𝑒 and 𝑧𝑒 plane pointing East
+•
+𝑧𝐸 - vector pointing down toward the center of the earth.
+•
+𝑥𝑒, 𝑦𝑒- plane is tangent to earth surface.
+•
+Moves with the body plane.
+North-East-Down (NED) Frame
+
+
+--- Page 10 ---
+Wind Reference Frame
+•
+𝑥𝑤 - points to wind vector.
+•
+𝑦𝑤 - perpendicular to the 𝑥𝑤 and 𝑧𝑒 plane pointing East
+•
+𝑧𝑤 - points downward perpendicular to the x𝑤 axis along the aircraft’s plane of 
+symmetry
+
+
+--- Page 11 ---
+Flight Control Channels
+CEC 300
+College of Engineering, Daytona Beach, FL
+11
+Surface
+Function(s)
+Ailerons
+Control roll about the longitudinal axis. 
+Elevator
+Control pitch about the lateral axis.
+Rudder
+Controls yaw about the vertical axis.
+Flaps
+Increase lift and induced drag when deployed.  Permits higher flight speeds 
+(retracted) and lower landing speeds (extended).
+Spoiler
+Reduces lift and increases drag.  Controls descent.  Can also be used for roll 
+control with reduced adverse yaw.
+Trim
+Aerodynamically assist movement and position of flight control system 
+allowing pilot to “tune” a particular control setting allowing a more hands-off 
+operation under R/C control.  
+•
+Trim can be set within an R/C controller to define control surface 
+position when hands-off.  
+•
+Trim mechanisms can be installed on control surfaces to assist pilot in 
+manually dialing in trim for example, trim tabs on elevators allow the 
+pilot to adjust the hands-off pitch of the aircraft.  
+Four common control channels:  
+•
+throttle (T channel),
+•
+elevator (𝛿𝐸 channel), 
+•
+aileron (𝛿𝐴 channel), and
+•
+rudder (𝛿𝐸 channel)
+
+
+--- Page 12 ---
+Coordinate system and state parameters
+12
+
+
+--- Page 13 ---
+State Calculations
+13
+Velocity in the Earth Coordinate System
+Where, 𝑅𝑏
+𝐸is transformation from body axis to earth coordinate system, V is velocity vector in aircraft body 
+coordinates, and Vw is the wind velocity vector 
+Transformation, 
+Notation: 
+s is sine
+c is cosine
+Velocity 
+equation 
+expanded 
+out:
+ሶ𝑥𝐸 is north velocity
+ሶ𝑦𝐸 is east velocity
+ሶ𝑧𝐸 is altitude change rate
+
+
+--- Page 14 ---
+•
+Airspeed along x, y, and z axis (u, v, and w) can be derived using an air data system’s 
+measurements of sideslip (β), angle of attack (⍺), and observed velocity (V).
+•
+Horizontal wind component (if wind is acting on horizontal plane) can be calculated 
+using heading angle and total observed wind.
+State Calculations (2)
+14
+Vertical element may be needed 
+for z-component, which can be 
+added to this matrix if known
+
+
+--- Page 15 ---
+•
+Euler angular rates (change in roll, pitch, and heading) can be derived by the angular 
+rates of the vehicle’s body (roll, pitch, and, yaw rates)
+•
+Or, if the Euler angular rates are known, the body axes angular rates can be 
+calculated:
+State Calculations (3)
+15
+
+
+--- Page 16 ---
+•
+Rate of change of latitude and longitude can be calculated using the east velocity 
+component or the north velocity component, respectively.
+o
+Current latitude is also required to estimate the longitudinal rate
+State Calculations (4)
+16
+Rate of latitude change
+Rate of longitude change
+𝑅𝐸𝑎𝑟𝑡ℎ= 6.378 100 x106meters
+
+
+--- Page 17 ---
+Flight Control Channels
+CEC 300
+College of Engineering, Daytona Beach, FL
+17
+Surface
+Function(s)
+Ailerons
+Control roll about the longitudinal axis. 
+Elevator
+Control pitch about the lateral axis.
+Rudder
+Controls yaw about the vertical axis.
+Flaps
+Increase lift and induced drag when deployed.  Permits higher flight speeds 
+(retracted) and lower landing speeds (extended).
+Spoiler
+Reduces lift and increases drag.  Controls descent.  Can also be used for roll 
+control with reduced adverse yaw.
+Trim
+Aerodynamically assist movement and position of flight control system 
+allowing pilot to “tune” a particular control setting allowing a more hands-off 
+operation under R/C control.  
+•
+Trim can be set within an R/C controller to define control surface 
+position when hands-off.  
+•
+Trim mechanisms can be installed on control surfaces to assist pilot in 
+manually dialing in trim for example, trim tabs on elevators allow the 
+pilot to adjust the hands-off pitch of the aircraft.  
+Four common control channels:  
+•
+throttle (T channel),
+•
+elevator (𝛿𝐸 channel), 
+•
+aileron (𝛿𝐴 channel), and
+•
+rudder (𝛿𝐸 channel)
+
+
+--- Page 18 ---
+Bigger Picture - Flight Control Software – Block Diagram
+CEC 300
+College of Engineering, Daytona Beach, FL
+18
+
+
+--- Page 19 ---
+STATE MEASUREMENT AND ESTIMATION
+19
+
+
+--- Page 20 ---
+Vehicle state vector updates can come from a variety of sources:
+• Accelerometers
+•
+Measure linear accelerations in the x, y, and z body axes (ax, ay, 
+az)
+•
+Integrated with time to yield velocity (u, v, w)
+•
+Velocities and accelerations can be integrated with time to give 
+position (xE, yE, zE)
+• Gyroscopes
+•
+Measure the Euler angles (𝜃, 𝜑, 𝜙)
+•
+Angular rates from the derivative of Euler angles (𝑝, 𝑞, 𝑟)
+•
+Angular acceleration from the second derivative of the Euler 
+angles ( ሶ𝑝, ሶ𝑞, ሶ 𝑟) 
+• GPS
+•
+Latitude and Longitude (𝜆, 𝜇)
+•
+Position in Earth Coordinates (𝑋𝐸, 𝑌𝐸, 𝑍𝐸)
+•
+Velocity (via first derivative of position over time) (u, v, w)
+• Level Sensor
+•
+Roll (𝜙)
+• Magnetic Compass 
+•
+Euler Angles (𝜃, 𝜑, 𝜙)
+• Air Data System
+•
+True airspeed  (𝑉𝑇)
+• INS – fuses multiple sensors together
+Overview
+20
+
+
+--- Page 21 ---
+Example of Sensor Fusion
+21
+
+
+--- Page 22 ---
+AHRS / INS (example of state estimation)
+22
+
+
+--- Page 23 ---
+Sensor Fusion and Kalman Filters
+•
+Sensor fusion techniques allow:
+o Common state based upon multiple 
+sensor inputs
+o Can correct or mitigate measurement 
+error 
+o Can utilize the best sensor data 
+available
+o Can extrapolate state between updates
+•
+Numerous techniques available
+•
+Book covers Linear Kalman Filter, 
+which we will cover
+o Fairly basic approach
+o Also known as linear quadratic 
+estimation
+o Variations on Kalman Filter exist
+•
+Extended Kalman Filter – permits non-linear 
+functions for state transitions and 
+observation models
+23
+
+
+--- Page 24 ---
+Kalman Filter
+24
+
+
+--- Page 25 ---
+•
+Tutorial walk through.
+Kalman Filter Explained Through Examples
+
+
+--- Page 26 ---
+Linear Kalman Filter
+•
+Assume, we have the following data available:
+o
+GPS (𝑥𝐸,𝐺𝑃𝑆, 𝑦𝐸,𝐺𝑃𝑆, 𝑧𝐸,𝐺𝑃𝑆)
+o
+Air Data System (𝑉𝐴𝐷𝑆)
+o
+Altimeter (𝑧𝐸,𝑎𝑙𝑡)
+o
+Compass (𝜓𝐶𝑜𝑚𝑝)
+•
+Measurement Vector:
+•
+State Vector:
+•
+Note: as the book points out, this is a simplified example and more data 
+would be needed for UAS navigation
+26
+𝑧𝑛
+
+
+--- Page 27 ---
+•
+Several Matrices are utilized for the algorithm.
+•
+State Transition Matrix
+o
+Relates how state will change after each change of a time increment, dT
+o
+E.g.
+•
+F = 
+•
+H Matrix
+o
+Relates measurement vector to the preceding state vector
+o
+E.g.
+Linear Kalman Filter (2)
+27
+Recall:
+𝑧𝑛
+
+
+--- Page 28 ---
+Linear Kalman Filter (3)
+•
+Three covariance matrices are used:
+o Covariance Matrix, P
+•
+Quantifies state vector errors (calculated in Kalman filter algorithm)
+o Measurement noise covariance matrix, R
+•
+Expected measurement errors
+•
+Also known as Sequence Covariance Matrix
+•
+Sometimes, initially sensor errors populated with the standard 
+deviations
+•
+Also, covariance matrix of random system 
+disturbances, Q
+o Bounds the UAS expected errors
+28
+
+
+--- Page 29 ---
+Linear Kalman Filter (4)
+• Now, let’s walk through the algorithm
+o Two parts:
+• Update Procedure – updates the state matrix based upon sensor 
+updates
+• Extrapolation Procedure – extrapolates the state matrix based upon 
+time interval, dT
+29
+
+
+--- Page 30 ---
+Linear Kalman Filter (5)
+•
+Extrapolation Procedure:
+o
+Allows extrapolation of the state between time steps even if no new 
+measurements made. i.e. state updates at a higher rate than measurements 
+through estimation
+o
+Extrapolation Step 1: Update state using state transition matrix
+o
+Extrapolation Step 2: Update the covariance matrix using the state 
+transformation matrix and the random system disturbance covariance matrix.
+30
+
+
+--- Page 31 ---
+Linear Kalman Filter (6)
+•
+Update Procedure
+o
+Update Step 1: Compute Kalman Gain
+•
+Where, dash superscript implies previous matrix prior to update
+o
+Update Step 2: Update State Given New Measurements and Preceding Estimate
+o
+Update Step 3: Update the Covariance Matrix, P 
+ 
+31
+
+
+--- Page 32 ---
+Kalman Filter Example
+•
+Book example walks through set up of Kalman Filter for a rocket sled.
+•
+Need to define:
+o
+State Vector
+o
+Measurement Vector
+o
+State Transition Matrix
+o
+Q matrix
+o
+H matrix
+o
+R matrix
+32
+
+
+--- Page 33 ---
+Kalman Filter Example (2)
+•
+Book example walks through set up of Kalman Filter for a rocket sled.
+•
+State and Measurement Vector:
+33
+𝑧𝑛
+
+
+--- Page 34 ---
+Kalman Filter Example (2)
+•
+Book example walks through set up of Kalman Filter for a rocket sled.
+•
+The state transition matrix is based upon the kinematics of the rocket sled.  
+We have equations for velocity and position measurement
+34
+F
+
+
+--- Page 35 ---
+Kalman Filter Example (2)
+•
+Book example walks through set up of Kalman Filter for a rocket sled.
+•
+The H, R, and Q matrices are as follows:
+35
+
+
+--- Page 36 ---
+Questions?

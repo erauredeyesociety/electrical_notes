@@ -1,0 +1,540 @@
+--- Page 1 ---
+Navigation Technologies
+CEC 300: Computing in Aviation and Aerospace
+Authors: Richard S. Stansbury
+
+
+--- Page 2 ---
+Polarization and Wavelength
+Antennas work best when ‘designed’ for the 
+wavelength of the signal, and has proper 
+polarization
+Electrons in antenna are “jiggled”
+by passage of electromagnetic wave
+E
+Optimal loop antenna 
+perimeter is around one 
+wavelength ()
+Transmit
+Antenna
+Receive
+Antenna
+Optimal dipole antenna 
+length perimeter is around 
+half wavelength (/2)
+Vertical Polarization
+RF Concepts: Polarization and Wavelength
+
+
+--- Page 3 ---
+•
+A typical wire antenna length is around ½ a wavelength.
+•
+If you locate an antenna above a ground plane, a mirror image of the antenna 
+appears. This means we can use a ¼ wavelength antenna.
+•
+The ground plane requires the ground (soil) to be conductive.
+•
+Antennas have dozens of radial wires buried in the ground to provide a good ground 
+plane. 
+RF Concepts – Antenna Ground planes
+
+
+--- Page 4 ---
+RF Concepts: Electrical Length
+•
+Even with a ground plane it is often 
+infeasible to have a ¼ wavelength antenna. 
+•
+Adding capacitance to the end of the 
+antenna makes the antenna look longer to 
+electrical signals.
+•
+Capacitive “hats” 
+
+
+--- Page 5 ---
+Wavelength
+•
+Assume a radio operates at 300kHz. What is the wavelength of the transmitted 
+signal?
+o
+Wavelength = Speed of light/frequency
+o
+Wavelength =
+3×108 𝑚/𝑠
+3×105 𝑐𝑦𝑐𝑙𝑒𝑠/𝑠 = 1000m
+o
+Efficient antennas are ¼ of a wavelength.
+o
+The antenna needs to be 250m tall?
+
+
+--- Page 6 ---
+Course Title
+NON-DIRECTIONAL BEACONS
+
+
+--- Page 7 ---
+A Non Directional Beacon, NDB
+•
+Transmits vertically polarized waves
+•
+Uses Ground Waves which follows the 
+curvature of the earth.
+•
+Identify with morse code.
+Propagates by Ground Waves
+190 – 530 KHz
+SHF
+30 KHz 
+(10 km)
+300 KHz
+(1 km)
+3 MHz
+(100m)
+30 MHz
+(10m)
+300 MHz
+(1m)
+3 GHz
+(10 cm)
+LF
+MF
+HF
+VHF
+UHF
+30 GHz
+(1 cm)
+NDB
+ß Ground Waves à 
+
+
+--- Page 8 ---
+A Typical NDB Station
+Source: G4FTC
+
+
+--- Page 9 ---
+Maximum Voltage
+Zero Voltage
+E-FIELD
+H-FIELD
+Direction Finding Loop and 
+© 2008 WC Barott
+ADF Indicator
+
+
+--- Page 10 ---
+Two Antennas: Loop + Sense
+Solid state antenna replaces loop antenna
+A single steerable loop can work, but it is harder to identify 
+zero.
+The addition of a sense antenna with the loop antenna is 
+such that when the antenna is pointed away from the target, 
+the receive power goes to zero.  The beacon is at the angle + 
+180 degree.
+
+
+--- Page 11 ---
+•
+ICAO allows operation from 190kHz – 1750kHz.
+o
+In many countries 540 -1610kHz is used for commercial AM radio broadcasts
+•
+In the US NDBs operate from 190 kHz – 435 kHz and 510 kHz – 530 kHz
+•
+ 500kHz used to be a distress frequency (now unused)
+NDB: Frequencies
+
+
+--- Page 12 ---
+Shore Effect
+NDB
+
+
+--- Page 13 ---
+Precipitation Static
+NDB
+
+
+--- Page 14 ---
+A Dual Pointer Radio Magnetic Indicator, RMI
+
+
+--- Page 15 ---
+Course Title
+VOR – VERTICAL OMNIDIRECTIONAL RANGE
+
+
+--- Page 16 ---
+•
+General Principle:
+•
+Need two signals:
+o
+One whose phase varies with bearing from (or to) the transmitter
+o
+2. A reference signal whose phase is constant regardless of bearing
+•
+Lighthouse example
+Bearing Systems
+
+
+--- Page 17 ---
+N
+Sync Light 
+Observed
+N
+Rotating Light 
+Observed
+Light Beacon Analogy
+Sync
+(0°)
+Sync
+(0°)
+180°
+Rotating
+(45°)
+
+
+--- Page 19 ---
+• VOR will indicate which radial the 
+aircraft is on relative to the station
+• If the aircraft is on the radial and the 
+radial leads toward the station, then 
+the TO flag is set.
+• If the aircraft is on the radial and the 
+radial segment leads away the station, 
+then the FROM flag is set.
+• Heading of the aircraft is irrelevant:
+•
+If you are on the TO radial, but flying away from the 
+station, it would still read as “TO”, but the pilot must 
+reverse their controls when following the CDI.
+Radial, not bearing
+
+
+--- Page 20 ---
+Some Airways Based on VORs
+
+
+--- Page 21 ---
+VOR
+•
+In VOR, the variable signal is provided by a limacon 
+antenna pattern which rotates clockwise at 30Hz.
+Note: a limacon has the equation 
+Thus an observer at any point measures an RF signal , 
+amplitude modulated at 30 Hz
+
+
+--- Page 22 ---
+The Phase Angle Between the Reference and Variable is the VOR Bearing
+
+
+--- Page 23 ---
+The Basic VOR Indicator
+
+
+--- Page 24 ---
+Video Demo
+
+
+--- Page 25 ---
+Operation of the TO/FROM
+
+
+--- Page 26 ---
+VOR Landing Aid
+
+
+--- Page 27 ---
+VOR Departure
+
+
+--- Page 28 ---
+VOR Departure
+
+
+--- Page 29 ---
+Course Title
+DISTANCE MEASUREMENT EQUIPMENT (DME)
+
+
+--- Page 30 ---
+DME
+• Frequencies:
+o
+Airborne:  1025 MHz – 1150 MHz
+o
+Ground : 
+• 63 MHz below Tx frequency 1025 – 1087 MHz
+• 63 MHz above Tx frequency 1088 – 1150 MHz
+• System sends pairs of pulses with the following spacings. 
+ 
+ 
+ 
+ 
+Channel
+Delay in Ground
+(Reply pulse pair spacing)
+Delay in Air
+(Interrogation pulse pair spacing)
+X
+12us
+12us
+Y
+30us
+36us
+W
+24us
+24us
+Z
+15us
+21us
+
+
+--- Page 31 ---
+Pulse pairs
+
+
+--- Page 32 ---
+• A radar mile is the time required for a signal to travel out to a 
+target 1 nautical mile away and return. 
+• Time= 2 x distance/speed of light
+• Radar Mile = 2 x 1852m/3x10^8 m/s = 12.3 microseconds
+Radar Mile
+
+
+--- Page 33 ---
+•
+The DME ground station adds a fixed delay of 50 microseconds before retransmitting 
+the pulse (for X channel).
+•
+Distance in nm = (time – 50 microseconds)/12.3 microseconds
+•
+The maximum range allowed for use in FARs is 200nm.
+•
+200nm*12.3microseconds+ 50 microseconds = 2510 microseconds
+•
+DME can be used to LOS which can be up to 300nm. 
+DME distance
+
+
+--- Page 34 ---
+FRUIT
+•
+There can be a lot of aircraft interrogating a DME transponder.
+•
+Many of the pulses coming back to the aircraft are responses to DME pulses from 
+other aircraft.
+•
+These replies are known as Friendly Replies Unsynchronized in Time. 
+o
+Commonly called FRUIT.
+•
+The circuit to remove these unwanted replies is a deFRUITer. 
+
+
+--- Page 35 ---
+Garble
+•
+A valid pulse pair for the X channel will have a pulse spacing of 12 us. 
+•
+Suppose a pulse from other aircraft pulses winds up in 12us window.
+•
+The pulse spacing is not valid for any channel and the DME will not respond to these 
+pulses.
+•
+Interference that scrambles the signals and prevents a correct output is called 
+GARBLE. 
+
+
+--- Page 36 ---
+•
+If two aircraft’s pulses cause garble, the aircraft will retransmit the pulses.
+o
+The new pulses could garble
+•
+Repeat  …. Forever.
+•
+To avoid this problem the interrogations are issued with random delays.
+•
+The average rate is 15 pulse pairs/second
+Random Interrogations
+
+
+--- Page 37 ---
+•
+SQUITTER is a response to no one.
+•
+The transmitter and receiver have trouble if they only receive occasional pulses
+•
+DME guarantees 2700 pulse pairs/second. 
+•
+ Some of these pulses are used to transmit the Morse code identifier for the DME
+•
+Some of the pulses are used to support TACAN (when available)  
+SQUITTER
+
+
+--- Page 38 ---
+•
+Out of the 2700 pulse pairs/second that are available, 
+•
+about 2000 are available to aircraft. 
+•
+2000 pulse pairs/sec  divided by 15 pulse pairs /sec for each aircraft.
+•
+A DME can support 133 aircraft. 
+Capacity
+
+
+--- Page 39 ---
+Slant Range
+Ground Range
+Altitude
+
+
+--- Page 41 ---
+Course Title
+INSTRUMENT LANDING SYSTEM
+
+
+--- Page 42 ---
+General Concept
+From: Avionics Made Simple by Abdulla, Svoboda, and Rodrigues. 
+ICAO Annex 10
+
+
+--- Page 43 ---
+General Concept
+From: Avionics Made Simple by Abdulla, Svoboda, and Rodrigues. 
+
+
+--- Page 44 ---
+Localizer (LOC)
+-
+Provides alignment with the runway centerline, on a horizontal 
+plane.
+-
+The LOC transmitter is located at the end of each runway.
+-
+Frequency: 108-112 MHz (VHF) with 20 channels.
+-
+Range: 40 km.
+-
+Maximum deviation from the centerline covered: +- 2⁰ (4⁰ 
+total).
+
+
+--- Page 45 ---
+From: Avionics Made Simple by Abdulla, Svoboda, and Rodrigues. 
+Localizer
+
+
+--- Page 46 ---
+Issue: Two Antennas is not sufficient
+Solution : Used two types of modulation
+LOC-Tx
+∆𝜃
+90 Hz
+Modulation
+150 Hz
+Modulation
+Carrier with Side Band (CSB)
+Side Bands Only (SBO)
+SBO
+CSB
+
+
+--- Page 47 ---
+LOC-TX Antenna
+Linear Array
+From: Avionics Made Simple by Abdulla, Svoboda, and Rodrigues. 
+
+
+--- Page 48 ---
+Space Modulation
+
+
+--- Page 49 ---
+Localizer Approach
+
+
+--- Page 50 ---
+What if we used two group of antennas?
+One to the modulated at 150 Hz pointing towards the right side of the runway, 
+and the other modulated at 90 Hz pointing to the left side?
+What is the issue?
+
+
+--- Page 51 ---
+Solution : Used two types of modulation:
+LOC-Tx
+∆𝜃
+90 Hz
+Modulation
+150 Hz
+Modulation
+Carrier with Side Band (CSB)
+Side Bands Only (SBO)
+SBO
+CSB
+
+
+--- Page 52 ---
+Glideslope:
+The glideslope systems provides vertical angle information to the 
+pilot, so a fixed descent rate can be achieved.
+The principle of operation is very similar to one of the localizer.
+
+
+--- Page 53 ---
+Glideslope (contd.):
+There is one glideslope transmitter per runway.
+Frequency range: UHF 329 – 335 MHz, with 20 channels.
+Vertical range: 1 km.
+Typical inclination: 3⁰
+Typical deviation: +- 0.7⁰ (1.4⁰ total).
+
+
+--- Page 54 ---
+Glideslope:
+Glideslope signals can be affected by:
+- Terrain profile – Moving vehicles – Terrain Moisture - Snow
+From: Avionics Made Simple by Abdulla, Svoboda, and Rodrigues. 
+
+
+--- Page 55 ---
+From: Avionics Made Simple by Abdulla, Svoboda, and Rodrigues. 
+(Runway Visual Range)
+
+
+--- Page 56 ---
+Category I
+
+
+--- Page 57 ---
+Category II
+
+
+--- Page 58 ---
+Category IIIA
+
+
+--- Page 59 ---
+Category IIIB
+
+
+--- Page 60 ---
+How is runway visibility measured?
+
+
+--- Page 61 ---
+Normal and Back course for DAB
+
+
+--- Page 62 ---
+Questions?
