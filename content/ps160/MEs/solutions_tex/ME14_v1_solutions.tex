@@ -1,0 +1,120 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\newcommand{\checkmk}{\ensuremath{\checkmark}}
+
+\title{ME14: Oscillations --- Walkthrough}
+\author{}\date{}
+
+\begin{document}\maketitle
+
+\section*{Core equations}
+\begin{itemize}[leftmargin=*]
+\item Block-spring: $\omega = \sqrt{k/m}$, $T = 2\pi\sqrt{m/k}$, $f=\omega/(2\pi)$
+\item SHM: $x = A\cos(\omega t+\phi)$, $v = -A\omega\sin(\omega t+\phi)$, $a=-\omega^2 x$
+\item $v_{\max}=A\omega$, $a_{\max}=A\omega^2$
+\item Phase: $\tan\phi = -v_0/(\omega x_0)$ from $x_0=A\cos\phi$, $v_0=-A\omega\sin\phi$
+\item Energy: $E = \tfrac12 kA^2 = \tfrac12 kx^2 + \tfrac12 mv^2$
+\item Simple pendulum: $\omega = \sqrt{g/L}$
+\item Physical pendulum: $\omega = \sqrt{mgd/I}$
+\end{itemize}
+
+\section*{Q1 --- Block-spring angular frequency}
+\emph{A mass on a spring is the canonical SHM system: $\omega = \sqrt{k/m}$. Stiffer spring or lighter mass means faster oscillation.}
+
+$\omega = \sqrt{1055/11} = \boxed{9.7933}$ rad/s \checkmk
+
+\section*{Q2 --- $\omega$, $f$, $T$ for block-spring}
+\emph{Same setup as Q1; we additionally want $f = \omega/(2\pi)$ (Hz) and $T = 1/f$ (s).}
+
+$\omega = \sqrt{1240/15} = 9.09$ rad/s; $f = 1.45$ Hz; $T = 0.691$ s \checkmk
+
+\section*{Q3 --- Tunnel through a uniform planet}
+\emph{Inside a uniform planet, only the mass interior to your radius pulls (shell theorem), and that mass scales as $r^3$, so the restoring force is linear in $r$ --- SHM. The given ODE has $\omega^2 = 4\pi G \rho/3$. One full ``other-side-and-back'' trip is one period $T$.}
+
+$\omega^2 = 4\pi G\rho/3 = 4\pi(6.67\times10^{-11})(4740)/3 = 1.3243\times10^{-6}$
+$\omega = 1.1508\times10^{-3}$ rad/s; $T = 2\pi/\omega = 5460.6\ \text{s} = \boxed{1.5168\ \text{h}}$ \checkmk
+
+(Note: the planetary radius $R$ is a distractor; only $\rho$ enters $\omega$.)
+
+\section*{Q4 --- Period from $m\ddot z + kz = 0$}
+\emph{This is just $F=ma$ for a Hooke's-law spring rearranged. Same block-spring system; $T = 2\pi\sqrt{m/k}$.}
+
+$T = 2\pi\sqrt{11.7/94} = \boxed{2.2167\ \text{s}}$ \checkmk
+
+\section*{Q5 --- Read $x = 4.00\cos(2.00t - 0.500)$}
+\emph{Match coefficients with $A\cos(\omega t + \phi)$: $A$ is the leading number, $\omega$ multiplies $t$, the additive constant is $\phi$. Frequency and period follow from $\omega$.}
+
+$A=\mathbf{4.00}$, $\omega=\mathbf{2.00}$, $\phi=\mathbf{-0.500}$, $f=\mathbf{0.318}$ Hz, $T=\mathbf{3.14}$ s.
+
+\section*{Q6 --- Full diagnostic for $y = 0.7\cos(8t+1.9)$}
+\emph{Read off $A,\omega,\phi$. Velocity is the time derivative ($-A\omega\sin$), acceleration the second derivative ($-\omega^2 x$). Peak speed is $A\omega$, peak acceleration $A\omega^2$. ``First time $x=0$'' sets $\cos = 0$; ``first time $v=0$'' sets $\sin=0$; pick the smallest positive root.}
+
+\begin{enumerate}[label=(\alph*),leftmargin=*]
+\item $A=0.7$ m
+\item $\omega=8$ rad/s
+\item $\phi=1.9$ rad
+\item $f = 8/(2\pi) = 1.27$ Hz
+\item $T = \pi/4 = 0.785$ s
+\item $v_{\max} = A\omega = 5.6$ m/s
+\item $a_{\max} = A\omega^2 = 44.8$ m/s$^2$
+\item $x(0) = 0.7\cos(1.9) = -0.226$ m
+\item $v(0) = -5.6\sin(1.9) = -5.30$ m/s
+\item $a(0) = -\omega^2 x(0) = 14.48$ m/s$^2$
+\item First $t>0$, $x=0$: $8t + 1.9 = 3\pi/2 \Rightarrow t = 0.352$ s
+\item First $t>0$, $v=0$: $8t + 1.9 = \pi \Rightarrow t = 0.155$ s
+\end{enumerate}
+
+\section*{Q7 --- Phase shift from initial conditions}
+\emph{From $x_0 = A\cos\phi$ and $v_0 = -A\omega\sin\phi$, divide to get $\tan\phi = -v_0/(\omega x_0)$. The signs of $x_0$ and $v_0$ choose the correct quadrant for $\phi$.}
+
+$m=4$, $k=539$, $x_0=0.51$, $v_0=-2.6$. $\omega = \sqrt{539/4} = 11.609$.
+\[ \tan\phi = -v_0/(\omega x_0) = 0.4391 \Rightarrow \phi = \boxed{0.4138\ \text{rad}}\ \checkmk \]
+(Quadrant 1: $x_0>0\Rightarrow\cos\phi>0$ and $v_0<0\Rightarrow\sin\phi>0$.)
+
+\section*{Q8 --- Mass from amplitude and $v_{\max}$}
+\emph{Peak speed at equilibrium is $v_{\max} = A\sqrt{k/m}$ (or, by energy: $\tfrac12 kA^2 = \tfrac12 m v_{\max}^2$). Solve for $m$.}
+
+$m = kA^2/v_{\max}^2 = 514(1.6)^2/(12.9)^2 = \boxed{7.907\ \text{kg}}$ \checkmk
+
+\section*{Q9 --- Amplitude from $v_{\max}$}
+\emph{Inverse of Q8: known $k$ and $m$ give $\omega$; then $A = v_{\max}/\omega$.}
+
+$A = v_{\max}/\omega = 10/\sqrt{183/4.7} = \boxed{1.603\ \text{m}}$ \checkmk
+
+\section*{Q10 --- Amplitude from instantaneous $(x,v)$}
+\emph{Total energy is conserved: $\tfrac12 kA^2 = \tfrac12 kx^2 + \tfrac12 mv^2$. Use a single instant to compute $E$, then back out $A$.}
+
+$A^2 = x^2 + (m/k)v^2 = 0.0676 + (7/133)(8.41) = 0.5103 \Rightarrow A = \boxed{0.7144\ \text{m}}$ \checkmk
+
+\section*{Q11 --- Speed at fractional displacement}
+\emph{Given total energy $E$ and $x = 0.14A$, the kinetic share is $E(1 - (x/A)^2)$, so $v = \sqrt{2E(1-0.14^2)/m}$.}
+
+$v = \sqrt{2E(1-(0.14)^2)/m} = \sqrt{2(5.8)(0.9804)/1.5} = \boxed{2.7535\ \text{m/s}}$ \checkmk
+
+\section*{Q12 --- Pendulum length from $\omega$}
+\emph{Simple pendulum: $\omega = \sqrt{g/L}$, so $L = g/\omega^2$.}
+
+$L = g/\omega^2 = 9.8/(2.82)^2 = \boxed{1.2323\ \text{m}}$ \checkmk
+
+\section*{Q13 --- Pendulum length from $T$}
+\emph{$T = 2\pi\sqrt{L/g}$, so $L = g(T/2\pi)^2$. Convert to cm at the end.}
+
+$L = g(T/2\pi)^2 = 9.8(0.25131)^2 = 0.6189\ \text{m} = \boxed{61.89\ \text{cm}}$ \checkmk
+
+\section*{Q14 --- Physical pendulum, period}
+\emph{An extended body pivoted at distance $d$ from its center of mass has $T = 2\pi\sqrt{I/(mgd)}$ with $I$ measured about the pivot. The simple-pendulum formula is the special case $I = mL^2$, $d=L$.}
+
+$T = 2\pi\sqrt{I/(mgd)} = 2\pi\sqrt{15/(11.5\cdot 9.8\cdot 1.41)} = \boxed{1.9304\ \text{s}}$ \checkmk
+
+\section*{Q15 --- Physical pendulum, frequency}
+\emph{Same physical pendulum, but report $f = \omega/(2\pi)$ instead of the period.}
+
+$\omega = \sqrt{mgd/I} = \sqrt{6\cdot 9.8\cdot 0.48/8.6} = 1.812$ rad/s; $f = \omega/(2\pi) = \boxed{0.2883\ \text{Hz}}$ \checkmk
+
+\section*{Q16 --- Pendulum conceptual}
+\emph{$T_{\text{simple}} = 2\pi\sqrt{L/g}$ depends only on $L$ and $g$; bob mass cancels because gravity scales both the driving force and the inertia.} Longer period $\Rightarrow$ \textbf{longer} string; lighter mass \textbf{can't} change the period; lower $g$ $\Rightarrow$ \textbf{smaller} acceleration of gravity.
+
+\bigskip\noindent\textbf{All numeric answers match source key.}
+\end{document}

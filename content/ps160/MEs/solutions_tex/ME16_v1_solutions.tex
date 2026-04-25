@@ -1,0 +1,106 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\newcommand{\checkmk}{\ensuremath{\checkmark}}
+
+\title{ME16: Sound --- Walkthrough}
+\author{}\date{}
+
+\begin{document}\maketitle
+
+\section*{Core equations}
+\begin{itemize}[leftmargin=*]
+\item $v_{\text{fluid}} = \sqrt{B/\rho}$; $v_{\text{air}} = 331\sqrt{T/273}$
+\item dB: $\beta = 10\log_{10}(I/I_0)$, $I_0 = 10^{-12}$ W/m$^2$
+\item Inverse-square: $\beta_2 - \beta_1 = 20\log_{10}(r_1/r_2)$
+\item $N$ identical sources: $\Delta\beta = 10\log_{10} N$
+\item Beats: $f_{\text{beat}} = |f_1 - f_2|$
+\item Constructive: $\Delta = n\lambda$; destructive: $(n+\tfrac12)\lambda$
+\item Open-open: $f_n = nv/(2L)$. Closed-open: $f_n = nv/(4L)$, $n=1,3,5,\dots$
+\item Doppler: $f' = f\,\dfrac{v+v_o}{v-v_s}$ with $v_o>0$ if observer toward source; $v_s>0$ if source toward observer.
+\end{itemize}
+
+\section*{Q1 --- Bulk modulus from transit time}
+\emph{A sound pulse traverses 20.4 m of unknown fluid in 14.6 ms; with $\rho=778$ kg/m$^3$, find the bulk modulus.} The mechanical-wave speed in a fluid is $v=\sqrt{B/\rho}$, so once $v=d/t$ is known we invert to get $B$.
+
+$v = 20.4/0.0146 = 1397.26$ m/s; $B = \rho v^2 = 778(1397.26)^2 = \boxed{1.5189\ \text{GPa}}$ \checkmk
+
+\section*{Q2 --- Travel time underwater}
+\emph{A subsea explosion 278 km from a sonar receiver: how long until it registers?} Compute the seawater sound speed from $\sqrt{B/\rho}$, then $t=d/v$.
+
+$v = \sqrt{2.34\times10^9/1025} = 1510.93$ m/s; $t = 278000/1510.93 = \boxed{183.99\ \text{s}}$ \checkmk
+
+\section*{Q3 --- Intensity from one siren, then doubled}
+\emph{One siren at 11 m measures 123 dB; two co-located sirens (incoherent) double the intensity.} Convert dB$\to I$ and multiply by two.
+
+$I_1 = 10^{-12}\cdot 10^{12.3} = 1.9953$ W/m$^2$; two sirens add: $\boxed{3.9905\ \text{W/m}^2}$ \checkmk
+
+\section*{Q4 --- Inverse square dB shift}
+\emph{A drill is 112 dB at 10 m; how loud at 37 m?} For a point source in free field, intensity drops as $1/r^2$, i.e.\ $\Delta\beta = 20\log_{10}(r_1/r_2)$ in dB form --- a direct subtraction.
+
+$\Delta\beta = 20\log(10/37) = -11.36$; $\beta = 112 - 11.36 = \boxed{100.64\ \text{dB}}$ \checkmk
+
+\section*{Q5 --- 61 cicadas at 25 m}
+\emph{Each cicada is 105 dB at 1 m; combine inverse-square dilution with the addition of 61 incoherent sources.} The two dB shifts ($-20\log_{10}25$ and $+10\log_{10}61$) add to the original level.
+
+Single cicada at 25 m: $\beta = 105 + 20\log(1/25) = 77.04$ dB. $\Delta\beta_{61} = 10\log(61) = 17.85$ dB.
+$\beta = \boxed{94.89\ \text{dB}}$ \checkmk
+
+\section*{Q6 --- Three forks beat puzzle}
+\emph{Beat frequencies give $|f_A-f_C|=2$ and $|f_B-f_C|=4$.} Each measurement leaves two candidates for $f_C$; only the one consistent with both is the answer.
+
+A=440, B=446, $|f_A-f_C|=2 \Rightarrow f_C\in\{438,442\}$, $|f_B-f_C|=4 \Rightarrow f_C\in\{442,450\}$. Common: $\boxed{442\ \text{Hz}}$ \checkmk
+
+\section*{Q7 --- First constructive right of center}
+\emph{Two in-phase speakers face each other 7 m apart; find the first constructive max to the right of midpoint.} Path difference for a listener at $x$ is $\Delta = x-(7-x)=2x-7$, zero at the center. The first maximum to the right uses $n=1$.
+
+$T=296$ K, $v = 344.67$ m/s, $\lambda = 0.9933$ m. Path diff $\Delta = 2x-7 = n\lambda$. First $x>3.5$ at $n=1$: $x = \boxed{3.9966\ \text{m}}$ \checkmk
+
+\section*{Q8 --- Minimum constructive frequency, off-axis}
+\emph{Two in-phase speakers at $(0,2)$ and $(0,0)$; find the lowest frequency for constructive interference at $(5,0)$.} Lowest $f$ $\Leftrightarrow$ longest $\lambda = \Delta$ (the $n=1$ case; $n=0$ would require zero path offset).
+
+Distances $\sqrt{29}=5.3852$ and $5$; $\Delta = 0.3852$ m. Min $\lambda=\Delta$: $f = 344/0.3852 = \boxed{893.12\ \text{Hz}}$ \checkmk
+
+\section*{Q9 --- Open-open pipe, $n=2$}
+\emph{Both ends open $\Rightarrow$ antinodes at each end $\Rightarrow$ all integer harmonics allowed.} Use $f_n=nv/(2L)$ with the temperature-corrected sound speed.
+
+$T=287$ K, $v=339.41$ m/s. Open-open $n=2$: $f_2 = v/L = \boxed{424.23\ \text{Hz}}$ \checkmk
+
+\section*{Q10 --- Closed-open pipe, first overtone}
+\emph{One end closed, one open $\Rightarrow$ only odd harmonics ($n=1,3,5,\dots$).} The ``first overtone'' is the lowest mode above the fundamental, namely $n=3$ (not $n=2$).
+
+$T=281$ K, $v=335.81$ m/s. Closed-open first overtone $n=3$: $f_3 = 3v/(4L) = \boxed{699.61\ \text{Hz}}$ \checkmk
+
+\section*{Q11 --- Doppler: train approaches stationary listener}
+\emph{Source moves toward a stationary observer $\Rightarrow$ wavefronts compress, perceived frequency rises.} With ``toward'' positive, $v_s=+20$, $v_o=0$.
+
+Source approach: $f' = f_s v/(v-v_s) = 1056(347/327) = \boxed{1120.59\ \text{Hz}}$ \checkmk
+
+\section*{Q12 --- Doppler: observer recedes from stationary horn}
+\emph{Stationary source, observer flees $\Rightarrow$ observer outruns wavefronts, hears lower $f$.} $v_o=-36$, $v_s=0$.
+
+Observer recede: $f' = f_s(v-v_o)/v = 685(308/344) = \boxed{613.31\ \text{Hz}}$ \checkmk
+
+\section*{Q13 --- Both east, ambulance ahead pulling away}
+\emph{Source recedes ($v_s=-43$), observer chases ($v_o=+10$).} The two effects partially cancel but the recession dominates, so heard $f$ is below source.
+
+$f' = 1130(343+10)/(343+43) = 1130(353/386) = \boxed{1033.39\ \text{Hz}}$ \checkmk
+
+\section*{Q14 --- Both north, car ahead pulling away from cyclist}
+\emph{Car (source) outruns cyclist (observer); $v_s=-25.8$, $v_o=+12.8$.} Gap opens, perceived $f$ drops.
+
+$f' = 916(344+12.8)/(344+25.8) = \boxed{883.80\ \text{Hz}}$ \checkmk
+
+\section*{Q15 --- dB increase from $\times 19.3$ intensity}
+\emph{Decibels are logarithmic in intensity ratio, so a fixed multiplicative factor adds a fixed dB amount.}
+
+$\Delta\beta = 10\log_{10}(19.3) = \boxed{12.856\ \text{dB}}$ \checkmk
+
+\section*{Q16 --- Wind instrument vs temperature}
+\emph{Pitch} $f\propto v/L$ \emph{with $L$ essentially fixed; $v$ rises with $\sqrt{T}$, so warm air raises pitch and cold air lowers it.}
+
+T rises $\Rightarrow$ $f$ \textbf{increases}; T falls $\Rightarrow$ $f$ \textbf{decreases}.
+
+\bigskip\noindent\textbf{All numeric answers match source key.}
+\end{document}

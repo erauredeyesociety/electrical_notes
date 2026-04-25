@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\newcommand{\checkmk}{\ensuremath{\checkmark}}
+
+\title{ME20: Heat Engines, Refrigerators \& Entropy --- Walkthrough}
+\author{}\date{}
+
+\begin{document}\maketitle
+
+\section*{Core formulas}
+\begin{itemize}[leftmargin=*]
+\item Engine: $|Q_H| = W + |Q_C|$; $e = W/|Q_H| = 1 - |Q_C|/|Q_H|$
+\item Refrigerator/cooling COP: $K = |Q_C|/W$
+\item Heat-pump heating COP: $K_{HP} = |Q_H|/W$
+\item Carnot: $|Q_C|/|Q_H| = T_C/T_H$, $e_{\text{Carnot}} = 1 - T_C/T_H$
+\item Net work in cycle = enclosed area on $pV$
+\item Entropy: phase change $\Delta S = \pm mL/T$; iso V: $\Delta S = nC_v\ln(T_f/T_i)$; iso T: $\Delta S = nR\ln(V_f/V_i)$; reservoir: $\Delta S = Q/T$
+\end{itemize}
+
+\section*{Q1 --- $Q_C$ from efficiency}
+\emph{Gasoline engine takes in $Q_H$ from combustion, converts fraction $e$ to work, dumps the rest as exhaust. $Q_C$ is heat \emph{out of} the system so it carries a negative sign.}
+
+$W = e Q_H = 0.37(8.87) = 3.282$ kJ; $Q_C = -(8.87 - 3.282) = \boxed{-5.5881\ \text{kJ}}$ \checkmk
+
+\section*{Q2 --- Work from heat in/out}
+\emph{Aircraft engine absorbs $Q_H$ and rejects $|Q_C|$ each cycle. Energy conservation: $W = Q_H - |Q_C|$.}
+
+$W = 9.52 - 6.08 = \boxed{3.44\ \text{kJ}}$ \checkmk
+
+\section*{Q3 --- Engine cycle (PV\_5)}
+\emph{Cycle has four legs: pressurize at $V_1$, ramp down/right to $(V_2,p_2)$, drop at $V_2$, contract isobarically back. Vertical legs do no work; sum the trapezoid (leg 2) and rectangle (leg 4) for net work, equal to the enclosed area.}
+
+Path: $(V_1,p_1)\xrightarrow{\text{iso V}}(V_1,p_3)\xrightarrow{\text{ramp}}(V_2,p_2)\xrightarrow{\text{iso V}}(V_2,p_1)\xrightarrow{\text{iso p}}(V_1,p_1)$.
+$W_2 = \tfrac12(p_3+p_2)(V_2-V_1) = 598.0$ kJ; $W_4 = p_1(V_1-V_2) = -241.8$ kJ.
+$W_{\text{net}} = \boxed{356.2\ \text{kJ}}$ \checkmk
+
+\section*{Q4 --- Refrigerator COP}
+\emph{Fridge moves $|Q_C|$ from cold interior to kitchen by paying $W$. Energy conservation gives $|Q_C| = |Q_H| - W$, then cooling COP $K = |Q_C|/W$.}
+
+$|Q_C| = 1305 - 106 = 1199$; $K = 1199/106 = \boxed{11.31}$ \checkmk
+
+\section*{Q5 --- Heat pump (heating), $Q_C$ from COP}
+\emph{Heating-mode heat pump delivers $|Q_H|$ to the home. Heating COP relates $|Q_H|$ to $W$; $|Q_C|$ (heat extracted from outdoors) follows from energy conservation.}
+
+$W = 1116/10.9 = 102.39$ J; $|Q_C| = 1116 - 102.39 = \boxed{1013.61\ \text{J}}$ \checkmk
+
+\section*{Q6 --- Heat pump (cooling) COP}
+\emph{Cooling-mode pump pulls $|Q_C|$ from inside and ejects $|Q_H|$ outside; work is the difference. Cooling COP $K = |Q_C|/W$.}
+
+$W = 1236 - 1050 = 186$; $K = 1050/186 = \boxed{5.645}$ \checkmk
+
+\section*{Q7 --- Rectangular cycle, monatomic}
+\emph{Gas traces a rectangle on $pV$. Net work is the rectangle area. Heat \emph{in} comes from the two legs where heat enters the gas: isochoric pressurization at $V_L$ ($Q = (3/2)V\Delta p$) and isobaric expansion at $p_H$ ($Q = (5/2)p\Delta V$).}
+
+$W_{\text{net}} = (p_H-p_L)(V_H-V_L) = 130(1.9) = 247$ kJ.
+$Q_{\text{in}} = (3/2)V_L(p_H-p_L) + (5/2)p_H(V_H-V_L) = 117 + 1026 = 1143$ kJ.
+$e = 247/1143 = \boxed{0.2161}$ \checkmk
+
+\section*{Q8 --- Carnot work output}
+\emph{Carnot efficiency depends only on the reservoir temperatures: $e = 1 - T_C/T_H$. Multiply by $Q_H$ for work.}
+
+$e = 1 - 334/564 = 0.4078$; $W = 0.4078(2313) = \boxed{943.24\ \text{J}}$ \checkmk
+
+\section*{Q9 --- Carnot, find $T_H$}
+\emph{Given $|Q_C|$, $T_C$, and $W$, get $|Q_H|$ from energy conservation, then use the Carnot identity $|Q_C|/|Q_H| = T_C/T_H$ to solve for $T_H$.}
+
+$|Q_H| = 1510$; $T_H = 301(1510/1171) = \boxed{388.14\ \text{K}}$ \checkmk
+
+\section*{Q10 --- Entropy change on melting}
+\emph{Solid at its melting point absorbs $mL_f$ of heat at fixed $T$. Because $T$ is constant, $\Delta S$ is just $Q/T$ at the absolute melting temperature.}
+
+$T_{\text{melt}} = 249.15$ K; $\Delta S = mL_f/T = 2.2(191022)/249.15 = \boxed{1687.74\ \text{J/K}}$ \checkmk
+
+\section*{Q11 --- Gallium freezing}
+\emph{Liquid gallium at 29.76$^\circ$C placed in an 18$^\circ$C room. As it freezes it releases $mL_f$ of heat: gallium loses entropy at the higher $T_g$, room gains entropy at the lower $T_r$. Since $T_r < T_g$, room's gain outweighs gallium's loss, so $\Delta S_{\text{univ}} > 0$.}
+
+$Q = 39(8.04\times10^4) = 3.1356\times10^6$ J. $T_g = 302.76$ K, $T_r = 291$ K.
+$\Delta S_g = -10{,}356.7$, $\Delta S_r = +10{,}775.3$. Net $\boxed{+418.6\ \text{J/K}}$ \checkmk
+
+\section*{Q12 --- Isochoric warming entropy}
+\emph{Monatomic gas in a rigid container warmed by 42 K. Volume fixed, so $dQ = nC_v\,dT$ and $\Delta S = nC_v\ln(T_f/T_i)$ with $C_v = (3/2)R$. Convert temperatures to Kelvin first.}
+
+$\Delta S = nC_v\ln(T_f/T_i) = 12(1.5)(8.314)\ln(334.15/292.15) = \boxed{20.10\ \text{J/K}}$ \checkmk
+
+\section*{Q13 --- Free expansion of helium}
+\emph{Helium expands into vacuum: no work, no heat, $\Delta U = 0$, $T$ unchanged. Entropy is a state function, so use the equivalent reversible isothermal expansion: $\Delta S = nR\ln(V_f/V_i)$.}
+
+$n = 10.8$, $V_f/V_i = 5.5/1.6 = 3.4375$. $\Delta S = nR\ln(3.4375) = \boxed{110.88\ \text{J/K}}$ \checkmk
+
+\section*{Q14 --- Ice melts then warms, room at 24$^\circ$C}
+\emph{5.4 kg ice melts then warms to room temperature; room is a reservoir at 297 K. Two stages: phase change at 273.15 K, then constant-pressure warming using $\Delta S_{\text{water}} = mc\ln(T_f/T_i)$. Room loses entropy via $-Q/T_r$ each stage.}
+
+Stage 1 (273.15 K): $\Delta S_{\text{ice}} = +6624.4$, $\Delta S_r = -6090.9$ J/K.
+Stage 2 (warm to 297 K): $\Delta S_{\text{water}} = mc\ln(297/273.15) = +1905$ J/K, $\Delta S_r = -1826.6$ J/K.
+$\Delta S_{\text{univ}} \approx \boxed{613.5\ \text{J/K}}$ \checkmk
+
+\section*{Q15 --- Entropy T/F}
+\emph{Probes the precise statement of the 2nd law and the conditions for isentropy.}
+
+(A) ``Any region'' \textbf{False}---only the universe as a whole; subsystems can lose entropy.
+(B) Universe $\ge 0$ \textbf{True}---this \emph{is} the 2nd law.
+(C) Free expansion increases \textbf{True}---irreversible adiabatic, $\Delta S > 0$.
+(D) ``Any adiabatic non-iso T = isentropic'' \textbf{False}---only \emph{reversible} adiabatic is isentropic; irreversible adiabatic (e.g.\ free expansion) has $\Delta S > 0$.
+
+\section*{Q16 --- Pre-power-stroke process}
+\emph{The combustion event right before the power stroke. In a Diesel, fuel is injected near TDC and burns gradually as the piston descends, holding pressure roughly constant. In an Otto, the spark ignites a pre-mixed charge essentially instantly at TDC, before the piston moves.}
+
+Diesel: \textbf{isobaric}. Otto: \textbf{isochoric}.
+
+\bigskip\noindent\textbf{All numeric answers match source key.}
+\end{document}

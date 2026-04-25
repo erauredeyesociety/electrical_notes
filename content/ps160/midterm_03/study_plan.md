@@ -21,6 +21,11 @@
 - Official knowledge-question PDFs:
   - `../midterm_01/knowledge_ps160_mid01.pdf` (fluids, oscillations, waves, sound)
   - `../midterm_02/knowledge_ps160_mid02.pdf` (thermo)
+- **Practice finals (highest-value resource — solve under exam conditions):**
+  - [test_finalexam_DRAFT_ps160_2024_fall.pdf](test_finalexam_DRAFT_ps160_2024_fall.pdf) — 33 questions (Q1-10 knowledge, Q11-33 calculation), 230/271 best-score grading. Has answer key.
+  - [test_final_ps160_2024_fall_answers.pdf](test_final_ps160_2024_fall_answers.pdf) — answers for the Fall calculation questions Q11-33.
+  - [test_finalexam_ps160_2024_spring.pdf](test_finalexam_ps160_2024_spring.pdf) — 26 calculation questions, 250/300, no answer key (verify against agent-generated solutions).
+  - Solutions (generated separately): `../MEs/solutions/midterm03_fall2024_practice_solutions.md` and `../MEs/solutions/midterm03_spring2024_practice_solutions.md`.
 - Past exams (great problem practice):
   - `../midterm_01/MT1_make_up.pdf`
   - `../midterm_01/Worked Problems.pdf`
@@ -34,6 +39,35 @@
   - `ME12`-`ME36`: main module exercises
   - `MQ12a/b`-`MQ36`: pop-quiz banks
   - `midterm1_v1`, `midterm2_v2`, `midterm3_final_v1`: sample midterms
+
+---
+
+## Practice-final-driven prep (highest-priority track)
+
+**TL;DR:** The two practice finals (Fall 2024, Spring 2024) are now the single best predictor of exam content. Anchor the schedule around them.
+
+Order of operations:
+
+1. **Top priority — Fall 2024 practice under exam conditions.** Set a 2-hour timer (or whatever the exam window is). Closed book except the equation sheet and a calculator. Do *not* peek at the answer key. Then check against [test_final_ps160_2024_fall_answers.pdf](test_final_ps160_2024_fall_answers.pdf) and the agent-generated walkthrough at `../MEs/solutions/midterm03_fall2024_practice_solutions.md`.
+2. **Second — Spring 2024 practice.** No official answer key. Solve cold, then verify each problem against your own work plus `../MEs/solutions/midterm03_spring2024_practice_solutions.md`.
+3. **Memorize-formulas day.** The Fall exam's first 21 points are pure formula-write (Q1-10, all optics). These are *free points if you've memorized the equation sheet* — schedule a dedicated day for blank-page recall before either practice attempt.
+
+### Coverage analysis from the practice finals
+
+See [review.md § Practice Final Coverage Analysis](review.md#practice-final-coverage-analysis) for the full breakdown.
+
+Topic priorities derived from the practice exams:
+
+- **High frequency (drill hard):** wave-function diagnostic (20 pts each exam), ideal gas combined law, water-freezing entropy, two-mirror corner, concave-mirror image (20 pts), thin-film bubble, double-slit fringe geometry, Rayleigh telescope, Doppler.
+- **Medium frequency:** Bernoulli, pendulum period, calorimetry, latent heat, $K_{tr}$, isothermal/adiabatic processes, Snell's law, Carnot.
+- **Low frequency in practice (don't skip, but don't over-invest):** EM waves (M33), Brewster, Malus calculation, lensmaker's, two-lens system, microscope/telescope, gratings, Michelson.
+
+### Weak-spot suggestions (revise based on practice scores)
+
+- If you bomb optics knowledge (Q1-10): reread [review.md § Module 34](review.md#module-34--geometric-optics) and § 35 carefully and re-memorize equations.
+- If you bomb the wave function (Q15): re-derive parts a-j from scratch — the relations ($\omega = 2\pi f$, $k = 2\pi/\lambda$, $v = \omega/k$, $v_{y,\max} = \omega A$, $v_y(x,t) = -A\omega\sin(kx-\omega t + \phi)$) are all on the equation sheet but you must know how to chain them.
+- If you bomb thermo: rebuild the process table (W, Q, ΔU for isobaric/isochoric/isothermal/adiabatic) — that single table answers Q22, Q24, Q25 of Fall.
+- If you bomb buoyancy / Bernoulli (Q11, Q12): work `../midterm_01/Worked Problems.pdf` fluids problems again. The "ice slab supports woman" type (Fall Q11) is novel — see review.md § Novel question types.
 
 ---
 
@@ -113,19 +147,27 @@ Adjust pace based on how much time you have; at minimum compress this into one w
 - Combined double-slit + envelope problem, including "missing orders"
 - Bragg's law X-ray problem
 
-**Day 12 (Fri) --- Simulated final, closed book**
-- Use `MEs/tex/midterm3_final_v1.tex` as your practice final
-- Time yourself; mark every problem where you're unsure
-- Before checking, spend 15 minutes trying to solve anything you missed, *with* the equation sheet
+**Day 11.5 (Thu evening) --- Memorize-formulas day**
+- The Fall 2024 practice final's first 21 points (Q1-10) are *pure formula-write* on optics. These are easy points if you've memorized — and zero points if you haven't.
+- Closed-book blank-page test: write out the 10 optics formulas asked for: Snell + reflection law, $n=c/v$ + $\lambda_n = \lambda_0/n$, critical angle + Brewster, lens/mirror equation + $m = -s'/s$, lensmaker's + small-angle, Malus + magnifier angular magnification, phase difference $\Delta\phi = (2\pi/\lambda)\Delta L$, double-slit + grating constructive ($d\sin\theta = m\lambda$), two-source intensity $I = I_0\cos^2(\phi/2)$, thin-film $\Delta L = 2nt$ + Rayleigh $\sin\theta = 1.22\lambda/D$.
+- Compare against [equations.tex](equations.tex) and [master_equations.tex](master_equations.tex) and re-drill anything you missed.
 
-**Day 13 (Sat) --- Targeted fix-up**
-- Review any problem you missed on Friday's practice final
-- Re-drill the corresponding concept in [review.md](review.md) and the source PDFs
-- Re-take the missed problems from scratch without notes
+**Day 12 (Fri) --- Simulated final #1: Fall 2024 practice (closed book, timed)**
+- Take [test_finalexam_DRAFT_ps160_2024_fall.pdf](test_finalexam_DRAFT_ps160_2024_fall.pdf) cold. Equation sheet + calculator only.
+- Time yourself for the actual exam window. Best 230/271, so you can drop ~4 problems strategically.
+- After the timer: check answers against [test_final_ps160_2024_fall_answers.pdf](test_final_ps160_2024_fall_answers.pdf) and `../MEs/solutions/midterm03_fall2024_practice_solutions.md`.
+- Mark every problem you missed or were unsure of.
+
+**Day 13 (Sat) --- Simulated final #2: Spring 2024 practice + targeted fix-up**
+- Morning: take [test_finalexam_ps160_2024_spring.pdf](test_finalexam_ps160_2024_spring.pdf) cold. No official answer key — when checking, use your own work plus `../MEs/solutions/midterm03_spring2024_practice_solutions.md`.
+- Afternoon: re-drill any concept you missed on either practice final. Use [review.md](review.md) and the source PDFs.
+- Re-take the missed problems from scratch without notes.
+- Pay special attention to the *novel* problem types flagged in [review.md § Novel question types](review.md#novel-question-types-not-previously-encountered-in-this-users-prep-materials): ice-slab buoyancy, max transverse speed, finding $L_f$, $v_{rms}$ after constant-V heat.
 
 **Day 14 (Sun) --- Rest + skim**
 - Light review: skim all three `equations.tex` sheets and [master_topics.md](master_topics.md)
 - Make sure you know the physical constants in `master_equations.tex` § Physical Constants
+- Re-skim the 10 optics formulas from Day 11.5 — these are guaranteed points
 - Sleep well the night before
 
 ---

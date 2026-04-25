@@ -1,0 +1,87 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\newcommand{\warn}{\textbf{[!]}}
+
+\title{ME35-36: Interference \& Diffraction --- Walkthrough}
+\author{}\date{}
+
+\begin{document}\maketitle
+
+\warn{} \emph{No source key for numeric items.}
+
+\section*{Core formulas}
+\begin{itemize}[leftmargin=*]
+\item Double slit: bright at $d\sin\theta = m\lambda$; small-angle $y_m \approx m\lambda L/d$. Spacing $\Delta y = \lambda L/d$.
+\item Single slit minima: $a\sin\theta = m\lambda$, $m=\pm1,\pm2,\dots$. Central-max width $\approx 2\lambda L/a$.
+\item Thin film: $\pi$ flip on each reflection where the next medium has higher $n$.
+  \begin{itemize}
+    \item Net 1 flip: constructive $2nt = (m+\tfrac12)\lambda$; destructive $2nt = m\lambda$.
+    \item Net 0 or 2 flips: constructive $2nt = m\lambda$; destructive $2nt = (m+\tfrac12)\lambda$.
+  \end{itemize}
+\item Grating resolving power: $R = \lambda/\Delta\lambda = mN$.
+\item Grating max order: $m_{\max}=\lfloor d/\lambda\rfloor$. Total maxima $= 2m_{\max}+1$.
+\item Bragg: $2d\sin\theta = m\lambda$ (grazing angle).
+\item Rayleigh: $\theta_{\min} = 1.22\lambda/D$.
+\end{itemize}
+
+\section*{Q1 --- Slit separation from central-max width}
+\textbf{Setup.} Coherent 502-nm light through a double slit produces a pattern on a screen 2.1 m away; the central maximum (bracketed by the two flanking dark fringes) is 11.9 mm wide. That width equals one fringe spacing $\Delta y = \lambda L/d$, so invert to get $d$.
+
+$d = \lambda L/W = 502\times10^{-9}(2.1)/0.0119 = \boxed{0.0886\ \text{mm}}$
+
+\section*{Q2 --- Wavelength from double-slit position}
+\textbf{Setup.} Standard Young's setup: $d=0.42$ mm, $L=3$ m, the second-order ($m=2$) bright fringe is at $y=4$ mm. Solve $y_m = m\lambda L/d$ for $\lambda$.
+
+$\lambda = yd/(mL) = (0.004)(4.2\times10^{-4})/(2\cdot 3) = \boxed{280\ \text{nm}}$
+
+\section*{Q3 --- Soap bubble enhancement}
+\textbf{Setup.} A thin water-like soap film ($n=1.34$) with air on both sides shows enhanced (constructive) reflection at $\lambda=481$ nm; find the minimum thickness. Phase-flip count: outer reflection (air$\to$water) flips $\pi$; inner (water$\to$air) does not. Net 1 flip $\Rightarrow$ constructive in reflection requires $2nt = (m+\tfrac12)\lambda$.
+
+Bubble: 1 net flip $\Rightarrow$ constructive at $2nt = (m+\tfrac12)\lambda$.
+$t_{\min} = \lambda/(4n) = 481/(4\cdot 1.34) = \boxed{89.74\ \text{nm}}$
+
+\section*{Q4 --- Antireflection coating}
+\textbf{Setup.} Air ($n=1$) $\to$ coating ($n=1.49$) $\to$ glass ($n=1.7$). Both reflections are at low-to-high boundaries, so each picks up a $\pi$ flip --- net 2 flips, equivalent to 0 net flips. With no net flip, destructive in reflection requires $2nt = (m+\tfrac12)\lambda$.
+
+$n_{\text{air}}<n_{\text{coat}}<n_{\text{glass}}$: 2 flips $\Rightarrow$ destructive at $2nt = (m+\tfrac12)\lambda$.
+$t_{\min} = \lambda/(4n) = 636/(4\cdot 1.49) = \boxed{106.7\ \text{nm}}$
+
+\section*{Q5 --- Qualitative double-slit response}
+Fringe spacing is $\Delta y = \lambda L/d$, so $d$ in the denominator (smaller $d$ $\Rightarrow$ wider spacing) and $L$ in the numerator (smaller $L$ $\Rightarrow$ narrower spacing).
+
+Spacing $\Delta y = \lambda L/d$. Decreasing $d$: \textbf{increases}; decreasing $L$: \textbf{decreases}.
+
+\section*{Q6 --- Single-slit central-max width}
+\textbf{Setup.} A \emph{single} slit of width $a=0.11$ mm, $\lambda=283$ nm, screen at $L=2.7$ m. The central diffraction max is bounded by the $m=\pm1$ minima of $a\sin\theta = m\lambda$, so its full width is $W \approx 2\lambda L/a$.
+
+$W = 2\lambda L/a = 2(283\times10^{-9})(2.7)/(1.1\times10^{-4}) = \boxed{13.89\ \text{mm}}$
+
+\section*{Q7 --- Grating slits/cm to resolve sodium doublet}
+\textbf{Setup.} Two sodium lines at 589.08 and 588.53 nm ($\Delta\lambda=0.55$, $\bar\lambda=588.81$). Resolving them in first order ($m=1$) needs $R = \bar\lambda/\Delta\lambda = mN$ illuminated slits. Divide by the 1.206-cm grating length to get line density.
+
+$R = 588.81/0.55 = 1070.6$; $N = R$ (1st order); density $= 1071/1.206 = \boxed{888\ \text{lines/cm}}$
+
+\section*{Q8 --- Number of grating maxima}
+\textbf{Setup.} Grating has 293 lines/mm, so $d=1/293\,000$ m, illuminated by $\lambda=649$ nm. The grating equation $d\sin\theta = m\lambda$ has solutions only for $|\sin\theta|\le 1$, capping $m$ at $\lfloor d/\lambda\rfloor$. Total maxima visible $= 2m_{\max}+1$ (central plus a pair at each $\pm m$).
+
+$d = 1/293000 = 3.413\times10^{-6}$ m; $m_{\max} = \lfloor 3.413\times10^{-6}/649\times10^{-9}\rfloor = 5$. Total $= \boxed{11}$.
+
+\section*{Q9 --- Bragg spacing}
+\textbf{Setup.} X-rays of $\lambda=1.65$ nm reflect off crystal planes at grazing angle $27.6^\circ$ (measured from the plane in Bragg's convention) and produce a first-order maximum. Bragg: $2d\sin\theta = m\lambda$.
+
+$d = m\lambda/(2\sin\theta) = 1.65/(2\sin 27.6^\circ) = \boxed{1.781\ \text{nm}}$
+
+\section*{Q10 --- Eye's resolving power}
+\textbf{Setup.} Diffraction at the pupil sets the angular resolution floor: $\theta_{\min} = 1.22\lambda/D$ (Rayleigh criterion). Pupil $D=6$ mm, $\lambda=558$ nm; convert radians to milli-degrees.
+
+$\theta = 1.22(558\times10^{-9})/(6\times10^{-3}) = 1.134\times10^{-4}\ \text{rad} = \boxed{6.50\ \text{millidegrees}}$
+
+\section*{Q11 --- Single-slit formula language}
+The single-slit equation $a\sin\theta = m\lambda$ is the \emph{minimum} (dark-fringe) condition; the center is a bright maximum, so $m$ skips zero. Replacing $m$ by $(m+\tfrac12)$ lands halfway between consecutive minima --- approximately where the weaker subsidiary bright maxima sit.
+
+Single-slit equation $a\sin\theta = m\lambda$ locates \textbf{dark fringes} with $m=\pm1,\pm2,\dots$. Replacing $m$ by $(m+\tfrac12)$ gives \textbf{approximate bright} fringes (other than central), $m=\pm1,\pm2,\dots$.
+
+\bigskip\warn{} Cross-check thin-film phase-flip logic against your textbook's convention.
+\end{document}

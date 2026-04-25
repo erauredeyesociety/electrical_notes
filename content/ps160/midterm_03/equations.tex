@@ -5,75 +5,81 @@
 \usepackage{enumitem}
 
 \title{PS160 --- Midterm 3 (Final) Equation Sheet}
-\author{Nature and Propagation of Light, Geometric Optics, Interference, Diffraction \\ (Modules 33, 34, 35, 36)}
+\author{Optics, EM Waves, Interference, Diffraction (Modules 33--36) \\
+\textit{Plus reminders of Midterm 1\,\&\,2 material that must be combined with optics}}
 \date{}
 
 \begin{document}
 \maketitle
 
-\noindent \textbf{Note:} Midterm 3 is comprehensive. This sheet focuses on new content (Ch 33--36);
-see \texttt{master\_equations.tex} for the full course equation set.
+\noindent\textbf{Important:} The official equation sheet provided on exam day
+covers \emph{only} Midterm 1 and Midterm 2 material (Modules 12, 14--20).
+\textbf{Nothing} from Modules 33--36 (this sheet's main topic) appears on the
+official sheet. Every formula on this page must therefore be memorized or
+quickly derivable. See \texttt{equation\_gaps.md} for the full audit.
 
-\section*{Nature and Propagation of Light (Module 33)}
+\section*{Module 33 --- Nature and Propagation of Light, EM Waves}
 
-\paragraph{Speed of light and index of refraction.}
+\paragraph{Speed of light, index, wavelength in medium.}
 \[
-c = \SI{3.00e8}{m/s}
+c = \SI{3.00e8}{m/s} = \frac{1}{\sqrt{\mu_0\varepsilon_0}}
 \qquad
 n = \frac{c}{v}
 \qquad
 \lambda_{\text{med}} = \frac{\lambda_0}{n}
 \]
-Frequency is unchanged when light crosses an interface; wavelength and speed scale by $1/n$.
+Frequency does not change at an interface; speed and wavelength scale by $1/n$.
 
-\paragraph{Law of reflection.} $\theta_r = \theta_a$ (both measured from the normal to the surface).
+\paragraph{Plane wave relations.} $E/B = c$, $\vec E\perp\vec B\perp\vec k$.
 
-\paragraph{Law of refraction (Snell's law).}
+\paragraph{Energy density.} $u = \varepsilon_0 E^2 = B^2/\mu_0$.
+
+\paragraph{Poynting vector and intensity.}
 \[
-n_a\sin\theta_a = n_b\sin\theta_b
+\vec S = \frac{1}{\mu_0}\vec E\times\vec B,
+\qquad
+I = \tfrac{1}{2}c\varepsilon_0 E_{\max}^2 = \frac{E_{\max}^2}{2\mu_0 c}
 \]
 
-\paragraph{Total internal reflection (TIR).} Occurs only when $n_a > n_b$:
+\paragraph{Radiation pressure.} $p_{\text{abs}} = I/c$, $p_{\text{refl}} = 2I/c$.
+
+\paragraph{Law of reflection.} $\theta_r = \theta_a$ (from the normal).
+
+\paragraph{Law of refraction (Snell).} $n_a\sin\theta_a = n_b\sin\theta_b$.
+
+\paragraph{Total internal reflection (only when $n_a > n_b$).}
 \[
 \sin\theta_c = \frac{n_b}{n_a}
 \]
 
-\paragraph{Dispersion.} $n = n(\lambda)$. In normal dispersion, shorter wavelengths (blue) refract more than longer ones (red). Prisms and raindrops separate white light into a spectrum.
-
-\paragraph{Huygens's principle.} Every point on a wavefront is the source of spherical wavelets; the new wavefront is the envelope of these wavelets. This yields both the law of reflection and Snell's law.
-
-\paragraph{Linear polarization / Malus's law.}
+\paragraph{Polarization (Malus's law).}
 \[
-I = I_{\max}\cos^{2}\phi
+I = I_{\max}\cos^2\phi
+\qquad\text{(unpolarized through ideal polarizer: }I = I_0/2)
 \]
-Unpolarized light through an ideal polarizer: $I = I_0/2$.
 
 \paragraph{Brewster's angle (reflected light fully polarized).}
 \[
-\tan\theta_{B} = \frac{n_2}{n_1}
+\tan\theta_B = \frac{n_2}{n_1}
 \]
 
-\section*{Geometric Optics: Mirrors and Lenses (Module 34)}
+\section*{Module 34 --- Geometric Optics: Mirrors and Lenses}
 
-\paragraph{Plane mirror.} Virtual image, same size, distance behind mirror equal to object distance in front.
-
-\paragraph{Spherical mirror / thin lens (sign convention: distances measured positive in the "real" direction).}
+\paragraph{Mirror / thin-lens equation.}
 \[
 \frac{1}{s} + \frac{1}{s'} = \frac{1}{f}
-\qquad\text{(paraxial / Gaussian mirror \& thin-lens equation)}
+\qquad
+f_{\text{mirror}} = \frac{R}{2}
 \]
 
-\paragraph{Mirror focal length.} $f = R/2$.
-
-\paragraph{Lateral (transverse) magnification.}
+\paragraph{Lateral magnification.}
 \[
 m = \frac{y'}{y} = -\frac{s'}{s}
 \]
-$|m| > 1$ enlarged, $|m| < 1$ reduced; $m > 0$ erect, $m < 0$ inverted.
 
 \paragraph{Lensmaker's equation (thin lens in air).}
 \[
-\frac{1}{f} = (n - 1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right)
+\frac{1}{f} = (n - 1)\!\left(\frac{1}{R_1} - \frac{1}{R_2}\right)
 \]
 
 \paragraph{Refraction at a single spherical surface.}
@@ -81,119 +87,178 @@ $|m| > 1$ enlarged, $|m| < 1$ reduced; $m > 0$ erect, $m < 0$ inverted.
 \frac{n_1}{s} + \frac{n_2}{s'} = \frac{n_2 - n_1}{R}
 \]
 
-\paragraph{Sign conventions (right-moving light, objects on left).}
+\paragraph{Sign conventions (incoming light from left).}
 \begin{itemize}\itemsep0pt
-\item $s > 0$: object on the incoming (left) side. Virtual object: $s < 0$.
-\item $s' > 0$: image on the outgoing (right) side for a lens, same side as object for a mirror (real image).
-\item $R > 0$: center of curvature on the outgoing (transmitted) side.
-\item $f > 0$ for a converging (convex) lens or concave mirror; $f < 0$ for diverging (concave) lens or convex mirror.
+  \item $s > 0$ if object is on the incoming side (left).
+  \item $s' > 0$ if image is on the outgoing side (transmitted side for a lens; same side as object for a mirror).
+  \item $R > 0$ if the center of curvature is on the outgoing side.
+  \item $f > 0$ converging (convex lens, concave mirror); $f < 0$ diverging (concave lens, convex mirror).
 \end{itemize}
 
-\paragraph{Two-lens systems.} Image of the first lens becomes the object of the second:
+\paragraph{Two-lens systems.}
 \[
-s_2 = d - s_1'
+s_2 = d - s_1', \qquad m_{\text{tot}} = m_1 m_2
 \]
-Total magnification $m = m_1 m_2$.
 
-\paragraph{Simple magnifier / microscope / telescope (angular magnification).}
+\paragraph{Optical instruments (angular magnification).}
 \[
-M_{\text{magnifier}} = \frac{25\text{ cm}}{f}
+M_{\text{magnifier}} = \frac{25\;\text{cm}}{f}
 \qquad
 M_{\text{telescope}} = -\frac{f_{\text{obj}}}{f_{\text{eye}}}
 \]
 
-\paragraph{Camera $f$-number and optical power.}
+\paragraph{Camera $f$-number, lens power, vision.}
 \[
-f\text{-number} = \frac{f}{D}
+f\text{-number} = \frac{f}{D},
 \qquad
-P_{\text{optical}} = \frac{1}{f\;[\text{m}]}\quad (\text{diopters})
+P\;[\text{diopter}] = \frac{1}{f\;[\text{m}]}
+\]
+Myopia (near-sighted) corrected by diverging lens ($P<0$);
+hyperopia (far-sighted) corrected by converging lens ($P>0$).
+
+\paragraph{Apparent depth.}
+\[
+d_{\text{app}} = d_{\text{real}}\cdot\frac{n_{\text{obs}}}{n_{\text{med}}}
 \]
 
-\section*{Interference (Module 35)}
+\section*{Module 35 --- Interference}
 
-\paragraph{Two-source phase difference.}
-Path difference $\Delta r$ produces phase difference
+\paragraph{Phase from path difference.}
 \[
-\Delta\phi = \frac{2\pi}{\lambda}\,\Delta r
+\Delta\phi = \frac{2\pi}{\lambda}\Delta r
 \]
 
-\paragraph{Conditions for constructive and destructive interference (coherent sources, same phase).}
+\paragraph{Two-source conditions (in phase, coherent).}
 \[
-\Delta r = m\lambda \Rightarrow\text{constructive},\quad m = 0,\pm 1,\pm 2,\dots
-\]
-\[
-\Delta r = (m + \tfrac{1}{2})\lambda \Rightarrow\text{destructive}
-\]
-
-\paragraph{Young's double-slit (slit separation $d$, screen distance $R$).}
-Maxima at
-\[
-d\sin\theta = m\lambda
+\Delta r = m\lambda \;\text{(bright)},
 \qquad
-y_{m}\approx \frac{m\lambda R}{d}\;(\text{small-angle})
+\Delta r = (m+\tfrac{1}{2})\lambda \;\text{(dark)}
 \]
-Minima at $d\sin\theta = (m + \tfrac{1}{2})\lambda$.
 
-\paragraph{Intensity pattern of two-source interference.}
+\paragraph{Young's double-slit.}
 \[
-I(\theta) = I_0\cos^{2}\!\left(\frac{\phi}{2}\right)
-= I_0\cos^{2}\!\left(\frac{\pi d\sin\theta}{\lambda}\right)
+d\sin\theta = m\lambda \;\text{(bright)},
+\qquad
+y_m \approx \frac{m\lambda R}{d},
+\qquad
+\text{fringe spacing} = \frac{\lambda R}{d}
 \]
+Width of central maximum (between $m=\pm 1$ dark fringes): $w = 2\lambda R/d$.
 
-\paragraph{Thin-film interference.}
-A reflection at an interface where light goes from lower-$n$ to higher-$n$ introduces a $\pi$ phase shift ($\lambda/2$ path shift). Combining path-length and reflection phase shifts:
+\paragraph{Two-source intensity.}
 \[
-2 n t = m\lambda_0 \text{ or } (m + \tfrac{1}{2})\lambda_0
+I(\theta) = I_0\cos^2\!\left(\frac{\pi d\sin\theta}{\lambda}\right)
 \]
-(choice depends on the number of hard reflections: one hard reflection flips the rule).
 
-\paragraph{Newton's rings / wedge.} Uses same logic: $2t = $ integer/half-integer of $\lambda_{\text{med}}$.
+\paragraph{Thin-film interference (normal incidence).}
+\[
+2 n t = m\lambda_0 \quad\text{or}\quad (m+\tfrac{1}{2})\lambda_0
+\]
+Choice flips with the count of \emph{hard} reflections (low-$n$ to high-$n$): zero or two hard reflections give the integer rule for constructive; one hard reflection swaps the rule.
 
 \paragraph{Michelson interferometer.}
-Moving one mirror by $\Delta d$ shifts the fringe pattern by $\Delta m$ fringes:
 \[
 2\,\Delta d = \Delta m\,\lambda
 \]
 
-\section*{Diffraction (Module 36)}
+\section*{Module 36 --- Diffraction}
 
-\paragraph{Single-slit (Fraunhofer) diffraction minima.} Slit width $a$:
+\paragraph{Single-slit (Fraunhofer) minima.}
 \[
-a\sin\theta = m\lambda,\quad m = \pm 1,\pm 2,\dots
+a\sin\theta = m\lambda,\qquad m = \pm 1,\pm 2,\dots
 \]
-(note: $m = 0$ is the central maximum, not a minimum). For small angles,
-\[
-y_{m}\approx \frac{m\lambda R}{a}
-\]
+Width of central max: $w = 2\lambda R/a$.
 
-\paragraph{Single-slit intensity pattern.}
+\paragraph{Single-slit intensity.}
 \[
-I(\theta) = I_0\left(\frac{\sin(\beta/2)}{\beta/2}\right)^{2},\qquad
+I = I_0\!\left(\frac{\sin(\beta/2)}{\beta/2}\right)^{\!2},
+\qquad
 \beta = \frac{2\pi a\sin\theta}{\lambda}
 \]
 
-\paragraph{Two-slit diffraction envelope.} Double-slit fringes modulated by single-slit envelope:
+\paragraph{Two-slit pattern (with finite slit width).}
 \[
-I(\theta) = I_0\cos^{2}\!\left(\frac{\pi d\sin\theta}{\lambda}\right)\left(\frac{\sin(\beta/2)}{\beta/2}\right)^{2}
+I = I_0\cos^2\!\left(\frac{\pi d\sin\theta}{\lambda}\right)
+\!\left(\frac{\sin(\beta/2)}{\beta/2}\right)^{\!2}
 \]
 
-\paragraph{Diffraction grating (slit spacing $d$, maxima).}
+\paragraph{Diffraction grating.}
 \[
-d\sin\theta = m\lambda,\quad m = 0,\pm 1,\pm 2,\dots
+d\sin\theta = m\lambda,\qquad
+R = \frac{\lambda}{\Delta\lambda} = N m
 \]
-Chromatic resolving power: $R = \lambda/\Delta\lambda = Nm$ ($N$ = total slits illuminated).
+Visible orders: $m_{\max} = \lfloor d/\lambda\rfloor$.
 
-\paragraph{Circular aperture (Airy disk) --- Rayleigh criterion.}
+\paragraph{Circular aperture (Rayleigh criterion).}
 \[
-\sin\theta_{R} = 1.22\,\frac{\lambda}{D}
+\sin\theta_R = 1.22\,\frac{\lambda}{D}
 \]
-$D$ is the aperture diameter; $\theta_R$ is the minimum angular separation of two just-resolvable sources.
 
 \paragraph{X-ray diffraction (Bragg's law).}
 \[
-2 d\sin\theta = m\lambda
+2d\sin\theta = m\lambda \qquad(\theta\ \text{measured from the planes})
 \]
-where $d$ is the spacing between crystal planes and $\theta$ is measured from the plane (not the normal).
+
+\section*{Reminders from Midterm 1\,\&\,2 (these \emph{are} on the official sheet)}
+
+\paragraph{Pressure, Bernoulli, continuity (M12).}
+$\rho = m/V$,
+$p = F_\perp/A$,
+$p(y) = p_0 - \rho g y$,
+$\rho A v = \mathcal{C}$,
+$p + \rho g y + \tfrac{1}{2}\rho v^2 = \mathcal{C}'$.
+
+\paragraph{SHM \& waves (M14--15).}
+$\ddot x + \omega^2 x = 0$,
+$x(t) = A\cos(\omega t + \phi)$,
+$\omega = \sqrt{k/m}$, $\sqrt{g/\ell}$, $\sqrt{mgd/I}$;
+$y(x,t) = A\cos(kx - \omega t)$, $v = \lambda f = \omega/k$;
+$v_{\text{string}}=\sqrt{F/\mu}$, $v_{\text{solid}}=\sqrt{Y/\rho}$, $v_{\text{fluid}}=\sqrt{B/\rho}$;
+$f_n = nv/(2L)$ or $nv/(4L)$;
+$\lambda_n = 2L/n$ or $4L/n$;
+$P_{av} = \tfrac{1}{2}\sqrt{\mu F}\,\omega^2 A^2$.
+
+\paragraph{Sound (M16).}
+$I = \tfrac{1}{2}\sqrt{\rho B}\,\omega^2 A^2 = p_{\max}^2/(2\sqrt{\rho B})$,
+$p_{\max} = BkA$,
+$I = P/(4\pi r^2)$,
+$\beta = (10\,\text{dB})\log_{10}(I/I_0)$ with $I_0 = \SI{e-12}{W/m^2}$,
+$f_L = f_S(v+v_L)/(v+v_S)$,
+$f_{\text{beat}} = f_a - f_b$.
+
+\paragraph{Heat \& kinetic theory (M17--18).}
+$\Delta L = \alpha L_0\Delta T$, $\Delta V = \beta V_0\Delta T$, $\beta = 3\alpha$;
+$Q = mc\Delta T = nC\Delta T$, $Q = \pm mL$;
+$H = kA\,\Delta T/L$, $H = A\sigma T^4$ (sheet has no $e$);
+$pV = NkT = nRT$, $kN_A = R$;
+$\tfrac{1}{2}m\langle v^2\rangle = \tfrac{3}{2}kT$, $v_{rms} = \sqrt{\langle v^2\rangle}$;
+$C_V = (f/2)R$, $C_P = C_V + R$, $\gamma = C_P/C_V$, $C_V = 3R$ (solid).
+
+\paragraph{Thermo cycles (M19--20).}
+$dU = dQ - dW$,
+$W = \int p\,dV$,
+$W = Q = Q_H + Q_C$ for a cycle,
+$\Delta S \ge 0$,
+$\Delta S = \int dQ/T$,
+$S = k\ln w$;
+$e = W/Q_H$,
+$K = Q_C/(-W)$,
+$K = -Q_H/(-W)$ (heat pump heating mode);
+Carnot: $\Delta S = Q_H/T_H + Q_C/T_C = 0$.
+
+\section*{Things NOT on the sheet that you must memorize}
+
+A non-exhaustive list (see \texttt{equation\_gaps.md} for the full inventory):
+\begin{itemize}\itemsep0pt
+  \item Temperature scale conversions $T_K = T_C + 273.15$, $T_F = \tfrac{9}{5}T_C + 32$.
+  \item Carnot efficiency $e = 1 - T_C/T_H$ (derive from sheet's $\Delta S = 0$ and $e = W/Q_H$).
+  \item Adiabatic process: $pV^\gamma = \text{const}$, $TV^{\gamma-1} = \text{const}$, $W = (p_1V_1 - p_2V_2)/(\gamma - 1)$.
+  \item Isothermal work $W = nRT\ln(V_2/V_1)$.
+  \item Useful entropy: $\Delta S_{\text{isoT}} = nR\ln(V_2/V_1)$, $\Delta S_{\text{heat}} = mc\ln(T_2/T_1)$, $\Delta S_{\text{phase}} = \pm mL/T$.
+  \item Temperature-dependent sound speed $v(T) = (331\,\text{m/s})\sqrt{T/(273\,\text{K})}$.
+  \item Stefan--Boltzmann with emissivity: $H = e A\sigma T^4$.
+  \item All of M33--M36 (above): Snell, Brewster, Malus, Maxwell relations, thin lens, lensmaker, $d\sin\theta=m\lambda$, $a\sin\theta=m\lambda$, Bragg, Rayleigh, thin-film $2nt$, etc.
+\end{itemize}
 
 \section*{Constants}
 \begin{tabular}{ll}

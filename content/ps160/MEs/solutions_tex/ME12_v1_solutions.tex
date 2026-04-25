@@ -1,0 +1,124 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\newcommand{\checkmk}{\ensuremath{\checkmark}}
+
+\title{ME12: Fluid Mechanics --- Walkthrough}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\textbf{Module:} M12 (Fluid Mechanics).
+
+\section*{Core equations used in this ME}
+\begin{itemize}[leftmargin=*]
+  \item Density: $\rho = m/V$; sphere volume $V = \tfrac{4}{3}\pi r^3$; cylinder volume $V=\pi r^2 L$
+  \item Mixture density: $\rho_{\text{mix}} = \dfrac{m_1+m_2}{V_1+V_2} = \dfrac{m_1+m_2}{m_1/\rho_1 + m_2/\rho_2}$
+  \item Pressure from a force on a surface: $p = F/A$ (with $F=mg$)
+  \item Hydrostatic pressure: $p = p_0 + \rho g h$
+  \item Barometer: $p_0 = \rho g (h_2 - h_1)$
+  \item Pascal's principle (hydraulic): $\dfrac{F_1}{A_1}=\dfrac{F_2}{A_2}$
+  \item Buoyancy (Archimedes): $B = \rho_{\text{fluid}}\, V_{\text{disp}}\, g$
+  \item Continuity: $A_1 v_1 = A_2 v_2$
+  \item Torricelli (efflux): $v = \sqrt{2gh}$
+  \item Bernoulli (horizontal): $p_1 + \tfrac{1}{2}\rho v_1^2 = p_2 + \tfrac{1}{2}\rho v_2^2$
+\end{itemize}
+Assume $g = 9.80\ \text{m/s}^2$ unless stated otherwise.
+
+\section*{Q1 --- Density of a sphere}
+\emph{We have a uniform spherical ball with known mass and radius and we need its density. Because mass is uniformly distributed throughout the volume, $\rho = m/V$ applies directly; the only modeling step is computing the sphere volume from its radius.}
+
+\textbf{Given:} $m = 454$ kg, $r = 1$ m. \textbf{Find:} $\rho$. Equation: $\rho = m/V$ with $V = \tfrac{4}{3}\pi r^3$.
+\[ V = \tfrac{4}{3}\pi(1)^3 = 4.18879\ \text{m}^3 \]
+\[ \rho = \frac{454}{4.18879} = \boxed{108.3846\ \text{kg/m}^3}\ \checkmk \]
+
+\section*{Q2 --- Alloy density}
+\emph{Two metals melted together form an alloy: total mass is the sum of the two masses, and total volume is the sum of the two volumes. The alloy density is therefore the combined mass over the combined volume --- not the average of the two densities.}
+
+$m_s = 4.3$ kg ($\rho_s = 10{,}490$), $m_g = 2.3$ kg ($\rho_g = 19{,}300$).
+\[ V_s = \tfrac{4.3}{10490} = 4.0992\times 10^{-4}\ \text{m}^3,\quad V_g = \tfrac{2.3}{19300} = 1.1917\times 10^{-4}\ \text{m}^3 \]
+\[ V_{\text{tot}} = 5.2909\times 10^{-4}\ \text{m}^3,\quad \rho = \frac{6.6}{5.2909\times 10^{-4}} = \boxed{12{,}474.36\ \text{kg/m}^3}\ \checkmk \]
+
+\section*{Q3 --- Pressure under a cube}
+\emph{A cube on a flat surface exerts pressure $p = F/A$. The contact area is one face $L^2$, and the force is the weight $mg$ at the local gravity. Vacuum just removes the atmospheric contribution.}
+
+$m=40$ kg, side $L=0.19$ m, $g=2.9\,\text{m/s}^2$.
+\[ p = \frac{mg}{L^2} = \frac{40\cdot 2.9}{(0.19)^2} = \frac{116}{0.0361} = \boxed{3{,}213.30\ \text{Pa}}\ \checkmk \]
+
+\section*{Q4 --- Barometer}
+\emph{A barometer is a closed tube of fluid inverted in a reservoir. The atmosphere holds up a column of fluid whose length $h_2 - h_1$ measures the ambient pressure: $p_0 = \rho g (h_2-h_1)$.}
+
+$h_1=3.9$ cm, $h_2=31$ cm, $\rho=6{,}282$ kg/m$^3$.
+\[ \Delta h = 0.271\ \text{m},\quad p_0 = 6282(9.80)(0.271) = \boxed{16.6837\ \text{kPa}}\ \checkmk \]
+
+\section*{Q5 --- Pressure below the surface of a fluid}
+\emph{We want the absolute pressure at depth $h$. The fluid surface already feels atmospheric pressure pressing down; descending adds the weight per area of the column above us, giving $p = p_{\text{atm}} + \rho g h$.}
+
+$g=8.3$, $p_{\text{atm}}=80{,}512$ Pa, $h=7.4$ m, $\rho=936$ kg/m$^3$.
+\[ p = p_{\text{atm}} + \rho g h = 80512 + 936(8.3)(7.4) = 80512 + 57489.12 = \boxed{138{,}001.12\ \text{Pa}}\ \checkmk \]
+
+\section*{Q6 --- Gauge pressure under a floating disk + potato}
+\emph{A wooden disk and a potato float on top of an oil column. We want gauge pressure (no $p_{\text{atm}}$) 13.2~cm below the oil surface. Two contributions push down: the disk+potato weight spread over the cylinder cross-section, plus the hydrostatic oil column.}
+
+Cylinder $r=0.051$ m, oil $\rho_o=810$ kg/m$^3$, disk $m_d=2.9$ kg, potato $m_p=0.5$ kg, depth $h=0.132$ m.
+\[ A = \pi(0.051)^2 = 8.1713\times 10^{-3}\ \text{m}^2 \]
+\[ p_{\text{gauge}} = \frac{(m_d+m_p)g}{A} + \rho_o g h = 4077.48 + 1047.82 = 5125.30\ \text{Pa} \]
+\[ p = \frac{5125.30}{6895} = \boxed{0.7434\ \text{psi}}\ \checkmk \]
+
+\section*{Q7 --- Hydraulic jack}
+\emph{Two pistons share an incompressible fluid; Pascal's principle keeps pressure equal, so $F_1/A_1 = F_2/A_2$. The smaller input piston needs proportionally less force.}
+
+$F_1 = F_2(A_1/A_2) = 1243(0.05/0.17) = \boxed{365.59\ \text{N}}\ \checkmk$
+
+\section*{Q8 --- Hydraulic brake torque}
+\emph{Pedal force pushes the master cylinder, hydraulic pressure transmits a larger force to the brake shoe; that shoe presses on the drum, generating friction $\mu F_{\text{shoe}}$ at radius $r_{\text{wheel}}$, hence torque $\mu F_{\text{shoe}}\,r_{\text{wheel}}$.}
+
+$F_{\text{shoe}} = F_{\text{pedal}}\,A_2/A_1 = 49(7.4/1.7) = 213.29$ N.
+$f = \mu F_{\text{shoe}} = 106.65$ N. $\tau = f r = 106.65(0.45) = \boxed{47.99\ \text{N\,m}}\ \checkmk$
+
+\section*{Q9 --- Buoyant force, fully submerged}
+\emph{Archimedes: $B$ equals the weight of fluid displaced. Fully submerged means displaced volume = object volume; the object's mass is a distractor for $B$ alone.}
+
+$B = \rho_f V g = 609(0.3)(6.3) = \boxed{1{,}151.01\ \text{N}}\ \checkmk$
+
+\section*{Q10 --- Tension on a submerged rock}
+\emph{A rock hangs from a cord, fully submerged. Static equilibrium: $T + B = W$, so $T = mg - \rho_w V g$ with $V = m/\rho_r$.}
+
+$T = mg(1 - \rho_w/\rho_r) = 6.4(9.80)(1 - 1000/3100) = 62.72(0.6774) = \boxed{42.49\ \text{N}}\ \checkmk$
+
+\section*{Q11 --- Continuity in a narrowing pipe}
+\emph{Incompressible flow conserves volume rate: $A_1 v_1 = A_2 v_2$. Squeezing the pipe by a radius factor $r_1/r_2$ multiplies the speed by $(r_1/r_2)^2$.}
+
+$v_2 = v_1(r_1/r_2)^2 = 2.9(1.1/0.4)^2 = 2.9(7.5625) = \boxed{21.93\ \text{m/s}}\ \checkmk$
+
+\section*{Q12 --- Hose flow speed filling a pool}
+\emph{Compute the volumetric flow rate $Q = V_{\text{pool}}/t$, then exit speed is $v = Q/A_{\text{hose}}$ by continuity. Convert hours to seconds and the hose radius from cm to m.}
+
+$Q = V/t = 120/12600 = 9.524\times 10^{-3}\ \text{m}^3/\text{s}$, $A = \pi(0.03)^2 = 2.827\times 10^{-3}\ \text{m}^2$.
+\[ v = Q/A = \boxed{3.3684\ \text{m/s}}\ \checkmk \]
+
+\section*{Q13 --- Torricelli (tank leak)}
+\emph{A tank is open at the top with a side leak. Bernoulli between the surface (atm pressure, $v\approx 0$) and the leak (atm pressure outside) gives $v = \sqrt{2gh}$ where $h$ is the depth of the leak \emph{below the surface}, not its height above the bottom.}
+
+$h = 16.3 - 8 = 8.3$ m. $v = \sqrt{2gh} = \sqrt{162.68} = \boxed{12.7546\ \text{m/s}}\ \checkmk$
+
+\section*{Q14 --- Bernoulli in a horizontal narrowing pipe}
+\emph{Continuity gives the new speed in the narrow section, then Bernoulli (no height change) trades kinetic energy for pressure. Faster flow $\Rightarrow$ lower pressure, so we expect $p_2 < p_1$.}
+
+$v_2 = v_1(r_1/r_2)^2 = 2.3(0.25/0.11)^2 = 11.880$ m/s.
+\[ p_2 = p_1 + \tfrac12\rho(v_1^2 - v_2^2) = 239000 + 500(5.29 - 141.14) = \boxed{171.08\ \text{kPa}}\ \checkmk \]
+
+\section*{Q15 --- Conceptual: cause of buoyancy}
+\textbf{The buoyant force is a result of increasing pressure with depth.} The bottom of a submerged body sits deeper than the top, so hydrostatic pressure ($p = p_0 + \rho g h$) pushes harder up on the bottom face than down on the top. The net upward force $B = \rho_f V g$ is Archimedes as a \emph{consequence} of depth-dependent pressure. (Other options fail: $B$ does depend on submerged volume; with equal masses the \emph{less}-dense object displaces more and gets a larger $B$; $B$ comes from the \emph{displaced fluid's} weight, not the object's; and $B$ can be less than, equal to, or greater than the object's weight.)
+
+\section*{Q16 --- Two metal balls, equal radii}
+\textbf{The buoyant forces are the same.} $B = \rho_w V g$ depends only on displaced volume, which is identical for two balls of equal radius (regardless of material). The gold ball has a larger \emph{weight}, but the same buoyancy.
+
+\bigskip\noindent\textbf{All 16 answers verified against the source key.}
+\end{document}

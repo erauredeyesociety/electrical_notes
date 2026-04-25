@@ -198,3 +198,97 @@ The user has said midterm 3 is comprehensive with **emphasis on later topics** (
 3. Drill sign conventions for lenses and mirrors until they're reflexive.
 4. Memorize the canonical short derivations: $c = 1/\sqrt{\mu_0\varepsilon_0}$ link; $E/B = c$; Malus; Snell → critical angle; fringe spacing $\lambda R/d$; Rayleigh $1.22\lambda/D$.
 5. Draw every problem — ray diagrams for optics, phasor diagrams for interference, $pV$ diagrams for thermo.
+
+---
+
+## Practice Final Coverage Analysis
+
+Two practice finals are now available:
+
+- **Fall 2024** ([test_finalexam_DRAFT_ps160_2024_fall.pdf](test_finalexam_DRAFT_ps160_2024_fall.pdf)) — 33 questions, best **230/271** points, default 10 pts per problem. **Q1-10 are knowledge formula-write** (1-3 pts each, 21 pts total covering optics formulas only — no fluids/thermo/sound knowledge questions). **Q11-33 are calculation problems**. Answers for Q11-33 in [test_final_ps160_2024_fall_answers.pdf](test_final_ps160_2024_fall_answers.pdf).
+- **Spring 2024** ([test_finalexam_ps160_2024_spring.pdf](test_finalexam_ps160_2024_spring.pdf)) — 26 questions, best **250/300** points, all calculation. No knowledge section, no answer key (verify against agent-generated solutions).
+
+### Notable structural facts
+
+- The course's actual final is the *length* of midterm 1 + midterm 2 + new optics — much longer than a single midterm.
+- "Best N out of M points" means you can skip the hardest problems; aim to *attempt* everything but bank on your strongest topics for the 230/250 bar.
+- All sub-part problems (wave-function diagnostic, mirror/lens, Carnot) are worth **20 pts** — these single questions are higher leverage than a typical 10-pt calculation.
+
+### Point distribution by topic (Fall 2024 calculation section, Q11-33)
+
+| Topic                                    | Questions | Points |
+| ---------------------------------------- | --------- | ------ |
+| Fluids (Bernoulli, buoyancy)             | Q11, Q12  | 20     |
+| SHM/Pendulum                             | Q13, Q14  | 20     |
+| Wave function diagnostic                 | Q15       | 20     |
+| Sound intensity (dB falloff)             | Q16       | 10     |
+| Doppler                                  | Q17       | 10     |
+| Pipes (standing waves)                   | Q18       | 10     |
+| Thermal expansion                        | Q19       | 10     |
+| Calorimetry / latent heat                | Q20       | 10     |
+| Kinetic theory ($K_{tr}$, $v_{rms}$)     | Q21, Q23  | 20     |
+| Ideal gas law (combined)                 | Q22       | 10     |
+| Thermo processes (isothermal, adiabatic) | Q24, Q25  | 20     |
+| Engines / efficiency                     | Q26       | 10     |
+| Entropy (water freezing)                 | Q27       | 10     |
+| Optics: reflection + Snell               | Q28, Q29  | 20     |
+| Optics: mirrors (concave)                | Q30       | 20     |
+| Optics: thin-film (bubble)               | Q31       | 10     |
+| Optics: double-slit                      | Q32       | 10     |
+| Optics: Rayleigh (telescope)             | Q33       | 10     |
+| **Knowledge formulas (optics only)**     | Q1-10     | 21     |
+
+**Optics' share of the calculation section is only ~70/250 points** — the rest is comprehensive midterm-1 and midterm-2 material. *Don't* let optics dominate prep at the expense of waves and thermo.
+
+### Spring 2024 calculation section (no knowledge section, more thermo-heavy)
+
+Adds: pressure column (Q1), hydraulic jack (Q2), spring energy (Q4), vibrating string $n=3$ (Q5), isobaric work (Q13), Carnot 20-pt (Q15), single-slit (Q23), Bragg (Q26), TIR mediated refraction (Q21), and a diverging-lens 20-pt (Q20). Q1-15 are all pre-optics, **so this exam is heavier on midterms 1+2 content than the Fall draft**.
+
+### Repeated / template question patterns across BOTH exams (high-confidence: will appear)
+
+These problems show up *verbatim or nearly verbatim* on both practice finals. Treat them as guaranteed:
+
+1. **Wave-function diagnostic.** Same numerical wave $y(x,t) = 5\cos(3t + 0.5x - 2.1)$ in both, asking for $A$, $\omega$, $k$, phase, $f$, $T$, $\lambda$, $v$, transverse speed at origin. Fall adds part (j) "max transverse speed" (= $\omega A$). Worth 20 pts.
+2. **Ideal gas combined law.** $T_1=220°\!\text{C}\to450°\!\text{C}$, $V$ halves, $p_1=89$ kPa — find $p_2$. Identical numbers in both (Fall Q22, Spring Q11). Answer: 261 kPa.
+3. **Water freezing entropy.** 11 kg of water at 0°C → ice at 0°C, $L_f = 3.35\times10^5$ J/kg, find $\Delta S$ (kJ/K). Identical (Fall Q27, Spring Q16). Answer: $-13.5$ kJ/K. Watch the **sign** (heat leaves water → $\Delta S < 0$).
+4. **Two plane mirrors at a corner.** Ray reflects off mirror 1 then mirror 2; find angle $\alpha$ between outgoing ray and second mirror's normal, given $\phi$ and $\theta$. Same geometry, different numbers (Fall: $\phi=70°,\theta=50°,\alpha=60°$; Spring: $\phi=60°,\theta=60°,\alpha=60°$). Use the angle sum in the triangle formed by the two mirrors and the ray.
+5. **Bubble thin-film enhancement.** Spherical-shell bubble, $\lambda=471$ nm, $n=1.5$, find minimum thickness for **enhancement** (constructive in reflection). Identical (Fall Q31, Spring Q22). Single hard reflection (air→soap), so condition is $2nt = (m+\tfrac{1}{2})\lambda_0$; thinnest is $t = \lambda_0/(4n)$. Answer: 78.5 nm.
+6. **Double-slit central-max width.** $\lambda=418$ nm, $d=0.26$ mm, $L=2.1$ m, find full width of central max. Identical (Fall Q32, Spring Q24). The "full width" is from the $m=-1$ to $m=+1$ minimum positions, $\Delta y = 2\lambda L/d$ (note: this uses the *minima* spacing for "full width", not fringe spacing). Answer: 3.376 mm. Verify which definition the answer key uses.
+7. **Rayleigh / Mars telescope crater.** $D=4.5$ cm, $\lambda=557$ nm, $L=883$ km, find smallest resolvable feature. Identical (Fall Q33, Spring Q25). $d_{\min} = 1.22 \lambda L / D = 13.33$ m.
+8. **Concave mirror, real object, $s>f$.** $s=18$ cm with either $f=8$ cm (Spring Q19) or $R=16$ cm so $f=8$ cm (Fall Q30 — same answer). Asks for $s'$, $m$, real/virtual, upright/inverted. Answer: $s'=14.4$ cm, $m=-0.8$, real, inverted.
+9. **Doppler.** Both have a single Doppler problem with sound speed given. Fall: source approaching observer at rest. Spring: source at rest, observer moving away. Master both sign cases.
+10. **Snell, air to denser medium.** Both have one of these (Fall Q29, Spring Q18 air-oil-water 2-step).
+
+### Question types DEFINITELY appearing on the real final (high-confidence)
+
+Based on appearing in both practice exams:
+
+- Ideal gas combined law (single equation problem)
+- Doppler effect with given $v_\text{sound}$
+- Two-mirror corner geometry (figure provided)
+- Concave mirror with real object inside/outside $f$ (4-part: $s'$, $m$, real/virtual, upright/inverted)
+- Thin-film bubble enhancement → $\lambda_0/(4n)$
+- Water freezing entropy with sign
+- Wave function diagnostic (multi-part)
+- Calorimetry / specific heat or latent heat
+- Rayleigh resolution applied to telescope
+- Double-slit fringe geometry
+- Pendulum period on a non-Earth gravity
+
+### Novel question types (not previously encountered in this user's prep materials)
+
+These appeared for the first time on the practice finals and warrant extra drill:
+
+1. **Ice slab supports woman (minimum-volume buoyancy).** Fall Q11. Ice has $\rho_{\text{ice}} = 0.92\rho_w$. The buoyancy from the *submerged* ice must support both the ice's weight and the 45-kg woman; in the limit case the slab is fully submerged but its top is exactly at the waterline. Setup: $\rho_w V g = \rho_{\text{ice}}V g + Mg \Rightarrow V = M/[(\rho_w - \rho_{\text{ice}})] = 45/(1000-920) = 0.5625\text{ m}^3$. The trick is realizing that "fully submerged but no water on top" is the *minimum* condition.
+2. **Maximum transverse speed sub-part on the wave function.** Fall Q15(j). $v_{y,\max} = \omega A$ — same idea as a SHM particle's max speed, but applied to the *transverse* motion of a string element. Don't confuse with propagation speed $v = \omega/k$.
+3. **Find $L_f$ given $Q$ and $m$ at the melting point.** Fall Q20. Inverse latent-heat problem: $L_f = Q/m$. Trivial but trains comfort with rearranging $Q = mL$ for any unknown.
+4. **$v_{\text{rms}}$ change after a *constant-volume* heat absorption.** Fall Q23. Procedure: at constant V, $Q = nC_V\Delta T$, so find $\Delta T$. New $v_{\text{rms}}$ comes from $\tfrac{1}{2}mv_{\text{rms}}^2 = \tfrac{3}{2}kT$, but easier: $v_{\text{rms}} \propto \sqrt{T}$ so $v_{\text{rms,new}}/v_{\text{rms,old}} = \sqrt{T_\text{new}/T_\text{old}}$. Need the $T_\text{old}$ from the *given* $v_{\text{rms,old}}$ via the ratio. This couples kinetic theory and the first law — a common synthesis question.
+5. **20-pt Carnot engine as a "give all four legs" question** (Spring Q15). Standard, but worth more points than a typical Q.
+
+### What the practice exams *don't* test (caution)
+
+- **No M33 (EM waves) problems** in either practice exam — neither Maxwell's-equation derivations nor radiation-pressure calculations nor Malus's law numerical problems appear. Knowledge questions on the Fall ask for Malus's law as a *formula*, but no calculation. **Don't assume EM waves are absent from the real exam** — they could appear; just realize the practice set's silence is a data point that they're *less* likely than optics.
+- **No lensmaker's equation calculation**, no two-lens system, no microscope/telescope angular magnification — but the formula-write Q5 asks for the lensmaker's. Practice these *just enough* to get the formula-write points.
+- **No grating problem** — only single-slit (Spring Q23), double-slit, and Bragg (Spring Q26). The knowledge question Q8 (Fall) asks for the grating constructive condition, though.
+- **No interferometer / Michelson** in either practice.
+- **No EM Brewster/critical-angle calculation** — but both formulas appear in knowledge Q3 (Fall).

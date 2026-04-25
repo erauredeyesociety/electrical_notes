@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\newcommand{\warn}{\textbf{[!]}}
+
+\title{ME33: Geometric Optics --- Walkthrough}
+\author{}\date{}
+
+\begin{document}\maketitle
+
+\warn{} \emph{No source answer key provided. Q1 depends on a figure not viewed; method given.}
+
+\section*{Core formulas}
+\begin{itemize}[leftmargin=*]
+\item Reflection: $\theta_i = \theta_r$ (from normal)
+\item Snell: $n_1\sin\theta_1 = n_2\sin\theta_2$
+\item Speed/wavelength in medium: $v = c/n$, $\lambda_{\text{med}} = \lambda_{\text{vac}}/n$ (frequency unchanged)
+\item Critical angle (TIR, $n_1>n_2$): $\sin\theta_c = n_2/n_1$
+\item Brewster: $\tan\theta_B = n_2/n_1$
+\item Malus: $I = I_0\cos^2\theta$
+\end{itemize}
+
+\section*{Q1 --- Two plane mirrors (image dependent)}
+\textbf{Setup.} Two flat mirrors meet at some angle and a light ray reflects off both. The figure labels $\phi=62^\circ$, $\theta=28^\circ$, and the unknown $\alpha$. Without the figure the labeling is ambiguous, but the geometry is solved by closing the ray + mirror segments into a triangle and using angle-sum $=180^\circ$.
+
+Method: identify the closed triangle formed by ray segments and mirrors; sum of interior angles $= 180^\circ$ relates $\alpha$, $\phi$, $\theta$. A common version: $\alpha = \phi - \theta = 62^\circ - 28^\circ = \boxed{34^\circ}$ \emph{(verify against figure)}.
+
+\section*{Q2 --- Speed of light in a medium}
+\textbf{Setup.} The index of refraction is the slow-down factor $n=c/v$, so a medium with $n=1.91$ has $v=c/n$.
+
+$v = c/n = 3.0\times10^8/1.91 = \boxed{1.57\times 10^8\ \text{m/s}}$
+
+\section*{Q3 --- Wavelength in a medium}
+\textbf{Setup.} Light of frequency $6.23\times10^{14}$ Hz crosses from air into a medium with $n=1.21$. Frequency is set by the source and doesn't change at a boundary, but speed (and therefore wavelength) shrinks by a factor of $n$. Compute $\lambda_{\text{vac}} = c/f$, then divide by $n$.
+
+$\lambda_{\text{vac}} = c/f = 481.5$ nm; $\lambda_{\text{med}} = 481.5/1.21 = \boxed{397.9\ \text{nm}}$
+
+\section*{Q4 --- Find angle of incidence}
+\textbf{Setup.} Light leaves air ($n_1=1$) and refracts into a denser fluid ($n_2=1.61$); the inside angle is $\theta_2=21^\circ$ and we want the original air-side angle. Snell's law connects the two; the air-side angle should be larger because rays bend toward the normal entering a denser medium.
+
+$\sin\theta_1 = 1.61\sin(21^\circ) = 0.5770 \Rightarrow \theta_1 = \boxed{35.24^\circ}$
+
+\section*{Q5 --- Air $\to$ oil $\to$ water}
+\textbf{Setup.} A ray hits a stack of parallel layers (air, oil, water). For parallel slabs, applying Snell's law at each interface chains the indices and the middle layer drops out --- only the entry and exit indices matter for the final ray direction. This reduces to a single Snell's-law step from air to water.
+
+If $\theta = 32^\circ$ in air: $\sin\phi = \sin(32^\circ)/1.33 = 0.3984 \Rightarrow \phi = \boxed{23.49^\circ}$
+
+\section*{Q6 --- BK7 dispersion through 0.42-m slab at 48$^\circ$}
+\textbf{Setup.} White light enters a 0.42-m-thick BK7 slab at $48^\circ$. Different wavelengths have slightly different $n$, so they refract by slightly different amounts and follow slightly different paths to the exit face. We want the lateral separation between the 475-nm beam ($n=1.523$) and the 625-nm beam ($n=1.515$) at the bottom. For each: refract on entry, travel $d\tan\theta_{\text{inside}}$, then take the difference.
+
+$\theta_2 = \arcsin(\sin 48^\circ/1.523) = 29.20^\circ$, $\theta_4 = \arcsin(\sin 48^\circ/1.515) = 29.37^\circ$.
+$\Delta x = d(\tan\theta_4 - \tan\theta_2) = 0.42(0.5630 - 0.5588) = 1.74\times 10^{-3}\ \text{m} = \boxed{1.74\ \text{mm}}$
+
+\section*{Q7 --- Critical angle, find $n_1$}
+\textbf{Setup.} A ray inside material 1 hits the boundary with material 2 ($n_2=1.5$); the figure shows the critical-angle geometry where the refracted ray skims the interface at $\theta=49^\circ$. At the critical angle $\sin\theta_c = n_2/n_1$. Since TIR requires denser-to-less-dense, $n_1$ should exceed $n_2$.
+
+$n_1 = n_2/\sin\theta_c = 1.5/\sin(49^\circ) = \boxed{1.988}$
+
+\section*{Q8 --- Refraction angle from a known critical angle}
+\textbf{Setup.} The critical angle at a liquid-air boundary is $42.3^\circ$, which lets us back out the liquid's index ($n=1/\sin\theta_c$ since air's $n=1$). Then a separate ray comes from the air side at $34^\circ$ and we find its refracted angle inside the liquid (smaller than $34^\circ$, since rays bend toward the normal entering a denser medium).
+
+$n_{\text{liq}} = 1/\sin(42.3^\circ) = 1.486$. $\sin\theta_2 = \sin(34^\circ)/1.486 = 0.3763 \Rightarrow \theta_2 = \boxed{22.10^\circ}$
+
+\section*{Q9 --- Two polarizers (Malus chain)}
+\textbf{Setup.} Polarized light hits a polarizer at $37^\circ$ from its polarization, then a second polarizer rotated a further $49^\circ$ from the first. After each filter intensity is multiplied by $\cos^2$ of the angle between the incoming polarization and the filter axis. Note that after filter 1 the light is polarized along filter 1's axis, so the angle for filter 2 is just the $49^\circ$ between axes.
+
+$I_2/I_0 = \cos^2(37^\circ)\cos^2(49^\circ) = 0.6378(0.4305) = \boxed{0.2746}$
+
+\section*{Q10 --- Brewster's angle, glass in oil}
+\textbf{Setup.} Glass ($n=1.6$) is immersed in oil ($n=1.465$). We want the angle at which the reflected ray is fully polarized: Brewster's angle, $\tan\theta_B = n_2/n_1$, with light coming from the oil side. The small index contrast puts $\theta_B$ near $45^\circ$.
+
+$\theta_B = \arctan(1.6/1.465) = \boxed{47.53^\circ}$
+
+\section*{Q11 --- Refraction qualitative}
+A bigger index contrast forces a bigger angular change at the boundary (Snell's law). Index of refraction depends on \emph{wavelength}, called \emph{dispersion}; in ordinary materials shorter wavelengths see a higher $n$ and bend more.
+
+Bigger $\Delta n$: more bending (\textbf{larger}). $n$ depends on \textbf{wavelength}, called \textbf{dispersion}. Shorter wavelengths bend \textbf{more than} longer.
+
+\section*{Q12 --- TIR conditions}
+TIR happens when the refracted ray would need to bend past $90^\circ$, which only occurs going from a denser to a less dense medium. If you start in a medium with $n<1$, all common neighboring media are denser, so you're going \emph{into} a higher index and there is no critical angle to exceed.
+
+TIR requires going to \textbf{lower} $n$. A medium with index \textbf{less than one} cannot TIR into typical media (n $\ge 1$).
+
+\bigskip\warn{} Q1 depends on figure; all other answers from first principles.
+\end{document}

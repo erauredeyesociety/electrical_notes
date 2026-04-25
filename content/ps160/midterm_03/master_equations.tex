@@ -14,6 +14,15 @@
 
 \noindent This is a single-document reference for every equation used in PS160. It is organized by exam and by module. See the individual \texttt{equations.tex} files in each \texttt{midterm\_0X/} folder for topic-focused cheat sheets.
 
+\paragraph{Note on the official Final equation sheet.}
+The official Final exam equation sheet (see
+\texttt{midterm\_03/test\_finalexam\_DRAFT\_ps160\_2024\_fall.pdf}, pp.\ 2--3)
+covers only Midterm~1 and Midterm~2 material (Modules 12, 14--20).
+\textbf{No Module 33--36 formulas are provided.} Items below tagged
+\fbox{\textsc{sheet}} are on the official sheet; items tagged
+\fbox{\textsc{memorize}} must be memorized or derived.
+See \texttt{midterm\_03/equation\_gaps.md} for the full audit.
+
 \tableofcontents
 \newpage
 
@@ -22,6 +31,7 @@
 %==========================================================
 
 \section{Fluid Mechanics (Module 12)}
+\fbox{\textsc{sheet}} --- everything in this section is on the official sheet.
 
 \[
 \rho = \frac{m}{V}\qquad p = \frac{F_\perp}{A}
@@ -36,6 +46,9 @@
 \paragraph{Volume flow rate.} $dV/dt = A v$.
 
 \section{Oscillations (Module 14)}
+SHM equation, $x(t)$, three $\omega$ forms, and the $f$/$T$/$\omega$ relations
+are \fbox{\textsc{sheet}}. Energy, damped, and driven results are
+\fbox{\textsc{memorize}}.
 
 \paragraph{SHM equation.} $\ddot{x} + \omega^{2}x = 0$, solution $x(t) = A\cos(\omega t + \varphi)$.
 \paragraph{Period relations.} $\omega = 2\pi f = 2\pi/T$, $T = 2\pi/\omega$.
@@ -51,6 +64,9 @@
 $A_d = F_0/\sqrt{(k - m\omega_d^{2})^{2} + b^{2}\omega_d^{2}}$.
 
 \section{Mechanical Waves (Module 15)}
+Wave function, $k$, $v=\lambda f$, all three speed formulas, $f_n$, $\lambda_n$,
+and $P_{\text{av}}$ are \fbox{\textsc{sheet}}. The wave equation itself is
+\fbox{\textsc{memorize}}.
 
 \paragraph{Wave function.} $y(x,t) = A\cos(kx - \omega t)$, $k = 2\pi/\lambda$, $v = \lambda f = \omega/k$.
 \paragraph{Wave equation.} $\partial_t^{2} y = v^{2}\partial_x^{2} y$.
@@ -68,9 +84,12 @@ f_n = \frac{nv}{2L}\;\text{or}\;\frac{nv}{4L},\qquad
 \]
 
 \section{Sound (Module 16)}
+Intensity, $p_{\max}$, spherical-source $I = P/(4\pi r^2)$, decibels, Doppler,
+and beats are \fbox{\textsc{sheet}}. Temperature dependence of $v$ is
+\fbox{\textsc{memorize}}.
 
 \paragraph{Sound speed.} $v = \sqrt{B/\rho}$; air $\approx \SI{343}{m/s}$.
-\paragraph{Temperature dependence (air).} $v(T) = (331\;\mathrm{m/s})\sqrt{T/(273\;\mathrm{K})}$.
+\paragraph{Temperature dependence (air) \fbox{\textsc{memorize}}.} $v(T) = (331\;\mathrm{m/s})\sqrt{T/(273\;\mathrm{K})}$.
 \paragraph{Intensity.} $I = \tfrac{1}{2}\sqrt{\rho B}\,\omega^{2}A^{2} = p_{\max}^{2}/(2\sqrt{\rho B})$.
 \paragraph{Pressure amplitude.} $p_{\max} = BkA$.
 \paragraph{Spherical source.} $I = P/(4\pi r^{2})$.
@@ -83,17 +102,24 @@ f_n = \frac{nv}{2L}\;\text{or}\;\frac{nv}{4L},\qquad
 %==========================================================
 
 \section{Temperature \& Heat (Module 17)}
+Expansion, $Q = mc\Delta T$, latent heat, conduction, and radiation $H = A\sigma T^4$
+are \fbox{\textsc{sheet}}. Temperature conversions and thermal stress are
+\fbox{\textsc{memorize}}. The sheet's radiation form omits the emissivity $e$;
+include it from memory if a problem specifies $e \ne 1$.
 
-\paragraph{Temperature scales.} $T_K = T_C + 273.15$; $T_F = \tfrac{9}{5}T_C + 32$; $T_R = T_F + 459.67$.
+\paragraph{Temperature scales \fbox{\textsc{memorize}}.} $T_K = T_C + 273.15$; $T_F = \tfrac{9}{5}T_C + 32$; $T_R = T_F + 459.67$.
 \paragraph{Expansion.}
 $\Delta L = \alpha L_0 \Delta T$, $\Delta V = \beta V_0\Delta T$, $\beta = 3\alpha$.
-\paragraph{Thermal stress.} $F/A = -Y\alpha\Delta T$.
+\paragraph{Thermal stress \fbox{\textsc{memorize}}.} $F/A = -Y\alpha\Delta T$.
 \paragraph{Heat.} $Q = mc\Delta T = nC\Delta T$.
 \paragraph{Latent heat.} $Q = \pm m L$.
 \paragraph{Conduction.} $H = kA\Delta T/L$.
-\paragraph{Radiation.} $H = eA\sigma T^{4}$, $\sigma = \SI{5.67e-8}{W/(m^{2} K^{4})}$.
+\paragraph{Radiation.} Sheet: $H = A\sigma T^{4}$. With emissivity (\fbox{\textsc{memorize}}): $H = eA\sigma T^4$. $\sigma = \SI{5.67e-8}{W/(m^{2} K^{4})}$.
 
 \section{Kinetic Theory (Module 18)}
+Ideal gas law, equipartition, $v_{rms}$, MB distribution, $C_V/C_P/\gamma$, and
+$C_V=3R$ for solids are \fbox{\textsc{sheet}}. Total translational KE form is
+derivable.
 
 \paragraph{Ideal gas.} $pV = NkT = nRT$, $kN_A = R$.
 \paragraph{Equipartition.} $\tfrac{1}{2}m\langle v^{2}\rangle = \tfrac{3}{2}kT$.
@@ -104,11 +130,14 @@ $\Delta L = \alpha L_0 \Delta T$, $\Delta V = \beta V_0\Delta T$, $\beta = 3\alp
 $C_V = (f/2)R$, $C_P = C_V + R$, $\gamma = C_P/C_V$; solid: $C_V = 3R$.
 
 \section{First Law (Module 19)}
+$dU = dQ - dW$, $W = \int p\,dV$, and $W = Q = Q_H + Q_C$ for a cycle are
+\fbox{\textsc{sheet}}. The closed-form process results below are
+\fbox{\textsc{memorize}} (derive from $W = \int p\,dV$ if needed).
 
 \paragraph{First law.} $dU = \bar dQ - \bar dW$, $W = \int p\,dV$.
 \paragraph{Ideal gas internal energy.} $U = nC_V T$, $\Delta U = nC_V\Delta T$.
 
-\paragraph{Processes (ideal gas).}
+\paragraph{Processes (ideal gas) \fbox{\textsc{memorize}}.}
 \begin{itemize}\itemsep0pt
 \item Isobaric: $W = p\Delta V$, $Q = nC_P\Delta T$.
 \item Isochoric: $W = 0$, $Q = nC_V\Delta T = \Delta U$.
@@ -117,15 +146,22 @@ $C_V = (f/2)R$, $C_P = C_V + R$, $\gamma = C_P/C_V$; solid: $C_V = 3R$.
 \end{itemize}
 
 \section{Second Law, Entropy, Cycles (Module 20)}
+Zeroth law, $\Delta S \ge 0$, $\Delta S = \int dQ/T$, $S = k\ln w$, $e = W/Q_H$,
+$K = Q_C/(-W)$, $K = -Q_H/(-W)$ for a heat pump in heating mode, and the
+Carnot entropy identity $\Delta S = Q_H/T_H + Q_C/T_C = 0$ are all
+\fbox{\textsc{sheet}}. The Carnot efficiency form $e = 1 - T_C/T_H$ is
+\fbox{\textsc{memorize}} (derive by combining $e = W/Q_H = (Q_H+Q_C)/Q_H$ with
+$\Delta S = 0$).
 
 \paragraph{Zeroth law.} $T_A = T_B = T_C$.
 \paragraph{Second law.} $\Delta S_{\text{universe}} \ge 0$.
 \paragraph{Engine cycle.} $W_{\text{net}} = Q_H + Q_C$; efficiency $e = W/Q_H = 1 - |Q_C|/Q_H$.
-\paragraph{Carnot.} $e_{\text{Carnot}} = 1 - T_C/T_H$.
-\paragraph{Refrigerator / heat pump.} $K_{\text{ref}} = Q_C/|W|$, $K_{\text{HP}} = |Q_H|/|W|$.
+\paragraph{Carnot \fbox{\textsc{memorize}}.} $e_{\text{Carnot}} = 1 - T_C/T_H$.
+\paragraph{Refrigerator (sheet form).} $K = Q_C/(-W)$.
+\paragraph{Heat pump, heating mode (sheet form).} $K = -Q_H/(-W)$.
 \paragraph{Entropy.} $\Delta S = \int dQ_{\text{rev}}/T$, $S = k\ln w$.
 \paragraph{Carnot entropy.} $\Delta S = Q_H/T_H + Q_C/T_C = 0$.
-\paragraph{Useful simple processes.}
+\paragraph{Useful simple processes \fbox{\textsc{memorize}} (derive from $\Delta S = \int dQ/T$).}
 \[
 \Delta S_{\text{isoT, ideal gas}} = nR\ln\frac{V_2}{V_1},\quad
 \Delta S_{\text{heating}} = mc\ln\frac{T_2}{T_1},\quad
@@ -137,6 +173,8 @@ $C_V = (f/2)R$, $C_P = C_V + R$, $\gamma = C_P/C_V$; solid: $C_V = 3R$.
 %==========================================================
 
 \section{EM Waves (Module 33)}
+\fbox{\textsc{memorize}} --- \emph{nothing} from this section is on the official
+sheet. Memorize or be ready to derive every formula below.
 
 \paragraph{Maxwell's equations.}
 \[
@@ -159,6 +197,7 @@ $I = \tfrac{1}{2}c\varepsilon_0 E_{\max}^{2} = E_{\max}^{2}/(2\mu_0 c)$.
 \paragraph{Brewster.} $\tan\theta_B = n_2/n_1$.
 
 \section{Geometric Optics (Module 34)}
+\fbox{\textsc{memorize}} --- nothing from this section is on the official sheet.
 
 \paragraph{Reflection.} $\theta_i = \theta_r$.
 \paragraph{Snell.} $n_1\sin\theta_1 = n_2\sin\theta_2$.
@@ -176,6 +215,7 @@ $M_{\text{magnifier}} = (25\text{ cm})/f$, $M_{\text{telescope}} = -f_{\text{obj
 \paragraph{Apparent depth.} $d_{\text{app}} = d_{\text{real}}(n_{\text{obs}}/n_{\text{med}})$.
 
 \section{Interference (Module 35)}
+\fbox{\textsc{memorize}} --- nothing from this section is on the official sheet.
 
 \paragraph{Path-difference phases.} $\Delta\phi = (2\pi/\lambda)\Delta r$.
 \paragraph{Two-source conditions.}
@@ -189,6 +229,7 @@ $2 n t = m\lambda_0$ or $(m + \tfrac{1}{2})\lambda_0$ (swap if exactly one hard 
 \paragraph{Michelson interferometer.} $2\Delta d = \Delta m\,\lambda$.
 
 \section{Diffraction (Module 36)}
+\fbox{\textsc{memorize}} --- nothing from this section is on the official sheet.
 
 \paragraph{Single-slit minima.} $a\sin\theta = m\lambda$, $m = \pm 1,\pm 2,\dots$
 \paragraph{Central max width (single slit).} $w_{\text{central}} = 2\lambda R/a$ (between $m=\pm 1$ dark fringes).

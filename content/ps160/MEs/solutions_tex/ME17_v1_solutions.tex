@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\newcommand{\checkmk}{\ensuremath{\checkmark}}
+
+\title{ME17: Temperature \& Thermal Expansion --- Walkthrough}
+\author{}\date{}
+
+\begin{document}\maketitle
+
+\section*{Core equations}
+\begin{itemize}[leftmargin=*]
+\item $T_F = \tfrac95 T_C + 32$, $T_K = T_C + 273.15$
+\item Linear expansion: $\Delta L = \alpha L_0\Delta T$. Volume: $\Delta V = \beta V_0\Delta T$, $\beta\approx 3\alpha$
+\item $Q = mc\Delta T$; phase change $Q = mL_f$ or $mL_v$
+\item Mixing: $\sum Q_i = 0$
+\item Conduction: $H = kA\Delta T/d$
+\item Radiation: $H_{\text{net}} = \varepsilon\sigma A(T_s^4 - T_{\text{env}}^4)$, $\sigma = 5.67\times 10^{-8}$ W/(m$^2$K$^4$)
+\end{itemize}
+
+\section*{Q1 --- 201 K to $^\circ$F}
+\emph{Two-step conversion: K $\to$ $^\circ$C, then $^\circ$C $\to$ $^\circ$F.} 201 K is well below water's freezing point, so a very negative $^\circ$F value is expected.
+
+$T_F = \tfrac95(201-273.15) + 32 = \boxed{-97.87\,^\circ\text{F}}$ \checkmk
+
+\section*{Q2 --- $\Delta T$ for given expansion}
+\emph{A 1.7-m pipe ($\alpha=2.6\times10^{-5}$/$^\circ$C) lengthens by 7.4 mm; what $\Delta T$ caused it?} Invert $\Delta L=\alpha L_0\Delta T$ for $\Delta T$.
+
+$\Delta T = \Delta L/(\alpha L_0) = 0.0074/(2.6\times10^{-5}\cdot 1.7) = \boxed{167.42\,^\circ\text{C}}$ \checkmk
+
+\section*{Q3 --- $\Delta L$ for given $\Delta T$}
+\emph{A 5.2-m pipe ($\alpha=1.1\times10^{-5}$/$^\circ$C) warmed 46 $^\circ$C; find elongation in mm.} Direct application of $\Delta L=\alpha L_0\Delta T$.
+
+$\Delta L = (1.1\times10^{-5})(5.2)(46) = \boxed{2.6312\ \text{mm}}$ \checkmk
+
+\section*{Q4 --- Volume coefficient of fluid}
+\emph{Filled-to-brim glass bottle spills 16 mL after a 7.1 $^\circ$C rise.} The cavity itself expands like a solid ($\beta_g = 3\alpha_g$), so the spill equals \emph{fluid expansion minus container expansion}. Then convert from $(^\circ$C$)^{-1}$ to $(\text{kC}^\circ)^{-1}$ (multiply by 1000).
+
+Spill = (fluid expansion) $-$ (bottle expansion):
+$\beta_f = \beta_g + \Delta V/(V_0\Delta T) = 5.7\times10^{-5} + 16\times10^{-6}/(0.012\cdot 7.1) = 2.448\times10^{-4}\ (^\circ\text{C})^{-1}$
+Convert: $\boxed{0.2448\ (\text{kC}^\circ)^{-1}}$ \checkmk
+
+\section*{Q5 --- Falling water self-heats}
+\emph{All gravitational PE of falling water converts to thermal energy in the water.} $mgh = mc\Delta T$; mass cancels, so the temperature rise depends only on $g$, $h$, $c$.
+
+$\Delta T = gh/c = 9.8(150.2)/4190 = \boxed{0.3513\,^\circ\text{C}}$ \checkmk
+
+\section*{Q6 --- $\Delta T$ from $Q,m,c$}
+\emph{3141 J into 4.3 kg with $c = 645$ J/(kg$\cdot^\circ$C); find $\Delta T$.} Direct application of $Q=mc\Delta T$.
+
+$\Delta T = Q/(mc) = 3141/(4.3\cdot 645) = \boxed{1.1325\,^\circ\text{C}}$ \checkmk
+
+\section*{Q7 --- Specific heat from data}
+\emph{Inverse calorimetry: 24,512 J raises 2.8 kg by 11 $^\circ$C $\Rightarrow$ solve $Q=mc\Delta T$ for $c$.}
+
+$c = Q/(m\Delta T) = 24512/(2.8\cdot 11) = \boxed{795.84\ \text{J/(kg\,C}^\circ)}$ \checkmk
+
+\section*{Q8 --- Mixing chloroform + propylene glycol}
+\emph{Cold chloroform poured into warm propylene glycol; no phase change.} Conservation: $\sum m_i c_i(T-T_{0i}) = 0$. The answer lies between the two starting temperatures.
+
+$5880(T-13.5) + 23750(T-36.8) = 0 \Rightarrow T = 953380/29630 = \boxed{32.18\,^\circ\text{C}}$ \checkmk
+
+\section*{Q9 --- Energy to freeze 0.29 kg of water from 17 $^\circ$C}
+\emph{Two stages: cool sensible-heat from 17 to 0 ($mc\Delta T$), then crystallize ($mL_f$).}
+
+$Q = mc(17) + mL_f = 0.29(4190)(17) + 0.29(335000) = 117{,}805\ \text{J} = \boxed{117.81\ \text{kJ}}$ \checkmk
+
+\section*{Q10 --- Ice $-20\,^\circ$C $\to$ water 16 $^\circ$C, $m=2.69$ kg}
+\emph{Three stages: warm ice ($c_{\text{ice}}$), melt ($L_f$), warm water ($c_w$).} Each stage uses its own equation; don't lump them with a single $\Delta T$.
+
+$Q = mc_{\text{ice}}(20) + mL_f + mc_w(16) = 112980 + 898460 + 180314 = \boxed{1191.78\ \text{kJ}}$ \checkmk
+
+\section*{Q11 --- Ice + water equilibrium}
+\emph{Two possible outcomes: all ice melts (warm equilibrium) or only some melts (equilibrium at 0 $^\circ$C).} Compare available cooling energy with the energy needed to melt all the ice.
+
+Avail: $11.5(4190)(28.4) = 1.369\times10^6$ J. Need to melt all: $7.2(335000) = 2.412\times10^6$ J. Avail $<$ need $\Rightarrow$ partial melt $\Rightarrow$ $\boxed{T_{\text{eq}} = 0\,^\circ\text{C}}$ \checkmk
+
+\section*{Q12 --- Conduction through window}
+\emph{Steady-state Fourier conduction across a 13.9-mm pane.} Note: thickness $d$ is a \emph{length} in the denominator, not an area.
+
+$H = kA\Delta T/d = 0.8(3.2)(35)/0.0139 = \boxed{6.446\ \text{kW}}$ \checkmk
+
+\section*{Q13 --- Radiation}
+\emph{Net Stefan-Boltzmann power between sphere and room.} Both temperatures must be in kelvin --- the fourth-power dependence is unforgiving of unit slips.
+
+$A = 4\pi r^2 = 120.76\ \text{m}^2$, $T_s = 365$ K, $T_{\text{env}} = 301$ K.
+$T_s^4 - T_{\text{env}}^4 = 9.540\times10^9$.
+$H = 0.63(5.67\times10^{-8})(120.76)(9.540\times10^9) = \boxed{41.16\ \text{kW}}$ \checkmk
+
+\section*{Q14 --- Hole in heated metal}
+\emph{Every linear dimension scales by $1+\alpha\Delta T$, including the diameter of a hole.} A ``phantom'' disk filling the void would expand identically, so the void expands too.
+
+Hole \textbf{becomes larger}.
+
+\section*{Q15 --- Two rods, equal $Q$}
+\emph{Rod A: $c_A=2c_B$, $\alpha_A=3\alpha_B$, same $m,L_0,T_0$.} Doubled $c$ halves $\Delta T$; tripled $\alpha$ combined with $\tfrac12\Delta T$ gives $1.5\times$ the elongation.
+
+$\Delta T_A = \Delta T_B/2$ (A's $c$ is doubled) $\Rightarrow$ A is \textbf{less than} B.
+$\Delta L = \alpha L_0\Delta T$: $\Delta L_A/\Delta L_B = 3\cdot\tfrac12 = 1.5 \Rightarrow$ A is \textbf{greater}.
+
+\section*{Q16 --- Hot stove, metal handle}
+\emph{Heat travels through the all-metal pan body and up the handle by conduction --- no fluid flow (convection), and the handle isn't hot enough for radiation to dominate.}
+
+Handle becomes \textbf{hot} by \textbf{conduction}.
+
+\bigskip\noindent\textbf{All numeric answers match source key.}
+\end{document}

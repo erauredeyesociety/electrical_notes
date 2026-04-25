@@ -1,0 +1,207 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\newcommand{\checkmk}{\ensuremath{\checkmark}}
+
+\title{Midterm 3 / Final --- Fall 2024 (DRAFT) Practice --- Walkthrough}
+\author{}\date{}
+
+\begin{document}\maketitle
+
+Cumulative final spanning \textbf{all modules} (M12, M14--M20, M33--M36). Score scales to \textbf{230/271} total points; default is 10 pts/question unless otherwise marked. \textbf{Q1--Q10 are formula-knowledge} (write the equation; ${\approx}2$ pts each); \textbf{Q11--Q33 are calculation} (mostly 10 pts, two are 20 pts).
+
+\begin{itemize}[leftmargin=*]
+\item Source PDF: \texttt{../../midterm\_03/test\_finalexam\_DRAFT\_ps160\_2024\_fall.pdf}
+\item Answer key: \texttt{../../midterm\_03/test\_final\_ps160\_2024\_fall\_answers.pdf} (Q11--Q33)
+\item Companion: \texttt{midterm3\_final\_v1\_solutions.md} (cumulative midterm 3 walkthrough)
+\end{itemize}
+
+\noindent\checkmk\ = matches stated answer key. Q1--Q10 are ``free points'' --- verbatim formula recall.
+
+\section*{Equation bank (from official equation sheet, pages 2--3)}
+
+\textbf{Fluids (M12).} \(\rho = m/V\), \(p = F_\perp/A\), \(dp/dy = -\rho g\), \(p(y) = p_0 - \rho g y\), \(\rho A v = \mathcal{C}\), \(p + \rho g y + \tfrac12\rho v^2 = \mathcal{C}'\).
+
+\textbf{SHM (M14).} \(\ddot x + \omega^2 x = 0\), \(x(t)=A\cos(\omega t+\phi)\), \(\omega=\sqrt{k/m}\), \(\omega=\sqrt{g/\ell}\) (simple pendulum), \(\omega=\sqrt{mgd/I}\) (physical pendulum).
+
+\textbf{Wave kinematics (M15).} \(f=1/T=\omega/(2\pi)\), \(\omega=2\pi f\), \(T=1/f=2\pi/\omega\), \(y(x,t)=A\cos(kx-\omega t)\), \(k=2\pi/\lambda\), \(v=\lambda f=\omega/k\).
+
+\textbf{Wave speeds.} \(v=\sqrt{F/\mu}\) (string), \(v=\sqrt{Y/\rho}\) (solid rod), \(v=\sqrt{B/\rho}\) (fluid/gas).
+
+\textbf{Standing waves \& power.} \(f_n = nv/(2L)\) or \(nv/(4L)\); \(\lambda_n=2L/n\) or \(4L/n\); \(P_{av}=\tfrac12\sqrt{\mu F}\,\omega^2 A^2\).
+
+\textbf{Sound (M16).} \(I=\tfrac12\sqrt{\rho B}\,\omega^2 A^2 = p_{\max}^2/(2\sqrt{\rho B})\), \(p_{\max}=BkA\), \(I=P/(4\pi r^2)\), \(\beta=(10\,\mathrm{dB})\log_{10}(I/I_0)\), \(I_0=10^{-12}\,\mathrm{W/m^2}\). Doppler: \(f_L=f_S(v+v_L)/(v+v_S)\). Beats: \(f_{\mathrm{beat}}=|f_a-f_b|\).
+
+\textbf{Thermal expansion (M17).} \(\Delta L=\alpha L_0 \Delta T\), \(\Delta V=\beta V_0\Delta T\), \(\beta=3\alpha\).
+
+\textbf{Heat (M17).} \(Q=mc\Delta T = nC\Delta T\), \(Q=\pm m L\) (latent), \(C_V=(f/2)R\), \(C_P=C_V+R\), \(\gamma=C_P/C_V\), \(C_V=3R\) (solid). Conduction \(H=kA\Delta T/L\); radiation \(H=A\sigma T^4\).
+
+\textbf{Ideal gas / kinetic theory (M18).} \(pV=NkT=nRT\), \(kN_A=R\), \(\tfrac12 m\langle v^2\rangle = \tfrac32 kT\), \(v_{\mathrm{rms}}=\sqrt{\langle v^2\rangle}\), Maxwell--Boltzmann \(f(v)\propto v^2 e^{-mv^2/2kT}\).
+
+\textbf{Thermo first law / processes (M19).} \(T_A=T_B=T_C\), \(dU=dQ-dW\), \(W=\int p\,dV\). For a cycle \(W=Q=Q_H+Q_C\).
+
+\textbf{Entropy \& engines (M20).} \(\Delta S \ge 0\), \(\Delta S=\int dQ/T\), \(S=k\ln w\), \(e=W/Q_H\), \(K=Q_C/(-W)\) (refrig), \(K=-Q_H/(-W)\) (heat pump), Carnot: \(Q_H/T_H + Q_C/T_C = 0\).
+
+\noindent\emph{The optics/wave-optics formulas (M33--M36) needed for Q1--Q10 and Q28--Q33 are not on the printed equation sheet --- those are the Knowledge Questions.}
+
+\section*{Knowledge Questions (Q1--Q10) --- formulas only}
+
+\subsection*{Q1 --- Reflection \& Snell's Law [2 pts] (M33)}
+Reflection: \(\theta_i = \theta_r\) (both from normal). \quad Snell: \(n_1\sin\theta_1 = n_2\sin\theta_2\).
+
+\subsection*{Q2 --- Index of refraction \& wavelength in a medium [2 pts] (M33)}
+\(n = c/v\), \quad \(\lambda_{\mathrm{med}} = \lambda_{\mathrm{vac}}/n\) (frequency unchanged).
+
+\subsection*{Q3 --- Critical angle \& Brewster's angle [2 pts] (M33)}
+Critical: \(\sin\theta_c = n_2/n_1\) (with \(n_1>n_2\)). \quad Brewster: \(\tan\theta_B = n_2/n_1\).
+
+\subsection*{Q4 --- Thin lens / mirror equation \& lateral magnification [3 pts] (M34)}
+\[\frac{1}{s} + \frac{1}{s'} = \frac{1}{f}, \qquad m = -\frac{s'}{s} = \frac{y'}{y}\]
+
+\subsection*{Q5 --- Lensmaker's equation \& small-angle approximation [2 pts] (M34)}
+\[\frac{1}{f} = (n-1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right), \qquad \sin\theta\approx\tan\theta\approx\theta,\ \cos\theta\approx 1\ (\text{rad})\]
+
+\subsection*{Q6 --- Malus's law \& magnifier angular magnification [2 pts] (M34)}
+Malus: \(I = I_0\cos^2\theta\). \quad Magnifier: \(M = 25\,\mathrm{cm}/f\) (image at \(\infty\)); \(M = 1 + 25\,\mathrm{cm}/f\) (image at near point).
+
+\subsection*{Q7 --- Phase difference between two rays [3 pts] (M35)}
+\[\phi = \frac{2\pi}{\lambda}\,\Delta r = k\,\Delta r\]
+
+\subsection*{Q8 --- Constructive interference: double slit \& grating [2 pts] (M35/M36)}
+Same condition for both:
+\[d\sin\theta = m\lambda, \quad m = 0,\pm 1,\pm 2,\ldots\]
+
+\subsection*{Q9 --- Two-source intensity [1 pt] (M35)}
+\[I = I_0\cos^2\!\left(\frac{\phi}{2}\right) = I_0\cos^2\!\left(\frac{\pi d \sin\theta}{\lambda}\right)\]
+
+\subsection*{Q10 --- Thin-film path difference \& Rayleigh criterion [2 pts] (M35/M36)}
+Thin film: \(\Delta = 2nt\) (normal incidence; add \(\lambda/2\) per hard reflection).\\
+Rayleigh (circular aperture): \(\sin\theta_1 \approx \theta_1 = 1.22\,\lambda/D\).
+
+\section*{Calculation Questions (Q11--Q33)}
+
+\subsection*{Q11 --- Ice slab supports a woman (buoyancy, minimum-volume twist)}
+\emph{45.0-kg woman on freshwater ice (\(\rho_{\mathrm{ice}}=920\) kg/m\(^3\)). At minimum volume the slab is just submerged; her weight plus the ice's weight is balanced by the buoyancy of the fully submerged slab.}
+
+\[\rho_w V g = (m_w + \rho_{\mathrm{ice}}V)g \;\Rightarrow\; V = \frac{m_w}{\rho_w-\rho_{\mathrm{ice}}} = \frac{45}{1000-920} = \boxed{0.5625\ \mathrm{m}^3}\ \checkmk\]
+
+\noindent\emph{Note: ice mass at this volume is \(920\cdot 0.5625 = 517.5\) kg; the answer key parenthetical ``(157.5 kg)'' appears to be a typo for 517.5 kg.}
+
+\subsection*{Q12 --- Bernoulli, narrowing horizontal pipe}
+\emph{Continuity for \(v_2\); Bernoulli (no \(\Delta y\)) for \(p_2\).}
+
+\(v_2 = v_1(r_1/r_2)^2 = 3.3(0.23/0.12)^2 = 12.123\) m/s.\\
+\(p_2 = p_1 + \tfrac12\rho(v_1^2-v_2^2) = 233000 + 500(10.89-146.96) = \boxed{164.96\ \mathrm{kPa}}\) \checkmk
+
+\subsection*{Q13 --- Simple pendulum on another planet}
+\[T = 2\pi\sqrt{\ell/g} = 2\pi\sqrt{0.67/5.9} = \boxed{2.117\ \mathrm{s}}\ \checkmk\]
+
+\subsection*{Q14 --- SHM block: mass from \(v_{\max}\)}
+\emph{\(v_{\max} = A\sqrt{k/m} \Rightarrow m = kA^2/v_{\max}^2\).}
+
+\[m = \frac{776(1.55)^2}{(12.1)^2} = \frac{1864.34}{146.41} = \boxed{12.73\ \mathrm{kg}}\ \checkmk\]
+
+\subsection*{Q15 --- Wave function \(y(x,t) = 5\cos(3t + 0.5x - 2.1)\) [20 pts]}
+Match \(A\cos(\omega t + kx + \phi)\):
+\begin{itemize}[leftmargin=*]
+\item (a) \(A = \boxed{5\ \mathrm{m}}\) \checkmk
+\item (b) \(\omega = \boxed{3\ \mathrm{rad/s}}\) \checkmk
+\item (c) \(k = \boxed{0.5\ \mathrm{rad/m}}\) \checkmk
+\item (d) \(\phi = \boxed{-2.1\ \mathrm{rad}}\) \checkmk
+\item (e) \(f = \omega/(2\pi) = \boxed{0.4775\ \mathrm{Hz}}\) \checkmk
+\item (f) \(T = 1/f = \boxed{2.094\ \mathrm{s}}\) \checkmk
+\item (g) \(\lambda = 2\pi/k = \boxed{12.57\ \mathrm{m}}\) \checkmk
+\item (h) \(v = \omega/k = \boxed{6\ \mathrm{m/s}}\) \checkmk
+\item (i) \(v_y(0,0) = -A\omega\sin\phi = -15\sin(-2.1) = -15(-0.8632) = \boxed{12.95\ \mathrm{m/s}}\) \checkmk
+\item (j) Maximum transverse speed \(=\omega A = 15\) m/s \(\Rightarrow \boxed{15\ \mathrm{m/s}}\) \checkmk\quad\emph{(new in fall 2024 --- not on ME15)}
+\end{itemize}
+
+\subsection*{Q16 --- Sound intensity vs. distance}
+\emph{Inverse-square law: \(\Delta\beta = -20\log_{10}(r_2/r_1)\).}
+
+\[\beta_2 = 122 - 20\log_{10}(56/11) = 122 - 14.13 = \boxed{107.87\ \mathrm{dB}}\ \checkmk\]
+
+\subsection*{Q17 --- Doppler, source approaching stationary listener}
+\[f_L = f_S\frac{v}{v-v_S} = 670\cdot\frac{342}{310} = \boxed{739\ \mathrm{Hz}}\ \checkmk\]
+
+\subsection*{Q18 --- Open-open pipe, \(n=2\) harmonic}
+\[f_2 = \frac{2v}{2L} = \frac{v}{L} = \frac{331}{0.5} = \boxed{662\ \mathrm{Hz}}\ \checkmk\]
+
+\subsection*{Q19 --- Linear thermal expansion}
+\[\Delta L = \alpha L_0\Delta T = (3.7\times 10^{-5})(4.6)(35) = 5.957\times 10^{-3}\ \mathrm{m} = \boxed{5.96\ \mathrm{mm}}\ \checkmk\]
+
+\subsection*{Q20 --- Latent heat of fusion from given \(Q\) (inverse melt problem)}
+\emph{All heat goes into the phase change, so \(Q = mL_f\); solve for \(L_f\) instead of the usual \(Q\).}
+
+\[L_f = Q/m = 10^6/5.2 = \boxed{192\ \mathrm{kJ/kg}}\ \checkmk\]
+
+\subsection*{Q21 --- Total translational KE of an ideal gas}
+\[K_{\mathrm{tr}} = \tfrac32 nRT = 1.5(10.1)(8.314)(300.15) = \boxed{37.79\ \mathrm{kJ}}\ \checkmk\]
+
+\subsection*{Q22 --- Combined gas law (T up, V halved)}
+\[p_2 = p_1\,\frac{V_1}{V_2}\,\frac{T_2}{T_1} = 89(2)\frac{723.15}{493.15} = \boxed{261\ \mathrm{kPa}}\ \checkmk\]
+
+\subsection*{Q23 --- New \(v_{\mathrm{rms}}\) after isochoric heat addition (kinetic theory + 1st law)}
+\emph{Constant-V heating: \(Q = \Delta U = \tfrac32 nR\Delta T\). Get \(T_1\) from given \(v_{\mathrm{rms}}\), then \(T_2 = T_1+\Delta T\), then recompute \(v_{\mathrm{rms}}\). New combo of kinetic theory + heat input.}
+
+\(T_1 = Mv_1^2/(3R) = (4\times 10^{-3})(900)^2/(3\cdot 8.314) = 129.93\) K.\\
+\(\Delta T = 2Q/(3nR) = 2(2400)/(3\cdot 3\cdot 8.314) = 64.15\) K \(\Rightarrow T_2 = 194.08\) K.\\
+\(v_{\mathrm{rms},2} = \sqrt{3RT_2/M} = \sqrt{3(8.314)(194.08)/(4\times 10^{-3})} = \boxed{1100\ \mathrm{m/s}}\) \checkmk
+
+\subsection*{Q24 --- Isothermal expansion: \(Q = W\)}
+\[Q = nRT\ln(V_2/V_1) = p_1V_1\ln(V_2/V_1) = (152000)(0.7)\ln(4.714) = \boxed{165\ \mathrm{kJ}}\ \checkmk\]
+(Positive --- heat absorbed by gas.)
+
+\subsection*{Q25 --- Adiabatic expansion of monatomic gas}
+\(\gamma = 5/3\).
+\[p_2 = p_1(V_1/V_2)^\gamma = 281\,(0.28)^{5/3} = 281\,(0.1199) = \boxed{33.7\ \mathrm{kPa}}\ \checkmk\]
+
+\subsection*{Q26 --- Engine \(Q_C\) from efficiency and \(W\)}
+\(Q_H = W/e = 1400/0.16 = 8750\) J. \(Q_C = W - Q_H = -7350\) J.
+\[\boxed{Q_C = -7350\ \mathrm{J}}\ \checkmk\]
+(Negative --- exhausted to cold reservoir.)
+
+\subsection*{Q27 --- Entropy change as water freezes at 0\(^\circ\)C}
+\emph{Freezing releases heat at constant \(T = 273.15\) K, so \(Q < 0\).}
+
+\[\Delta S = \frac{-mL_f}{T} = \frac{-(11)(3.35\times 10^5)}{273.15} = \boxed{-13.5\ \mathrm{kJ/K}}\ \checkmk\]
+
+\subsection*{Q28 --- Two-mirror corner geometry}
+\emph{The figure shows \(\phi=70^\circ\) between the slanted mirror and the vertical dashed normal of the bottom mirror, with incidence \(\theta=50^\circ\) on the first mirror. Take the wedge between mirror surfaces (interior corner angle of the triangle bounded by the two mirrors and the bouncing ray) as \(180^\circ - \phi = 110^\circ\). Triangle interior angles: corner + first hit + second hit = \(180^\circ\):}
+
+\[110^\circ + (90^\circ-\theta) + (90^\circ-\alpha) = 180^\circ \;\Rightarrow\; \alpha = 110^\circ - \theta = \boxed{60^\circ}\ \checkmk\]
+
+\subsection*{Q29 --- Snell's law: find incidence angle}
+\[\sin\theta_1 = 1.6\sin(20^\circ) = 0.5472 \Rightarrow \theta_1 = \boxed{33.2^\circ}\ \checkmk\]
+
+\subsection*{Q30 --- Concave mirror, \(s=18\) cm, \(R=16\) cm [20 pts]}
+\(f = R/2 = 8\) cm.
+\begin{itemize}[leftmargin=*]
+\item (a) \(\dfrac{1}{s'} = \dfrac{1}{f}-\dfrac{1}{s} = \dfrac{1}{8}-\dfrac{1}{18} = \dfrac{10}{144}\) \(\Rightarrow s' = \boxed{14.4\ \mathrm{cm}}\) \checkmk
+\item (b) \(m = -s'/s = -14.4/18 = \boxed{-0.8}\) \checkmk
+\item (c) \(s' > 0 \Rightarrow\) image is \textbf{real} \checkmk
+\item (d) \(m < 0 \Rightarrow\) image is \textbf{inverted} \checkmk
+\end{itemize}
+
+\subsection*{Q31 --- Thin-film bubble, minimum thickness for enhancement}
+\emph{Air--soap--air bubble: one phase reversal (top surface only). Constructive (enhanced reflection) requires \(2nt = (m+\tfrac12)\lambda\). Minimum is \(m=0\).}
+
+\[t_{\min} = \frac{\lambda}{4n} = \frac{471}{4(1.5)} = \boxed{78.5\ \mathrm{nm}}\ \checkmk\]
+
+\subsection*{Q32 --- Double-slit central maximum width}
+\emph{First minima at \(d\sin\theta = \lambda/2\) on each side; full width \(\Delta y = L\lambda/d\).}
+
+\[\Delta y = \frac{(2.1)(418\times 10^{-9})}{0.26\times 10^{-3}} = 3.376\times 10^{-3}\ \mathrm{m} = \boxed{3.376\ \mathrm{mm}}\ \checkmk\]
+
+\subsection*{Q33 --- Rayleigh resolution: smallest crater a Mars-orbiting telescope can resolve}
+\emph{Multiply Rayleigh angle by orbital altitude. Real-world space-telescope application of \(\theta = 1.22\lambda/D\).}
+
+\(\theta_{\min} = 1.22(557\times 10^{-9})/(0.045) = 1.510\times 10^{-5}\) rad.
+\[d_{\min} = \theta_{\min}\cdot L = (1.510\times 10^{-5})(883{,}000) = \boxed{13.33\ \mathrm{m}}\ \checkmk\]
+
+\section*{Summary}
+All 23 numeric answers (Q11--Q33, including all 10 sub-parts of Q15 and all 4 sub-parts of Q30) match the official key. The only flag: Q11's answer-key parenthetical ``(157.5 kg)'' appears to be a typo --- the correct ice-slab mass at \(V_{\min}=0.5625\) m\(^3\) is \(\rho_{\mathrm{ice}}V = 517.5\) kg.
+
+\end{document}

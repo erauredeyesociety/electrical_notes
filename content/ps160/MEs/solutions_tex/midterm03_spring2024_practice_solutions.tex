@@ -1,0 +1,188 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\newcommand{\warn}{\textbf{[!]}}
+
+\title{PS160 Spring 2024 Final Exam --- Walkthrough Solutions}
+\author{}
+\date{}
+
+\begin{document}\maketitle
+
+\warn{} \emph{No source answer key.} Independently computed. Where Spring 2024 questions reuse the exact same scenario as the Fall 2024 final (Q6, Q11, Q16, Q22, Q24, Q25), the numeric answer is cross-referenced to the Fall 2024 walkthrough (\texttt{midterm3\_final\_v1\_solutions}) and the official Fall key. Image-dependent items (Q17, Q18) are flagged.
+
+\medskip
+\noindent\textbf{Score:} 250 / 300 best --- all questions 10 pts unless flagged. \textbf{Compound 20-pt items:} Q6 (a--i), Q15 (a--b), Q19 (a--d), Q20 (a--d).
+
+\section*{Equation bank (PS160 official sheet)}
+
+\textbf{Fluids / oscillations / waves:}
+\[ p = p_0 + \rho g h, \qquad F_2/F_1 = A_2/A_1, \qquad \omega=\sqrt{k/m},\ \omega=\sqrt{g/\ell} \]
+\[ E_{\text{spring}}=\tfrac12 kA^2,\quad y(x,t)=A\cos(kx \pm \omega t + \phi),\quad k=2\pi/\lambda,\ \omega=2\pi f,\ v=\lambda f=\omega/k \]
+\[ v_{\text{string}}=\sqrt{F/\mu},\quad f_n=\tfrac{nv}{2L}\ \text{(both ends fixed)},\quad v_y=\partial y/\partial t \]
+
+\textbf{Sound:}
+\[ I = P/(4\pi r^2),\qquad \beta = (10\,\text{dB})\log_{10}(I/I_0),\ I_0 = 10^{-12}\,\text{W/m}^2 \]
+\[ f_L = f_S\frac{v+v_L}{v+v_S}\quad\text{(toward source/listener positive)} \]
+
+\textbf{Thermal:}
+\[ \Delta L=\alpha L_0\Delta T,\ \Delta V=\beta V_0\Delta T,\ \beta=3\alpha,\qquad Q=mc\Delta T,\ Q=\pm mL \]
+\[ pV=nRT,\ K_{\text{tr}}=\tfrac32 nRT,\qquad W=\int p\,dV \]
+\[ \Delta U=Q-W,\ \Delta U_{\text{ideal}}=nC_V\Delta T,\ \Delta S=\int dQ/T \]
+\[ e_{\text{Carnot}} = 1-T_C/T_H,\ e=W/Q_H \]
+
+\textbf{Optics --- geometric:}
+\[ \theta_i=\theta_r,\qquad n_1\sin\theta_1=n_2\sin\theta_2,\qquad \sin\theta_c = n_2/n_1 \]
+\[ \tfrac1s+\tfrac1{s'}=\tfrac1f,\qquad m=-s'/s \]
+Sign convention: $s'>0$ real/in-front-of-mirror or behind-lens; $f>0$ converging lens / concave mirror; $f<0$ diverging lens / convex mirror.
+
+\textbf{Optics --- wave:}
+\[ \text{Bubble (1 net flip), bright reflection: } 2nt=(m+\tfrac12)\lambda \Rightarrow t_{\min}=\lambda/(4n) \]
+\[ \text{Double slit fringe spacing: } \Delta y=\lambda L/d;\ \text{single-slit central full-width: } 2\lambda L/a \]
+\[ \text{Single-slit minima: } a\sin\theta=m\lambda;\quad \text{Bragg: } 2d\sin\theta = m\lambda \]
+\[ \text{Rayleigh: } \theta_{\min} = 1.22\lambda/D \]
+
+\section*{Q1 --- Pressure at bottom of mercury column}
+Hydrostatic: $p = p_{\text{atm}} + \rho g h$. With $\rho_{Hg}=13600$ kg/m\textsuperscript{3}, $h=0.46$ m:
+\[ p = 71{,}000 + (13600)(9.8)(0.46) = 71{,}000 + 61{,}308.8 = \boxed{1.323\times 10^5\ \text{Pa}} \]
+
+\section*{Q2 --- Hydraulic jack force ratio}
+Equal pressure: $F_2 = F_1\cdot A_2/A_1$.
+\[ F_2 = 640(0.25/0.03) = 640(8.333) = 5333\ \text{N} = \boxed{5.333\ \text{kN}} \]
+
+\section*{Q3 --- Pendulum period on exoplanet}
+$T = 2\pi\sqrt{L/g}$ (mass cancels).
+\[ T = 2\pi\sqrt{1.87/7.3} = 2\pi(0.5061) = \boxed{3.180\ \text{s}} \]
+
+\section*{Q4 --- Spring SHM total energy}
+$E = \tfrac12 kA^2 = \tfrac12(288)(0.14)^2 = \tfrac12(288)(0.0196) = \boxed{2.822\ \text{J}}$
+
+\section*{Q5 --- Vibrating string, $n=3$}
+$\mu = 0.003/0.55 = 5.4545\times 10^{-3}$ kg/m. $v=\sqrt{F/\mu}$, $f_n=nv/(2L)$.
+\begin{itemize}[leftmargin=*]
+  \item (b) $v = \sqrt{12/5.4545\times 10^{-3}} = \sqrt{2200} = \boxed{46.90\ \text{m/s}}$
+  \item (a) $f_3 = 3(46.90)/(1.1) = \boxed{127.9\ \text{Hz}}$
+\end{itemize}
+
+\section*{Q6 --- Wave function $y(x,t)=5\cos(3t+0.5x-2.1)$ [20 pts]}
+\emph{Same wave as Fall 2024 Q15.} Both $\omega t$ and $kx$ have the same sign $\Rightarrow$ wave travels in the $-x$ direction.
+\begin{itemize}[leftmargin=*]
+  \item (a) $A = \boxed{5\ \text{m}}$
+  \item (b) $\omega = \boxed{3\ \text{rad/s}}$
+  \item (c) $k = \boxed{0.5\ \text{rad/m}}$
+  \item (d) $\phi = \boxed{-2.1\ \text{rad}}$
+  \item (e) $f = \omega/(2\pi) = 3/(2\pi) = \boxed{0.4775\ \text{Hz}}$
+  \item (f) $T = 1/f = 2\pi/3 = \boxed{2.094\ \text{s}}$
+  \item (g) $\lambda = 2\pi/k = \boxed{12.57\ \text{m}}$
+  \item (h) $v = \omega/k = 6\ \text{m/s}$ (in $-x$ direction); $\boxed{6\ \text{m/s}}$
+  \item (i) $v_y = -A\omega\sin(3t+0.5x-2.1)$. At $(0,0)$: $v_y=-15\sin(-2.1)=-15(-0.8632)=\boxed{12.95\ \text{m/s}}$
+\end{itemize}
+
+\section*{Q7 --- Sound intensity at 39 m from a 116-dB siren}
+At 6 m: $I_6 = 10^{-12}\cdot 10^{11.6} = 0.3981$ W/m\textsuperscript{2}. Inverse-square:
+\[ I_{39} = I_6(6/39)^2 = 0.3981(0.02367) = 9.422\times 10^{-3}\ \text{W/m}^2 = \boxed{9.42\ \text{mW/m}^2} \]
+
+\section*{Q8 --- Doppler, listener moving away}
+$v_L=-49$, $v_S=0$, $v=340$:
+\[ f_L = 439(340-49)/340 = 439(291)/340 = \boxed{375.7\ \text{Hz}} \]
+
+\section*{Q9 --- Granite sphere thermal expansion}
+$\beta = 3\alpha = 1.05\times 10^{-4}$ K\textsuperscript{-1}.
+\[ \Delta T = \frac{\Delta V}{\beta V_0} = \frac{10^{-3}}{(1.05\times 10^{-4})(1)} = \boxed{9.524\ ^\circ\text{C}} \]
+
+\section*{Q10 --- Iron in water, equilibrium temperature}
+$m_{Fe}c_{Fe}(90-T) = m_w c_w(T-10)$:
+\[ 9(444)(90-T) = 2(4190)(T-10) \]
+\[ 3996(90-T) = 8380(T-10) \]
+\[ 359{,}640 - 3996T = 8380T - 83{,}800 \Rightarrow 12{,}376T = 443{,}440 \]
+\[ T = \boxed{35.83\ ^\circ\text{C}} \]
+
+\section*{Q11 --- Combined gas law}
+\emph{Identical to Fall 2024 Q22 --- answer 261 kPa (Fall key).} $T_1=493.15$ K, $T_2=723.15$ K, $V_2=0.5V_1$.
+\[ p_2 = p_1(V_1/V_2)(T_2/T_1) = 89(2)(1.4664) = \boxed{261.0\ \text{kPa}} \]
+
+\section*{Q12 --- Translational KE of ideal gas}
+$K_{\text{tr}}=\tfrac32 nRT$, $T=296.15$ K:
+\[ K_{\text{tr}} = 1.5(7.2)(8.314)(296.15) = 26{,}579\ \text{J} = \boxed{26.58\ \text{kJ}} \]
+
+\section*{Q13 --- Isobaric work done by the gas}
+\[ W = p\,\Delta V = 50(1.2-1.8) = \boxed{-30\ \text{kJ}} \]
+(Negative: gas is compressed --- work done \textbf{on} it.)
+
+\section*{Q14 --- Isothermal expansion, $\Delta U$}
+For ideal gas at constant $T$: $\Delta U = \boxed{0\ \text{J}}$. Pressure and volume values are red herrings.
+
+\section*{Q15 --- Carnot engine [20 pts]}
+\begin{itemize}[leftmargin=*]
+  \item (b) $e = 1 - T_C/T_H = 1 - 305/799 = 1 - 0.3817 = \boxed{0.6183}$ (61.83\%)
+  \item (a) $W = e\cdot Q_H = 0.6183(2400) = \boxed{1484\ \text{J}}$
+\end{itemize}
+
+\section*{Q16 --- 11 kg water freezes at 0\textdegree C}
+\emph{Identical to Fall 2024 Q27 --- answer $-13.5$ kJ/K (Fall key).} Reversible isothermal heat removal at $T=273.15$ K, $Q=-mL_f$:
+\[ \Delta S = -mL_f/T = -11(3.35\times 10^5)/273.15 = -13{,}491\ \text{J/K} = \boxed{-13.49\ \text{kJ/K}} \]
+
+\section*{Q17 --- Two-mirror corner reflection \warn{} figure-dependent}
+$\phi=60^\circ$ between mirrors, $\theta=60^\circ$ incidence on m1. Triangle (corner, m1 bounce point, m2 bounce point) interior angles sum to $180^\circ$:
+\[ \beta = 180^\circ - \phi - (90^\circ-\theta) = 90^\circ + \theta - \phi = 90^\circ \]
+Ray hits m2 along its normal $\Rightarrow$ outgoing ray travels back along the normal:
+\[ \alpha = \boxed{0^\circ} \]
+(Retroreflector geometry; verify against figure orientation.)
+
+\section*{Q18 --- Light through oil layer onto water \warn{} figure-dependent}
+Snell at both interfaces; intermediate $n_{\text{oil}}$ cancels:
+\[ \sin\phi = \sin(33^\circ)/n_{\text{water}} = 0.5446/1.33 = 0.4095 \]
+\[ \phi = \boxed{24.18^\circ} \]
+
+\section*{Q19 --- Concave mirror, $s=18$, $f=8$ [20 pts]}
+$1/s' = 1/f - 1/s = 1/8 - 1/18 = 10/144$.
+\begin{itemize}[leftmargin=*]
+  \item (a) $s' = 144/10 = \boxed{14.4\ \text{cm}}$
+  \item (b) $m = -s'/s = -14.4/18 = \boxed{-0.8}$
+  \item (c) $s'>0 \Rightarrow$ \textbf{real}
+  \item (d) $m<0 \Rightarrow$ \textbf{inverted}
+\end{itemize}
+
+\section*{Q20 --- Diverging lens, $s=16$, $f=-12$ [20 pts]}
+$1/s' = 1/f - 1/s = -1/12 - 1/16 = -28/192$.
+\begin{itemize}[leftmargin=*]
+  \item (a) $s' = -192/28 = \boxed{-6.857\ \text{cm}}$
+  \item (b) $m = -s'/s = -(-6.857)/16 = \boxed{+0.4286}$
+  \item (c) $s'<0 \Rightarrow$ \textbf{virtual}
+  \item (d) $m>0 \Rightarrow$ \textbf{upright}
+\end{itemize}
+
+\section*{Q21 --- Refraction with critical angle given}
+Critical angle is from inside the liquid: $n_{\text{liq}}\sin(43.5^\circ) = 1$, so $n_{\text{liq}} = 1/\sin(43.5^\circ) = 1.4524$.
+
+Now ray in air at $28^\circ$ refracts into liquid:
+\[ \sin\theta_r = \sin(28^\circ)/1.4524 = 0.4695/1.4524 = 0.3232 \]
+\[ \theta_r = \boxed{18.85^\circ} \]
+
+\section*{Q22 --- Bubble enhancement, 471 nm, $n=1.5$}
+\emph{Identical to Fall 2024 Q31 --- answer 78.5 nm (Fall key).} 1 net flip $\Rightarrow$ constructive at $2nt=(m+\tfrac12)\lambda$:
+\[ t_{\min} = \lambda/(4n) = 471/(4\cdot 1.5) = \boxed{78.5\ \text{nm}} \]
+
+\section*{Q23 --- Single-slit, find $\lambda$ from $m=2$ minimum}
+$y_m = m\lambda L/a$:
+\[ \lambda = \frac{ya}{mL} = \frac{(7.3\times 10^{-3})(3.1\times 10^{-4})}{2\cdot 2} = 5.658\times 10^{-7}\ \text{m} = \boxed{565.8\ \text{nm}} \]
+
+\section*{Q24 --- Double-slit central-max width}
+\emph{Identical to Fall 2024 Q32 --- answer 3.376 mm (Fall key).} Width $\Delta y = \lambda L/d$:
+\[ \Delta y = (418\times 10^{-9})(2.1)/(2.6\times 10^{-4}) = \boxed{3.376\ \text{mm}} \]
+
+\section*{Q25 --- Mars space telescope crater resolution}
+\emph{Identical to Fall 2024 Q33 --- answer 13.33 m (Fall key).}
+\[ \theta_{\min} = 1.22(557\times 10^{-9})/0.045 = 1.510\times 10^{-5}\ \text{rad} \]
+\[ d_{\min} = \theta_{\min}\cdot L = (1.510\times 10^{-5})(883{,}000) = \boxed{13.33\ \text{m}} \]
+
+\section*{Q26 --- Bragg first-order diffraction}
+Grazing angle: $2d\sin\theta = m\lambda$, $m=1$:
+\[ d = \lambda/(2\sin 23^\circ) = 0.54/(2\cdot 0.3907) = \boxed{0.691\ \text{nm}} \]
+
+\medskip
+\noindent\emph{Independently computed; cross-check Q17 and Q18 against the figure. Q6, Q11, Q16, Q22, Q24, Q25 confirmed against the official Fall 2024 answer key for the identical scenarios.}
+
+\end{document}

@@ -1,0 +1,110 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\newcommand{\checkmk}{\ensuremath{\checkmark}}
+
+\title{ME19: Heat Transfer (Thermodynamic Processes) --- Walkthrough}
+\author{}\date{}
+
+\begin{document}\maketitle
+
+\section*{Sign convention \& tools}
+$W_{\text{by}} = $ work done by gas; $W_{\text{on}} = -W_{\text{by}}$. First law: $\Delta U = Q - W_{\text{by}} = Q + W_{\text{on}}$.
+\begin{itemize}[leftmargin=*]
+\item $W_{\text{by}} = \int p\,dV$ (area under the path)
+\item Isobaric: $W = p\Delta V$, $\Delta U = (f/2)nR\Delta T = (f/2)p\Delta V$
+\item Isochoric: $W=0$, $Q=\Delta U$
+\item Isothermal (ideal): $\Delta U=0$, $Q = W_{\text{by}} = nRT\ln(V_f/V_i) = p_iV_i\ln(V_f/V_i)$
+\item Adiabatic: $Q=0$, $pV^\gamma=\text{const}$, $W_{\text{by}}=(p_iV_i-p_fV_f)/(\gamma-1)$, $\Delta U=-W_{\text{by}}$
+\item Monatomic: $\gamma = 5/3$, $f=3$. Diatomic: $\gamma = 7/5$, $f=5$.
+\end{itemize}
+
+\section*{Q1 --- Isobaric compression, work \emph{on} the gas}
+\emph{A gas is compressed at fixed pressure from a larger volume to a smaller one. The area under the path is a rectangle, and because the surroundings push inward, $W_{\text{on}} > 0$.}
+
+$W_{\text{by}} = p\Delta V = 197(-2.1) = -413.7$ kJ; $W_{\text{on}} = \boxed{+413.7\ \text{kJ}}$ \checkmk
+
+\section*{Q2 --- Step-down PV diagram}
+\emph{The gas expands at high pressure, drops vertically (isochoric, no work), then expands again at low pressure. Total work by the gas is the sum of the two isobaric rectangles.}
+
+$W_{\text{by}} = p_2(V_2-V_1) + p_1(V_3-V_2) = 212(1.1) + 91(1) = \boxed{324.2\ \text{kJ}}$ \checkmk
+
+\section*{Q3 --- V-shape ramp (PV\_5)}
+\emph{Pressure ramps down linearly while volume grows $V_1 \to V_2$, then ramps back up while volume grows $V_2 \to V_3$. Both legs share average height $\tfrac12(p_1+p_2)$, so the trapezoids combine across the full $V_1 \to V_3$ span.}
+
+$(V_1,p_2)\to(V_2,p_1)\to(V_3,p_2)$:
+$W_{\text{by}} = \tfrac12(p_1+p_2)(V_3-V_1) = 0.5(587)(3.8) = +1115.3$; $W_{\text{on}} = \boxed{-1115.3\ \text{kJ}}$ \checkmk
+
+\section*{Q4 --- First law}
+\emph{The gas absorbs 644 J of heat and spends 62\% of it doing work on the environment. Whatever isn't spent on work raises the internal energy.}
+
+$\Delta U = Q - 0.62Q = 644(0.38) = \boxed{244.72\ \text{J}}$ \checkmk
+
+\section*{Q5 --- Heat at constant volume (monatomic)}
+\emph{A monatomic gas in a rigid sealed container has its pressure raised. Volume can't change so $W=0$, and all heat goes into internal energy. For monatomic gas $\Delta U = (3/2)nR\Delta T = (3/2)V\Delta p$.}
+
+Mono iso V: $Q = \Delta U = (3/2)V\Delta p = 1.5(1.1)(92) = \boxed{151.8\ \text{kJ}}$ \checkmk
+
+\section*{Q6 --- Work at constant volume}
+\emph{No volume change means no displacement against pressure---the gas can't do any work no matter what else changes.}
+
+Iso V $\Rightarrow W = \boxed{0}$ \checkmk
+
+\section*{Q7 --- Diatomic isobaric compression, $\Delta U$}
+\emph{A diatomic gas with $f=5$ degrees of freedom is squeezed at constant pressure. Compression cools it ($\Delta V < 0 \Rightarrow \Delta T < 0$), so $\Delta U < 0$.}
+
+Diatomic iso P: $\Delta U = (5/2)p\Delta V = 2.5(225)(-2.2) = \boxed{-1237.5\ \text{kJ}}$ \checkmk
+
+\section*{Q8 --- Monatomic isobaric expansion, $W_{\text{by}}$}
+\emph{A monatomic gas expands at constant pressure (think piston under fixed weight). Work by the gas is just the rectangle $p\Delta V$.}
+
+$W_{\text{by}} = p\Delta V = 130(2.8) = \boxed{364\ \text{kJ}}$ \checkmk
+
+\section*{Q9 --- Isothermal expansion, work \emph{on} the gas}
+\emph{The gas expands while a heat bath holds $T$ fixed, so $\Delta U = 0$ and all absorbed heat is spent on work. The gas does positive work; $W_{\text{on}}$ is the negative of that.}
+
+Iso T: $W_{\text{by}} = p_iV_i\ln(V_f/V_i) = 159(1.3)\ln(2/1.3) = +89.04$ kJ; $W_{\text{on}} = \boxed{-89.04\ \text{kJ}}$ \checkmk
+
+\section*{Q10 --- Isothermal compression}
+\emph{Same isothermal setup, but the gas is squeezed from 3 to 1.2 m$^3$. Work by the gas is negative because volume shrinks; the gas must dump heat to the bath to keep $T$ steady.}
+
+$W_{\text{by}} = 120(3)\ln(0.4) = \boxed{-329.86\ \text{kJ}}$ \checkmk
+
+\section*{Q11 --- Diatomic adiabatic compression, $p_f$}
+\emph{A diatomic gas is compressed fast enough that no heat escapes. Pressure rises more steeply than in an isothermal compression because the gas also heats; the adiabatic relation $pV^\gamma = $ const with $\gamma = 7/5$ captures both.}
+
+Diatomic adi: $p_f = 81(2.8/1.4)^{1.4} = 81(2.6390) = \boxed{213.76\ \text{kPa}}$ \checkmk
+
+\section*{Q12 --- Mono adiabatic compression}
+\emph{A monatomic gas is compressed by a factor of 3 in volume with no heat exchanged. All the work done on the gas becomes internal energy, raising $T$ and $p$ sharply.}
+
+$p_f = 10^5(3)^{5/3} = 10^5(6.240) = \boxed{624\ \text{kPa}}$ \checkmk
+$W_{\text{by}} = (10^5(3) - 6.24\times10^5)/0.6667 = -486$ kJ; $\Delta U = \boxed{+486\ \text{kJ}}$ \checkmk
+
+\section*{Q13 --- Mono adiabatic expansion}
+\emph{The same monatomic gas now expands adiabatically. Pushing the piston out spends internal energy with no replacement heat, so $\Delta U$ is negative.}
+
+$p_f = 304(1.4/2.6)^{5/3} = 304(0.3563) = 108.32$ kPa.
+$W_{\text{by}} = (304\cdot 1.4 - 108.32\cdot 2.6)/0.6667 = +215.87$ kJ; $\Delta U = \boxed{-215.87\ \text{kJ}}$ \checkmk
+
+\section*{Q14 --- Straight ramp on a $pV$ diagram}
+\emph{The state moves along a straight line from $(3, 146)$ to $(5, 541)$. Work by the gas is the area under that segment---a trapezoid with parallel sides $p_i$ and $p_f$.}
+
+$W_{\text{by}} = \tfrac12(146+541)(2) = \boxed{687\ \text{kJ}}$ \checkmk
+
+\section*{Q15 --- First-law statements}
+\emph{Each statement is a first-law identity. Apply $\Delta U = Q - W_{\text{by}} = Q + W_{\text{on}}$ and the named-process constraint.}
+
+(a) Iso V: $W=0 \Rightarrow \Delta U = Q$. \textbf{True}.
+(b) Iso T: $\Delta U = 0 \Rightarrow Q = W_{\text{by}}$. \textbf{True}.
+(c) ``$\Delta U = Q - W_{\text{on}}$'' has the wrong sign---should be $Q + W_{\text{on}}$. \textbf{False}.
+(d) Adi: $Q=0 \Rightarrow \Delta U = -W_{\text{by}} = W_{\text{on}}$. \textbf{True}.
+
+\section*{Q16 --- Name the process}
+\emph{Each ideal-gas process is defined by which quantity is held fixed (or by $Q=0$).}
+
+$\Delta U = 0$ (i.e.\ $\Delta T = 0$): \textbf{isothermal}. $W = 0$ (no volume change): \textbf{isochoric}. $Q = 0$: \textbf{adiabatic}.
+
+\bigskip\noindent\textbf{All numeric answers match source key.}
+\end{document}

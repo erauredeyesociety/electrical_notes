@@ -3,9 +3,24 @@
 One-page map of every topic in the course. Use this as a checklist when prepping for the comprehensive final.
 
 For the full theory narrative of each midterm, see:
+
 - [../midterm_01/review.md](../midterm_01/review.md)
 - [../midterm_02/review.md](../midterm_02/review.md)
 - [./review.md](./review.md)
+
+---
+
+## Practice final exams (added 2026-04)
+
+Two real practice finals from previous years are now in the `midterm_03/` folder, with worked solution walkthroughs:
+
+- **Fall 2024 (DRAFT):** [`test_finalexam_DRAFT_ps160_2024_fall.pdf`](./test_finalexam_DRAFT_ps160_2024_fall.pdf)
+  - Answer key: [`test_final_ps160_2024_fall_answers.pdf`](./test_final_ps160_2024_fall_answers.pdf)
+  - Walkthrough: [`../MEs/solutions/midterm03_fall2024_practice_solutions.md`](../MEs/solutions/midterm03_fall2024_practice_solutions.md)
+- **Spring 2024:** [`test_finalexam_ps160_2024_spring.pdf`](./test_finalexam_ps160_2024_spring.pdf)
+  - Walkthrough: [`../MEs/solutions/midterm03_spring2024_practice_solutions.md`](../MEs/solutions/midterm03_spring2024_practice_solutions.md)
+
+**Important note on the official equation sheet:** The fall 2024 PDF includes the official equation sheet on pages 2--3. It covers **only Midterm 1 and Midterm 2 material** (Modules 12, 14--20). Nothing from Modules 33--36 is provided. Memorize all optics formulas. See [`equation_gaps.md`](./equation_gaps.md) for the full on-sheet vs.\ must-memorize audit.
 
 ---
 

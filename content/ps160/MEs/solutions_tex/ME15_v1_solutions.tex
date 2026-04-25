@@ -1,0 +1,90 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\newcommand{\checkmk}{\ensuremath{\checkmark}}
+
+\title{ME15: Waves --- Walkthrough}
+\author{}\date{}
+
+\begin{document}\maketitle
+
+\section*{Core equations}
+\begin{itemize}[leftmargin=*]
+\item $v=f\lambda$, $\omega = 2\pi f$, $k = 2\pi/\lambda$, $T=1/f$, $v=\omega/k$
+\item Wave equation $\partial_t^2 y = v^2\,\partial_x^2 y$
+\item String: $v=\sqrt{T/\mu}$, $\mu = m/L$
+\item Fixed-fixed string: $f_n = nv/(2L)$
+\item Standing-wave geometry: node--node $= \lambda/2$; node--antinode $= \lambda/4$
+\item Power on string: $P_{\text{avg}} = \tfrac12 \mu\omega^2 A^2 v$
+\end{itemize}
+
+\section*{Q1 --- Frequency of 564\,nm light}
+\emph{Light obeys $c = f\lambda$. Compute $f = c/\lambda$ and report in units of $10^{12}$~Hz as the question asks.}
+
+$f = c/\lambda = 3.0\times10^8/564\times10^{-9} = 5.315\times10^{14}\ \text{Hz} = \boxed{531.54\times 10^{12}\ \text{Hz}}$ \checkmk
+
+\section*{Q2 --- $v$, $\omega$, $T$, $k$ from $f$ and $\lambda$}
+\emph{A traveling wave is fully specified by $f$ and $\lambda$: speed $v = f\lambda$, angular frequency $\omega = 2\pi f$, period $T = 1/f$, wave number $k = 2\pi/\lambda$. Each is a different repackaging of the same information.}
+
+$v=151$ m/s, $\omega=226$ rad/s, $T=0.0278$ s, $k=1.50$ rad/m. \checkmk
+
+\section*{Q3 --- Wave equation $\partial_t^2 y - \beta^2\partial_x^2 y = 0$, exponential form}
+\emph{Plug $y = A e^{\omega t + kx}$ into the PDE: each time derivative pulls down $\omega$, each spatial derivative pulls down $k$. The equation becomes $(\omega^2 - \beta^2 k^2)y = 0$, so $\beta = \omega/k$ --- the same dispersion relation as for cosines.}
+
+$\partial_t^2 y = \omega^2 y$, $\partial_x^2 y = k^2 y$ $\Rightarrow$ $\beta = \omega/k = 20/0.8 = \boxed{25}$ \checkmk
+
+\section*{Q4 --- $y = 5\cos(3t + 0.5x - 2.1)$}
+\emph{Match coefficients with $A\cos(\omega t + kx + \phi)$. Frequency/period from $\omega$, wavelength from $k$, propagation speed $v = \omega/k$. The transverse speed at a point is $\partial y/\partial t$ evaluated there --- a particle's velocity on the string, not the wave's propagation speed.}
+
+$A = 5$, $\omega = 3$, $k = 0.5$, $\phi = -2.1$, $f = 0.477$ Hz, $T = 2.09$ s, $\lambda = 12.6$ m, $v = 6.0$ m/s.
+Transverse speed at $(0,0)$: $\partial_t y = -15\sin(-2.1) = \boxed{12.9\ \text{m/s}}$ \checkmk
+
+\section*{Q5 --- Average power on a wire}
+\emph{A wave on a string transports energy at $P_{\text{avg}} = \tfrac12 \mu \omega^2 A^2 v$. Compute $\mu = m/L$ and $v = \sqrt{T/\mu}$ first, then plug in.}
+
+$\mu = 0.012/0.7 = 0.01714$ kg/m, $v = \sqrt{514/0.01714} = 173.16$ m/s, $\omega = 2\pi(123) = 772.83$ rad/s.
+\[ P = \tfrac12\mu\omega^2 A^2 v = 0.5(0.01714)(597270)(6.4\times10^{-5})(173.16) = \boxed{56.73\ \text{W}}\ \checkmk \]
+
+\section*{Q6 --- Wavelength from node spacing}
+\emph{Adjacent nodes in a standing wave are $\lambda/2$ apart. Nodes 1 through 6 span 5 intervals (not 6), so $5\lambda/2 = 4.89$ m.}
+
+$5\lambda/2 = 4.89 \Rightarrow \lambda = \boxed{1.956\ \text{m}}$ \checkmk
+
+\section*{Q7 --- Third harmonic from fourth}
+\emph{For a string fixed at both ends, $f_n = n f_1$. Back out $f_1 = f_4/4$, then $f_3 = 3 f_1$.}
+
+$f_n = nf_1 \Rightarrow f_1 = 60.5$ Hz; $f_3 = \boxed{182\ \text{Hz}}$ \checkmk
+
+\section*{Q8 --- Tension from fundamental frequency}
+\emph{From $f_1 = v/(2L)$ get $v$; from $v = \sqrt{T/\mu}$ get $T = \mu v^2$ with $\mu = m/L$.}
+
+$v = 2Lf_1 = 85.6$ m/s, $\mu = 0.165$ kg/m, $T = \mu v^2 = \boxed{1209\ \text{N}}$ \checkmk
+
+\section*{Q9 --- Length from tension and fundamental}
+\emph{Combine $v = \sqrt{TL/m}$ with $v = 2Lf_1$, square, and solve for $L$: $L = T/(4 m f_1^2)$. Convert mass from grams to kg.}
+
+$L = T/(4mf_1^2) = 759/(4\cdot 0.006\cdot 318^2) = \boxed{0.3127\ \text{m}}$ \checkmk
+
+\section*{Q10 --- Standing-wave geometry}
+\emph{Each ``loop'' between adjacent nodes spans $\lambda/2$, with an antinode in the middle. So node--antinode $= \lambda/4$. The fundamental has exactly one such loop spanning the string, so $L = \lambda_1/2$.}
+
+Node--antinode = \textbf{one-quarter} wavelength; string length = \textbf{one-half} wavelength at $f_1$.
+
+\section*{Q11 --- Transverse vs longitudinal}
+\emph{A wave's vibration is either perpendicular to its propagation (string wiggle) or parallel (sound compression).}
+
+\textbf{Transverse} (vibration $\perp$ propagation), \textbf{longitudinal} (vibration $\parallel$ propagation).
+
+\section*{Q12 --- Guitar string scaling}
+\emph{$v = \sqrt{T/\mu}$ scales as $\sqrt{T}$ and as $1/\sqrt{\mu}$. With $L$ fixed, $f_1 = v/(2L)$ scales the same way as $v$.}
+
+Doubling $T$: $v$ \textbf{increases} (factor $\sqrt2$), $f$ \textbf{increases}. Quadrupling mass at fixed $L$: $\mu \to 4\mu$, $v$ \textbf{decreases by one-half}, $f$ \textbf{decreases by one-half}.
+
+\section*{Q13 --- Name of $k = 2\pi/\lambda$}
+\emph{$k$ counts radians of phase per meter ($2\pi$ rad per wavelength).}
+
+$k$ is the \textbf{wave number} / \textbf{angular wavenumber}.
+
+\bigskip\noindent\textbf{All numeric answers match source key.}
+\end{document}
