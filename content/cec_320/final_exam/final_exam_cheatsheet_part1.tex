@@ -1133,9 +1133,77 @@ A2=0x378{\mbox{<}}{\mbox{<}}24, B2=0x288{\mbox{<}}{\mbox{<}}24 $\to$ C=1.\end{qp
 \begin{qp}\textbf{Q3 P6} sign-ext at call: \cee{int8\_t 0x7E}$\to$R0=0x7E; \cee{int8\_t 0x81}$\to$R1=0xFFFFFF81.\end{qp}
 
 % ==========================================================
-\section{Quiz 4 Problems (CCS+LDR/STR)}
+% [SEMESTER QZ4] Spring-2026 Quiz 4 (qz-26a) - LDR/STR + flow ctrl
+% Source: qz-26a-qz4-ldr-str-n-flow-ctrl-soln-26-04.pdf
+\section{Quiz 4 (Spring 2026, 105 pts)}
 
-\begin{qp}\textbf{Q4 P1} \cee{if (a{\mbox{>}}=0) return x; else return y;}
+Memory at 0x2000\_0000: bytes \texttt{88 89 8A 8B 8C 8D 8E 8F 70 71 72 73 74 75 76 77}.
+
+\begin{qp}\textbf{P1a (8pts)} task1: \asm{ldrsh r2,[r0,\#4]} loads halfword 0x8D8C $\to$ r2 = \textbf{0xFFFF8D8C} (sign-ext, MSB=1). \asm{ldrsh r3,[r0,\#8]} loads 0x7170 $\to$ r3 = 0x00007170.\end{qp}
+
+\begin{qp}\textbf{P1b (8pts)} task2: \asm{ldrsb r2,[r0,\#2]!} byte 0x8A $\to$ r2 = \textbf{0xFFFFFF8A}, r0=0x...0002. \asm{ldrsb r3,[r0,\#4]!} byte at 0x...0006 = 0x8E $\to$ r3 = \textbf{0xFFFFFF8E}, r0=0x...0006.\end{qp}
+
+\begin{qp}\textbf{P1c (8pts)} After task1 stores (r2 then r3 with post-idx \#4) at 0x2000\_0020: bytes \texttt{8C 8D FF FF | 70 71 00 00}.\end{qp}
+
+\begin{qp}\textbf{P1d (6pts)} \cee{val = *(ptr+i)} for \cee{uint16\_t*}:
+\begin{lstlisting}
+ldrh r2,[r0,r1,lsl #1]   @ scale i*2
+\end{lstlisting}
+LSL=$\log_2$(sizeof). Index in elements; addr in bytes.\end{qp}
+
+\begin{qp}\textbf{P2 (30pts)} Three C-pointer ops on \cee{int16\_t *src,*dst}:
+\begin{lstlisting}
+@ *dst++ = *src++;
+ldrsh r2,[r0],#2
+strh  r2,[r1],#2
+@ *dst++ = *++src;
+ldrsh r2,[r0,#2]!
+strh  r2,[r1],#2
+@ *dst++ = ++*src;     @ inc memory!
+ldrsh r2,[r0]
+add   r2,#1
+strh  r2,[r0]          @ writeback
+strh  r2,[r1],#2
+\end{lstlisting}
+\textbf{Trap:} \cee{++*src} modifies the dereferenced value at memory --- needs explicit STRH writeback.\end{qp}
+
+\begin{qp}\textbf{P3 (20pts)} LDRD/STRD round trip. \cee{ipt[i]=i<{<}4} $\to$ words 0x30201000, 0x70605040, 0xB0A09080, 0xF0E0D0C0.
+\begin{lstlisting}
+ldrd  r2,r3,[r0,#8]!   @ r2=0xB0A09080, r3=0xF0E0D0C0
+str   r3,[r1,#0]        @ opt[0]=0xF0E0D0C0
+str   r2,[r1,#4]        @ opt[1]=0xB0A09080
+sub   r0,r0,#8          @ rewind
+ldrsh r3,[r0],#4        @ r3=0x00001000
+ldrsh r2,[r0,#4]!       @ r2=0xFFFF9080 (sign-ext)
+strd  r2,r3,[r1,#8]!    @ opt[2..3]
+bx    lr
+\end{lstlisting}
+Outputs: 0xF0E0D0C0 / 0xB0A09080 / 0xFFFF9080 / 0x1000.\\
+\textbf{Trap:} LDRD Rt=low addr (LSW), Rt2=high addr (MSW). Order matters.\end{qp}
+
+\begin{qp}\textbf{P4 (25pts)} \cee{if (x{\mbox{<}}={-}20 || x{\mbox{>}}=20) return *(ptrA+1)*4; else return *(ptrB+2)/4;}
+\begin{lstlisting}
+  cmp   r0,#-20
+  ble   then
+  cmp   r0,#20
+  blt   else_       @ -20<x<20 -> else
+then:
+  ldr   r0,[r1,#4]  @ *(ptrA+1) = +4 bytes
+  lsl   r0,#2       @ * 4
+  b     end
+else_:
+  ldr   r0,[r2,#8]  @ *(ptrB+2) = +8 bytes
+  lsr   r0,#2       @ /4 unsigned (use ASR if signed!)
+end:
+  bx    lr
+\end{lstlisting}
+\textbf{Trap:} OR short-circuits with first \asm{ble} to \texttt{then}. Ptr offsets in bytes ($k\cdot$sizeof).\end{qp}
+
+% ==========================================================
+% [PRIOR SEMESTER PRACTICE] qz-25b material kept for additional practice
+\section{Practice Quiz (Prior Sem qz-25b)}
+
+\begin{qp}\textbf{Q5 P1} \cee{if (a{\mbox{>}}=0) return x; else return y;}
 \begin{lstlisting}
 mp_selector:     @ a,x,y = r0,r1,r2
   cmp   r0,#0
@@ -1147,15 +1215,10 @@ mp_selector:     @ a,x,y = r0,r1,r2
   bx    lr
 \end{lstlisting}\end{qp}
 
-\begin{qp}\textbf{Q4 P2} 5-bit ARM flags, $({-}15){-}({-}16)$: U: $17{-}16{=}1$, no borrow, \textbf{C=1}; S: $1\in[{-}16,15]$, \textbf{V=0}. Binary 0b00001 (N=0,Z=0).\\
-$16{-}18$: U: needs borrow, \textbf{C=0}; S: $-2\in[-16,15]$, \textbf{V=0}. Binary 0b11110 (N=1,Z=0).\end{qp}
+\begin{qp}\textbf{Q5 P2} 5-bit ARM flags, $({-}15){-}({-}16)$: U: $17{-}16{=}1$, no borrow, \textbf{C=1}; S: $1\in[{-}16,15]$, \textbf{V=0}. Binary 0b00001.\\
+$16{-}18$: U: needs borrow, \textbf{C=0}; S: $-2\in[-16,15]$, \textbf{V=0}. Binary 0b11110.\end{qp}
 
-\begin{qp}\textbf{Q4 P3} LDR pre/post + scaled. Given mem 0x2000\_0000..000F = 0x80..0x87,0x78..0x7F.
-task1 (\asm{[r0,\#4]!} twice): r2=0x8786{\textunderscore}8584, r3=0x7B7A{\textunderscore}7978.
-task2 (\asm{[r0],\#8} then \asm{[r0,r2,lsl \#2]} w/ r2={-}1): first r3=0x8382{\textunderscore}8180; after postinc r0=0x2000{\textunderscore}0008; second r3 reads $0x2000{\textunderscore}0008{+}({-}4){=}0x2000{\textunderscore}0004 =$ 0x8786{\textunderscore}8584.
-Store dest mem@0x20000030: 0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87.
-Prototypes: \cee{void task1(int *p1,int *p2); void task2(int *,int *,int);}.
-C for task1: \cee{*p2 = *++p1; *(p2+1) = *++p1;}\end{qp}
+\begin{qp}\textbf{Q5 P3} LDR pre/post + scaled. Mem 0x2000\_0000..000F = 0x80..0x87,0x78..0x7F. Two tasks ($[r0,\#4]!$ twice; $[r0],\#8$ then $[r0,r2,lsl \#2]$ with r2=$-1$). Pre-index updates BEFORE; signed reg-offset can be negative.\end{qp}
 
 % ==========================================================
 \section{Quiz 6a (flow ctrl)}
@@ -2082,80 +2145,8 @@ r0 $=$ 0, r1 $\ne$ 0 (s) & N depends on r1 sign \\
 
 \textbf{Branch chooser:} if C gives \cee{==}/\cee{!=}, just use EQ/NE --- works for both signed and unsigned.
 
-% ==========================================================
-\section{Calling-Convention Templates}
-
-\subsection{Leaf fn (no BL, no R4+ used)}
-\begin{lstlisting}
-leaf_fn:
-  @ use R0-R3, R12 freely
-  @ compute result in R0
-  bx  lr
-\end{lstlisting}
-
-\subsection{Leaf fn but uses R4 for loop}
-\begin{lstlisting}
-leaf_with_r4:
-  push {r4}          @ save callee-saved
-  @ ...
-  pop  {r4}
-  bx   lr
-\end{lstlisting}
-
-\subsection{Stem fn (calls another fn)}
-\begin{lstlisting}
-stem_fn:
-  push {r4-r7,lr}    @ save callee + LR
-  mov  r4,r0         @ stash caller's args
-  mov  r5,r1
-  @ ... prep R0-R3 for call ...
-  bl   inner_fn
-  @ ... use result ...
-  pop  {r4-r7,pc}    @ restore + return
-\end{lstlisting}
-
-\subsection{Stem calling in loop}
-\begin{lstlisting}
-stem_loop:
-  push {r4-r7,lr}
-  mov  r4,r0          @ base ptr
-  mov  r5,r1          @ N
-  mov  r6,#0          @ i
-lp:
-  cmp  r6,r5
-  bge  end
-  ldr  r0,[r4,r6,lsl #2]
-  bl   process
-  @ R0 = result; store it
-  str  r0,[r4,r6,lsl #2]
-  add  r6,#1
-  b    lp
-end:
-  pop  {r4-r7,pc}
-\end{lstlisting}
-
-% ==========================================================
-\section{Operator Precedence Cheat (C)}
-
-Highest $\to$ lowest:
-\begin{enumerate}
-\item \cee{()} \cee{[]} \cee{->} \cee{.} \cee{postfix ++/--}
-\item prefix \cee{++/--} \cee{+ -} \cee{! \textasciitilde{}} \cee{*} (deref) \cee{\&} \cee{(type)} \cee{sizeof}
-\item \cee{* / \%}
-\item \cee{+ -}
-\item \cee{{\mbox{<}}{\mbox{<}} {\mbox{>}}{\mbox{>}}}
-\item \cee{{\mbox{<}} {\mbox{<}}= {\mbox{>}} {\mbox{>}}=}
-\item \cee{== !=}
-\item \cee{\&} \cee{\textasciicircum} \cee{|}  (bitwise)
-\item \cee{\&\&} \cee{||}
-\item \cee{? :}
-\item \cee{= += -= ...}
-\item \cee{,}
-\end{enumerate}
-
-Right-to-left for L2 (prefix ops), L11 (assignment), L12 (ternary). Rest LTR.
-
-\textbf{Common trap:} \cee{*p++} = \cee{*(p++)} not \cee{(*p)++} (postfix has higher precedence than deref). Use \cee{(*p)++} if you mean value-increment.
+% [TRIM-Part1] Calling-Convention Templates removed (covered by Function Calls section)
+% [MOVE-Part2] Operator Precedence moved to Part 2 (C reference section)
 
 % ==========================================================
 \section{HW5 Walkthrough (all 5 problems)}
@@ -2382,22 +2373,7 @@ add r2,#1               @ r2=3
 After: R0 unchanged, R2=3, R3=0xB0A09080.
 
 % ==========================================================
-\section{Bonus: Bit-Twiddle Idioms}
-\begin{tabular}{@{}ll@{}}
-\toprule
-Idiom & ASM \\
-\midrule
-test bit n & \asm{tst r0,\#1,lsl \#n} \\
-isolate low n bits & \asm{ubfx r0,r1,\#0,\#n} \\
-isolate top n bits & \asm{lsr r0,r1,\#(32-n)} \\
-clear low n bits & \asm{bfc r0,\#0,\#n} \\
-swap nibbles in byte & \asm{ror r0,r1,\#4} (limited) \\
-swap halves of word & \asm{ror r0,r1,\#16} \\
-abs (signed) & \asm{cmp r0,\#0/it lt/rsblt r0,\#0} \\
-sign of signed n & \asm{asr r0,r1,\#31} (-1 or 0) \\
-count zero bits up to LSB & \asm{rbit/clz} (rev+CLZ) \\
-\bottomrule
-\end{tabular}
+% [TRIM-Part1] Bit-Twiddle Idioms moved to Part 2 reference section
 
 % ==========================================================
 \section{Common ASM-File Skeleton}
@@ -2597,22 +2573,7 @@ ldrb r0,[r1],#1
 strb r0,[r2],#1
 \end{lstlisting}
 
-% ==========================================================
-\section{Conditional Pre/Post LDR Inside IT}
-
-Both \texttt{LDR\{cc\}} and \texttt{STR\{cc\}} support pre/post-index inside IT blocks. Pattern from HW11 P1 P3:
-
-\begin{lstlisting}
-  cmp     r0,r1
-  ittee   le
-  ldrle   r0,[r3],#4    @ post-idx, T
-  asrle   r0,r0,#1
-  ldrshgt r0,[r2,#2]!   @ pre-idx, E
-  lslgt   r0,r0,#1
-  bx      lr
-\end{lstlisting}
-
-\textbf{Suffix order:} \asm{<insn><sufix><cc>} for shifts; \asm{<insn><cc>} for plain. So \asm{ldrshgt} = LDRSH on GT.
+% [TRIM-Part1] Conditional Pre/Post LDR section removed (covered in IT Blocks section)
 
 % ==========================================================
 \section{Loops --- Detailed Count}
@@ -2647,55 +2608,7 @@ For an N-element loop with:
 
 \textbf{Trade:} downto uses CBZ (no flags churn) and single SUBS. Up-counting needs CMP each iter.
 
-% ==========================================================
-\section{Switch Variants}
-
-\subsection{Naive CMP/BEQ ladder}
-\begin{lstlisting}
-  cmp r0,#65    @ 'A'
-  beq case_a
-  cmp r0,#66
-  beq case_b
-  cmp r0,#67
-  beq case_c
-  b   default
-\end{lstlisting}
-
-\subsection{Stacked-label fall-through}
-\begin{lstlisting}
-case_a:           @ no insn here = falls through
-case_b:
-case_c:
-  ldr r0,=80     @ same body for A, B, C
-  b   end
-\end{lstlisting}
-
-\subsection{TBB jump table (O(1))}
-\begin{lstlisting}
-  cmp r0,#3
-  bge default
-  adr r1,tbl
-  tbb [r1,r0]    @ PC = PC+4+2*tbl[r0]
-case_0:
-  @ ...
-  b   end
-case_1:
-  @ ...
-  b   end
-case_2:
-  @ ...
-  b   end
-.align 1
-tbl:
-  .byte (case_0-tbl)/2
-  .byte (case_1-tbl)/2
-  .byte (case_2-tbl)/2
-\end{lstlisting}
-
-\subsection{TBH (16-bit table, longer jumps)}
-\begin{lstlisting}
-  tbh [r1,r0,LSL #1]   @ table is .hword
-\end{lstlisting}
+% [TRIM-Part1] Switch Variants removed (covered in flow-ctrl switch section)
 
 % ==========================================================
 \section{C--ASM Pitfall Quiz}
@@ -2737,50 +2650,8 @@ tbl:
 \textbf{A:} 0xEF (only low byte).
 
 % ==========================================================
-\section{All Q3/Q4/Q6a Problems --- One-Liner Cheats}
-
-\textbf{Q3 P1} 32-bit signed return $-2$ $\to$ R0 = \textbf{0xFFFFFFFE}.\\
-\textbf{Q3 P2} 64-bit add C-flag test design: low-word sum must cross $2^{32}$ for one case, not for the other.\\
-\textbf{Q3 P3} \asm{push \{r4,r8,r6\}} on SP=0x1020 $\to$ SP=0x1014; R4@1014, R6@1018, R8@101C.\\
-\textbf{Q3 P4} $A=k\cdot B/8$ in one Op2: factor $k/8 = 1\pm 1/2^n$ $\to$ \asm{add/sub r0,r1,r1,asr \#n}.\\
-\textbf{Q3 P5} BIC+ORR splice: \cee{a \&= \textasciitilde(15{\mbox{<}}{\mbox{<}}8); a |= (b\&15){\mbox{<}}{\mbox{<}}8;}\\
-\textbf{Q3 P6} \cee{int8\_t 0x81} $\to$ R1 = \textbf{0xFFFFFF81}; \cee{int8\_t 0x7E} $\to$ R0 = 0x7E.\\
-\textbf{Q4 P1} \cee{if(a{\mbox{>}}=0) ret x else ret y;} $\to$ \asm{cmp r0,\#0 / blt .else / mov r0,r1 / bx lr}.\\
-\textbf{Q4 P2} 5-bit flags: $({-}15){-}({-}16)$: C=1, V=0; $16-18$: C=0, V=0.\\
-\textbf{Q4 P3} \asm{[r0,\#4]!} pre-idx; \asm{[r0],\#8} post-idx; \asm{[r0,r2,lsl \#2]} signed scaled (r2=$-1$ $\to$ $-4$ bytes).\\
-\textbf{Q6a P1} LDRD pre-idx 8 + LDRSB sign-ext (0xB0 $\to$ 0xFFFFFFB0).\\
-\textbf{Q6a P2} Saturate $[-5,5]$: 2 \texttt{cmp} + 2 \texttt{b}.\\
-\textbf{Q6a P3} Conditional sum: standard array-loop template.
-
-% ==========================================================
-\section{Top-20 Single-Instruction Patterns}
-
-\begin{tabular}{@{}lll@{}}
-\toprule
-\# & ASM & C \\
-\midrule
-1  & \asm{add r0,r1,r2}        & \cee{r0=r1+r2} \\
-2  & \asm{adds r0,r1,r2}       & \cee{r0=r1+r2} (sets flags) \\
-3  & \asm{adc r0,r1,r2}        & w/ carry-in \\
-4  & \asm{rsb r0,r1,\#0}       & \cee{r0=-r1} \\
-5  & \asm{mvn r0,r1}           & \cee{r0=\textasciitilde r1} \\
-6  & \asm{mul r0,r1,r2}        & \cee{r0=r1*r2} (32-bit) \\
-7  & \asm{mla r0,r1,r2,r3}     & \cee{r0=r3+r1*r2} \\
-8  & \asm{mls r0,r1,r2,r3}     & \cee{r0=r3-r1*r2} \\
-9  & \asm{udiv r0,r1,r2}       & u div \\
-10 & \asm{sdiv r0,r1,r2}       & s div \\
-11 & \asm{lsl r0,r1,\#n}       & \cee{r0=r1<{<}n} \\
-12 & \asm{asr r0,r1,\#n}       & signed \cee{r1>{>}n} \\
-13 & \asm{lsr r0,r1,\#n}       & unsigned \cee{r1>{>}n} \\
-14 & \asm{add r0,r1,r1,lsl \#n}& $r_1\cdot(2^n+1)$ \\
-15 & \asm{ldr r0,[r1]}         & \cee{r0=*r1} (word) \\
-16 & \asm{ldr r0,[r1,r2,lsl \#2]} & \cee{r0=p[i]} word \\
-17 & \asm{strb r0,[r1],\#1}    & \cee{*p++=v} byte \\
-18 & \asm{cbz r0,lbl}          & \cee{if(!r0) goto lbl} \\
-19 & \asm{tst r0,\#mask}       & flag-set bit test \\
-20 & \asm{bic r0,r0,\#mask}    & clear masked bits \\
-\bottomrule
-\end{tabular}
+% [TRIM-Part1] One-liner cheats removed (full versions earlier in Quiz sections)
+% [TRIM-Part1] Top-20 patterns moved to Part 2 (duplicated Pattern Catalog)
 
 % ==========================================================
 \section{LDR Pseudo Resolution Detail}
@@ -2862,23 +2733,7 @@ FPU & VFPv4-SP single-prec (M4F variant) \\
 \bottomrule
 \end{tabular}
 
-% ==========================================================
-\section{Bit-Banding (Background)}
-
-Direct bit access without read-modify-write:
-
-\textbf{SRAM bit-band:} $\text{alias} = 0x22000000 + 32 \cdot (\text{addr}-0x20000000) + 4\cdot \text{bit}$
-
-\textbf{Peripheral bit-band:} $\text{alias} = 0x42000000 + 32 \cdot (\text{addr}-0x40000000) + 4\cdot \text{bit}$
-
-\begin{lstlisting}
-@ Set bit 5 of word at 0x20000000 atomically:
-ldr r0,=0x22000000+0+4*5
-mov r1,#1
-str r1,[r0]
-\end{lstlisting}
-
-Reading the alias yields 0 or 1; writing 0/1 sets the bit. Atomic from ISR perspective.
+% [MOVE-Part2] Bit-Banding moved to Part 2 (peripheral reference)
 
 % ==========================================================
 \section{When to Use What}
