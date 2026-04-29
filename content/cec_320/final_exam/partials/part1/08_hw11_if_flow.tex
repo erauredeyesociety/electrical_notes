@@ -1,0 +1,225 @@
+\section{HW11: If-Based Flow Control (PL/NL/CEX)}
+
+\subsection{Three styles for \cee{if-else} in ASM}
+Given C \cee{if (cond) then; else else;}, three idiomatic ASM templates (Lctr 25):
+\begin{tabular}{@{}l l l@{}}
+\toprule
+Style & Branch on & Layout \\
+\midrule
+\textbf{PL} (positive logic) & \textbf{same} CCS as C & else first, fall thru / B end / then \\
+\textbf{NL} (negative logic) & \textbf{inverse} CCS  & then first, fall thru / B end / else \\
+\textbf{CEX} (cond exec)     & no branch (IT block)  & all instrs in straight line \\
+\bottomrule
+\end{tabular}\\
+NL reads closest to C (then-block falls through, matches \cee{if(c){...}}). PL is "branch when C-true". CEX is best when each arm is $\le$ 4 instructions total. CCS in \asm{IT..} = NL cond (the inverse of the C test).
+
+\subsection{IT block syntax + hard rules}
+\asm{IT\{x\{y\{z\}\}\} cond} -- up to \textbf{4} conditional instrs. First slot always \asm{T} (matches \asm{cond}); each later slot is \asm{T} (same cond) or \asm{E} (\textbf{inverse} cond).
+\textbf{Common forms (T = same cond, E = inverse):} \asm{IT} (T), \asm{ITT} (T,T), \asm{ITE} (T,E), \asm{ITTT} (T,T,T), \asm{ITTE} (T,T,E), \asm{ITEE} (T,E,E), \asm{ITTEE} (T,T,E,E), \asm{ITTTT} (T,T,T,T).\\
+\textbf{Hard rules (Lctr 24, p.\ 9):} max \textbf{4} cond instrs; \textbf{cond B} (\asm{Bcc}) only in \textbf{LAST} slot; \textbf{CBZ/CBNZ FORBIDDEN} inside IT (use \asm{cmp+Bcc}); each slot's CCS must match T/E role; cond LDR/STR (pre/post-idx) \textbf{legal} in IT.
+
+\subsection{CBZ / CBNZ}
+\asm{CBZ Rn,lbl} = "if Rn==0 goto lbl"; \asm{CBNZ Rn,lbl} = "if Rn!=0". \textbf{Forward only}, max \textbf{126 B} ahead. \asm{Rn} restricted to \textbf{R0--R7}. \textbf{Does NOT set flags}. Replaces \asm{cmp Rn,\#0 ; beq lbl} (1 instr vs 2). Forbidden inside IT. Use for null/loop guards.
+
+\subsection{Sign-aware CCS (HW 11 always signed)}
+Signed: \asm{GT/GE/LE/LT}; unsigned: \asm{HI/HS/LS/LO}. \textbf{Inverse pairs:} GT$\leftrightarrow$LE, GE$\leftrightarrow$LT, EQ$\leftrightarrow$NE. NL branches on the inverse. \textbf{Type drives 3 things:} CCS (GT/LE vs HI/LS), shift (ASR vs LSR), load (SB/SH vs B/H).
+
+\subsection{Compound conditions}
+\textbf{OR} (\cee{a||b}) -- short-circuit with TWO \asm{CMP}s, both branch to the SAME \asm{then} label; fall-through = else:
+\begin{lstlisting}
+    cmp r0, #20
+    ble then         @ a true -> then
+    cmp r0, #25
+    bge then         @ b true -> then
+    b   else_        @ neither -> else
+\end{lstlisting}
+\textbf{AND} (\cee{a\&\&b}) -- via De Morgan, branch to ELSE on inverse of either:
+\begin{lstlisting}
+    cmp r0, #LO
+    blt else_        @ !a -> else (skip then)
+    cmp r0, #HI
+    bgt else_        @ !b -> else
+    @ both true: fall through to then
+\end{lstlisting}
+For CEX of compound OR: 1st sub-test must be a plain \asm{Bcc} (cond B in middle of IT illegal); only the FINAL test can fan out into a full \asm{ITTEE}.
+
+\subsection{Cond LDR/STR forms in IT}
+All three addressing modes (\asm{[Rn,\#os]}, \asm{[Rn,\#os]!}, \asm{[Rn],\#os}) accept a CCS suffix (Lctr 24 Ex 3,4): e.g.\ \asm{ldrshgt r0,[r2,\#2]!}, \asm{ldrle r0,[r3],\#4}. Pre/post writeback honored only when cond true. Cond instr that fails: no write, no flag change, no exception.
+
+\subsection{HW11 P1 -- \cee{x\_cmp\_y\_load}, three styles}
+\begin{hwp}\textbf{P1.} \cee{int32\_t f(int32\_t x, int32\_t y, int16\_t *ptrA, int32\_t *ptrB)\{ if (x>y) return (int32\_t)*(++ptrA)*2; else return *(ptrB++)/2; \}}\\
+AAPCS: R0=x, R1=y, R2=ptrA, R3=ptrB; ret in R0.\\
+Then arm: \cee{*(++ptrA)} $\to$ \asm{ldrsh r0,[r2,\#2]!} (pre-idx, sign-ext halfword); \cee{*2} $\to$ \asm{lsl r0,r0,\#1}.\\
+Else arm: \cee{*(ptrB++)} $\to$ \asm{ldr r0,[r3],\#4} (post-idx); signed \cee{/2} $\to$ \asm{asr r0,r0,\#1}.
+
+\textbf{Part 1 -- PL (BGT, same CCS as C):}
+\begin{lstlisting}
+x_cmp_y_load_pl:
+    cmp     r0, r1
+    bgt     pl_then         @ x>y -> then
+pl_else:                    @ else lays out FIRST
+    ldr     r0, [r3], #4    @ *ptrB; ptrB++
+    asr     r0, r0, #1      @ /2 signed
+    b       pl_end
+pl_then:
+    ldrsh   r0, [r2, #2]!   @ ++ptrA; *ptrA (s-ext)
+    lsl     r0, r0, #1      @ *2
+pl_end:
+    bx      lr
+\end{lstlisting}
+
+\textbf{Part 2 -- NL (BLE, inverse CCS, reads like C):}
+\begin{lstlisting}
+x_cmp_y_load_nl:
+    cmp     r0, r1
+    ble     nl_else         @ x<=y -> else (skip then)
+nl_then:                    @ then falls through
+    ldrsh   r0, [r2, #2]!
+    lsl     r0, r0, #1
+    b       nl_end
+nl_else:
+    ldr     r0, [r3], #4
+    asr     r0, r0, #1
+nl_end:
+    bx      lr
+\end{lstlisting}
+
+\textbf{Part 3 -- CEX (\asm{ITTEE le}, no branches):}
+\begin{lstlisting}
+x_cmp_y_load_cex:
+    cmp     r0, r1
+    ittee   le              @ T=le,T=le,E=gt,E=gt
+    ldrle   r0, [r3], #4    @ T1: else load (post-idx)
+    asrle   r0, r0, #1      @ T2: else /2
+    ldrshgt r0, [r2, #2]!   @ E1: then load (pre-idx)
+    lslgt   r0, r0, #1      @ E2: then *2
+    bx      lr
+\end{lstlisting}
+CCS in \asm{ITTEE} = \asm{le} (NL cond = inverse of C's \cee{>}). Each arm is 2 instrs $\Rightarrow$ \asm{ITTEE} (4 slots) is the natural fit. Cond pre-idx (\asm{ldrshgt!}) and post-idx (\asm{ldrle ,\#4}) both legal.
+\end{hwp}
+
+\subsection{HW11 P2 -- \cee{mathf} piecewise (3-way cascade)}
+\begin{hwp}\textbf{P2.} \cee{f(x) = -10 if x<-5; +10 if x>=5; else 2x}.\\
+\textbf{Part 1 (C):}
+\begin{lstlisting}[language={}]
+if (x < -5)      y = -10;
+else if (x >= 5) y =  10;
+else             y =  2*x;
+\end{lstlisting}
+
+\textbf{Part 2 -- CMP chain (NL at each arm):}
+\begin{lstlisting}
+mathf_cmp:
+    cmp     r0, #-5         @ asm: cmn r0,#5
+    bge     elseif          @ NL: x>=-5 skips 1st arm
+    ldr     r0, =-10        @ x<-5 -> -10
+    b       end
+elseif:
+    cmp     r0, #5
+    blt     else_           @ NL: x<5 skips 2nd arm
+    ldr     r0, =10         @ x>=5 -> +10
+    b       end
+else_:
+    lsl     r0, r0, #1      @ 2*x
+end:
+    bx      lr
+\end{lstlisting}
+\textbf{Note:} \asm{cmp r0,\#-5} not directly encodable; assembler emits \asm{cmn r0,\#5} (flags = R0+5). Signed CCSs work unchanged.
+
+\textbf{Part 3 -- CEX (chained \asm{ITT lt} + \asm{ITE ge}):}
+\begin{lstlisting}
+mathf_cex:
+    cmp     r0, #-5
+    itt     lt              @ T=lt, T=lt
+    ldrlt   r1, =-10        @ T1: stash -10 in R1
+    blt     end             @ T2: cond B *LAST slot only*
+    @ fall-through: x >= -5
+    cmp     r0, #5          @ fresh CMP, new flags
+    ite     ge              @ T=ge, E=lt
+    ldrge   r1, =10         @ T : x>=5, R1=10
+    lsllt   r1, r0, #1      @ E : R1=2*x (uses ORIG x in R0)
+end:
+    mov     r0, r1          @ result -> ret reg
+    bx      lr
+\end{lstlisting}
+\textbf{Key tricks:}
+\begin{itemize}
+\item \textbf{Stash result in R1} so R0 (=x) survives the 2nd CMP. \asm{lsllt r1,r0,\#1} reads original x.
+\item \asm{blt end} is in \textbf{slot 2} of \asm{ITT} -- legal only because it's the \textbf{last} slot (Lctr 24 rule).
+\item Without the cond B, fall-through after 1st IT would corrupt R1 in 2nd block.
+\end{itemize}
+\end{hwp}
+
+\subsection{HW11 P3 -- compound OR \cee{x<=20 || x>=25}}
+\begin{hwp}\textbf{P3.} \cee{int32\_t g(int x, uint16\_t *ptrA, uint32\_t *ptrB)\{ if (x<=20 || x>=25) return (int32\_t)*++ptrA*4; else return *++ptrB/4; \}}\\
+AAPCS: R0=x, R1=ptrA, R2=ptrB; ret in R0.\\
+Then arm: \cee{*++ptrA} $\to$ \asm{ldrh r0,[r1,\#2]!} (zero-ext); \cee{*4} $\to$ \asm{lsl r0,r0,\#2}.\\
+Else arm: \cee{*++ptrB} $\to$ \asm{ldr r0,[r2,\#4]!}; UNSIGNED \cee{/4} $\to$ \asm{lsr r0,r0,\#2} (NOT \asm{ASR} -- ptrB is \cee{uint32\_t*}).
+
+\textbf{Part 1 -- CMP short-circuit OR (both tests $\to$ same \cee{then}):}
+\begin{lstlisting}
+load_based_on_x_cmp:
+    cmp     r0, #20
+    ble     then            @ 1st OR true -> then
+    cmp     r0, #25
+    bge     then            @ 2nd OR true -> then
+    b       else_           @ both false -> else
+then:
+    ldrh    r0, [r1, #2]!   @ ++ptrA; *ptrA (zero-ext)
+    lsl     r0, r0, #2      @ *4
+    b       end
+else_:
+    ldr     r0, [r2, #4]!   @ ++ptrB; *ptrB
+    lsr     r0, r0, #2      @ /4 unsigned
+end:
+    bx      lr
+\end{lstlisting}
+
+\textbf{Part 2 -- CEX (1st test plain \asm{BGT}, 2nd test \asm{ITTEE ge}):}
+\begin{lstlisting}
+load_based_on_x_cex:
+    cmp     r0, #20
+    bgt     check25         @ x>20 -> 2nd test (plain B; mid-IT cond B illegal)
+    @ x<=20: compound TRUE -> then arm inline
+    ldrh    r0, [r1, #2]!
+    lsl     r0, r0, #2
+    bx      lr
+check25:
+    cmp     r0, #25
+    ittee   ge              @ T=ge,T=ge,E=lt,E=lt
+    ldrhge  r0, [r1, #2]!   @ T: then load
+    lslge   r0, r0, #2      @ T: *4
+    ldrlt   r0, [r2, #4]!   @ E: else load
+    lsrlt   r0, r0, #2      @ E: /4
+    bx      lr
+\end{lstlisting}
+\textbf{Why split:} 1st sub-test of OR can't sit inside an IT block -- it would need a cond B in a non-last slot. Only the FINAL test packs into \asm{ITTEE}. Both arms run 2 instrs $\Rightarrow$ \asm{ITTEE} (T,T,E,E) is exact fit.
+
+\textbf{Trace:}
+\begin{tabular}{@{}c l l@{}}
+\toprule
+x & path & arm \\
+\midrule
+15 & \asm{bgt} N (15$\le$20) & inline then \\
+20 & \asm{bgt} N            & inline then \\
+21 & \asm{bgt} Y, ge N      & ITTEE E (else) \\
+24 & \asm{bgt} Y, ge N      & ITTEE E (else) \\
+25 & \asm{bgt} Y, ge Y      & ITTEE T (then) \\
+30 & \asm{bgt} Y, ge Y      & ITTEE T (then) \\
+\bottomrule
+\end{tabular}
+\end{hwp}
+
+\subsection{Picker + pitfalls}
+\textbf{Pick CEX} when both arms $\le$ 4 instrs total; \textbf{PL/NL} when arms larger or need general branch; \textbf{CMP short-circuit} for OR; \textbf{CMP+De Morgan} for AND (branch to else on $!a$/$!b$); \textbf{CBZ/CBNZ} for null/loop guards (forward $\le$126B, R0-R7, no flag effect).
+\textbf{Gotchas:} (1) HI/LS on signed (or GT/LE on unsigned) miscompares near sign bit -- match CCS to type. (2) LSR on negative = huge positive; use ASR for signed div. (3) LDRH on \cee{int16\_t} loses sign -- use LDRSH. (4) Cond B in non-last IT slot = assembler err. (5) CBZ inside IT = forbidden. (6) In CEX cascade, stash result in R1 so R0 (=x) survives next CMP. (7) \asm{cmp Rn,\#-imm} rewritten to \asm{cmn Rn,\#imm} (signed CCS unchanged). (8) Pre/post-idx LDR both legal in IT, writeback honored only when cond true.
+
+\subsection{One-line summary cards}
+\begin{itemize}
+\item \textbf{PL:} \asm{cmp; B<C-cond> then; <else>; b end; then: <then>; end:}
+\item \textbf{NL:} \asm{cmp; B<inv-cond> else; <then>; b end; else: <else>; end:}
+\item \textbf{CEX:} \asm{cmp; ITTEE <inv-cond>; <else x2 with cond>; <then x2 with inv-cond>}
+\item \textbf{CEX cascade:} \asm{cmp; ITT lt; <stash-T>; blt end; cmp; ITE ge; <stash-T>; <stash-E>; end: mov r0,r1}
+\item \textbf{OR (CMP):} \asm{cmp; ble then; cmp; bge then; b else}
+\item \textbf{OR (CEX):} 1st = plain \asm{Bcc} to \asm{checkN}, 2nd packs into \asm{ITTEE}.
+\end{itemize}

@@ -1,0 +1,234 @@
+\section{HW9: LDR/STR Addressing Modes}
+
+\subsection{Three immediate-offset forms}
+Let \asm{Ra}$=$base, \asm{\#os}$=$signed small immediate.
+\begin{tabular}{@{}lll@{}}
+\toprule
+syntax & EA & R\textsubscript{a} after \\
+\midrule
+\asm{[Ra,\#os]}    & \asm{Ra+os} & unchanged (basic) \\
+\asm{[Ra,\#os]!}   & \asm{Ra+os} & $\leftarrow$\asm{Ra+os} (pre) \\
+\asm{[Ra],\#os}    & \asm{Ra}    & $\leftarrow$\asm{Ra+os} (post) \\
+\bottomrule
+\end{tabular}
+\textbf{Mnem:} \asm{!}$=$update first then load ($\equiv$\cee{*++p});
+trailing \asm{,\#os}$=$load first then update ($\equiv$\cee{*p++});
+neither $=$\cee{*(p+k)}.
+
+\subsection{Load-size suffixes}
+\begin{tabular}{@{}llll@{}}
+\toprule
+op & bits & extend & C type \\
+\midrule
+\asm{LDR}   & 32 & ---           & \cee{int32\_t} \\
+\asm{LDRH}  & 16 & zero          & \cee{uint16\_t} \\
+\asm{LDRSH} & 16 & sign          & \cee{int16\_t}  \\
+\asm{LDRB}  & 8  & zero          & \cee{uint8\_t}  \\
+\asm{LDRSB} & 8  & sign          & \cee{int8\_t}   \\
+\bottomrule
+\end{tabular}
+\textbf{STR} has \emph{no} sign variants: \asm{STR/STRH/STRB} only --- write
+just truncates the low bits of the source register.
+
+\subsection{Sign-extension trap}
+\begin{tabular}{@{}ll@{}}
+\toprule
+load mem & R\textsubscript{d} (32b) \\
+\midrule
+LDRB 0x80      & 0x00000080 \\
+LDRSB 0x80     & 0xFFFFFF80 \\
+LDRSB 0x40     & 0x00000040 \\
+LDRH 0xB0A0    & 0x0000B0A0 \\
+LDRSH 0xB0A0   & 0xFFFFB0A0 \\
+\bottomrule
+\end{tabular}
+Sign bit$=$bit-7 (B) or bit-15 (H). If set under SB/SH, top 24/16
+bits become \asm{1}.
+
+\subsection{Register-offset (scaled index)}
+\asm{[Ra, Ri, LSL \#n]} $\Rightarrow$ EA $=$ \asm{Ra + (Ri$\!\ll\!$n)}.
+$n=\log_2(\text{elem size})$:
+\asm{\#0}/B,SB; \asm{\#1}/H,SH; \asm{\#2}/word; \asm{\#3}/dword.
+\textbf{No writeback form} --- \asm{Ra} never updates.
+This is the \cee{p[i]} idiom.
+
+\subsection{LDRD / STRD --- 64-bit pair}
+\asm{LDRD Rt,Rt2,[Ra,...]} loads two consecutive words into
+\textbf{consecutive regs} (Rt, Rt2$=$Rt+1).
+Forms: basic \asm{[Ra,\#os]}, pre \asm{[Ra,\#os]!}, post \asm{[Ra],\#os}.
+\textbf{NO reg-offset form.}
+Rt$=$word@EA, Rt2$=$word@EA$+4$.
+
+\subsection{C $\leftrightarrow$ ASM cookbook}
+\begin{tabular}{@{}ll@{}}
+\toprule
+C idiom & ARM form \\
+\midrule
+\cee{*p}                  & \asm{LDR r,[Ra]}            \\
+\cee{*(p+k)}              & \asm{LDR r,[Ra,\#k*sz]}     \\
+\cee{p[i]}                & \asm{LDR r,[Ra,Ri,LSL \#n]} \\
+\cee{*p++}                & \asm{LDR r,[Ra],\#sz}       \\
+\cee{*++p}                & \asm{LDR r,[Ra,\#sz]!}      \\
+\cee{*p = v} (no upd)     & \asm{STR r,[Ra]}            \\
+\cee{*p++ = v}            & \asm{STR r,[Ra],\#sz}       \\
+\cee{*++p = v}            & \asm{STR r,[Ra,\#sz]!}      \\
+\bottomrule
+\end{tabular}
+\textbf{What's modified:}\;
+prefix \asm{++} on \cee{*p} $\Rightarrow$ value in memory changes
+$\Rightarrow$ need explicit STR writeback;
+postfix on \emph{pointer} $\Rightarrow$ pointer changes (post-index);
+both ($\cee{*p8b++ = ++*p8a++}$) $\Rightarrow$ LDRB post + ADD +
+STRB \asm{[Ra,\#-1]} writeback.
+
+\subsection{HW9 P1 --- Trace through 16 bytes}
+Memory: 16 bytes \asm{0x00..0x0F} at \asm{0x20000000} (LE words:
+\asm{ipt+0=0x03020100}, \asm{+4=0x07060504},
+\asm{+8=0x0B0A0908}, \asm{+12=0x0F0E0D0C}).
+\begin{lstlisting}
+ldr r4, =0x20000000     @ (1) R4=0x20000000
+ldr r0, [r4, #4]        @ (2) basic
+ldr r1, [r4, #2]!       @ (3) pre-idx
+ldr r2, [r4], #4        @ (4) post-idx
+ldr r3, [r4]            @ (5) basic, no offset
+\end{lstlisting}
+\begin{tabular}{@{}llll@{}}
+\toprule
+step & EA & dest & R4 after \\
+\midrule
+(1) & ---        & ---           & 0x20000000 \\
+(2) & 0x20000004 & R0=0x07060504 & 0x20000000 \\
+(3) & 0x20000002 & R1=0x05040302 & 0x20000002 \\
+(4) & 0x20000002 & R2=0x05040302 & 0x20000006 \\
+(5) & 0x20000006 & R3=0x09080706 & 0x20000006 \\
+\bottomrule
+\end{tabular}
+\textbf{Key:} pre-idx (3) loads from \emph{new} R4; post-idx (4) loads
+from \emph{old} R4. Loads at non-word-aligned addresses (0x...02) work
+fine on Cortex-M but cross word boundaries.
+
+\subsection{HW9 P2 --- ASM $\to$ C prototypes}
+\begin{lstlisting}
+mp_task1:                  mp_task2:
+  ldrsh r2,[r0],#4           ldrh  r2,[r0,#2]!
+  str   r2,[r1,#0]           str   r2,[r1,#0]
+  ldrsh r3,[r0],#4           ldrh  r3,[r0,#2]!
+  str   r3,[r1,#4]           str   r3,[r1,#4]
+  bx    lr                   bx    lr
+\end{lstlisting}
+\textbf{Task1:} \cee{void mp\_task1(int16\_t *pSrc, int32\_t *pDst)} ---
+LDRSH$\Rightarrow$signed src; STR (word)$\Rightarrow$word dst.
+Post-idx \asm{\#4} skips \emph{every other halfword} (stride$=2$ in
+\cee{int16\_t} units).
+\textbf{C:} \cee{*p32 = (int32\_t)*p16s; p16s += 2;} \newline \cee{
+*(p32+1) = (int32\_t)*p16s; p16s += 2;}
+
+\textbf{Task2:} \cee{void mp\_task2(uint16\_t *pSrc, int32\_t *pDst)} ---
+LDRH$\Rightarrow$unsigned. Pre-idx \asm{\#2} advances first $\Rightarrow$
+\emph{skips arr[0]}, reads \cee{arr[1]} then \cee{arr[2]}.
+\textbf{C:} \cee{p16u += 1; *p32 = (int32\_t)*p16u;} \newline \cee{
+p16u += 1; *(p32+1) = (int32\_t)*p16u;}
+
+\subsection{HW9 P3 --- Four tasks, same data}
+\cee{ipt[16]} initialized \cee{ipt[i]=i<<4} ($0x00,0x10,\ldots,0xF0$).
+Words (LE, treating ipt as \cee{int32\_t*}):
+\begin{tabular}{@{}ll@{}}
+\toprule
+addr & word \\
+\midrule
+\cee{ipt+0}  & 0x30201000 \\
+\cee{ipt+4}  & 0x70605040 \\
+\cee{ipt+8}  & 0xB0A09080 \\
+\cee{ipt+12} & 0xF0E0D0C0 \\
+\bottomrule
+\end{tabular}
+Entry: \asm{R0}$=$\asm{0x20001010} (\cee{ipt}),
+\asm{R1}$=$\asm{0x20001040} (\cee{opt}).
+T4 also gets \asm{R2}$=1$.
+
+\subsubsection*{T1 --- basic offset (R0 unchanged)}
+\begin{lstlisting}
+ldr r2,[r0,#4]      @ R2=0x70605040
+str r2,[r1,#0]      @ opt[0]
+ldr r2,[r0,#0xC]    @ R2=0xF0E0D0C0
+str r2,[r1,#4]      @ opt[1]
+\end{lstlisting}
+\textbf{Print:} \asm{Out1=0x70605040, Out2=0xF0E0D0C0}.\;
+\textbf{After:} R0$=$0x20001010, R2$=$0xF0E0D0C0.\;
+\textbf{C:} \cee{int32\_t *p=(int32\_t*)ipt; opt[0]=p[1]; opt[1]=p[3];}
+
+\subsubsection*{T2 --- pre-index ($\times 2$)}
+\begin{lstlisting}
+ldr r2,[r0,#4]!     @ R0=0x...14, R2=0x70605040
+str r2,[r1,#0]
+ldr r2,[r0,#4]!     @ R0=0x...18, R2=0xB0A09080
+str r2,[r1,#4]
+\end{lstlisting}
+\textbf{Print:} \asm{Out1=0x70605040, Out2=0xB0A09080}.\;
+\textbf{After:} R0$=$0x20001018, R1$=$0x20001040 (unchanged).\;
+\textbf{C:} \cee{p++; opt[0]=*p; p++; opt[1]=*p;}
+
+\subsubsection*{T3 --- post-index ($\times 2$)}
+\begin{lstlisting}
+ldr r2,[r0],#4      @ R2=0x30201000, R0=0x...14
+str r2,[r1,#0]
+ldr r2,[r0],#4      @ R2=0x70605040, R0=0x...18
+str r2,[r1,#4]
+\end{lstlisting}
+\textbf{Print:} \asm{Out1=0x30201000, Out2=0x70605040}.\;
+\textbf{After:} R0$=$0x20001018.\;
+\textbf{C:} \cee{opt[0]=*p; p++; opt[1]=*p; p++;}\\
+\textbf{T2 vs T3:} pre starts at \cee{ipt+4}, post starts at \cee{ipt+0}
+--- pre and post end at \emph{same} R0 but read \emph{different} words.
+
+\subsubsection*{T4 --- register offset \asm{LSL \#2}}
+Entry R2$=1$.
+\begin{lstlisting}
+ldr r3,[r0,r2,lsl #2]   @ ipt+4, R3=0x70605040
+str r3,[r1,#0]
+add r2,#1               @ R2=2
+ldr r3,[r0,r2,lsl #2]   @ ipt+8, R3=0xB0A09080
+str r3,[r1,#4]
+add r2,#1               @ R2=3
+\end{lstlisting}
+\textbf{Print:} \asm{Out1=0x70605040, Out2=0xB0A09080}.\;
+\textbf{After:} R0$=$0x20001010 (unchanged!), R2$=$3, R3$=$0xB0A09080.\;
+\textbf{C:} \cee{int i=1; opt[0]=p[i]; i++; opt[1]=p[i]; i++;}
+
+\subsection{Pre vs post --- ending pointer is the same}
+For two consecutive same-stride loads from base \asm{Ra}:
+\textbf{pre} reads \asm{[Ra+s, Ra+2s]} ending at \asm{Ra+2s};
+\textbf{post} reads \asm{[Ra, Ra+s]} ending at \asm{Ra+2s}.
+Same \emph{final} pointer, different \emph{data}.
+
+\subsection{Common pitfalls}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item Pre \asm{[Ra,\#os]!} vs post \asm{[Ra],\#os}: \asm{!} \emph{inside}
+      brackets $=$ EA changed inside the access.
+\item Stride matches elem size: \cee{int16\_t*}+1$=$\asm{\#2};
+      \cee{int32\_t*}+1$=$\asm{\#4}.
+\item LDRSB/LDRSH on 0x80/0x8000 $\to$ 0xFFFFFF80/0xFFFF8000.
+\item Reg-offset has no writeback; to advance use
+      \asm{ADD Ra,Ra,Ri,LSL \#n}.
+\item LDRD/STRD: consecutive regs, no reg-offset form.
+\item ``Follow assembly's intention'': if .s treats \cee{uint8\_t*} as
+      \cee{int32\_t*}, stride is 4 bytes regardless of declared type.
+\item \cee{*p8b++ = ++*p8a++} $\Rightarrow$ \asm{LDRB+ADD+STRB[r0,\#-1]}
+      writeback to original address.
+\end{itemize}
+
+\subsection{Decision table}
+\begin{tabular}{@{}lll@{}}
+\toprule
+need & form & note \\
+\midrule
+read element, keep ptr  & \asm{[Ra,\#k]}      & basic    \\
+walk forward (post)     & \asm{[Ra],\#sz}     & \cee{*p++}    \\
+skip first, then walk   & \asm{[Ra,\#sz]!}    & \cee{*++p}    \\
+random index            & \asm{[Ra,Ri,LSL \#n]}& \cee{p[i]}; no upd \\
+two words at once       & \asm{LDRD r,r+1,...}& consec. reg pair \\
+signed byte/half        & \asm{LDRSB/LDRSH}   & sign-ext to 32 \\
+unsigned byte/half      & \asm{LDRB/LDRH}     & zero-ext to 32 \\
+store (any size)        & \asm{STR/STRH/STRB} & no sign variants \\
+\bottomrule
+\end{tabular}

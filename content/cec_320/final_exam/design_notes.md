@@ -5,171 +5,117 @@
 - **Part 1** (`final_exam_cheatsheet_part1.tex`) — **6 pages** (even, prints clean front/back)
 - **Part 2** (`final_exam_cheatsheet_part2.tex`) — **8 pages** (even, prints clean front/back)
 
-Both documents use the same LaTeX format (4-col landscape, 0.18in margins, scriptsize body, lstlistings for ASM/C). Identical macros (`\asm`, `\cee`) and tag environments (`\begin{hwp}`, `\begin{qp}`, `\begin{ex}`, `\begin{reg}`).
+Both are 4-column landscape, 0.18in margins, scriptsize body, lstlisting for ASM/C. Macros: `\asm`, `\cee`. Tag environments: `\begin{hwp}` (orange HW), `\begin{qp}` (purple Quiz), `\begin{ex}` (red example), `\begin{reg}` (teal Register).
 
-Page-count verified locally via `tectonic` (a static-binary LaTeX compiler at `~/bin/tectonic`) + PyMuPDF page-count check. Rendered PDFs are NOT committed — compile from source as needed.
+Page-count verified locally via `tectonic` + PyMuPDF. Rendered PDFs are NOT committed — compile from source.
 
-## Part 1 (6 pages) content map
+## Build system
 
-ARM ASM programming meat (Lectures 14-27, HW 5-12, this semester's quizzes).
+The cheatsheets are now built from PARTIALS via `partials/build.sh`. Each partial is a content fragment (no preamble, no `\documentclass`, no `\begin{multicols*}`) — just `\section{...}` + content. The build script concatenates `_preamble_partN.tex` + every `.tex` in `partN/` (alphabetic order, prefix `NN_` controls order) + `_footer.tex`, producing `final_exam_cheatsheet_partN.tex` next to this file.
 
-- Lectures 14-27 recall bullets
-- Q-format fixed-point (HW5)
-- Arithmetic instructions (HW6) — ADDS/ADC, SUBS/SBC, modulo, SMLAL/UMLAL/MLA/MLS
-- EABI arg passing + sign/zero ext at call site
-- Stack + PUSH/POP rules
-- Barrel shifter Op2 + scaling idioms
-- Bitwise logic (HW7) — BIC/ORR/EOR/ORN/MVN/BFC/BFI
-- NZCV flag computation (HW8)
-- CCS table + HiLow unSun mnemonic
-- LDR/STR matrix + addressing modes
-- C pointer → ASM translation
-- Sign-extension pitfalls
-- Inc/dec patterns
-- Function calls / AAPCS
-- IT blocks + CBZ/CBNZ
-- If/if-else (PL/NL/CEX)
-- Loops (while / do-while / for / while(1)+break)
-- break/continue/switch
-- **Quiz 4 (Spring 2026, qz-26a)** — full problem-by-problem solutions
-- Practice Quiz (qz-25b prior semester) — additional practice
-- Quiz 6a worksheet
-- ASM quick ref + directives
-- Pattern catalog (C → ASM)
-- Common recipes
-- HW Coverage Map
-- Full HW11/HW12 walkthroughs side-by-side
-- HW5/HW6/HW7 walkthroughs (compact)
-- HW8 walkthrough (NZCV + CCS drills)
-- HW9 P3 four-task tasks
-- Common ASM-file skeleton
-- Number-format speed tables
-- Memory regions (F412/G431)
-- Endianness drills
-- C-ASM Pitfall Quiz
-- Last-Minute Traps (extended)
+```bash
+cd content/cec_320/final_exam/
+./partials/build.sh                    # builds both parts
+./partials/build.sh part1              # part 1 only
+./partials/build.sh part1 --pdf        # also compile to PDF
+./partials/build.sh --pdf              # build both + compile both PDFs
+```
 
-## Part 2 (8 pages) content map
+The script auto-detects `~/bin/tectonic` or system `tectonic`. PDFs land in `/tmp/`.
+
+## Part 1 partials (6 pages)
+
+ARM ASM programming meat — Lectures 14–27, HW 5–12, current-semester quizzes.
+
+| File | Content |
+|------|---------|
+| `01_lectures_14_27.tex` | Recall bullets per lecture (L14–L27) |
+| `02_hw05_qformat.tex`   | Q-format fixed-point; HW5 problems |
+| `03_hw06_arith_eabi.tex`| Arithmetic instr; EABI calling; PUSH/POP |
+| `04_hw07_shifts_logic.tex` | Shifts, Op2, bitwise; HW7 problems |
+| `05_hw08_nzcv_ccs.tex`  | NZCV flags, CCS table, branches; HW8 |
+| `06_hw09_ldr_str.tex`   | LDR/STR addressing; HW9 traces |
+| `07_hw10_ptr_fn_call.tex` | C ptr idioms + AAPCS; HW10 traces |
+| `08_hw11_if_flow.tex`   | If/if-else PL/NL/CEX; HW11 walkthroughs |
+| `09_hw12_loops.tex`     | While/do-while/for/break; HW12 |
+| `10_quiz3.tex`          | Quiz 3 reconstructed problems |
+| `11_quiz4_qz26a.tex`    | Quiz 4 (current sem qz-26a) full solutions |
+
+## Part 2 partials (8 pages)
 
 Early-semester material + STM32 peripheral reference + extended worked examples.
 
-**Part A — Early Lectures (L2-9, 13):**
-- L2: UART (baud math, framing, parity, STM32 default)
-- L3: MCU arch + pipeline + memory map
-- L4: Two's complement + endianness + C type widths
-- L5: Pointers + Unity unit testing
-- L6: GPIO (modes, register map, base addresses)
-- L7: Bitwise + direct GPIO + BSRR atomic
-- L8: Exceptions + NVIC (IRQn, vector table, NVIC regs)
-- L9: Preemption + EXTI + FSM
-- L13: Real numbers (IEEE 754 single/half, Q-format preview)
-
-**Part B — HW1-4 solutions:**
-- HW1 (UART, pipeline, binary)
-- HW2 (TC, endianness, pointers, Unity)
-- HW3 (GPIO + bitwise)
-- HW4 (NVIC + EXTI)
-
-**Part C — Peripheral reference:**
-- GPIO_TypeDef offsets + common ops
-- NVIC layout
-- EXTI + SYSCFG
-- USART register highlights
-- SysTick + TIM + ADC + DMA
-
-**Part D — C language:**
-- Operator precedence
-- Bit-banding (SRAM + peripheral aliases)
-- Bit-twiddle idioms
-- Type promotion + UB watchlist
-- Inline ASM with GCC syntax
-- Build system (linker + startup)
-
-**Part E-G — Extended worked examples:**
-- HW1 P3 pipeline math
-- HW2 P3 endianness
-- HW2 P6 union aliasing
-- HW3 bit-field replace
-- HW4 EXTI configuration trace
-- 7 practice problems (pipeline, TC, GPIO, NVIC, memory map, fixed-point, pointers)
-
-**Part H-I — System internals:**
-- Vector table layout
-- Reset handler ASM
-- Linker script sketch
-- ASM-writing workflow + reading-ASM workflow
-- ASM patterns vocabulary
-
-**Part J — Extended HW walkthroughs:**
-- HW1 deep walkthrough
-- HW2 5-bit TC drills
-- HW3 register access mapping
-- HW4 priority + nested ISR
-
-**Part K-N — Reference + practice:**
-- ASM-to-C reverse-engineering drills
-- C-to-ASM translation drills
-- Stack frame drawings
-- Cortex-M4 quick specs (extended)
-- Vector table (G4 partial)
-- Exam-day error hit-list
-- IEEE 754 worked examples
-- Q-format drills
-- Number conversion drills
-- Boolean algebra refresher
-- Useful macros and constants
-- Common driver patterns
-- Cycle counts by instruction
-- Calling-convention details
-- HAL vs direct register
-- ARM instruction encoding
-- HAL init pattern
-- Saturating arithmetic
-- NVIC priority math
-- Vector table override
-- Flash wait states
-- Boot sequence
+| File | Content |
+|------|---------|
+| `01_lectures_2_9_13.tex` | Early lecture reference (L2–9, L13) |
+| `02_hw01_uart_arch.tex`  | HW1 UART/MCU arch/numeric |
+| `03_hw02_tc_ptr_unity.tex` | HW2 TC/endianness/pointers/Unity |
+| `04_hw03_gpio_bitwise.tex` | HW3 GPIO + bitwise |
+| `05_hw04_interrupts.tex` | HW4 NVIC/EXTI/preemption |
+| `06_quiz1_uart_arch.tex` | Quiz 1 (prior sem qz-25a) |
+| `07_quiz2.tex`           | Quiz 2 (reconstructed from prep notes) |
+| `08_peripheral_reference.tex` | STM32 peripheral + C language reference |
+| `09_arm_reference.tex`   | ARM ASM quick reference + traps |
+| `10_hw1_4_extended_drills.tex` | Extended HW1–4 worked drills + 8 practice problems |
+| `11_reverse_eng_internals.tex` | ASM↔C reverse-eng + system internals |
+| `12_quiz6a_practice.tex` | Quiz 6a practice (prior-sem qz-25b) |
 
 ## Source extracts (markdown reference)
 
-These are the per-topic data extracts agents produced and were used to write the LaTeX files. They remain in the folder for reference / future updates.
+These are the per-topic data extracts agents produced. They remain in the folder for reference / future updates.
 
-- `early_lectures_extract.md` — Lectures 2-9, 13 (411 lines)
-- `hw1_4_extracts.md` — HW1-4 problems + solutions (192 lines)
+- `early_lectures_extract.md` — Lectures 2–9, 13 (411 lines)
+- `hw1_4_extracts.md` — HW1–4 problems + solutions (192 lines)
 - `hw5_hw6_extracts.md` — HW5/6 (101 lines)
 - `hw7_hw8_extracts.md` — HW7/8 (196 lines)
-- `hw9_12_expanded.md` — HW9-12 expanded register-state traces (280 lines)
-- `lectures_condensed.md` — Lectures 14-27 condensed bullets (104 lines)
+- `hw9_12_expanded.md` — HW9–12 expanded register-state traces (280 lines)
+- `lectures_condensed.md` — Lectures 14–27 condensed bullets (104 lines)
 - `quiz3_quiz4_extracts.md` — Quiz 3 + 4 (qz-25b prior) + 6a (174 lines)
-- `quiz4_2026_solutions.md` — **THIS semester's Quiz 4 (qz-26a)** with full solutions (152 lines)
+- `quiz4_2026_solutions.md` — **Current semester** Quiz 4 (qz-26a) full solutions (152 lines)
 
 ## Compile / verify locally
 
 ```bash
-~/bin/tectonic -X compile final_exam_cheatsheet_part1.tex -o /tmp
-~/bin/tectonic -X compile final_exam_cheatsheet_part2.tex -o /tmp
-python3 -c "import fitz; print(fitz.open('/tmp/final_exam_cheatsheet_part1.pdf').page_count)"
-# 6
-python3 -c "import fitz; print(fitz.open('/tmp/final_exam_cheatsheet_part2.pdf').page_count)"
-# 8
+cd content/cec_320/final_exam/
+./partials/build.sh --pdf
+# Expected: part1 -> 6 pages, part2 -> 8 pages
 ```
 
-(Tectonic auto-fetches needed TeX Live packages on first run; subsequent runs are instant.)
+Tectonic auto-fetches needed TeX Live packages on first run; subsequent runs are instant.
 
-For Overleaf: just paste the .tex contents into a new project. Default `pdflatex` engine works.
+For Overleaf: paste the generated `.tex` (full document, not partials) into a new project. Default `pdflatex` engine works.
+
+## Adding new content
+
+To add a new section to either part: drop a new `NN_topic.tex` fragment file into `partials/part1/` or `partials/part2/`. The fragment must:
+
+- NOT include `\documentclass`, `\begin{document}`, `\begin{multicols*}`, or any preamble
+- Start directly with `\section{...}`
+- Use the available macros: `\asm{}`, `\cee{}`, `\begin{lstlisting}` (language=arm), `\begin{hwp}`, `\begin{qp}`, `\begin{ex}`, `\begin{reg}`
+- For ARM mnemonics or C identifiers containing `_`: write `\_` inside `\asm{}`/`\cee{}` (the macros use `\texttt{}` which doesn't auto-escape)
+- Avoid `\langle`/`\rangle` (math-mode only)
+- Avoid `\\` line breaks inside `\cee{}`/`\asm{}` — close and reopen instead
+- Number prefix controls order; `NN_` keeps related material grouped
+
+Then re-run `./partials/build.sh --pdf` and verify the page count.
 
 ## Workflow log
 
-1. Three parallel agents extracted HW5-6, HW7-8, quiz3+quiz4 problems.
-2. Built initial 3-page cheatsheet (Part 1 v0).
-3. Two more agents pulled HW9-12 expanded + lecture 14-27 highlights.
-4. Extended Part 1 to 7 pages.
-5. After user feedback, **trimmed Part 1 to 6 pages** by removing redundant sections (Top-20 patterns, one-liner cheats, switch variants, calling-convention templates, operator precedence, bit-banding -- those moved to Part 2).
-6. After user uploaded the 2026 Quiz 4 solution PDF, an agent extracted those problems; Part 1's old Quiz 4 section was replaced with the actual semester-current content; the older qz-25b material was kept as "Practice Quiz (Prior Sem qz-25b)" for additional drilling.
-7. Spawned 2 parallel agents for Part 2 source: early-lecture extract (411 lines) + HW1-4 extracts (192 lines).
-8. Built Part 2 fresh at 8 pages (matched 6 + 8 = 14 split for clean-print front/back).
+1. Initial build was a single 14-page document, then split into parts 1 (6 pp) + 2 (8 pp) with hand-edited TeX files.
+2. After feedback about whitespace and gaps, **rebuilt entirely from partials** with one agent per HW (HW1–12), one per quiz (Q1, Q2, Q3, Q4-26a, Q6a-25b), plus reference partials (lectures 14–27, lectures 2–13, ARM reference, peripheral reference, extended HW1–4 drills, reverse-eng + internals).
+3. Build script concatenates partials in alphabetic order; preamble/footer files at `partials/_preamble_partN.tex` and `partials/_footer.tex`.
+4. Final structure: 11 partials in part1 (6 pp), 12 partials in part2 (8 pp).
 
 ## Known issues (minor)
 
-- A few `Underfull \hbox` / `Overfull \hbox` warnings in both parts. None affect readability at compile dpi.
-- Trim-comments (`% [TRIM-Part1] ...` / `% [MOVE-Part2] ...`) in Part 1 mark sections that were moved out; Part 2's section comments mark which content was migrated in.
+- Several `Underfull \hbox` / `Overfull \hbox` warnings in both parts. None affect readability at compile dpi.
+- The `\asm{}`/`\cee{}` macros use `\texttt{}` which doesn't auto-escape underscores — historical content writes `\_` manually; if you copy ASM/C identifiers in, escape underscores.
+
+## Content known to be incomplete (per inventory)
+
+- **Quiz 1**: only 2025 prior-semester solution PDF available; no current-sem Q1 worksheet/PDF
+- **Quiz 2**: no problem/solution PDF; reconstructed from prep markdown only
+- **Quiz 3**: no standalone problem/solution PDF; reconstructed from cheatsheet markdown
+- **Quiz 6a**: only prior-semester (qz-25b) worksheet; no current-sem version
+
+If you find any of these, drop them in `quizes/quizN/` and update the corresponding partial.

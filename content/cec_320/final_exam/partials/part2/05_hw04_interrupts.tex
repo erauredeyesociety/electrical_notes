@@ -1,0 +1,128 @@
+% =============================================================================
+% HW4 -- Interrupts, Preemption, NVIC, EXTI (Lctr 8 + 9)
+% =============================================================================
+\section{HW4: Interrupts + Preemption}
+
+\subsection{Cortex-M4 exception model}
+\textbf{Vector table} @ \cee{0x0000\_0000} (or relocated via SCB->VTOR). Layout: word 0 = initial MSP, word 1 = Reset handler, then NMI, HardFault, MemManage, BusFault, UsageFault, $\ldots$, SVCall, PendSV, SysTick, then external IRQ0..IRQn (vendor defined).\\
+\textbf{Exception number} = 16 + IRQn. So PSR ExcNum=22 $\Rightarrow$ IRQn=6 = \cee{EXTI0\_IRQn}.\\
+\textbf{Stacks:} MSP (default, used by handlers) and PSP (optional thread mode). On exception entry HW selects MSP for the handler.\\
+\textbf{EXC\_RETURN} loaded into LR on entry. Common values: \cee{0xFFFFFFF1} (handler $\to$ handler MSP), \cee{0xFFFFFFF9} (return to thread MSP), \cee{0xFFFFFFFD} (return to thread PSP). Branching to LR with EXC\_RETURN triggers the unstack.
+
+\subsection{HW auto-stack (8 words)}
+On exception entry CPU pushes 8 regs onto active stack in order (low addr first): \cee{R0, R1, R2, R3, R12, LR, PC, xPSR}. Cost = 8 cycles (overlapped with vector fetch). On return same regs unstacked $\to$ 8 cycles. Caller-saved set: ISR may freely clobber R0--R3, R12 without saving; if it touches R4--R11 it must push/pop them itself.
+
+\begin{hwp}\textbf{P2 (15pt)} 8 stk + 10 ISR (3-stage pipe full = 1 cyc/instr) + 8 unstk = \textbf{26 cyc}. ISR fetch overlaps with stacking (no extra).\end{hwp}
+\begin{hwp}\textbf{P3 (5pt)} PSR ExcNum 22 $\Rightarrow$ IRQn = 22-16 = \textbf{6} (EXTI0).\end{hwp}
+
+\subsection{NVIC layout (base = SCS+0x100 = \cee{0xE000E100})}
+\cee{SCS\_BASE = 0xE000E000}; \cee{SysTick = SCS+0x010 = 0xE000E010}; \cee{NVIC = SCS+0x100 = 0xE000E100}.\\
+\textbf{NVIC\_Type struct} (offsets relative to NVIC\_BASE; instructor uses 0xE000\_E000 base in P5):
+\begin{tabular}{@{}lll@{}}
+\textbf{Field} & \textbf{Off (NVIC base)} & \textbf{Off (0xE000\_E000)}\\
+\cee{ISER[8]} u32 & 0x000 & 0x100\\
+\cee{ICER[8]} u32 & 0x080 & 0x180\\
+\cee{ISPR[8]} u32 & 0x100 & 0x200\\
+\cee{ICPR[8]} u32 & 0x180 & 0x280\\
+\cee{IABR[8]} u32 & 0x200 & 0x300\\
+\cee{IP[240]} u8  & 0x300 & 0x400\\
+\cee{STIR}    u32 & 0xE00 & 0xF00\\
+\end{tabular}
+
+\textbf{Bit/word indexing} for any of ISER/ICER/ISPR/ICPR/IABR: \cee{idx = IRQn>>5} (IRQn/32), \cee{bit = IRQn\&31} (IRQn\%32). IP is byte-indexed: \cee{IP[IRQn]}.
+
+\textbf{Common operations:}\\
+\cee{NVIC->ISER[IRQn>>5] = 1U<<(IRQn\&31);}\hfill // enable\\
+\cee{NVIC->ICER[IRQn>>5] = 1U<<(IRQn\&31);}\hfill // disable\\
+\cee{NVIC->ICPR[IRQn>>5] = 1U<<(IRQn\&31);}\hfill // clr pend\\
+\cee{NVIC->ISPR[IRQn>>5] = 1U<<(IRQn\&31);}\hfill // sw pend\\
+\cee{NVIC->IP[IRQn] = pn<<(8-N);}\hfill // N priority bits
+
+\begin{hwp}\textbf{P4 (10pt)} NVIC=\textbf{0xE000\_E100}, SysTick=\textbf{0xE000\_E010}.\end{hwp}
+\begin{hwp}\textbf{P5 (10pt)} Struct@\cee{0xE000\_E000} (instructor convention): \cee{\&ICER[4]} = 0x080+4*4 = 0x090 $\Rightarrow$ \textbf{0xE000\_E090}. \cee{\&IP[4]} = 0x300+4 = \textbf{0xE000\_E304}.\end{hwp}
+\begin{hwp}\textbf{P6 (10pt)} IRQn=69 $\Rightarrow$ \cee{ICPR[69/32]=ICPR[2]}, bit \cee{69\%32 = 5}.\end{hwp}
+
+\subsection{Priority bits + AIRCR PRIGROUP}
+STM32 uses upper N bits of \cee{IP[IRQn]} (typ N=4 $\Rightarrow$ shift left by 4, lower 4 bits ignored). \cee{NVIC\_SetPriority(IRQn,pn)} writes \cee{IP[IRQn] = (pn \& ((1U<<N)-1)) << (8-N);}\\
+\textbf{SCB->AIRCR PRIGROUP} (bits 10:8) splits the N priority bits into preemption (PPN) high bits and sub-priority (SPN) low bits. With N=4 and 2 PPN bits / 2 SPN bits: \cee{PN = (PPN<<2) + SPN}, range 0--15.\\
+\textbf{Preemption rule:} ISR-A preempts running ISR-B iff \cee{PPN\_A < PPN\_B} (strict). SPN only orders simultaneous-pending IRQs of equal PPN (tie-break for which runs first), it never causes preemption.\\
+\textbf{Lower number = higher priority} for both PPN and overall PN.
+
+\subsection{HW4 P7 (35pt) priority drill}
+Setup: 4 priority bits in IP[7:4]; PPN=2 bits, SPN=2 bits; \cee{PN=(PPN<<2)+SPN}.\\
+Demo proj: UART2 (IRQn2) PPN=1,SPN=0 $\Rightarrow$ PN=4. SysTick (IRQn3) PPN=0,SPN=0 $\Rightarrow$ PN=0. EXTI0 (IRQn1) PPN=2,SPN=0 $\Rightarrow$ PN=8 (or PPN=1,SPN=0 $\Rightarrow$ PN=4).\\
+1. \cee{IP[IRQn2]} stored in upper nibble: \cee{4<<4 = 0x40 = 0b0100\_0000}.\\
+2. IRQn1 preempt IRQn2? PPN1$\geq$PPN2 (2$\geq$1 or 1$\geq$1) $\Rightarrow$ \textbf{No}.\\
+3. IRQn3 preempt IRQn2? PPN3=0 $<$ PPN2=1 $\Rightarrow$ \textbf{Yes}.\\
+4. PN range for IRQn4 to preempt IRQn2: need PPN4$<$1 $\Rightarrow$ PPN4=0, SPN=0..3 $\Rightarrow$ \textbf{PN $\in$ [0,3]}.\\
+5. PN range to NOT preempt: PPN4$\geq$1 $\Rightarrow$ PPN4$\in\{1,2,3\}$, each with 4 SPN $\Rightarrow$ \textbf{PN $\in$ [4,15]}.
+
+\subsection{EXTI peripheral}
+EXTI lines 0--15 are GPIO pins; lines 16+ are internal events (PVD, RTC, USB, etc.).
+\begin{tabular}{@{}lll@{}}
+\textbf{Reg} & \textbf{Off} & \textbf{Purpose}\\
+\cee{EXTI->IMR}  & 0x00 & Interrupt mask (1=enable IRQ)\\
+\cee{EXTI->EMR}  & 0x04 & Event mask (1=enable event/wakeup)\\
+\cee{EXTI->RTSR} & 0x08 & Rising trigger select\\
+\cee{EXTI->FTSR} & 0x0C & Falling trigger select\\
+\cee{EXTI->SWIER}& 0x10 & SW interrupt event reg\\
+\cee{EXTI->PR}   & 0x14 & Pending reg (W1C to clear)\\
+\end{tabular}
+Write 1 to a bit of \cee{EXTI->PR} to clear the pending flag. Writing 0 has no effect.\\
+\textbf{Multiplexed IRQ vectors:} EXTI0--EXTI4 each have own IRQn; EXTI5--9 share \cee{EXTI9\_5\_IRQn}; EXTI10--15 share \cee{EXTI15\_10\_IRQn}. Shared handlers must read PR to find which line.
+
+\subsection{SYSCFG\_EXTICR (port routing)}
+4 registers, each maps 4 EXTI lines, 4 bits/line. \cee{SYSCFG->EXTICR[n]} (n=0..3) handles lines 4n..4n+3. Field index inside reg = \cee{(line\%4)*4}. Field value: A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7.
+
+\textbf{Hookup pattern:}
+\begin{lstlisting}[language={}]
+SYSCFG->EXTICR[line/4] &= ~(0xFU << (4*(line%4)));
+SYSCFG->EXTICR[line/4] |=  (port_code << (4*(line%4)));
+EXTI->IMR  |=  (1U<<line);   // unmask IRQ
+EXTI->RTSR |=  (1U<<line);   // rising edge
+EXTI->FTSR &= ~(1U<<line);   // (or set for falling)
+NVIC->ISER[exti_irqn>>5] = 1U<<(exti_irqn&31);
+\end{lstlisting}
+
+\begin{hwp}\textbf{P8 (20pt)} EXTI3 routed to PC3, but instructor uses \cee{EXTICR1} (atypical) -- treat EXTI3 as occupying bits [12:15] of that reg. PortC code = \cee{0b0010}.\\
+\textbf{MASK\_FOR\_EXTI3} = \cee{0xF<<12 = 0xF000}.\\
+\textbf{VALUE\_FOR\_EXTI3\_PC} = \cee{0b0010<<12 = 0x2000}.\\
+Pattern: \cee{EXTICR\&=\~{}MASK; EXTICR|=VALUE;} (read-mod-write).
+\end{hwp}
+
+\subsection{ISR handler skeleton (EXTI on PA0)}
+\begin{lstlisting}[language={}]
+void EXTI0_IRQHandler(void){
+  if (EXTI->PR & (1U<<0)) {       // check line 0
+    EXTI->PR = (1U<<0);           // W1C: clear pending
+    /* user logic: read GPIO, set flag, etc. */
+  }
+}
+\end{lstlisting}
+Always clear EXTI->PR \emph{before} returning, else IRQ refires. NVIC pending bit auto-clears on entry; only re-set if line still asserted at return.
+
+\subsection{HW4 P1 (25pt) IDR check decomposition}
+\cee{bool s = ((GPIOA->IDR \& GPIO\_PIN\_1) == GPIO\_PIN\_1);}\\
+1. \cee{GPIO\_PIN\_1 = 1<<1 = 2} (\cee{0x0002}).\\
+2. Pressed (bit1=1): \cee{IDR \& 2 = 2}.\\
+3. \cee{(2 == 2) = 1} (true).\\
+4. Released (bit1=0): \cee{IDR \& 2 = 0}.\\
+5. \cee{(0 == 2) = 0} (false).
+
+\subsection{Preemption + nesting summary}
+\begin{itemize}
+\item Higher-pri (smaller PPN) IRQ asserting during lower-pri ISR $\Rightarrow$ HW pushes another 8-word frame, vectors to new handler. On return, original ISR resumes.
+\item Equal PPN: new IRQ stays pending until current ISR returns; then runs (SPN orders multiple equal-PPN pending).
+\item Tail-chaining: if a pending IRQ has PPN $\leq$ current, on EXC\_RETURN the CPU skips full unstack/restack and jumps directly to next ISR (saves $\sim$6 cycles).
+\item Late arrival: a higher-pri IRQ asserting during stacking causes vector to be re-fetched for that higher-pri handler instead.
+\item BASEPRI register: SW-controlled priority threshold; setting BASEPRI=k masks all IRQs with PN$\geq$k (0 = disabled mask).
+\item PRIMASK / FAULTMASK: \cee{cpsid i} / \cee{cpsie i} (PRIMASK) disables all configurable IRQs; FAULTMASK also blocks HardFault.
+\end{itemize}
+
+\subsection{Quick numeric reference}
+\begin{tabular}{@{}ll@{}}
+PSR ExcNum 16 = IRQ0 & PSR ExcNum 22 = IRQ6 = EXTI0\\
+SysTick (intrnl) IRQn=$-1$ & SVCall IRQn=$-5$, PendSV=$-2$\\
+NVIC\_BASE=\cee{0xE000E100} & SCB\_BASE=\cee{0xE000ED00}\\
+SysTick\_BASE=\cee{0xE000E010} & SCS\_BASE=\cee{0xE000E000}\\
+\end{tabular}

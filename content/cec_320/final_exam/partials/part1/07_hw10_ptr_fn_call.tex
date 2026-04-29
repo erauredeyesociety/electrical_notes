@@ -1,0 +1,227 @@
+\section{HW10: C Pointers + LDR/STR + Function Calls}
+
+\subsection{C precedence (rows that matter)}
+\begin{tabular}{@{}clll@{}}
+\toprule
+L & ops & assoc & note \\
+\midrule
+1 & \cee{() [] . -> ++ -- (post)} & L$\to$R & postfix inc/dec \\
+2 & \cee{++ -- (pre)}, \cee{* \& (cast)} & R$\to$L & deref, addr-of \\
+14 & \cee{= += ...} & R$\to$L & assignment \\
+\bottomrule
+\end{tabular}
+\textbf{Rule:} postfix \cee{p++} (L1) yields OLD pointer; deref/prefix-\cee{++}/cast share L2 R$\to$L. Decode right-to-left.
+
+\subsection{Idiom $\to$ ASM cookbook}
+\begin{tabular}{@{}lll@{}}
+\toprule
+C & ASM & note \\
+\midrule
+\cee{v=*(p+k)}  & \asm{ldrb r0,[r1,\#k]}   & basic, p unchanged \\
+\cee{v=*++p}    & \asm{ldrb r0,[r1,\#1]!}  & pre (p first) \\
+\cee{v=*p++}    & \asm{ldrb r0,[r1],\#1}   & post (load first) \\
+\cee{*(p+k)=v}  & \asm{strb r0,[r1,\#k]}   & basic store \\
+\cee{*p++=v}    & \asm{strb r0,[r1],\#1}   & post store \\
+\cee{++(*p)}    & ldr;add\#1;str           & READ-MOD-WRITE \\
+\cee{(*p)++}    & ldr;mov;add\#1;str       & return old \\
+\cee{++*p++}    & ldr post;add;str\asm{[\#-1]} & WB to OLD \\
+\cee{*p++=*q++} & ldr post; str post       & two ptrs walk \\
+\bottomrule
+\end{tabular}
+\textbf{Hook:} \texttt{!}$=$urgent update BEFORE; trailing \texttt{\#}$=$update AFTER.
+
+\subsection{Type suffix table (load only --- stores zero/sign agnostic)}
+\begin{tabular}{@{}llll@{}}
+\toprule
+sfx & C type & ext & sample \\
+\midrule
+(none) & \cee{int32\_t} & --- & \asm{ldr} \\
+B  & \cee{uint8\_t}  & zero $\to$ 32 & 0x80$\to$0x0000\_0080 \\
+SB & \cee{int8\_t}   & sign $\to$ 32 & 0x80$\to$0xFFFF\_FF80 \\
+H  & \cee{uint16\_t} & zero $\to$ 32 & 0xB0A0$\to$0x0000\_B0A0 \\
+SH & \cee{int16\_t}  & sign $\to$ 32 & 0xB0A0$\to$0xFFFF\_B0A0 \\
+\bottomrule
+\end{tabular}
+Sign-extension test: MSB of the loaded chunk (bit 7 for SB, bit 15 for SH).
+\textbf{STR has no S/U variant} (you store the bits you have).
+
+\subsection{Pointer arithmetic scaling}
+Increment of typed pointer scales by \cee{sizeof(*p)}: \cee{p8++}$=$+1B,
+\cee{p16++}$=$+2B, \cee{p32++}$=$+4B. Register-offset shift exponent matches
+log$_2$(elem): \asm{[Rb,Ri,LSL \#0/1/2/3]} for byte/hw/word/dword.
+\textbf{Typed difference} \cee{q-p} returns \emph{elements}, not bytes
+(divide-by-size baked in).
+
+\subsection{HW10 P1 --- four-line memory \& pointer trace}
+Array: \cee{uint8\_t my\_arr[16]} at \texttt{0x2000\_0100}, \cee{my\_arr[i]=2i}.
+\cee{p8a=0x...100}, \cee{p8b=0x...10C}.
+\begin{tabular}{@{}lllll@{}}
+\toprule
+ln & RHS & memory effect & p8a$\to$ & p8b$\to$ \\
+\midrule
+4 & \cee{*p8b++=*(p8a+2)}     & rd 0x102$=$0x04; \texttt{0x10C}$\leftarrow$0x04 & 0x100 & 0x10D \\
+5 & \cee{*p8b++=++*(p8a+4)}   & 0x104:0x08$\to$0x09; \texttt{0x10D}$\leftarrow$0x09 & 0x100 & 0x10E \\
+6 & \cee{*p8b++=++*p8a++}     & 0x100:0x00$\to$0x01; \texttt{0x10E}$\leftarrow$0x01 & 0x101 & 0x10F \\
+7 & \cee{*p8b++=*p8a++}       & rd 0x101$=$0x02; \texttt{0x10F}$\leftarrow$0x02 & 0x102 & 0x110 \\
+\bottomrule
+\end{tabular}
+
+\textbf{Bytes at 0x10C--0x10F:} \texttt{0x04,0x09,0x01,0x02}.
+\textbf{Mem changes by RHS:} L4 none, L5 0x104(0x08$\to$0x09), L6 0x100(0x00$\to$0x01), L7 none.
+
+\textbf{Line 6 dissection (\cee{++*p8a++}, the trickiest):}
+postfix \cee{p8a++} (L1) gives OLD pointer 0x100; deref reads 0x00; prefix
+\cee{++} adds 1, writes 0x01 BACK to 0x100. So memory at 0x100 changes; the
+loaded value is 0x01; p8a now 0x101.
+
+\subsection{HW10 P1.3 --- ASM (leaf, \cee{my\_fn(uint8\_t*, uint8\_t*)})}
+\begin{lstlisting}
+my_fn:                       @ R0=p8a, R1=p8b (caller-saved)
+  @ L4: *p8b++ = *(p8a+2);
+    ldrb r2, [r0, #2]          @ basic offset, p8a stays
+    strb r2, [r1], #1          @ post-idx: *p8b=r2; p8b++
+  @ L5: *p8b++ = ++*(p8a+4);
+    ldrb r2, [r0, #4]
+    add  r2, r2, #1            @ prefix-inc the value
+    strb r2, [r0, #4]          @ WRITEBACK -- don't forget!
+    strb r2, [r1], #1
+  @ L6: *p8b++ = ++*p8a++;
+    ldrb r2, [r0], #1          @ post-idx: r2=*OLD p8a; R0+=1
+    add  r2, r2, #1
+    strb r2, [r0, #-1]         @ writeback to OLD addr (R0-1)
+    strb r2, [r1], #1
+  @ L7: *p8b++ = *p8a++;
+    ldrb r2, [r0], #1
+    strb r2, [r1], #1
+    bx   lr                     @ leaf: no PUSH/POP, no LR save
+\end{lstlisting}
+
+\textbf{Three patterns to memorize:}
+(1) \cee{++(*(p+k))} $=$ ldrb / add\#1 / strb-to-same-offset / strb-to-dest;
+(2) \cee{++*p++}     $=$ ldrb post-idx / add / strb \asm{[\#-1]} / strb post-idx;
+(3) \cee{*p++}       $=$ ldrb post-idx alone (no writeback).
+
+\subsection{AAPCS: who-saves-what (the only table you need)}
+\begin{tabular}{@{}lll@{}}
+\toprule
+reg & role & preserved? \\
+\midrule
+R0--R3 & args + return value & no (caller-saved, scratch) \\
+R4--R11& callee scratch       & \textbf{yes} (PUSH if used) \\
+R12 (IP)& scratch              & no \\
+R13 (SP)& stack pointer        & yes (8-byte aligned at boundary) \\
+R14 (LR)& return addr          & save if you BL (stem) \\
+R15 (PC)& program counter      & --- \\
+\bottomrule
+\end{tabular}
+
+\textbf{Caller widens narrow types} (\cee{int8\_t/int16\_t}) to 32b before
+placing in R0--R3: signed args sign-ext, unsigned zero-ext. 64-bit args use
+register pair (lo, hi), even-aligned (R0:R1 or R2:R3).
+
+\subsection{Leaf vs Stem function templates}
+\textbf{Leaf} (no BL inside, $\le$4 scratch regs needed): no push, no pop.
+\begin{lstlisting}
+leaf_fn:                  @ R0..R3 in, R0 out
+    @ work in R0--R3, R12
+    bx   lr
+\end{lstlisting}
+
+\textbf{Stem} (calls others or needs R4--R11): push LR + any callee-saved used.
+Stash-args pattern: copy R0--R3 into R4--R7 \emph{before} BL clobbers them.
+\begin{lstlisting}
+stem_fn:
+    push {r4-r7, lr}        @ save callee + return addr
+    mov  r4, r0             @ stash args (R0..R3 die on next BL)
+    mov  r5, r1
+    mov  r6, r2
+    mov  r7, r3
+    @ ... bl other_fn; arg in R0; result in R0 ...
+    @ recover args from R4--R7 between calls
+    pop  {r4-r7, pc}        @ pop PC = return; replaces BX LR
+\end{lstlisting}
+Push/pop list \emph{must match}; pushing odd \# of regs $\to$ pad for 8B align
+(usually push LR alongside even count). \asm{POP \{...,pc\}} returns directly.
+
+\subsection{HW10 P2 --- four-task LDRD/SB/SH/H trace}
+Setup: \cee{ipt[i]=i<<4} $\to$ bytes 0x00,0x10,0x20,...,0xF0. Word at ipt+0
+$=$ 0x30201000 (little-endian: LSB at lowest addr). Halfwords at
+ipt+0/+2/.../+14 $=$ 0x1000,0x3020,0x5040,0x7060,0x9080,0xB0A0,0xD0C0,0xF0E0.
+Entry R0$=$0x2000\_1010 (ipt), R1$=$0x2000\_1040 (opt).
+
+\textbf{T1: LDRD pre-idx (8B$\to$2 regs).}
+\asm{ldrd r2,r3,[r0,\#8]!} : R0$+$=8 first, then load lo word at \texttt{[R0]}
+$=$ 0xB0A09080, hi word at \texttt{[R0+4]} $=$ 0xF0E0D0C0.
+\asm{strd r2,r3,[r1,\#0]} writes opt[0],opt[1].
+\textbf{Print:} \texttt{Out1=0xB0A09080, Out2=0xF0E0D0C0}.
+
+\textbf{T2: LDRSB pre-idx, sign-extend.}
+\asm{ldrsb r2,[r0,\#4]!}: R0$\to$ipt+4, byte 0x40 (bit7$=$0) $\to$ R2$=$0x0000\_0040.
+\asm{ldrsb r3,[r0,\#4]!}: R0$\to$ipt+8, byte 0x80 (bit7$=$1) $\to$ R3$=$0xFFFF\_FF80.
+After: R0$=$\textbf{0x2000\_1018}, R1$=$0x2000\_1040 (STRD has no \texttt{!}).
+\textbf{Print:} \texttt{Out1=0x40, Out2=0xFFFFFF80}.
+
+\textbf{T3: LDRSH post-idx, odd stride 10.}
+\asm{ldrsh r2,[r0],\#10}: load hw at ipt+0$=$0x1000 (bit15$=$0) $\to$
+R2$=$0x0000\_1000; THEN R0$+$=10.
+\asm{ldrsh r3,[r0],\#4}: hw at ipt+10$=$0xB0A0 (bit15$=$1) $\to$
+R3$=$0xFFFF\_B0A0; R0$+$=4.
+After: R0$=$\textbf{0x2000\_101E} (unaligned!).
+\textbf{Print:} \texttt{Out1=0x1000, Out2=0xFFFFB0A0}.
+
+\textbf{T4: LDRH register-offset, zero-ext.} Called \cee{task4(ipt,opt,1)}, R2$=$1.
+\asm{ldrh r3,[r0,r2,LSL \#1]}: EA$=$ipt$+$2, hw 0x3020 $\to$ R3$=$0x0000\_3020;
+\asm{str r3,[r1,\#0]}; \asm{add r2,\#1} (R2$=$2); reload at ipt$+$4 $=$
+0x5040 $\to$ R3$=$0x0000\_5040; \asm{str r3,[r1,\#4]}; \asm{add r2,\#1} (R2$=$3).
+\textbf{Print:} \texttt{Out1=0x3020, Out2=0x5040}. \textbf{R2$=$0x3, R3$=$0x5040.}
+
+\subsection{Sign-extend pivots: LOAD vs CALL}
+\textbf{LOAD:} LDRSB/LDRSH test bit 7/15 of loaded data, widen to 32b. LDRB/LDRH zero-pad.
+\textbf{CALL:} caller widens narrow C arg per type signedness BEFORE \asm{BL}. Two independent extensions.
+
+\subsection{HW10 P2 --- ASM$\to$C reverse}
+\textbf{T1} 8B copy: \cee{*((int64\_t*)opt)=*((int64\_t*)ipt+1)} (or word-by-word with \cee{(int32\_t*)}).
+\textbf{T2} pre-inc \cee{int8\_t*}: \cee{p8+=4; opt[0]=*p8; p8+=4; opt[1]=*p8;}.
+\textbf{T3} post-inc \cee{int16\_t*}: \cee{opt[0]=*p16; opt[1]=*(p16+5);} (\#10$=$5 elem).
+\textbf{T4} idx \cee{uint16\_t*}: \cee{int i=1; opt[0]=*(p16u+i); i++; opt[1]=*(p16u+i); i++;}.
+
+\subsection{Array-loop $+$ call pattern (compute index $\to$ ldr/bl/str)}
+Idiom: \cee{for(i;..) arr[i]=fn(arr[i],...)} compiles to:
+\begin{lstlisting}
+    @ R5=&arr (base, callee-saved), R8=i (callee-saved)
+loop:
+    ldr  r0, [r5, r8, lsl #2]   @ R0 = arr[i]   (32b elements)
+    bl   fn                      @ R0 = result; clobbers R0--R3,R12
+    str  r0, [r5, r8, lsl #2]   @ arr[i] = R0
+    add  r8, r8, #1
+    cmp  r8, r9                  @ R9 = N (callee-saved)
+    blt  loop
+\end{lstlisting}
+\textbf{Why callee-saved (R4--R11) for base/index/N:} they survive across
+\asm{BL fn}. Putting them in R0--R3/R12 would corrupt on every call.
+
+\subsection{Fast-failure modes}
+\begin{itemize}
+\item Forgetting STRB writeback after \cee{++(*p)}: needs \asm{ldr;add;str} then dest store.
+\item \asm{[r0,\#4]!} (pre, urgent BEFORE) vs \asm{[r0],\#4} (post, AFTER).
+\item LDRB on \cee{int8\_t} $\to$ wrong zero-pad; use LDRSB.
+\item STRD/LDRD w/o \texttt{!} doesn't update Ra (T1 R1 unchanged; T2 R0 advances).
+\item Reg-offset shift: LSL \#0/1/2/3 for byte/hw/word/dword.
+\item No \asm{push \{lr\}} in stem $\to$ \asm{BL} clobbers LR, return broken.
+\end{itemize}
+
+\subsection{One-line summary table}
+\begin{tabular}{@{}lll@{}}
+\toprule
+goal & instruction & C \\
+\midrule
+\cee{*(p+k)}      & \asm{ldr\{B/H\}\{S\} Rd,[Ra,\#os]} & basic, p stays \\
+\cee{*++p}        & \asm{...,[Ra,\#os]!}                & pre, p$+$=os first \\
+\cee{*p++}        & \asm{...,[Ra],\#os}                 & post, load then p$+$=os \\
+\cee{*(p+i)} typed& \asm{...,[Ra,Ri,LSL \#k]}           & k$=$log$_2$elem \\
+8B copy           & \asm{ldrd}/\asm{strd}               & 64b, two regs \\
+sign-ext load     & \asm{ldrsb}/\asm{ldrsh}             & test bit 7/15 \\
+leaf return       & \asm{bx lr}                          & no push \\
+stem return       & \asm{pop \{...,pc\}}                & pushed LR \\
+\bottomrule
+\end{tabular}

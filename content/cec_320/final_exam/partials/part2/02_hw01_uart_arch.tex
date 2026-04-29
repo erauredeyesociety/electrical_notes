@@ -1,0 +1,63 @@
+% =============================================================================
+% HW1 --- UART, ARM/MCU pipeline architecture, numeric expressions
+% =============================================================================
+\section{HW1: UART, MCU Arch, Numeric Expressions}
+
+\subsection{P1--P2: UART framing \& parity}
+A UART frame is \emph{start (1)} + \emph{data ($N$)} + \emph{parity (0/1)} + \emph{stop (1--2)}; the line idles \textbf{high} and the start bit pulls it \textbf{low} (active low). Data rate in bytes/s = \cee{baud / bits\_per\_frame}; only the data field is payload, but every overhead bit consumes baud time.
+\begin{hwp}
+\textbf{P1} (10pt) 115200 bps, frame = 1+8+1+1 = 11 bits, 1 data byte. Rate = $115200/11 = \mathbf{10472.7~B/s}$. Trap: divide by 11 (full frame), \emph{not} 8.
+\end{hwp}
+\begin{hwp}
+\textbf{P2} (10pt) Data \cee{0b1101\_1100} has 5 ones (odd count). Parity bit makes the total \emph{count of 1's including parity} match the chosen scheme: \textbf{even $\Rightarrow$ p = 1} (5+1 = 6 ones), \textbf{odd $\Rightarrow$ p = 0} (5 ones already odd). See Lctr 2 \S 2.2.4.
+\end{hwp}
+
+\subsection{P3--P4: Pipeline throughput}
+$k$-stage pipeline: first instr exits at cycle $k$, then one per cycle. Total cycles for $n$ ideal instructions $= n + (k-1)$. Throughput $T = n/(n+k-1) \to 1$ as $n\to\infty$. A \emph{taken branch flushes} the pipeline, so each iteration of a tight loop pays the $(k{-}1)$-cycle fill cost again. \textbf{Loop unrolling} amortizes that flush over more useful instructions, raising $T$ toward 1.
+
+\begin{center}\scriptsize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+case & instr $n$ & cycles & $T$ \\
+\midrule
+P3.1 base loop (5 + 1 br) & 6  & $3{+}5{=}8$  & $6/8=0.750$ \\
+P3.2 unroll $\times 4$ (20 + 1 br) & 21 & $3{+}20{=}23$ & $21/23=0.913$ \\
+P4.1 ideal, 10 instr, $k{=}3$ & 10 & $10{+}2{=}12$ & $10/12=0.833$ \\
+P4.2 ideal, $n$ instr, $k{=}3$ & $n$ & $n{+}2$ & $n/(n{+}2)\to 1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{hwp}
+\textbf{P3 trap:} the branch \emph{is} a real instruction --- it counts in both numerator and denominator. \textbf{P4 trap:} ``perfect scenario'' = no flushes, no stalls; only the initial fill of $k{-}1$ cycles.
+\end{hwp}
+
+\subsection{Cortex-M 3-stage pipeline (context)}
+Stages: \textbf{Fetch $\to$ Decode $\to$ Execute}. Each stage = 1 cycle, so a fully-loaded pipe retires 1 instr/cycle. Pipeline hazards on M-class: taken branches (flush F\&D), \cee{ldr} from slow memory (stall), and self-modifying / interrupt entry (refill from new PC). Cortex-M0/M0+ are 2-stage; M3/M4 are 3-stage; M7 is 6-stage superscalar (out of scope).
+
+\subsection{Cortex-M memory map \& core regs (cheat)}
+Fixed regions: \cee{0x0000\_0000} code, \cee{0x2000\_0000} SRAM, \cee{0x4000\_0000} peripherals (APB1/APB2/AHB1/AHB2 sub-ranges), \cee{0xE000\_0000} private peripheral bus (NVIC, SCB, SysTick at \cee{0xE000\_E000}). Core regs: \texttt{R0--R12} general, \texttt{R13=SP}, \texttt{R14=LR}, \texttt{R15=PC}, plus \texttt{xPSR} (APSR/IPSR/EPSR), \texttt{PRIMASK}, \texttt{CONTROL}.
+
+\subsection{P5--P6: Binary conversions \& shift identities}
+Decompose decimal as a sum of powers of 2; pad to width with leading 0s; left-shift by $k$ multiplies by $2^k$, right-shift by $k$ divides (floor for unsigned).
+\begin{center}\scriptsize
+\begin{tabular}{@{}rll@{}}
+\toprule
+dec & 5-bit & 8-bit \\
+\midrule
+28 = 16+8+4 & \cee{0b1\_1100} & \cee{0b0001\_1100} \\
+14 = 8+4+2  & \cee{0b0\_1110} & \cee{0b0000\_1110} \\
+24 = 16+8   & \cee{0b1\_1000} & \cee{0b0001\_1000} \\
+6  = 4+2    & \cee{0b0\_0110} & \cee{0b0000\_0110} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{hwp}
+\textbf{P5B:} $28 = 14 \ll 1$ (left-shift by 1 = $\times 2$). \textbf{P6B:} $a=24,\;b=6$, so $b = a \gg 2$ (right-shift by 2 = $\div 4$).
+\end{hwp}
+
+\subsection{Two's complement quick rules (carryover for HW2)}
+For an $N$-bit signed field: range $[-2^{N-1},\;2^{N-1}-1]$. Encode $-x$: compute $2^N - x$ (or invert all bits and add 1). Decode: if MSB$=1$, value $= \mathrm{raw} - 2^N$. Sign-extension copies the MSB into all higher bits when widening; zero-extend for unsigned.
+
+\begin{ex}
+5-bit TC: $-8 \to 32-8 = 24 = $ \cee{0b1\_1000}; \cee{0b1\_1010} $= 26-32 = -6$. Left-shift of a signed value can overflow into the sign bit --- use unsigned for bitfield work.
+\end{ex}

@@ -1,0 +1,363 @@
+% =============================================================================
+% Lectures 2--9, 13 quick reference (companion to HW partials)
+% =============================================================================
+\section{Early Lectures (L2--9, L13) Reference}
+
+\subsection{L2: UART / USART}
+\textbf{UART} = 2-wire (TX/RX + GND), no clock; \textbf{USART} adds CLK (3 wires). Frame: \cee{START | D0..Dn | [P] | STOP}, line \emph{idles HIGH}, START is LOW (1$\to$0 edge triggers RX). Data field is 6/7/8 bits, sent \textbf{LSB-first}. Both ends must agree on baud, frame size, parity, stop bits before any byte flows. Modern receivers \textbf{oversample 16$\times$} to reject noise.\\
+\textbf{Baud} = bits/sec (incl.\ start/stop/parity overhead). Throughput = baud / frame\_bits. \emph{8N1}: 1+8+0+1 = 10 bits/byte $\Rightarrow$ 9600 bps $=$ 960 B/s; \emph{8E1}: 11 bits/byte.\\
+\textbf{Parity:} even = make total \#1s (data+parity) even; odd = make total odd. Detects 1-bit errors only; cannot correct or catch even-count errors.\\
+\textbf{STM32 USART defaults} (cc1s template): 115200 bps, 8 data, no parity, 1 stop, 16$\times$ OS.\\
+\textbf{HAL API:}
+\begin{lstlisting}[language={}]
+HAL_UART_Transmit(&huart2, pData, Size, Timeout);
+HAL_UART_Receive (&huart2, pData, Size, Timeout);
+HAL_UART_Receive_IT(&huart2, buf, n);   // IRQ-driven
+\end{lstlisting}
+\cee{huart2} is a \cee{UART\_HandleTypeDef} struct; pass its address. For \cee{printf}/\cee{scanf} retarget, override \cee{\_\_io\_putchar} / \cee{\_\_io\_getchar} to call HAL TX/RX, and call \cee{SET\_STDIN\_TO\_NO\_BUFFER} once before \cee{scanf}.
+\begin{ex}
+9600 bps, 7E2 frame: 1+7+1+2 = 11 bits, throughput $=$ \cee{9600/11 $\approx$ 873 B/s}. Even parity on \cee{0b0111\_1110} (six 1s) $\Rightarrow$ p\,$=$\,0.
+\end{ex}
+
+\subsection{L3: Cortex-M4 architecture, memory, pipeline}
+\textbf{Bus:} M0/M0+ Von-Neumann (1 bus); \textbf{M3/M4/M7 Harvard} (separate I/D). All Cortex-M are 32-bit (32-bit regs, 32-bit ALU; 32$\times$32$\to$64 MUL). \\
+\textbf{Register file:} R0--R7 \emph{low}, R8--R12 \emph{high}, R13=SP (banked MSP/PSP), R14=LR, R15=PC, plus xPSR (APSR/IPSR/EPSR), PRIMASK, FAULTMASK, BASEPRI, CONTROL.\\
+\textbf{Modes:} Thread (app code, MSP or PSP) vs.\ Handler (ISRs, always MSP). Privileged vs.\ unprivileged via CONTROL.nPRIV.
+
+\textbf{Memory map (4 GiB)}
+\begin{center}\scriptsize
+\begin{tabular}{@{}ll@{}}
+\toprule
+range & region \\
+\midrule
+\cee{0x0000\_0000}--\cee{0x07FF\_FFFF} & Code/Flash (128 MB) \\
+\cee{0x2000\_0000}+                    & SRAM (data) \\
+\cee{0x4000\_0000}--\cee{0x5FFF\_FFFF} & Peripherals (512 MB) \\
+\cee{0x6000\_0000}--\cee{0x9FFF\_FFFF} & External RAM \\
+\cee{0xA000\_0000}--\cee{0xDFFF\_FFFF} & External device \\
+\cee{0xE000\_0000}--\cee{0xE00F\_FFFF} & Private periph (NVIC/SCB/SysTick) \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Granularity:} byte (each addressed); halfword = 2B (align 2); word = 4B (align 4). Aligned word read = 1 byte read in cycles. SRAM layout high$\to$low: stack (grows down), heap (grows up), uninit data, init data.
+
+\textbf{Pipeline (M3/M4 = 3-stage F/D/E):} 1 stand-alone instr = 3 cyc; $n$ pipelined = $n+2$ cyc. \textbf{Throughput} $T = n/(n+2) \to 1$. Taken branch \emph{flushes} pipe (refill cost = 2 cyc). Loops: pay flush each iteration unless unrolled.
+
+\textbf{Number bases (C):}\\
+\cee{70 == 0b1000110 == 0106 == 0x46}. Suffix \cee{1U}$\to$uint32, \cee{1L}$\to$int32. Bin$\leftrightarrow$oct group by 3, bin$\leftrightarrow$hex group by 4 from LSB. n-LSB mask: \cee{(1U<<n)-1}.
+
+\subsection{L4: Data representation}
+\textbf{Three signed encodings (4-bit demo):}
+\begin{center}\scriptsize
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+bits & SnM & 1's-comp & 2's-comp \\
+\midrule
+\cee{0000} & $+0$ & $+0$ & $0$ \\
+\cee{0111} & $+7$ & $+7$ & $+7$ \\
+\cee{1000} & $-0$ & $-7$ & $\mathbf{-8}$ \\
+\cee{1111} & $-7$ & $-0$ & $-1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+TC has a \emph{single} zero $\Rightarrow$ HW uses TC. Range $[-2^{N-1},\,2^{N-1}-1]$.\\
+\textbf{Encode $-\alpha$:} bit method = invert + add 1; decimal method $= 2^N - \alpha$. Ex.\ 5-bit $-3$: $32-3=29=$\cee{0b11101}.\\
+\textbf{Decode:} read unsigned U; if MSB$=$1 then val $=$ U$-2^N$. Ex.\ \cee{0b11101}\,$=$29$-$32$=-3$.\\
+\textbf{Sign-extension:} \emph{repeat the MSB} when widening signed; zero-extend unsigned. $-3$: 4b=\cee{1101}, 5b=\cee{1\,1101}, 6b=\cee{11\,1101}.\\
+\textbf{Why TC:} one zero, $a-b = a+\mathrm{TC}(b)$, ADD/SUB/MUL HW unified for signed/unsigned.
+
+\textbf{C type widths}
+\begin{center}\scriptsize
+\begin{tabular}{@{}lrll@{}}
+\toprule
+type & N & unsigned & signed (TC) \\
+\midrule
+char/int8\_t  & 8  & 0..255       & $-128$..127 \\
+short/int16   & 16 & 0..65535     & $-32768$..32767 \\
+int/long/int32 & 32 & 0..$2^{32}{-}1$ & $-2^{31}$..$2^{31}{-}1$ \\
+long long/int64 & 64 & 0..$2^{64}{-}1$ & $-2^{63}$..$2^{63}{-}1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Endianness (ARM = LE):} word/halfword address $=$ \emph{lowest} byte addr regardless of endianness. \textbf{LE: LSB at lowest addr}, MSB at highest. Mem \cee{0x2000\_0000..03} $=$ \cee{EF BE AD DE} $\Rightarrow$ LE word \cee{0xDEADBEEF}; BE word \cee{0xEFBEADDE}.
+
+\subsection{L5: Pointers + Unity}
+\textbf{Decl:} \cee{T *p [= addr];} -- the \cee{*} is part of the variable, not the type binding. \cee{\&x} address-of, \cee{*p} dereference.\\
+\textbf{Precedence:} postfix \cee{[],++,--} (prec 1, L$\to$R) bind tighter than prefix \cee{*,\&,(type),++,--} (prec 2, R$\to$L). Hence \cee{*p++ == *(p++)}; use \cee{(*p)++} to bump pointee.\\
+\textbf{Array decay:} \cee{arr} $\equiv$ \cee{\&arr[0]}; \cee{arr[i] == *(arr+i)}.\\
+\textbf{Pointer arith scales by sizeof:} \cee{p+n} advances \cee{n*sizeof(*p)} bytes. \cee{int8\_t* +2} = +2 bytes; \cee{int32\_t* +2} = +8 bytes. \cee{void*} = byte-granular universal ptr (cannot deref directly).\\
+\textbf{Casts:} \cee{(T*)p} reinterprets the address; \cee{(T)*p} reads native then truncates/extends. For \cee{p\_16=0xBEEF}: \cee{(int32\_t)*p\_16=0xFFFFBEEF} (signed, sign-ext); \cee{(int8\_t)*p\_16=0xEF} (low byte).
+
+\textbf{Increment idioms}
+\begin{lstlisting}[language={}]
+ch = *src++;     // deref *src, then src++
+ch = (*src)++;   // deref, then bump pointee value
+*dst++ = ch;     // *dst = ch, then dst++  (strcpy core)
+*++p = v;        // ++p first, then *p = v
+\end{lstlisting}
+
+\textbf{Storage qualifiers:} \cee{extern} (global, defined elsewhere), \cee{static} file-scope (private linkage), \cee{static} local (persists across calls), \cee{volatile} (no caching/CSE; required for MMIO regs and ISR-shared vars), \cee{const} (read-only).\\
+\textbf{RAM layout high$\to$low:} stack$\downarrow$ / heap$\uparrow$ / .bss / .data.
+
+\textbf{Unity test framework}
+\begin{lstlisting}[language={}]
+#include "unity.h"
+void setUp(void){}    void tearDown(void){}
+void test_<FUT_name>(void){
+  TEST_ASSERT_EQUAL_INT32(exp, FUT(args));
+}
+int main(void){
+  UNITY_BEGIN();
+  RUN_TEST(test_<FUT_name>);
+  return UNITY_END();
+}
+\end{lstlisting}
+Asserts: \cee{TEST\_ASSERT\_TRUE/FALSE/NULL}, \cee{...EQUAL\_INT8/16/32/64}, \cee{...EQUAL\_UINT*}, \cee{...EQUAL\_HEX8/16/32}, \cee{...EQUAL\_<T>\_ARRAY(exp,act,N)}, \cee{...EQUAL\_STRING}.
+
+\subsection{L6: GPIO}
+\textbf{Pin functions:} digital input (Schmitt), digital output, analog (ADC/DAC bypass), alternate function (UART/TIM/SPI). \textbf{Output stages:} push-pull (PMOS+NMOS, sources \emph{and} sinks; default for LEDs); open-drain (NMOS only, drives 0 or HiZ; needs external pull-up; supports wired-AND / level-shifting). \textbf{Input pulls:} HiZ floats randomly $\Rightarrow$ enable pull-up (reads 1 floating) or pull-down (reads 0).
+
+\begin{reg}
+\textbf{GPIOx register map} (STM32G4, GPIOA base \cee{0x4800\_0000})\\
+\begin{tabular}{@{}llll@{}}
+\toprule
+off & reg & purpose & b/pin \\
+\midrule
+\cee{0x00} & MODER   & mode select        & 2 \\
+\cee{0x04} & OTYPER  & PP=0 / OD=1        & 1 \\
+\cee{0x08} & OSPEEDR & slew rate          & 2 \\
+\cee{0x0C} & PUPDR   & pull-up/-down      & 2 \\
+\cee{0x10} & IDR     & input data (RO)    & 1 (lo16) \\
+\cee{0x14} & ODR     & output data        & 1 (lo16) \\
+\cee{0x18} & BSRR    & set/reset (WO,atomic) & 1+1 \\
+\cee{0x1C} & LCKR    & config lock        & 1 \\
+\cee{0x20} & AFR[2]  & alt-fn lo/hi nibble & 4 \\
+\cee{0x28} & BRR     & bit-reset only     & 1 \\
+\bottomrule
+\end{tabular}
+\end{reg}
+
+\textbf{MODER (2b/pin):} \cee{00}=input, \cee{01}=output, \cee{10}=AF, \cee{11}=analog (reset). \textbf{PUPDR (2b/pin):} \cee{00}=none, \cee{01}=PU, \cee{10}=PD, \cee{11}=rsvd.\\
+\textbf{Bus addresses:} \cee{FLASH\_BASE=0x0800\_0000}, \cee{SRAM1\_BASE=0x2000\_0000}, \cee{PERIPH\_BASE=0x4000\_0000}, \cee{AHB2PERIPH\_BASE=0x4800\_0000}=GPIOA. \cee{GPIOB=GPIOA+0x400}, \cee{GPIOC=+0x800}, etc. APB = low-speed (UART/TIM); AHB = high-speed (GPIO/DMA).\\
+\textbf{C access:} \cee{\#define GPIOA ((GPIO\_TypeDef *)GPIOA\_BASE)} where the struct lays out registers in offset order $\Rightarrow$ \cee{GPIOA->MODER} resolves to the right MMIO word.\\
+\textbf{HAL API:} \cee{HAL\_GPIO\_Init/DeInit/ReadPin/WritePin/TogglePin}.
+
+\subsection{L7: Bitwise ops + direct GPIO/BSRR}
+\textbf{Shifts:} \cee{<<} fills 0 from right (can flip sign of signed!); \cee{>>} unsigned fills 0 from left; \cee{>>} signed \emph{replicates the sign bit} (arithmetic shift). E.g.\ \cee{0xABCD >> 4 = 0x0ABC} (uint), but \cee{(int16\_t)0xABCD >> 4 = 0xFABC}.
+
+\textbf{Truth + identities:} \cee{a\^{}0=a} (preserve), \cee{a\^{}1=\~{}a} (toggle), \cee{a\&0=0}, \cee{a|1=1}.
+
+\textbf{Operator precedence (C):} \cee{\~{}}(2) $>$ shifts(7) $>$ \cee{\&}(8) $>$ \cee{\^{}}(9) $>$ \cee{|}(10) $>$ compound \cee{\&=,\^{}=,|=}(14). Logical \cee{\&\&,||,!} are whole-value, not bitwise.
+
+\textbf{Bit patterns} (bit N, mask M):
+\begin{lstlisting}[language={}]
+read N  : (A & (1U<<N)) > 0
+set  N  : A |=  (1U<<N);
+clr  N  : A &= ~(1U<<N);
+tog  M  : A ^=  M;
+field s,w,v: m=((1U<<w)-1)<<s; A&=~m; A|=(v<<s)&m;
+\end{lstlisting}
+
+\textbf{Direct register access:}
+\begin{lstlisting}[language={}]
+// PA10 = output (MODER bits 21:20)
+GPIOA->MODER &= ~(3U << (10*2));
+GPIOA->MODER |=  (1U << (10*2));
+// PA0 pull-down (PUPDR bits 1:0)
+GPIOA->PUPDR &= ~(3U << 0);
+GPIOA->PUPDR |=  (2U << 0);
+// read PA0
+bool s = (GPIOA->IDR & (1U<<0)) > 0;
+// load-modify-store (NOT atomic)
+GPIOA->ODR |=  (1U<<10);
+GPIOA->ODR &= ~(1U<<8);
+GPIOB->ODR ^= (1U<<10) | (1U<<8);
+\end{lstlisting}
+
+\begin{reg}
+\textbf{BSRR (32b, WO, ATOMIC, single-store)}\\
+\begin{tabular}{@{}cc@{}}
+\toprule
+bits 31..16 & bits 15..0 \\
+\midrule
+BR15..BR0 (reset/clear) & BS15..BS0 (set) \\
+\bottomrule
+\end{tabular}
+\cee{GPIOA->BSRR = (1U<<10);}\quad // set PA10\\
+\cee{GPIOA->BSRR = (1U<<(8+16));}\; // reset PA8\\
+\cee{GPIOA->BRR  = (1U<<8);}\quad\;  // equivalent reset
+\end{reg}
+BSRR avoids load-modify-store $\Rightarrow$ \emph{race-free under interrupts}; preferred in ISRs and shared-pin updates.
+
+\subsection{L8: Exceptions, NVIC, vector table}
+\textbf{Definitions:} \emph{exception} = ARM-core / SW-instruction condition; \emph{interrupt} = peripheral-driven exception (peripheral $\subset$ exception). Cortex-M supports up to 255, each with CMSIS \texttt{IRQn}.
+
+\textbf{IRQn numbering:} system exceptions are negative IRQn (NMI=$-14$, HardFault=$-13$, MemMgmt=$-12$, BusFault=$-11$, UsageFault=$-10$, SVCall=$-5$, DebugMon=$-4$, PendSV=$-2$, SysTick=$-1$). Peripherals use non-negative (vendor-defined): EXTI0..4 = 6..10, EXTI9\_5 = 23, EXTI15\_10 = 40, USART2 = 38, TIM2 = 28. \textbf{PSR ExcNum = 16 + IRQn.}
+
+\textbf{Vector table} (\cee{startup\_stm32g431kbtx.s}, section \cee{.isr\_vector} at addr 0): word 0 $=$ \cee{\_estack} (initial MSP), word 1 $=$ \cee{Reset\_Handler}, then NMI..SysTick at idx 15, peripheral handlers from idx 16. Each handler is \cee{.weak} $\to$ \cee{Default\_Handler}; user override (e.g.\ \cee{void SysTick\_Handler(void)} in \cee{stm32g4xx\_it.c}) replaces it at link time.
+
+\textbf{ISR entry/exit:} (1) IRQ asserts $\to$ pending. (2) HW \emph{auto-stacks} 8 words: R0,R1,R2,R3,R12,LR,PC,xPSR (caller-saved). (3) PC $\leftarrow$ vector table[IRQn$+$16]; mode$=$Handler (MSP). (4) ISR runs; on \cee{bx lr} with EXC\_RETURN, HW \emph{auto-unstacks}, returns to Thread mode.
+
+\textbf{Modes:} Thread (MSP/PSP, app) vs.\ Handler (MSP, ISRs). RTOSes use PSP for tasks, MSP for kernel/ISRs.
+
+\begin{reg}
+\textbf{NVIC} (\cee{core\_cm4.h}, NVIC\_BASE \cee{0xE000\_E100}; SCS \cee{0xE000\_E000}; SysTick \cee{0xE000\_E010}; SCB \cee{0xE000\_ED00})\\
+\begin{tabular}{@{}lll@{}}
+\toprule
+off & reg & purpose \\
+\midrule
+\cee{0x000} & ISER[8]   & set-enable \\
+\cee{0x080} & ICER[8]   & clear-enable \\
+\cee{0x100} & ISPR[8]   & set-pending \\
+\cee{0x180} & ICPR[8]   & clear-pending \\
+\cee{0x200} & IABR[8]   & active bit \\
+\cee{0x300} & IP[240]   & priority (1B/IRQn) \\
+\cee{0xE00} & STIR      & sw-trigger \\
+\bottomrule
+\end{tabular}
+\end{reg}
+\textbf{ISER indexing:} \cee{NVIC->ISER[IRQn>>5] = 1U<<(IRQn\&31);}. IRQn\,$=$\,38 (USART2): \cee{NVIC->ISER[1] = 1U<<6;}.\\
+\textbf{CMSIS:} \cee{NVIC\_EnableIRQ/DisableIRQ/ClearPendingIRQ/SetPriority/SetPriorityGrouping}.\\
+\textbf{HAL callbacks:} HAL handler clears flag + calls \cee{\_\_weak HAL\_<P>\_<event>Callback}; user overrides callback only. UART RX IRQ flow: \cee{HAL\_UART\_Receive\_IT(\&huart2,buf,n);} then implement \cee{HAL\_UART\_RxCpltCallback}.
+
+\subsection{L9: Preemption, EXTI, FSM}
+\textbf{Priority semantics (REVERSED):} smaller PN $=$ higher priority $=$ more urgent. Each IRQn has 8-bit \cee{IP[]} byte; STM32 implements only top \emph{n}\,$=$\,4 bits (lower 4 read as 0).
+
+\textbf{8-bit IP layout:} \cee{[ PPN (n bits) | SPN (m bits) | empty (8-n-m) ]}. \textbf{PN} $=$ \cee{(PPN<<m) + SPN}. Higher-PPN ISR \emph{cannot} be preempted by equal/lower PPN; lower PPN \emph{can} preempt higher PPN. SPN only orders \emph{simultaneously pending} same-PPN IRQs (lower SPN first); ties broken by lower IRQn.
+
+\textbf{AIRCR PRIGROUP (bits 10:8)} splits n bits into PPN/SPN:
+\begin{center}\scriptsize
+\begin{tabular}{@{}ccc@{}}
+\toprule
+G & PPN bits & SPN bits \\
+\midrule
+0 & 7 & 1 \\
+3 & 4 & 4 \\
+4 & 3 & 5 \\
+7 & 0 & 8 (no preemption) \\
+\bottomrule
+\end{tabular}
+\end{center}
+STM32 macros: \cee{NVIC\_PRIORITYGROUP\_0..4}; call \cee{NVIC\_SetPriorityGrouping(NVIC\_PRIORITYGROUP\_n);}.
+
+\begin{ex}
+4 bits implemented, 2 PPN + 2 SPN. USART2 PPN$=$2, SPN$=$1 $\Rightarrow$ \cee{PN=(2<<2)+1=9}; \cee{NVIC\_SetPriority(USART2\_IRQn,9);} writes \cee{IP[38]=9<<4=0x90}. EXTI0 to preempt USART2: PPN$<$2 $\Rightarrow$ PN $\in [0,7]$; to NOT preempt: PN $\in[8,15]$.
+\end{ex}
+
+\textbf{Preemption summary}
+\begin{itemize}
+\item Higher-pri (smaller PPN) IRQ during lower-pri ISR $\Rightarrow$ \emph{nested} stack frame, vector to new handler; original ISR resumes on return.
+\item Equal PPN: new IRQ stays pending; runs after current returns.
+\item \emph{Tail-chain}: pending IRQ with PPN\,$\leq$\,current $\to$ skip unstack/restack ($\sim$6 cyc save).
+\item \emph{Late arrival}: higher-pri IRQ during stacking $\Rightarrow$ vector re-fetched for the higher one.
+\item \cee{BASEPRI=k} masks all IRQs with PN$\geq$k (0$=$disabled). \cee{cpsid i} sets PRIMASK (mask all configurable); \cee{cpsie i} clears.
+\end{itemize}
+
+\begin{reg}
+\textbf{EXTI} (drives IRQs from GPIO edges, no polling)\\
+\begin{tabular}{@{}lll@{}}
+\toprule
+off & reg & purpose \\
+\midrule
+\cee{0x00} & IMR   & IRQ mask (1=enable) \\
+\cee{0x04} & EMR   & event mask (wakeup) \\
+\cee{0x08} & RTSR  & rising-edge select \\
+\cee{0x0C} & FTSR  & falling-edge select \\
+\cee{0x10} & SWIER & SW trigger \\
+\cee{0x14} & PR    & pending (W1C) \\
+\bottomrule
+\end{tabular}
+\end{reg}
+\textbf{Lines 0--15} are GPIO; 16+ are internal (PVD/RTC/USB). \textbf{Vector mux:} EXTI0..4 own IRQn (6..10); EXTI5--9 share \cee{EXTI9\_5\_IRQn}\,$=$\,23; EXTI10--15 share \cee{EXTI15\_10\_IRQn}\,$=$\,40 -- shared handlers must read PR to identify the line.
+
+\textbf{SYSCFG\_EXTICR (port routing):} 4 regs $\times$ 4 lines $\times$ 4 bits/line. \cee{EXTICR[N/4]} bits \cee{[(N\%4)*4 .. +3]} hold port code: A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7. Each EXTI line picks \emph{one} port at a time.
+
+\textbf{EXTI setup (PA0 rising edge):}
+\begin{lstlisting}[language={}]
+/* 1. PA0 input */
+GPIOA->MODER &= ~(3U<<0);
+GPIOA->PUPDR &= ~(3U<<0); GPIOA->PUPDR |= (2U<<0); // PD
+/* 2. clk + route */
+__HAL_RCC_SYSCFG_CLK_ENABLE();
+SYSCFG->EXTICR[0] &= ~(0xFU<<0);                   // PA = 0
+/* 3. trigger + mask */
+EXTI->RTSR1 |= EXTI_RTSR1_RT0;
+EXTI->IMR1  |= EXTI_IMR1_IM0;
+/* 4. NVIC */
+NVIC_EnableIRQ(EXTI0_IRQn);
+\end{lstlisting}
+
+\textbf{ISR skeleton} (clear PR \emph{before} return or it refires):
+\begin{lstlisting}[language={}]
+void EXTI0_IRQHandler(void){
+  if (EXTI->PR1 & (1U<<0)) {
+    EXTI->PR1 = (1U<<0);   // W1C
+    /* user logic */
+  }
+}
+\end{lstlisting}
+
+\textbf{Finite State Machine:} state $=$ status defining function behavior; transitions on events. C idiom:
+\begin{lstlisting}[language={}]
+typedef enum { S_INI, S_A, S_B } state_t;
+static state_t st = S_INI;
+void fsm_step(event_t e){
+  switch (st){
+  case S_INI: if (e==E0) st = S_A; break;
+  case S_A:   if (e==E1) st = S_B; else if (e==E2) st = S_INI; break;
+  case S_B:   /* output + transition */ break;
+  }
+}
+\end{lstlisting}
+Mealy: output depends on (state, input); Moore: output depends on state only. Always make \cee{st} \cee{static} (persists across calls); declare ISR-shared as \cee{volatile}.
+
+\subsection{L13: Real numbers (IEEE 754 + fixed point)}
+\textbf{IEEE 754 normal:} $f_N = (-1)^S\,(1+F_R)\,2^{E_B}$, $F_R\in[0,1)$, $E_B = E - B$ (bias).\\
+\textbf{Single (32b):} 1 S \,|\, 8 E \,|\, 23 F; bias $B=127$, $E_B \in [-126,127]$.\\
+\textbf{Half (16b):} 1\,|\,5\,|\,10; $B=15$, $E_B\in[-14,15]$.\\
+\textbf{Double (64b):} 1\,|\,11\,|\,52; $B=1023$.
+
+\begin{center}\scriptsize
+\begin{tabular}{@{}lll@{}}
+\toprule
+encoding & value & note \\
+\midrule
+S=0,E=0,F=0           & $+0$    & \\
+S=1,E=0,F=0           & $-0$    & \\
+S=0,E=2B+1,F=0        & $+\infty$ & all-1s exp \\
+S=1,E=2B+1,F=0        & $-\infty$ & \\
+E=2B+1, F$>$0          & NaN     & \\
+$0<E<2B+1$            & normal  & implicit leading 1 \\
+E=0, F$>$0             & subnormal & $(-1)^S F_R\,2^{1-B}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Smallest positive normal single $=$ $2^{-126}\,{\approx}\,1.18{\times}10^{-38}$. \cee{lrint(f)} rounds to nearest \cee{long}; \cee{llrint(f)} for 64b. ARM default: round-to-nearest, ties-to-even.
+
+\textbf{Encode example} (single, $-6.625$):\\
+$|x|=6.625 = 110.101_2 = 1.10101 \times 2^2$ $\Rightarrow$ $S=1$, $E=2+127=129=$\cee{0b10000001}, $F=$\cee{10101000\ldots0}.
+
+\textbf{Fixed-point UQm.n (unsigned, $N=m+n$ bits):} $m$ int $\,|\,$ radix $\,|\,$ $n$ frac. Range $[0,\,2^m-2^{-n}]$, resolution $2^{-n}$.\\
+\textbf{Decode:} integer $I_A=$ raw bits as unsigned; $f_A = I_A\,2^{-n}$.\\
+\textbf{Encode:} \cee{round(f * 2\^{}n)}.\\
+Ex.\ UQ5.3 \cee{0xFF}: $I_A=255$, $f=255/8=31.875$.\\
+Ex.\ encode $3.141593$ to UQ4.12: $3.141593{\cdot}4096 = 12867.96 \to 12868 =$ \cee{0x3244}.
+
+\textbf{Fixed-point Qm.n (signed, $N=1+m+n$ bits):} 1 sign $|$ $m$ int $|$ $n$ frac. Decode via TC: $U_A$ unsigned; if MSB$=$1 then $I_A = U_A - 2^N$; $f = I_A\,2^{-n}$.\\
+Ex.\ Q4.3 \cee{0xAD = 0b1010\_1101}: $U_A=173$, MSB$=$1 $\Rightarrow I_A=173-256=-83$; $f=-83/8=-10.375$.\\
+Ex.\ encode $-3.1234$ to Q5.10: $-3.1234\cdot 1024 = -3198.36 \to -3198$; TC: $-3198+2^{16}=62338=$\cee{0xF382}.
+
+\textbf{Q15 / Q31 (CMSIS DSP, \cee{arm\_math.h}):} \cee{q15\_t}$=$int16, \cee{q31\_t}$=$int32. Range $[-1.0,\,+1.0)$. $-1.0 =$ \cee{0x8000} / \cee{0x80000000}; max $=$ \cee{0x7FFF} / \cee{0x7FFFFFFF}. $(-1)\cdot(-1)$ overflows to $-1.0$ (wrap); workaround: clip $-1.0$ to \cee{0x8001}.
+
+\textbf{Fixed-point arithmetic}
+\begin{itemize}
+\item \emph{Add/sub} (same Qm.n): $I_C = I_A + I_B$, value $f_C = I_C\,2^{-n}$.
+\item \emph{Multiply}: $I_T = I_A\cdot I_B$ is $2N$-bit wide. Stay in same Qm.n by right-shift $n$:
+\end{itemize}
+\begin{lstlisting}[language={}]
+q15_t r15 = (q15_t)(((int32_t)x * y) >> 15);
+q31_t r31 = (q31_t)(((q63_t) x * y) >> 31);
+\end{lstlisting}
+
+\textbf{Float vs.\ fixed:} float $\to$ huge range ($10^{-38}\!..\!10^{38}$), relative precision, slow without FPU; fixed $\to$ limited but uses integer ALU (fast). Choose Qm.n by signal range; CMSIS DSP kernels are Q-format optimized.

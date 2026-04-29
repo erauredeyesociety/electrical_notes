@@ -1,0 +1,108 @@
+\section{HW3: GPIO + Bitwise}
+
+\textbf{GPIO\_TypeDef} (STM32 GPIO register bank, one per port). Pointer base = \cee{GPIOx\_BASE}; access via \cee{GPIOx->REG}.
+\begin{lstlisting}[language={}]
++0x00 MODER  uint32  2b/pin: 00 in,01 out,10 AF,11 analog
++0x04 OTYPER uint32  1b/pin: 0 push-pull, 1 open-drain
++0x08 OSPEEDR uint32 2b/pin: 00 low,01 med,10 high,11 vhigh
++0x0C PUPDR  uint32  2b/pin: 00 none,01 pull-up,10 pull-dn
++0x10 IDR    uint32  16 lsb = pin states (read-only)
++0x14 ODR    uint32  16 lsb = output latch (R/W)
++0x18 BSRR   uint32  hi16=BR (reset), lo16=BS (set), W-only
++0x1C LCKR   uint32  config lock (one-shot key seq)
++0x20 AFR[0] uint32  AFRL: pins 0..7,  4b/pin
++0x24 AFR[1] uint32  AFRH: pins 8..15, 4b/pin
+\end{lstlisting}
+\textbf{Field index:} for pin $n$, 2-bit field occupies bits $[2n+1{:}2n]$ in MODER/OSPEEDR/PUPDR; 1-bit at bit $n$ in OTYPER/ODR/IDR; AFR[$n/8$] bits $[4(n\%8)+3{:}4(n\%8)]$.
+
+\textbf{Mode selection rules.} Pull-up/down only for \emph{input}. Push-pull/open-drain only for \emph{output}.
+\begin{itemize}
+\item Input, HiZ$\to$1: \textbf{pull-up} (tie up to Vcc).
+\item Input, HiZ$\to$0: \textbf{pull-down} (tie to GND).
+\item Output \emph{sourcing} current to load (load to GND): \textbf{push-pull}.
+\item Output \emph{sinking} current from load (load to Vcc): \textbf{open-drain} preferred (PP works).
+\item LED on at out=1 (LED to GND): push-pull. LED on at out=0 (LED to Vcc): open-drain.
+\end{itemize}
+
+\textbf{GPIOx base addresses.} \cee{PERIPH\_BASE = 0x4000\_0000}.
+\begin{lstlisting}[language={}]
+AHB2: AHB2PERIPH_BASE = PERIPH_BASE + 0x0800_0000
+      GPIOx_BASE = AHB2PERIPH_BASE + 0x0400*x'  (port spacing 0x0400)
+      GPIOA=0x4800_0000  GPIOB=0x4800_0400  GPIOC=0x4800_0800
+AHB1: AHB1PERIPH_BASE = PERIPH_BASE + 0x0002_0000
+      GPIOA=0x4002_0000  GPIOB=0x4002_0400  GPIOC=0x4002_0800
+\end{lstlisting}
+\textbf{Reg addr = base + offset:} GPIOC IDR (AHB2) = \cee{0x4800\_0810}; GPIOC ODR (AHB1) = \cee{0x4002\_0814}; GPIOC BSRR (AHB2) = \cee{0x4800\_0818}.
+
+\textbf{ODR vs BSRR (atomicity).} ODR write is read-modify-write -- must \cee{ODR \&= \~mask; ODR |= val;} (3 instr, NOT atomic; ISR between read and write loses other-pin updates). BSRR is \emph{write-only, atomic}: bits[15:0] set pins, bits[31:16] reset. Writing 1 to a BSRR bit acts; writing 0 ignores. Set-and-reset same pin in one write $\to$ \emph{set wins} (low half latches first conceptually; result: pin set).
+\begin{lstlisting}[language={}]
+GPIOA->BSRR = (1U<<5);          // atomic SET pin 5
+GPIOA->BSRR = (1U<<5) << 16;    // atomic RESET pin 5
+GPIOA->BSRR = (1U<<3) | (1U<<(7+16)); // set P3 + reset P7 in one cycle
+\end{lstlisting}
+
+\textbf{Bitwise C operators.} \cee{\&} AND (clear), \cee{|} OR (set), \cee{\^} XOR (toggle), \cee{\~} NOT (invert all), \cee{<<} left shift (zero-fill, $\times 2^n$), \cee{>>} right shift (unsigned: zero-fill = $/2^n$; signed: arith, sign-fill).
+
+\textbf{Shift truths (uint8\_t A=0b1010\_1011=0xAB):}
+\begin{itemize}
+\item \cee{(A>>2)<<2 = 0b1010\_1000} (clears low 2 bits; mask = \cee{\~0x03}).
+\item \cee{(A<<2)>>2 = 0b0010\_1011} (clears high 2 bits; unsigned shifts in 0).
+\item \cee{A>>4 = 0x0A} (high nibble), \cee{A<<4 = 0xB0} (drops top, low nibble to top -- on uint8 truncates).
+\end{itemize}
+
+\textbf{Single-bit idioms} (bit $n$):
+\begin{lstlisting}[language={}]
+SET    : R |=  (1U << n);
+CLEAR  : R &= ~(1U << n);
+TOGGLE : R ^=  (1U << n);
+TEST   : if (R & (1U << n))      // nonzero = bit set
+READ   : ((R >> n) & 1U)         // 0 or 1
+\end{lstlisting}
+
+\textbf{Multi-bit field (N bits at position p):} mask of N ones = \cee{((1U<<N)-1)}; shifted = \cee{((1U<<N)-1) << p}. To write value \cee{v} ($v < 2^N$):
+\begin{lstlisting}[language={}]
+R &= ~(((1U<<N)-1) << p);   // clear field
+R |=  (v & ((1U<<N)-1)) << p; // write field
+\end{lstlisting}
+
+\textbf{GPIO config recipe (output, push-pull, low speed, no pull) for pin n on GPIOx} -- 2-bit fields at $2n$:
+\begin{lstlisting}[language={}]
+GPIOx->MODER   &= ~(3U << (2*n));  GPIOx->MODER  |= (1U << (2*n)); // 01 out
+GPIOx->OTYPER  &= ~(1U << n);                                       // PP
+GPIOx->OSPEEDR &= ~(3U << (2*n));                                   // low
+GPIOx->PUPDR   &= ~(3U << (2*n));                                   // none
+\end{lstlisting}
+\textbf{Input with pull-up:} MODER 00 (already cleared), PUPDR \cee{|= (1U<<(2*n))}.
+
+\begin{hwp}\textbf{P1 modes.} (1)pull-up (2)pull-down (3)open-drain (sinking) (4)open-drain (LED to Vcc, on@0) (5)push-pull (LED to GND, on@1).\end{hwp}
+
+\begin{hwp}\textbf{P2 addresses.} GPIOC start AHB2=\cee{0x4800\_0800}; IDR AHB2=\cee{0x4800\_0810}; GPIOC start AHB1=\cee{0x4002\_0800}; ODR AHB1=\cee{0x4002\_0814}.\end{hwp}
+
+\begin{hwp}\textbf{P3.} \cee{(0xAB>>2)<<2 = 0b1010\_1000} (low 2 cleared). \textbf{P4.} \cee{(0xAB<<2)>>2 = 0b0010\_1011} (top 2 cleared, uint8).\end{hwp}
+
+\begin{hwp}\textbf{P5 toggle Pin5+Pin7.} mask = \cee{(1<<5)|(1<<7) = 0xA0} (= \cee{0x00A0} as 16-bit). Apply: \cee{GPIOx->ODR \^{}= 0x00A0;}\end{hwp}
+
+\begin{hwp}\textbf{P6.} \cee{A=0xAB}. \cee{A | 4U = 0b1010\_1111} (sets bit 2, was 0). \cee{A \& \~4U = 0b1010\_1011} (clears bit 2; unchanged since already 0). \cee{4U = 0b0000\_0100}; \cee{\~4U = 0b...1111\_1011}.\end{hwp}
+
+\begin{hwp}\textbf{P7 OTYPER GPIOB.} (1) \cee{0x1234 | (1<<3) = 0x123C} (low nibble \cee{0x4=0b0100} $\to$ \cee{0b1100=0xC}). (2) Pin 4 push-pull = clear bit 4: \cee{GPIOB->OTYPER \&= \~(1U << 4);}\end{hwp}
+
+\begin{hwp}\textbf{P8 nibble manipulation} on \cee{uint16\_t A = 0xH3H2H1H0}; target digit H1 = bits[7:4]. \emph{Preferred} forms use \cee{15u<<4} (mask), \emph{literal} forms use \cee{0xFF0F} / \cee{0x00F0}.
+\begin{lstlisting}[language={}]
+(a) zero H1 :  A &= ~(15u << 4);       or  A &= 0xFF0F;
+(b) H1 = F  :  A |=  (15u << 4);       or  A |= 0x00F0;
+(c) H1 = 6  :  A &= ~(15u << 4);
+               A |=  (6u  << 4);       or  A &= 0xFF0F; A |= 0x0060;
+(d) H1 = 9  :  A &= ~(15u << 4);
+               A |=  (9u  << 4);       or  A &= 0xFF0F; A |= 0x0090;
+(e) H1 -> ~H1 (15-H1) : A ^= (15u << 4);   or  A ^= 0x00F0;
+(f) shift right 1 digit : A >>= 4;     // 0xH3H2H1H0 -> 0x0H3H2H1
+\end{lstlisting}
+\textbf{Pattern:} clear-then-write = \cee{R \&= \~(M<<p); R |= (v<<p);}. XOR-with-ones flips. Right-shift by 4 drops H0, brings H3 down.\end{hwp}
+
+\begin{hwp}\textbf{P9 wire-AND.} Open-drain (MOSFET) / open-collector (BJT): only sinks low or floats; needs external pull-up to Vcc for logic 1. Multiple OD outputs share line: any pull-low forces line low, all-released $\to$ pull-up gives high $\Rightarrow$ wired-AND. Push-pull tied together $\to$ if outputs disagree (one drives Vcc, one drives GND) $\Rightarrow$ direct short, high current, contention/damage. Rule: only OD/OC safe for shared bus (I2C, IRQ wired-OR).\end{hwp}
+
+\begin{ex}\textbf{Atomic toggle 2 pins via XOR ODR vs BSRR.} ODR XOR is RMW: \cee{GPIOA->ODR \^{}= 0x00A0;} (not atomic). BSRR cannot toggle directly (set or reset only); must read ODR, compute, write set+reset masks: \cee{u32 cur = GPIOA->ODR; GPIOA->BSRR = (\~cur \& 0xA0) | ((cur \& 0xA0) << 16);}.\end{ex}
+
+\begin{ex}\textbf{Configure PA5 as output push-pull (LED).} \cee{GPIOA->MODER \&= \~(3U<<10); GPIOA->MODER |= (1U<<10); GPIOA->OTYPER \&= \~(1U<<5);} then drive: \cee{GPIOA->BSRR = (1U<<5);} (on), \cee{GPIOA->BSRR = (1U<<(5+16));} (off).\end{ex}
+
+\begin{ex}\textbf{Read PA0 button.} \cee{uint32\_t s = (GPIOA->IDR >> 0) \& 1U;} or \cee{bool pressed = ((GPIOA->IDR \& (1U<<0)) != 0);}. With pull-up: idle=1, pressed=0 (active-low).\end{ex}

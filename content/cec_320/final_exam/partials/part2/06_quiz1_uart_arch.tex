@@ -1,0 +1,92 @@
+% =============================================================================
+% Quiz 1 (qz1a, Spring 2025 prior-sem) -- UART, Arch, Memory, Pointers
+% Maps to HW1+HW2 material (Lctr 2-7).
+% =============================================================================
+\section{Quiz 1: UART, Arch, Memory, Pointers (qz-25a, prior sem)}
+
+\textit{Source: Spring 2025 \cee{qz1a-uart-arch-mem-ptr-soln} (90pt). Current-sem PDF not in repo; problems below are prior-semester reference. Topics align 1:1 with HW1+HW2 (UART framing, pipeline throughput, binary/shift, 6-bit TC, little-endian aliasing, union, pre/post increment, pointer arithmetic).}
+
+\subsection{P1 (10pt) UART data rate w/ 2 stop bits}
+Setup: baud = 115200; frame = 1 start + 8 data + 1 parity + \emph{2 stop} = 13 bits/frame; 1 byte payload/frame.\\
+\textbf{Trap:} this version has 2 stop bits (HW1 P1 had 1). Always sum \emph{all} overhead bits.
+\begin{qp}
+Rate = $115200 / 13 = \mathbf{8861.5~B/s}$. \emph{Solution PDF rounds frame to 12 (1+8+1+2) and reports 9600 B/s} -- match the PDF's framing in case the grader counts the same way: $115200/12 = \mathbf{9600~B/s}$. Either is defensible if the frame total is shown.
+\end{qp}
+
+\subsection{P2 (20pt) Pipeline w/ 3 branch instructions}
+$k$=3-stage pipe; basic task = 5 instr; branch tail = \textbf{3} instr (not 1); branch flushes pipe.\\
+General: $n$ instr in body $\Rightarrow$ cycles $= n + (k{-}1) = n + 2$. Throughput $T = n/(n+2)$.
+\begin{qp}\textbf{Q1 (10pt)} Single loop: $n = 5+3 = 8$ instr, cycles $= 8+2 = 10$. $T = \mathbf{8/10 = 0.80}$.\end{qp}
+\begin{qp}\textbf{Q2 (10pt)} Unroll body $\times 8$: $n = 5\!\cdot\!8 + 3 = 43$ instr, cycles $= 43+2 = 45$. $T = \mathbf{43/45 \approx 0.956}$. Unrolling amortizes the branch flush.\end{qp}
+
+\subsection{P3 (10pt) 8-bit binary + shift}
+\begin{qp}
+\textbf{A.} $11 = 8+2+1 = $ \cee{0b0000\_1011}; $\;22 = 16+4+2 = $ \cee{0b0001\_0110}.\\
+\textbf{B.} $22 = 11 \!\ll\! 1$ (left shift by 1 = $\times 2$). \cee{0b0000\_1011 << 1 = 0b0001\_0110}. \checkmark
+\end{qp}
+
+\subsection{P4 (10pt) 6-bit two's-complement encode}
+6-bit cardinality $2^6 = 64$. Decimal recipe for $-x$: encode as $(-x + 64)$ then convert to 6-bit unsigned binary. Range $[-32,31]$.
+\begin{qp}
+$\mathbf{-9}$: $-9 + 64 = 55 = 32+16+4+2+1 = $ \cee{0b11\_0111}.\\
+$\mathbf{-18}$: $-18 + 64 = 46 = 32+8+4+2 = $ \cee{0b10\_1110}.\\
+\emph{Check MSB=1 for negatives.} Sanity: $0b110111 \to 55-64 = -9$ \checkmark.
+\end{qp}
+
+\subsection{P5 (10pt) Little-endian aliasing}
+Memory @ \cee{0x2000\_0000..7} holds bytes \cee{3,4,5,6,7,8,9,10} ($= $\cee{0x03..0x0A}). LE: lowest address byte $\to$ \emph{LSB} of multibyte read.
+\begin{qp}
+\cee{*(uint16\_t*)0x2000\_0002} reads bytes \{5,6\} = \{\cee{0x05,0x06}\} $\to$ LE $= \mathbf{0x0605}$.\\
+\cee{*(uint32\_t*)0x2000\_0004} reads \{7,8,9,10\} $\to$ LE $= \mathbf{0x0A09\_0807}$.\\
+\emph{Mantra:} reverse the byte sequence to get the hex value.
+\end{qp}
+
+\subsection{P6 (10pt) Union memory aliasing}
+\begin{lstlisting}[language={}]
+typedef union { uint8_t my_arr08[8]; uint32_t my_arr32[2]; } my_union_t;
+\end{lstlisting}
+\cee{my\_arr32[1]} occupies bytes 4..7 of the union (offset \cee{1*sizeof(u32)=4}). LE puts LSB at lowest byte.\\
+Given \cee{my\_arr32[1] = 0x3456\_789A} $\Rightarrow$ bytes[4..7] = \{\cee{0x9A, 0x78, 0x56, 0x34}\}.
+\begin{qp}\textbf{Q1 (5pt)} \cee{my\_arr08[4]} = byte 4 = LSB of \cee{my\_arr32[1]} $= \mathbf{0x9A}$.\end{qp}
+\begin{qp}\textbf{Q2 (5pt)} \cee{my\_arr08[6] = 0xAB} replaces bytes[6]. Bytes[4..7] now \{\cee{0x9A, 0x78, 0xAB, 0x34}\} $\to$ LE $\Rightarrow$ \cee{my\_arr32[1]} $= \mathbf{0x34AB\_789A}$. (Byte 6 is bits[23:16] of the u32.)\end{qp}
+
+\subsection{P7 (10pt) Pre/post increment in expression}
+\begin{lstlisting}[language={}]
+int arr[4], base1 = 0, base2 = 1;
+arr[0] = base1++;          // post: use 0, then base1=1
+arr[1] = ++base2;          // pre:  base2=2, use 2
+arr[2] = ++base1 + base2++;// pre base1->2; post base2 use 2 then ->3
+arr[3] = base1 + base2++;  // base1=2, post use 3 then base2->4
+\end{lstlisting}
+\textbf{Pre $\Rightarrow$ increment first, use NEW.} \textbf{Post $\Rightarrow$ use OLD, then increment.}
+\begin{qp}
+After exec: \cee{arr = \{0, 2, 4, 5\}}; final \cee{base1 = 2, base2 = 4}.\\
+Line-3 detail: \cee{++base1}=2, \cee{base2++}=2 (pre-incr), sum=4. Line-4: \cee{base1}=2, \cee{base2++}=3 (then base2$\to$4), sum=5.
+\end{qp}
+
+\subsection{P8 (10pt) Pointer increment cascade}
+\begin{lstlisting}[language={}]
+int32_t arr[5] = {-10};   // arr[0]=-10, arr[1..4]=0  (NB: see note)
+int32_t *ptr = arr;       // ptr -> arr[0]
+++ptr;                    // ptr -> arr[1]
+*ptr     = 10;            // arr[1] = 10
+*++ptr   = 20;            // pre:  ptr -> arr[2], then arr[2]=20
+*ptr++   = 30;            // post: arr[2]=30 (overwrites 20), ptr -> arr[3]
+*++ptr   = 40;            // pre:  ptr -> arr[4], arr[4]=40
+\end{lstlisting}
+\textbf{Solution PDF assumes \cee{\{-10\}} fills all 5} (instructor's stated comment), so arr[3] stays $-10$, not $0$.
+\begin{qp}
+Final: \cee{arr[0]=-10, arr[1]=10, arr[2]=30, arr[3]=-10, arr[4]=40}.\\
+\emph{Strict C semantics:} \cee{int32\_t arr[5]=\{-10\}} actually gives \cee{\{-10,0,0,0,0\}}; the PDF's "all 5 are -10" comment is non-standard. Match the comment as written on the quiz.
+\end{qp}
+
+\subsection{Cross-cuts \& exam tactics}
+\begin{itemize}
+\item \textbf{UART rate:} always \cee{baud / total\_frame\_bits}. Total = 1 + data + parity? + stop. Don't divide by 8.
+\item \textbf{Pipeline:} cycles $= n + (k{-}1)$ for $n$ ideal instr; branch flush re-pays $(k{-}1)$. Unrolling$\Rightarrow T\to 1$.
+\item \textbf{TC encode:} $-x \to (-x) + 2^N$, then to unsigned binary. Decode: if MSB=1, subtract $2^N$.
+\item \textbf{LE memory:} byte at addr$+i$ is bits[$8i{+}7$:$8i$] of the multibyte word. \emph{Lowest addr = LSB.}
+\item \textbf{Union:} same memory, different views. Index in larger type $\times$ sizeof = byte offset.
+\item \textbf{\cee{++}/\cee{--} placement:} prefix evaluates after the increment, postfix evaluates the old value then increments. \cee{*p++} = \cee{*(p++)} (post-inc \emph{pointer}, deref old).
+\item \textbf{Pointer math:} \cee{ptr+k} advances by \cee{k*sizeof(*ptr)} bytes. Cast to \cee{(void*)} or \cee{(uint8\_t*)} for byte stride.
+\end{itemize}

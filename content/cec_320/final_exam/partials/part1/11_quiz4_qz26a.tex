@@ -1,0 +1,417 @@
+% =============================================================================
+% Quiz 4 (qz-26a, Spring 2026) + practice qz-25b qz5/qz6a
+% Topics: LDR/STR (signed/half/byte), pre/post-index +writeback, scaled-reg
+%         addressing, LDRD/STRD, conditional-branch flow control, ptr idioms.
+% =============================================================================
+\section{Quiz 4: LDR/STR + Flow Control (qz-26a current sem)}
+
+\subsection{Cheat-card: LDR/STR variants}
+\textbf{Sign-extend loads} fill upper bits with the loaded MSB:
+\begin{center}\scriptsize
+\begin{tabular}{@{}llll@{}}
+\toprule
+mnem & loads & upper bits & view \\
+\midrule
+\asm{LDRB}  & 1 byte  & zero-fill   & unsigned \\
+\asm{LDRSB} & 1 byte  & sign-extend & signed   \\
+\asm{LDRH}  & 2 bytes & zero-fill   & unsigned \\
+\asm{LDRSH} & 2 bytes & sign-extend & signed   \\
+\asm{LDR}   & 4 bytes & ---         & word     \\
+\asm{LDRD}  & 8 bytes & Rt=lo,Rt2=hi& pair     \\
+\bottomrule
+\end{tabular}
+\end{center}
+Stores have no signed variant (\asm{STRB/STRH/STR/STRD} only) -- low bits go to memory regardless of sign.
+
+\textbf{Addressing modes} (effective addr {[}EA{]} vs writeback to Rn):
+\begin{center}\scriptsize
+\begin{tabular}{@{}lll@{}}
+\toprule
+syntax & EA & Rn after \\
+\midrule
+\asm{[Rn]}                & Rn          & Rn (unchanged) \\
+\asm{[Rn,\#i]}            & Rn$+$i      & Rn (offset) \\
+\asm{[Rn,\#i]!}           & Rn$+$i      & Rn$+$i \,\,(\textbf{pre-index} wb) \\
+\asm{[Rn],\#i}            & Rn          & Rn$+$i \,\,(\textbf{post-index} wb) \\
+\asm{[Rn,Rm,LSL \#n]}     & Rn$+$(Rm$\!\ll\!$n) & Rn (scaled-reg) \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Pre} uses updated addr; \textbf{post} uses old addr then advances. Post-index by 4 advances Rn even if only 2 bytes were read (e.g.\ \asm{ldrsh r3,[r0],\#4}).
+
+\textbf{Scaled register}: \asm{LDR Rt,[Rn,Rm,LSL \#n]} where \asm{n}$=\log_2$sizeof. \asm{LSL \#0} byte, \asm{\#1} half, \asm{\#2} word, \asm{\#3} dword. R1 is in \emph{elements}; the shift converts to bytes. Halfword/word access at non-aligned addr faults.
+
+% =============================================================================
+\subsection{Q4 (qz-26a, current sem)}
+\textbf{Memory state for Prob 1} (little-endian; bytes labeled B0..B3):
+\begin{center}\scriptsize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Addr & B0 & B1 & B2 & B3 \\
+\midrule
+0x2000\_0000 & 88 & 89 & 8A & 8B \\
+0x2000\_0004 & 8C & 8D & 8E & 8F \\
+0x2000\_0008 & 70 & 71 & 72 & 73 \\
+0x2000\_000C & 74 & 75 & 76 & 77 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Half/word reads are LE: addr 0x4 halfword $=$ \asm{0x8D8C} (B1:B0); word $=$ \asm{0x8F8E\_8D8C}.
+
+\begin{qp}\textbf{Prob 1a (8pt) -- task1 just before \asm{bx lr}:}
+\begin{lstlisting}
+task1:                       @ R0=0x2000_0000, R1=0x2000_0020
+    ldrsh r2, [r0, #4]       @ HW @0x4 = 0x8D8C (neg)
+                             @ -> R2 = 0xFFFF_8D8C
+    str   r2, [r1], #4       @ store full r2 to 0x20, R1+=4
+    ldrsh r3, [r0, #8]       @ HW @0x8 = 0x7170 (pos)
+                             @ -> R3 = 0x0000_7170
+    str   r3, [r1], #4       @ store to 0x24, R1+=4
+    bx    lr
+\end{lstlisting}
+\textbf{Ans:} \asm{R2=0xFFFF\_8D8C}, \asm{R3=0x0000\_7170}.\\
+\emph{Trap:} \asm{LDRSH} with positive HW (MSB=0) gives upper-16 zeros; negative HW (MSB=1) gives upper-16 ones. R0 is \textbf{not} modified (no \asm{!}).
+\end{qp}
+
+\begin{qp}\textbf{Prob 1b (8pt) -- task2 (pre-index w/ writeback):}
+\begin{lstlisting}
+task2:                       @ R0=0x2000_0000, R1=0x2000_0030
+    ldrsb r2, [r0, #2]!      @ R0 first becomes 0x2000_0002
+                             @ load byte 0x8A, sign-ext
+                             @ -> R2 = 0xFFFF_FF8A
+    str   r2, [r1, #0]       @ store full r2 to 0x30
+    ldrsb r3, [r0, #4]!      @ R0 -> 0x2000_0006
+                             @ byte 0x8E, sign-ext
+                             @ -> R3 = 0xFFFF_FF8E
+    str   r3, [r1, #4]       @ store full r3 to 0x34
+    bx    lr
+\end{lstlisting}
+\textbf{Ans:} \asm{R2=0xFFFF\_FF8A}, \asm{R3=0xFFFF\_FF8E}.
+After return: \asm{R0=0x2000\_0006} (writeback persists across both pre-index ops).
+\end{qp}
+
+\begin{qp}\textbf{Prob 1c (8pt) -- mem map at 0x2000\_0020 after task1:}
+task1 stores full \emph{word} R2 then word R3 with post-index. R2$=$\asm{0xFFFF\_8D8C} $\to$ bytes \asm{8C 8D FF FF}; R3$=$\asm{0x0000\_7170} $\to$ \asm{70 71 00 00}.
+\begin{center}\scriptsize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Addr & B0 & B1 & B2 & B3 \\
+\midrule
+0x2000\_0020 & 8C & 8D & FF & FF \\
+0x2000\_0024 & 70 & 71 & 00 & 00 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\emph{LE rule:} R[7:0]$\to$B0, R[15:8]$\to$B1, R[23:16]$\to$B2, R[31:24]$\to$B3.
+\end{qp}
+
+\begin{qp}\textbf{Prob 1d (6pt) -- C \cee{val=*(ptr+i)} for \cee{uint16\_t *ptr}:}
+\begin{lstlisting}
+LDRH R2, [R0, R1, LSL #1]   @ scale i by 2 (sizeof uint16_t)
+\end{lstlisting}
+\emph{Trap:} forgetting \asm{LSL \#1} treats i as a byte offset $\Rightarrow$ wrong elem and possible alignment fault. For \cee{uint8\_t*} use \asm{LSL \#0} (or omit shift); \cee{int32\_t*} use \asm{LSL \#2}.
+\end{qp}
+
+\begin{qp}\textbf{Prob 2 (30pt) -- C ptr ops $\to$ ASM + memory.}\\
+Initial mem (LE):
+\begin{center}\scriptsize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Addr & B0 & B1 & B2 & B3 \\
+\midrule
+0x2000\_0000 & 7C & 7D & 7E & 7F \\
+0x2000\_0004 & 80 & 81 & 82 & 83 \\
+0x2000\_0008 & 84 & 85 & 86 & 87 \\
+0x2000\_000C & 88 & 89 & 8A & 8B \\
+\bottomrule
+\end{tabular}
+\end{center}
+\cee{int16\_t *src=0x2000\_0000} in R0; \cee{int16\_t *dst=0x2000\_0008} in R1.
+\begin{lstlisting}
+@ (1) *dst++ = *src++;       @ post-inc both
+LDRSH R2, [R0], #2           @ R2 = 0x7D7C; R0 -> 0x...02
+STRH  R2, [R1], #2           @ HW@0x08 = 7C 7D; R1 -> 0x...0A
+
+@ (2) *dst++ = *++src;       @ pre-inc src, then deref
+LDRSH R2, [R0, #2]!          @ R0 -> 0x...04; R2 = 0xFFFF_8180
+STRH  R2, [R1], #2           @ HW@0x0A = 80 81; R1 -> 0x...0C
+
+@ (3) *dst++ = ++*src;       @ inc *src in place, then store
+LDRSH R2, [R0]               @ R2 = 0xFFFF_8180
+ADD   R2, #1                 @ R2 = 0xFFFF_8181
+STRH  R2, [R0]               @ writeback HW@0x04 = 81 81
+STRH  R2, [R1], #2           @ HW@0x0C = 81 81; R1 -> 0x...0E
+\end{lstlisting}
+\textbf{Final memory:}
+\begin{center}\scriptsize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Addr & B0 & B1 & B2 & B3 \\
+\midrule
+0x2000\_0000 & 7C & 7D & 7E & 7F \\
+0x2000\_0004 & \textbf{81} & \textbf{81} & 82 & 83 \\
+0x2000\_0008 & \textbf{7C} & \textbf{7D} & \textbf{80} & \textbf{81} \\
+0x2000\_000C & \textbf{81} & \textbf{81} & 8A & 8B \\
+\bottomrule
+\end{tabular}
+\end{center}
+\emph{Idiom map:}
+\begin{center}\scriptsize
+\begin{tabular}{@{}ll@{}}
+\toprule
+C & ASM pattern \\
+\midrule
+\cee{*p++}    & post-index \asm{[Rn],\#sz} \\
+\cee{*++p}    & pre-index  \asm{[Rn,\#sz]!} \\
+\cee{++*p}    & load,\,ADD\,\#1,\,STORE-back to \asm{[Rn]} \\
+\cee{(*p)++}  & load to Rt,\,ADD\,\#1 to copy Rs,\,STORE Rs \\
+\bottomrule
+\end{tabular}
+\end{center}
+\emph{Trap:} \cee{++*p} modifies the value at \cee{*p}, NOT the pointer. The pointer p is unchanged; only the storage cell is incremented. Don't forget the writeback \asm{STRH R2,[R0]}.
+\end{qp}
+
+\begin{qp}\textbf{Prob 3 (20pt) -- LDRD/STRD round-trip.}\\
+Setup: \cee{ipt[16]} filled with \cee{ipt[i]=i<<4} (so 00,10,20,...,F0). \cee{ipt=0x2000\_0200}, \cee{opt=0x2000\_0280}.
+\begin{lstlisting}
+mp_task:                  @ R0=ipt, R1=opt
+    ldrd r2,r3,[r0,#8]!   @ R0+=8 -> 0x208
+                          @ R2 = word @0x208 = 0xB0A0_9080
+                          @ R3 = word @0x20C = 0xF0E0_D0C0
+    str  r3,[r1,#0]       @ opt[0] = 0xF0E0_D0C0
+    str  r2,[r1,#4]       @ opt[1] = 0xB0A0_9080
+    sub  r0,r0,#8         @ R0 -> 0x200 (rewind)
+    ldrsh r3,[r0],#4      @ HW@0x200 = 0x1000 (pos)
+                          @ R3 = 0x0000_1000; R0 -> 0x204
+    ldrsh r2,[r0,#4]!     @ R0 -> 0x208; HW@0x208 = 0x9080
+                          @ R2 = 0xFFFF_9080 (sign-ext)
+    strd r2,r3,[r1,#8]!   @ R1+=8 -> 0x288
+                          @ word@0x288 = 0xFFFF_9080 (Rt=lo)
+                          @ word@0x28C = 0x0000_1000 (Rt2=hi)
+    bx   lr
+\end{lstlisting}
+\textbf{Part (a, 12pt) -- printout:}
+\begin{lstlisting}
+Out1=0xF0E0D0C0, Out2=0xB0A09080,
+Out3=0xFFFF9080, Out4=0x1000
+\end{lstlisting}
+\textbf{Part (b, 8pt) -- final regs:} \asm{R0=0x2000\_0208}, \asm{R1=0x2000\_0288}.\\
+\emph{Trap:} \asm{LDRD Rt,Rt2,[Rn,\#i]!} loads Rt from EA (low addr) and Rt2 from EA$+$4. Pair must be \emph{consecutive} regs (Rt2$=$Rt$+$1) and Rt usually even (legacy A32 constraint -- T32 relaxed but exam expects pairs). \asm{LDRSH...,\#4} post-indexes Rn by 4 even though only 2 bytes were read.
+\end{qp}
+
+\begin{qp}\textbf{Prob 4 (25pt) -- conditional branch translation.}\\
+C source:
+\begin{lstlisting}
+int load_based_on_x_c(int x, int *ptrA, int *ptrB){
+  if (x <= -20 || x >= 20) return *(ptrA+1) * 4;
+  else                     return *(ptrB+2) / 4;
+}
+\end{lstlisting}
+ASM (cond-branch method; x$\to$R0, ptrA$\to$R1, ptrB$\to$R2):
+\begin{lstlisting}
+load_based_on_x_s:
+    cmp  r0, #-20
+    ble  load_based_on_x_s_then  @ x<=-20 short-circuit to then
+    cmp  r0, #20
+    blt  load_based_on_x_s_else  @ -20<x<20 -> else
+load_based_on_x_s_then:
+    ldr  r0, [r1, #4]            @ *(ptrA+1): int*, off=1*4=4
+    lsl  r0, #2                  @ *4
+    b    load_based_on_x_s_end
+load_based_on_x_s_else:
+    ldr  r0, [r2, #8]            @ *(ptrB+2): int*, off=2*4=8
+    lsr  r0, #2                  @ /4 (signed: should be ASR)
+load_based_on_x_s_end:
+    bx   lr
+\end{lstlisting}
+\emph{Traps:}
+(1) \cee{||} short-circuits: 1st condition true $\Rightarrow$ jump to then \emph{without} testing the 2nd; 1st false $\Rightarrow$ test 2nd; both false $\Rightarrow$ else.
+(2) Pointer offset is \textbf{bytes}: \cee{*(p+1)} for \cee{int*} is \asm{\#4}; \cee{*(p+2)} is \asm{\#8}.
+(3) Signed div by $2^n$ is \asm{ASR \#n}; the soln uses \asm{LSR} which is wrong for signed but matches the rubric. Memorize: \asm{ASR}=signed, \asm{LSR}=unsigned.
+(4) The closing \asm{b ...\_end} is mandatory to skip the else-block when then ran.
+\end{qp}
+
+% =============================================================================
+\subsection{Practice qz-25b qz5}
+Mem for prob 3:
+\begin{center}\scriptsize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Addr & B0 & B1 & B2 & B3 \\
+\midrule
+0x2000\_0000 & 80 & 81 & 82 & 83 \\
+0x2000\_0004 & 84 & 85 & 86 & 87 \\
+0x2000\_0008 & 78 & 79 & 7A & 7B \\
+0x2000\_000C & 7C & 7D & 7E & 7F \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{qp}\textbf{P1 (20pt) -- mp\_selector(a,x,y): return a$\geq$0 ? x : y.}
+\begin{lstlisting}
+@ a->r0, x->r1, y->r2 ; return -> r0
+mp_selector:
+    cmp  r0, #0
+    blt  mp_selector_else  @ neg-logic: a<0 -> else
+mp_selector_then:
+    mov  r0, r1
+    bx   lr
+mp_selector_else:
+    mov  r0, r2
+    bx   lr
+\end{lstlisting}
+\emph{Trap:} for signed compare to 0 use \asm{BLT}; for unsigned use \asm{BLO}. Two \asm{bx lr} (one per branch) is OK -- saves the unconditional \asm{b end}.
+\end{qp}
+
+\begin{qp}\textbf{P2 -- 5-bit flag drills (ARM convention: C$=$\textbf{!borrow} on sub).}
+Constants: $C_N{=}32$, $U_{\!max}{=}31$, $S_{min}{=}-16$, $S_{max}{=}15$.
+
+\textbf{(1) $-15 - (-16)$:}
+\begin{itemize}
+\item Unsigned: $(17-16)=1\in[0,31]$ $\Rightarrow$ no borrow $\Rightarrow$ \textbf{C$=$1}, dec$=$1.
+\item Signed: $1\in[-16,15]$ $\Rightarrow$ \textbf{V$=$0}, dec$=$1.
+\item Bin $=$ \cee{0\,0001} $\Rightarrow$ \textbf{N$=$0, Z$=$0}. Final \textbf{NZCV $=$ 0010}.
+\end{itemize}
+
+\textbf{(2) $16 - 18$:}
+\begin{itemize}
+\item Unsigned: $16-18 = -2\notin[0,31]$ $\Rightarrow$ borrow $\Rightarrow$ \textbf{C$=$0}; correct $-2{+}32=30$.
+\item Signed: re-encode operands as 5-bit signed: $16\to-16$, $18\to-14$; $(-16)-(-14)=-2\in[-16,15]$ $\Rightarrow$ \textbf{V$=$0}, dec$=-2$.
+\item Bin $=$ \cee{1\,1110} $\Rightarrow$ \textbf{N$=$1, Z$=$0}. Final \textbf{NZCV $=$ 1000}.
+\end{itemize}
+\emph{Trap:} unsigned-overflow $\to$ ``correct by $\pm C_N$''; signed needs operands re-interpreted (operand $\geq C_N/2$ becomes operand$-C_N$). $16$ in 5-bit signed is unrepresentable as $+16$, so it pattern-aliases to $-16$.
+\end{qp}
+
+\begin{qp}\textbf{P3 -- LDR variants \& scaled register.}
+\begin{lstlisting}
+task1:                       @ R0=0x2000_0000, R1=0x2000_0020
+    ldr  r2, [r0, #4]!       @ R0->0x04; R2=word@0x04=0x8786_8584
+    str  r2, [r1, #0]
+    ldr  r3, [r0, #4]!       @ R0->0x08; R3=word@0x08=0x7B7A_7978
+    str  r3, [r1, #4]
+    bx   lr
+
+task2:                       @ R0=0x2000_0000, R1=0x2000_0030, R2=-1
+    ldr  r3, [r0], #8        @ R3=word@0x00=0x8382_8180; R0->0x08
+    str  r3, [r1, #0]
+    ldr  r3, [r0, r2, lsl #2]@ EA = 0x08 + (-1<<2) = 0x04
+                             @ R3 = word@0x04 = 0x8786_8584
+    str  r3, [r1, #4]
+    bx   lr
+\end{lstlisting}
+\textbf{Ans (task1):} R2$=$\asm{0x8786\_8584}, R3$=$\asm{0x7B7A\_7978}.\\
+\textbf{Ans (task2):} R0$=$\asm{0x2000\_0008}, R3$=$\asm{0x8786\_8584}.\\
+\textbf{Mem @0x30} after task1: \asm{80 81 82 83 / 84 85 86 87}? -- \emph{No}: task1 stored its OWN r2,r3 at p2$=$0x20, not p3. The 0x30 region is written by task2: \asm{80 81 82 83 / 84 85 86 87}.\\
+\textbf{Prototypes:} \cee{void task1(int *p1,int *p2);} and \cee{void task2(int *p1,int *p2,int n);}.\\
+\textbf{C of task1:} \cee{*p2 = *++p1; *(p2+1) = *++p1;}\\
+\emph{Trap:} scaled-reg with negative R2 walks \emph{backward}: \asm{[R0,R2,LSL\#2]} with R2$=-1$ subtracts 4 from R0. Two-arg \asm{ldr [Rn],\#8} post-increments Rn.
+\end{qp}
+
+% =============================================================================
+\subsection{Practice qz-25b qz6a}
+
+\begin{qp}\textbf{P1 (45pt) -- LDRD/STRD + sign-extend bytes.}
+\cee{uint8\_t ipt[20]} with \cee{ipt[i]=0x70+(i<<2)} $\Rightarrow$ \asm{70 74 78 7C 80 84 88 8C 90 94 98 9C A0 A4 A8 AC B0 B4 B8 BC}.
+\begin{lstlisting}
+task_a:                       @ R0=ipt, R1=opt
+    ldrd r2,r3,[r0,#8]!       @ R0+=8 -> ipt+8
+                              @ R2 = word@(ipt+8) = 0x9C988_4?
+                              @ Actually: 0x9C98_9490
+                              @ R3 = word@(ipt+12)= 0xACA8_A4A0
+    strd r2,r3,[r1,#0]        @ opt[0]=R2, opt[1]=R3
+    ldrsb r2,[r0,#4]!         @ R0 -> ipt+12
+                              @ byte=0xA0 -> R2=0xFFFF_FFA0
+    ldrsb r3,[r0,#4]!         @ R0 -> ipt+16
+                              @ byte=0xB0 -> R3=0xFFFF_FFB0
+    strd r2,r3,[r1,#8]        @ opt[2]=R2, opt[3]=R3 (no wb)
+    bx   lr
+\end{lstlisting}
+\textbf{Printout:}
+\begin{lstlisting}
+opt[0]=0x9C989490, opt[1]=0xACA8A4A0,
+opt[2]=0xFFFFFFA0, opt[3]=0xFFFFFFB0
+\end{lstlisting}
+\textbf{Final regs:} R0$=$\cee{ipt}$+16$, R1$=$\cee{opt} (no \asm{!} on last \asm{strd}).\\
+\textbf{C translation:}
+\begin{lstlisting}
+void task_a(uint8_t *p, int32_t *q){
+  p += 8;
+  q[0] = *(int32_t*)p;
+  q[1] = *(int32_t*)(p+4);
+  p += 4;
+  q[2] = (int32_t)(int8_t)*p;
+  p += 4;
+  q[3] = (int32_t)(int8_t)*p;
+}
+\end{lstlisting}
+\emph{Trap:} \asm{LDRSB} on byte $\geq$\asm{0x80} gives \asm{0xFFFF\_FFxx}; on byte $<$\asm{0x80} gives \asm{0x0000\_00xx}. Cast chain \cee{(int32\_t)(int8\_t)} forces sign-extend in C.
+\end{qp}
+
+\begin{qp}\textbf{P2 (20pt) -- saturating clamp $[-5,+5]$.}
+\begin{lstlisting}
+int math_fun_c(int x){
+  if (x < -5) x = -5;
+  else if (x > 5) x = 5;
+  return x;
+}
+@ x -> r0 ; return r0
+math_fun_s:
+    cmp  r0, #-5
+    bge  math_fun_chk_hi    @ x>=-5: maybe still > 5
+    mov  r0, #-5            @ x<-5
+    bx   lr
+math_fun_chk_hi:
+    cmp  r0, #5
+    ble  math_fun_end       @ -5<=x<=5: pass through
+    mov  r0, #5             @ x>5
+math_fun_end:
+    bx   lr
+\end{lstlisting}
+\emph{Trap:} the C \cee{else if} means the second test runs ONLY when the first fell through. Don't put both clamps under unconditional branches -- otherwise you'd clamp $-10$ first to $-5$ then re-test and accidentally pass through. The \asm{bx lr} inside the low-clamp avoids re-running the high-clamp test.
+\end{qp}
+
+\begin{qp}\textbf{P3 (35pt) -- sum of negative elems of array.}
+\begin{lstlisting}
+int mp_neg_sum_array_c(int *arr, int N){
+    int s = 0;
+    for (int i = 0; i < N; i++)
+        if (arr[i] < 0) s += arr[i];
+    return s;
+}
+
+@ arr->r0, N->r1 ; return r0
+@ tmp:r2=elem, r3=sum, r12=i (or reuse r1)
+mp_neg_sum_array_s:
+    mov   r3, #0             @ sum = 0
+    mov   r12, #0            @ i   = 0
+.Lloop:
+    cmp   r12, r1
+    bge   .Ldone             @ i>=N done (signed)
+    ldr   r2, [r0, r12, lsl #2]   @ arr[i]
+    cmp   r2, #0
+    bge   .Lskip             @ arr[i]>=0 skip
+    add   r3, r3, r2         @ s += arr[i]
+.Lskip:
+    add   r12, r12, #1
+    b     .Lloop
+.Ldone:
+    mov   r0, r3
+    bx    lr
+\end{lstlisting}
+\emph{Trap:} use \asm{BGE}/\asm{BLT} (signed) since \cee{int}; arr indexed via scaled reg \asm{LSL \#2} for \cee{int*}. R12 (IP) is caller-saved so no push needed; if you used R4--R11 you'd need \asm{push \{r4,lr\}}/\asm{pop \{r4,pc\}} for AAPCS compliance.
+\end{qp}
+
+% =============================================================================
+\subsection{Carry-over patterns to memorize}
+\begin{enumerate}
+\item \textbf{Sign-ext loads}: \asm{LDRSB}/\asm{LDRSH} fill upper bits with the loaded MSB. Positive byte/HW $\to$ upper zero; negative $\to$ upper \asm{0xFF...}.
+\item \textbf{Pre vs post writeback}: \asm{[Rn,\#i]!} updates Rn first, then loads from new Rn; \asm{[Rn],\#i} loads from old Rn, then advances. Both modify Rn.
+\item \textbf{Scaled-register addressing}: \asm{LDR Rt,[Rn,Rm,LSL \#n]} where n$=\log_2$sizeof. Index in elements; result in bytes.
+\item \textbf{LDRD/STRD pairing}: Rt$=$lower addr, Rt2$=$upper. Pair must be consecutive (Rt2$=$Rt$+$1), Rt typically even. \asm{[Rn,\#i]!} writes back to Rn; trailing \asm{,\#i} (no \asm{!}) does not.
+\item \textbf{C ptr idioms}: \cee{*p++}=post-idx; \cee{*++p}=pre-idx; \cee{++*p}=load+ADD\#1+\textbf{store-back}; \cee{(*p)++}=load+copy+ADD on copy+store original.
+\item \textbf{LE bytes in store}: R[7:0]$\to$lowest byte at addr; R[31:24]$\to$highest. STRH only writes low 16; STRB only low 8.
+\item \textbf{Cond-branch \cee{||}}: 1st test true $\to$ jump to then; 1st false $\to$ test 2nd. \cee{\&\&}: 1st false $\to$ jump to else; 1st true $\to$ test 2nd.
+\item \textbf{Pointer offset units}: \cee{*(p+k)} compiles to \asm{[Rn,\#k*sizeof(*p)]}: \cee{int*}$\to$\asm{\#4k}; \cee{int16\_t*}$\to$\asm{\#2k}; \cee{char*}$\to$\asm{\#k}.
+\item \textbf{Signed vs unsigned div by $2^n$}: \asm{ASR \#n} (signed); \asm{LSR \#n} (unsigned). Match shift family to operand domain (and CCS family: G/L signed, H/L unsigned).
+\item \textbf{Post-idx advance $\neq$ load size}: \asm{ldrsh r3,[r0],\#4} reads 2B but advances R0 by 4. The post-idx imm is independent of the load width.
+\end{enumerate}

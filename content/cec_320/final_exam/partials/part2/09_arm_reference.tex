@@ -1,0 +1,291 @@
+\section{ARM ASM Quick Reference}
+
+\subsection{Instruction quick ref (immediate / reg-offset / MOV / stack)}
+\textbf{Immediate-offset loads/stores} (basic, pre-, post-index):
+\begin{tabular}{@{}l l@{}}
+\asm{ldr Rd,[Ra,\#k]}     & \asm{Rd=*(Ra+k)}; Ra unchanged \\
+\asm{ldr Rd,[Ra,\#k]!}    & Ra$\leftarrow$Ra+k \emph{first}, then load \\
+\asm{ldr Rd,[Ra],\#k}     & load from Ra \emph{first}, then Ra+=k \\
+\asm{ldrb/h Rd,[...]}     & 8/16b $\to$ 32b, \textbf{zero}-ext \\
+\asm{ldrsb/sh Rd,[...]}   & 8/16b $\to$ 32b, \textbf{sign}-ext \\
+\asm{ldrd Rl,Rh,[Ra,\#k]} & 8B; lo at lo addr; \textbf{no reg-offset} \\
+\asm{str/strh/strb}       & no sign variant; STRB writes \emph{low byte} only \\
+\asm{strd Rl,Rh,[Ra,\#k]} & 8B; same forms; \textbf{no reg-offset} \\
+\end{tabular}
+
+\textbf{Reg-offset} (\asm{[Ra,Ri,LSL\#n]}, $n=\log_2$elem):
+\begin{tabular}{@{}l l@{}}
+\asm{LSL\#2}        & word array (\cee{p[i]} on int32) \\
+\asm{LSL\#1}        & halfword (int16) \\
+\asm{LSL\#0} or none & byte (int8) \\
+\asm{ldrsh/sb}      & sign-ext loads (same form) \\
+\asm{str/strh/strb} & stores (same form) \\
+\multicolumn{2}{@{}l@{}}{\textbf{No \asm{!} or post-idx for reg-offset.} Ra const.}\\
+\end{tabular}
+
+\textbf{MOV / pseudo-LDR (constants):}
+\begin{tabular}{@{}l l@{}}
+\asm{mov Rd,\#imm8r}  & 8b val rotated even (Thumb-2 modimm) \\
+\asm{movw Rd,\#imm16} & low halfword; zero-clears top 16 \\
+\asm{movt Rd,\#imm16} & top halfword; preserves low 16 \\
+\asm{ldr Rd,=expr}    & assembler picks MOV/MOVW+T/literal pool \\
+\asm{ldr Rd,=label}   & PC-relative load of address (any 32b) \\
+\asm{adr Rd,label}    & near PC-relative addr (no pool) \\
+\end{tabular}
+
+\textbf{Stack (Full-Descending; SP$\to$last pushed):}
+\begin{tabular}{@{}l l@{}}
+\asm{push \{r4,r5,lr\}} & SP-=12; \textbf{lowest reg\# at lowest addr} \\
+\asm{pop \{r4,r5,pc\}}  & undoes push; \asm{pop \{pc\}} returns \\
+\multicolumn{2}{@{}l@{}}{Brace order is irrelevant; HW always sorts ascending.}\\
+\multicolumn{2}{@{}l@{}}{Stem fn: \asm{push \{lr\}} on entry, \asm{pop \{pc\}} to return.}\\
+\multicolumn{2}{@{}l@{}}{Leaf fn: just \asm{bx lr}; never trashes LR.}\\
+\end{tabular}
+
+\subsection{\asm{Bcc} decoder (full table)}
+\begin{tabular}{@{}l l l@{}}
+\toprule
+mnem & branch if \dots & flags \\
+\midrule
+\asm{B}    & always (uncond)               & --- \\
+\asm{BEQ}  & equal / zero                  & Z=1 \\
+\asm{BNE}  & not equal / non-zero          & Z=0 \\
+\asm{BHS/BCS} & uns $\ge$ (no borrow)      & C=1 \\
+\asm{BLO/BCC} & uns $<$ (borrow)           & C=0 \\
+\asm{BMI}  & negative result               & N=1 \\
+\asm{BPL}  & non-negative                  & N=0 \\
+\asm{BVS}  & signed overflow               & V=1 \\
+\asm{BVC}  & no signed overflow            & V=0 \\
+\asm{BHI}  & uns $>$                       & C=1, Z=0 \\
+\asm{BLS}  & uns $\le$                     & C=0 or Z=1 \\
+\asm{BGE}  & sgn $\ge$                     & N=V \\
+\asm{BLT}  & sgn $<$                       & N$\ne$V \\
+\asm{BGT}  & sgn $>$                       & Z=0, N=V \\
+\asm{BLE}  & sgn $\le$                     & Z=1 or N$\ne$V \\
+\bottomrule
+\end{tabular}
+\textbf{Pick by operand type:} signed $\Rightarrow$ EQ/NE/GT/GE/LT/LE; unsigned $\Rightarrow$ EQ/NE/HI/HS/LO/LS. Mixing (e.g.\ \asm{BGT} on uint compare) silently breaks at boundary cases.
+
+\subsection{Pattern catalog: C $\to$ ASM}
+
+\textbf{Integer arithmetic} (R0=a, R1=b, R2=c, R3=d):
+\begin{tabular}{@{}l l@{}}
+\cee{c=a+b}      & \asm{add r2,r0,r1} \\
+\cee{c=a-b}      & \asm{sub r2,r0,r1} \\
+\cee{c=-a}       & \asm{rsb r2,r0,\#0}      ($=0-$a) \\
+\cee{c=b-a}      & \asm{rsb r2,r0,r1}       (reverse) \\
+\cee{c=a*b}      & \asm{mul r2,r0,r1} \\
+\cee{c=a*b+d}    & \asm{mla r2,r0,r1,r3}    (Ra last) \\
+\cee{c=d-a*b}    & \asm{mls r2,r0,r1,r3} \\
+\cee{c=a/b}      & \asm{sdiv r2,r0,r1}      / \asm{udiv} \\
+\cee{c=a\%b}     & \asm{sdiv r2,r0,r1; mls r2,r2,r1,r0} \\
+\cee{c=a+b+CF}   & \asm{adcs r2,r0,r1}      (after \asm{adds}) \\
+\cee{int64=a+b}  & \asm{adds r0,r2; adc r1,r3} (lo,hi) \\
+\end{tabular}
+
+\textbf{Shifts / scaling} (Op2 barrel shift, free):
+\begin{tabular}{@{}l l@{}}
+\cee{2*a}         & \asm{lsl r2,r0,\#1}  \\
+\cee{a/2 (uns)}   & \asm{lsr r2,r0,\#1}  \\
+\cee{a/2 (sgn)}   & \asm{asr r2,r0,\#1}  \\
+\cee{a*4 + a}=5a  & \asm{add r2,r0,r0,lsl \#2} \\
+\cee{3*a}         & \asm{add r2,r0,r0,lsl \#1} \\
+\cee{a - a/4}=3a/4 & \asm{sub r2,r0,r0,asr \#2} (sgn) \\
+\cee{a + a/8}=9a/8 & \asm{add r2,r0,r0,asr \#3} (sgn) \\
+\cee{a<<n | a>>(32-n)} & \asm{ror r2,r0,\#(32-n)} \\
+\end{tabular}
+\textbf{Op2 quirk:} when Op2 uses a shifted register, dest \emph{must} be written explicitly even if same as Rn (\asm{add r0,r0,lsl \#1} is invalid; need \asm{add r0,r0,r0,lsl \#1}).
+
+\textbf{Bit manipulation:}
+\begin{tabular}{@{}l l@{}}
+\cee{c|=(1<<n)}      & \asm{mov r3,\#1; orr r2,r2,r3,lsl Rn} \\
+\cee{c\&=$\sim$(1<<n)} & \asm{mov r3,\#1; bic r2,r2,r3,lsl Rn} \\
+\cee{c\^{}=(1<<n)}   & \asm{eor r2,r2,r3,lsl Rn} \\
+\cee{tst bit n}      & \asm{tst r2,\#(1<<n)} $\to$ Z=0 if set \\
+\cee{c[s+w-1:s]=0}   & \asm{bfc r2,\#s,\#w} (clear field) \\
+\cee{c[s+w-1:s]=v[w-1:0]} & \asm{bfi r2,r1,\#s,\#w} \\
+\cee{ext uns field}  & \asm{ubfx r0,r1,\#s,\#w} \\
+\cee{ext sgn field}  & \asm{sbfx r0,r1,\#s,\#w} \\
+\cee{count lead 0}   & \asm{clz r0,r1} \\
+\cee{$\sim$x}          & \asm{mvn r0,r1} \\
+\cee{a \& $\sim$b}     & \asm{bic r0,r0,r1} \\
+\cee{a | $\sim$b}      & \asm{orn r0,r0,r1} \\
+\end{tabular}
+
+\textbf{Memory pointer idioms} (R0=v, R1=p, R2=k):
+\begin{tabular}{@{}l l@{}}
+\cee{v=*p}        & \asm{ldr r0,[r1]} \\
+\cee{*p=v}        & \asm{str r0,[r1]} \\
+\cee{v=p[k]}      & \asm{ldr r0,[r1,r2,lsl \#2]} \\
+\cee{v=*(p+k)}    & \asm{ldr r0,[r1,\#(4*k)]} (k const) \\
+\cee{v=*p++}      & \asm{ldr r0,[r1],\#4}    (post-idx) \\
+\cee{v=*++p}      & \asm{ldr r0,[r1,\#4]!}   (pre-idx) \\
+\cee{*p++=v}      & \asm{str r0,[r1],\#4} \\
+\cee{*++p=v}      & \asm{str r0,[r1,\#4]!} \\
+\cee{*(p-1)=v}    & \asm{str r0,[r1,\#-4]}   (no wb) \\
+\cee{++*p}        & \asm{ldr r0,[r1]; add r0,\#1; str r0,[r1]} \\
+\cee{++*p++}      & \asm{ldrb r0,[r1],\#1; add r0,\#1; strb r0,[r1,\#-1]} \\
+\cee{(int8) v=*p++}  & \asm{ldrsb r0,[r1],\#1} \\
+\cee{(uint16) v=*p++}& \asm{ldrh  r0,[r1],\#2} \\
+\end{tabular}
+
+\textbf{Flow control:}
+\begin{tabular}{@{}l l@{}}
+\cee{if(a==b)$\dots$} & \asm{cmp r0,r1; bne \_else} (NL) \\
+\cee{if(a==0)}        & \asm{cbz r0,\_then} (fwd $\le$126B) \\
+\cee{if(a!=0)}        & \asm{cbnz r0,\_then} \\
+\cee{if(a<0)}         & \asm{cmp r0,\#0; blt \_then} or \asm{tst}+\asm{bmi} \\
+\cee{while(*p)}      & \asm{ldrb r2,[r1],\#1; cbz r2,\_end; ...; b lp} \\
+\cee{return} (leaf)   & \asm{bx lr} \\
+\cee{return} (stem)   & \asm{pop \{pc\}} (paired with entry \asm{push \{lr\}}) \\
+\cee{int64 ret}       & lo$\to$R0, hi$\to$R1 \\
+\end{tabular}
+
+\subsection{Common recipes}
+
+\textbf{Saturate signed to $[L,H]$:}
+\begin{lstlisting}
+@ R0 = clip(R0, R1=L, R2=H)
+    cmp  r0, r1
+    it   lt
+    movlt r0, r1                   @ if (r0<L) r0=L
+    cmp  r0, r2
+    it   gt
+    movgt r0, r2                   @ if (r0>H) r0=H
+    bx   lr
+\end{lstlisting}
+
+\textbf{Array sum (int32, len R1):}
+\begin{lstlisting}
+    mov  r2, #0                    @ sum
+    cbz  r1, sm_done
+sm_lp:
+    ldr  r3, [r0], #4
+    add  r2, r2, r3
+    subs r1, r1, #1
+    bne  sm_lp
+sm_done:
+    mov  r0, r2
+    bx   lr
+\end{lstlisting}
+
+\textbf{Conditional sum (negatives only):}
+\begin{lstlisting}
+    mov  r2, #0
+cs_lp:
+    cbz  r1, cs_done
+    ldr  r3, [r0], #4
+    cmp  r3, #0
+    it   lt
+    addlt r2, r2, r3               @ accumulate iff r3<0
+    sub  r1, r1, #1
+    b    cs_lp
+cs_done:
+    mov  r0, r2
+    bx   lr
+\end{lstlisting}
+
+\textbf{Array max (signed):}
+\begin{lstlisting}
+    ldr  r2, [r0], #4              @ seed = a[0]
+    sub  r1, r1, #1
+mx_lp:
+    cbz  r1, mx_done
+    ldr  r3, [r0], #4
+    cmp  r3, r2
+    it   gt
+    movgt r2, r3                   @ signed max
+    sub  r1, r1, #1
+    b    mx_lp
+mx_done:
+    mov  r0, r2
+    bx   lr
+\end{lstlisting}
+
+\textbf{strlen:}
+\begin{lstlisting}
+    mov  r1, r0                    @ keep base
+sl_lp:
+    ldrb r2, [r0], #1
+    cmp  r2, #0
+    bne  sl_lp
+    sub  r0, r0, r1                @ end - base
+    sub  r0, r0, #1                @ exclude '\0'
+    bx   lr
+\end{lstlisting}
+
+\textbf{strcpy (returns dst):}
+\begin{lstlisting}
+    mov  r2, r0                    @ save dst
+sc_lp:
+    ldrb r3, [r1], #1
+    strb r3, [r0], #1              @ writes '\0' too
+    cmp  r3, #0
+    bne  sc_lp
+    mov  r0, r2
+    bx   lr
+\end{lstlisting}
+
+\textbf{memcpy byte-wise (R0=dst,R1=src,R2=n):}
+\begin{lstlisting}
+    cbz  r2, mc_done
+mc_lp:
+    ldrb r3, [r1], #1
+    strb r3, [r0], #1
+    subs r2, r2, #1
+    bne  mc_lp
+mc_done:
+    bx   lr
+\end{lstlisting}
+
+\textbf{Q15$\times$Q15$\to$Q15} (renorm $\gg 15$ via 32b chunk):
+\begin{lstlisting}
+@ R0=a (Q15 in low 16, sign-ext), R1=b
+    smull r2, r3, r0, r1           @ r3:r2 = a*b (Q30, 64b)
+    lsr   r2, r2, #15              @ shift fractional
+    orr   r0, r2, r3, lsl #17      @ stitch carry from hi
+    sxth  r0, r0                   @ clamp/keep low 16 (Q15)
+    bx    lr
+\end{lstlisting}
+
+\textbf{Pointer difference (typed):}
+\begin{lstlisting}
+@ int32_t *pa,*pb;  ret = pa - pb (in elements)
+    sub  r0, r0, r1                @ raw byte diff
+    asr  r0, r0, #2                @ /4 because sizeof(int32)=4
+    bx   lr
+@ for int16: asr #1; int8: no shift; int64: asr #3.
+\end{lstlisting}
+
+\textbf{Bit-field assign / extract:}
+\begin{lstlisting}
+@ struct { unsigned mode:3; unsigned val:5; ... } @bits 0..7
+    bfi  r0, r1, #0, #3            @ mode = r1[2:0]
+    bfi  r0, r2, #3, #5            @ val  = r2[4:0]
+    ubfx r3, r0, #3, #5            @ uns extract val
+    sbfx r4, r0, #0, #3            @ sgn extract mode
+\end{lstlisting}
+
+\subsection{Last-Minute Traps (extended)}
+\begin{itemize}
+\item \textbf{Sign-ext on byte/half MSbit=1.} \asm{ldrsb} of \asm{0x80}$\to$\asm{0xFFFFFF80}; \asm{ldrsh} of \asm{0x8000}$\to$\asm{0xFFFF8000}. \asm{LDRB/LDRH} always zero-ext. Pick suffix from C type, \emph{not} from data values.
+\item \textbf{Sign-ext at the call site.} \cee{int8\_t a=-1} arg $\Rightarrow$ caller widens to \asm{R0=0xFFFFFFFF}. Callee that reads R0 as \asm{uint32\_t} sees a huge unsigned. EABI widens narrow types BEFORE the BL.
+\item \textbf{\asm{STRD} has no reg-offset form.} Only \asm{[Ra,\#k]}, \asm{[Ra,\#k]!}, \asm{[Ra],\#k}. Same restriction on \asm{LDRD}.
+\item \textbf{\asm{CBZ}/\asm{CBNZ} forbidden inside IT.} They don't read flags; using them in IT is a hard assemble error. \textbf{Conditional B inside IT only legal as the FINAL slot.}
+\item \textbf{\asm{cmp r0,\#-5} re-encodes as \asm{CMN r0,\#5}.} Output is identical for signed CCS, but the disassembly will read \asm{CMN}; don't be confused.
+\item \textbf{Prefix \asm{++} on \asm{*p} requires explicit STR writeback.} \cee{++*p} = LDR, ADD \#1, \emph{STR back}. The assembler/CPU does not auto-write-back the value side; only pre-/post-index handles \emph{pointer} writeback.
+\item \textbf{Pointer arithmetic is scaled by sizeof.} \cee{p++} on \cee{int32\_t*} adds 4; on \cee{int16\_t*} adds 2; on \cee{int8\_t*} adds 1; on \cee{int64\_t*} adds 8. Diff between two typed ptrs returns \emph{elements}, not bytes.
+\item \textbf{Flag update needs the \asm{S} suffix.} \asm{add}$\ne$\asm{adds}; \asm{sub}$\ne$\asm{subs}; \asm{mov}$\ne$\asm{movs}. Plain forms leave NZCV alone -- read flags immediately after \asm{cmp}/\asm{cmn}/\asm{tst}/\asm{teq} or an \asm{*S} op.
+\item \textbf{\asm{UDIV}/\asm{SDIV} \emph{never} set flags.} No \asm{UDIVS} exists. If you need a flag after a divide, follow with \asm{cmp Rd,\#0}.
+\item \textbf{ARM \asm{C}-on-subtract is the \emph{inverse} of x86.} \asm{C=1} after \asm{SUB/CMP} means \emph{no borrow} (i.e.\ Rn$\ge$Op2 unsigned). \asm{BHS/BCS}=$\ge$, \asm{BLO/BCC}=$<$. Don't reuse x86 borrow intuition.
+\item \textbf{GNU shifted-Op2 quirk.} When Op2 is a register with a shift, the destination must be written explicitly even if it equals Rn. \asm{add r0,r0,lsl \#1} fails; use \asm{add r0,r0,r0,lsl \#1}.
+\item \textbf{Q-format mul renorm.} Q$m.n$$\times$Q$m.n$ produces Q$2m.2n$ in 64b; renormalize back via \asm{ASR \#n} (signed) on the low/high stitch. For Q15$\to$Q15: \asm{smull;lsr \#15} after combining hi/lo halves.
+\item \textbf{PUSH order is always ascending reg\#.} \asm{push \{r7,r5,r8,r6\}} stores R5 at the lowest address, R8 at the highest, regardless of brace order. POP is the inverse.
+\item \textbf{\asm{STRB} silently drops upper 24 bits.} \asm{strb r0,[r1]} writes only \asm{r0[7:0]}. Hence no \asm{STRSB}: store-side sign info is meaningless.
+\item \textbf{8-byte SP alignment required at every \asm{BL}.} If your prologue pushes an odd number of registers (incl.\ LR), pad with a dummy reg (e.g.\ \asm{push \{r4,lr\}} = 2 regs OK; \asm{push \{lr\}} alone violates -- pair with one more). AAPCS rule.
+\item \textbf{Address bit0 in \asm{BX}/\asm{BLX} = Thumb-mode flag.} The PC always sees an even address; the CPU strips bit0 to set the T-bit. Don't manually clear it from a function pointer.
+\item \textbf{Literal pool reach.} \asm{ldr Rd,=expr} works when there's a reachable pool ($\le 4095$B). For deep functions, drop \asm{.ltorg} or split.
+\end{itemize}
+
+\subsection{One-page summary block}
+\textbf{EABI:} R0--R3 args/return, caller-saved. R4--R11 callee-saved. R12=IP scratch. R13=SP, R14=LR, R15=PC. 64b vals: low$\to$R0, high$\to$R1. Stack=Full-Descending; SP 8B-aligned at \asm{BL}. Leaf: \asm{bx lr}; stem: \asm{push \{lr\}}\dots\asm{pop \{pc\}}. \textbf{Loads:} basic \asm{[Ra,\#k]} no wb; pre \asm{[Ra,\#k]!}=\cee{*++p}; post \asm{[Ra],\#k}=\cee{*p++}. Suffixes: \asm{LDR}=32b, \asm{LDRH/B}=zero-ext, \asm{LDRSH/SB}=sign-ext. STRs: no sign variants; STRB drops upper 24b. \asm{LDRD/STRD} no reg-offset. Reg-offset: \asm{[Ra,Ri,LSL \#n]}, $n=\log_2$elem. \textbf{Constants:} \asm{ldr=expr} picks MOV/MOVW+T/pool. \textbf{Flags:} \asm{S}-suffix sets NZCV. \asm{cmp}=SUBS no-wb; \asm{cmn}=ADDS no-wb; \asm{tst}=ANDS no-wb; \asm{teq}=EORS no-wb. \asm{UDIV/SDIV} never set flags. C-on-SUB = no-borrow. \textbf{CCS pick:} signed$\to$EQ/NE/GT/GE/LT/LE; unsigned$\to$EQ/NE/HI/HS/LO/LS. \textbf{Cond exec:} IT/ITT/ITE/ITTT/ITTE/ITEE/ITTEE/ITTTT, max 4 slots, T=match cond, E=inverse, cond \asm{B} only as last slot, no \asm{CBZ} inside. \textbf{CBZ/CBNZ:} fwd $\le$126B, R0--R7, flag-neutral, ideal post-LDRB null test. \textbf{Loops:} top-test (\asm{while},\asm{for}) $\ge 0$ iters; bottom-test (\asm{do-while}) $\ge 1$. Priming-while and \asm{while(1)+break} have same dynamic LDR count, differ only in source duplication. \textbf{Switch:} CMP/BEQ ladder ($O(n)$) / stacked fall-through (shared body, no code between labels) / \asm{TBB [Rn,Rm]} byte table $O(1)$ / \asm{TBH [Rn,Rm,LSL \#1]} halfword table for far cases. \textbf{Q-fmt:} renorm by ASR $n$; Q15 mul = \asm{smull}+\asm{lsr \#15}. \textbf{Bit-fields:} \asm{BFC/BFI/UBFX/SBFX} eliminate hand-coded shift+mask sequences. \textbf{Pointer scaling}: \cee{p++} adds sizeof(*p). Diff returns elements. \textbf{Sign-ext at BL:} narrow signed types widen to 32b before placement in R0--R3. \textbf{Hard fails:} \asm{cmp Rn,\#-imm}$\to$CMN; CBZ in IT; reg-offset \asm{!}; STRD reg-offset; \asm{add r0,r0,lsl \#1} (need 3-arg form); flagless ops where flags expected. When in doubt: type drives suffix; suffix drives sign-ext; signed/unsigned drives CCS \emph{and} shift kind (ASR vs LSR).

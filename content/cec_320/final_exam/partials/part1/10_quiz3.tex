@@ -1,0 +1,129 @@
+% =============================================================================
+% Quiz 3 --- early-ASM material (EABI, stack, barrel-shifter, BIC+ORR splice)
+% NOTE: no standalone qz3 problem/solution PDF exists in the course repo. The
+% problems below are reconstructed from
+%   content/cec_320/quizes/quiz3/qz3_cheatsheet.md
+%   content/cec_320/quizes/quiz3/qz3_init.md
+%   content/cec_320/quizes/quiz3/lecture_notes_summary.md (Lctr 14--18)
+%   content/cec_320/final_exam/quiz3_quiz4_extracts.md (Q3 P1..P6)
+% Header in qz3_init.md is explicit: ``Just a reminder that you can use your own
+% formula sheets for QZ3'' --- so the user originally also requested NVIC/EXTI
+% material here, but Quiz 3 actually covers HW6/7/8 (Lctr 14--19): mixed C/ASM,
+% EABI, arithmetic, shifts, bitwise logic, NZCV, CCS. No interrupt/EXTI/NVIC
+% content was tested on Quiz 3 per the source markdown.
+% =============================================================================
+\section{Quiz 3: Interrupts + Early ASM}
+
+\subsection{Coverage \& meta}
+\textbf{Scope:} HW6 (mixed C+ASM, EABI, stack, 64-bit \asm{ADDS/ADC}, \asm{SUBS/SBC}, \asm{UDIV+MLS} modulo, Q15.16 encode), HW7 (shifts, barrel-shifter scaling, BIC/ORR bit-field splice), HW8 (NZCV, CCS, neg-logic branch, \asm{SMLAL} loop). Lectures 14--19. \emph{Despite the section title above, no NVIC/EXTI was on Q3 ---} that material lives on Q4/Q5. The ``early ASM'' tag is the accurate description; cross-reference \S HW6/7/8 above for full mechanics.\\
+\textbf{Allowed:} prior cheat-sheets + one new letter-size sheet, only ASM instructions covered in lecture, no invented mnemonics.\\
+\textbf{Reconstruction note:} Q3 problem statements below are derived from the cheatsheet+extract markdown; the original Fall-2025 PDF is not in the repo, so wording may differ slightly. Numeric answers are verified against the cheatsheet trace.
+
+\subsection{One-page Q3 cookbook}
+\begin{tabular}{@{}ll@{}}
+\toprule
+task & one-liner \\
+\midrule
+return signed $-2$ in 32b   & \cee{R0 = 0xFFFF\_FFFE} (two's-comp), \emph{not} 0x80000002 \\
+sign-ext \cee{int8\_t} arg  & MSB$=$1 $\Rightarrow$ pad upper 24b with 1s; MSB$=$0 $\Rightarrow$ pad with 0s \\
+zero-ext \cee{uint8\_t}     & always pad upper bits with 0s \\
+\cee{push \{list\}} layout  & lowest reg\# at lowest addr (independent of brace order) \\
+\cee{push} of $n$ regs      & \cee{SP -= 4*n} (full-descending) \\
+$k\cdot B/2^n$ in 1 instr   & decompose $k/2^n=1\pm 1/2^m$, use \cee{ADD/SUB Rd,B,B,ASR\#m} \\
+clear field then insert     & \cee{BIC Rd,Rd,mask\,LSL\#s}; \cee{ORR Rd,Rd,val\,LSL\#s} \\
+\cee{ADDS/ADC} 64-bit add   & low \cee{ADDS} sets C; \cee{ADC} adds C into high \\
+\bottomrule
+\end{tabular}
+
+\subsection{P1 (7pt) --- Return reg for signed int32}
+\textbf{Setup:} ASM function returns signed 32-bit $-2$. (a) Which register holds it? (b) Hex value?
+\begin{qp}
+(a) \textbf{R0} (AAPCS: any 32-bit return goes in R0; 64-bit return uses R0:R1 lo:hi). (b) $-2$ in 32-bit two's-complement: invert bits of $+2 = $\cee{0x0000\_0002} and add 1 $\to$ \textbf{\cee{0xFFFF\_FFFE}}. \emph{Trap:} writing \cee{0x8000\_0002} (sign-magnitude form, which ARM does \emph{not} use) loses 6 of 7 points.
+\end{qp}
+
+\subsection{P2 (20pt) --- 64-bit ADD + C flag}
+\textbf{Setup:} \asm{mp\_add\_64bit\_s} executes \asm{adds r0,r2}; \asm{adc r1,r3}; \asm{bx lr}. Two test sets: $A_1=$\cee{0x377{<}{<}24}, $B_1=$\cee{0x287{<}{<}24}; $A_2=$\cee{0x378{<}{<}24}, $B_2=$\cee{0x288{<}{<}24}. Find sums and the C flag observed after the low-word \asm{adds}.
+\begin{qp}
+Layout: \asm{R1:R0} holds A, \asm{R3:R2} holds B. Bits 24..31 of the low word receive the most-significant nibble of the constant.\\
+\textbf{Set 1:} low words \cee{0x77\_0000\_00 + 0x87\_0000\_00 = 0xFE\_0000\_00} (no carry-out of bit 31) $\Rightarrow$ \textbf{C=0}. High words 0+0+0=0. Sum $=$ \cee{(int64\_t)0x5FE{<}{<}24}.\\
+\textbf{Set 2:} low \cee{0x78\_0000\_00 + 0x88\_0000\_00 = 0x1\_00\_0000\_00} (overflows bit 31!) $\Rightarrow$ \textbf{C=1}, low result \cee{0x00\_0000\_00}. \asm{adc} adds C to high: $0+0+1=1$. Sum $=$ \cee{(int64\_t)0x600{<}{<}24}.\\
+\emph{Design rule:} a good 64-bit-ADD test toggles the low-word carry between cases (one set with C=0, one with C=1) so \asm{adc} is exercised both ways.
+\end{qp}
+
+\subsection{P3 (20pt) --- \texttt{push \{r4,r8,r6\}} memory layout}
+\textbf{Setup:} $R_i = (1{<}{<}i) + (1{<}{<}(2{+}i))$ for $i=1..12$. \asm{SP} $=$ \cee{0x2000\_1020} before \asm{push \{r4, r8, r6\}}. Find SP after, $R_4$, the word at \cee{0x2000\_1018}, and the byte at \cee{0x2000\_1019}.
+\begin{qp}
+3 regs $\cdot$ 4B $=$ 12 $=$ \cee{0xC} $\Rightarrow$ \textbf{SP$=$\cee{0x2000\_1014}}. Push writes \emph{in ascending register-number order} regardless of brace listing $\Rightarrow$ R4 lowest, R6 middle, R8 highest:\\
+\quad \cee{0x2000\_1014} $\leftarrow$ \textbf{R4} = \cee{(1{<}{<}4)+(1{<}{<}6) = 0x10+0x40 = 0x0000\_0050}\\
+\quad \cee{0x2000\_1018} $\leftarrow$ \textbf{R6} = \cee{(1{<}{<}6)+(1{<}{<}8) = 0x40+0x100 = 0x0000\_0140}\\
+\quad \cee{0x2000\_101C} $\leftarrow$ \textbf{R8} = \cee{(1{<}{<}8)+(1{<}{<}10) = 0x100+0x400 = 0x0000\_0500}\\
+Word at \cee{0x2000\_1018} $=$ \textbf{\cee{0x0000\_0140}}. Byte at \cee{0x2000\_1019}: little-endian, address +1 holds byte 1 of R6 $=$ \textbf{\cee{0x01}} (next bytes: \cee{0x00},\cee{0x00},\cee{0x00} for the upper word).\\
+\emph{Trap:} writing in brace-list order (R4,R8,R6) and putting R8 at the middle address --- the assembler ignores the listing order.
+\end{qp}
+
+\subsection{P4 (25pt) --- Single-instr $k\cdot B/8$ via barrel shifter}
+\textbf{Setup:} signed $A$ in \asm{r0}, signed $B$ in \asm{r1}. Each part wants $A=k\cdot B/8$ in one instruction. Decompose as $k/8 = 1 \pm 2^{-m}$ where convenient; remainder $= 1$ becomes a no-op MOV.
+\begin{center}\scriptsize
+\begin{tabular}{@{}clll@{}}
+\toprule
+$k$ & $k/8$ & decomp & instruction \\
+\midrule
+6  & 6/8  & $1 - 2^{-2}$ & \asm{sub r0, r1, r1, asr \#2} \\
+7  & 7/8  & $1 - 2^{-3}$ & \asm{sub r0, r1, r1, asr \#3} \\
+8  & 1    & $1$          & \asm{mov r0, r1} \;\,(or \asm{add r0, r1, \#0}) \\
+9  & 9/8  & $1 + 2^{-3}$ & \asm{add r0, r1, r1, asr \#3} \\
+10 & 10/8 & $1 + 2^{-2}$ & \asm{add r0, r1, r1, asr \#2} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{qp}
+\textbf{Why ASR not LSR?} $B$ is signed; \asm{LSR} fills MSB with 0, mangling negatives ($-1{\,>>\,}1$ would become $\!\sim\!2^{31}$). \asm{ASR} replicates the sign bit. \textbf{Why no \asm{rsb}?} $1\pm 2^{-m}$ keeps the unshifted $B$ first, so the sign of $B$ leads the result; \asm{rsb} would only be needed for $-1+\text{something}$ patterns ($k\cdot B$ with $k$ near 0). \textbf{Trap:} \asm{add r0, r0, r0, asr \#3} silently corrupts when \asm{r0=r1} aliases the input.
+\end{qp}
+
+\subsection{P5 (20pt) --- BIC+ORR bit-field splice $\to$ C}
+\textbf{Setup:} ASM body
+\begin{lstlisting}
+mp_func_s:
+    ldr  r3, =15           @ mask = 0xF (4 ones)
+    bic  r0, r0, r3, lsl #8   @ a &= ~(0xF << 8)   ; clear bits[11:8]
+    and  r1, r1, r3           @ b &= 0xF           ; isolate b's low nibble
+    orr  r0, r0, r1, lsl #8   @ a |= b << 8        ; insert into [11:8]
+    bx   lr
+\end{lstlisting}
+Write the C equivalent and trace with $a=$\cee{0xH3H2H1H0}, $b=17=$\cee{0x0011}.
+\begin{qp}
+C version (canonical clear-then-insert):
+\begin{lstlisting}[language=]
+uint16_t func_c(uint16_t a, uint16_t b) {
+    uint16_t mask = 15;
+    a &= ~(mask << 8);          // clear nibble at bit 8
+    a |= (b & mask) << 8;       // insert low nibble of b
+    return a;
+}
+\end{lstlisting}
+\textbf{Trace} with $a=$\cee{0xH3H2H1H0}, $b=$\cee{0x0011}: \asm{r3=0x000F}; \asm{r3{<}{<}8 = 0x0F00}; \asm{bic} $\Rightarrow a=$\cee{0xH3\_0\_H1H0} (digit H2 cleared). $b\,\&\,0xF = 0x1$; \asm{orr} with \cee{0x1{<}{<}8 = 0x0100} $\Rightarrow$ \textbf{$a=$\cee{0xH3\,1\,H1H0}}. \emph{Pattern alias:} this is the universal ``\asm{BIC}+\asm{ORR} both shifted by the same \asm{LSL\#s}'' field-splice idiom; if you see \asm{BIC ...,LSL\#s} look immediately for the matching \asm{ORR ...,LSL\#s} below.
+\end{qp}
+
+\subsection{P6 (8pt) --- \cee{int8\_t} sign-ext into 32-bit args}
+\textbf{Setup:} \cee{int8\_t var1=0x7E, var2=0x81; fn(var1,var2);} where prototype takes \cee{int32\_t}. Find R0, R1.
+\begin{qp}
+Sign-extension occurs at the \emph{call site} per AAPCS, before the callee runs.\\
+\cee{var1=0x7E}: MSB (bit 7) $=$ 0 $\Rightarrow$ positive ($+126$); pad upper 24b with 0 $\Rightarrow$ \textbf{R0$=$\cee{0x0000\_007E}}.\\
+\cee{var2=0x81}: MSB $=$ 1 $\Rightarrow$ negative ($-127$ as \cee{int8\_t}); pad upper 24b with 1 $\Rightarrow$ \textbf{R1$=$\cee{0xFFFF\_FF81}}.\\
+\emph{Sanity:} \cee{0xFFFF\_FF81} as \cee{int32\_t} is $-127$ --- value preserved across the widening. Compare to \cee{uint8\_t} promotion (always zero-ext): \cee{0x81} would become \cee{0x0000\_0081} ($=129$). The same sign-ext rule governs \asm{LDRSB} / \asm{LDRSH} loads (Q4/Q6a territory).
+\end{qp}
+
+\subsection{Cross-references --- prior-week material on Q3}
+\textbf{EABI registers:} R0--R3 args/scratch (caller-saved); R4--R11 callee-saved; R12=IP (scratch); R13=SP, R14=LR, R15=PC. 64-bit return: R0=lo, R1=hi. \textbf{Stack:} full-descending, SP points to last pushed item, \asm{push} pre-decrements, \asm{pop} post-increments. \textbf{Flag-only ops:} \asm{CMP=SUBS}-discard, \asm{CMN=ADDS}-discard, \asm{TST=ANDS}-discard (no V update), \asm{TEQ=EORS}-discard. \textbf{C-on-sub:} ARM sets C$=$!borrow (opposite of x86). \textbf{CCS domains:} \asm{HI/HS/LO/LS} unsigned (use C+Z), \asm{GT/GE/LT/LE} signed (use V vs N), \asm{EQ/NE} domain-free (just Z). \textbf{Neg-logic branch:} after \asm{cmp}, branch on the \emph{opposite} CCS to skip the then-block.
+
+\subsection{Q3 trap inventory (memorize before walking in)}
+\begin{itemize}
+  \item Negative int return $\to$ two's-complement hex, \emph{not} sign-magnitude (P1).
+  \item \asm{push \{r4,r8,r6\}} stores in numeric order; brace-list order is irrelevant (P3).
+  \item 64-bit add: low \asm{adds} provides C, high \asm{adc} consumes it; if your test only exercises one C value, \asm{adc} is half-untested (P2).
+  \item Barrel-shifter ASR vs LSR --- ASR for signed, LSR for unsigned. Mismatch $=$ silent corruption (P4).
+  \item \asm{BIC \dots LSL\#s} immediately followed by \asm{ORR \dots LSL\#s} $=$ ``replace field [s+w-1:s]'' --- treat as a single semantic unit (P5).
+  \item \cee{int8\_t} args $\geq$ \cee{0x80} sign-extend to \cee{0xFFFF\_FFxx}; \cee{uint8\_t} always zero-extends. Same rule for \asm{ldrsb} on Q4 (P6).
+  \item C $=$ NOT borrow on subtract (ARM convention). On 5-bit hand-flag drills, this flips most students up.
+  \item \asm{TST}/\asm{TEQ} don't update V $\to$ never pair with V-dependent CCS.
+\end{itemize}

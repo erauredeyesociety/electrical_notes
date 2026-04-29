@@ -1,0 +1,99 @@
+\section{Quiz 2: GPIO + Bitwise (prep notes)}
+
+\textbf{Note.} Q2 problem/solution PDFs are \emph{not} archived in the repo; the items below are \emph{reconstructed} from prep notes (\cee{qz2\_prep.md}, \cee{quiz2\_prep2.md}, \cee{qz\_2.5.md}). Q2 spans HW3 (GPIO+bitwise) primarily; some prep entries hint at HW4 (NVIC priority, IDR-mask read) and HW5 (Q-format) — see those partials for full coverage. Below: only items explicitly tagged \emph{Quiz P\#} in prep.
+
+\textbf{Core toolkit (single-bit / field):}
+\begin{lstlisting}[language={}]
+SET   bit n : R |=  (1U << n);
+CLEAR bit n : R &= ~(1U << n);
+TOGGLE bit n: R ^=  (1U << n);
+TEST  bit n : (R & (1U << n)) != 0;
+READ  bit n : (R >> n) & 1U;
+FIELD W bits at p, write v: R &= ~(((1U<<W)-1)<<p); R |= (v<<p);
+NIBBLE k (bits[4k+3:4k]): mask = 0xFu << (4*k);
+\end{lstlisting}
+
+\textbf{Nibble extraction / placement} (digit $H_k$ at position $k$, $k=0$ is LSDigit):
+\begin{lstlisting}[language={}]
+extract: dk = (A >> (4*k)) & 0xF;
+place  : R |= (dk << (4*k));
+shift R: A >>= 4;   // H3H2H1H0 -> 0H3H2H1 (drops H0)
+shift L: A <<= 4;   // H3H2H1H0 -> H2H1H00 (drops H3 in 16b)
+flip Hk: A ^= (0xFu << (4*k));   // 1's-comp digit (15-Hk)
+\end{lstlisting}
+
+\textbf{Strategy for digit rearrangement:} (1) extract digits going to non-trivial slots, (2) bulk-shift the rest, (3) clear / mask any fixed-value slots, (4) OR in extracted/constants. Always parenthesise; use \cee{U} suffix; cast to wider type before multiplying / shifting if needed.
+
+\begin{qp}\textbf{P2 digit rearrangement} on \cee{uint16\_t A = 0xH3H2H1H0}.
+\begin{lstlisting}[language={}]
+(b) 0xH3H2H1H0 -> 0xH2H1H0_3
+    A = (A << 4) | 0x3U;
+    // shift left drops H3, makes ...H2H1H0_0; OR sets bottom = 3.
+
+(c) 0xH3H2H1H0 -> 0x7_H3H2H1
+    A = (A >> 4) | (0x7U << 12);
+    // shift right drops H0, brings H3 to position 2; OR forces top = 7.
+
+(d) 0xH3H2H1H0 -> 0xH0_~H3_H2_H1   (~ = 1's-comp digit)
+    uint16_t h0  =  A         & 0xF;
+    uint16_t h3c = ((A >> 12) & 0xF) ^ 0xF;
+    A = ((A >> 4) & 0x00FF)            // bring H2,H1 to slots 1,0 (H3 falls off)
+      | (h3c << 8)                     // place complemented H3 in slot 2
+      | (h0  << 12);                   // place H0 in slot 3 (top)
+
+(e) 0xH3H2H1H0 -> 0xF_H0_H3_H2
+    uint16_t h0 = A & 0xF;
+    A = (A >> 8)        // H3 -> slot 0, H2 -> slot ... actually H3 -> slot 1, H2 -> slot 0
+      | (h0  << 8)      // H0 to slot 2
+      | (0xFU << 12);   // top = F
+    // NOTE prep says (A>>8) gives H3 in slot 1, H2 in slot 0; H0 placed at slot 2.
+\end{lstlisting}
+\textbf{Pitfall:} \cee{(A>>4) \& 0x00FF} keeps only the two low nibbles after the shift, which is what (d) needs because the shift smears H3 into slot 2; the AND-mask wipes that bleed before the OR places \cee{h3c} cleanly.\end{qp}
+
+\begin{qp}\textbf{P4 read GPIO pin via IDR masking.} \cee{GPIO\_PIN\_n = (1U<<n)}; pattern:
+\begin{lstlisting}[language={}]
+bool state = ((GPIOx->IDR & GPIO_PIN_n) == GPIO_PIN_n);
+\end{lstlisting}
+For \cee{GPIO\_PIN\_4 = 0x0010} (bit 4, lives in nibble $H_1$):
+\begin{itemize}
+\item IDR \cee{= 0x7777}: $H_1=7=0\mathrm{b}0111$, bit 4 = LSB of $H_1$ = 1 $\Rightarrow$ \cee{IDR \& 0x0010 = 0x0010} = mask $\Rightarrow$ \cee{state = true}.
+\item IDR \cee{= 0x8888}: $H_1=8=0\mathrm{b}1000$, bit 4 = 0 $\Rightarrow$ \cee{IDR \& 0x0010 = 0x0000} $\ne$ mask $\Rightarrow$ \cee{state = false}.
+\end{itemize}
+\textbf{Hex$\to$bin nibble map:} \cee{0=0000 1=0001 2=0010 3=0011 4=0100 5=0101 6=0110 7=0111 8=1000 9=1001 A=1010 B=1011 C=1100 D=1101 E=1110 F=1111}. For bit $K$: nibble = $K/4$, bit-in-nibble = $K\%4$ (LSB of nibble = $K\%4=0$).\end{qp}
+
+\begin{qp}\textbf{P5 NVIC priority -- 5 implemented bits, $n{=}2$ preempt, $m{=}3$ sub.} (Differs from HW4 P7 which was $n{=}m{=}2$.) Layout:
+\begin{lstlisting}[language={}]
+PN = (PPN << m) + SPN = (PPN << 3) + SPN
+PPN = PN >> 3,    SPN = PN & 0x7
+IP[IRQn] = PN << (8 - 5) = PN << 3
+PPN_max = (1<<n)-1 = 3,  SPN_max = (1<<m)-1 = 7,  PN_max = (3<<3)+7 = 31
+\end{lstlisting}
+Each PPN level spans 8 PN values ($2^m=8$), not 4. Given \cee{NVIC\_SetPriority(IRQn3, 12)}:
+\begin{itemize}
+\item PPN $= 12 \gg 3 = 1$; SPN $= 12 \,\&\, 7 = 4$; check $(1\!\ll\!3)+4=12$ \checkmark
+\item IP[IRQn3] $= 12 \ll 3 = 96 = $ \cee{0x60} (top-5 bits = 01100, low 3 = 0).
+\item Range to \emph{preempt} IRQn3 (need PPN$<$1, i.e. PPN=0): PN $= 0\ldots 7$.
+\item Range to \emph{not preempt} (PPN$\ge$1): PN $= 8\ldots 31$.
+\end{itemize}
+\textbf{Rules recap:} A preempts B iff \cee{PPN\_A < PPN\_B} (strict). Same PPN $\Rightarrow$ no preemption; among pending, lower SPN runs first; tie on SPN $\Rightarrow$ lower IRQn first.\end{qp}
+
+\begin{qp}\textbf{P-misc bitwise sanity (recurring quiz patterns).}
+\begin{itemize}
+\item \cee{uint8\_t A=0xAB}; \cee{(A>>2)<<2 = 0b1010\_1000} (low-2 cleared, info lost). \cee{(A<<2)>>2 = 0b1010\_1011} (unchanged: int-promotion preserves high bits during \cee{<<}, then \cee{>>} restores).
+\item \cee{A | 4U} sets bit 2; \cee{A \& \~{}4U} clears bit 2 (already 0 here, so unchanged).
+\item Toggle Pin5+Pin7 of ODR: mask \cee{= (1<<5)|(1<<7) = 0xA0}; apply \cee{GPIOx->ODR \^{}= 0xA0;}.
+\item BSRR atomic: \cee{GPIOx->BSRR = (1U<<n)} sets pin~$n$; \cee{GPIOx->BSRR = (1U<<(n+16))} resets. Set+reset same pin same write $\to$ set wins.
+\item Address: GPIOC IDR on AHB2 = \cee{0x4800\_0000 + 0x0800 + 0x10 = 0x4800\_0810}.
+\end{itemize}\end{qp}
+
+\begin{qp}\textbf{Operator-precedence \& promotion gotchas} (frequent quiz traps):
+\begin{itemize}
+\item \cee{==} binds tighter than \cee{\&}: write \cee{((R \& m) == v)}, never \cee{R \& m == v}.
+\item Use \cee{1U << n}, not \cee{1 << n} — for \cee{n=31} on signed int the latter is UB.
+\item \cee{uint8\_t} promotes to \cee{int} (32b) before bitwise; intermediate widths bigger than the source can hold ``invisible'' bits between operations.
+\item Cast \emph{before} multiply for wide products: \cee{(int32\_t)a * (int32\_t)b}, not \cee{(int32\_t)(a*b)}.
+\end{itemize}\end{qp}
+
+\begin{ex}\textbf{Mode-pick quick decisions (HW3-flavour, fair-game on Q2).} Input HiZ$\to$1: pull-up. Input HiZ$\to$0: pull-down. Output, LED to GND on@1: push-pull (source). Output, LED to Vcc on@0: open-drain (sink). Shared bus / wire-AND (I2C SDA/SCL): open-drain + external pull-up. Push-pull tied together = bus contention / shoot-through (forbidden).\end{ex}
+
+\begin{ex}\textbf{2-bit field write recipe} (MODER pin $n$ to output ``01''): \cee{GPIOx->MODER \&= \~{}(3U << (2*n)); GPIOx->MODER |= (1U << (2*n));}. Then \cee{OTYPER \&= \~{}(1U<<n)} for push-pull, \cee{PUPDR \&= \~{}(3U << (2*n))} for no-pull.\end{ex}

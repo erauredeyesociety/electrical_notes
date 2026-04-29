@@ -1,0 +1,175 @@
+\section{HW2: Data Rep + Memory + Pointers + Unity}
+
+\subsection{5-bit Two's Complement (P1, P2)}
+$N$-bit TC: cardinality $2^N$, range $[-2^{N-1},\,2^{N-1}-1]$. \textbf{Encode} (negative): bit-pattern $=$ \cee{value + 2\^{}N}. \textbf{Decode}: read unsigned; if MSB$=1$ subtract $2^N$.
+\begin{tabular}{@{}llll@{}}
+\toprule
+val & enc (5b TC) & bits & decode \\
+\midrule
+$-8$  & $-8+32=24$  & \cee{0b11000} & MSB=1 \\
+$-12$ & $-12+32=20$ & \cee{0b10100} & $20-32$ \\
+$+6$  & $6$         & \cee{0b00110} & MSB=0$\to$6 \\
+$-6$  & $26$        & \cee{0b11010} & $26-32$ \\
+\bottomrule
+\end{tabular}
+\begin{hwp}\textbf{P1:} $-8\to$\cee{0b11000}; $-12\to$\cee{0b10100}. \textbf{P2:} \cee{0b11010}$=26-32=-6$; \cee{0b00110}$=6$.\end{hwp}
+
+\subsection{Register Range, Type Widths (P4, P5)}
+$N$-bit reg: unsigned $[0,\,2^N-1]$; signed $[-2^{N-1},\,2^{N-1}-1]$.
+\begin{tabular}{@{}lll@{}}
+\toprule
+$N$ & unsigned & signed (TC) \\
+\midrule
+8  & 0..255      & $-128$..127 \\
+12 & 0..4095     & $-2048$..2047 \\
+16 & 0..65535    & $-32768$..32767 \\
+32 & 0..$2^{32}{-}1$ & $-2^{31}$..$2^{31}{-}1$ \\
+\bottomrule
+\end{tabular}
+Cortex-M literals: \cee{1U}$\Rightarrow$\cee{uint32\_t} (32b); \cee{1L}$\Rightarrow$\cee{int32\_t} (32b). U=unsigned long, L=signed long.
+\begin{hwp}\textbf{P4:} 12-bit $\Rightarrow$ unsigned $[0,4095]$, signed $[-2048,2047]$.\end{hwp}
+
+\subsection{Little-Endian Memory Layout (P3)}
+LE rule: \textbf{LSB at lowest address}. Multi-byte read at addr $a$: assemble high$\to$low from descending addresses.
+\begin{tabular}{@{}cc@{\hspace{4pt}}cc@{}}
+\toprule
+addr & val & addr & val \\
+\midrule
+0x..00 & 0x01 & 0x..04 & 0x05 \\
+0x..01 & 0x02 & 0x..05 & 0x06 \\
+0x..02 & 0x03 & 0x..06 & 0x07 \\
+0x..03 & 0x04 & 0x..07 & 0x08 \\
+\bottomrule
+\end{tabular}
+\begin{hwp}\textbf{P3:} \cee{uint16\_t}@\cee{0x2000\_0002} reads bytes \{3,4\} $\to$ LE \cee{0x0403}. \cee{uint32\_t}@\cee{0x2000\_0004} reads \{5,6,7,8\} $\to$ LE \cee{0x08070605}.\end{hwp}
+Inverse: to write \cee{0x12345678} as LE, store bytes \cee{78,56,34,12} at addresses $a, a{+}1, a{+}2, a{+}3$.
+
+\subsection{Union Memory Aliasing (P6)}
+\begin{lstlisting}[language=]
+typedef union {
+  uint8_t  arr08[8];
+  uint32_t arr32[2];
+} my_union_t;
+\end{lstlisting}
+Both views share the same 8 bytes. \cee{arr32[0]=0x12345678} (LE) $\Rightarrow$ \cee{arr08[0..3]=\{0x78,0x56,0x34,0x12\}}.
+\begin{hwp}\textbf{P6A:} \cee{arr08[2]=0x34}. \textbf{P6B:} after \cee{arr08[0]=0xAB} $\Rightarrow$ \cee{arr32[0]=0x123456AB} (only LSB swapped).\end{hwp}
+
+\subsection{Pre/Post-Increment Eval (P7)}
+Prefix \cee{++x}: increment, \emph{then} use new value. Postfix \cee{x++}: use \emph{old} value, then increment.
+\begin{lstlisting}[language=]
+int arr[4], base1=0, base2=0;
+arr[0] = ++base1;        // base1->1; arr[0]=1
+arr[1] = base2++;        // arr[1]=0; base2->1
+arr[2] = ++base1 + base2;// base1->2; arr[2]=2+1=3
+arr[3] = base1 + base2++;// arr[3]=2+1=3; base2->2
+\end{lstlisting}
+\begin{hwp}\textbf{P7:} arr$=\{1,0,3,3\}$, base1$=2$, base2$=2$.\end{hwp}
+
+\subsection{Pointer Increment Patterns (P8)}
+Precedence: postfix \cee{p++} binds tighter than \cee{*}; \cee{*p++} = \cee{*(p++)} (deref old $p$, then bump). Prefix: \cee{*++p} = \cee{*(++p)} (bump first, then deref).
+\begin{lstlisting}[language=]
+int32_t arr[4]={0}, *ptr=arr;  // ptr->arr[0]
+*ptr++ = 10;  // arr[0]=10; ptr->arr[1]
+*++ptr = 20;  // ptr->arr[2]; arr[2]=20
+*ptr++ = 30;  // arr[2]=30; ptr->arr[3]
+\end{lstlisting}
+\begin{hwp}\textbf{P8:} arr$=\{10,0,30,0\}$ (note arr[2] gets 20 then immediately 30 \emph{written over}).\end{hwp}
+
+\subsection{Pointer Arithmetic Scaling (P9)}
+\cee{p+n} advances by \cee{n*sizeof(*p)} bytes. Cast to \cee{(void*)} (treat as byte ptr) reveals the byte offset.
+\begin{tabular}{@{}lll@{}}
+\toprule
+type & elem sz & \cee{p+1} bytes \\
+\midrule
+\cee{int8\_t*}/\cee{uint8\_t*}   & 1 & 1 \\
+\cee{int16\_t*}/\cee{uint16\_t*} & 2 & 2 \\
+\cee{int32\_t*}/\cee{int*}       & 4 & 4 \\
+\bottomrule
+\end{tabular}
+\begin{hwp}\textbf{P9:} \cee{(void*)(ptr32+1)-(void*)ptr32 = 4}. \cee{(void*)(ptr16+3)-(void*)ptr16 = 6} ($3{\times}2$).\end{hwp}
+
+\subsection{Pointer Casts + Offsets (P10)}
+\cee{arr32[4]={0x1122,0x3344,0x5566,0x7788}}; LE bytes (ascending): \cee{22 11 00 00 | 44 33 00 00 | 66 55 00 00 | 88 77 00 00}.
+\begin{itemize}
+\item \cee{*((uint8\_t*)ptr32+1)}: byte ptr; +1 = byte 1 of \cee{arr32[0]} = \cee{0x11}.
+\item \cee{(uint8\_t)*(ptr16+2)}: \cee{ptr16+2} skips 4 bytes (2$\times$2) to byte 4; reads \cee{uint16}=\cee{0x3344}; cast to \cee{uint8\_t} keeps low byte $\to$ \cee{0x44}.
+\end{itemize}
+\begin{hwp}\textbf{P10:} \cee{0x11} and \cee{0x44}.\end{hwp}
+
+\subsection{Big Drill: Pointer Cast Eval (P12)}
+Mem \cee{0x2000\_0010..17} = \cee{01,23,45,67,89,AB,CD,EF}. \cee{int *ptr32 = 0x2000\_0010}; LE target.
+\begin{tabular}{@{}ll@{}}
+\toprule
+expression & value \\
+\midrule
+\cee{*ptr32}                        & \cee{0x67452301} \\
+\cee{*(int16\_t*)ptr32}             & \cee{0x2301} \\
+\cee{(int8\_t)*ptr32}               & \cee{0x01} \\
+\cee{(int16\_t)*(int8\_t*)(ptr32+1)} & \cee{0xFF89} \\
+\bottomrule
+\end{tabular}
+Trap on last: \cee{ptr32+1} is \emph{int*} arith $\Rightarrow$ +4 bytes (addr \cee{0x14}, byte \cee{0x89}). Cast to \cee{int8\_t*} then deref $\to$ signed byte \cee{0x89}=$-119$. Sign-extend to 16b $\Rightarrow$ \cee{0xFF89}.
+\begin{ex}Sign-extension trap: any signed narrow$\to$wider conversion replicates the sign bit. \cee{(int16\_t)(int8\_t)0x89 = 0xFF89}, but \cee{(int16\_t)(uint8\_t)0x89 = 0x0089}.\end{ex}
+
+\subsection{Endian Decode Cookbook}
+Steps for \cee{*(T*)addr} on LE:
+\begin{enumerate}
+\item Compute byte address (apply ptr-arith scaling \emph{before} cast).
+\item Read \cee{sizeof(T)} bytes ascending from that address.
+\item Reverse byte order (lowest-addr byte $=$ LSByte).
+\item If \cee{T} is signed and MSB$=1$, value is negative (TC).
+\item Apply final cast (truncation keeps low bits; widening sign-/zero-extends per source signedness).
+\end{enumerate}
+
+\subsection{Unity Assertion Macros (P11)}
+General form: \cee{TEST\_ASSERT\_EQUAL\_<TYPE>(expected, actual)}; arrays add length: \cee{TEST\_ASSERT\_EQUAL\_<TYPE>\_ARRAY(exp, act, num\_elem)}.
+\begin{tabular}{@{}ll@{}}
+\toprule
+test on & macro \\
+\midrule
+\cee{int8\_t}        & \cee{TEST\_ASSERT\_EQUAL\_INT8} \\
+\cee{int16\_t}       & \cee{TEST\_ASSERT\_EQUAL\_INT16} \\
+\cee{int32\_t}       & \cee{TEST\_ASSERT\_EQUAL\_INT32} \\
+\cee{uint8\_t}       & \cee{TEST\_ASSERT\_EQUAL\_UINT8} \\
+\cee{uint16\_t}      & \cee{TEST\_ASSERT\_EQUAL\_UINT16} \\
+\cee{uint32\_t}      & \cee{TEST\_ASSERT\_EQUAL\_UINT32} \\
+\cee{uint32\_t[N]}   & \cee{TEST\_ASSERT\_EQUAL\_UINT32\_ARRAY(e,a,N)} \\
+hex byte / word & \cee{TEST\_ASSERT\_EQUAL\_HEX8/16/32} \\
+bool / ptr / str & \cee{TEST\_ASSERT\_TRUE/NULL/EQUAL\_STRING} \\
+\bottomrule
+\end{tabular}
+\begin{hwp}\textbf{P11:} (1) \cee{TEST\_ASSERT\_EQUAL\_UINT16(exp,act)}. (2) \cee{TEST\_ASSERT\_EQUAL\_INT32(exp,act)}. (3) \cee{TEST\_ASSERT\_EQUAL\_UINT32\_ARRAY(exp,act,3)}.\end{hwp}
+
+\subsection{Unity Test Runner Pattern}
+\begin{lstlisting}[language=]
+#include "unity.h"
+void setUp(void)    {}   // before each test
+void tearDown(void) {}   // after each test
+void test_add_works(void) {
+  TEST_ASSERT_EQUAL_INT32(5, my_add(2,3));
+}
+int main(void) {
+  UNITY_BEGIN();
+  RUN_TEST(test_add_works);
+  return UNITY_END();
+}
+\end{lstlisting}
+Each test is a void/void function; \cee{RUN\_TEST} wraps setUp/tearDown around it. Failure prints file:line and stops that test (others continue).
+
+\subsection{Quick-Reference: Pointer Idioms}
+\begin{tabular}{@{}ll@{}}
+\toprule
+expression & meaning \\
+\midrule
+\cee{int *p}        & declare ptr to int \\
+\cee{\&x}           & address-of \cee{x} \\
+\cee{*p}            & deref (read/write target) \\
+\cee{p[i]} $\equiv$ \cee{*(p+i)} & indexed access (scaled) \\
+\cee{p+n}           & advance $n{\cdot}$\cee{sizeof(*p)} bytes \\
+\cee{(void*)p}      & byte-granularity ptr (for diff) \\
+\cee{(T*)p}         & reinterpret bytes as type \cee{T} \\
+\cee{*p++}          & deref then bump (postfix tighter) \\
+\cee{*++p}          & bump then deref \\
+\cee{(*p)++}        & bump the pointee, ptr unchanged \\
+\bottomrule
+\end{tabular}

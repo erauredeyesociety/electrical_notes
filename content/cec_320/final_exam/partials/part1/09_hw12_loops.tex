@@ -1,0 +1,256 @@
+\section{HW12: Loops in ASM}
+
+\subsection{C loops $\to$ ASM shapes (Lctr 26 \S26.1--26.2)}
+\begin{tabular}{@{}l l l l@{}}
+\textbf{loop} & \textbf{test} & \textbf{min iters} & \textbf{C $\to$ ASM idiom} \\
+\asm{while(c)} & top  & 0 & priming-read style: dup body update \\
+\asm{do\{\}while(c)} & bottom & 1 & body, then \asm{cmp}+cond.\,branch back \\
+\asm{for(i;c;u)} & top & 0 & \asm{init} / lp: \asm{cmp}+exit / body / \asm{u} / \asm{b lp} \\
+\asm{while(1)\{...break;\}} & inline & 0+ & single in-loop \asm{LDRB}, \asm{break} = \asm{b \_end} \\
+\end{tabular}
+
+\textbf{Label conventions:} \asm{\_lp} at the top (re-entry target); \asm{\_end} after the exit (target of \asm{break}/condition-fail). \textbf{Top-tested while $\ge 0$ iters; do-while $\ge 1$ iter.} \asm{for} = same shape as \asm{while} with explicit init+update slots.
+
+\subsection{Plain \asm{while} (priming-read style)}
+\begin{lstlisting}
+@ ch = *src++;                    @ priming LDRB BEFORE label
+@ while (ch) { body; ch = *src++; }
+        ldrb r2, [r1], #1         @ priming read
+fn_lp:  cbz  r2, fn_end           @ exit when ch==0
+            @ ... body ...
+            ldrb r2, [r1], #1     @ in-loop update (DUP of priming)
+        b    fn_lp
+fn_end: bx   lr
+\end{lstlisting}
+Two textual \asm{LDRB}s (priming + update). \asm{CBZ} on the freshly-loaded byte tests the null-terminator without setting flags.
+
+\subsection{\asm{do-while} (bottom-tested, body $\ge 1$)}
+\begin{lstlisting}
+@ do { body; i++; } while (i < N);
+        mov  r1, #0               @ i = 0
+fn_lp:                            @ no entry test -> body always runs once
+            @ ... body ...
+            add  r1, r1, #1
+        cmp  r1, r2
+        blt  fn_lp                @ back-edge test at bottom
+fn_end: bx   lr
+\end{lstlisting}
+No \asm{\_end} jump-around needed; first entry falls straight into body.
+
+\subsection{\asm{for} loop}
+\begin{lstlisting}
+@ for (i = 0; i < N; i++) { body }
+        mov  r1, #0               @ INIT
+fn_lp:  cmp  r1, r2               @ TEST at top
+        bge  fn_end               @ exit if !cond
+            @ ... body ...
+            add  r1, r1, #1       @ UPDATE
+        b    fn_lp
+fn_end: bx   lr
+\end{lstlisting}
+
+\subsection{\asm{while(1)} + \asm{break} (cleaner than priming)}
+\begin{lstlisting}
+@ while (1) { ch = *src++; if (!ch) break; body; }
+fn_lp:  ldrb r2, [r1], #1         @ SINGLE in-loop read (no priming)
+        cbz  r2, fn_end           @ break = forward b end
+            @ ... body ...
+        b    fn_lp
+fn_end: bx   lr
+\end{lstlisting}
+\textbf{Dynamic-count rule:} priming-read and \asm{while(1)+break} execute the \emph{same} number of \asm{LDRB}s at runtime ($N{+}1$ for an $N$-element string). The break-style only reduces \emph{source-line} count by removing the duplicated \asm{LDRB}.
+
+\subsection{\asm{while}-with-CEX (rare; body must fit IT)}
+\begin{lstlisting}
+fn_lp:  cmp  r1, r2
+        itt  lt
+        ldrlt r0, [r3], #4        @ body in IT
+        blt  fn_lp                @ cond B legal ONLY as last IT slot
+\end{lstlisting}
+Only viable when the entire body (and the back-edge \asm{B}) fits in 4 IT slots. Otherwise use plain \asm{cmp}+\asm{bcc}.
+
+\subsection{\asm{break} / \asm{continue} semantics (Lctr 27 \S27.2--27.3)}
+\textbf{break} $\to$ unconditional forward \asm{b \_end}; must be wrapped in an \asm{if} so it's executed conditionally (typically via \asm{CBZ}/\asm{CBNZ}/\asm{Bcc}).
+
+\textbf{\asm{continue} target depends on loop type:}
+\begin{tabular}{@{}l l@{}}
+in \asm{while}/\asm{do-while} & jumps to \textbf{condition test} (\asm{\_lp}) \\
+in \asm{for}                  & jumps to the \textbf{UPDATE expr} (i++ still runs) \\
+\end{tabular}
+$\Rightarrow$ in a while loop, any loop-control update must appear \emph{before} \asm{continue}; otherwise the loop hangs.
+
+\subsection{HW12 P1 -- swap last 2 of every trio}
+\begin{hwp}\textbf{P1.} \cee{int mp\_swap\_last\_2\_chars\_in\_3\_in\_str(char *str)} -- walk 3 chars at a time; if all 3 non-null, swap the last two; return \# trios swapped.\\
+\textbf{Test:} \cee{"hellow"$\to$"hlelwo"} ret 2; \cee{"hello"$\to$"hlelo"} ret 1; \cee{"he"} ret 0.
+
+\textbf{C (while(1)+break, three-way exit):}
+\begin{lstlisting}
+int n = 0;
+while (1) {
+    char c1 = *str++; if (!c1) break;
+    char c2 = *str++; if (!c2) break;
+    char c3 = *str++; if (!c3) break;
+    *(str-2) = c3;  *(str-1) = c2;  n++;
+}
+return n;
+\end{lstlisting}
+
+\textbf{ASM} (\asm{R12} accumulator $\Rightarrow$ no push/pop; \asm{r1/r2/r3} = c1/c2/c3 scratch):
+\begin{lstlisting}
+        mov  r12, #0               @ pair_swapped = 0
+fn_lp:  ldrb r1, [r0], #1          @ c1 = *str++  (post-idx)
+        cbz  r1, fn_end            @ break if !c1
+        ldrb r2, [r0], #1          @ c2 = *str++
+        cbz  r2, fn_end            @ break if !c2
+        ldrb r3, [r0], #1          @ c3 = *str++
+        cbz  r3, fn_end            @ break if !c3
+            strb r3, [r0, #-2]     @ *(str-2) = c3
+            strb r2, [r0, #-1]     @ *(str-1) = c2
+            add  r12, r12, #1      @ n++
+        b    fn_lp
+fn_end: mov  r0, r12               @ return n
+        bx   lr
+\end{lstlisting}
+
+\textbf{Why \asm{[r0,\#-2]}/\asm{[r0,\#-1]} (not $-3,-2$):} after 3 post-inc \asm{LDRB}s, \asm{r0} sits one byte \emph{past} the trio. The trio occupies addrs \asm{[r0,\#-3]} (c1), \asm{[r0,\#-2]} (c2), \asm{[r0,\#-1]} (c3). We swap \emph{only the last two} $\Rightarrow$ $-2$ and $-1$. Using $-3,-2$ corrupts c1.
+
+\textbf{Why no \asm{!} writeback on the STRBs:} we want \asm{r0} to remain at the post-trio cursor for the next iter; \asm{[r0,\#-2]} is plain base+neg-offset, no update.
+\end{hwp}
+
+\subsection{HW12 P2/P1 -- lower$\to$upper, plain \asm{while}}
+\begin{hwp}\textbf{P2.1.} \cee{void mp\_str\_cpy\_2\_caps\_while(char *dst,char *src);} -- ASM of the given priming-read C.\\
+\textbf{C (given):}
+\begin{lstlisting}
+char ch = *src++;          // priming read
+while (ch) {
+    ch -= 0x20;            // 'a'=0x61 -> 'A'=0x41
+    *dst++ = ch;
+    ch = *src++;           // duplicate update
+}
+*dst++ = ch;               // post-loop store of '\0'
+\end{lstlisting}
+
+\textbf{Regs (AAPCS):} r0=dst, r1=src, r2=ch. All scratch $\Rightarrow$ no push/pop.
+
+\textbf{ASM:}
+\begin{lstlisting}
+        ldrb r2, [r1], #1          @ priming read
+fn_lp:  cbz  r2, fn_end            @ while (ch)
+            sub  r2, r2, #0x20     @ ch -= 0x20
+            strb r2, [r0], #1      @ *dst++ = ch
+            ldrb r2, [r1], #1      @ ch = *src++  (DUP)
+        b    fn_lp
+fn_end: strb r2, [r0], #1          @ *dst++ = '\0'  (r2=0 from CBZ exit)
+        bx   lr
+\end{lstlisting}
+\textbf{Note:} \asm{0x20} is a Thumb-2 8-bit-rotated immediate $\Rightarrow$ \asm{sub} encodes directly. Terminator store at \asm{\_end} uses \asm{r2=0} guaranteed by \asm{CBZ}-exit. Writeback (\asm{\#1}) on terminator \asm{strb} is harmless -- \asm{r0} is dead.
+\end{hwp}
+
+\subsection{HW12 P2/P2 -- refactor to \asm{while(1)}+\asm{break} (C only)}
+\begin{hwp}\textbf{P2.2.} Eliminate the duplicate \asm{*src++} read.
+\begin{lstlisting}
+while (1) {
+    char ch = *src++;
+    if (ch == 0) {
+        *dst++ = ch;       // store '\0' BEFORE break
+        break;
+    }
+    ch -= 0x20;
+    *dst++ = ch;
+}
+\end{lstlisting}
+Single read at top of body; \asm{break} after writing the terminator.\\
+\textbf{Equivalence:} non-null bytes $\to$ read,sub,store; null byte $\to$ store-zero,exit. Identical observable behavior to plain \asm{while} version.
+\end{hwp}
+
+\subsection{HW12 P2/P3 -- \asm{while(1)}+\asm{break} ASM}
+\begin{hwp}\textbf{P2.3.} ASM of the refactored C.
+\begin{lstlisting}
+fn_lp:  ldrb r2, [r1], #1          @ ch = *src++  (SINGLE read)
+        cbz  r2, fn_end            @ if (!ch) goto end (deferred terminator)
+            sub  r2, r2, #0x20
+            strb r2, [r0], #1
+        b    fn_lp
+fn_end: strb r2, [r0], #1          @ *dst++ = '\0'  (r2=0 by CBZ)
+        bx   lr
+\end{lstlisting}
+\textbf{Where the terminator store lives:} the C writes \asm{*dst++ = ch} \emph{inside} the \asm{if(!ch)} branch \emph{before} \asm{break}. Translating literally, that store must still happen $\Rightarrow$ place the \asm{strb} as the \emph{first} instruction at \asm{\_end}. Don't duplicate it inside the loop.\\
+\textbf{Source-line vs dynamic count:} only one textual \asm{ldrb} (vs two in P2/P1). Runtime: same $N{+}1$ \asm{LDRB} executions per call. The refactor saves \emph{source bytes}, not cycles.
+\end{hwp}
+
+\subsection{Loop dynamic-count rule (memorize)}
+For a string of $N$ non-null chars then \asm{\textbackslash 0}: priming-read \asm{while} and \asm{while(1)+break} both execute exactly $N{+}1$ \asm{LDRB}s at runtime (one per byte read, including the terminator). \textbf{Refactor only collapses source duplication; it does not save instructions executed.}
+
+\subsection{Pointer-idiom $\to$ ASM (byte) cheat-card}
+\begin{tabular}{@{}l l l@{}}
+\cee{x = *p++}      & \asm{ldrb r0, [r1], \#1}    & post-idx, writeback \\
+\cee{*p++ = x}      & \asm{strb r0, [r1], \#1}    & post-idx, writeback \\
+\cee{x = *++p}      & \asm{ldrb r0, [r1, \#1]!}   & pre-idx, writeback \\
+\cee{*++p = x}      & \asm{strb r0, [r1, \#1]!}   & pre-idx, writeback \\
+\cee{*(p-1) = x}    & \asm{strb r0, [r1, \#-1]}   & base+neg-offset, no writeback \\
+\cee{*(p-2) = x}    & \asm{strb r0, [r1, \#-2]}   & base+neg-offset, no writeback \\
+\end{tabular}
+
+\subsection{\asm{CBZ}/\asm{CBNZ} -- when, why, restrictions (Lctr 25)}
+\textbf{\asm{CBZ Rn,lbl}} = $\{$\asm{cmp Rn,\#0}; \asm{beq lbl}$\}$ in one instr; \textbf{leaves flags untouched}.
+\begin{itemize}
+\item Ideal for null-terminator test on a fresh \asm{LDRB} (no flags wanted).
+\item \asm{Rn} restricted to \asm{r0..r7}.
+\item Forward branch only ($\le {+}126$ B); \emph{cannot} branch backward.
+\item \textbf{Cannot appear inside an IT block} (Lctr 24 \S24.3.2).
+\end{itemize}
+
+\subsection{\asm{switch} implementations (Lctr 27 \S27.4)}
+HW12 doesn't exercise \asm{switch}, but it's exam-fair. Three forms:
+
+\textbf{(a) \asm{CMP}/\asm{BEQ} ladder} -- $O(n)$, one cmp per case:
+\begin{lstlisting}
+        cmp r0, #0
+        beq case0
+        cmp r0, #1
+        beq case1
+        ...
+        b   default
+\end{lstlisting}
+
+\textbf{(b) Stacked-label fall-through} -- multiple values share a body by stacking labels:
+\begin{lstlisting}
+case0:
+case1:                          @ both 0 and 1 fall here
+        @ shared body
+        b   end_sw
+\end{lstlisting}
+
+\textbf{(c) \asm{TBB} jump table} -- $O(1)$ via byte offsets:
+\begin{lstlisting}
+        adr  r1, jt
+        tbb  [r1, r0]           @ PC += 2 * jt[r0]
+jt:     .byte (case0 - jt)/2
+        .byte (case1 - jt)/2
+        .byte (case2 - jt)/2
+        .byte (default - jt)/2
+\end{lstlisting}
+\textbf{\asm{TBH}} variant uses halfword offsets for far cases: \asm{tbh [r1, r0, lsl \#1]}, \asm{.short} entries. Use TBB for tight tables ($\le 510$ B reach), TBH for larger ones.
+
+\subsection{Common HW12 mistakes}
+\begin{itemize}
+\item Wrong offsets in P1: \asm{\#-3,\#-2} instead of \asm{\#-2,\#-1} -- corrupts c1.
+\item Putting the terminator \asm{strb} \emph{inside} the loop in P2/P3 -- duplicates the C's \cee{*dst++=ch;break} pattern; cleanest is at \asm{\_end}.
+\item Using \asm{cmp Rn,\#0}+\asm{beq} when \asm{cbz} suffices -- wastes 2 bytes / blows away flags you may need.
+\item Pushing \asm{r4} for a tiny loop accumulator -- prefer \asm{r12} (IP, scratch under AAPCS).
+\item Trying \asm{cbz} inside an IT block -- forbidden.
+\item Forgetting that \cee{while(ch)} on an empty input runs body 0 times -- the post-loop \cee{*dst++=ch} still writes the \asm{\textbackslash 0} (correct).
+\item For-loop \asm{continue} branches to UPDATE, not the test -- so \asm{i++} still runs. While-loop \asm{continue} branches to test.
+\end{itemize}
+
+\subsection{Quick-reference summary}
+\begin{itemize}
+\item \textbf{Top-tested} (\asm{while}, \asm{for}) $\ge 0$ iters; \textbf{bottom-tested} (\asm{do-while}) $\ge 1$.
+\item \textbf{Priming \asm{while}} = duplicated \asm{LDRB} (text); \textbf{\asm{while(1)+break}} = single \asm{LDRB}; same dynamic count.
+\item Labels: \asm{\_lp} (top, re-entry) and \asm{\_end} (post-exit, terminator-store target).
+\item \asm{CBZ} on fresh \asm{LDRB} = idiomatic null-terminator test; not allowed in IT.
+\item Post-idx \asm{ldrb [r0],\#1} $=$ \cee{*p++}; base+neg-offset \asm{[r0,\#-k]} $=$ \cee{*(p-k)} no update.
+\item \asm{R12} (IP) is AAPCS scratch -- prefer over \asm{R4} for short-lived loop locals.
+\item \asm{break} $\to$ forward \asm{b \_end}; \asm{continue} target = \asm{for}'s update / \asm{while}'s test.
+\item \asm{switch}: ladder ($O(n)$) / stacked fall-through (shared body) / \asm{TBB},\asm{TBH} jump table ($O(1)$).
+\end{itemize}

@@ -1,0 +1,263 @@
+% =============================================================================
+% HW1-4 Extended Drills + Practice Problems (Part 2 add-on)
+% =============================================================================
+\section{HW1-4 Extended Drills + Practice Problems}
+
+\subsection{HW1 Deep Walkthrough --- UART throughput (P1)}
+\textbf{Setup:} 115200~bps, 1 start + 8 data + 1 parity + 1 stop = \textbf{11 bits/frame}, payload = 8 data bits = 1~byte.\\
+\textbf{Step 1.} Frame rate $=$ 115200 / 11 $=$ 10472.727 frames/s.\\
+\textbf{Step 2.} Each frame carries 1 payload byte $\Rightarrow$ throughput $=$ \textbf{10472.7~B/s}.\\
+\textbf{Trap:} dividing by 8 (data bits only) gives 14400~B/s $-$ wrong; the line still ships start/parity/stop overhead.\\
+\textbf{General formula:} $T_B = \dfrac{\text{baud}}{N_{\text{start}}+N_{\text{data}}+N_{\text{par}}+N_{\text{stop}}}\cdot\dfrac{N_{\text{data}}}{8}$ B/s when payload is whole byte. For 8N1: $\text{baud}/10$. For 8N2: $\text{baud}/11$. For 9600 8N1: 960~B/s. For 230400 8N1: 23040~B/s.
+
+\subsection{HW1 Deep Walkthrough --- Pipeline loop (P3)}
+3-stage pipe (F-D-E). Loop body = 5 task instr + 1 branch; branch FLUSHES (drops 2 in-flight stages).\\
+\textbf{Single iter cycles:} pipe fill $=$ depth$-1$ $=$ 2 cyc; then 1 cyc/instr after fill. So 6 instr $\Rightarrow$ $2 + 6 = 8$ cyc. Throughput $=$ 6/8 $=$ \textbf{0.75 instr/cyc}.\\
+\textbf{Unroll 4x} (5 task)$\times 4 + $1 branch $= 21$ instr/iter $\Rightarrow$ $2 + 21 = 23$ cyc. Throughput $=$ 21/23 $=$ \textbf{0.913 instr/cyc}.\\
+\textbf{Why unrolling helps:} each branch costs depth$-1$ flush cycles, amortized over more useful work. Unroll by $K$: cycles $=(K\cdot 5 + 1)+2$, throughput $\to 1$ as $K\to\infty$.\\
+\textbf{General:} cycles $= n + (\text{depth}-1)$ for straight code; throughput $\to 1$ as $n\to\infty$. 4-stage: $n+3$. 5-stage: $n+4$.
+\begin{hwp}\textbf{P4:} 3-stage, 10 instr $\Rightarrow$ $10+2=12$ cyc, $10/12=$0.833.\end{hwp}
+
+\subsection{HW1 Deep Walkthrough --- Shift conversions (P5/P6)}
+\textbf{Decimal $\to$ binary} (divide-by-2, LSB first): $28: 28/2{=}14r0; 14/2{=}7r0; 7/2{=}3r1; 3/2{=}1r1; 1/2{=}0r1$ $\Rightarrow$ \cee{0b11100} (read remainders bottom$\to$top).\\
+$28=$\cee{0b0001\_1100}; $14=$\cee{0b0000\_1110}. Shift relation: \cee{14<<1 = 28}. Confirm: \cee{0000\_1110 << 1 = 0001\_1100}.\\
+$24=$\cee{0b0001\_1000}, $6=$\cee{0b0000\_0110}; \cee{24>>2=6}, so \textbf{b=a>>2}. Each \cee{>>1} divides by 2; \cee{<<1} multiplies by 2 (unsigned).
+\begin{hwp}\textbf{P2 parity:} \cee{0b1101\_1100} has 5 ones (odd); even-par bit $=$ \textbf{1}; odd-par bit $=$ \textbf{0}.\end{hwp}
+
+\subsection{HW2 5-bit Two's-Complement Drill}
+Cardinality $2^5=32$. Range $[-16,+15]$. Encode neg: $v+32$. Decode: if MSB$=1$, subtract 32.
+\begin{tabular}{@{}rlll@{}}
+\toprule
+dec & enc calc & binary (5b) & hex \\
+\midrule
+$-16$ & $-16+32=16$ & \cee{0b10000} & \cee{0x10} \\
+$-15$ & $-15+32=17$ & \cee{0b10001} & \cee{0x11} \\
+$-12$ & $-12+32=20$ & \cee{0b10100} & \cee{0x14} \\
+$-8$  & $-8+32=24$  & \cee{0b11000} & \cee{0x18} \\
+$-1$  & $-1+32=31$  & \cee{0b11111} & \cee{0x1F} \\
+$\;0$ & $0$         & \cee{0b00000} & \cee{0x00} \\
+$+1$  & $1$         & \cee{0b00001} & \cee{0x01} \\
+$+7$  & $7$         & \cee{0b00111} & \cee{0x07} \\
+$+15$ & $15$        & \cee{0b01111} & \cee{0x0F} \\
+\bottomrule
+\end{tabular}\\
+Decode drill: \cee{0b11010}$=26\to 26{-}32=$\textbf{-6}; \cee{0b10110}$=22\to{-}10$; \cee{0b01101}$=13\to+13$.\\
+\textbf{Sign-extend} $-6$ from 5b to 8b: repeat MSB $\Rightarrow$ \cee{0b1111\_1010 = 0xFA}. As 16b: \cee{0xFFFA}. As 32b: \cee{0xFFFF\_FFFA}.
+
+\subsection{HW2 Endianness Drill (mem @\cee{0x2000\_0000})}
+Bytes (low$\to$high addr): \cee{[0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]}.
+\begin{tabular}{@{}llll@{}}
+\toprule
+addr off & type & bytes used & LE value \\
+\midrule
++0 & uint8\_t  & \{0x01\}              & \cee{0x01} \\
++0 & int8\_t   & \{0x01\}              & $+1$ \\
++1 & uint8\_t  & \{0x02\}              & \cee{0x02} \\
++0 & uint16\_t & \{0x01,0x02\}         & \cee{0x0201} \\
++2 & uint16\_t & \{0x03,0x04\}         & \cee{0x0403} \\
++0 & int16\_t  & \{0x01,0x02\}         & $+513$ \\
++0 & uint32\_t & \{0x01..0x04\}        & \cee{0x04030201} \\
++4 & uint32\_t & \{0x05..0x08\}        & \cee{0x08070605} \\
++4 & int32\_t  & \{0x05..0x08\}        & $+134678021$ \\
+\bottomrule
+\end{tabular}\\
+\textbf{Unaligned trap:} \cee{*(uint32\_t*)0x20000001} reads 4 bytes from offset 1 $\to$ \cee{0x05040302}. On Cortex-M3/4 unaligned word access is \emph{allowed} (LDR/STR) but slower; on M0/M0+ it raises UsageFault. Halfword reads need addr\%2==0; word reads addr\%4==0 for guaranteed single-cycle.\\
+\textbf{Rule:} multi-byte read = (high addr byte)$\cdot 2^{8(N-1)}$ + ... + (low addr byte). LE places \emph{LSB at lowest address}, so the low-address byte is the lowest-order byte of the assembled value.
+
+\subsection{HW2 Union Aliasing --- Concrete Hex}
+\begin{lstlisting}[language=]
+typedef union { uint8_t b[4]; uint16_t h[2]; uint32_t w; } u_t;
+u_t u;
+u.w = 0xDEADBEEF;
+// LE bytes: b[0]=0xEF, b[1]=0xBE, b[2]=0xAD, b[3]=0xDE
+// halfwords: h[0]=0xBEEF, h[1]=0xDEAD
+\end{lstlisting}
+\textbf{Write u8s, read u16:} after \cee{b[0]=0x12; b[1]=0x34;} $\Rightarrow$ \cee{h[0] = 0x3412} (LE assembles low addr as low byte).\\
+\textbf{Write u16, read u8s:} after \cee{h[0]=0xCAFE;} $\Rightarrow$ \cee{b[0]=0xFE, b[1]=0xCA}.\\
+\textbf{Partial overwrite:} starting from \cee{w=0x12345678}, then \cee{b[0]=0xAB} $\Rightarrow$ \cee{w=0x123456AB} (only LSB changed).\\
+\textbf{Type punning safe via union} (C99+); reinterpret\_cast via pointer cast may break strict-aliasing rules but works in MCU code with \cee{volatile}/compiler flags.
+
+\subsection{HW3 Register-Access Mapping --- Configure PA5 as Output PP, Low-Speed, No-Pull}
+GPIOA base = \cee{0x4800\_0000} (AHB2). Pin 5 uses bits $[2\cdot 5{:}2\cdot 5{+}1] = [10{:}11]$ in 2-bit fields, bit 5 in 1-bit fields.\\
+\textbf{Reset state} (G4 GPIOA): MODER=\cee{0xABFF\_FFFF} (most pins analog=0b11), OTYPER=\cee{0x0}, OSPEEDR=\cee{0x0}, PUPDR=\cee{0x6400\_0000}.
+\begin{lstlisting}[language=]
+// 1. Enable AHB2 GPIOA clock first (in RCC):
+RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+// 2. MODER: clear pin5 (bits 11:10), write 01 (output)
+GPIOA->MODER  &= ~(3U << (5*2));   // clr bits 11:10
+GPIOA->MODER  |=  (1U << (5*2));   // set 0b01
+// 3. OTYPER: bit5 = 0 (push-pull)  -- already 0 at reset
+GPIOA->OTYPER &= ~(1U << 5);
+// 4. OSPEEDR: clear pin5 field, write 00 (low speed)
+GPIOA->OSPEEDR &= ~(3U << (5*2));  // 0b00 = low
+// 5. PUPDR: clear pin5 field, write 00 (no pull)
+GPIOA->PUPDR  &= ~(3U << (5*2));
+\end{lstlisting}
+\textbf{Before/after} (assume reset values, change only pin 5):
+\begin{tabular}{@{}lll@{}}
+\toprule
+reg & before & after \\
+\midrule
+MODER  (0x00) & \cee{0xABFF\_FFFF} & \cee{0xABFF\_F7FF} \\
+OTYPER (0x04) & \cee{0x0000\_0000} & \cee{0x0000\_0000} \\
+OSPEEDR(0x08) & \cee{0x0000\_0000} & \cee{0x0000\_0000} \\
+PUPDR  (0x0C) & \cee{0x6400\_0000} & \cee{0x6400\_0000} \\
+\bottomrule
+\end{tabular}\\
+\textbf{Drive PA5 high (atomic):} \cee{GPIOA->BSRR = (1U<<5);} (no read-modify-write).
+
+\subsection{HW3 Bit-Field Replace Drill (5 examples)}
+Pattern: \cee{R \&= \~{}(MASK<<POS); R |= ((VAL \& MASK)<<POS);} where MASK $=$ \cee{(1U<<W)-1}.
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\# & field & W & POS & MASK \\
+\midrule
+1 & MODER pin 7  & 2 & 14 & \cee{0x0000C000} \\
+2 & EXTICR line3 & 4 & 12 & \cee{0x0000F000} \\
+3 & PUPDR pin 12 & 2 & 24 & \cee{0x03000000} \\
+4 & ADC SQR1 SQ1 & 5 & 6  & \cee{0x000007C0} \\
+5 & RCC PLLM     & 4 & 4  & \cee{0x000000F0} \\
+\bottomrule
+\end{tabular}
+\begin{lstlisting}[language=]
+// 1. Set MODER pin7 to AF (0b10):
+GPIOA->MODER   &= ~(3U  <<14);  GPIOA->MODER   |= (2U  <<14);
+// 2. Route EXTI3 to port D (code 3):
+SYSCFG->EXTICR[0] &= ~(0xFU<<12); SYSCFG->EXTICR[0] |= (3U<<12);
+// 3. Pull-down on PA12 (0b10):
+GPIOA->PUPDR   &= ~(3U  <<24);  GPIOA->PUPDR   |= (2U  <<24);
+// 4. ADC SQR1 first conversion = ch 17:
+ADC1->SQR1     &= ~(0x1FU<<6);  ADC1->SQR1     |= (17U<<6);
+// 5. RCC PLLM = 8 (encoded as 7):
+RCC->PLLCFGR   &= ~(0xFU <<4);  RCC->PLLCFGR   |= (7U  <<4);
+\end{lstlisting}
+\textbf{One-shot form:} \cee{R = (R \& \~{}(M<<P)) | ((V\&M)<<P);} avoids glitch window between two writes (matters for live timer/PWM regs).
+
+\subsection{HW4 EXTI Configuration Trace --- PA0 Falling-Edge IRQ}
+\textbf{IRQn:} EXTI0 $\Rightarrow$ IRQn $=$ \textbf{6}; PSR ExcNum = $16+6 = 22$.\\
+\textbf{NVIC index/bit:} idx $=$ 6/32 $=$ 0; bit $=$ 6\%32 $=$ 6 $\Rightarrow$ \cee{ISER[0]} bit 6.
+\begin{lstlisting}[language=]
+// 0. clocks
+RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
+// 1. PA0 input, no-pull
+GPIOA->MODER &= ~(3U<<0);          // 00 = input
+GPIOA->PUPDR &= ~(3U<<0);          // 00 = no pull
+// 2. Route EXTI0 to PA: SYSCFG_EXTICR1 bits[3:0] = 0b0000
+SYSCFG->EXTICR[0] &= ~(0xFU<<0);   // clr -> port A code 0
+// 3. Falling-edge trigger only
+EXTI->RTSR &= ~(1U<<0);            // disable rising
+EXTI->FTSR |=  (1U<<0);            // enable falling
+// 4. Unmask IRQ
+EXTI->IMR  |=  (1U<<0);
+// 5. Clear stale pending in NVIC, then enable
+NVIC->ICPR[0] = (1U<<6);
+NVIC->ISER[0] = (1U<<6);
+\end{lstlisting}
+\textbf{Final reg state} (only EXTI0-related bits):
+\begin{tabular}{@{}lll@{}}
+\toprule
+reg & contents (relevant) & note \\
+\midrule
+SYSCFG\_EXTICR1 & \cee{...0000} bits[3:0] & port A=0 \\
+EXTI\_RTSR & bit0=0 & no rising \\
+EXTI\_FTSR & bit0=1 & falling enabled \\
+EXTI\_IMR  & bit0=1 & IRQ unmasked \\
+NVIC\_ISER[0] & bit6=1 & EXTI0 enabled \\
+\bottomrule
+\end{tabular}
+\textbf{Handler:}
+\begin{lstlisting}[language=]
+void EXTI0_IRQHandler(void){
+  if(EXTI->PR & (1U<<0)){
+    EXTI->PR = (1U<<0);   // W1C clear pending
+    /* user logic */
+  }
+}
+\end{lstlisting}
+
+\subsection{HW4 Priority + Nested ISR Drill}
+\textbf{Setup:} AIRCR PRIGROUP $=$ 4 (3 PPN bits, 1 SPN bit, N$=$4 implemented). Priorities (in IP[7:4] form, raw byte): IRQ\_A $=$ \cee{0x20}, IRQ\_B $=$ \cee{0x40}, IRQ\_C $=$ \cee{0x60}.\\
+\textbf{Decode:} drop low 4 (unimplemented) $\Rightarrow$ PN = byte$>>$4. PRIGROUP$=$4 with N$=$4 means 3 PPN, 1 SPN: PPN $=$ PN$>>$1, SPN $=$ PN\&1.
+\begin{tabular}{@{}lllll@{}}
+\toprule
+IRQ & raw IP & PN & PPN & SPN \\
+\midrule
+A & \cee{0x20} & 2 & 1 & 0 \\
+B & \cee{0x40} & 4 & 2 & 0 \\
+C & \cee{0x60} & 6 & 3 & 0 \\
+\bottomrule
+\end{tabular}\\
+\textbf{(a) Preemption matrix:} A preempts B (1$<$2) yes; A preempts C (1$<$3) yes; B preempts C (2$<$3) yes; B preempts A no (2$\not<$1); C preempts neither.\\
+\textbf{(b) Highest priority:} \textbf{IRQ\_A} (smallest PN=2).\\
+\textbf{(c) Set IRQ\_X to PN=4:} write \cee{IP[X] = 4<<(8-4) = 4<<4 = 0x40 = 0b0100\_0000}. Equivalent CMSIS call: \cee{NVIC\_SetPriority(X, 4);} which masks to N bits and shifts.\\
+\textbf{Nesting trace:} B running, A asserts $\to$ HW pushes 8-word frame (R0-R3, R12, LR, PC, xPSR), vectors to A. A returns $\to$ unstacks back to B context. C asserting during B does \emph{not} preempt (3$\not<$2) $\to$ stays pending until B returns.
+
+\subsection{Memory Map Quick Reference}
+\begin{tabular}{@{}lll@{}}
+\toprule
+addr & region & contents \\
+\midrule
+\cee{0x0800\_0000} & FLASH  & code (vector table aliased here) \\
+\cee{0x2000\_0000} & SRAM   & .data, .bss, heap, stack(top) \\
+\cee{0x4000\_0000} & APB1   & TIM2-7, USART2-3, I2C, etc. \\
+\cee{0x4001\_0000} & APB2   & TIM1, USART1, SPI1, SYSCFG \\
+\cee{0x4002\_0000} & AHB1   & DMA, RCC, FLASH ctrl, CRC \\
+\cee{0x4800\_0000} & AHB2   & GPIOA..GPIOH (G4 family) \\
+\cee{0xE000\_E000} & SCS    & (private peripheral bus) \\
+\cee{0xE000\_E010} & SysTick & CTRL/LOAD/VAL/CALIB \\
+\cee{0xE000\_E100} & NVIC   & ISER/ICER/ISPR/ICPR/IABR/IP \\
+\cee{0xE000\_ED00} & SCB    & CPUID/ICSR/VTOR/AIRCR/SCR \\
+\bottomrule
+\end{tabular}
+
+\subsection{Standalone Practice Problems}
+
+\begin{ex}\textbf{Pipeline math.} 4-stage ideal pipe; loop body has 6 instr including 2 unconditional branches that flush. Throughput?\\
+\textbf{Sol.} Each branch wastes (depth$-1$)$=$3 cyc. Useful instr/iter $=$ 6; cyc/iter $=$ 6 (1 cyc each in fill steady-state) $+$ 2$\cdot$3 flushes $=$ 12. Throughput $=$ 6/12 $=$ \textbf{0.5 instr/cyc}.\end{ex}
+
+\begin{ex}\textbf{Two's complement encode.} Encode $-100$ in 8-bit TC.\\
+\textbf{Sol.} $-100 + 256 = 156 =$ \cee{0b1001\_1100} $=$ \cee{0x9C}. Verify: MSB$=1$, $156-256 = -100$. \checkmark
+\end{ex}
+
+\begin{ex}\textbf{Two's complement decode.} Decode \cee{0xC8} as 8-bit signed.\\
+\textbf{Sol.} \cee{0xC8} $=$ 200; MSB$=1$ $\Rightarrow$ $200-256 = $ \textbf{-56}. Bits: \cee{0b1100\_1000}; magnitude via invert+1: \cee{\~{}0xC8 = 0x37 = 55}; $+1=56$, sign neg $\Rightarrow -56$. \checkmark
+\end{ex}
+
+\begin{ex}\textbf{GPIO BSRR atomic.} Write the BSRR value to set PB7 and reset PB12 in one store.\\
+\textbf{Sol.} BSRR low half (bits 15:0) = BS0..BS15 (set), high half (31:16) = BR0..BR15 (reset). Set PB7: bit 7 $=$ \cee{0x0080}. Reset PB12: bit $12+16=28$ $=$ \cee{0x1000\_0000}. OR them: \cee{GPIOB->BSRR = 0x1000\_0080;}\end{ex}
+
+\begin{ex}\textbf{NVIC ISER for USART2 (IRQn=38).} Which ISER index/bit? What's its address?\\
+\textbf{Sol.} idx $=$ 38/32 $=$ \textbf{1}; bit $=$ 38\%32 $=$ \textbf{6}. ISER[0] is at NVIC base 0xE000\_E100, each entry 4 bytes, so ISER[1] at \cee{0xE000\_E104}. C: \cee{NVIC->ISER[1] = (1U<<6);} or equivalently \cee{*(volatile uint32\_t*)0xE000E104 = 0x40;}\end{ex}
+
+\begin{ex}\textbf{Memory map.} Identify peripherals at given addresses.\\
+\textbf{Sol.} \cee{0x4002\_0000} = AHB1 base (RCC, DMA, FLASH ctrl region; specifically DMA1 on G4). \cee{0x4001\_0000} = APB2 base (SYSCFG, COMP, EXTI on G4 sit in this region). \cee{0xE000\_ED00} = SCB base (CPUID/ICSR/VTOR/AIRCR/SCR/CCR/SHPR/SHCSR).\end{ex}
+
+\begin{ex}\textbf{Fixed-point Q1.7.} Encode 1.75 in Q1.7.\\
+\textbf{Sol.} Q1.7 $=$ 1 sign + 1 int + 7 frac $=$ 9 bits typ stored in 16/8. Range $[-2,+2)$, resolution $2^{-7}$. Encode: $1.75 \cdot 2^7 = 224 =$ \cee{0b0\_1110\_0000} $=$ \cee{0x0E0}. As 16b stored: \cee{0x00E0}. Decode check: 224/128 $=$ 1.75. \checkmark\end{ex}
+
+\begin{ex}\textbf{Pointer cast.} Memory at \cee{0x2000\_0004} = \cee{[0x01,0x02,0x03,0x04,0x05,0x06]}. Evaluate \cee{*(uint16\_t *)0x20000004}.\\
+\textbf{Sol.} Cast addr to \cee{uint16\_t*}, dereference reads 2 LE bytes from \cee{0x20000004,0x20000005} $=$ \cee{0x01,0x02} $\Rightarrow$ value $=$ \cee{0x0201} = 513.\end{ex}
+
+\subsection{Rapid-Fire Reference Card}
+\begin{tabular}{@{}ll@{}}
+\toprule
+quantity & value \\
+\midrule
+8N1 byte time @115200 & 86.8~$\mu$s \\
+8N1 throughput @115200 & 11520~B/s \\
+3-stage pipe, $n$ instr & $n+2$ cyc \\
+4-stage pipe, $n$ instr & $n+3$ cyc \\
+ISR auto-stack cost & 8 cyc (push) + 8 cyc (pop) \\
+EXTI0\_IRQn / PSR & 6 / 22 \\
+USART2\_IRQn & 38 \\
+SysTick\_IRQn & $-1$ \\
+TC range, $N$ bits & $[-2^{N-1},\,2^{N-1}{-}1]$ \\
+LE rule & LSB at lowest addr \\
+GPIO MODER bits/pin & 2 (00 in, 01 out, 10 AF, 11 ana) \\
+GPIO BSRR layout & \cee{[BR15..0\;|\;BS15..0]} \\
+NVIC index & IRQn$\gg$5 \\
+NVIC bit & IRQn\&31 \\
+IP shift (N=4) & val$\ll$4 \\
+\bottomrule
+\end{tabular}

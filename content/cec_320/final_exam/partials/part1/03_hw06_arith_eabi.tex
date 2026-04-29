@@ -1,0 +1,138 @@
+\section{HW6: Arithmetic + EABI Calling}
+
+\subsection{Arithmetic instructions (Cortex-M4)}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Instr & Form & Flags \\
+\midrule
+\asm{ADD/SUB/RSB} & \asm{Rd,Rn,op2} & none \\
+\asm{ADDS/SUBS/RSBS} & \asm{Rd,Rn,op2} & N,Z,C,V \\
+\asm{ADC/SBC/RSC} & \asm{Rd,Rn,op2} & uses C in (S sets flags) \\
+\asm{MUL/MLA/MLS} & 32$\times$32$\to$lo32 & none (\asm{MULS}: only N,Z) \\
+\asm{UMULL/SMULL} & 32$\times$32$\to$64 & none \\
+\asm{UMLAL/SMLAL} & RdLo:RdHi += A$\cdot$B & none \\
+\asm{UDIV/SDIV} & \asm{Rd,Rn,Rm} & \textbf{never} set flags \\
+\bottomrule
+\end{tabular}\\
+\textbf{RSB:} \asm{rsb Rd,Rn,op2} $=$ op2$-$Rn (reverse). \textbf{MLA} \asm{Rd,Rn,Rm,Ra}: Rd=Ra+Rn$\cdot$Rm. \textbf{MLS} \asm{Rd,Rn,Rm,Ra}: Rd=Ra$-$Rn$\cdot$Rm.\\
+\textbf{Flag suffix rule:} append \asm{S} to update NZCV (e.g.\ \asm{ADD}$\to$\asm{ADDS}). Plain \asm{ADD} leaves flags untouched. \asm{UDIV/SDIV} have no S form. Div-by-zero $\to$ Rd=0 (no fault when CFG.DIV\_0\_TRP=0).
+
+\subsection{ARM C / V flag conventions (subtract!)}
+\textbf{ADD: } C=1 iff unsigned overflow out of bit 31. V=1 iff signed overflow.\\
+\textbf{SUB/CMP: } \emph{C = NOT borrow}. C=1 means \emph{no} borrow (Rn$\ge$op for unsigned); C=0 means borrow occurred. V=1 iff signed overflow.\\
+\asm{SBC Rd,Rn,Rm}: Rd $=$ Rn $-$ Rm $-$ \asm{!C} $=$ Rn$-$Rm$-$(1$-$C). So a low-word borrow (C=0) propagates an extra $-1$ into the high word.
+
+\subsection{64-bit ADD / SUB pattern}
+\begin{lstlisting}
+@ A=R1:R0 (hi:lo), B=R3:R2; result back in R1:R0
+mp_add_64bit_s:
+    ADDS r0, r2     @ low,  C = unsigned ovf
+    ADC  r1, r3     @ high + C
+    BX   lr
+mp_sub_64bit_s:
+    SUBS r0, r2     @ low,  C = !borrow
+    SBC  r1, r3     @ high - !C
+    BX   lr
+\end{lstlisting}
+Convention: low word at lower-numbered reg (R0,R2), high at next (R1,R3). The S on the low op is mandatory; the high op must be ADC/SBC, never ADD/SUB.
+
+\subsection{Modulo via UDIV+MUL+SUB (no MOD instr)}
+Identity \asm{A\%B = A - (A/B)*B}. Leaf, R0--R2 caller-saved $\Rightarrow$ no PUSH/POP.
+\begin{lstlisting}
+umod32bit_s:                @ uint32 mod: R0=A,R1=B
+    UDIV r2, r0, r1         @ q = A/B
+    MUL  r2, r2, r1         @ q*B
+    SUB  r0, r0, r2         @ A - q*B
+    BX   lr
+@ One-instruction form (M4 has MLS):
+    UDIV r2, r0, r1
+    MLS  r0, r2, r1, r0     @ r0 = r0 - r2*r1
+    BX   lr
+\end{lstlisting}
+For signed modulo use \asm{SDIV} (sign of result follows dividend).
+
+\subsection{EABI / AAPCS register usage}
+\begin{tabular}{@{}llp{4.4cm}@{}}
+\toprule
+Reg & Role & Notes \\
+\midrule
+R0--R3 & arg / ret, scratch & \emph{caller-saved}; R0(:R1) hold return \\
+R4--R11 & local & \emph{callee-saved}; PUSH on entry, POP on exit \\
+R12 (IP) & scratch & may be clobbered by veneers \\
+R13 (SP) & stack ptr & 8-byte aligned at public boundaries \\
+R14 (LR) & link reg & save if you call (BL) anything \\
+R15 (PC) & program ctr & POP \{...,pc\} returns \\
+\bottomrule
+\end{tabular}\\
+\textbf{Args:} first 4 word-sized go in R0--R3, rest spill to stack (lowest addr = 5th arg). 64-bit args use an aligned even/odd pair (R0:R1 or R2:R3); cannot split across R3/stack--R3 is left unused if needed for alignment.\\
+\textbf{Return:} 32-bit in \textbf{R0}. 64-bit in \textbf{R0:R1} (R0=lo, R1=hi). \texttt{void} returns nothing.\\
+\textbf{Leaf rule:} if you don't BL anything and only touch R0--R3,R12, no PUSH/POP needed.
+
+\subsection{Sub-word arg promotion at the CALL SITE}
+Caller widens \asm{int8\_t/int16\_t/uint8\_t/uint16\_t} to 32-bit before placing in R0--R3:
+\begin{itemize}
+\item \textbf{Unsigned} src $\Rightarrow$ \emph{zero-extend} (UXTB/UXTH): upper bits = 0.
+\item \textbf{Signed} src $\Rightarrow$ \emph{sign-extend} (SXTB/SXTH): upper bits = MSB of src.
+\end{itemize}
+Callee assumes the value is already 32-bit clean--reading the low byte without re-extending is wrong if caller failed to extend.
+
+\subsection{Stack \& PUSH/POP rules (full descending)}
+SP points at last-pushed word; PUSH pre-decrements, POP post-increments. \textbf{Lowest reg\# stored at lowest address, regardless of brace order.}\\
+\asm{PUSH \{r7,r5,r8,r6\}} with SP=0x2000\_1020:\\
+\begin{tabular}{@{}ll@{}}
+0x2000\_101C & R8 (highest \#) \\
+0x2000\_1018 & R7 \\
+0x2000\_1014 & R6 \\
+0x2000\_1010 & R5 (lowest \#) $\leftarrow$ new SP \\
+\end{tabular}\\
+SP after $=$ 0x2000\_1020$-$4$\cdot$4 $=$ 0x2000\_1010. POP reverses: lowest addr$\to$lowest reg.\\
+\asm{POP \{...,pc\}} replaces the usual final \asm{BX lr}.
+
+\subsection{HW6 P1: PUSH ordering walkthrough}
+\begin{hwp}\textbf{P1.1} 4 regs $\cdot$ 4B $=$ 16 $\Rightarrow$ SP$=$0x20001020$-$0x10$=$\textbf{0x20001010}.\\
+\textbf{P1.2} R5$=$(1$\ll$5)$+$(1$\ll$10)$=$32$+$1024$=$\textbf{0x0000\_0420}.\\
+\textbf{P1.3} Sorted: R5@1010, R6@1014, R7@1018, R8@101C. R6$=$(1$\ll$6)$+$(1$\ll$12)$=$64$+$4096$=$\textbf{0x0000\_1040}.\\
+\textbf{P1.4} Little-endian byte@0x20001014 $=$ LSB of 0x1040 $=$ \textbf{0x40}.
+\end{hwp}
+
+\subsection{HW6 P2--P3: arg promotion}
+\begin{hwp}\textbf{P2 (unsigned, zero-ext):} \cee{fn1((uint8\_t)0xF,(uint8\_t)0xFF,0xFFF,0xFFFF)} into \cee{uint32\_t}\\
+R0$=$0x0000\_000F, R1$=$0x0000\_00FF, R2$=$0x0000\_0FFF, R3$=$0x0000\_FFFF.\end{hwp}
+\begin{hwp}\textbf{P3 (signed, sign-ext):} \cee{fn2((int8\_t)0xF,(int8\_t)0xFF)} into \cee{int32\_t}\\
+0xF: MSB$=$0 $\Rightarrow$ R0$=$\textbf{0x0000\_000F}.\\
+0xFF: MSB$=$1 (it's $-1$) $\Rightarrow$ R1$=$\textbf{0xFFFF\_FFFF}. Value $-1$ preserved.\end{hwp}
+
+\subsection{HW6 P4: return-reg + Q15.16 encode}
+\begin{hwp}Encode 3.25 in Q15.16: I$=$f$\cdot$2\textsuperscript{16}. $3\!\ll\!16=$0x0003\_0000; $0.25\!\cdot\!65536=$16384$=$0x4000.\\
+$I=$\textbf{0x0003\_4000}; 32-bit return $\Rightarrow$ goes in \textbf{R0}.\end{hwp}
+
+\subsection{HW6 P5: 64-bit ADD flag analysis}
+\begin{hwp}A$=$R1:R0, B$=$R3:R2.\\
+\textbf{T1:} A1$=$0x388$\!\ll\!$24, B1$=$0x289$\!\ll\!$24.\\
+lo: 0x88000000$+$0x89000000$=$0x1\_11000000 $\Rightarrow$ R0$=$0x11000000, \textbf{C$=$1}.\\
+hi: 3$+$2$+$1$=$6 $\Rightarrow$ R1$=$0x6. Result $=$ \cee{(int64\_t)0x611<<24}.\\
+\textbf{T2:} A2$=$0x378$\!\ll\!$24, B2$=$0x279$\!\ll\!$24.\\
+lo: 0x78000000$+$0x79000000$=$0xF1000000, fits $\Rightarrow$ \textbf{C$=$0}.\\
+hi: 3$+$2$+$0$=$5. Result $=$ \cee{(int64\_t)0x5F1<<24}.\end{hwp}
+
+\subsection{HW6 P6: 64-bit SUB flag analysis}
+\begin{hwp}\textbf{T1:} A1$=$0x387$\!\ll\!$28, B1$=$0x28$\!\ll\!$28.\\
+lo: 0x70000000$-$0x80000000 $\Rightarrow$ borrow! lo$=$0xF000\_0000, \textbf{C$=$0}.\\
+hi: 0x38$-$0x02$-$1$=$0x35. Result $=$ \cee{(int64\_t)0x35F<<28}.\\
+\textbf{T2:} A2$=$0x388$\!\ll\!$28, B2$=$0x288$\!\ll\!$28.\\
+lo: 0x80000000$-$0x80000000$=$0, no borrow $\Rightarrow$ \textbf{C$=$1}.\\
+hi: 0x38$-$0x28$-$0$=$0x10. Result $=$ \cee{(int64\_t)0x100<<28}.\\
+\emph{Mantra:} subtract sets C$=$\textbf{!borrow}; SBC subtracts the inverse.\end{hwp}
+
+\subsection{HW6 P7: modulo example}
+\begin{hwp}A$=$17, B$=$5: \asm{UDIV} $\to$ q$=$3; \asm{MUL} $\to$ 15; \asm{SUB} $\to$ 17$-$15$=$\textbf{2}. Leaf, no stack frame, R2 is scratch.\end{hwp}
+
+\subsection{Quick gotchas}
+\begin{itemize}
+\item \asm{MUL} (no S) never sets flags; \asm{MULS} sets only N,Z (C,V undefined). \asm{UMULL/SMULL/UMLAL/SMLAL} never set flags.
+\item Reading flags after \asm{UDIV/SDIV} reads stale flags from the previous flag-setting instr.
+\item \asm{MLS Rd,Rn,Rm,Ra}: Rd$=$Ra$-$Rn$\cdot$Rm--note the operand order.
+\item Signed $\to$ unsigned promotion of a negative byte yields a huge positive uint32 (0xFF\_int8 $\to$ 0xFFFF\_FFFF as int32 $\to$ 4294967295 if reinterpreted unsigned).
+\item PUSH brace order is cosmetic; assembler sorts. Don't rely on listed order for memory layout.
+\item Full-descending: SP points at \emph{valid} top word; word at [SP] is the most recently pushed.
+\end{itemize}

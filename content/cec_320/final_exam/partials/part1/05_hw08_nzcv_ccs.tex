@@ -1,0 +1,163 @@
+% =============================================================================
+% HW8 --- NZCV flags, condition codes, conditional branches (Lctr 18-19)
+% =============================================================================
+\section{HW8: NZCV Flags + CCS + Branch}
+
+\subsection{APSR layout \& per-flag meaning}
+The four arithmetic flags live in the top nibble of the \textbf{APSR} (Application Program Status Register, view of xPSR):
+\begin{center}\scriptsize
+\begin{tabular}{@{}cccccl@{}}
+\toprule
+b31 & b30 & b29 & b28 & b27 & rest \\
+\midrule
+\textbf{N} & \textbf{Z} & \textbf{C} & \textbf{V} & Q & \cee{0\dots 0} (reserved/IT/GE) \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{N} = sign of result = MSB of result word (1 $\Rightarrow$ negative when interpreted signed). \textbf{Z} = (result $==$ 0); pure equality bit, signed/unsigned agnostic. \textbf{C} = unsigned carry-out (add) \emph{or} \textbf{!Borrow} (sub) --- ARM convention is opposite of x86. \textbf{V} = signed overflow: result fell outside $[-2^{N-1},\,2^{N-1}-1]$. Q is the saturation sticky bit (DSP). N\&Z apply to logical ops too; C may be set by shifter; V is unaffected by logical ops.
+
+\subsection{Hand computation in $N$-bit system}
+Constants for an $N$-bit ALU: $C_N = 2^N$, $U_{max} = 2^N{-}1$, $S_{min} = -2^{N-1}$, $S_{max} = 2^{N-1}{-}1$. The processor doesn't know signed vs unsigned --- it sets \emph{all four flags every time} and the programmer picks which to consult via the CCS suffix.
+\begin{enumerate}
+  \item Convert each operand to its $N$-bit unsigned form (negatives: add $C_N$). Same bit pattern for both views.
+  \item \textbf{Unsigned table:} compute $u_{tmp}$. If $u_{tmp} > U_{max}$ on add $\Rightarrow$ \textbf{C=1} (carry); subtract $C_N$. If $u_{tmp} < 0$ on sub $\Rightarrow$ \textbf{C=0} (borrow); add $C_N$. Otherwise C matches no-overflow side.
+  \item \textbf{Signed table:} compute $s_{tmp}$ from signed operands. If $s_{tmp}$ falls outside $[S_{min},S_{max}]$ $\Rightarrow$ \textbf{V=1}, correct by $\pm C_N$. Else V=0.
+  \item \textbf{N} = MSB of corrected binary (same pattern from both tables). \textbf{Z} = 1 iff result is all zeros.
+\end{enumerate}
+\textbf{ARM C-on-subtract:} after \cee{SUBS}, no borrow $\Rightarrow$ C=1, borrow $\Rightarrow$ C=0. \emph{Mnemonic:} ``C = NOT borrow''. (x86 inverts this --- exam trap if you've used x86.)
+
+\subsection{P1 (42pt) --- 5-bit drills ($C_N{=}32$, $S_{min}{=}{-}16$, $S_{max}{=}15$)}
+\begin{center}\scriptsize
+\begin{tabular}{@{}llllcccc@{}}
+\toprule
+op & u-view & s-view & bin & N & Z & C & V \\
+\midrule
+$(-15){+}({-}5)$ & $17{+}27{=}44{>}31$ & $-20{<}{-}16$ & \cee{0\,1100} & 0 & 0 & \textbf{1} & \textbf{1} \\
+$11{-}18$        & $-7{<}0$ borrow     & $11{-}({-}14){=}25$ & \cee{1\,1001} & \textbf{1} & 0 & \textbf{0} & \textbf{1} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{hwp}
+\textbf{P1a:} both C and V fire because \emph{both} interpretations overflow. Binary \cee{0\,1100} reads as $12$ unsigned and $12$ signed --- they coincidentally agree only because of the wrap. \textbf{P1b:} the operand $18$ is unrepresentable in signed 5-bit, so \cee{10010} reinterprets to $-14$ and the signed subtraction is $11-(-14)=25$, which overflows positive. Sub borrow $\Rightarrow$ C=0 (ARM).
+\end{hwp}
+
+\subsection{Flag-only ops: CMP, CMN, TST, TEQ}
+These four discard the result and \emph{only} update flags (no Rd):
+\begin{center}\scriptsize
+\begin{tabular}{@{}lllc@{}}
+\toprule
+mnem & equiv\ to & op & V affected? \\
+\midrule
+\cee{CMP Rn,Op2} & \cee{SUBS \_,Rn,Op2}      & subtract & yes \\
+\cee{CMN Rn,Op2} & \cee{ADDS \_,Rn,Op2}      & add      & yes \\
+\cee{TST Rn,Op2} & \cee{ANDS \_,Rn,Op2}      & bitwise AND & no  \\
+\cee{TEQ Rn,Op2} & \cee{EORS \_,Rn,Op2}      & bitwise XOR & no  \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Pseudo:} \asm{cmp r0,\#-5} is illegal as a literal but the assembler rewrites it to \asm{cmn r0,\#5} (subtracting $-5$ = adding $5$). Flags come out identical to the conceptual subtract, so \emph{signed CCS still works correctly}. Use \cee{TST}/\cee{TEQ} for bit-mask checks; they leave V untouched, so V-dependent CCS (\cee{GT}/\cee{LT}/\cee{GE}/\cee{LE}) shouldn't be paired with them.
+
+\subsection{Condition-code suffixes (all 16)}
+\begin{center}\scriptsize
+\begin{tabular}{@{}lllll@{}}
+\toprule
+CCS & alias & meaning & flag eqn & domain \\
+\midrule
+\textbf{EQ} & --   & equal           & Z=1            & both \\
+\textbf{NE} & --   & not equal       & Z=0            & both \\
+\textbf{CS} & HS   & carry set / $\geq_u$ & C=1       & unsigned \\
+\textbf{CC} & LO   & carry clr / $<_u$    & C=0       & unsigned \\
+\textbf{MI} & --   & minus / negative& N=1            & rare \\
+\textbf{PL} & --   & plus / non-neg  & N=0            & rare \\
+\textbf{VS} & --   & ovfl set        & V=1            & rare \\
+\textbf{VC} & --   & ovfl clr        & V=0            & rare \\
+\textbf{HI} & --   & higher ($>_u$)  & C=1 \& Z=0     & unsigned \\
+\textbf{LS} & --   & lower or same ($\leq_u$) & C=0 $\vert$ Z=1 & unsigned \\
+\textbf{GE} & --   & $\geq_s$        & N=V            & signed \\
+\textbf{LT} & --   & $<_s$           & N$\neq$V       & signed \\
+\textbf{GT} & --   & $>_s$           & Z=0 \& N=V     & signed \\
+\textbf{LE} & --   & $\leq_s$        & Z=1 $\vert$ N$\neq$V & signed \\
+\textbf{AL} & --   & always          & ---            & default \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Mnemonic ``HiLow unSun'':} the H/L family (\cee{HI/HS/LO/LS}) is \emph{unsigned}, the G/L family (\cee{GT/GE/LT/LE}) is \emph{signed}. EQ/NE work either way. Mismatching domain to operand type is the classic exam trap.
+
+\subsection{Match shift type \& CCS to operand domain}
+Pair the \emph{shift kind} and the \emph{CCS suffix} to the same domain or you'll get silently wrong answers:
+\begin{center}\scriptsize
+\begin{tabular}{@{}lll@{}}
+\toprule
+operand domain & shift for $\div 2^n$ & comparison CCS \\
+\midrule
+signed   (\cee{int})   & \cee{ASR \#n} (sign-extend) & GT GE LT LE \\
+unsigned (\cee{uint})  & \cee{LSR \#n} (zero-fill)   & HI HS LO LS \\
+\bottomrule
+\end{tabular}
+\end{center}
+\cee{LSR} on a negative number gives garbage; \cee{ASR} on a large unsigned smears the sign bit. EQ/NE are domain-free.
+
+\subsection{P2 (40pt) --- 6-bit CMP and CCS verify ($C_N{=}64$)}
+\textbf{Case (a):} $r0{=}22$, $r1{=}20$. Subtract $\Rightarrow$ result $2$, no borrow, no signed overflow $\Rightarrow$ \textbf{N=0, Z=0, C=1, V=0}. \textbf{Case (b):} $r0{=}{-}20$, $r1{=}{-}22$. Unsigned forms $44$ and $42$; $44{-}42 = 2$ --- identical flags to (a). The ``equal flags from equal magnitudes'' fact is general: $a{-}b$ and $(a{+}C_N){-}(b{+}C_N)$ produce the same result and same NZCV.
+
+\begin{center}\scriptsize
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+flags N=0,Z=0,C=1,V=0 & EQ & NE & GT & GE & LT & LE & HI & HS \\
+\midrule
+evaluate              & F  & T  & T  & T  & F  & F  & T  & T  \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{hwp}
+\textbf{P2 takeaway:} CCS evaluation is \emph{flag-driven, not value-driven}. Two CMPs on totally different operand pairs that happen to yield identical NZCV will branch identically. Therefore the same flag pattern $(0,0,1,0)$ supports \emph{both} ``$22 > 20$'' (signed) and ``$44 >_u 42$'' (unsigned) --- GT and HI both fire. EQ logic is just $Z=1$, NE is $Z=0$ --- domain-independent.
+\end{hwp}
+
+\subsection{P3 (20pt) --- max() via negative-logic branch}
+C source: \cee{int max(int a,int b)\{ return a{>}{=}b ? a : b; \}}. Negative-logic skeleton: \emph{branch on the opposite CCS to skip the then-block}. For $\geq$ the opposite is $<$, so we use \cee{BLT}.
+\begin{lstlisting}
+mp_max_ab_i_s:
+    cmp   r0, r1            @ a vs b (signed CMP)
+    blt   .else             @ NL: a<b skips the then
+.then:
+    b     .end_if           @ a>=b: r0 already = a, fall to end
+.else:
+    mov   r0, r1            @ r0 = b
+.end_if:
+    bx    lr
+\end{lstlisting}
+\textbf{Why BLT (signed) and not BLO (unsigned)?} \cee{int} operands $\Rightarrow$ signed CCS family. Using \cee{BLO} would silently mis-handle negative $a$ (e.g., $a={-}1$, $b=1$: signed $-1<1$ true, but unsigned $0xFFFFFFFF > 1$ false). Domain mismatch.
+
+\subsection{P4 (30pt) --- 64-bit sum-of-squares with SMLAL}
+$\sum_{i=s}^{e} i^2$ overflows 32 bits quickly ($50000^2{=}2.5{\cdot}10^9 > 2^{31}$), so accumulate into a 64-bit pair using the multiply-accumulate variant. \cee{SMLAL Rlo,Rhi,Rn,Rm} computes \cee{\{Rhi:Rlo\} += Rn*Rm} (signed); \cee{UMLAL} is the unsigned twin. EABI returns 64-bit values in \cee{R0} (low) : \cee{R1} (high).
+\begin{lstlisting}
+mp_range_square_sum_standard_while_s:
+    push  {r4, r5}
+    ldr   r2, =0            @ sum_lo = 0
+    ldr   r3, =0            @ sum_hi = 0
+.lp:
+    cmp   r0, r1            @ i vs e  (r0 reused as i)
+    bgt   .end              @ NL: exit when i>e (signed)
+    smlal r2, r3, r0, r0    @ {r3:r2} += i*i  (signed 32x32->64 MAC)
+    add   r0, #1
+    b     .lp
+.end:
+    mov   r0, r2            @ lo -> R0
+    mov   r1, r3            @ hi -> R1
+    pop   {r4, r5}
+    bx    lr
+\end{lstlisting}
+\begin{hwp}
+\textbf{Alt:} use \cee{SMULL r4,r5,r0,r0} then \cee{ADDS r2,r2,r4} \cee{ADC r3,r3,r5}; \cee{ADDS}/\cee{ADC} is the generic 64-bit-add idiom (low \cee{ADDS} sets C, high \cee{ADC} adds C). \cee{SMLAL} fuses both into one instruction. Reuse the input \cee{r0} as the loop counter to dodge a callee-saved push.
+\end{hwp}
+
+\subsection{Summary / common traps}
+\begin{itemize}
+  \item Processor sets \emph{all four flags every arithmetic op} --- the programmer chooses C vs V via the CCS suffix.
+  \item Sub: \textbf{C = !borrow} (ARM); add: C = carry. Equal magnitudes (e.g. $22{-}20$ vs $({-}20){-}({-}22)$) produce equal flags.
+  \item \cee{TST}/\cee{TEQ} \emph{don't touch V} --- never follow them with V-dependent CCS (\cee{GT}/\cee{LT}/\cee{GE}/\cee{LE}).
+  \item \cee{cmp r0,\#-5} pseudo-assembles as \cee{cmn r0,\#5}; signed CCS still semantically valid.
+  \item Match operand domain to both shift kind (\cee{ASR} signed / \cee{LSR} unsigned) and CCS family (G/L signed / H/L unsigned).
+  \item Negative-logic branch reads cleaner: \cee{cmp;\,b\textit{!cond}\,.else} skips the then-block.
+  \item For 64-bit accumulate use \cee{SMLAL/UMLAL} (or \cee{ADDS}/\cee{ADC} pair); return low in R0, high in R1.
+\end{itemize}

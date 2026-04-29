@@ -1,0 +1,235 @@
+\section{Quiz 6a Practice (qz-25b, ptr + flow ctrl)}
+
+\textbf{Note:} this is the \emph{Fall-2025} (qz-25b) qz6a worksheet --- the
+current-semester qz6a is not in the repo, so use this version as the
+canonical practice. Worksheet only, no instructor solution PDF; answers
+below derived from first principles via HW9--12.
+
+\subsection{P1 (45) --- LDRD/STRD + LDRSB pre-idx copy}
+\begin{qp}
+\cee{uint8\_t ipt[20]} with \cee{ipt[i]=0x70+(i<<2)};
+\cee{int32\_t opt[4]}; \asm{task\_a(ipt,opt)}.
+\begin{lstlisting}
+task_a:
+  ldrd  r2,r3,[r0,#8]!   @ pre-idx, then load 2 words
+  strd  r2,r3,[r1,#0]    @ opt[0], opt[1]
+  ldrsb r2,[r0,#4]!      @ pre-idx byte, sign-ext
+  ldrsb r3,[r0,#4]!
+  strd  r2,r3,[r1,#8]    @ opt[2], opt[3]
+  bx    lr
+\end{lstlisting}
+\end{qp}
+
+\textbf{(a) Memory map of \cee{ipt[20]}.}
+$0x70+(i\!\ll\!2) = 0x70+4i$ \;$\Rightarrow$ stride$=4$, byte values:
+\begin{tabular}{@{}ll|ll|ll@{}}
+\toprule
+i & ipt & i & ipt & i & ipt \\
+\midrule
+0  & 0x70 & 7  & 0x8C & 14 & 0xA8 \\
+1  & 0x74 & 8  & 0x90 & 15 & 0xAC \\
+2  & 0x78 & 9  & 0x94 & 16 & 0xB0 \\
+3  & 0x7C & 10 & 0x98 & 17 & 0xB4 \\
+4  & 0x80 & 11 & 0x9C & 18 & 0xB8 \\
+5  & 0x84 & 12 & 0xA0 & 19 & 0xBC \\
+6  & 0x88 & 13 & 0xA4 &    &      \\
+\bottomrule
+\end{tabular}
+\textbf{Trap:} stride is 4 \emph{bytes}, not 4 indices --- \cee{ipt[i]} is
+still a single byte, neighbors differ by $0x04$.
+
+\textbf{(b) Trace.} R0 in $=$ \cee{\&ipt[0]}, R1 in $=$ \cee{\&opt[0]}.
+\begin{tabular}{@{}lll@{}}
+\toprule
+step & R0 after & loaded \\
+\midrule
+\asm{ldrd r2,r3,[r0,\#8]!} & \cee{\&ipt[8]}  & R2,R3 \\
+\asm{ldrsb r2,[r0,\#4]!}   & \cee{\&ipt[12]} & R2 \\
+\asm{ldrsb r3,[r0,\#4]!}   & \cee{\&ipt[16]} & R3 \\
+\bottomrule
+\end{tabular}
+\textbf{LDRD words} (LE pack of 4 bytes at \cee{\&ipt[8]}, \cee{\&ipt[12]}):
+R2 $=$ bytes \cee{\{90,94,98,9C\}} $\to$ \asm{0x9C989490};\;
+R3 $=$ bytes \cee{\{A0,A4,A8,AC\}} $\to$ \asm{0xACA8A4A0}.\\
+\textbf{LDRSB:} byte at \cee{\&ipt[12]}$=0xA0$ (MSB$=1$) $\to$
+R2 $=$ \asm{0xFFFFFFA0}.\;
+Byte at \cee{\&ipt[16]}$=0xB0$ $\to$ R3 $=$ \asm{0xFFFFFFB0}.
+
+\textbf{Printout:}\\
+\asm{opt[0]=0x9C989490, opt[1]=0xACA8A4A0,}\\
+\asm{opt[2]=0xFFFFFFA0, opt[3]=0xFFFFFFB0}
+
+\textbf{(c) Exit registers.}
+R0 $=$ \cee{\&ipt[16]} (last pre-idx update; R0 advanced
+$8+4+4=16$ bytes).\;
+R1 $=$ \cee{\&opt[0]} unchanged --- both \asm{strd}'s used basic
+offset (no \asm{!}).
+
+\textbf{(d) C translation.}
+\begin{lstlisting}[language=C]
+void task_a(uint8_t *p, int32_t *q) {
+  int32_t *pw = (int32_t*)(p + 8);   // ldrd from ipt+8
+  q[0] = pw[0];                       // word @ ipt[8..11]
+  q[1] = pw[1];                       // word @ ipt[12..15]
+  int8_t *pb = (int8_t*)(p + 16);     // ldrsb from ipt+16
+  q[2] = (int32_t)pb[0];              // sign-ext ipt[12]? NO --
+  q[3] = (int32_t)pb[1];              // see below
+}
+\end{lstlisting}
+\textbf{Careful:} \asm{ldrsb r2,[r0,\#4]!} \emph{after} ldrd-pre means
+R0 was already at \cee{ipt+8}, so first ldrsb reads
+\cee{ipt[12]}, second reads \cee{ipt[16]}.
+\begin{lstlisting}[language=C]
+// Cleanest form, follows ASM byte-by-byte:
+q[0] = *(int32_t*)(p+8);
+q[1] = *(int32_t*)(p+12);
+q[2] = (int32_t)(int8_t)p[12];
+q[3] = (int32_t)(int8_t)p[16];
+\end{lstlisting}
+
+\subsection{P2 (20) --- Saturate to $[-5,5]$}
+\begin{qp}
+\cee{int math\_fun\_c(int x)\{ if(x<-5) x=-5; else if(x>5) x=5; return x; \}}
+Translate to ASM \asm{int math\_fun\_s(int x)}.
+\end{qp}
+
+\textbf{Branch form (cleanest):}
+\begin{lstlisting}
+math_fun_s:                @ x->R0, ret R0
+  cmp   r0, #-5
+  bge   .Lchk_hi           @ x>=-5 -> check high
+  mov   r0, #-5
+  bx    lr
+.Lchk_hi:
+  cmp   r0, #5
+  ble   .Ldone             @ x<=5 -> already ok
+  mov   r0, #5
+.Ldone:
+  bx    lr
+\end{lstlisting}
+
+\textbf{IT-block form (denser, no labels):}
+\begin{lstlisting}
+math_fun_s:
+  cmp   r0, #-5
+  it    lt
+  movlt r0, #-5            @ if x<-5 then x=-5
+  cmp   r0, #5
+  it    gt
+  movgt r0, #5             @ else if x>5 then x=5
+  bx    lr
+\end{lstlisting}
+\textbf{Why \asm{blt}/\asm{bgt}/\asm{lt}/\asm{gt}?} \cee{int} is signed
+$\Rightarrow$ signed cond codes (\asm{lt/gt/le/ge}). Using
+\asm{blo/bhi} would \emph{wrongly} treat $-5$ as a huge unsigned value
+$0xFFFFFFFB$.\;
+\textbf{2nd cmp safe even after clamp-low:} after \asm{movlt r0,\#-5},
+$x=-5<5$ so the \asm{movgt} is correctly skipped --- no need for
+explicit \asm{else if} branching.
+
+\subsection{P3 (35) --- Sum of negative elements}
+\begin{qp}
+\cee{int mp\_neg\_sum\_array(int *arr, int N)} returning sum of
+\cee{arr[i]} for which \cee{arr[i]<0}. Write C (15) and ASM (20).
+\end{qp}
+
+\textbf{C (15 pts):}
+\begin{lstlisting}[language=C]
+int mp_neg_sum_array_c(int *arr, int N) {
+  int sum = 0;
+  for (int i = 0; i < N; i++) {
+    if (arr[i] < 0) sum += arr[i];
+  }
+  return sum;
+}
+\end{lstlisting}
+
+\textbf{ASM (20 pts) --- index + scaled load:}
+\begin{lstlisting}
+mp_neg_sum_array_s:        @ R0=arr, R1=N
+  mov   r2, #0             @ sum = 0
+  mov   r3, #0             @ i   = 0
+.Lloop:
+  cmp   r3, r1
+  bge   .Ldone             @ i>=N -> exit
+  ldr   r12,[r0,r3,lsl #2] @ tmp = arr[i]
+  cmp   r12,#0
+  bge   .Lskip             @ tmp>=0 -> skip
+  add   r2, r2, r12        @ sum += tmp
+.Lskip:
+  add   r3, r3, #1         @ i++
+  b     .Lloop
+.Ldone:
+  mov   r0, r2             @ return sum
+  bx    lr
+\end{lstlisting}
+
+\textbf{IT-block variant} (saves the \asm{.Lskip} label):
+\begin{lstlisting}
+.Lloop:
+  cmp   r3, r1
+  bge   .Ldone
+  ldr   r12,[r0,r3,lsl #2]
+  cmp   r12, #0
+  it    lt
+  addlt r2, r2, r12        @ sum += arr[i] if <0
+  add   r3, r3, #1
+  b     .Lloop
+\end{lstlisting}
+
+\textbf{Pointer-walk variant} (no scaled index):
+\begin{lstlisting}
+  mov   r2, #0             @ sum
+  add   r1, r0, r1, lsl #2 @ end = arr + N
+.L:
+  cmp   r0, r1
+  bge   .D
+  ldr   r12,[r0],#4        @ tmp=*p++; post-idx
+  cmp   r12, #0
+  it    lt
+  addlt r2, r2, r12
+  b     .L
+.D:
+  mov   r0, r2
+  bx    lr
+\end{lstlisting}
+
+\textbf{Reg map / pattern.}
+\begin{tabular}{@{}lll@{}}
+\toprule
+role     & reg  & note \\
+\midrule
+arg1 \cee{arr} & R0   & also caller-save scratch \\
+arg2 \cee{N}   & R1   & loop bound        \\
+sum            & R2   & final $\to$ R0    \\
+i              & R3   & loop counter      \\
+tmp \cee{arr[i]}& R12 & \asm{ip}, scratch \\
+\bottomrule
+\end{tabular}
+R0--R3, R12 are caller-save (AAPCS) $\Rightarrow$ no push/pop needed.\;
+\textbf{Index vs ptr-walk:} index form = 1 ldr/iter w/ \asm{lsl \#2};
+ptr-walk = 1 ldr post-idx --- both 4 cycles in inner loop, choice is
+style.
+
+\subsection{Cross-cutting traps (qz6a checklist)}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item \textbf{LDRSB on $\geq$0x80} $\to$ top 24 bits become \asm{1};
+      \cee{ipt[12]=0xA0}, \cee{ipt[16]=0xB0} both sign-extend.
+\item \textbf{LDRD/STRD pair} $=$ consecutive registers (R2,R3 here);
+      no register-offset form, but pre-/post-idx OK.
+\item \textbf{Pre-idx \asm{!}} updates base \emph{before} access $=$
+      \cee{*++p}; cumulative across multiple \asm{!} ops $\Rightarrow$
+      total advance $= \sum$ offsets ($8+4+4=16$).
+\item \textbf{STR/STRD with no \asm{!}} = base unchanged;
+      R1 stays at \cee{\&opt[0]} throughout P1.
+\item \textbf{Signed cmp} for \cee{int}: use
+      \asm{blt/bge/bgt/ble} (\emph{not} \asm{blo/bhs/bhi/bls}).
+\item \textbf{Array-loop template} (drill until automatic):
+      init \asm{sum=0,i=0}; top: \asm{cmp i,N / bge done};
+      \asm{ldr tmp,[base,i,LSL\#2]}; predicate; conditional accumulate;
+      \asm{add i,\#1 / b loop}; done: \asm{mov r0,sum / bx lr}.
+\item \textbf{IT block} useful when body is 1--4 instructions all
+      sharing one cond code; replaces label+branch.
+\item \textbf{C $\to$ ASM} for \cee{a[i]} on \cee{int*}: scaled
+      \asm{[base, i, LSL \#2]} (no writeback) $=$ \cee{p[i]} idiom.
+\end{itemize}

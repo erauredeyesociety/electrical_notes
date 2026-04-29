@@ -1,0 +1,135 @@
+\section{Lctr 14--27 Recall Bullets}
+
+\subsection{L14 --- Mixed C/ASM (EABI)}
+\begin{itemize}
+\item EABI: \asm{R0--R3} pass args + return; caller-saved (NOT preserved). \asm{R4--R11} callee-saved $\Rightarrow$ push/pop if used.
+\item 64-bit arg/return: low word in \asm{R0}, high word in \asm{R1} (little-endian).
+\item Stack = Full Descending: SP points at last pushed item; \asm{push} decrements SP by 4/word.
+\item Multi-reg push: low-numbered regs end up at LOW addresses regardless of brace order in \asm{\{...\}}.
+\item Return: \asm{bx lr} if LR not stacked; \asm{pop \{pc\}} if LR was pushed ($\equiv$\asm{pop \{lr\}}+\asm{bx lr}).
+\item Leaf fn $\Rightarrow$ no LR push needed; stem fn (calls another) MUST push LR before BL.
+\end{itemize}
+
+\subsection{L15 --- Arithmetic}
+\begin{itemize}
+\item \asm{ADD/SUB/RSB} (no S) leave flags alone; \asm{ADDS/SUBS/RSBS} update NZCV. \asm{RSB} exists because Rn must be a reg.
+\item \asm{ADC Rn,Op2}$=$Rn$+$Op2$+$C; \asm{SBC Rn,Op2}$=$Rn$-$Op2$+$C$-$1 (C$=$1 means no-borrow).
+\item 64-bit add idiom: \asm{adds r0,r2} / \asm{adc r1,r3} (low sets C, high consumes it).
+\item \asm{MUL/MLA/MLS} 32-bit signed$\equiv$unsigned in low 32; \asm{UMULL/SMULL/UMLAL/SMLAL} for 64-bit.
+\item \asm{UDIV} vs \asm{SDIV} differ; no flag-setting form, non-constant cycles.
+\item Modulo idiom: \asm{udiv r2,r0,r1} / \asm{mls r0,r1,r2,r0} ($r0=r0-r1\cdot r2$).
+\end{itemize}
+
+\subsection{L16 --- Shifts \& Op2}
+\begin{itemize}
+\item \asm{LSL} both signed/unsigned; \asm{LSR} unsigned-only (0-fill); \asm{ASR} signed-only (sign-bit replicate). Last bit out $\to$ C.
+\item \asm{RRX} rotates right by 1 through C: C $\to$ MSB, LSB $\to$ C.
+\item Op2 forms: \asm{\#imm}, \asm{Rm}, or \asm{Rm,LSL/LSR/ASR \#n} (barrel shifter, free combined w/ arithmetic).
+\item Shifted-reg Op2: destination canNOT be omitted even if same as Rn.
+\item Q31 accurate mul (3 instr): \asm{smull r1,r0,r0,r1} / \asm{lsl r0,\#1} / \asm{add r0,r0,r1,lsr \#31}.
+\item Fast scaling by $(2^n\pm1)/2^n$: \asm{add r0,r0,r0,asr \#2}$=5/4$; \asm{sub r0,r0,r0,asr \#3}$=7/8$.
+\end{itemize}
+
+\subsection{L17 --- Bitwise Logic}
+\begin{itemize}
+\item \asm{MVN}$=\sim$, \asm{AND}$=\&$, \asm{ORR}$=|$, \asm{EOR}$=\hat{}\,$. No-C-equivalents: \asm{BIC Rn,Op2}$=$Rn\,\&\,$\sim$Op2; \asm{ORN}$=$Rn\,$|$\,$\sim$Op2.
+\item \asm{BFC Rd,\#s,\#w} clears $w$ bits at pos $s$; \asm{BFI Rd,Rn,\#s,\#w} inserts low-$w$ bits of Rn at pos $s$.
+\item Clear-bit-N: \asm{mov mask,\#1}/\asm{lsl mask,\#N}/\asm{bic r0,mask} (BIC$=$AND-NOT).
+\item Read APSR: \asm{MRS r0,apsr}; write: \asm{MSR apsr\_nzcvq,Rn}.
+\item Bit-field assign $v$: build mask $((1\!\ll\!w)-1)\!\ll\!s$, \asm{bic} target, shift $v$ to pos, \asm{and} mask, \asm{orr} in.
+\end{itemize}
+
+\subsection{L18 --- NZCV Flags}
+\begin{itemize}
+\item \textbf{N}$=$MSB(result); \textbf{Z}$=$(result$=$0); \textbf{C}$=$unsigned carry/no-borrow; \textbf{V}$=$signed overflow.
+\item HW always updates BOTH C and V; programmer chooses interpretation.
+\item Unsigned uses \{C,N,Z\}; signed uses \{V,N,Z\}.
+\item C on SUB: C$=$1 if no borrow (Rn$\ge$Op2), C$=$0 if borrow (counterintuitive naming).
+\item \asm{CMP}$=$SUB w/o writeback (sets flags). \asm{CMN}$=$add-form. \asm{TST}$=$AND-only-flags. \asm{TEQ}$=$EOR-only-flags.
+\item N-bit verify trick: \asm{LSL \#(32-N)} operands, \asm{ADDS}, \asm{ASR \#(32-N)} back, read APSR via \asm{MRS}.
+\end{itemize}
+
+\subsection{L19 --- CCS \& Conditional Branch}
+\begin{itemize}
+\item Signed CCS: \asm{EQ/NE/GT/GE/LT/LE}. Unsigned: \asm{EQ/NE/HI/HS(CS)/LO(CC)/LS}.
+\item \asm{HS}$=$\asm{CS} (C set $\Rightarrow$ unsigned $\ge$); \asm{LO}$=$\asm{CC} (C clear $\Rightarrow$ unsigned $<$).
+\item Mnemonic ``HiLow unSun'': \textbf{Hi/Low} family $=$ unSigned; \textbf{G/L} ($>$/$<$) $=$ Signed.
+\item Consistency rule: signed operands $\Rightarrow$ signed CCS + \asm{ASR} for divide; unsigned $\Rightarrow$ unsigned CCS + \asm{LSR}.
+\item \asm{cmp r0,\#-5} assembled as \asm{CMN r0,\#5}; signed CCSs still behave correctly.
+\end{itemize}
+
+\subsection{L20 --- LDR/STR Immediate}
+\begin{itemize}
+\item Three forms: \asm{[Ra,\#os]} basic (no update); \asm{[Ra,\#os]!} pre (update BEFORE, ``urgent bang''); \asm{[Ra],\#os} post (update AFTER).
+\item LOAD size: none(word), \asm{B}(u8), \asm{SB}(i8), \asm{H}(u16), \asm{SH}(i16). STORE: NO sign variant (truncate only).
+\item C$\to$ASM: \asm{*p++}$=$post-index; \asm{*++p}$=$pre-index; \asm{*(p+k)}$=$basic offset, $k\cdot$sizeof(elem).
+\item \asm{STRB} writes only low byte of Rv; upper bits ignored (no signed variant needed).
+\item Valid offset range: word LDR/STR typically $\pm$4095; byte/halfword $\pm$255 on certain forms.
+\end{itemize}
+
+\subsection{L21 --- LDR/STR Register + MOV}
+\begin{itemize}
+\item Reg-offset: \asm{LDR Rv,[Ra,Ri,LSL \#n]}, $n=\log_2$(elem-size): word$=$2, half$=$1, byte$=$0, dword$=$3.
+\item NO writeback form for reg-offset (only immediate-offset has \asm{!} or trailing \asm{,\#os}).
+\item Iter idioms: post-index advances Ra; reg-offset keeps Ra constant, increments Ri.
+\item \asm{MOV} $=$ small imm only; \asm{MOVW} loads 16b low; \asm{MOVT} loads 16b high (upper halfword).
+\item Pseudo \asm{LDR Rd,=expr} $\to$ assembler picks \asm{MOV}/\asm{MOVW}+\asm{MOVT}/PC-relative literal-pool load.
+\end{itemize}
+
+\subsection{L22 --- Increment Ops (vars + ptrs)}
+\begin{itemize}
+\item C precedence: postfix \asm{++} level 1 (LTR, highest); prefix \asm{++},\asm{*},\asm{\&}, cast all level 2 (RTL).
+\item \asm{*p++} $=$ deref OLD p, then p advances. \asm{*++p} $=$ p advances, then deref NEW.
+\item \asm{++*p} $=$ load val, +1, store back (modifies \emph{value}, not pointer).
+\item \asm{++*p++}: post-inc p (so p now points past), but modify mem at OLD addr via \asm{[r0,\#-1]}.
+\item Ptr arith scales by sizeof(elem): \asm{p8++}$+1$, \asm{p16++}$+2$, \asm{p32++}$+4$. Diff of typed ptrs $\to$ elements.
+\item \asm{B[i]=A[i++]++;} is UB (unsequenced i mods); split or use comma operator.
+\end{itemize}
+
+\subsection{L23 --- ASM Calls ASM (LDRD/STRD)}
+\begin{itemize}
+\item \textbf{Leaf} fn (never BLs): \asm{bx lr} suffices, no LR push.
+\item \textbf{Stem} fn (calls another): MUST \asm{push \{lr\}} (BL clobbers LR), \asm{pop \{pc\}} to return.
+\item \asm{LDRD Rv\_L,Rv\_H,[Ra,\#os]}: 8 bytes, low word at low addr, high word at high addr (little-endian).
+\item Rt2$=$Rt$+1$ (consecutive regs). NO register-offset form for \asm{LDRD/STRD} (basic/pre/post only).
+\item Arg-prep by C type: int32$\to$\asm{LDR}; int16$\to$\asm{LDRSH}; uint16$\to$\asm{LDRH}; int8$\to$\asm{LDRSB}; uint8$\to$\asm{LDRB}; int64$\to$\asm{LDRD}.
+\end{itemize}
+
+\subsection{L24 --- Combo Branch / CEX (CBZ/IT)}
+\begin{itemize}
+\item \asm{CBZ Rn,label} / \asm{CBNZ Rn,label}: FORWARD only ($\sim$126 byte range), Rn $\in$ R0--R7, does NOT read/set flags.
+\item Perfect after \asm{ldrb} for null-terminator test (loaded byte is flag-neutral).
+\item IT block $=$ up to 4 conditional instr sharing one CCS. Forms: \asm{IT, ITT, ITE, ITTT, ITTE, ITEE, ITTEE, ITTTT}.
+\item First IT slot is ALWAYS T (matches CCS); later slots T (same) or E (inverse). Each instr inside still needs explicit CCS suffix.
+\item HARD bans: \asm{CBZ}/\asm{CBNZ} forbidden inside IT; conditional branch only allowed in LAST IT slot.
+\end{itemize}
+
+\subsection{L25 --- If / If-Else (PL/NL/CEX)}
+\begin{itemize}
+\item \textbf{PL} (positive logic): same-CCS branch to \asm{\_then}; else-block laid FIRST. Reads ``backward'' from C.
+\item \textbf{NL} (negative logic): inverse-CCS branch to \asm{\_else}; then-block FIRST. Closer to C source order.
+\item if-else-if: chain \asm{cmp}+NL-branch; \asm{b end} at each arm tail to skip the rest.
+\item Compound \textbf{OR} (short-circuit): two CMPs each branch to shared \asm{\_then}; fall-through $=$ else.
+\item Compound \textbf{AND} (De Morgan): both CMPs branch to \asm{\_else} on FAILURE; fall-through $=$ then.
+\item CEX style: small bodies inside IT block instead of branches (saves a label).
+\end{itemize}
+
+\subsection{L26 --- Loops}
+\begin{itemize}
+\item Labels: \asm{<fn>\_lp} (top), \asm{<fn>\_end} (exit).
+\item Top-tested: \asm{for}, \asm{while} (0+ iters). Bottom-tested: \asm{do-while} ($\ge$1 iter).
+\item \asm{while} top-test form: NL-branch to \asm{\_end} at top, body, update, \asm{b lp}.
+\item \asm{while} late-check: jump-over-body on entry, test at bottom $\Rightarrow$ saves one branch per iteration.
+\item \asm{while} CEX form: \asm{cmp}+\asm{it cond}+conditional B as last slot in IT (only legal cond-branch-in-IT).
+\item Priming-read pattern: \asm{ldrb} before loop + \asm{ldrb} inside loop (eliminated by \asm{while(1)+break}).
+\end{itemize}
+
+\subsection{L27 --- break / continue / switch}
+\begin{itemize}
+\item \asm{break} $=$ forward \asm{b <loop\_end>} (or \asm{CBZ}/\asm{CBNZ} to end on a value test).
+\item \asm{continue} in while/do-while $\to$ branch to CONDITION test; in \asm{for} $\to$ branch to UPDATE expr (so \asm{i++} still runs!).
+\item \asm{while(1) \{ ...; if(c) break; \}} removes priming-read duplication $\Rightarrow$ single \asm{ldrb} inside loop.
+\item Switch naive: \asm{CMP}/\asm{BEQ} ladder; stacked case labels w/ no code between $\Rightarrow$ fall-through.
+\item \asm{ADR Rd,label} $=$ PC-relative addr load (position-independent).
+\item \asm{TBB [Rn,Rm]}: \asm{PC = PC+4+2*table[Rm]}; table bytes $=$ \asm{(case\_X-first\_case)/2} (Thumb-2 halfword aligned).
+\end{itemize}

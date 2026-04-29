@@ -1,0 +1,178 @@
+\section{HW7: Shifts, Op2, Bitwise Logic}
+
+\subsection{Shift instructions (4 forms + RRX)}
+\begin{tabular}{@{}l l l@{}}
+\textbf{LSL} & logical shift L & signed/unsigned, 0-fill at LSB \\
+\textbf{LSR} & logical shift R & unsigned only, 0-fill at MSB \\
+\textbf{ASR} & arith shift R & signed, sign-bit replicated at MSB \\
+\textbf{ROR} & rotate right & bits wrap LSB$\to$MSB \\
+\textbf{RRX} & rot R thru C & 33-bit rotate by \textbf{1} (C $\to$ MSB, LSB $\to$ C) \\
+\end{tabular}
+
+\textbf{S-suffix} (\asm{lsls/lsrs/asrs/rors}): updates flags. \textbf{C = last bit shifted out}; N/Z from result. For \asm{lsls Rd,Rs,\#n} $\Rightarrow$ C = bit$(32{-}n)$ of Rs. For \asm{lsrs Rd,Rs,\#n} $\Rightarrow$ C = bit$(n{-}1)$ of Rs.
+
+\subsection{Operand-2 (flexible second operand)}
+Three legal forms in any data-processing instr:
+\begin{itemize}
+\item \asm{\#imm} -- 8-bit rotated immediate (must encode)
+\item \asm{Rm} -- bare register
+\item \asm{Rm, \{LSL|LSR|ASR|ROR\} \#n} -- register w/ inline shift (\textbf{free}, no extra cycle)
+\end{itemize}
+\textbf{Shift count must be immediate} when used as Op2. Standalone \asm{lsl/lsr/asr/ror Rd,Rm,Rs} can take a register count -- only because the shift IS the instruction.
+
+\textbf{GNU quirk:} \asm{add r0, r1, lsl \#3} is illegal even though it looks like \asm{r0 += r0<<3}; you must specify dest+src+Op2 explicitly: \asm{add r0, r0, r1, lsl \#3}. Never omit the Rn slot when Op2 carries a shift.
+
+\subsection{One-instr scaling idioms (decompose $k = 2^n \pm 1$)}
+\textbf{Multiply by integer $k$:}
+\begin{lstlisting}
+lsl r0, r1, #4         @ A = 16*B  (2^n)
+add r0, r1, r1, lsl #1 @ A =  3*B
+add r0, r1, r1, lsl #2 @ A =  5*B
+add r0, r1, r1, lsl #3 @ A =  9*B
+add r0, r1, r1, lsl #4 @ A = 17*B  (1+2^n)
+rsb r0, r1, r1, lsl #3 @ A =  7*B  (2^n - 1)
+rsb r0, r1, r1, lsl #4 @ A = 15*B
+\end{lstlisting}
+\textbf{Divide / fractional ($k/2^n$, signed):} use ASR.
+\begin{lstlisting}
+asr r0, r1, #4         @ A = B/16
+add r0, r1, r1, asr #4 @ A = 17B/16  = B + B/16
+sub r0, r1, r1, asr #4 @ A = 15B/16  = B - B/16
+sub r0, r0, r0, asr #2 @ A = 0.75*A  (3/4)
+\end{lstlisting}
+Recall \asm{rsb Rd,Rn,Op2} $\Rightarrow$ Rd = Op2$-$Rn (reverse). LSR on a signed negative gives garbage; \textbf{always ASR for signed division}.
+
+\subsection{Q31 / Q15.16 renormalization (post-SMULL)}
+After \asm{smull Rlo,Rhi,Rn,Rm}, the 64-bit signed product spans $b_{63}\ldots b_0$. Extract Q$m$.$n$ output (bits $b_{m+n+15}\ldots b_n$) with a fused 3-instr renorm:
+\begin{lstlisting}
+@ Q15.16 result := bits b47..b16 of {Rhi:Rlo}
+smull r1, r0, r0, r1   @ Rlo=R1, Rhi=R0
+lsr   r0, r1, #16      @ low half: top 16 of LW
+orr   r0, r0, r0, lsl #16  @ ... typical pair:
+@ canonical:
+lsr   r0, r1, #16          @ R0 = (LW >> 16)
+orr   r0, r0, r3, lsl #16  @ OR (HW << 16)
+\end{lstlisting}
+\textbf{Rule:} for Q$m$.$n$, LW $\gg n$, HW $\ll (32{-}n)$, OR. \quad Q31: $\ll 1 / \gg 31$. \quad Q15.16: $\ll 16/\gg 16$. \quad Q16.15: $\ll 17/\gg 15$.
+
+\subsection{Bitwise logic family}
+\begin{tabular}{@{}l l l@{}}
+\asm{AND Rd,Rn,Op2} & Rd = Rn \& Op2 & mask in \\
+\asm{ORR Rd,Rn,Op2} & Rd = Rn $|$ Op2 & set bits \\
+\asm{EOR Rd,Rn,Op2} & Rd = Rn $\oplus$ Op2 & toggle bits \\
+\asm{BIC Rd,Rn,Op2} & Rd = Rn \& $\sim$Op2 & \textbf{clear} bits set in Op2 \\
+\asm{ORN Rd,Rn,Op2} & Rd = Rn $|$ $\sim$Op2 & (no C operator) \\
+\asm{MVN Rd,Op2} & Rd = $\sim$Op2 & bitwise NOT \\
+\asm{BFC Rd,\#lsb,\#w} & clear $w$ bits at lsb & field clear \\
+\asm{BFI Rd,Rn,\#lsb,\#w} & insert low $w$ of Rn at lsb & field insert \\
+\end{tabular}
+
+\textbf{C-equivalent gap:} BIC has no direct C operator -- write \cee{a \&= \~{}mask;} (or \cee{a \& \~{}m}). Same for ORN: \cee{a | \~{}b}.
+
+\subsection{APSR access}
+\asm{MRS Rd, APSR} -- read flags into Rd. \asm{MSR APSR\_nzcvq, Rs} -- write flags. Used for save/restore around critical sections; rare on exam.
+
+\subsection{Bit-field idioms (memorize)}
+\textbf{Replace field of width $w$ at position $s$ with value $v$:}
+\begin{lstlisting}
+@ a &= ~(MASK << s);   a |= (v << s);
+ldr  r1, =((1<<w)-1)   @ width mask (e.g. 0xF for nibble)
+bic  r0, r0, r1, lsl #s  @ clear field
+ldr  r2, =v
+orr  r0, r0, r2, lsl #s  @ insert value
+\end{lstlisting}
+\textbf{Insert digit at LSB end} (vacated nibble already 0):
+\begin{lstlisting}
+lsl r0, r0, #4    @ H3H2H1H0 -> H2H1H0 0
+orr r0, r0, #3    @ -> H2H1H0 3
+\end{lstlisting}
+\textbf{Insert digit at MSB end:}
+\begin{lstlisting}
+lsr r0, r0, #4         @ -> 0 H3H2H1
+ldr r1, =0x7000        @ 7000 not 8-bit-rot encodable -> use ldr=
+orr r0, r0, r1         @ -> 7 H3H2H1
+\end{lstlisting}
+\textbf{Set/Clear/Toggle triad:} ORR sets, BIC clears, EOR toggles. MVN inverts.
+
+\subsection{HW7 P1 -- Q15.16 from SMULL}
+\begin{hwp}\textbf{P1.} Given \asm{smull r2,r3,r0,r1} produces \{R3:R2\} 64-bit, extract Q15.16 ($b_{47}\ldots b_{16}$):
+\begin{lstlisting}
+lsr r0, r2, #16        @ low 16 of result = top 16 of LW
+orr r0, r0, r3, lsl #16  @ high 16 of result = low 16 of HW
+\end{lstlisting}
+\end{hwp}
+
+\subsection{HW7 P2 -- LSLS/LSRS \& C flag}
+\begin{hwp}\textbf{P2.} R0 = \asm{0xDD} = \asm{0b1101\_1101}.
+\begin{lstlisting}
+lsls r1, r0, #1   @ R1 = 0x1BA; bit shifted out = R0[31] = 0 -> C=0
+lsrs r2, r0, #3   @ R2 = 0x1B;  last bit out = R0[2]  = 1 -> C=1
+\end{lstlisting}
+After both, C = \textbf{1} (from the last S-instr). Rule: LSLS\#$n$ $\Rightarrow$ C=src$[32{-}n]$; LSRS\#$n$ $\Rightarrow$ C=src$[n{-}1]$.
+\end{hwp}
+
+\subsection{HW7 P3 -- Single-instr scaling table}
+\begin{hwp}\textbf{P3.} R1=B, write A=R0 in one instruction.
+\begin{tabular}{@{}l l@{}}
+$A = 16B$  & \asm{lsl r0, r1, \#4} \\
+$A = 17B$  & \asm{add r0, r1, r1, lsl \#4} \\
+$A = 15B$  & \asm{rsb r0, r1, r1, lsl \#4} \\
+$A = B/16$ & \asm{asr r0, r1, \#4} \\
+$A = 17B/16$ & \asm{add r0, r1, r1, asr \#4} \\
+$A = 15B/16$ & \asm{sub r0, r1, r1, asr \#4} \\
+\end{tabular}
+\end{hwp}
+
+\subsection{HW7 P4 -- BIC+ORR replace nibble}
+\begin{hwp}\textbf{P4.} \cee{uint16\_t a = 0xH3H2H1H0} $\to$ \asm{0xH3H2 A H0} (set bits[7:4]=A).
+\begin{lstlisting}
+ldr r1, =15
+bic r0, r0, r1, lsl #4   @ clear bits 7:4
+ldr r2, =10
+orr r0, r0, r2, lsl #4   @ OR in 0xA<<4
+\end{lstlisting}
+C: \cee{(a \& \textasciitilde(0xF<<4)) | (0xA<<4);} or \cee{(a \& 0xFF0F) | 0x00A0;}.
+\end{hwp}
+
+\subsection{HW7 P5 -- BIC/ORR/EOR hand-trace}
+\begin{hwp}\textbf{P5.} R0=\asm{0xAD}=\asm{1010\_1101}, R1=\asm{0x03}=\asm{0000\_0011}.
+\begin{tabular}{@{}l l l@{}}
+\asm{lsr r2,r1,\#2} & R2 = 0 & \asm{0x00} \\
+\asm{lsl r2,\#2}    & R2 = 0 & \asm{0x00} \\
+\asm{bic r3,r0,r1}  & \asm{0xAD \& \~{}0x03 = 0xAD \& 0xFC} & \asm{0xAC} \\
+\asm{orr r4,r3,r1}  & \asm{0xAC | 0x03} & \asm{0xAF} \\
+\asm{eor r5,r0,r1}  & \asm{0xAD $\oplus$ 0x03} & \asm{0xAE} \\
+\end{tabular}
+\end{hwp}
+
+\subsection{HW7 P6 -- Digit insert/replace patterns}
+\begin{hwp}\textbf{P6(a).} \asm{H3H2H1H0} $\to$ \asm{H3H2 5 H0} (replace H1 with 5):
+\begin{lstlisting}
+bic r0, r0, #0xF0   @ #0xF0 IS 8-bit-rot encodable
+orr r0, r0, #0x50
+\end{lstlisting}
+\textbf{P6(b).} $\to$ \asm{H2H1H0 3} (shift L, insert 3 at LSB):
+\begin{lstlisting}
+lsl r0, r0, #4
+orr r0, r0, #3
+\end{lstlisting}
+\textbf{P6(c).} $\to$ \asm{7 H3H2H1} (shift R, insert 7 at MSB):
+\begin{lstlisting}
+lsr r0, r0, #4
+ldr r1, =0x7000      @ 0x7000 not encodable as Op2 imm
+orr r0, r0, r1
+\end{lstlisting}
+\textbf{Why ldr=} for \asm{0x7000}: doesn't fit 8-bit-rotated immediate format. Use \asm{ldr Rx,=const} when an immediate refuses to encode.
+\end{hwp}
+
+\subsection{Quick-reference summary}
+\begin{itemize}
+\item Op2 shift is \textbf{free} -- always prefer \asm{add Rd,Rn,Rm,lsl \#n} over a 2-instr \asm{lsl}+\asm{add}.
+\item Always write the \textbf{dest} explicitly when Op2 has a shift -- no implicit \asm{Rd=Rn}.
+\item LSL = signed \emph{and} unsigned mul-by-$2^n$. LSR = unsigned div only. ASR = signed div.
+\item S-suffix on a shift puts the \textbf{last bit shifted out} into C -- handy single-bit pluck.
+\item Field replace = BIC mask $\to$ ORR value-shifted-in. End-insert = shift word, ORR digit.
+\item BIC has no C operator: \cee{a \& \~{}m}. ORN: \cee{a | \~{}b}. MVN: \cee{\~{}a}.
+\item RRX rotates 33 bits (with C); no count needed -- always 1.
+\item APSR via \asm{MRS}/\asm{MSR}; \asm{APSR\_nzcvq} field selector for write.
+\end{itemize}

@@ -1,0 +1,130 @@
+\section{HW5: Q-Format Fixed-Point Real Numbers}
+
+\subsection{Format anatomy}
+\textbf{Qm.n} (signed): 1 sign + $m$ int + $n$ frac $=$ $N=1+m+n$ bits, two's-comp.
+\textbf{UQm.n} (unsigned): $m$ int + $n$ frac $=$ $N=m+n$ bits.
+Scale factor $=2^{-n}$. LSB resolution $=2^{-n}$.
+
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Fmt & $N$ & $n$ & range (signed) & res \\
+\midrule
+Q3.4   & 8  & 4  & $-8.0\ldots+7.9375$ & $1/16$ \\
+UQ3.5  & 8  & 5  & $0.0\ldots 7.96875$ & $1/32$ \\
+Q2.5   & 8  & 5  & $-4.0\ldots+3.96875$ & $1/32$ \\
+Q15 ($=$Q0.15) & 16 & 15 & $-1.0\ldots+0.99997$ & $2^{-15}$ \\
+Q15.16 & 32 & 16 & $\pm 32{\rm k}$ & $2^{-16}$ \\
+\bottomrule
+\end{tabular}
+
+\subsection{Encode rule (real $\to$ hex code)}
+\begin{enumerate}
+\item Multiply: $I = f\cdot 2^{n}$
+\item Round to nearest integer.
+\item If $I<0$ (signed Qm.n): $I \leftarrow I + 2^{N}$ (two's-comp wrap).
+\item Express $I$ in hex (width $=\lceil N/4\rceil$ digits).
+\end{enumerate}
+Out-of-range $\Rightarrow$ saturate or flag overflow.
+
+\subsection{Decode rule (hex code $\to$ real)}
+\begin{enumerate}
+\item Read $U =$ unsigned int value of code.
+\item If signed Qm.n and MSB$=$1: $I = U - 2^{N}$; else $I=U$.
+\item $f = I \cdot 2^{-n} = I/2^{n}$.
+\end{enumerate}
+
+\subsection{Multiplication / MAC rule}
+$\text{Q}m.n \times \text{Q}p.q = \text{Q}(m{+}p{+}1).(n{+}q)$ in $2N$-bit product.
+Renormalize back to Q$m.n$ by arithmetic shift right $n$ (\asm{ASR \#n}).
+\textbf{Q15 MAC:} \asm{smull} gives Q30 in 64b across (HW:LW); shift the
+\emph{low word} right by 15 to recover Q15 product. Sum of Q15 products is
+plain integer add (no scaling).
+
+\subsection{Q15.16 result extraction (32-bit Q15.16 from \texttt{smull})}
+\asm{smull lo,hi,a,b} gives $a\cdot b$ as Q30.32 in (\asm{hi}:\asm{lo}).
+To get Q15.16 (32b): \asm{lsl hi,\#16} (keep low 16 bits of hi as int part),
+\asm{lsr lo,\#16} (keep high 16 bits of lo as frac part), then
+\asm{orr/add} them: result $= (\text{hi}\!\ll\!16)\,|\,(\text{lo}\!\gg\!16)$.
+
+\begin{lstlisting}
+@ Q15 multiply: r0=A (Q15), r1=B (Q15) -> r0=A*B (Q15)
+    smull r2, r3, r0, r1   @ r3:r2 = A*B (Q30, 64b)
+    lsr   r0, r2, #15      @ shift Q30 -> Q15 (low 32 ok if no overflow)
+    bx    lr
+\end{lstlisting}
+
+\subsection{HW5 P1 --- Encode 2.75 in UQ3.5 (unsigned, 8b, $n{=}5$)}
+\begin{hwp}
+$2.75\cdot 2^{5}=2.75\cdot 32 = 88$. Hex: $88=$\textbf{0x58}.
+\end{hwp}
+
+\subsection{HW5 P2 --- Decode Q3.4 ($N{=}8$, $n{=}4$)}
+\begin{hwp}
+\textbf{(a)} 0x77: $U{=}119$, MSB$=$0 $\Rightarrow I{=}119$;
+$f=119/16=$\textbf{7.4375}.\\
+\textbf{(b)} 0xAA: $U{=}170$, MSB$=$1 $\Rightarrow I=170-256=-86$;
+$f=-86/16=$\textbf{$-5.375$}.
+\end{hwp}
+
+\subsection{HW5 P3 --- Decode Q2.5 (\texttt{0b1001\_1001})}
+\begin{hwp}
+$U{=}153$, MSB$=$1 $\Rightarrow I=153-256=-103$;
+$f=-103/32=$\textbf{$-3.21875$}.
+\end{hwp}
+
+\subsection{HW5 P4 --- Encode in Q3.4 (range $[-8.0,+7.9375]$)}
+\begin{hwp}
+\textbf{(a)} $0.5\cdot 16=8 \Rightarrow$ \textbf{0x08}.\\
+\textbf{(b)} $6.73\cdot 16 = 107.68 \to 108 \Rightarrow$ \textbf{0x6C}
+(decode: $108/16=6.75$, err $0.02$).\\
+\textbf{(c)} $-2.25\cdot 16=-36$, $+256=220 \Rightarrow$ \textbf{0xDC}.\\
+\textbf{(d)} $-4.5\cdot 16=-72$, $+256=184 \Rightarrow$ \textbf{0xB8}.
+\end{hwp}
+
+\subsection{HW5 P5 --- Q15 MAC: $f_1f_2+f_3f_4$}
+\begin{hwp}
+$f_1{=}0.5,\,f_2{=}0.25,\,f_3{=}0.125,\,f_4{=}0.0625$.
+\textbf{Encode} ($I{=}f\cdot 2^{15}$): \;
+$I_1{=}$0x4000, $I_2{=}$0x2000, $I_3{=}$0x1000, $I_4{=}$0x0800.\\
+\textbf{Mult+renorm} ($I_P=(I_AI_B)\!\gg\!15$):
+$I_{P1}=2^{14}\!\cdot\!2^{13}\!\gg\!15=2^{12}=$0x1000;
+$I_{P2}=2^{12}\!\cdot\!2^{11}\!\gg\!15=2^{8}=$0x0100.\\
+\textbf{Add:} $I_A=$0x1100$=4352$.
+\textbf{Decode:} $4352/32768=$\textbf{0.1328125} $\checkmark$
+($0.5\!\cdot\!0.25+0.125\!\cdot\!0.0625$).
+\end{hwp}
+
+\subsection{Worked encode/decode shortcuts}
+\begin{ex}
+Powers of two: $f=2^{-k}\Rightarrow I=2^{n-k}$ (single-bit code).
+Q15 of $0.5=2^{14}=$0x4000; Q15 of $0.0625=2^{11}=$0x0800.
+\end{ex}
+
+\begin{ex}
+Q15.16 of $3.25$: $I=3.25\cdot 2^{16}=3\cdot 0x10000+0x4000=$\textbf{0x00034000}.
+Returned in R0 (32-bit EABI return).
+\end{ex}
+
+\subsection{Common pitfalls}
+\begin{itemize}
+\item Forgetting the $+2^{N}$ wrap on negative encodes (yields wrong sign).
+\item Using LSR (logical) instead of ASR for signed renormalize after multiply.
+\item Adding numbers of \emph{different} Q-formats without aligning $n$
+(shift smaller-$n$ left, or shift larger-$n$ right, before add).
+\item Q15$\times$Q15 product is Q30 not Q15 --- must \asm{ASR \#15}.
+\item Q15 cannot store $+1.0$ exactly (max $\approx 0.99997$).
+\end{itemize}
+
+\subsection{Cookbook table}
+\begin{tabular}{@{}lll@{}}
+\toprule
+op & rule & note \\
+\midrule
+encode & $I=\mathrm{round}(f\cdot 2^{n})$ & $+2^{N}$ if $I<0$ \\
+decode & $f=I\cdot 2^{-n}$ & $I=U-2^{N}$ if MSB \\
+add Qm.n & $I_S=I_A+I_B$ & same format only \\
+mul Qm.n & $I_P=(I_AI_B)\!\gg\!n$ & ASR for signed \\
+Q15 mul & \asm{smull;lsr \#15} & 16$\to$32$\to$16 \\
+Q15.16  & 32b, $n{=}16$ & R0 return \\
+\bottomrule
+\end{tabular}

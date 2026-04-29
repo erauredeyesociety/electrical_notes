@@ -1,0 +1,93 @@
+% ==============================================================================
+% CEC 320 FINAL EXAM CHEATSHEET --- PART 1 PREAMBLE
+% Auto-generated header. Concatenate with partials in part1/ then _footer.tex.
+% Built by build.sh.
+% ==============================================================================
+\documentclass[8pt,landscape]{extarticle}
+\usepackage[letterpaper,landscape,margin=0.18in,top=0.18in,bottom=0.18in]{geometry}
+\usepackage{multicol}
+\usepackage{amsmath,amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\AtBeginDocument{\small}
+
+% ---------- Spacing / layout ----------
+\setlength{\columnsep}{0.3em}
+\setlength{\columnseprule}{0.15pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1pt}
+\setlist{nosep,leftmargin=0.9em,itemsep=0pt,topsep=0.5pt,parsep=0pt,partopsep=0pt}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.0}
+\pagestyle{empty}
+\raggedcolumns
+
+% ---------- Section styling (tight) ----------
+\titleformat{\section}{\normalfont\bfseries\footnotesize\color{blue!60!black}}
+  {\thesection.}{0.25em}{}
+\titlespacing*{\section}{0pt}{3pt}{0.5pt}
+\titleformat{\subsection}{\normalfont\bfseries\scriptsize}{}{0em}{}
+\titlespacing*{\subsection}{0pt}{2pt}{0.2pt}
+
+% ---------- ARM listings ----------
+\lstdefinelanguage{arm}{
+  morekeywords={ldr,ldrb,ldrh,ldrsb,ldrsh,ldrd,str,strb,strh,strd,mov,movw,movt,%
+    movs,add,adds,adc,sub,subs,sbc,cmp,cmn,tst,teq,bl,bx,b,beq,bne,bgt,bge,blt,%
+    ble,bhi,bhs,blo,bls,bcs,bcc,push,pop,cbz,cbnz,it,itt,ite,itte,itet,itee,%
+    ittt,ittee,iteee,ittte,itttt,tbb,tbh,adr,lsl,lsls,lsr,lsrs,asr,asrs,ror,%
+    rors,rrx,rrxs,and,ands,orr,orrs,eor,eors,bic,bics,orn,mvn,mvns,bfc,bfi,%
+    mul,muls,mla,mls,umull,umlal,smull,smlal,udiv,sdiv,nop,wfi,wfe,svc,rsb,%
+    sxtb,sxth,uxtb,uxth,clz,rbit,rev,%
+    lslge,lslgt,lsllt,lslle,asrge,asrgt,asrlt,asrle,ldrle,ldrgt,ldrlt,ldrge,%
+    ldrshgt,ldrshlt,ldrhge,ldrhlt,lsrlt,lsrge},
+  morecomment=[l]{@},
+  sensitive=false
+}
+\lstset{
+  language=arm,
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{blue!70!black}\bfseries,
+  commentstyle=\color{green!40!black}\itshape,
+  breaklines=false,
+  frame=none,
+  aboveskip=0.5pt,
+  belowskip=0.5pt,
+  columns=fullflexible,
+  keepspaces=true,
+  xleftmargin=0.25em,
+  showstringspaces=false
+}
+\newcommand{\asm}[1]{\texttt{\scriptsize #1}}
+\newcommand{\cee}[1]{\texttt{\scriptsize #1}}
+
+% Tag environments
+\newenvironment{ex}
+  {\par\smallskip\noindent{\scriptsize\color{red!55!black}\textbf{Ex.}}\,\scriptsize\ignorespaces}
+  {\par}
+\newenvironment{qp}
+  {\par\smallskip\noindent{\scriptsize\color{purple!70!black}\textbf{Qz.}}\,\scriptsize\ignorespaces}
+  {\par}
+\newenvironment{hwp}
+  {\par\smallskip\noindent{\scriptsize\color{orange!70!black}\textbf{HW}}\,\scriptsize\ignorespaces}
+  {\par}
+\newenvironment{reg}
+  {\par\smallskip\noindent{\scriptsize\color{teal!75!black}\textbf{Reg}}\,\scriptsize\ignorespaces}
+  {\par}
+
+\begin{document}
+\begin{center}
+  \textbf{\footnotesize CEC 320 --- FINAL EXAM Cheatsheet (Part 1)} \;
+  \scriptsize HW 5--12 \textbullet{} Lctr 14--27 \textbullet{} Quiz 3, 4, 6a
+\end{center}
+\vspace{-8pt}
+
+\begin{multicols*}{4}
+\scriptsize

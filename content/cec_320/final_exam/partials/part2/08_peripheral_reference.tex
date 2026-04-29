@@ -1,0 +1,383 @@
+% =============================================================================
+% Big Reference: STM32 peripherals + C language + memory map + bit-banding
+% =============================================================================
+\section{STM32 Peripheral + C Reference}
+
+\subsection{Memory map (4 GiB, ARMv7-M)}
+\begin{lstlisting}[language={}]
+0x0000_0000  Code alias (boot map: Flash/SRAM/system)
+0x0800_0000  Flash (program memory; vector table default)
+0x1FFF_xxxx  System memory / option bytes (boot ROM)
+0x2000_0000  SRAM (data: stack/heap/.data/.bss)
+0x2200_0000  SRAM bit-band ALIAS (32 MB -> 1 MB)
+0x4000_0000  Peripheral region (APB1 base)
+0x4001_0000  APB2  0x4002_0000 AHB1  0x4800_0000 AHB2 (G4)
+0x4200_0000  Peripheral bit-band ALIAS (32 MB -> 1 MB)
+0x6000_0000  External RAM   0xA000_0000 External device
+0xE000_0000  Private peripheral bus (PPB) -- core peripherals
+0xE000_E000  SCS (SysTick @+0x010, NVIC @+0x100, SCB @+0xD00)
+0xE000_ED00  SCB (CPUID, ICSR, VTOR, AIRCR, SCR, CCR, SHPR1-3,
+             SHCSR, CFSR, HFSR, MMFAR, BFAR)
+0xFFFF_FFFF  end (4 GiB)
+\end{lstlisting}
+Stack grows DOWN from \cee{\_estack}; heap grows UP. Linker script declares regions; \cee{.data} init image lives in Flash, copied to SRAM by Reset\_Handler. Vector table relocatable: \cee{SCB->VTOR = newbase;} (must be 32-word aligned, $\geq$ 128 B). Default after reset = 0x0000\_0000 which aliases 0x0800\_0000.
+
+\subsection{Bit-banding (Cortex-M3/M4 only)}
+Single-bit atomic R/W via \emph{alias} word. Each bit in a 1\,MB region maps to a 32-bit word in a 32\,MB alias region. Read alias word: bit value (0/1) in LSB; write alias word: 0/1 stores into the target bit.
+\begin{lstlisting}[language={}]
+SRAM region:  base = 0x2000_0000, alias = 0x2200_0000
+PERIPH region:base = 0x4000_0000, alias = 0x4200_0000
+alias_addr = alias_base + 32*(addr - region_base) + 4*bit
+\end{lstlisting}
+\textbf{Why useful:} replaces 3-instr load-modify-store with single \cee{STR} -- atomic vs ISR; no read-modify-write hazard. \emph{Limit:} only addresses inside the two 1\,MB windows are aliased -- GPIO ports on AHB2 (0x4800\_0000) are \emph{outside} the peripheral bit-band on most STM32 (use BSRR instead).
+\begin{lstlisting}[language={}]
+// Toggle bit 5 of word at 0x2000_0200 atomically:
+uint32_t a = 0x2200_0000 + 32*(0x200) + 4*5;  // 0x2200_4014
+*(volatile uint32_t*)a = 1;   // sets bit 5
+*(volatile uint32_t*)a = 0;   // clears bit 5
+*(volatile uint32_t*)a;       // reads bit 5 (0 or 1)
+\end{lstlisting}
+
+\subsection{GPIO\_TypeDef -- full register table}
+Per-port struct, 28 bytes; one per GPIOA..GPIOH. Spacing 0x400.
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Off} & \textbf{Reg} & \textbf{Sz} & \textbf{Bits/pin} & \textbf{Note}\\
+\midrule
+0x00 & MODER   & u32 & 2 & 00 in / 01 out / 10 AF / 11 analog (rst=11)\\
+0x04 & OTYPER  & u32 & 1 & 0 push-pull / 1 open-drain (low 16b)\\
+0x08 & OSPEEDR & u32 & 2 & 00 low / 01 med / 10 high / 11 vhi\\
+0x0C & PUPDR   & u32 & 2 & 00 none / 01 PU / 10 PD / 11 rsvd\\
+0x10 & IDR     & u32 & 1 & low 16b read-only input state\\
+0x14 & ODR     & u32 & 1 & low 16b output latch (R/W)\\
+0x18 & BSRR    & u32 & 1+1 & lo16=BS (set), hi16=BR (reset); W-only, atomic\\
+0x1C & LCKR    & u32 & 1 & lock seq: 1,0,1 + read = freeze MODER/OTYPER/OSPEEDR/PUPDR/AFR\\
+0x20 & AFR[0]  & u32 & 4 & AFRL pins 0..7 (AF0..AF15)\\
+0x24 & AFR[1]  & u32 & 4 & AFRH pins 8..15\\
+\bottomrule
+\end{tabular}\\
+\textbf{Field index for pin $n$:} 2-bit field at bits $[2n+1{:}2n]$ (MODER/OSPEEDR/PUPDR); 1-bit at bit $n$ (OTYPER/IDR/ODR); 4-bit AF at \cee{AFR[n/8]} bits $[4(n\%8)+3{:}4(n\%8)]$.
+
+\begin{reg}\textbf{BSRR semantics.} Single 32-bit store, atomic. Bit $n$ in lo16 sets pin $n$; bit $(n+16)$ resets pin $n$. Set+reset same pin in one write $\Rightarrow$ \emph{set wins}. Writing 0 to any bit is a no-op. ODR writes are RMW (3 instr, race-prone in ISRs); BSRR is the safe primitive.\end{reg}
+
+\subsection{NVIC layout (NVIC\_BASE = 0xE000\_E100)}
+Note: CMSIS \cee{NVIC\_Type} struct is sometimes laid out at \cee{0xE000\_E000} to keep ISER at +0x100. Below uses NVIC base = 0xE000\_E100 (offsets within).
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Reg} & \textbf{Off} & \textbf{Size} & \textbf{Use}\\
+\midrule
+ISER[8] & 0x000 & 8 $\times$ u32 & set-enable IRQs (W1S)\\
+ICER[8] & 0x080 & 8 $\times$ u32 & clear-enable\\
+ISPR[8] & 0x100 & 8 $\times$ u32 & set-pending\\
+ICPR[8] & 0x180 & 8 $\times$ u32 & clear-pending\\
+IABR[8] & 0x200 & 8 $\times$ u32 & active flag (RO)\\
+IP[240] & 0x300 & 240 $\times$ u8 & per-IRQ priority\\
+STIR    & 0xE00 & u32 & SW trigger IRQ (writes IRQn)\\
+\bottomrule
+\end{tabular}\\
+\textbf{Indexing} ISER/ICER/ISPR/ICPR/IABR (each bit = one IRQn): \cee{idx = IRQn>>5; bit = IRQn\&31;}. \textbf{IP is byte-indexed:} \cee{NVIC->IP[IRQn]}. With $N$ implemented priority bits (STM32: $N=4$), priority value $p$ stores as \cee{IP[IRQn] = p << (8-N);}.
+\begin{lstlisting}[language={}]
+NVIC->ISER[IRQn>>5] = 1U << (IRQn & 31);  // enable
+NVIC->ICER[IRQn>>5] = 1U << (IRQn & 31);  // disable
+NVIC->ISPR[IRQn>>5] = 1U << (IRQn & 31);  // sw pend
+NVIC->ICPR[IRQn>>5] = 1U << (IRQn & 31);  // clr pend
+NVIC->IP[IRQn] = (p & 0xF) << 4;          // 4 prio bits
+\end{lstlisting}
+
+\subsection{EXTI + SYSCFG}
+EXTI lines 0-15 = GPIO edges; 16+ = internal (PVD line 16, RTC alarm 17, USB wakeup 18, COMP, RTC tamper, etc.). Each line individually maskable.
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Reg} & \textbf{Off} & \textbf{Use}\\
+\midrule
+IMR    & 0x00 & 1=IRQ enabled (mask=0 blocks)\\
+EMR    & 0x04 & 1=event enabled (wakeup, no IRQ)\\
+RTSR   & 0x08 & 1=trigger on rising edge\\
+FTSR   & 0x0C & 1=trigger on falling edge\\
+SWIER  & 0x10 & write 1 to force pending (sw trigger)\\
+PR     & 0x14 & pending; \emph{W1C} (write 1 to clear)\\
+\bottomrule
+\end{tabular}\\
+\textbf{PR semantics:} writing 1 clears the bit; writing 0 has no effect. ISR \emph{must} clear PR before return or IRQ refires immediately.
+
+\textbf{SYSCFG\_EXTICR[0..3]} -- routes pin source to EXTI line. 4 lines per register, 4 bits per line. Field: \cee{(line\%4)*4}; port codes A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7.
+\begin{lstlisting}[language={}]
+SYSCFG->EXTICR[line/4] &= ~(0xFU << (4*(line%4)));
+SYSCFG->EXTICR[line/4] |=  (port_code << (4*(line%4)));
+\end{lstlisting}
+\textbf{IRQn (STM32G4 typical):} EXTI0=6, EXTI1=7, EXTI2=8, EXTI3=9, EXTI4=10, EXTI9\_5=23, EXTI15\_10=40. Shared handlers must read \cee{EXTI->PR} to dispatch which line fired.
+\begin{lstlisting}[language={}]
+void EXTI0_IRQHandler(void) {
+  if (EXTI->PR & (1U<<0)) {
+    EXTI->PR = (1U<<0);   // W1C clear
+    /* user code */
+  }
+}
+\end{lstlisting}
+
+\subsection{USART register highlights}
+Three control + status + data + baud. APBx clock supplies USART (USART1/6 on APB2; USART2/3, UART4/5 on APB1).
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Reg} & \textbf{Off} & \textbf{Key bits}\\
+\midrule
+CR1 & 0x00 & UE(0) RE(2) TE(3) IDLEIE(4) RXNEIE(5) TCIE(6) TXEIE(7) PEIE(8) PS(9) PCE(10) WAKE(11) M0(12) MME(13) OVER8(15) M1(28)\\
+CR2 & 0x04 & ADDM7(4) STOP[13:12] (00=1, 01=0.5, 10=2, 11=1.5) LBCL(8) CPHA(9) CPOL(10) CLKEN(11)\\
+CR3 & 0x08 & EIE(0) IREN HDSEL DMAR(6) DMAT(7) RTSE CTSE CTSIE OVRDIS(12) ONEBIT(11) DEM(14) DEP(15)\\
+BRR & 0x0C & USARTDIV (16-bit). OVER8=0: BRR=USARTDIV. OVER8=1: BRR[3:0]=usartdiv[3:0]>>1, BRR[15:4]=usartdiv[15:4]\\
+ISR/SR & 0x1C/0x00 & PE(0) FE(1) NE(2) ORE(3) IDLE(4) RXNE(5) TC(6) TXE(7) BUSY(16)\\
+ICR & 0x20 & W1C for PE/FE/NE/ORE/IDLE/TC etc.\\
+RDR & 0x24 & receive data (read clears RXNE)\\
+TDR & 0x28 & transmit data (write clears TXE)\\
+\bottomrule
+\end{tabular}
+\textbf{Baud calc (OVER8=0, 16$\times$ oversample):}
+\[ \text{USARTDIV} = \frac{f_{CK}}{\text{baud}} \quad\Rightarrow\quad \text{BRR}=\text{USARTDIV}. \]
+\textbf{OVER8=1 (8$\times$):} $\text{USARTDIV} = 2 f_{CK}/\text{baud}$; BRR layout split. \emph{Example:} 80\,MHz APB, 115200 baud, OVER8=0 $\Rightarrow$ BRR $= 80\text{e}6/115200 = 694.44 \to 694 = 0x2B6$ (actual baud $= 80\text{e}6/694 = 115273$, error 0.06\%).
+
+\textbf{Frame:} START(0) | D0..Dn LSB-first | [parity] | STOP(1 or 2). M1:M0 sets word length: 00=8b, 01=9b, 10=7b. With PCE=1 the MSB of the data field is replaced by parity (so M=01,PCE=1 = 8 data + parity).
+\textbf{Errors:} ORE = RXNE was 1 when new byte arrived (overrun, byte lost). FE = stop bit not detected (baud mismatch / framing). NE = noise per oversample vote. PE = parity mismatch.
+\textbf{Idle line:} IDLE flag set after a full frame of HIGH following last RX char (used for variable-length packets). \textbf{TC:} last byte fully shifted out (vs TXE = TDR empty). For DMA tail, wait TC before disabling.
+
+\subsection{SysTick (STK)}
+24-bit downcounter at \cee{0xE000\_E010}. Reloads from LOAD when count hits 0 and asserts SysTick exception (IRQn = -1, vector idx 15).
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Reg} & \textbf{Off} & \textbf{Bits}\\
+\midrule
+CTRL  & 0x00 & ENABLE(0) TICKINT(1) CLKSOURCE(2: 0=AHB/8, 1=AHB) COUNTFLAG(16, RC)\\
+LOAD  & 0x04 & RELOAD[23:0]; period = LOAD+1 ticks\\
+VAL   & 0x08 & current count[23:0]; any write clears to 0 + clears COUNTFLAG\\
+CALIB & 0x0C & TENMS[23:0] vendor 10\,ms reload, NOREF, SKEW\\
+\bottomrule
+\end{tabular}
+\textbf{Period} = $(\text{LOAD}+1)/f_{\text{src}}$. For 1\,kHz at 80\,MHz HCLK, CLKSOURCE=1: LOAD = $80000-1 = 79999$.
+
+\subsection{Generic timer (TIMx)}
+Common base: CR1, SR, CNT, PSC, ARR, plus CCMR1/2 + CCER + CCR1..4 + DIER + EGR.
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Reg} & \textbf{Off} & \textbf{Use}\\
+\midrule
+CR1   & 0x00 & CEN(0) UDIS(1) URS(2) OPM(3) DIR(4) CMS[6:5] ARPE(7) CKD[9:8]\\
+DIER  & 0x0C & UIE(0) CCxIE(1..4) UDE(8) CCxDE(9..12)\\
+SR    & 0x10 & UIF(0) CCxIF(1..4) -- W0C semantics\\
+EGR   & 0x14 & UG(0) write 1 to force update event\\
+CNT   & 0x24 & current count (16/32-bit per timer)\\
+PSC   & 0x28 & prescaler (16-bit; divides by PSC+1)\\
+ARR   & 0x2C & auto-reload (period top, 16/32b)\\
+CCRx  & 0x34..0x40 & capture/compare values\\
+\bottomrule
+\end{tabular}
+\textbf{Frequency:} $f_{\text{TIM}} = f_{\text{APB}}/((\text{PSC}{+}1)(\text{ARR}{+}1))$. PWM duty $= \text{CCRx}/(\text{ARR}+1)$.
+
+\subsection{ADC (basic SAR flow)}
+Single-conversion, polling: enable, select channel via SQR, start, wait EOC, read DR.
+\begin{lstlisting}[language={}]
+ADC->CR2  |= ADC_CR2_ADON;            // wake/enable
+ADC->SQR3  = (channel & 0x1F);        // 1st in regular seq (F4)
+ADC->CR2  |= ADC_CR2_SWSTART;         // start conv
+while (!(ADC->SR & ADC_SR_EOC));      // wait
+v = ADC->DR;                          // 12-bit result, clears EOC
+\end{lstlisting}
+G4 differs (CFGR/SQR1/ISR/IER): use ADC\_ISR\_EOC, ADC\_CR\_ADSTART, ADSTP. Resolution selected via CFGR\_RES (12/10/8/6 bits). Sampling time per channel via SMPR.
+
+\subsection{DMA (channel-based, F4/G4)}
+Memory $\leftrightarrow$ peripheral autonomous transfers; CPU set up + ISR on completion.
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Reg} & \textbf{Off} & \textbf{Bits}\\
+\midrule
+CCR    & per-ch & EN(0) TCIE(1) HTIE(2) TEIE(3) DIR(4: 0=P2M,1=M2P) CIRC(5) PINC(6) MINC(7) PSIZE[9:8] MSIZE[11:10] PL[13:12] MEM2MEM(14)\\
+CNDTR  & per-ch & 16-bit transfer count (decrements; 0 ends)\\
+CPAR   & per-ch & peripheral address (DR of UART/SPI/ADC/...)\\
+CMAR   & per-ch & memory buffer base address\\
+\bottomrule
+\end{tabular}
+Setup: CMAR=buf, CPAR=\&peri->DR, CNDTR=N, CCR set DIR/MINC/CIRC/sizes, then EN. MEMINC=1 for buffer scan; PERIPHINC=0 for fixed DR. CIRC=1 auto-restarts (ring/audio). DMA controller mux via DMAMUX (G4) selects request line.
+
+\subsection{C operator precedence (top binds tightest)}
+\begin{tabular}{@{}rlll@{}}
+\toprule
+\textbf{Lvl} & \textbf{Ops} & \textbf{Assoc} & \textbf{Note}\\
+\midrule
+1 & \cee{() [] -> .} postfix++/-- & L$\to$R & call, subscript, member\\
+2 & ++/-- prefix \cee{+ - ! \~{} *} \&{} \cee{(type) sizeof} & R$\to$L & unary\\
+3 & \cee{* / \%} & L$\to$R & mul/div/mod\\
+4 & \cee{+ -} & L$\to$R & add/sub\\
+5 & \cee{<{}<{}  >{}>} & L$\to$R & shifts (below add!)\\
+6 & \cee{< <= > >=} & L$\to$R & relational\\
+7 & \cee{== !=} & L$\to$R & equality (\emph{above} bitwise!)\\
+8 & \cee{\&}     & L$\to$R & bit AND\\
+9 & \cee{\^{}}   & L$\to$R & bit XOR\\
+10 & \cee{|}     & L$\to$R & bit OR\\
+11 & \cee{\&\&}  & L$\to$R & logical AND (short-circuit)\\
+12 & \cee{||}    & L$\to$R & logical OR (short-circuit)\\
+13 & \cee{?:}    & R$\to$L & ternary\\
+14 & \cee{= += -= *= ...} & R$\to$L & assignment\\
+15 & \cee{,}     & L$\to$R & comma\\
+\bottomrule
+\end{tabular}
+\textbf{Trap:} \cee{R \& m == v} parses as \cee{R \& (m==v)}; always write \cee{((R \& m) == v)}. \cee{*p++} = \cee{*(p++)} (postfix binds before unary deref). Shift below \cee{+}: \cee{a + b << 2} = \cee{(a+b)<<2}.
+
+\subsection{Type promotion (integer)}
+\textbf{Rule (usual arithmetic conversions):}
+(1) \emph{Integer promotion:} any \cee{char/short/bitfield} promoted to \cee{int} (or \cee{unsigned int} if int can't hold its range) before any arithmetic/bitwise/shift op.
+(2) For binary op with mixed types: convert to common type by ranking: \cee{long long > long > int > short > char}; signed/unsigned of same rank $\to$ unsigned wins (C99 6.3.1.8).
+(3) \emph{Shift result type} = type of \emph{promoted left operand} (right operand independent).
+\textbf{Consequences:}
+\begin{itemize}
+\item \cee{uint8\_t a=0xFF; \~{}a == 0xFFFFFF00} (int!), not 0x00. Mask: \cee{(uint8\_t)\~{}a} or \cee{\~{}a \& 0xFF}.
+\item \cee{1<<31} on signed int = UB (sign overflow). Use \cee{1U<<31}.
+\item \cee{int x=-1; (unsigned)x < 1U} false (x becomes 0xFFFFFFFF).
+\item Cast \emph{operands} not result for wide products: \cee{(int64\_t)a*b}, not \cee{(int64\_t)(a*b)}.
+\end{itemize}
+
+\subsection{volatile keyword}
+\cee{volatile} tells compiler: every access in source = real access in memory; do not cache in register, do not reorder relative to other volatile accesses, do not elide.
+\textbf{Required for:}
+\begin{itemize}
+\item Hardware registers (\cee{volatile uint32\_t *p = (volatile uint32\_t*)0x4800\_0000;}) -- otherwise reads of IDR get optimized into a constant or hoisted out of loops.
+\item Variables \emph{shared between ISR and main} (or two threads) -- without it, main may keep \cee{flag} in a register and never see ISR write.
+\item Memory mapped to DMA (volatile because DMA writes outside CPU's view).
+\item \cee{setjmp/longjmp} locals modified between calls.
+\end{itemize}
+\textbf{Does NOT provide:} atomicity, memory barriers, mutual exclusion. For multi-word atomic, use BSRR-style write-only registers or disable IRQs around RMW. CMSIS register definitions all use \cee{\_\_IO} = \cee{volatile}.
+
+\subsection{Inline ASM (GCC extended)}
+\begin{lstlisting}[language={}]
+__asm__ volatile (
+   "mov %0, %1\n\t"            // template (\n\t separates)
+   "add %0, %0, #1"
+   : "=r" (out)                // outputs: =r write-only, +r read-write
+   : "r"  (in)                 // inputs: r reg, i imm, m mem
+   : "cc", "memory"            // clobbers: cc=flags, memory=barrier
+);
+\end{lstlisting}
+Constraints: \cee{r} GP reg, \cee{l} low reg (R0-R7), \cee{i} imm, \cee{n} known imm, \cee{I/J/K/L/M} ARM-specific imm ranges, \cee{m} memory operand.
+Modifiers: \cee{=} write-only, \cee{+} R/W, \cee{\&} early-clobber.
+\textbf{volatile} prevents the compiler from deleting/reordering the asm even if outputs unused.
+\textbf{"memory" clobber} = full memory barrier (forces compiler to flush/reload all variables across the asm).
+\textbf{Common one-liners:}
+\cee{\_\_asm\_\_ volatile("nop");}, \cee{\_\_asm\_\_ volatile("dsb"::: "memory");} (data-sync barrier), \cee{\_\_asm\_\_ volatile("cpsid i");} (PRIMASK=1 disable IRQs), \cee{cpsie i} re-enable, \cee{wfi} sleep until IRQ, \cee{wfe} sleep until event, \cee{svc \#n} supervisor call.
+
+\subsection{C undefined behavior watchlist}
+\begin{itemize}
+\item \textbf{Signed overflow} = UB (\cee{INT\_MAX+1}). Unsigned wraps mod $2^N$ (defined).
+\item \textbf{Shift} by ${\geq}$ width or negative: UB. \cee{int x; x<<32}, \cee{1<<31} (signed): UB.
+\item \textbf{Type-punning via cast through non-char pointer:} strict-aliasing violation. Use \cee{union}, \cee{memcpy}, or \cee{char*}/\cee{uint8\_t*}.
+\item \textbf{Misaligned access via cast:} \cee{*(uint32\_t*)(p+1)} on a byte-array p with \cee{p+1} not 4-aligned -- UB (Cortex-M4 mostly works for word but not LDRD/STRD/LDM).
+\item \textbf{Sequence points / unsequenced modification:} \cee{i = i++ + ++i;} UB. Side-effects on same scalar between two seq points UB (pre-C11) / unsequenced (C11+) UB.
+\item \textbf{Null deref}, \textbf{use-after-free}, \textbf{uninit auto var read} (other than via \cee{unsigned char}).
+\item \textbf{Strict-aliasing safe pun:} \cee{uint32\_t v; uint8\_t b[4]; memcpy(b,\&v,4);} -- compiler optimizes to a single LDR.
+\item \textbf{Comparing signed/unsigned:} signed becomes unsigned if same rank: \cee{-1 < 1U} false.
+\end{itemize}
+
+\subsection{Linker script structure}
+\begin{lstlisting}[language={}]
+MEMORY {
+  FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 256K
+  RAM   (xrw) : ORIGIN = 0x20000000, LENGTH =  32K
+}
+_estack = ORIGIN(RAM) + LENGTH(RAM);   // top of stack
+SECTIONS {
+  .isr_vector : { . = ALIGN(4); KEEP(*(.isr_vector)) } >FLASH
+  .text       : { *(.text .text.*) *(.rodata .rodata.*)
+                  _etext = .;          } >FLASH
+  _sidata = LOADADDR(.data);            // init image addr
+  .data : {                             // copied at startup
+    _sdata = .;
+    *(.data .data.*) ;
+    _edata = .; } >RAM AT>FLASH
+  .bss : {                              // zeroed at startup
+    _sbss = .; *(.bss .bss.*) *(COMMON) ; _ebss = .;
+  } >RAM
+  ._user_heap_stack : { . += _Min_Heap_Size;
+                        . += _Min_Stack_Size; } >RAM
+}
+\end{lstlisting}
+Symbols \cee{\_sidata/\_sdata/\_edata/\_sbss/\_ebss/\_estack} consumed by Reset\_Handler.
+
+\subsection{Startup code (Reset\_Handler)}
+\begin{lstlisting}[language={}]
+Reset_Handler:
+  ldr r0, =_estack ; msr msp, r0       /* set MSP */
+  ldr r0, =_sdata  ; ldr r1, =_edata
+  ldr r2, =_sidata ; mov r3, #0        /* copy .data */
+1: cmp r0, r1 ; ittt lt
+   ldrlt r4, [r2], #4 ; strlt r4, [r0], #4 ; blt 1b
+  ldr r0, =_sbss ; ldr r1, =_ebss      /* zero .bss */
+2: cmp r0, r1 ; itt lt
+   strlt r3, [r0], #4 ; blt 2b
+  bl  SystemInit                       /* clocks/PLL */
+  bl  __libc_init_array                /* C++ static ctors */
+  bl  main
+3: b 3b
+\end{lstlisting}
+\textbf{Vector table} (.isr\_vector section): word 0 = \cee{\_estack}, word 1 = \cee{Reset\_Handler}, then NMI, HardFault, MemManage, BusFault, UsageFault, (4 reserved), SVCall, DebugMon, (1 reserved), PendSV, SysTick, then 16+ peripheral handlers (vendor list).
+\textbf{Default\_Handler} = infinite loop; declared \cee{.weak} alias for every IRQ name so user can override by defining the symbol.
+
+\subsection{GCC ARM toolchain flags}
+\begin{lstlisting}[language={}]
+CC      = arm-none-eabi-gcc
+CFLAGS  = -mcpu=cortex-m4 -mthumb \                # M4 + Thumb-2 ISA
+          -mfloat-abi=hard -mfpu=fpv4-sp-d16 \     # use FPU regs (s0-s31)
+          -Os -ffunction-sections -fdata-sections\ # per-fn sections (gc)
+          -Wall -Wextra -Wno-unused-parameter \
+          -ffreestanding -nostartfiles \           # we provide startup
+          -DSTM32G431xx -DUSE_HAL_DRIVER \
+          -g3 -gdwarf-2
+LDFLAGS = -T linker.ld -Wl,--gc-sections \         # drop unused fns
+          -Wl,-Map=app.map -specs=nano.specs \     # newlib-nano libc
+          -lc -lm -lnosys
+\end{lstlisting}
+\textbf{Float ABI:} \cee{soft} = library calls (no FPU), \cee{softfp} = FPU compute but args in core regs (compat), \cee{hard} = FPU regs for args (fastest, requires matching libs). Cortex-M4F uses \cee{fpv4-sp-d16} (single-precision, 16 D-regs aliased over 32 S-regs).
+\textbf{-Os} for code size; \cee{-O2} or \cee{-O3} for speed (watch flash budget).
+\textbf{nano.specs} swaps in newlib-nano (smaller printf without float; add \cee{-u \_printf\_float} to relink float support).
+
+\subsection{Quick numeric reference}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Item} & \textbf{Value}\\
+\midrule
+PERIPH\_BASE & 0x4000\_0000\\
+APB1PERIPH\_BASE & 0x4000\_0000\\
+APB2PERIPH\_BASE & 0x4001\_0000\\
+AHB1PERIPH\_BASE & 0x4002\_0000\\
+AHB2PERIPH\_BASE & 0x4800\_0000 (G4) / +0x0800\_0000 (F4)\\
+GPIOA\_BASE (G4) & 0x4800\_0000 (port spacing 0x0400)\\
+SCS\_BASE & 0xE000\_E000\\
+SysTick\_BASE & 0xE000\_E010\\
+NVIC\_BASE & 0xE000\_E100\\
+SCB\_BASE & 0xE000\_ED00\\
+SCB->VTOR & 0xE000\_ED08\\
+SCB->AIRCR & 0xE000\_ED0C (PRIGROUP[10:8], VECTKEY=0x05FA)\\
+Flash base & 0x0800\_0000\\
+SRAM base & 0x2000\_0000\\
+SRAM bit-band alias & 0x2200\_0000\\
+PERIPH bit-band alias & 0x4200\_0000\\
+PSR ExcNum & 16 + IRQn\\
+SysTick IRQn & $-1$ (ExcNum 15)\\
+\bottomrule
+\end{tabular}
+
+\begin{ex}\textbf{Bit-band atomic toggle SRAM bit.} Word at 0x2000\_0040, bit 7. Alias = $0x2200\_0000 + 32 \cdot 0x40 + 4 \cdot 7 = 0x2200\_081C$. Read returns 0 or 1; write 0/1 stores into bit 7 atomically.\end{ex}
+
+\begin{ex}\textbf{USART BRR for 9600 baud, $f_{CK}$=16\,MHz, OVER8=0.} USARTDIV = 16e6/9600 = 1666.67 $\to$ 1667 = 0x683. Actual baud = 16e6/1667 = 9598 (0.02\% err).\end{ex}
+
+\begin{ex}\textbf{NVIC enable USART2\_IRQn=38.} \cee{NVIC->ISER[1] = 1U << 6;} (38>>5=1, 38\&31=6).\end{ex}
+
+\begin{ex}\textbf{Volatile vs not.} Without \cee{volatile}, the compiler may hoist the load of \cee{*flag} out of the spin loop:
+\begin{lstlisting}[language={}]
+extern int flag;        // BAD: GCC -O2 caches flag in a reg
+while (!flag) {}        //      loop becomes infinite if flag was 0
+extern volatile int flag;  // GOOD: re-reads each iteration
+while (!flag) {}
+\end{lstlisting}\end{ex}
+
+\begin{ex}\textbf{Operator precedence sanity.}
+\cee{x \& 0xF == 0} parses as \cee{x \& (0xF==0)} = \cee{x \& 0} = 0 -- always 0!
+Correct: \cee{(x \& 0xF) == 0}.
+\cee{a + b >> 1} = \cee{(a+b)>>1} (shift below \cee{+}). To halve a sum is fine; \cee{a + (b>>1)} requires explicit parens.\end{ex}
+
+\begin{ex}\textbf{Linker symbol lookup.} In Reset\_Handler, \cee{ldr r0, =\_estack} loads the literal-pool word that the linker filled with the symbol's address (= top of RAM). The C-side declaration is \cee{extern uint32\_t \_estack;} and you take its \emph{address}: \cee{\&\_estack}.\end{ex}

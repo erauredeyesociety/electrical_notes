@@ -1,0 +1,523 @@
+% =============================================================================
+% Part 2 / 11 -- ASM-to-C reverse-engineering drills + System internals + Traps
+% =============================================================================
+\section{ASM Reverse-Engineering + System Internals + Exam-Day Traps}
+
+\subsection{ASM $\to$ C drills (decode the loop, name the idiom)}
+
+\textbf{R1: increment-and-store buffer fill.}
+\begin{lstlisting}
+@ R0 = p (uint32_t*), R1 = n
+    cbz   r1, R1_end
+R1_lp:
+    str   r1, [r0], #4              @ *p++ = n
+    subs  r1, r1, #1
+    bne   R1_lp
+R1_end:
+    bx    lr
+\end{lstlisting}
+\cee{void f(uint32\_t *p,uint32\_t n)\{ while(n)\{ *p++=n; n--; \} \}} -- post-index store, decrement-and-branch loop. Final \cee{*p} value is 1, not 0.
+
+\textbf{R2: conditional accumulator (IT block).}
+\begin{lstlisting}
+@ R0=arr, R1=n; ret R0 = sum of positive elems
+    movs  r2, #0
+R2_lp:
+    cbz   r1, R2_done
+    ldr   r3, [r0], #4
+    cmp   r3, #0
+    it    gt
+    addgt r2, r2, r3                @ r2 += r3 iff r3 > 0
+    subs  r1, r1, #1
+    b     R2_lp
+R2_done:
+    mov   r0, r2
+    bx    lr
+\end{lstlisting}
+\cee{int sum\_pos(int *a,int n)\{int s=0; while(n--)\{ if(*a>0) s+=*a; a++;\} return s;\}}. Single-slot IT; \cee{cmp} sets N/V/Z used by \cee{GT}. Note: writing \cee{addgt} \emph{outside} a guarding IT is illegal in Thumb-2.
+
+\textbf{R3: 64-bit add (lo,hi pairs).}
+\begin{lstlisting}
+@ R1:R0 = a (lo,hi);  R3:R2 = b
+    adds  r0, r0, r2                @ lo  + lo, sets C
+    adc   r1, r1, r3                @ hi  + hi + C
+    bx    lr
+\end{lstlisting}
+\cee{int64\_t add64(int64\_t a,int64\_t b)\{ return a+b; \}}. EABI: 64b in (R0=lo,R1=hi). \asm{adds} \emph{must} have S so that \asm{adc} sees the carry. For subtract: \asm{subs;sbc} (sbc subtracts the borrow = $\overline{C}$).
+
+\textbf{R4: 64-bit subtract.}
+\begin{lstlisting}
+    subs  r0, r0, r2                @ lo - lo, C=1 if NO borrow
+    sbc   r1, r1, r3                @ hi - hi - !C
+    bx    lr
+\end{lstlisting}
+\cee{int64\_t sub64(int64\_t a,int64\_t b)\{ return a-b; \}}. ARM C-flag inverted vs x86 borrow.
+
+\textbf{R5: strlen (null-terminator search).}
+\begin{lstlisting}
+@ R0 = char *s; ret R0 = length
+    mov   r1, r0
+R5_lp:
+    ldrb  r2, [r0], #1
+    cbnz  r2, R5_lp                 @ keep going while *p != 0
+    sub   r0, r0, r1                @ delta = (one past '\0')
+    sub   r0, r0, #1                @ exclude '\0'
+    bx    lr
+\end{lstlisting}
+\cee{size\_t strlen(const char *s)\{const char *t=s; while(*t)t++; return t-s;\}}. Note CBNZ only sees R0--R7 and a forward $\le$126 B branch.
+
+\textbf{R6: byte-wise memcpy (post-index).}
+\begin{lstlisting}
+@ R0=dst, R1=src, R2=n; ret R0 = dst
+    mov   r3, r0
+    cbz   r2, R6_end
+R6_lp:
+    ldrb  r12, [r1], #1
+    strb  r12, [r0], #1
+    subs  r2, r2, #1
+    bne   R6_lp
+R6_end:
+    mov   r0, r3
+    bx    lr
+\end{lstlisting}
+\cee{void *memcpy(void *d,const void *s,size\_t n)\{...\}}. R12 is scratch (caller-saved) so no PUSH needed.
+
+\textbf{R7: signed saturate to $[-N,N]$.}
+\begin{lstlisting}
+@ R0 = x, R1 = N
+    rsb   r2, r1, #0                @ r2 = -N
+    cmp   r0, r2
+    it    lt
+    movlt r0, r2                    @ if x < -N, x = -N
+    cmp   r0, r1
+    it    gt
+    movgt r0, r1                    @ if x >  N, x =  N
+    bx    lr
+\end{lstlisting}
+\cee{int sat(int x,int N)\{ if(x<-N)x=-N; if(x>N)x=N; return x; \}}. Equivalent: \cee{SSAT R0,\#bits,R0} when N is a power-of-2 minus 1.
+
+\textbf{R8: bit-field extract via UBFX/SBFX.}
+\begin{lstlisting}
+@ R0 = packed; extract bits[10:7] uns -> R1, bits[6:0] sgn -> R2
+    ubfx  r1, r0, #7, #4            @ width 4 starting bit 7
+    sbfx  r2, r0, #0, #7            @ signed 7-bit field
+    bx    lr
+\end{lstlisting}
+\cee{r1 = (packed>>7) \& 0xF;} \cee{r2 = ((int32\_t)(packed<<25))>>25;} -- one instruction replaces 2 shifts + 1 AND.
+
+\textbf{R9: switch via TBB jump table.}
+\begin{lstlisting}
+@ R0 = case index in [0..3]
+    cmp   r0, #3
+    bhi   def
+    tbb   [pc, r0]                  @ byte table at NEXT instr
+br_tbl:
+    .byte (c0-br_tbl)/2
+    .byte (c1-br_tbl)/2
+    .byte (c2-br_tbl)/2
+    .byte (c3-br_tbl)/2
+    .align 1
+c0: ...; b end
+c1: ...; b end
+c2: ...; b end
+c3: ...; b end
+def: ...
+end: bx lr
+\end{lstlisting}
+\cee{switch(i)\{case 0:...; case 1:...; ...\}}. TBB looks up byte at \cee{table[r0]}, multiplies by 2, branches forward. TBH = halfword for far targets.
+
+\subsection{C $\to$ ASM drills}
+
+\textbf{C1: 64-bit return convention.}
+\begin{lstlisting}[language={}]
+int64_t add64(int64_t a, int64_t b) { return a + b; }
+\end{lstlisting}
+\begin{lstlisting}
+@ a in R1:R0 (hi:lo), b in R3:R2; ret R1:R0
+    adds r0, r0, r2
+    adc  r1, r1, r3
+    bx   lr
+\end{lstlisting}
+Both 64-bit args occupy 2 regs (lo,hi). On stack-spilled long longs, alignment is 8B; first stack arg may force a skip slot.
+
+\textbf{C2: branchless abs (IT vs branch).}
+\begin{lstlisting}[language={}]
+int abs(int x) { return x<0 ? -x : x; }
+\end{lstlisting}
+\begin{lstlisting}
+@ IT version (no branch, no flush)
+    cmp   r0, #0
+    it    lt
+    rsblt r0, r0, #0                @ if x<0, x = 0 - x
+    bx    lr
+@ Branch version (older / GCC -O0)
+    cmp   r0, #0
+    bge   1f
+    rsb   r0, r0, #0
+1:  bx    lr
+\end{lstlisting}
+IT is faster on M4 (no pipeline flush); compiler picks it at -O2.
+
+\textbf{C3: countdown delay using CBZ.}
+\begin{lstlisting}[language={}]
+void delay(uint32_t cycles){ while(cycles--) __asm__("nop"); }
+\end{lstlisting}
+\begin{lstlisting}
+    cbz  r0, dly_end
+dly_lp:
+    nop
+    subs r0, r0, #1
+    bne  dly_lp
+dly_end:
+    bx   lr
+\end{lstlisting}
+CBZ saves the initial \cee{cmp} when zero is the early-out value.
+
+\textbf{C4: register-offset array sum.}
+\begin{lstlisting}[language={}]
+int sum_array(int *a, int n) {
+  int s=0; for(int i=0;i<n;i++) s+=a[i]; return s;
+}
+\end{lstlisting}
+\begin{lstlisting}
+    mov  r2, #0                     @ s
+    mov  r3, #0                     @ i
+sa_lp:
+    cmp  r3, r1
+    bge  sa_end
+    ldr  r12, [r0, r3, lsl #2]      @ a[i]
+    add  r2, r2, r12
+    add  r3, r3, #1
+    b    sa_lp
+sa_end:
+    mov  r0, r2
+    bx   lr
+\end{lstlisting}
+Reg-offset \asm{[Rb,Ri,LSL\#2]} is one cycle, scales index by sizeof(int). Note: post-index pointer-bump variant from ARM ref is \emph{shorter} when \cee{i} isn't needed afterwards.
+
+\textbf{C5: strcpy (returns dst).}
+\begin{lstlisting}[language={}]
+char *strcpy(char *d, const char *s){
+  char *r=d; while((*d++=*s++)); return r;
+}
+\end{lstlisting}
+\begin{lstlisting}
+    mov  r2, r0
+sc_lp:
+    ldrb r3, [r1], #1
+    strb r3, [r0], #1               @ writes terminator too
+    cmp  r3, #0
+    bne  sc_lp
+    mov  r0, r2
+    bx   lr
+\end{lstlisting}
+
+\textbf{C6: find\_max with conditional update.}
+\begin{lstlisting}[language={}]
+int find_max(int *a, int n){
+  int m = a[0];
+  for(int i=1;i<n;i++) if(a[i]>m) m=a[i];
+  return m;
+}
+\end{lstlisting}
+\begin{lstlisting}
+    ldr  r2, [r0], #4               @ seed = a[0]
+    sub  r1, r1, #1
+fm_lp:
+    cbz  r1, fm_end
+    ldr  r3, [r0], #4
+    cmp  r3, r2
+    it   gt
+    movgt r2, r3                    @ branchless max
+    sub  r1, r1, #1
+    b    fm_lp
+fm_end:
+    mov  r0, r2
+    bx   lr
+\end{lstlisting}
+
+\subsection{Stack frame text-art (Full-Descending, 8B align at BL)}
+
+\textbf{Leaf fn (no PUSH)} -- only LR \emph{in register}:
+\begin{lstlisting}[language={}]
+   higher addr
+   ............
+   |  caller's |
+   |  frame    |
+   +-----------+ <- SP at entry  (= SP at BX LR)
+\end{lstlisting}
+LR is live, never spilled. Cannot make a \asm{BL} (would clobber LR) without first saving it.
+
+\textbf{Stem fn, \asm{push \{r4-r7,lr\}}} (5 regs $=$ 20\,B; padded to 24\,B for 8B align):
+\begin{lstlisting}[language={}]
+   +-----------+  caller frame
+   |    LR     |  <- pushed last; HIGHEST addr of frame
+   |    R7     |
+   |    R6     |
+   |    R5     |
+   |    R4     |  <- LOWEST addr of saved set
+   |  pad 4B   |  (inserted by GCC if needed for 8B align)
+   +-----------+ <- SP after PUSH
+\end{lstlisting}
+\textbf{Rule:} ascending reg\# at ascending addr regardless of brace order. Total bytes pushed must keep SP $\equiv 0\pmod 8$ at any subsequent \asm{BL}.
+
+\textbf{Stem with stack locals (\asm{sub sp,\#16}):}
+\begin{lstlisting}[language={}]
+   +-----------+
+   |    LR     |
+   |    R4     |
+   +-----------+ <- SP after push {r4,lr}  (8B-aligned: 2 regs)
+   |  loc[12]  |  local int a
+   |  loc[8]   |  local int b
+   |  loc[4]   |  local int c
+   |  loc[0]   |  spill / temp     <- SP after sub sp,#16
+   +-----------+
+\end{lstlisting}
+Access locals via \asm{[sp,\#0]}\dots\asm{[sp,\#12]}. Epilogue: \asm{add sp,\#16; pop \{r4,pc\}}.
+
+\textbf{Inside ISR -- HW auto-stacks 8 words (R0-R3, R12, LR, retPC, xPSR):}
+\begin{lstlisting}[language={}]
+   +-----------+ <- pre-IRQ SP (8B aligned)
+   |   xPSR    |  +0x1C
+   |   PC      |  +0x18  (return address)
+   |   LR      |  +0x14
+   |   R12     |  +0x10
+   |   R3      |  +0x0C
+   |   R2      |  +0x08
+   |   R1      |  +0x04
+   |   R0      |  +0x00  <- SP at handler entry
+   +-----------+
+\end{lstlisting}
+LR loaded with EXC\_RETURN (\cee{0xFFFFFFFD} thread/PSP, \cee{0xFFFFFFF9} thread/MSP, \cee{0xFFFFFFF1} handler). \asm{BX LR} pops the frame in HW. Tail-chain reuses this frame; late-arrival fixes up a higher-prio IRQ before unstacking. With FPU active, 18 extra words also stacked (s0--s15, FPSCR + pad).
+
+\subsection{Cortex-M4 quick specs (extended)}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Item & Value \\
+\midrule
+Word size           & 32-bit (regs, ALU, addr bus) \\
+ISA                 & Thumb-2 only (mix of 16/32-bit encodings) \\
+Endianness          & Little (default; BE-8 optional, fixed at reset) \\
+Pipeline            & 3-stage: Fetch / Decode / Execute \\
+GP registers        & 16 (R0--R15); R13/14/15 = SP/LR/PC \\
+SP banks            & MSP (default, handler), PSP (optional thread) \\
+Multiplier          & 32$\times$32$\to$64 (1c MUL, 3--7c MULL) \\
+Divider             & SDIV/UDIV, 2--12c, no flag update \\
+DSP ext (M4)        & SIMD (UADD8, QADD16, SMLAD\dots), saturating arith \\
+FPU (M4F)           & Single-precision IEEE 754, 32 S-regs / 16 D-regs \\
+Bit-banding         & SRAM (0x2000\_0000) + Periph (0x4000\_0000), 1\,MB win \\
+SysTick             & 24-bit downcount \\
+NVIC IRQ slots      & up to 240 ext IRQs + 16 sys exceptions \\
+NVIC priority bits  & 3--8 implemented; STM32 = 4 (16 levels) \\
+Exc latency (no FP) & 12 cyc enter, 10 cyc exit (zero wait state) \\
+Tail-chain latency  & 6 cyc (skips push+pop) \\
+Late-arrival        & up to 6 cyc to swap higher-prio in mid-entry \\
+Sleep modes         & WFI, WFE, sleep-on-exit \\
+\bottomrule
+\end{tabular}
+
+\textbf{Special-purpose registers (CONTROL/PRIMASK/etc.):}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Reg & Effect \\
+\midrule
+\cee{PRIMASK}  & bit0=1 $\Rightarrow$ block all IRQs (NMI/HardFault still run); set/clr via \asm{cpsid i}/\asm{cpsie i} \\
+\cee{FAULTMASK}& bit0=1 $\Rightarrow$ block all incl.\ HardFault (auto-cleared on return) \\
+\cee{BASEPRI}  & 8-bit; if non-zero, mask IRQs whose priority $\ge$ BASEPRI value (selective gate) \\
+\cee{CONTROL}  & b0=nPRIV (1=unpriv thread), b1=SPSEL (1=PSP), b2=FPCA (FP context active) \\
+\cee{xPSR}     & APSR (NZCVQ) | IPSR (ExcNum 0..511) | EPSR (T-bit, IT-state, ICI) \\
+\bottomrule
+\end{tabular}
+\textbf{IPSR = 16 + IRQn} for external IRQs; 0 in thread mode; 1=Reset, 2=NMI, 3=HardFault, \dots, 11=SVC, 14=PendSV, 15=SysTick.
+
+\subsection{Vector table (first 16 system entries)}
+Located in \cee{.isr\_vector} at start of FLASH (alias 0x0000\_0000 after reset). Each entry is a 32-bit address.
+\begin{tabular}{@{}rlll@{}}
+\toprule
+Idx & Off & Name & Use \\
+\midrule
+0  & 0x00 & \cee{\_estack}      & Initial MSP value \\
+1  & 0x04 & Reset\_Handler      & Entry after reset/POR \\
+2  & 0x08 & NMI\_Handler        & Non-maskable interrupt (clock fail) \\
+3  & 0x0C & HardFault\_Handler  & Catch-all fault if specific handlers off \\
+4  & 0x10 & MemManage\_Handler  & MPU violation \\
+5  & 0x14 & BusFault\_Handler   & Bus error (illegal access, abort) \\
+6  & 0x18 & UsageFault\_Handler & Bad instr, unaligned, divide-by-0 \\
+7  & 0x1C & ---                 & Reserved \\
+8  & 0x20 & ---                 & Reserved \\
+9  & 0x24 & ---                 & Reserved \\
+10 & 0x28 & ---                 & Reserved \\
+11 & 0x2C & SVC\_Handler        & Supervisor call (\asm{svc \#n}) \\
+12 & 0x30 & DebugMon\_Handler   & Debug monitor \\
+13 & 0x34 & ---                 & Reserved \\
+14 & 0x38 & PendSV\_Handler     & SW-pendable, low-prio context switch \\
+15 & 0x3C & SysTick\_Handler    & 24-bit tick timer \\
+16+ & 0x40+ & IRQ0..IRQn        & Vendor peripheral handlers \\
+\bottomrule
+\end{tabular}
+\textbf{Offset of vendor IRQ$n$:} \cee{0x40 + 4*n}. Vendor table is \cee{.weak} aliased to \cee{Default\_Handler} so user can override by defining the symbol. Relocate via \cee{SCB->VTOR = newbase;} (32-word align, $\ge$\,128 B aligned, point to RAM for runtime patching).
+
+\subsection{Reset\_Handler ASM sketch}
+\begin{lstlisting}
+Reset_Handler:
+  /* (0) MSP already loaded by HW from word 0 of vec table */
+  ldr   r0, =_estack
+  msr   msp, r0                     @ explicit, in case VTOR moved
+
+  /* (1) copy .data init image FLASH -> SRAM */
+  ldr   r0, =_sdata                 @ dest start  (RAM)
+  ldr   r1, =_edata                 @ dest end
+  ldr   r2, =_sidata                @ src  (FLASH image)
+copy_loop:
+  cmp   r0, r1
+  ittt  lt
+  ldrlt r3, [r2], #4
+  strlt r3, [r0], #4
+  blt   copy_loop
+
+  /* (2) zero .bss */
+  ldr   r0, =_sbss
+  ldr   r1, =_ebss
+  movs  r3, #0
+zero_loop:
+  cmp   r0, r1
+  itt   lt
+  strlt r3, [r0], #4
+  blt   zero_loop
+
+  /* (3) early SoC bring-up: clocks/PLL, FPU, VTOR */
+  bl    SystemInit
+
+  /* (4) C runtime init: static C++ ctors + libc */
+  bl    __libc_init_array
+
+  /* (5) jump to user main */
+  bl    main
+
+  /* (6) main() should not return; trap if it does */
+hang:
+  b     hang
+\end{lstlisting}
+
+\subsection{Linker script sketch}
+\begin{lstlisting}[language={}]
+MEMORY {
+  FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 256K
+  RAM   (xrw) : ORIGIN = 0x20000000, LENGTH =  32K
+}
+_estack = ORIGIN(RAM) + LENGTH(RAM);
+SECTIONS {
+  .isr_vector : { . = ALIGN(4); KEEP(*(.isr_vector)) } >FLASH
+  .text       : { *(.text*) *(.rodata*) _etext = .; } >FLASH
+  _sidata = LOADADDR(.data);
+  .data : { _sdata = .; *(.data*) _edata = .; } >RAM AT>FLASH
+  .bss  : { _sbss  = .; *(.bss*) *(COMMON) _ebss = .; } >RAM
+}
+\end{lstlisting}
+\textbf{Key symbols consumed by Reset\_Handler:} \cee{\_estack, \_sdata, \_edata, \_sidata, \_sbss, \_ebss}. \cee{KEEP()} prevents \cee{--gc-sections} from dropping the vector table even though no C code references it directly.
+
+\subsection{Exam-day error hit-list (extended)}
+\begin{itemize}
+\item \textbf{Forget to clear \cee{EXTI->PR} (W1C).} Handler returns, IRQ refires immediately $\to$ infinite loop. Cure: \cee{EXTI->PR = (1U<<line);} (write 1, NOT 0) at top of handler.
+\item \textbf{Wrong AIRCR PRIGROUP.} Set via VECTKEY=\cee{0x05FA} + PRIGROUP[10:8]; mismatch with your \cee{NVIC\_SetPriority} expectations $\Rightarrow$ preempt vs sub split is wrong, ISRs preempt or fail to preempt unexpectedly.
+\item \textbf{PUSH/POP register count mismatch.} \asm{push \{r4,r5,lr\}}\,/\,\asm{pop \{r4,pc\}} loses R5; subsequent reads of R5 see ISR junk or compiler-spilled value.
+\item \textbf{B vs BL inside a function.} Plain \asm{B target} is a goto; doesn't update LR. If \cee{target} is meant to be called and return, you need \asm{BL}; otherwise you fall off the function.
+\item \textbf{Leaf calling a non-leaf without saving LR.} If a "leaf" issues \asm{BL}, LR is overwritten, original return addr lost. Either turn it into a stem (\asm{push \{lr\}}) or inline the callee.
+\item \textbf{Misaligned SP at \asm{BL}.} AAPCS requires 8B align at every external call. \asm{push \{lr\}} alone leaves SP off by 4; pair with one more reg (\asm{push \{r4,lr\}}) or pad with \asm{sub sp,\#4}.
+\item \textbf{Reading \cee{IDR} for an output pin.} Works on M4 (the line is sampled in), but the \emph{intent} is the latched value; read \cee{ODR} for what was last written.
+\item \textbf{Forgetting \cee{volatile} on a HW pointer.} \cee{uint32\_t *p = (uint32\_t*)0x40020000;} -- compiler caches/elides accesses. Always \cee{volatile uint32\_t *}.
+\item \textbf{\cee{++} on \cee{*p} without write-back.} \cee{++*p} compiles to LDR; ADD; \emph{STR}. Skipping the STR (or writing inline asm that omits it) leaves the bumped value in a register only.
+\item \textbf{\asm{LDRSH} on misaligned addr.} HW requires bit0=0 for \asm{LDRH/SH}. \asm{[Ra,\#1]} where \cee{Ra} is word-aligned $\to$ effective addr odd $\to$ UsageFault (UNALIGN\_TRP=1) or implementation-defined garbage.
+\item \textbf{Inverting \asm{Bcc} family for signedness.} \asm{BGT/BLT} are signed; \asm{BHI/BLO} are unsigned. Mixing breaks at boundary (e.g.\ \asm{BGT} on \cee{uint32\_t} compares treats $0x80000000$ as negative).
+\item \textbf{CBZ/CBNZ inside an IT block.} Hard assemble error -- they don't read flags so IT can't gate them. Also: only \emph{conditional B} is legal as the FINAL slot of an IT.
+\item \textbf{\asm{cmp r0,\#imm} with imm not in modimm encoding.} Modified-imm = 8-bit value rotated by even amount, OR specific 32b patterns. \asm{cmp r0,\#0x12345} fails to assemble; use \asm{ldr r1,=0x12345; cmp r0,r1}.
+\item \textbf{\asm{cmp Rn,\#-imm} silently re-encoded as CMN.} Same flag effect for signed CCS, but disassembly reads \asm{CMN} which can confuse hand-traced flag analysis.
+\item \textbf{Reusing a clobbered LR.} After \asm{BL foo}, LR holds the return-from-foo address. Using \asm{BX LR} \emph{after} another \asm{BL} returns to the wrong place.
+\item \textbf{Forgetting to enable peripheral clock.} \cee{RCC->AHB2ENR |= GPIOAEN;} required before any GPIOA register write -- silent failure (writes ignored, reads return 0).
+\item \textbf{Endianness on union/cast.} \cee{union\{u32 w; u8 b[4];\} u; u.w=0x11223344;} $\Rightarrow$ \cee{u.b[0]==0x44} (LE). Don't assume MSB-first.
+\item \textbf{Comparing signed and unsigned.} \cee{int x=-1; if(x < 1U)} is FALSE because $x$ promotes to \cee{0xFFFFFFFF}. C99 6.3.1.8.
+\item \textbf{\asm{adds} omitted before \asm{adc}.} 64-bit chain breaks because C is stale. Same for \asm{subs;sbc}. Always pair the S-suffixed step.
+\item \textbf{Trying TBB/TBH with an out-of-range index.} No bounds check -- guard with \asm{cmp Rn,\#max; bhi default} BEFORE the TBB.
+\end{itemize}
+
+\subsection{HAL vs direct register}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Aspect & HAL & Direct (CMSIS bare metal) \\
+\midrule
+Naming   & \cee{HAL\_GPIO\_WritePin}, \cee{HAL\_UART\_Transmit} & \cee{GPIOA->BSRR=...}, \cee{USART2->TDR=...} \\
+Coverage & Drivers, error-checks, callbacks & Direct register access only \\
+Speed    & 10--100$\times$ slower (struct deref + checks) & 1--3 instr per access \\
+Setup    & CubeMX-generated init                     & Manual RCC + register writes \\
+Best for & App code, complex periph (USB, SD), portability & ISRs, time-critical loops, exam Q's \\
+\bottomrule
+\end{tabular}
+\textbf{Exam pattern:} questions almost always require \emph{direct register} answers -- e.g.\ "set PA5 high atomically" $\to$ \cee{GPIOA->BSRR = (1U<<5);} (NOT \cee{HAL\_GPIO\_WritePin(GPIOA,GPIO\_PIN\_5,GPIO\_PIN\_SET);}). Naming hint: HAL fns are \cee{HAL\_<MOD>\_<Verb>(...)}; CMSIS uses \cee{<PERI>-><REG>}.
+
+\subsection{NVIC priority math (PRIGROUP $\to$ preempt vs sub)}
+8-bit priority register; only top $N$ bits implemented (STM32 = 4, so low 4 read 0). PRIGROUP value $G\in\{0..7\}$ specifies the split point:
+\[
+  \begin{aligned}
+    &\text{preempt bits} = 7-G \quad (\text{within top }N=4)\\
+    &\text{sub bits}     = G   \quad (\text{within top }N=4)\\
+    &\text{stored byte}  = (\text{PPN} \ll (G+1)\;|\;\text{SPN}) \ll (8-N)
+  \end{aligned}
+\]
+For STM32 ($N=4$, low 4 bits don't exist):
+\begin{tabular}{@{}cccl@{}}
+\toprule
+PRIGROUP $G$ & PP bits & SP bits & Layout in IP[IRQn] (top 4) \\
+\midrule
+3 & 4 & 0 & PPPP\,---- (16 levels preempt, 1 sub) \\
+4 & 3 & 1 & PPPS\,---- (8 preempt, 2 sub) \\
+5 & 2 & 2 & PPSS\,---- (4 preempt, 4 sub) \\
+6 & 1 & 3 & PSSS\,---- (2 preempt, 8 sub) \\
+7 & 0 & 4 & SSSS\,---- (no preempt, 16 sub) \\
+\bottomrule
+\end{tabular}
+
+\textbf{Worked examples (decode \cee{IP[IRQn]} byte $\to$ PPN/SPN):}
+
+\begin{ex}\textbf{$G$=4, IP byte \cee{0x60}.} Top 4 = \cee{0110}. Layout PPPS: PPN = \cee{011}b = 3, SPN = \cee{0}b = 0. Total PN $= (3{<<}1)|0 = 6$.\end{ex}
+
+\begin{ex}\textbf{$G$=5, IP byte \cee{0xB0}.} Top 4 = \cee{1011}. Layout PPSS: PPN = \cee{10}b = 2, SPN = \cee{11}b = 3. PN $= (2{<<}2)|3 = 11$.\end{ex}
+
+\begin{ex}\textbf{$G$=3, IP byte \cee{0xA0}.} Top 4 = \cee{1010}. All 4 bits are preempt: PPN = 10, SPN = 0. Same-PPN ISRs cannot preempt each other.\end{ex}
+
+\begin{ex}\textbf{Encode: $G$=4, want PPN=2, SPN=1.} Field = \cee{010\,1} = \cee{0101}b. Place in top 4: \cee{IP[IRQn] = 0x50;}. Equivalent: \cee{NVIC\_SetPriority(IRQn, NVIC\_EncodePriority(4,2,1));}.\end{ex}
+
+\textbf{Preemption rule:} an IRQ \emph{can} preempt the running ISR iff its \emph{PPN} is strictly less. Equal PPN $\to$ pending; tie broken by lower IRQn first. Sub-priority only orders \emph{simultaneously pending} same-PPN IRQs at dispatch -- never preempts.
+
+\subsection{Useful macros + intrinsics (CMSIS / HAL)}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Symbol & Effect \\
+\midrule
+\cee{\_\_HAL\_RCC\_GPIOA\_CLK\_ENABLE()} & set RCC AHB2ENR.GPIOAEN bit \\
+\cee{\_\_HAL\_RCC\_USART2\_CLK\_ENABLE()} & set RCC APB1ENR1.USART2EN \\
+\cee{\_\_HAL\_RCC\_SYSCFG\_CLK\_ENABLE()} & needed before EXTICR write \\
+\cee{NVIC\_EnableIRQ(IRQn)}            & ISER[IRQn/32] $|=$ 1$<<$(IRQn\%32) \\
+\cee{NVIC\_DisableIRQ(IRQn)}           & ICER set bit \\
+\cee{NVIC\_SetPriority(IRQn,p)}        & writes IP[IRQn] = p$<<$(8$-$N) \\
+\cee{NVIC\_SetPriorityGrouping(g)}     & AIRCR PRIGROUP=g + VECTKEY \\
+\cee{NVIC\_ClearPendingIRQ(IRQn)}      & ICPR set bit \\
+\cee{\_\_disable\_irq() / \_\_enable\_irq()} & \asm{cpsid i} / \asm{cpsie i} (PRIMASK) \\
+\cee{\_\_set\_BASEPRI(p)}              & selective IRQ mask above level $p$ \\
+\cee{\_\_DSB() / \_\_ISB() / \_\_DMB()}& barriers (data sync / instr sync / mem) \\
+\cee{\_\_NOP() / \_\_WFI() / \_\_WFE()}& single-instr intrinsics \\
+\cee{\_\_REV(x) / \_\_REV16 / \_\_RBIT}& byte-swap / hw-swap / bit-reverse \\
+\cee{\_\_CLZ(x)}                       & count leading zeros (1 cyc) \\
+\cee{\_\_LDREXW / \_\_STREXW}          & exclusive monitor for atomics \\
+\cee{SET\_BIT / CLEAR\_BIT / READ\_BIT}& \cee{REG |= MASK} / \cee{\&= \~{}MASK} / \cee{REG \& MASK} \\
+\cee{MODIFY\_REG(R,M,V)}               & \cee{R = (R \& \~{}M) | (V \& M)} \\
+\bottomrule
+\end{tabular}
+
+\begin{ex}\textbf{Atomic NVIC enable USART2 (IRQn=38).} \cee{NVIC->ISER[1] = 1U << 6;} or \cee{NVIC\_EnableIRQ(USART2\_IRQn);}. Both compile to a single 32-bit STR -- ISER is W1S so no RMW.\end{ex}
+
+\begin{ex}\textbf{Disable IRQs around 64-bit RMW.} \cee{uint32\_t pri = \_\_get\_PRIMASK(); \_\_disable\_irq(); /*update*/ \_\_set\_PRIMASK(pri);} -- preserves nesting (don't blindly \cee{\_\_enable\_irq()}).\end{ex}
+
+\begin{ex}\textbf{Read\,/modify\,/write that should be atomic.} \cee{REG |= mask;} compiles to LDR; ORR; STR. ISR firing between LDR and STR loses ISR's update. Use BSRR-style W1S/W1C registers when available, otherwise mask IRQs.\end{ex}
+
+\subsection{One-page summary block (System internals)}
+\textbf{Vector table:} 32-bit entries; index 0=\cee{\_estack}, 1=Reset, 2--15 system, 16+ vendor. Offset = $4\cdot$idx. Reset\_Handler: load MSP $\to$ copy .data $\to$ zero .bss $\to$ SystemInit $\to$ \_\_libc\_init\_array $\to$ main $\to$ trap loop. \textbf{Stack frame:} HW auto-stacks 8 words on IRQ entry (R0--R3, R12, LR, PC, xPSR), pushed in ascending-addr order; SW prologue may push R4--R11+LR for stem fns. Always 8B-aligned at \asm{BL}. \textbf{NVIC priority:} byte per IRQ, top $N=4$ bits used on STM32; PRIGROUP $G$ splits top 4 into PPN (high) + SPN (low) where PP bits = $7-G$ within those 4. Preempt iff PPN strictly less. \textbf{System regs:} PRIMASK gates all (cpsid i), FAULTMASK gates incl.\ HardFault, BASEPRI selective gate, CONTROL holds nPRIV/SPSEL/FPCA. \textbf{Exam tells:} HAL questions ask for register names, not function calls; clear PR (W1C) in EXTI handler; pair \asm{adds}+\asm{adc} for 64b; ARM C-flag inverted on subtract; CBZ no-IT and forward-only; PUSH order always ascending; 8B align at every BL. \textbf{Reverse engineer:} look for post-index (\asm{[Rb],\#k}) $\to$ \cee{*p++}; pre-index (\asm{[Rb,\#k]!}) $\to$ \cee{*++p}; reg-offset \asm{[Rb,Ri,LSL\#n]} $\to$ \cee{a[i]} where $n$=log2 sizeof; CMP+IT+MOVcc $\to$ ternary; CBZ on a freshly LDRB'd byte $\to$ string null check; \asm{adds;adc} $\to$ 64-bit; \asm{ldr;add\#1;str} on same addr $\to$ \cee{(*p)++}. \textbf{Translate forward:} type chooses LDR suffix (sgn $\Rightarrow$ S-variant); array stride chooses LSL\#n; loop shape chooses CBZ vs cmp+B; conditional update chooses IT block; 64-bit return uses (R0,R1)=(lo,hi). \textbf{Final sanity:} flag-setting needs S-suffix; CMP/TST/TEQ/CMN already do; SDIV/UDIV never do; modimm has 8b+rotate constraint; literal pool reachable within 4\,KB.
