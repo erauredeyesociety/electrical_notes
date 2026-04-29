@@ -40,9 +40,9 @@ uint32_t a = 0x2200_0000 + 32*(0x200) + 4*5;  // 0x2200_4014
 
 \subsection{GPIO\_TypeDef -- full register table}
 Per-port struct, 28 bytes; one per GPIOA..GPIOH. Spacing 0x400.
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{@{}llllp{0.42\columnwidth}@{}}
 \toprule
-\textbf{Off} & \textbf{Reg} & \textbf{Sz} & \textbf{Bits/pin} & \textbf{Note}\\
+\textbf{Off} & \textbf{Reg} & \textbf{Sz} & \textbf{B/pin} & \textbf{Note}\\
 \midrule
 0x00 & MODER   & u32 & 2 & 00 in / 01 out / 10 AF / 11 analog (rst=11)\\
 0x04 & OTYPER  & u32 & 1 & 0 push-pull / 1 open-drain (low 16b)\\
@@ -51,7 +51,7 @@ Per-port struct, 28 bytes; one per GPIOA..GPIOH. Spacing 0x400.
 0x10 & IDR     & u32 & 1 & low 16b read-only input state\\
 0x14 & ODR     & u32 & 1 & low 16b output latch (R/W)\\
 0x18 & BSRR    & u32 & 1+1 & lo16=BS (set), hi16=BR (reset); W-only, atomic\\
-0x1C & LCKR    & u32 & 1 & lock seq: 1,0,1 + read = freeze MODER/OTYPER/OSPEEDR/PUPDR/AFR\\
+0x1C & LCKR    & u32 & 1 & lock seq: 1,0,1+read freezes MODER/OTYPER/OSPEEDR/PUPDR/AFR\\
 0x20 & AFR[0]  & u32 & 4 & AFRL pins 0..7 (AF0..AF15)\\
 0x24 & AFR[1]  & u32 & 4 & AFRH pins 8..15\\
 \bottomrule
@@ -117,20 +117,22 @@ void EXTI0_IRQHandler(void) {
 
 \subsection{USART register highlights}
 Three control + status + data + baud. APBx clock supplies USART (USART1/6 on APB2; USART2/3, UART4/5 on APB1).
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}llp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Reg} & \textbf{Off} & \textbf{Key bits}\\
 \midrule
-CR1 & 0x00 & UE(0) RE(2) TE(3) IDLEIE(4) RXNEIE(5) TCIE(6) TXEIE(7) PEIE(8) PS(9) PCE(10) WAKE(11) M0(12) MME(13) OVER8(15) M1(28)\\
-CR2 & 0x04 & ADDM7(4) STOP[13:12] (00=1, 01=0.5, 10=2, 11=1.5) LBCL(8) CPHA(9) CPOL(10) CLKEN(11)\\
+CR1 & 0x00 & see bit-list below\\
+CR2 & 0x04 & ADDM7(4); STOP[13:12]: 00=1, 01=0.5, 10=2, 11=1.5; LBCL(8) CPHA(9) CPOL(10) CLKEN(11)\\
 CR3 & 0x08 & EIE(0) IREN HDSEL DMAR(6) DMAT(7) RTSE CTSE CTSIE OVRDIS(12) ONEBIT(11) DEM(14) DEP(15)\\
-BRR & 0x0C & USARTDIV (16-bit). OVER8=0: BRR=USARTDIV. OVER8=1: BRR[3:0]=usartdiv[3:0]>>1, BRR[15:4]=usartdiv[15:4]\\
+BRR & 0x0C & USARTDIV (16-bit); see formula below\\
 ISR/SR & 0x1C/0x00 & PE(0) FE(1) NE(2) ORE(3) IDLE(4) RXNE(5) TC(6) TXE(7) BUSY(16)\\
 ICR & 0x20 & W1C for PE/FE/NE/ORE/IDLE/TC etc.\\
 RDR & 0x24 & receive data (read clears RXNE)\\
 TDR & 0x28 & transmit data (write clears TXE)\\
 \bottomrule
-\end{tabular}
+\end{tabular}\\
+\textbf{CR1 bits:} UE(0) RE(2) TE(3) IDLEIE(4) RXNEIE(5) TCIE(6) TXEIE(7) PEIE(8) PS(9) PCE(10) WAKE(11) M0(12) MME(13) OVER8(15) M1(28).\\
+\textbf{BRR layout:} OVER8=0: BRR=USARTDIV. OVER8=1: BRR[3:0]=usartdiv[3:0]\,$>>$\,1, BRR[15:4]=usartdiv[15:4].
 \textbf{Baud calc (OVER8=0, 16$\times$ oversample):}
 \[ \text{USARTDIV} = \frac{f_{CK}}{\text{baud}} \quad\Rightarrow\quad \text{BRR}=\text{USARTDIV}. \]
 \textbf{OVER8=1 (8$\times$):} $\text{USARTDIV} = 2 f_{CK}/\text{baud}$; BRR layout split. \emph{Example:} 80\,MHz APB, 115200 baud, OVER8=0 $\Rightarrow$ BRR $= 80\text{e}6/115200 = 694.44 \to 694 = 0x2B6$ (actual baud $= 80\text{e}6/694 = 115273$, error 0.06\%).
@@ -141,11 +143,11 @@ TDR & 0x28 & transmit data (write clears TXE)\\
 
 \subsection{SysTick (STK)}
 24-bit downcounter at \cee{0xE000\_E010}. Reloads from LOAD when count hits 0 and asserts SysTick exception (IRQn = -1, vector idx 15).
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}llp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Reg} & \textbf{Off} & \textbf{Bits}\\
 \midrule
-CTRL  & 0x00 & ENABLE(0) TICKINT(1) CLKSOURCE(2: 0=AHB/8, 1=AHB) COUNTFLAG(16, RC)\\
+CTRL  & 0x00 & ENABLE(0) TICKINT(1); CLKSOURCE(2): 0=AHB/8, 1=AHB; COUNTFLAG(16, RC)\\
 LOAD  & 0x04 & RELOAD[23:0]; period = LOAD+1 ticks\\
 VAL   & 0x08 & current count[23:0]; any write clears to 0 + clears COUNTFLAG\\
 CALIB & 0x0C & TENMS[23:0] vendor 10\,ms reload, NOREF, SKEW\\
@@ -155,7 +157,7 @@ CALIB & 0x0C & TENMS[23:0] vendor 10\,ms reload, NOREF, SKEW\\
 
 \subsection{Generic timer (TIMx)}
 Common base: CR1, SR, CNT, PSC, ARR, plus CCMR1/2 + CCER + CCR1..4 + DIER + EGR.
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}llp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Reg} & \textbf{Off} & \textbf{Use}\\
 \midrule
@@ -184,16 +186,17 @@ G4 differs (CFGR/SQR1/ISR/IER): use ADC\_ISR\_EOC, ADC\_CR\_ADSTART, ADSTP. Reso
 
 \subsection{DMA (channel-based, F4/G4)}
 Memory $\leftrightarrow$ peripheral autonomous transfers; CPU set up + ISR on completion.
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}llp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Reg} & \textbf{Off} & \textbf{Bits}\\
 \midrule
-CCR    & per-ch & EN(0) TCIE(1) HTIE(2) TEIE(3) DIR(4: 0=P2M,1=M2P) CIRC(5) PINC(6) MINC(7) PSIZE[9:8] MSIZE[11:10] PL[13:12] MEM2MEM(14)\\
+CCR    & per-ch & see bit-list below\\
 CNDTR  & per-ch & 16-bit transfer count (decrements; 0 ends)\\
 CPAR   & per-ch & peripheral address (DR of UART/SPI/ADC/...)\\
 CMAR   & per-ch & memory buffer base address\\
 \bottomrule
-\end{tabular}
+\end{tabular}\\
+\textbf{CCR bits:} EN(0) TCIE(1) HTIE(2) TEIE(3); DIR(4): 0=P2M, 1=M2P; CIRC(5) PINC(6) MINC(7) PSIZE[9:8] MSIZE[11:10] PL[13:12] MEM2MEM(14).
 Setup: CMAR=buf, CPAR=\&peri->DR, CNDTR=N, CCR set DIR/MINC/CIRC/sizes, then EN. MEMINC=1 for buffer scan; PERIPHINC=0 for fixed DR. CIRC=1 auto-restarts (ring/audio). DMA controller mux via DMAMUX (G4) selects request line.
 
 \subsection{C operator precedence (top binds tightest)}
@@ -201,18 +204,18 @@ Setup: CMAR=buf, CPAR=\&peri->DR, CNDTR=N, CCR set DIR/MINC/CIRC/sizes, then EN.
 \toprule
 \textbf{Lvl} & \textbf{Ops} & \textbf{Assoc} & \textbf{Note}\\
 \midrule
-1 & \cee{() [] -> .} postfix++/-- & L$\to$R & call, subscript, member\\
-2 & ++/-- prefix \cee{+ - ! \~{} *} \&{} \cee{(type) sizeof} & R$\to$L & unary\\
+1 & \cee{() [] -> .} post\,++/-- & L$\to$R & call/subscript\\
+2 & pre\,++/-- \cee{+ - ! \~{} * \&} cast \cee{sizeof} & R$\to$L & unary\\
 3 & \cee{* / \%} & L$\to$R & mul/div/mod\\
 4 & \cee{+ -} & L$\to$R & add/sub\\
 5 & \cee{<{}<{}  >{}>} & L$\to$R & shifts (below add!)\\
 6 & \cee{< <= > >=} & L$\to$R & relational\\
-7 & \cee{== !=} & L$\to$R & equality (\emph{above} bitwise!)\\
+7 & \cee{== !=} & L$\to$R & eq (\emph{above} bitwise!)\\
 8 & \cee{\&}     & L$\to$R & bit AND\\
 9 & \cee{\^{}}   & L$\to$R & bit XOR\\
 10 & \cee{|}     & L$\to$R & bit OR\\
-11 & \cee{\&\&}  & L$\to$R & logical AND (short-circuit)\\
-12 & \cee{||}    & L$\to$R & logical OR (short-circuit)\\
+11 & \cee{\&\&}  & L$\to$R & logical AND (s/c)\\
+12 & \cee{||}    & L$\to$R & logical OR (s/c)\\
 13 & \cee{?:}    & R$\to$L & ternary\\
 14 & \cee{= += -= *= ...} & R$\to$L & assignment\\
 15 & \cee{,}     & L$\to$R & comma\\
@@ -336,7 +339,7 @@ LDFLAGS = -T linker.ld -Wl,--gc-sections \         # drop unused fns
 \textbf{nano.specs} swaps in newlib-nano (smaller printf without float; add \cee{-u \_printf\_float} to relink float support).
 
 \subsection{Quick numeric reference}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Item} & \textbf{Value}\\
 \midrule
@@ -344,14 +347,14 @@ PERIPH\_BASE & 0x4000\_0000\\
 APB1PERIPH\_BASE & 0x4000\_0000\\
 APB2PERIPH\_BASE & 0x4001\_0000\\
 AHB1PERIPH\_BASE & 0x4002\_0000\\
-AHB2PERIPH\_BASE & 0x4800\_0000 (G4) / +0x0800\_0000 (F4)\\
-GPIOA\_BASE (G4) & 0x4800\_0000 (port spacing 0x0400)\\
+AHB2PERIPH\_BASE & 0x4800\_0000 (G4); F4 +0x0800\_0000\\
+GPIOA\_BASE (G4) & 0x4800\_0000 (port stride 0x0400)\\
 SCS\_BASE & 0xE000\_E000\\
 SysTick\_BASE & 0xE000\_E010\\
 NVIC\_BASE & 0xE000\_E100\\
 SCB\_BASE & 0xE000\_ED00\\
 SCB->VTOR & 0xE000\_ED08\\
-SCB->AIRCR & 0xE000\_ED0C (PRIGROUP[10:8], VECTKEY=0x05FA)\\
+SCB->AIRCR & 0xE000\_ED0C (PRIGROUP, VECTKEY=0x05FA)\\
 Flash base & 0x0800\_0000\\
 SRAM base & 0x2000\_0000\\
 SRAM bit-band alias & 0x2200\_0000\\

@@ -2,13 +2,13 @@
 
 \subsection{Three styles for \cee{if-else} in ASM}
 Given C \cee{if (cond) then; else else;}, three idiomatic ASM templates (Lctr 25):
-\begin{tabular}{@{}l l l@{}}
+\begin{tabular}{@{}l l p{0.40\columnwidth}@{}}
 \toprule
 Style & Branch on & Layout \\
 \midrule
-\textbf{PL} (positive logic) & \textbf{same} CCS as C & else first, fall thru / B end / then \\
-\textbf{NL} (negative logic) & \textbf{inverse} CCS  & then first, fall thru / B end / else \\
-\textbf{CEX} (cond exec)     & no branch (IT block)  & all instrs in straight line \\
+\textbf{PL} (pos. logic) & \textbf{same} CCS as C & else first, fall thru / B end / then \\
+\textbf{NL} (neg. logic) & \textbf{inverse} CCS  & then first, fall thru / B end / else \\
+\textbf{CEX} (cond exec) & no branch (IT block)  & all instrs in straight line \\
 \bottomrule
 \end{tabular}\\
 NL reads closest to C (then-block falls through, matches \cee{if(c){...}}). PL is "branch when C-true". CEX is best when each arm is $\le$ 4 instructions total. CCS in \asm{IT..} = NL cond (the inverse of the C test).
@@ -179,7 +179,7 @@ end:
 \begin{lstlisting}
 load_based_on_x_cex:
     cmp     r0, #20
-    bgt     check25         @ x>20 -> 2nd test (plain B; mid-IT cond B illegal)
+    bgt     check25         @ x>20 -> 2nd test (plain B)
     @ x<=20: compound TRUE -> then arm inline
     ldrh    r0, [r1, #2]!
     lsl     r0, r0, #2

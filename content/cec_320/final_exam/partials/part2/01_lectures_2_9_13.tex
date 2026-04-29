@@ -218,8 +218,16 @@ off & reg & purpose \\
 \end{tabular}
 \end{reg}
 \textbf{ISER indexing:} \cee{NVIC->ISER[IRQn>>5] = 1U<<(IRQn\&31);}. IRQn\,$=$\,38 (USART2): \cee{NVIC->ISER[1] = 1U<<6;}.\\
-\textbf{CMSIS:} \cee{NVIC\_EnableIRQ/DisableIRQ/ClearPendingIRQ/SetPriority/SetPriorityGrouping}.\\
-\textbf{HAL callbacks:} HAL handler clears flag + calls \cee{\_\_weak HAL\_<P>\_<event>Callback}; user overrides callback only. UART RX IRQ flow: \cee{HAL\_UART\_Receive\_IT(\&huart2,buf,n);} then implement \cee{HAL\_UART\_RxCpltCallback}.
+\textbf{CMSIS:} \cee{NVIC\_EnableIRQ}, \cee{DisableIRQ},
+\cee{ClearPendingIRQ},
+\cee{SetPriority}, \cee{SetPriorityGrouping}.\\
+\textbf{HAL callbacks:} HAL handler clears flag + calls
+\cee{\_\_weak HAL\_<P>\_<event>Callback};
+user overrides callback only.
+\textbf{UART RX IRQ flow:} call
+\cee{HAL\_UART\_Receive\_IT}
+\cee{(\&huart2,buf,n)} then implement
+\cee{HAL\_UART\_RxCpltCallback}.
 
 \subsection{L9: Preemption, EXTI, FSM}
 \textbf{Priority semantics (REVERSED):} smaller PN $=$ higher priority $=$ more urgent. Each IRQn has 8-bit \cee{IP[]} byte; STM32 implements only top \emph{n}\,$=$\,4 bits (lower 4 read as 0).

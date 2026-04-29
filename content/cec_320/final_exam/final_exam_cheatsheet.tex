@@ -417,11 +417,11 @@ umod32bit_s:                @ uint32 mod: R0=A,R1=B
 For signed modulo use \asm{SDIV} (sign of result follows dividend).
 
 \subsection{EABI / AAPCS register usage}
-\begin{tabular}{@{}llp{4.4cm}@{}}
+\begin{tabular}{@{}llp{3.4cm}@{}}
 \toprule
 Reg & Role & Notes \\
 \midrule
-R0--R3 & arg / ret, scratch & \emph{caller-saved}; R0(:R1) hold return \\
+R0--R3 & arg/ret, scratch & \emph{caller-saved}; R0(:R1) hold return \\
 R4--R11 & local & \emph{callee-saved}; PUSH on entry, POP on exit \\
 R12 (IP) & scratch & may be clobbered by veneers \\
 R13 (SP) & stack ptr & 8-byte aligned at public boundaries \\
@@ -429,9 +429,14 @@ R14 (LR) & link reg & save if you call (BL) anything \\
 R15 (PC) & program ctr & POP \{...,pc\} returns \\
 \bottomrule
 \end{tabular}\\
-\textbf{Args:} first 4 word-sized go in R0--R3, rest spill to stack (lowest addr = 5th arg). 64-bit args use an aligned even/odd pair (R0:R1 or R2:R3); cannot split across R3/stack--R3 is left unused if needed for alignment.\\
-\textbf{Return:} 32-bit in \textbf{R0}. 64-bit in \textbf{R0:R1} (R0=lo, R1=hi). \texttt{void} returns nothing.\\
-\textbf{Leaf rule:} if you don't BL anything and only touch R0--R3,R12, no PUSH/POP needed.
+\textbf{Args:} first 4 word-sized go in R0--R3, rest spill to stack
+(lowest addr $=$ 5th arg). 64-bit args use an aligned even/odd pair
+(R0:R1 or R2:R3); cannot split across R3/stack -- R3 unused if needed
+for alignment.\\
+\textbf{Return:} 32-bit in \textbf{R0}; 64-bit in \textbf{R0:R1}
+(R0$=$lo, R1$=$hi). \texttt{void} returns nothing.\\
+\textbf{Leaf rule:} if you don't BL anything and only touch
+R0--R3, R12, no PUSH/POP needed.
 
 \subsection{Sub-word arg promotion at the CALL SITE}
 Caller widens \asm{int8\_t/int16\_t/uint8\_t/uint16\_t} to 32-bit before placing in R0--R3:
@@ -461,7 +466,9 @@ SP after $=$ 0x2000\_1020$-$4$\cdot$4 $=$ 0x2000\_1010. POP reverses: lowest add
 \end{hwp}
 
 \subsection{HW6 P2--P3: arg promotion}
-\begin{hwp}\textbf{P2 (unsigned, zero-ext):} \cee{fn1((uint8\_t)0xF,(uint8\_t)0xFF,0xFFF,0xFFFF)} into \cee{uint32\_t}\\
+\begin{hwp}\textbf{P2 (unsigned, zero-ext):}
+\cee{fn1((uint8\_t)0xF, (uint8\_t)0xFF, 0xFFF, 0xFFFF)}
+into \cee{uint32\_t}\\
 R0$=$0x0000\_000F, R1$=$0x0000\_00FF, R2$=$0x0000\_0FFF, R3$=$0x0000\_FFFF.\end{hwp}
 \begin{hwp}\textbf{P3 (signed, sign-ext):} \cee{fn2((int8\_t)0xF,(int8\_t)0xFF)} into \cee{int32\_t}\\
 0xF: MSB$=$0 $\Rightarrow$ R0$=$\textbf{0x0000\_000F}.\\
@@ -1317,13 +1324,13 @@ stem return       & \asm{pop \{...,pc\}}                & pushed LR \\
 
 \subsection{Three styles for \cee{if-else} in ASM}
 Given C \cee{if (cond) then; else else;}, three idiomatic ASM templates (Lctr 25):
-\begin{tabular}{@{}l l l@{}}
+\begin{tabular}{@{}l l p{0.40\columnwidth}@{}}
 \toprule
 Style & Branch on & Layout \\
 \midrule
-\textbf{PL} (positive logic) & \textbf{same} CCS as C & else first, fall thru / B end / then \\
-\textbf{NL} (negative logic) & \textbf{inverse} CCS  & then first, fall thru / B end / else \\
-\textbf{CEX} (cond exec)     & no branch (IT block)  & all instrs in straight line \\
+\textbf{PL} (pos. logic) & \textbf{same} CCS as C & else first, fall thru / B end / then \\
+\textbf{NL} (neg. logic) & \textbf{inverse} CCS  & then first, fall thru / B end / else \\
+\textbf{CEX} (cond exec) & no branch (IT block)  & all instrs in straight line \\
 \bottomrule
 \end{tabular}\\
 NL reads closest to C (then-block falls through, matches \cee{if(c){...}}). PL is "branch when C-true". CEX is best when each arm is $\le$ 4 instructions total. CCS in \asm{IT..} = NL cond (the inverse of the C test).
@@ -1494,7 +1501,7 @@ end:
 \begin{lstlisting}
 load_based_on_x_cex:
     cmp     r0, #20
-    bgt     check25         @ x>20 -> 2nd test (plain B; mid-IT cond B illegal)
+    bgt     check25         @ x>20 -> 2nd test (plain B)
     @ x<=20: compound TRUE -> then arm inline
     ldrh    r0, [r1, #2]!
     lsl     r0, r0, #2
@@ -1543,10 +1550,10 @@ x & path & arm \\
 \section{HW12: Loops in ASM}
 
 \subsection{C loops $\to$ ASM shapes (Lctr 26 \S26.1--26.2)}
-\begin{tabular}{@{}l l l l@{}}
-\textbf{loop} & \textbf{test} & \textbf{min iters} & \textbf{C $\to$ ASM idiom} \\
+\begin{tabular}{@{}l l l p{0.40\columnwidth}@{}}
+\textbf{loop} & \textbf{test} & \textbf{min} & \textbf{C $\to$ ASM idiom} \\
 \asm{while(c)} & top  & 0 & priming-read style: dup body update \\
-\asm{do\{\}while(c)} & bottom & 1 & body, then \asm{cmp}+cond.\,branch back \\
+\asm{do\{\}while(c)} & bot. & 1 & body, then \asm{cmp}+cond.\,branch back \\
 \asm{for(i;c;u)} & top & 0 & \asm{init} / lp: \asm{cmp}+exit / body / \asm{u} / \asm{b lp} \\
 \asm{while(1)\{...break;\}} & inline & 0+ & single in-loop \asm{LDRB}, \asm{break} = \asm{b \_end} \\
 \end{tabular}
@@ -1820,7 +1827,7 @@ jt:     .byte (case0 - jt)/2
 \textbf{Reconstruction note:} Q3 problem statements below are derived from the cheatsheet+extract markdown; the original Fall-2025 PDF is not in the repo, so wording may differ slightly. Numeric answers are verified against the cheatsheet trace.
 
 \subsection{One-page Q3 cookbook}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lp{0.62\columnwidth}@{}}
 \toprule
 task & one-liner \\
 \midrule
@@ -2568,8 +2575,16 @@ off & reg & purpose \\
 \end{tabular}
 \end{reg}
 \textbf{ISER indexing:} \cee{NVIC->ISER[IRQn>>5] = 1U<<(IRQn\&31);}. IRQn\,$=$\,38 (USART2): \cee{NVIC->ISER[1] = 1U<<6;}.\\
-\textbf{CMSIS:} \cee{NVIC\_EnableIRQ/DisableIRQ/ClearPendingIRQ/SetPriority/SetPriorityGrouping}.\\
-\textbf{HAL callbacks:} HAL handler clears flag + calls \cee{\_\_weak HAL\_<P>\_<event>Callback}; user overrides callback only. UART RX IRQ flow: \cee{HAL\_UART\_Receive\_IT(\&huart2,buf,n);} then implement \cee{HAL\_UART\_RxCpltCallback}.
+\textbf{CMSIS:} \cee{NVIC\_EnableIRQ}, \cee{DisableIRQ},
+\cee{ClearPendingIRQ},
+\cee{SetPriority}, \cee{SetPriorityGrouping}.\\
+\textbf{HAL callbacks:} HAL handler clears flag + calls
+\cee{\_\_weak HAL\_<P>\_<event>Callback};
+user overrides callback only.
+\textbf{UART RX IRQ flow:} call
+\cee{HAL\_UART\_Receive\_IT}
+\cee{(\&huart2,buf,n)} then implement
+\cee{HAL\_UART\_RxCpltCallback}.
 
 \subsection{L9: Preemption, EXTI, FSM}
 \textbf{Priority semantics (REVERSED):} smaller PN $=$ higher priority $=$ more urgent. Each IRQn has 8-bit \cee{IP[]} byte; STM32 implements only top \emph{n}\,$=$\,4 bits (lower 4 read as 0).
@@ -3328,16 +3343,16 @@ flip Hk: A ^= (0xFu << (4*k));   // 1's-comp digit (15-Hk)
 (d) 0xH3H2H1H0 -> 0xH0_~H3_H2_H1   (~ = 1's-comp digit)
     uint16_t h0  =  A         & 0xF;
     uint16_t h3c = ((A >> 12) & 0xF) ^ 0xF;
-    A = ((A >> 4) & 0x00FF)            // bring H2,H1 to slots 1,0 (H3 falls off)
-      | (h3c << 8)                     // place complemented H3 in slot 2
-      | (h0  << 12);                   // place H0 in slot 3 (top)
+    A = ((A >> 4) & 0x00FF)   // H2,H1 -> slots 1,0; H3 falls off
+      | (h3c << 8)            // complemented H3 -> slot 2
+      | (h0  << 12);          // H0 -> slot 3 (top)
 
 (e) 0xH3H2H1H0 -> 0xF_H0_H3_H2
     uint16_t h0 = A & 0xF;
-    A = (A >> 8)        // H3 -> slot 0, H2 -> slot ... actually H3 -> slot 1, H2 -> slot 0
-      | (h0  << 8)      // H0 to slot 2
+    A = (A >> 8)        // H3 -> slot 1, H2 -> slot 0
+      | (h0  << 8)      // H0 -> slot 2
       | (0xFU << 12);   // top = F
-    // NOTE prep says (A>>8) gives H3 in slot 1, H2 in slot 0; H0 placed at slot 2.
+    // (A>>8) puts H3 in slot 1, H2 in slot 0; H0 at slot 2.
 \end{lstlisting}
 \textbf{Pitfall:} \cee{(A>>4) \& 0x00FF} keeps only the two low nibbles after the shift, which is what (d) needs because the shift smears H3 into slot 2; the AND-mask wipes that bleed before the OR places \cee{h3c} cleanly.\end{qp}
 
@@ -3432,9 +3447,9 @@ uint32_t a = 0x2200_0000 + 32*(0x200) + 4*5;  // 0x2200_4014
 
 \subsection{GPIO\_TypeDef -- full register table}
 Per-port struct, 28 bytes; one per GPIOA..GPIOH. Spacing 0x400.
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{@{}llllp{0.42\columnwidth}@{}}
 \toprule
-\textbf{Off} & \textbf{Reg} & \textbf{Sz} & \textbf{Bits/pin} & \textbf{Note}\\
+\textbf{Off} & \textbf{Reg} & \textbf{Sz} & \textbf{B/pin} & \textbf{Note}\\
 \midrule
 0x00 & MODER   & u32 & 2 & 00 in / 01 out / 10 AF / 11 analog (rst=11)\\
 0x04 & OTYPER  & u32 & 1 & 0 push-pull / 1 open-drain (low 16b)\\
@@ -3443,7 +3458,7 @@ Per-port struct, 28 bytes; one per GPIOA..GPIOH. Spacing 0x400.
 0x10 & IDR     & u32 & 1 & low 16b read-only input state\\
 0x14 & ODR     & u32 & 1 & low 16b output latch (R/W)\\
 0x18 & BSRR    & u32 & 1+1 & lo16=BS (set), hi16=BR (reset); W-only, atomic\\
-0x1C & LCKR    & u32 & 1 & lock seq: 1,0,1 + read = freeze MODER/OTYPER/OSPEEDR/PUPDR/AFR\\
+0x1C & LCKR    & u32 & 1 & lock seq: 1,0,1+read freezes MODER/OTYPER/OSPEEDR/PUPDR/AFR\\
 0x20 & AFR[0]  & u32 & 4 & AFRL pins 0..7 (AF0..AF15)\\
 0x24 & AFR[1]  & u32 & 4 & AFRH pins 8..15\\
 \bottomrule
@@ -3509,20 +3524,22 @@ void EXTI0_IRQHandler(void) {
 
 \subsection{USART register highlights}
 Three control + status + data + baud. APBx clock supplies USART (USART1/6 on APB2; USART2/3, UART4/5 on APB1).
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}llp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Reg} & \textbf{Off} & \textbf{Key bits}\\
 \midrule
-CR1 & 0x00 & UE(0) RE(2) TE(3) IDLEIE(4) RXNEIE(5) TCIE(6) TXEIE(7) PEIE(8) PS(9) PCE(10) WAKE(11) M0(12) MME(13) OVER8(15) M1(28)\\
-CR2 & 0x04 & ADDM7(4) STOP[13:12] (00=1, 01=0.5, 10=2, 11=1.5) LBCL(8) CPHA(9) CPOL(10) CLKEN(11)\\
+CR1 & 0x00 & see bit-list below\\
+CR2 & 0x04 & ADDM7(4); STOP[13:12]: 00=1, 01=0.5, 10=2, 11=1.5; LBCL(8) CPHA(9) CPOL(10) CLKEN(11)\\
 CR3 & 0x08 & EIE(0) IREN HDSEL DMAR(6) DMAT(7) RTSE CTSE CTSIE OVRDIS(12) ONEBIT(11) DEM(14) DEP(15)\\
-BRR & 0x0C & USARTDIV (16-bit). OVER8=0: BRR=USARTDIV. OVER8=1: BRR[3:0]=usartdiv[3:0]>>1, BRR[15:4]=usartdiv[15:4]\\
+BRR & 0x0C & USARTDIV (16-bit); see formula below\\
 ISR/SR & 0x1C/0x00 & PE(0) FE(1) NE(2) ORE(3) IDLE(4) RXNE(5) TC(6) TXE(7) BUSY(16)\\
 ICR & 0x20 & W1C for PE/FE/NE/ORE/IDLE/TC etc.\\
 RDR & 0x24 & receive data (read clears RXNE)\\
 TDR & 0x28 & transmit data (write clears TXE)\\
 \bottomrule
-\end{tabular}
+\end{tabular}\\
+\textbf{CR1 bits:} UE(0) RE(2) TE(3) IDLEIE(4) RXNEIE(5) TCIE(6) TXEIE(7) PEIE(8) PS(9) PCE(10) WAKE(11) M0(12) MME(13) OVER8(15) M1(28).\\
+\textbf{BRR layout:} OVER8=0: BRR=USARTDIV. OVER8=1: BRR[3:0]=usartdiv[3:0]\,$>>$\,1, BRR[15:4]=usartdiv[15:4].
 \textbf{Baud calc (OVER8=0, 16$\times$ oversample):}
 \[ \text{USARTDIV} = \frac{f_{CK}}{\text{baud}} \quad\Rightarrow\quad \text{BRR}=\text{USARTDIV}. \]
 \textbf{OVER8=1 (8$\times$):} $\text{USARTDIV} = 2 f_{CK}/\text{baud}$; BRR layout split. \emph{Example:} 80\,MHz APB, 115200 baud, OVER8=0 $\Rightarrow$ BRR $= 80\text{e}6/115200 = 694.44 \to 694 = 0x2B6$ (actual baud $= 80\text{e}6/694 = 115273$, error 0.06\%).
@@ -3533,11 +3550,11 @@ TDR & 0x28 & transmit data (write clears TXE)\\
 
 \subsection{SysTick (STK)}
 24-bit downcounter at \cee{0xE000\_E010}. Reloads from LOAD when count hits 0 and asserts SysTick exception (IRQn = -1, vector idx 15).
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}llp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Reg} & \textbf{Off} & \textbf{Bits}\\
 \midrule
-CTRL  & 0x00 & ENABLE(0) TICKINT(1) CLKSOURCE(2: 0=AHB/8, 1=AHB) COUNTFLAG(16, RC)\\
+CTRL  & 0x00 & ENABLE(0) TICKINT(1); CLKSOURCE(2): 0=AHB/8, 1=AHB; COUNTFLAG(16, RC)\\
 LOAD  & 0x04 & RELOAD[23:0]; period = LOAD+1 ticks\\
 VAL   & 0x08 & current count[23:0]; any write clears to 0 + clears COUNTFLAG\\
 CALIB & 0x0C & TENMS[23:0] vendor 10\,ms reload, NOREF, SKEW\\
@@ -3547,7 +3564,7 @@ CALIB & 0x0C & TENMS[23:0] vendor 10\,ms reload, NOREF, SKEW\\
 
 \subsection{Generic timer (TIMx)}
 Common base: CR1, SR, CNT, PSC, ARR, plus CCMR1/2 + CCER + CCR1..4 + DIER + EGR.
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}llp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Reg} & \textbf{Off} & \textbf{Use}\\
 \midrule
@@ -3576,16 +3593,17 @@ G4 differs (CFGR/SQR1/ISR/IER): use ADC\_ISR\_EOC, ADC\_CR\_ADSTART, ADSTP. Reso
 
 \subsection{DMA (channel-based, F4/G4)}
 Memory $\leftrightarrow$ peripheral autonomous transfers; CPU set up + ISR on completion.
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}llp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Reg} & \textbf{Off} & \textbf{Bits}\\
 \midrule
-CCR    & per-ch & EN(0) TCIE(1) HTIE(2) TEIE(3) DIR(4: 0=P2M,1=M2P) CIRC(5) PINC(6) MINC(7) PSIZE[9:8] MSIZE[11:10] PL[13:12] MEM2MEM(14)\\
+CCR    & per-ch & see bit-list below\\
 CNDTR  & per-ch & 16-bit transfer count (decrements; 0 ends)\\
 CPAR   & per-ch & peripheral address (DR of UART/SPI/ADC/...)\\
 CMAR   & per-ch & memory buffer base address\\
 \bottomrule
-\end{tabular}
+\end{tabular}\\
+\textbf{CCR bits:} EN(0) TCIE(1) HTIE(2) TEIE(3); DIR(4): 0=P2M, 1=M2P; CIRC(5) PINC(6) MINC(7) PSIZE[9:8] MSIZE[11:10] PL[13:12] MEM2MEM(14).
 Setup: CMAR=buf, CPAR=\&peri->DR, CNDTR=N, CCR set DIR/MINC/CIRC/sizes, then EN. MEMINC=1 for buffer scan; PERIPHINC=0 for fixed DR. CIRC=1 auto-restarts (ring/audio). DMA controller mux via DMAMUX (G4) selects request line.
 
 \subsection{C operator precedence (top binds tightest)}
@@ -3593,18 +3611,18 @@ Setup: CMAR=buf, CPAR=\&peri->DR, CNDTR=N, CCR set DIR/MINC/CIRC/sizes, then EN.
 \toprule
 \textbf{Lvl} & \textbf{Ops} & \textbf{Assoc} & \textbf{Note}\\
 \midrule
-1 & \cee{() [] -> .} postfix++/-- & L$\to$R & call, subscript, member\\
-2 & ++/-- prefix \cee{+ - ! \~{} *} \&{} \cee{(type) sizeof} & R$\to$L & unary\\
+1 & \cee{() [] -> .} post\,++/-- & L$\to$R & call/subscript\\
+2 & pre\,++/-- \cee{+ - ! \~{} * \&} cast \cee{sizeof} & R$\to$L & unary\\
 3 & \cee{* / \%} & L$\to$R & mul/div/mod\\
 4 & \cee{+ -} & L$\to$R & add/sub\\
 5 & \cee{<{}<{}  >{}>} & L$\to$R & shifts (below add!)\\
 6 & \cee{< <= > >=} & L$\to$R & relational\\
-7 & \cee{== !=} & L$\to$R & equality (\emph{above} bitwise!)\\
+7 & \cee{== !=} & L$\to$R & eq (\emph{above} bitwise!)\\
 8 & \cee{\&}     & L$\to$R & bit AND\\
 9 & \cee{\^{}}   & L$\to$R & bit XOR\\
 10 & \cee{|}     & L$\to$R & bit OR\\
-11 & \cee{\&\&}  & L$\to$R & logical AND (short-circuit)\\
-12 & \cee{||}    & L$\to$R & logical OR (short-circuit)\\
+11 & \cee{\&\&}  & L$\to$R & logical AND (s/c)\\
+12 & \cee{||}    & L$\to$R & logical OR (s/c)\\
 13 & \cee{?:}    & R$\to$L & ternary\\
 14 & \cee{= += -= *= ...} & R$\to$L & assignment\\
 15 & \cee{,}     & L$\to$R & comma\\
@@ -3728,7 +3746,7 @@ LDFLAGS = -T linker.ld -Wl,--gc-sections \         # drop unused fns
 \textbf{nano.specs} swaps in newlib-nano (smaller printf without float; add \cee{-u \_printf\_float} to relink float support).
 
 \subsection{Quick numeric reference}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lp{0.55\columnwidth}@{}}
 \toprule
 \textbf{Item} & \textbf{Value}\\
 \midrule
@@ -3736,14 +3754,14 @@ PERIPH\_BASE & 0x4000\_0000\\
 APB1PERIPH\_BASE & 0x4000\_0000\\
 APB2PERIPH\_BASE & 0x4001\_0000\\
 AHB1PERIPH\_BASE & 0x4002\_0000\\
-AHB2PERIPH\_BASE & 0x4800\_0000 (G4) / +0x0800\_0000 (F4)\\
-GPIOA\_BASE (G4) & 0x4800\_0000 (port spacing 0x0400)\\
+AHB2PERIPH\_BASE & 0x4800\_0000 (G4); F4 +0x0800\_0000\\
+GPIOA\_BASE (G4) & 0x4800\_0000 (port stride 0x0400)\\
 SCS\_BASE & 0xE000\_E000\\
 SysTick\_BASE & 0xE000\_E010\\
 NVIC\_BASE & 0xE000\_E100\\
 SCB\_BASE & 0xE000\_ED00\\
 SCB->VTOR & 0xE000\_ED08\\
-SCB->AIRCR & 0xE000\_ED0C (PRIGROUP[10:8], VECTKEY=0x05FA)\\
+SCB->AIRCR & 0xE000\_ED0C (PRIGROUP, VECTKEY=0x05FA)\\
 Flash base & 0x0800\_0000\\
 SRAM base & 0x2000\_0000\\
 SRAM bit-band alias & 0x2200\_0000\\
@@ -4626,7 +4644,7 @@ Access locals via \asm{[sp,\#0]}\dots\asm{[sp,\#12]}. Epilogue: \asm{add sp,\#16
 LR loaded with EXC\_RETURN (\cee{0xFFFFFFFD} thread/PSP, \cee{0xFFFFFFF9} thread/MSP, \cee{0xFFFFFFF1} handler). \asm{BX LR} pops the frame in HW. Tail-chain reuses this frame; late-arrival fixes up a higher-prio IRQ before unstacking. With FPU active, 18 extra words also stacked (s0--s15, FPSCR + pad).
 
 \subsection{Cortex-M4 quick specs (extended)}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lp{0.65\columnwidth}@{}}
 \toprule
 Item & Value \\
 \midrule
@@ -4652,7 +4670,7 @@ Sleep modes         & WFI, WFE, sleep-on-exit \\
 \end{tabular}
 
 \textbf{Special-purpose registers (CONTROL/PRIMASK/etc.):}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lp{0.7\columnwidth}@{}}
 \toprule
 Reg & Effect \\
 \midrule
@@ -4667,26 +4685,26 @@ Reg & Effect \\
 
 \subsection{Vector table (first 16 system entries)}
 Located in \cee{.isr\_vector} at start of FLASH (alias 0x0000\_0000 after reset). Each entry is a 32-bit address.
-\begin{tabular}{@{}rlll@{}}
+\begin{tabular}{@{}rllp{0.40\columnwidth}@{}}
 \toprule
 Idx & Off & Name & Use \\
 \midrule
 0  & 0x00 & \cee{\_estack}      & Initial MSP value \\
 1  & 0x04 & Reset\_Handler      & Entry after reset/POR \\
-2  & 0x08 & NMI\_Handler        & Non-maskable interrupt (clock fail) \\
-3  & 0x0C & HardFault\_Handler  & Catch-all fault if specific handlers off \\
-4  & 0x10 & MemManage\_Handler  & MPU violation \\
-5  & 0x14 & BusFault\_Handler   & Bus error (illegal access, abort) \\
-6  & 0x18 & UsageFault\_Handler & Bad instr, unaligned, divide-by-0 \\
+2  & 0x08 & NMI\_Handler        & Non-maskable IRQ (clock fail) \\
+3  & 0x0C & HardFault           & Catch-all fault if specific off \\
+4  & 0x10 & MemManage           & MPU violation \\
+5  & 0x14 & BusFault            & Bus error (illegal access, abort) \\
+6  & 0x18 & UsageFault          & Bad instr, unaligned, div-by-0 \\
 7  & 0x1C & ---                 & Reserved \\
 8  & 0x20 & ---                 & Reserved \\
 9  & 0x24 & ---                 & Reserved \\
 10 & 0x28 & ---                 & Reserved \\
 11 & 0x2C & SVC\_Handler        & Supervisor call (\asm{svc \#n}) \\
-12 & 0x30 & DebugMon\_Handler   & Debug monitor \\
+12 & 0x30 & DebugMon            & Debug monitor \\
 13 & 0x34 & ---                 & Reserved \\
-14 & 0x38 & PendSV\_Handler     & SW-pendable, low-prio context switch \\
-15 & 0x3C & SysTick\_Handler    & 24-bit tick timer \\
+14 & 0x38 & PendSV              & SW-pendable, low-prio ctx switch \\
+15 & 0x3C & SysTick             & 24-bit tick timer \\
 16+ & 0x40+ & IRQ0..IRQn        & Vendor peripheral handlers \\
 \bottomrule
 \end{tabular}
@@ -4776,14 +4794,14 @@ SECTIONS {
 \end{itemize}
 
 \subsection{HAL vs direct register}
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}lp{0.32\columnwidth}p{0.32\columnwidth}@{}}
 \toprule
-Aspect & HAL & Direct (CMSIS bare metal) \\
+Aspect & HAL & Direct (CMSIS) \\
 \midrule
 Naming   & \cee{HAL\_GPIO\_WritePin}, \cee{HAL\_UART\_Transmit} & \cee{GPIOA->BSRR=...}, \cee{USART2->TDR=...} \\
 Coverage & Drivers, error-checks, callbacks & Direct register access only \\
 Speed    & 10--100$\times$ slower (struct deref + checks) & 1--3 instr per access \\
-Setup    & CubeMX-generated init                     & Manual RCC + register writes \\
+Setup    & CubeMX-generated init & Manual RCC + register writes \\
 Best for & App code, complex periph (USB, SD), portability & ISRs, time-critical loops, exam Q's \\
 \bottomrule
 \end{tabular}
@@ -4799,11 +4817,11 @@ Best for & App code, complex periph (USB, SD), portability & ISRs, time-critical
   \end{aligned}
 \]
 For STM32 ($N=4$, low 4 bits don't exist):
-\begin{tabular}{@{}cccl@{}}
+\begin{tabular}{@{}cccp{0.45\columnwidth}@{}}
 \toprule
-PRIGROUP $G$ & PP bits & SP bits & Layout in IP[IRQn] (top 4) \\
+PRIGROUP $G$ & PP & SP & Layout in IP[IRQn] (top 4) \\
 \midrule
-3 & 4 & 0 & PPPP\,---- (16 levels preempt, 1 sub) \\
+3 & 4 & 0 & PPPP\,---- (16 preempt, 1 sub) \\
 4 & 3 & 1 & PPPS\,---- (8 preempt, 2 sub) \\
 5 & 2 & 2 & PPSS\,---- (4 preempt, 4 sub) \\
 6 & 1 & 3 & PSSS\,---- (2 preempt, 8 sub) \\
@@ -4824,7 +4842,7 @@ PRIGROUP $G$ & PP bits & SP bits & Layout in IP[IRQn] (top 4) \\
 \textbf{Preemption rule:} an IRQ \emph{can} preempt the running ISR iff its \emph{PPN} is strictly less. Equal PPN $\to$ pending; tie broken by lower IRQn first. Sub-priority only orders \emph{simultaneously pending} same-PPN IRQs at dispatch -- never preempts.
 
 \subsection{Useful macros + intrinsics (CMSIS / HAL)}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lp{0.50\columnwidth}@{}}
 \toprule
 Symbol & Effect \\
 \midrule

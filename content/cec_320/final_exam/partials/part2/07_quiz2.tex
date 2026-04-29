@@ -37,16 +37,16 @@ flip Hk: A ^= (0xFu << (4*k));   // 1's-comp digit (15-Hk)
 (d) 0xH3H2H1H0 -> 0xH0_~H3_H2_H1   (~ = 1's-comp digit)
     uint16_t h0  =  A         & 0xF;
     uint16_t h3c = ((A >> 12) & 0xF) ^ 0xF;
-    A = ((A >> 4) & 0x00FF)            // bring H2,H1 to slots 1,0 (H3 falls off)
-      | (h3c << 8)                     // place complemented H3 in slot 2
-      | (h0  << 12);                   // place H0 in slot 3 (top)
+    A = ((A >> 4) & 0x00FF)   // H2,H1 -> slots 1,0; H3 falls off
+      | (h3c << 8)            // complemented H3 -> slot 2
+      | (h0  << 12);          // H0 -> slot 3 (top)
 
 (e) 0xH3H2H1H0 -> 0xF_H0_H3_H2
     uint16_t h0 = A & 0xF;
-    A = (A >> 8)        // H3 -> slot 0, H2 -> slot ... actually H3 -> slot 1, H2 -> slot 0
-      | (h0  << 8)      // H0 to slot 2
+    A = (A >> 8)        // H3 -> slot 1, H2 -> slot 0
+      | (h0  << 8)      // H0 -> slot 2
       | (0xFU << 12);   // top = F
-    // NOTE prep says (A>>8) gives H3 in slot 1, H2 in slot 0; H0 placed at slot 2.
+    // (A>>8) puts H3 in slot 1, H2 in slot 0; H0 at slot 2.
 \end{lstlisting}
 \textbf{Pitfall:} \cee{(A>>4) \& 0x00FF} keeps only the two low nibbles after the shift, which is what (d) needs because the shift smears H3 into slot 2; the AND-mask wipes that bleed before the OR places \cee{h3c} cleanly.\end{qp}
 

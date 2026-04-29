@@ -139,9 +139,37 @@ maybe_compile() {
     return
   fi
   echo "  compiling with tectonic..."
-  "$TECTONIC" -X compile "$tex" -o /tmp 2>&1 | tail -5 || true
+  local logfile="/tmp/${stem}_tectonic.log"
+  "$TECTONIC" -X compile "$tex" -o /tmp >"$logfile" 2>&1 || true
+
+  # ---- overfull-hbox stats (visual horizontal overflow) ----
+  local n_overfull max_overfull_pt
+  n_overfull=$(grep -c "Overfull \\\\hbox" "$logfile" || true)
+  if [ -n "${n_overfull:-}" ] && [ "$n_overfull" -gt 0 ]; then
+    max_overfull_pt=$(grep -oE "Overfull \\\\hbox \([0-9]+\.[0-9]+pt" "$logfile" \
+      | grep -oE "[0-9]+\.[0-9]+" | sort -rn | head -1)
+    # count runs that exceed common severity thresholds
+    local n_severe n_egregious
+    n_severe=$(grep -oE "Overfull \\\\hbox \([0-9]+\.[0-9]+pt" "$logfile" \
+      | grep -oE "[0-9]+\.[0-9]+" \
+      | awk '$1>=20 {n++} END{print n+0}')
+    n_egregious=$(grep -oE "Overfull \\\\hbox \([0-9]+\.[0-9]+pt" "$logfile" \
+      | grep -oE "[0-9]+\.[0-9]+" \
+      | awk '$1>=50 {n++} END{print n+0}')
+    echo "  overfull \\hbox: $n_overfull total, max=${max_overfull_pt}pt, ${n_severe} >=20pt, ${n_egregious} >=50pt (visual overlap risk)"
+  else
+    echo "  overfull \\hbox: 0 (clean horizontal layout)"
+  fi
+
+  # ---- page count via PyMuPDF (fitz) if available ----
   if command -v python3 >/dev/null 2>&1 && python3 -c "import fitz" 2>/dev/null; then
-    python3 -c "import fitz; print('  pages:', fitz.open('/tmp/${stem}.pdf').page_count)" 2>/dev/null || true
+    local pdf="/tmp/${stem}.pdf"
+    if [ -f "$pdf" ]; then
+      python3 -c "import fitz; d=fitz.open('$pdf'); print('  pages:', d.page_count)" 2>/dev/null || true
+    else
+      echo "  (PDF not produced — compile likely failed; tail of log:)"
+      tail -10 "$logfile"
+    fi
   fi
 }
 

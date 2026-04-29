@@ -1,10 +1,10 @@
 \section{HW12: Loops in ASM}
 
 \subsection{C loops $\to$ ASM shapes (Lctr 26 \S26.1--26.2)}
-\begin{tabular}{@{}l l l l@{}}
-\textbf{loop} & \textbf{test} & \textbf{min iters} & \textbf{C $\to$ ASM idiom} \\
+\begin{tabular}{@{}l l l p{0.40\columnwidth}@{}}
+\textbf{loop} & \textbf{test} & \textbf{min} & \textbf{C $\to$ ASM idiom} \\
 \asm{while(c)} & top  & 0 & priming-read style: dup body update \\
-\asm{do\{\}while(c)} & bottom & 1 & body, then \asm{cmp}+cond.\,branch back \\
+\asm{do\{\}while(c)} & bot. & 1 & body, then \asm{cmp}+cond.\,branch back \\
 \asm{for(i;c;u)} & top & 0 & \asm{init} / lp: \asm{cmp}+exit / body / \asm{u} / \asm{b lp} \\
 \asm{while(1)\{...break;\}} & inline & 0+ & single in-loop \asm{LDRB}, \asm{break} = \asm{b \_end} \\
 \end{tabular}

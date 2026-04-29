@@ -52,11 +52,11 @@ umod32bit_s:                @ uint32 mod: R0=A,R1=B
 For signed modulo use \asm{SDIV} (sign of result follows dividend).
 
 \subsection{EABI / AAPCS register usage}
-\begin{tabular}{@{}llp{4.4cm}@{}}
+\begin{tabular}{@{}llp{3.4cm}@{}}
 \toprule
 Reg & Role & Notes \\
 \midrule
-R0--R3 & arg / ret, scratch & \emph{caller-saved}; R0(:R1) hold return \\
+R0--R3 & arg/ret, scratch & \emph{caller-saved}; R0(:R1) hold return \\
 R4--R11 & local & \emph{callee-saved}; PUSH on entry, POP on exit \\
 R12 (IP) & scratch & may be clobbered by veneers \\
 R13 (SP) & stack ptr & 8-byte aligned at public boundaries \\
@@ -64,9 +64,14 @@ R14 (LR) & link reg & save if you call (BL) anything \\
 R15 (PC) & program ctr & POP \{...,pc\} returns \\
 \bottomrule
 \end{tabular}\\
-\textbf{Args:} first 4 word-sized go in R0--R3, rest spill to stack (lowest addr = 5th arg). 64-bit args use an aligned even/odd pair (R0:R1 or R2:R3); cannot split across R3/stack--R3 is left unused if needed for alignment.\\
-\textbf{Return:} 32-bit in \textbf{R0}. 64-bit in \textbf{R0:R1} (R0=lo, R1=hi). \texttt{void} returns nothing.\\
-\textbf{Leaf rule:} if you don't BL anything and only touch R0--R3,R12, no PUSH/POP needed.
+\textbf{Args:} first 4 word-sized go in R0--R3, rest spill to stack
+(lowest addr $=$ 5th arg). 64-bit args use an aligned even/odd pair
+(R0:R1 or R2:R3); cannot split across R3/stack -- R3 unused if needed
+for alignment.\\
+\textbf{Return:} 32-bit in \textbf{R0}; 64-bit in \textbf{R0:R1}
+(R0$=$lo, R1$=$hi). \texttt{void} returns nothing.\\
+\textbf{Leaf rule:} if you don't BL anything and only touch
+R0--R3, R12, no PUSH/POP needed.
 
 \subsection{Sub-word arg promotion at the CALL SITE}
 Caller widens \asm{int8\_t/int16\_t/uint8\_t/uint16\_t} to 32-bit before placing in R0--R3:
@@ -96,7 +101,9 @@ SP after $=$ 0x2000\_1020$-$4$\cdot$4 $=$ 0x2000\_1010. POP reverses: lowest add
 \end{hwp}
 
 \subsection{HW6 P2--P3: arg promotion}
-\begin{hwp}\textbf{P2 (unsigned, zero-ext):} \cee{fn1((uint8\_t)0xF,(uint8\_t)0xFF,0xFFF,0xFFFF)} into \cee{uint32\_t}\\
+\begin{hwp}\textbf{P2 (unsigned, zero-ext):}
+\cee{fn1((uint8\_t)0xF, (uint8\_t)0xFF, 0xFFF, 0xFFFF)}
+into \cee{uint32\_t}\\
 R0$=$0x0000\_000F, R1$=$0x0000\_00FF, R2$=$0x0000\_0FFF, R3$=$0x0000\_FFFF.\end{hwp}
 \begin{hwp}\textbf{P3 (signed, sign-ext):} \cee{fn2((int8\_t)0xF,(int8\_t)0xFF)} into \cee{int32\_t}\\
 0xF: MSB$=$0 $\Rightarrow$ R0$=$\textbf{0x0000\_000F}.\\

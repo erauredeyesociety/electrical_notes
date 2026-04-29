@@ -291,7 +291,7 @@ Access locals via \asm{[sp,\#0]}\dots\asm{[sp,\#12]}. Epilogue: \asm{add sp,\#16
 LR loaded with EXC\_RETURN (\cee{0xFFFFFFFD} thread/PSP, \cee{0xFFFFFFF9} thread/MSP, \cee{0xFFFFFFF1} handler). \asm{BX LR} pops the frame in HW. Tail-chain reuses this frame; late-arrival fixes up a higher-prio IRQ before unstacking. With FPU active, 18 extra words also stacked (s0--s15, FPSCR + pad).
 
 \subsection{Cortex-M4 quick specs (extended)}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lp{0.65\columnwidth}@{}}
 \toprule
 Item & Value \\
 \midrule
@@ -317,7 +317,7 @@ Sleep modes         & WFI, WFE, sleep-on-exit \\
 \end{tabular}
 
 \textbf{Special-purpose registers (CONTROL/PRIMASK/etc.):}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lp{0.7\columnwidth}@{}}
 \toprule
 Reg & Effect \\
 \midrule
@@ -332,26 +332,26 @@ Reg & Effect \\
 
 \subsection{Vector table (first 16 system entries)}
 Located in \cee{.isr\_vector} at start of FLASH (alias 0x0000\_0000 after reset). Each entry is a 32-bit address.
-\begin{tabular}{@{}rlll@{}}
+\begin{tabular}{@{}rllp{0.40\columnwidth}@{}}
 \toprule
 Idx & Off & Name & Use \\
 \midrule
 0  & 0x00 & \cee{\_estack}      & Initial MSP value \\
 1  & 0x04 & Reset\_Handler      & Entry after reset/POR \\
-2  & 0x08 & NMI\_Handler        & Non-maskable interrupt (clock fail) \\
-3  & 0x0C & HardFault\_Handler  & Catch-all fault if specific handlers off \\
-4  & 0x10 & MemManage\_Handler  & MPU violation \\
-5  & 0x14 & BusFault\_Handler   & Bus error (illegal access, abort) \\
-6  & 0x18 & UsageFault\_Handler & Bad instr, unaligned, divide-by-0 \\
+2  & 0x08 & NMI\_Handler        & Non-maskable IRQ (clock fail) \\
+3  & 0x0C & HardFault           & Catch-all fault if specific off \\
+4  & 0x10 & MemManage           & MPU violation \\
+5  & 0x14 & BusFault            & Bus error (illegal access, abort) \\
+6  & 0x18 & UsageFault          & Bad instr, unaligned, div-by-0 \\
 7  & 0x1C & ---                 & Reserved \\
 8  & 0x20 & ---                 & Reserved \\
 9  & 0x24 & ---                 & Reserved \\
 10 & 0x28 & ---                 & Reserved \\
 11 & 0x2C & SVC\_Handler        & Supervisor call (\asm{svc \#n}) \\
-12 & 0x30 & DebugMon\_Handler   & Debug monitor \\
+12 & 0x30 & DebugMon            & Debug monitor \\
 13 & 0x34 & ---                 & Reserved \\
-14 & 0x38 & PendSV\_Handler     & SW-pendable, low-prio context switch \\
-15 & 0x3C & SysTick\_Handler    & 24-bit tick timer \\
+14 & 0x38 & PendSV              & SW-pendable, low-prio ctx switch \\
+15 & 0x3C & SysTick             & 24-bit tick timer \\
 16+ & 0x40+ & IRQ0..IRQn        & Vendor peripheral handlers \\
 \bottomrule
 \end{tabular}
@@ -441,14 +441,14 @@ SECTIONS {
 \end{itemize}
 
 \subsection{HAL vs direct register}
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}lp{0.32\columnwidth}p{0.32\columnwidth}@{}}
 \toprule
-Aspect & HAL & Direct (CMSIS bare metal) \\
+Aspect & HAL & Direct (CMSIS) \\
 \midrule
 Naming   & \cee{HAL\_GPIO\_WritePin}, \cee{HAL\_UART\_Transmit} & \cee{GPIOA->BSRR=...}, \cee{USART2->TDR=...} \\
 Coverage & Drivers, error-checks, callbacks & Direct register access only \\
 Speed    & 10--100$\times$ slower (struct deref + checks) & 1--3 instr per access \\
-Setup    & CubeMX-generated init                     & Manual RCC + register writes \\
+Setup    & CubeMX-generated init & Manual RCC + register writes \\
 Best for & App code, complex periph (USB, SD), portability & ISRs, time-critical loops, exam Q's \\
 \bottomrule
 \end{tabular}
@@ -464,11 +464,11 @@ Best for & App code, complex periph (USB, SD), portability & ISRs, time-critical
   \end{aligned}
 \]
 For STM32 ($N=4$, low 4 bits don't exist):
-\begin{tabular}{@{}cccl@{}}
+\begin{tabular}{@{}cccp{0.45\columnwidth}@{}}
 \toprule
-PRIGROUP $G$ & PP bits & SP bits & Layout in IP[IRQn] (top 4) \\
+PRIGROUP $G$ & PP & SP & Layout in IP[IRQn] (top 4) \\
 \midrule
-3 & 4 & 0 & PPPP\,---- (16 levels preempt, 1 sub) \\
+3 & 4 & 0 & PPPP\,---- (16 preempt, 1 sub) \\
 4 & 3 & 1 & PPPS\,---- (8 preempt, 2 sub) \\
 5 & 2 & 2 & PPSS\,---- (4 preempt, 4 sub) \\
 6 & 1 & 3 & PSSS\,---- (2 preempt, 8 sub) \\
@@ -489,7 +489,7 @@ PRIGROUP $G$ & PP bits & SP bits & Layout in IP[IRQn] (top 4) \\
 \textbf{Preemption rule:} an IRQ \emph{can} preempt the running ISR iff its \emph{PPN} is strictly less. Equal PPN $\to$ pending; tie broken by lower IRQn first. Sub-priority only orders \emph{simultaneously pending} same-PPN IRQs at dispatch -- never preempts.
 
 \subsection{Useful macros + intrinsics (CMSIS / HAL)}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lp{0.50\columnwidth}@{}}
 \toprule
 Symbol & Effect \\
 \midrule
