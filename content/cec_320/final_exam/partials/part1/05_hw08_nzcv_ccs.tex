@@ -103,14 +103,14 @@ unsigned (\cee{uint})  & \cee{LSR \#n} (zero-fill)   & HI HS LO LS \\
 \begin{center}\scriptsize
 \begin{tabular}{@{}lcccccccc@{}}
 \toprule
-flags N=0,Z=0,C=1,V=0 & EQ & NE & GT & GE & LT & LE & HI & HS \\
+flags N=0,Z=0,C=1,V=0 & GT & GE & LE & LT & HI & HS & LS & LO \\
 \midrule
-evaluate              & F  & T  & T  & T  & F  & F  & T  & T  \\
+eval (both cases)     & T  & T  & F  & F  & T  & T  & F  & F  \\
 \bottomrule
 \end{tabular}
 \end{center}
 \begin{hwp}
-\textbf{P2 takeaway:} CCS evaluation is \emph{flag-driven, not value-driven}. Two CMPs on totally different operand pairs that happen to yield identical NZCV will branch identically. Therefore the same flag pattern $(0,0,1,0)$ supports \emph{both} ``$22 > 20$'' (signed) and ``$44 >_u 42$'' (unsigned) --- GT and HI both fire. EQ logic is just $Z=1$, NE is $Z=0$ --- domain-independent.
+\textbf{P2 takeaway:} CCS evaluation is \emph{flag-driven, not value-driven}. Both case (a) and (b) yield identical NZCV $(0,0,1,0)$ so all 8 CCSs evaluate identically: GT/GE true (V$=$N \& Z$=$0); LT/LE false; HI/HS true (C$=$1 \& Z$=$0); LS/LO false. Same pattern supports ``$22{>}20$'' signed \emph{and} ``$44{>}_u 42$'' unsigned. \textbf{P2 Part 3:} \cee{EQ <==> Z==1}, \cee{NE <==> Z==0} --- domain-independent.
 \end{hwp}
 
 \subsection{P3 (20pt) --- max() via negative-logic branch}

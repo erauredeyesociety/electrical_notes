@@ -94,12 +94,17 @@ orr r0, r0, r1         @ -> 7 H3H2H1
 \end{lstlisting}
 \textbf{Set/Clear/Toggle triad:} ORR sets, BIC clears, EOR toggles. MVN inverts.
 
-\subsection{HW7 P1 -- Q15.16 from SMULL}
-\begin{hwp}\textbf{P1.} Given \asm{smull r2,r3,r0,r1} produces \{R3:R2\} 64-bit, extract Q15.16 ($b_{47}\ldots b_{16}$):
+\subsection{HW7 P1 -- Q15.16 mult function}
+\begin{hwp}\textbf{P1.} Modify Q31 mult to Q15.16. Right-shift LW by $n{=}16$, left-shift HW by $32{-}n{=}16$:
 \begin{lstlisting}
-lsr r0, r2, #16        @ low 16 of result = top 16 of LW
-orr r0, r0, r3, lsl #16  @ high 16 of result = low 16 of HW
+@ int mp_mult_q15p16_s(int A, int B)
+mp_mult_q15p16_s:
+    smull r1, r0, r0, r1   @ {R0:R1} = A*B (Q30.32)
+    lsl   r0, #16          @ HW <<16: keep low 16 -> int part
+    add   r0, r0, r1, lsr #16  @ OR top 16 of LW -> frac part
+    bx    lr
 \end{lstlisting}
+For Q16.15 use \asm{lsl r0,\#17} and \asm{lsr \#15}.
 \end{hwp}
 
 \subsection{HW7 P2 -- LSLS/LSRS \& C flag}

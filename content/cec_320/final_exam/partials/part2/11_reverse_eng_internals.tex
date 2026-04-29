@@ -521,3 +521,99 @@ Symbol & Effect \\
 
 \subsection{One-page summary block (System internals)}
 \textbf{Vector table:} 32-bit entries; index 0=\cee{\_estack}, 1=Reset, 2--15 system, 16+ vendor. Offset = $4\cdot$idx. Reset\_Handler: load MSP $\to$ copy .data $\to$ zero .bss $\to$ SystemInit $\to$ \_\_libc\_init\_array $\to$ main $\to$ trap loop. \textbf{Stack frame:} HW auto-stacks 8 words on IRQ entry (R0--R3, R12, LR, PC, xPSR), pushed in ascending-addr order; SW prologue may push R4--R11+LR for stem fns. Always 8B-aligned at \asm{BL}. \textbf{NVIC priority:} byte per IRQ, top $N=4$ bits used on STM32; PRIGROUP $G$ splits top 4 into PPN (high) + SPN (low) where PP bits = $7-G$ within those 4. Preempt iff PPN strictly less. \textbf{System regs:} PRIMASK gates all (cpsid i), FAULTMASK gates incl.\ HardFault, BASEPRI selective gate, CONTROL holds nPRIV/SPSEL/FPCA. \textbf{Exam tells:} HAL questions ask for register names, not function calls; clear PR (W1C) in EXTI handler; pair \asm{adds}+\asm{adc} for 64b; ARM C-flag inverted on subtract; CBZ no-IT and forward-only; PUSH order always ascending; 8B align at every BL. \textbf{Reverse engineer:} look for post-index (\asm{[Rb],\#k}) $\to$ \cee{*p++}; pre-index (\asm{[Rb,\#k]!}) $\to$ \cee{*++p}; reg-offset \asm{[Rb,Ri,LSL\#n]} $\to$ \cee{a[i]} where $n$=log2 sizeof; CMP+IT+MOVcc $\to$ ternary; CBZ on a freshly LDRB'd byte $\to$ string null check; \asm{adds;adc} $\to$ 64-bit; \asm{ldr;add\#1;str} on same addr $\to$ \cee{(*p)++}. \textbf{Translate forward:} type chooses LDR suffix (sgn $\Rightarrow$ S-variant); array stride chooses LSL\#n; loop shape chooses CBZ vs cmp+B; conditional update chooses IT block; 64-bit return uses (R0,R1)=(lo,hi). \textbf{Final sanity:} flag-setting needs S-suffix; CMP/TST/TEQ/CMN already do; SDIV/UDIV never do; modimm has 8b+rotate constraint; literal pool reachable within 4\,KB.
+
+\subsection{Saturating + DSP intrinsics (M4 only)}
+Saturating instructions clamp instead of wrapping -- critical for Q-fmt audio/control where wraparound silently inverts the signal.
+\begin{tabular}{@{}lp{0.55\columnwidth}@{}}
+\toprule
+Insn / intrinsic & Effect \\
+\midrule
+\asm{SSAT Rd,\#n,Rm}    & clamp signed Rm to $[-2^{n-1},2^{n-1}{-}1]$ \\
+\asm{USAT Rd,\#n,Rm}    & clamp unsigned Rm to $[0,2^n{-}1]$ \\
+\asm{QADD Rd,Rn,Rm}     & saturating signed 32b add \\
+\asm{QSUB Rd,Rn,Rm}     & saturating signed 32b sub \\
+\asm{QADD16/QSUB16}     & SIMD 2$\times$16b sat (lanes ind.) \\
+\asm{SMLAD Rd,Rn,Rm,Ra} & sgn dual MAC: $Ra+Rn[15:0]\!\cdot\!Rm[15:0]+Rn[31:16]\!\cdot\!Rm[31:16]$ (Q15 dot product step) \\
+\asm{SMLAL Rl,Rh,Rn,Rm} & sgn 64b MAC: $\{Rh{:}Rl\}\!+\!=\!Rn{\cdot}Rm$ \\
+\asm{UMULL/SMULL}       & 32$\times$32$\to$64 mul (uns/sgn) \\
+\cee{\_\_QADD/\_\_QSUB}    & CMSIS C wrapper \\
+\cee{\_\_SSAT(x,n)}        & CMSIS for SSAT \\
+\bottomrule
+\end{tabular}
+\textbf{Saturate Q15 result after Q31 mul:} \asm{smull r1,r0,a,b} $\to$ \asm{ssat r0,\#16,r0,asr \#15} packs the renormalized + clipped Q15 in one instruction.
+
+\subsection{Memory barriers (DMB / DSB / ISB)}
+\begin{tabular}{@{}lp{0.65\columnwidth}@{}}
+\toprule
+Barrier & Use \\
+\midrule
+\asm{DMB} & Data-Memory: all explicit mem accesses before complete before any after (multicore / DMA visibility). \\
+\asm{DSB} & Data-Sync: stronger -- pipeline waits for all mem ops AND side effects to drain. Use after writing CCR, ICACHE config, MPU regs, before \asm{WFI}. \\
+\asm{ISB} & Instr-Sync: flush prefetch + refetch from current PC. Required after writing VTOR, CONTROL, or any reg that changes how subsequent instr fetch/decode. \\
+\bottomrule
+\end{tabular}
+\textbf{Idiom:} \cee{NVIC\_DisableIRQ(n); \_\_DSB(); \_\_ISB();} -- guarantees the disable takes effect before next instruction sees IRQ state. CMSIS exposes \cee{\_\_DSB()/\_\_ISB()/\_\_DMB()} as 1-instr intrinsics.
+
+\subsection{Endian / bit reversal recipes}
+\begin{tabular}{@{}lp{0.55\columnwidth}@{}}
+\toprule
+Insn & Effect \\
+\midrule
+\asm{REV  Rd,Rm}  & swap 4 bytes (\cee{0xAABBCCDD} $\to$ \cee{0xDDCCBBAA}); LE$\leftrightarrow$BE 32b \\
+\asm{REV16 Rd,Rm} & swap bytes within each halfword (\cee{0xAABBCCDD} $\to$ \cee{0xBBAADDCC}) \\
+\asm{REVSH Rd,Rm} & swap low halfword bytes + sign-ext to 32b (LE$\leftrightarrow$BE int16) \\
+\asm{RBIT Rd,Rm}  & reverse all 32 bits (\cee{0x1} $\to$ \cee{0x80000000}); pairs with CLZ for trailing-zero count \\
+\asm{CLZ Rd,Rm}   & count leading zeros (1 cyc); CTZ via \asm{rbit;clz} \\
+\bottomrule
+\end{tabular}
+\textbf{Network-byte-order:} \cee{ntohl(x) = \_\_REV(x)} on LE Cortex-M (no-op on BE host). \textbf{First-set-bit:} \cee{ffs(x) = 32 - \_\_CLZ(\_\_RBIT(x))} (returns 0..31 for x$\ne$0).
+
+\subsection{Critical-section primitives}
+\begin{tabular}{@{}lp{0.55\columnwidth}@{}}
+\toprule
+Mechanism & Notes \\
+\midrule
+\cee{\_\_disable\_irq()} / \asm{cpsid i} & PRIMASK=1; mask all configurable IRQs incl.\ SysTick. NMI/HardFault still run. \\
+\cee{\_\_enable\_irq()}  / \asm{cpsie i} & PRIMASK=0. Use \cee{\_\_get/\_\_set\_PRIMASK} for nest-safe pattern. \\
+\cee{\_\_set\_BASEPRI(p)} & gate IRQs with PN $\geq p$; lets high-pri IRQs preempt the critical section. \\
+\asm{LDREX Rd,[Rn]} / \asm{STREX Rs,Rd,[Rn]} & exclusive monitor: STREX returns 0 in Rs on success, 1 if monitor was cleared (interrupt happened). Build CAS / atomic increment. \\
+\asm{WFI} / \asm{WFE} & sleep until IRQ / event; clear-on-event; common in idle loop. \\
+\bottomrule
+\end{tabular}
+\textbf{Atomic increment via LDREX/STREX:}
+\begin{lstlisting}
+1:  ldrex r1, [r0]
+    add   r1, r1, #1
+    strex r2, r1, [r0]
+    cmp   r2, #0
+    bne   1b                       @ retry on contention
+\end{lstlisting}
+
+\subsection{Cycle-accurate timing (DWT cycle counter)}
+\cee{DWT->CYCCNT} is a free-running 32-bit cycle counter (Cortex-M3/4/7). Enable once, read anywhere, $\sim$1\,ns resolution at 80\,MHz.
+\begin{lstlisting}[language={}]
+CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;       // enable
+DWT->CYCCNT = 0;                            // optional reset
+uint32_t t0 = DWT->CYCCNT;
+/* code under test */
+uint32_t dt = DWT->CYCCNT - t0;            // wraparound-safe
+\end{lstlisting}
+Equivalent SysTick recipe (24b only): \cee{val = SysTick->VAL;} (downcounter).
+
+\subsection{Exam-day rapid checklist}
+\begin{itemize}
+\item Q asks ``set/reset pin atomically'' $\Rightarrow$ \cee{BSRR}, never \cee{ODR |=}.
+\item Q asks ``read pin'' $\Rightarrow$ \cee{IDR \& (1<<n)}; Q asks ``what was last written'' $\Rightarrow$ \cee{ODR}.
+\item Q asks for ``IRQn for EXTI13'' $\Rightarrow$ shared handler \cee{EXTI15\_10\_IRQn = 40}; PSR ExcNum 56.
+\item Q gives an IP byte + PRIGROUP $\Rightarrow$ drop low 4 unused bits, then split top 4 by $G$ rule.
+\item Q gives baud + frame $\Rightarrow$ throughput $=$ baud / total\_bits (incl.\ start/par/stop).
+\item Q gives Q-fmt $f \cdot 2^n$ $\Rightarrow$ round to int, then if $f<0$ use TC of |result| in N bits.
+\item ASM has \asm{adds} but \asm{adc} omitted? It's a buggy 32-bit add; carry never consumed.
+\item ASM has \asm{cmp Rn,\#-imm}? Disassembler shows \asm{CMN}; flag effect is identical for signed CCS.
+\item ASM uses \asm{B} where \asm{BL} expected? Function ``call'' loses return address $\Rightarrow$ falls off.
+\item Compound-OR if-test: TWO same-direction branches to the SAME \asm{\_then}. Compound-AND: TWO branches to \asm{\_else} (De Morgan).
+\item \cee{volatile} missing on MMIO ptr $\Rightarrow$ optimizer hoists/elides $\Rightarrow$ silent freeze in the loop.
+\item \cee{int x = -1; (unsigned)x < 1U} is FALSE -- $x$ promotes to \cee{0xFFFFFFFF}.
+\item TBB out-of-range index $\Rightarrow$ undefined branch; always \asm{cmp;bhi default} first.
+\end{itemize}

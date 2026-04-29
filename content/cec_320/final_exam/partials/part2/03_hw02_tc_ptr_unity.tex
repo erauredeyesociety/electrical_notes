@@ -27,7 +27,8 @@ $N$ & unsigned & signed (TC) \\
 \bottomrule
 \end{tabular}
 Cortex-M literals: \cee{1U}$\Rightarrow$\cee{uint32\_t} (32b); \cee{1L}$\Rightarrow$\cee{int32\_t} (32b). U=unsigned long, L=signed long.
-\begin{hwp}\textbf{P4:} 12-bit $\Rightarrow$ unsigned $[0,4095]$, signed $[-2048,2047]$.\end{hwp}
+\begin{hwp}\textbf{P4:} 12-bit $\Rightarrow$ unsigned $[0,2^{12}{-}1]=[0,4095]$, signed $[-2^{11},2^{11}{-}1]=[-2048,2047]$.\end{hwp}
+\begin{hwp}\textbf{P5:} on 32-bit Cortex-M, \cee{1U} is \cee{uint32\_t} (32 bits, U=unsigned long); \cee{1L} is \cee{int32\_t} (32 bits, L=signed long).\end{hwp}
 
 \subsection{Little-Endian Memory Layout (P3)}
 LE rule: \textbf{LSB at lowest address}. Multi-byte read at addr $a$: assemble high$\to$low from descending addresses.

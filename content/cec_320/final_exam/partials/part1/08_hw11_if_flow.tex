@@ -175,25 +175,25 @@ end:
     bx      lr
 \end{lstlisting}
 
-\textbf{Part 2 -- CEX (1st test plain \asm{BGT}, 2nd test \asm{ITTEE ge}):}
+\textbf{Part 2 -- CEX official (\asm{ITTT le} then \asm{ITTEE ge}, max-CEX):}
 \begin{lstlisting}
 load_based_on_x_cex:
     cmp     r0, #20
-    bgt     check25         @ x>20 -> 2nd test (plain B)
-    @ x<=20: compound TRUE -> then arm inline
-    ldrh    r0, [r1, #2]!
-    lsl     r0, r0, #2
-    bx      lr
-check25:
+    ittt    le              @ T,T,T cond=le (x<=20 true)
+    ldrhle  r0, [r1, #2]!   @ T1: then load (zero-ext)
+    lslle   r0, r0, #2      @ T2: *4
+    ble     end             @ T3: last-slot cond B (legal)
+    @ fall-through: x>20 -> 2nd OR test
     cmp     r0, #25
     ittee   ge              @ T=ge,T=ge,E=lt,E=lt
     ldrhge  r0, [r1, #2]!   @ T: then load
     lslge   r0, r0, #2      @ T: *4
     ldrlt   r0, [r2, #4]!   @ E: else load
     lsrlt   r0, r0, #2      @ E: /4
+end:
     bx      lr
 \end{lstlisting}
-\textbf{Why split:} 1st sub-test of OR can't sit inside an IT block -- it would need a cond B in a non-last slot. Only the FINAL test packs into \asm{ITTEE}. Both arms run 2 instrs $\Rightarrow$ \asm{ITTEE} (T,T,E,E) is exact fit.
+\textbf{Why \asm{ITTT le}:} 1st OR test packs into IT, ending with cond \asm{B end} in slot 3 (legal only as LAST slot). 2nd test fans into \asm{ITTEE}. \emph{Repetition:} then-arm appears twice (once per IT block) -- official solution notes this is undesirable but inherent to packing both OR branches into CEX.
 
 \textbf{Trace:}
 \begin{tabular}{@{}c l l@{}}
