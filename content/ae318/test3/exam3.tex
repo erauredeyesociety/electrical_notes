@@ -1,0 +1,200 @@
+% =============================================================================
+% AE318 -- TEST 3 -- Restated Problems + Diagram Interpretations
+% Student: Diana Streber
+%   a = # letters in first name "Diana" = 5
+%   b = # letters in last name  "Streber" = 7
+%   c = (a + b)/10 = 1.2 in
+% Source PDF: AE318_Test3_Word.pdf
+% Companion documents: references.tex (theory + work), solutions.tex (clean answers)
+% =============================================================================
+
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1.0in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!50!black, urlcolor=blue!50!black}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\title{\textbf{AE 318 -- Test 3 (Restated)}\\\large Problem statements + diagram interpretations}
+\author{Diana Streber\\\small $a = 5,\ b = 7,\ c = (a+b)/10 = 1.2$ in}
+\date{}
+
+\newtcolorbox{verifybox}{
+  colback=yellow!10, colframe=orange!70!black,
+  title=\textbf{Verify diagram interpretation}, fonttitle=\bfseries,
+  boxrule=0.5pt, arc=2pt
+}
+\newtcolorbox{problembox}{
+  colback=blue!4, colframe=blue!50!black,
+  boxrule=0.5pt, arc=2pt, breakable
+}
+
+\begin{document}
+\maketitle
+\hrule
+\vspace{6pt}
+
+This document restates each Test 3 problem in the student's own words and gives a paragraph-style interpretation of every figure on the exam. The yellow ``Verify'' boxes call out spots where the original PDF figure could be read more than one way -- please confirm those before relying on the companion solutions.
+
+% =============================================================================
+\section*{Problem 1 -- Open-ended thin-walled cantilever design}
+% =============================================================================
+
+\begin{problembox}
+The year is 2029 and you are now a contractor at Lockheed Martin specializing in structural design and analysis. Your boss has asked you to get creative and think of a unique \textbf{thin-walled (non-idealized) cantilevered beam} scenario that involves bending stress and shear flow analysis. You are to:
+\begin{itemize}[leftmargin=2em, itemsep=2pt]
+  \item Choose the \textbf{length} of your beam.
+  \item Choose a \textbf{transverse load} (with nonzero $V_y$ \emph{and} $V_z$ components) and the location along the beam where it acts.
+  \item Choose your own \textbf{cross-section}, which must be different from any of the shapes covered in class.
+  \item Choose the material limits of the beam $(F_u,\ F_y,\ F_{su},\ F_{sy})$, in psi.
+\end{itemize}
+For the chosen values, solve:
+\begin{enumerate}[label=(\alph*), leftmargin=2em, itemsep=2pt]
+  \item the maximum bending stress and the location $(x, y, z)$ where it occurs;
+  \item the maximum shear flow and the location $(x, y, z)$ where it occurs;
+  \item demonstrate whether the beam is predicted to fail given its material limits.
+\end{enumerate}
+\end{problembox}
+
+\subsection*{What ``unique cross-section'' means here}
+
+Cross-sections covered explicitly in the AE318 lecture sequence and Chapter 5 are: I-beam (Mar 6 lecture), Z-beam stiffener (Mar 2, Mar 25, Apr 6 lectures \& Examples 5.1.1, 4.5.1), C-shape / four-stringer rectangle (Example 5.2.1, Apr 3--6 lectures), J-beam stiffener (Example 5.1.2), and the racetrack / two-semicircle closed section (Example 5.3.1, Apr 10 lecture). Anything outside that list is fair game.
+
+\paragraph{Chosen cross-section for this exam (used by the companion solution).} A right-triangle thin-walled open section: two perpendicular straight webs along $+y$ and $+z$, plus a hypotenuse closing the triangle. Three webs total, all of constant thickness $t$. None of the in-class examples used a triangular cross-section; this satisfies the ``unique'' constraint.
+
+\paragraph{Chosen length, load, and material (used by the companion solution).}
+\begin{itemize}[leftmargin=2em, itemsep=1pt]
+  \item Beam length $L = 50$~in (cantilevered, fixed at $x = 0$, free at $x = L$).
+  \item Transverse load applied at the free end ($x = L$), magnitudes $V_y = -500$ lb and $V_z = +200$ lb. Load applied at the cross-section's shear center so no torsion develops.
+  \item Cross-section dimensions: vertical leg $h = 4$ in, horizontal leg $w = 3$ in, hypotenuse $\sqrt{h^2+w^2} = 5$ in. Uniform wall thickness $t = 0.05$ in.
+  \item Material: 2024-T3 aluminum alloy (typical aerospace skin/spar material) with limits $F_u = 64{,}000$ psi, $F_y = 47{,}000$ psi, $F_{su} = 39{,}000$ psi, $F_{sy} = 28{,}000$ psi.
+\end{itemize}
+
+\begin{verifybox}
+The choices above are not dictated by the exam -- they are the specific values used in \texttt{solutions.tex}. If the student would prefer a different ``unique'' cross-section (e.g.\ an equilateral triangle, a half-pipe / D-section, an open trapezoid, a regular pentagon, or a curved circular-arc strip), the same workflow in \texttt{references.tex} applies; only the section properties change.
+\end{verifybox}
+
+% =============================================================================
+\section*{Problem 2 -- Pure moment on an L-shaped section, NA aligned with $\vec M$}
+% =============================================================================
+
+\begin{problembox}
+Consider the cantilevered beam shown, with cross-section dimensions
+$$a = 5\ \text{in},\qquad b = 7\ \text{in},\qquad c = (a+b)/10 = 1.2\ \text{in}.$$
+A pure moment (concentrated couple) is applied at the free end of the beam in any direction (i.e.\ along any axis) the analyst chooses. Apply the moment such that the \textbf{neutral axis aligns with the direction of the moment vector}; that is, the axis about which the moment is applied must also be the neutral axis. Is this possible for the given cross-section? If so, draw the cross-section with the direction of the moment vector clearly indicated (slope, angle, etc.). If not, explain why not.
+\end{problembox}
+
+\subsection*{Diagram interpretation -- side view of the L-section}
+
+The exam shows two figures: a span view of the cantilever (a horizontal beam fixed at its left wall, free at the right) and a side / cross-section view labelled ``C.S.''.
+
+The cross-section is an L-shape with two short return flanges. Reading the dimensions on the figure clockwise from the upper-left corner:
+\begin{itemize}[leftmargin=2em, itemsep=2pt]
+  \item A horizontal segment of length $c = 1.2$ in runs along the very top, sitting at the upper-left of the section.
+  \item Immediately below this top stub, a vertical segment of length $b = 7$ in runs straight down (this is the ``tall left leg'' of the L).
+  \item At the bottom of the left leg, a horizontal segment of length $a = 5$ in runs to the right (the ``long bottom leg'' of the L).
+  \item At the right end of the bottom leg, a short vertical segment of length $c = 1.2$ in runs upward.
+\end{itemize}
+
+The four-segment outline therefore traces an open L with two short return flanges -- a long vertical of height $b$, a long horizontal of length $a$, plus a $c$-long stub at the top of the vertical and a $c$-long stub at the right end of the horizontal. The interior corner of the L sits at the lower-left.
+
+\begin{verifybox}
+The exam figure does not give a wall thickness $t$. Because the principal-axis angle for a thin-walled section depends on geometry alone (thickness cancels in $\tan 2\theta_p$ when $t$ is uniform), the answer to this problem does not need a numerical $t$ -- it can be solved purely from $a$, $b$, $c$. The companion solution does it that way. If the student has a thickness in their notes, the centroid and inertia magnitudes can be re-stated in numerical units, but the principal-axis directions will not change.
+\end{verifybox}
+
+\subsection*{What the question is really asking}
+
+When a pure moment is applied with components $(M_y, M_z)$ in the cross-section plane, the General Flexure Formula gives the slope of the resulting neutral axis as
+$$\Bigl(\tfrac{y}{z}\Bigr)_{NA} \;=\; \frac{I_{yz} M_z + I_z M_y}{I_y M_z + I_{yz} M_y}.$$
+The moment vector itself, drawn in the cross-section plane, has slope $M_y / M_z$. Setting these equal forces the moment vector to coincide with the neutral axis it produces. The result is a single quadratic in the ratio $r = M_y/M_z$:
+$$I_{yz}\, r^2 \;-\; (I_z - I_y)\, r \;-\; I_{yz} \;=\; 0.$$
+This always has two real roots whenever $I_{yz} \neq 0$, and those two roots are exactly the two principal-axis directions of the cross-section. So for any non-symmetric thin-walled section there are exactly two such moment directions, $90^\circ$ apart, and the answer is \textbf{yes} -- the directions are the principal axes, found from
+$$\tan(2\theta_p) \;=\; \frac{2\,I_{yz}}{I_z - I_y}.$$
+
+% =============================================================================
+\section*{Problem 3 -- Modified Textbook Problem 5.5 (six-stringer beam, two semicircles)}
+% =============================================================================
+
+\begin{problembox}
+Work problem 5.5 in the textbook with the following changes:
+\begin{itemize}[leftmargin=2em, itemsep=2pt]
+  \item The applied load is a positive vertical $V_y$ force at the right end of the beam of magnitude $10\,a$.
+  \item The radius of semicircle CD is $a$.
+  \item The radius of semicircle DE is $b$.
+\end{itemize}
+With $a = 5$ and $b = 7$ this gives $V_y = +50$ lb, $r_{CD} = 5$ in, and $r_{DE} = 7$ in.
+
+The textbook problem 5.5 itself reads: ``The beam below consists of webbing material and six stringers. The stringers have already been idealized; i.e., their areas are effective areas. The 10 lb/in line load is applied along the entire 140'' span.''
+\begin{enumerate}[label=(\alph*), leftmargin=2em, itemsep=2pt]
+  \item Give the sign and magnitude of $V_y$, $V_z$, $M_y$, and $M_z$ at the wall that you would use in either the General Flexure Formula or the General Shear Flow Formula.
+  \item Find the value of $\sigma_{\text{Largest}}$ at the wall and indicate in which stringer it occurs.
+  \item Find the location of the shear center, measured from Point E, at the wall, and show your answer on a diagram.
+  \item Find the shear flows at the wall, and show your answer on a diagram.
+\end{enumerate}
+\end{problembox}
+
+\subsection*{Diagram interpretation -- span view and cross-section side view}
+
+The exam shows two figures: a span view of the cantilever and a cross-section side view.
+
+\paragraph{Span view (left half of figure).}
+A cantilevered beam of total length \textbf{140 in}, fixed at its \emph{left} end and free at its \emph{right} end. With the exam's load modification the original distributed load is replaced by a single concentrated tip force; that tip force is in the $+y$ direction (vertical, upward in the cross-section frame), with magnitude $V_y = 10a = 50$ lb. The original textbook figure labels a $60^\circ$ inclined arrow representing the original 10 lb/in distributed line load -- with the exam's modification this arrow is replaced by the $+50$ lb tip load, so the $60^\circ$ angle and the 10 lb/in label do not enter the modified problem.
+
+\paragraph{Cross-section / side view (right half of figure).}
+The cross-section has \textbf{six stringers} labeled A, B, C, D, E, F, each with effective area \textbf{1.3 in$^2$}, connected by webbing. Reading the figure as drawn, with the side view's coordinate frame having $y$ vertical and $z$ horizontal:
+\begin{itemize}[leftmargin=2em, itemsep=2pt]
+  \item \textbf{Top semicircle CD} (radius $a = 5$ in): runs across the top of the cross-section. C is the upper-right stringer; D is the upper-left stringer; the curved web between them traces a semicircle of radius $a$ that bulges upward (the ``cap'' on top).
+  \item \textbf{Side / lower semicircle DE} (radius $b = 7$ in): connects D (upper-left) to E (lower-left). The curved web bulges to the left and traces a semicircle of radius $b$.
+  \item \textbf{Mid-level stringers A and B}: A is the middle-left stringer, just inside the DE arc; B is the middle-right stringer. They are connected to each other by a horizontal web (the ``midspan tie''), and B is connected to C by a short vertical web on the right.
+  \item \textbf{Stringer F at bottom-right}: located 2 in below B (so F shares B's $z$-coordinate but lies $2$ in lower in $y$). E is the lower-left stringer (already at the bottom of the DE arc).
+  \item The bottom of the section is closed by webbing connecting E to F (and possibly through B / A, depending on exact wiring shown in the figure).
+\end{itemize}
+
+\begin{verifybox}
+The original textbook figure for Problem 5.5 contains additional small dimensions that are not fully legible in the exam PDF (specifically the horizontal offsets between A--B, between D--C, and between B--F at the bottom, plus the exact horizontal placement of E relative to the DE semicircle). The companion solution adopts the following interpretation, which is consistent with every visible label on the exam figure:
+
+\begin{itemize}[leftmargin=2em, itemsep=2pt]
+  \item Place the centerline of the DE semicircle vertically; D and E are then $2b = 14$ in apart in $y$, both at the same $z$ (the leftmost point of the cross-section).
+  \item Place the centerline of the CD semicircle horizontally; C and D are $2a = 10$ in apart in $z$, both at the same $y$ (the topmost point of the cross-section).
+  \item Stringer A sits halfway between D and E in $y$, on the vertical chord of the DE semicircle (so A and the midpoint of DE are coincident in $z$).
+  \item Stringer B sits at the same $y$ as A, at a horizontal distance set by the right-side web of the section (the figure shows B level with A, on the right).
+  \item Stringer F sits 2 in below B at the same $z$ as B.
+\end{itemize}
+
+If the student's notes contain different positions for A, B, or F, only the centroid and inertia computations change -- the workflow shown in \texttt{references.tex} carries through unchanged. Please correct any of these placements before relying on \texttt{solutions.tex} for part (b)--(d).
+\end{verifybox}
+
+\paragraph{Modifications applied in this exam.}
+\begin{itemize}[leftmargin=2em, itemsep=1pt]
+  \item Replace the original 10 lb/in distributed line load (and the 60$^\circ$ inclined arrow representing it) with a single concentrated tip load of $+50$ lb in $+y$ at the free (right) end of the 140 in cantilever.
+  \item Use $r_{CD} = a = 5$ in instead of the original $r = 4$ in.
+  \item Use $r_{DE} = b = 7$ in instead of the original $r = 5$ in.
+  \item All other figure labels (six stringers each $1.3$ in$^2$, the 2 in vertical offset of F below B, and the cantilever's 140 in length) remain unchanged from the original textbook problem.
+\end{itemize}
+
+\paragraph{What each part asks for.}
+\begin{enumerate}[label=(\alph*), leftmargin=2em, itemsep=1pt]
+  \item Sign and magnitude of $V_y$, $V_z$, $M_y$, $M_z$ at the wall: these are the four scalar inputs to the General Flexure Formula and the General Shear Flow Formula. They must be obtained from a free-body diagram between the wall and the free end with the exam's modified $+50$ lb tip load applied.
+  \item Largest normal stress $\sigma_{\text{Largest}}$ at the wall: requires a centroid + $I_y, I_z, I_{yz}$ computation followed by application of the General Flexure Formula at every stringer; the largest in absolute value is the answer, together with which stringer it occurs at.
+  \item Shear-center location measured from Point E: requires running the General Shear Flow Formula symbolically (with $V_y$, $V_z$ left as variables), turning the resulting $q$ field into an equivalent force-and-moment system, and matching to a force at an unknown $(e_y, e_z)$ measured from E.
+  \item Shear flows in every web at the wall: same General Shear Flow Formula, but evaluated with the actual $V_y = -50$ lb / $V_z = 0$ at the wall, plus the closed-section moment-equivalence equation $\sum M_O = 2A q + \sum F_i L_i d_i$ to close the indeterminate cell.
+\end{enumerate}
+
+% =============================================================================
+\section*{Cross-document map}
+% =============================================================================
+
+This is one of three companion documents:
+\begin{itemize}[leftmargin=2em, itemsep=1pt]
+  \item \texttt{exam3.tex} (this document) -- restated problems + diagram interpretations.
+  \item \texttt{references.tex} -- every theory citation, every section-property derivation, all step-by-step work, and the lecture / chapter sources used.
+  \item \texttt{solutions.tex} -- the clean, polished final answers, with every required equation and diagram-callout but without the lecture-by-lecture cross-references.
+\end{itemize}
+
+\end{document}
