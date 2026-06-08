@@ -13,7 +13,7 @@
 %                                          | output (StatCrunch) | prompt | given
 %     <label>  optional sub-id             option letter (a,b,c,d) or part (a,b,c)
 %   Examples:  q1_dotplot_a.png   q1_dotplot_d.png
-%              q2_boxplot.png     q3_output_partb.png
+%              q2_dotplot_c.png
 %  ---------------------------------------------------------------------------
 %==============================================================================
 \documentclass[11pt]{article}
@@ -21,6 +21,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{enumitem}
@@ -66,7 +67,7 @@ temperature. A study was carried out in which $12$ specimens of the rubber were
 prepared using each of two curing temperatures, \SI{20}{\celsius} and
 \SI{45}{\celsius}. The resulting tensile-strength measurements (MPa) are:
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{l *{12}{c}}
@@ -90,8 +91,7 @@ Four candidate comparative dotplots (a–d) are shown below, in which
 \textcolor{red}{$\times$} = High temperature (\SI{45}{\celsius}).
 \textbf{Which dotplot correctly displays the data?}
 
-%--- the four option figures -------------------------------------------------
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \begin{minipage}{0.48\textwidth}\centering
   \includegraphics[width=\linewidth]{q1_dotplot_a.png}
@@ -114,11 +114,7 @@ Four candidate comparative dotplots (a–d) are shown below, in which
 \caption{The four candidate comparative dotplots.}
 \end{figure}
 
-\paragraph{Solution.}
-
 \paragraph{Step 1: Sort each group.}
-Ordering each row from smallest to largest makes the endpoints and clusters easy
-to check against the plots:
 \[
 \begin{aligned}
 \textbf{Low }(\SI{20}{\celsius}):\;
@@ -128,22 +124,18 @@ to check against the plots:
 \end{aligned}
 \]
 
-\paragraph{Step 2: Identify ``fingerprint'' points that a correct plot must match.}
-Rather than checking all $24$ marks, use the two extremes of the combined data
-set --- they uniquely identify the correct plot:
+\paragraph{Step 2: Use the two extremes as ``fingerprints.''}
 \begin{itemize}[leftmargin=1.4em]
   \item \textbf{Overall minimum $=1.96$} belongs to the \emph{High} group, so the
         single left-most mark must be a \textcolor{red}{red $\times$}.
   \item \textbf{Overall maximum $=2.49$ (twice)} also belongs to the \emph{High}
-        group, so the two right-most marks (stacked near $2.49$) must be
-        \textcolor{red}{red $\times$}'s.
-  \item The \emph{Low} group is tightly clustered: it never goes below $2.02$ or
-        above $2.29$, so \textbf{no \textcolor{blue}{blue $\circ$} may appear at
-        either extreme.}
+        group, so the two right-most marks must be \textcolor{red}{red $\times$}'s.
+  \item The \emph{Low} group never goes below $2.02$ or above $2.29$, so
+        \textbf{no \textcolor{blue}{blue $\circ$} may appear at either extreme.}
 \end{itemize}
 
 \paragraph{Step 3: Test each option against the fingerprints.}
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{c l l c}
@@ -159,9 +151,9 @@ Plot & Left-most mark ($\approx1.96$) & Right-most marks ($\approx2.49$) & Verdi
 \caption{Only plot (d) places both extremes in the High-temperature group.}
 \end{table}
 
+\noindent
 Only \textbf{plot (d)} puts the smallest value \emph{and} the two largest values
-in the High group, with the Low group confined to the $2.02$–$2.29$ band. It is
-the only plot consistent with the data.
+in the High group, with the Low group confined to the $2.02$–$2.29$ band.
 
 \begin{answerbox}
 \textbf{Answer (a): Dot plot (d)} is the correct comparative dotplot.
@@ -169,93 +161,64 @@ the only plot consistent with the data.
 
 \subsection*{Part (b) — Sample mean tensile strength for each group}
 
-\paragraph{Setup.} The sample mean is
+\paragraph{Low temperature (\SI{20}{\celsius}).} Sum $=25.56$, so
 \[
-\bar{x}=\frac{1}{n}\sum_{i=1}^{n} x_i,\qquad n=12 \text{ for each group.}
+\bar{x}_{\text{low}}=\frac{25.56}{12}=2.130 .
 \]
 
-\paragraph{Low temperature (\SI{20}{\celsius}).}
+\paragraph{High temperature (\SI{45}{\celsius}).} Sum $=26.80$, so
 \[
-\sum x_i = 2.07+2.19+2.29+2.04+2.24+2.04+2.09+2.18+2.02+2.19+2.16+2.05 = 25.56,
-\]
-\[
-\bar{x}_{\text{low}}=\frac{25.56}{12}=2.130\ \text{MPa}.
-\]
-
-\paragraph{High temperature (\SI{45}{\celsius}).}
-\[
-\sum x_i = 2.42+2.16+2.44+2.04+2.37+2.09+1.96+2.49+2.08+2.49+2.25+2.01 = 26.80,
-\]
-\[
-\bar{x}_{\text{high}}=\frac{26.80}{12}=2.2333\ldots \approx 2.233\ \text{MPa}.
+\bar{x}_{\text{high}}=\frac{26.80}{12}=2.2333\ldots\approx 2.233 .
 \]
 
 \begin{answerbox}
 \textbf{Answer (b):}\quad
-$\bar{x}_{\text{low}} = 2.130$ megapascals \qquad
-$\bar{x}_{\text{high}} = 2.233$ megapascals \quad(rounded to three decimals).
+$\bar{x}_{\text{low}} = 2.130$ MPa \qquad
+$\bar{x}_{\text{high}} = 2.233$ MPa \quad(rounded to three decimals).
 \end{answerbox}
 
 \subsection*{Part (c) — Does curing temperature affect tensile strength?}
 
-\noindent Based on the plot, choose the best statement and comment further:
+\noindent
 \begin{enumerate}[label=\textbf{\Alph*.},leftmargin=2.2em,itemsep=2pt]
-  \item Yes. The observations for the high-temperature group are generally
-        \emph{lower} than the low-temperature group.
-  \item Yes. The observations for the high-temperature group are generally
-        \emph{higher} than the low-temperature group.
-  \item No. The observations for the high-temperature group are similar to the
-        low-temperature group.
-  \item No. The plot cannot be used to distinguish between the two groups.
+  \item Yes. The high-temperature observations are generally \emph{lower}.
+  \item Yes. The high-temperature observations are generally \emph{higher}.
+  \item No. The two groups are similar.
+  \item No. The plot cannot distinguish the two groups.
 \end{enumerate}
 
 \noindent
-The high-temperature ($\SI{45}{\celsius}$) marks sit farther to the right than the
-low-temperature ($\SI{20}{\celsius}$) marks: the high group has the larger center
-($\bar{x}=2.233$ vs.\ $2.130$, median $2.205$ vs.\ $2.125$) and contains all of the
-largest values ($2.37$–$2.49$). So curing temperature \emph{does} appear to affect
-tensile strength, with higher temperature giving generally higher strength.
+The high-temperature group has the larger center ($\bar{x}=2.233$ vs.\ $2.130$,
+median $2.205$ vs.\ $2.125$) and holds all the largest values ($2.37$–$2.49$).
 
 \begin{answerbox}
 \textbf{Answer (c): B} --- Yes; the high-temperature observations are generally
-higher than the low-temperature observations, so curing temperature appears to
-increase tensile strength.
+higher, so curing temperature appears to increase tensile strength.
 \end{answerbox}
 
 \subsection*{Part (d) — Is anything else influenced by curing temperature?}
 
-\noindent Choose the best statement and explain:
+\noindent
 \begin{enumerate}[label=\textbf{\Alph*.},leftmargin=2.2em,itemsep=2pt]
-  \item Yes. The high-temperature group also contains the lowest observations, so
-        an increase in temperature leads to a \emph{decrease} in variability.
-  \item Yes. The high-temperature group also contains the lowest observations, so
-        an increase in temperature leads to an \emph{increase} in variability.
-  \item No. The high-temperature group appears to have similar variability to the
-        low-temperature group.
-  \item No. The plot cannot be used to distinguish between the two groups.
+  \item Yes. Higher temperature leads to a \emph{decrease} in variability.
+  \item Yes. Higher temperature leads to an \emph{increase} in variability.
+  \item No. The variability is similar in both groups.
+  \item No. The plot cannot distinguish the two groups.
 \end{enumerate}
 
 \noindent
-Besides shifting the center up, the high-temperature ($\SI{45}{\celsius}$) group is
-much more \emph{spread out}. It contains \emph{both} the smallest value in the whole
-study ($1.96$) and the two largest ($2.49$), so its range is nearly double that of
-the low-temperature group:
+The high-temperature group contains \emph{both} the smallest value ($1.96$) and
+the two largest ($2.49$), so its range is nearly double:
 \[
-R_{\text{high}} = 2.49 - 1.96 = 0.53
-\quad>\quad
-R_{\text{low}} = 2.29 - 2.02 = 0.27 .
+R_{\text{high}}=2.49-1.96=0.53 \;>\; R_{\text{low}}=2.29-2.02=0.27 .
 \]
-So a higher curing temperature appears to increase the \emph{variability}
-(spread/consistency) of the tensile strength, not just its average.
 
 \begin{answerbox}
-\textbf{Answer (d): B} --- Yes; the high-temperature group also contains the lowest
-observations, so an increase in curing temperature leads to an increase in
-variability.
+\textbf{Answer (d): B} --- Yes; the high-temperature group is more spread out, so
+an increase in curing temperature increases the variability.
 \end{answerbox}
 
-\subsection*{Interpretation (what the plot and means tell us)}
-The summary measures confirm what the dotplot shows:
+\subsection*{Summary}
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{l c c c c}
@@ -268,24 +231,187 @@ High (\SI{45}{\celsius}) & $2.233$ & $2.205$ & $0.53$ & much wider \\
 \end{tabular}
 \end{center}
 
+%==============================================================================
+\section{Flexibility of Springs --- Two Suppliers}
+%==============================================================================
+
+\subsection*{Problem}
+Steel rods from two companies were compared; ten sample springs were made from
+each company's rods and a flexibility measure recorded for each. Complete parts
+(a) and (b).
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l *{10}{c}}
+\toprule
+\textbf{Company A} & 8.8 & 8.4 & 6.7 & 8.2 & 8.1 & 7.3 & 7.8 & 6.6 & 9.1 & 6.5 \\
+\textbf{Company B} & 10.5 & 10.2 & 10.1 & 10.3 & 10.4 & 9.6 & 10.5 & 11.1 & 10.3 & 9.9 \\
+\bottomrule
+\end{tabular}
+\caption{Flexibility of springs ($n=10$ per company).}
+\end{table}
+
+\subsection*{Part (a) — Sample mean and median for each company}
+
+\paragraph{Sorted data.}
+\[
+\begin{aligned}
+\text{A}:\;& 6.5,\,6.6,\,6.7,\,7.3,\,\underline{7.8},\,\underline{8.1},\,8.2,\,8.4,\,8.8,\,9.1\\
+\text{B}:\;& 9.6,\,9.9,\,10.1,\,10.2,\,\underline{10.3},\,\underline{10.3},\,10.4,\,10.5,\,10.5,\,11.1
+\end{aligned}
+\]
+
+\paragraph{Means.}
+\[
+\bar{x}_A=\frac{77.5}{10}=7.75,\qquad \bar{x}_B=\frac{102.9}{10}=10.29 .
+\]
+
+\paragraph{Medians} (average of the 5th and 6th ordered values).
+\[
+\tilde{x}_A=\frac{7.8+8.1}{2}=7.95,\qquad \tilde{x}_B=\frac{10.3+10.3}{2}=10.30 .
+\]
+
+\begin{answerbox}
+\textbf{Answer (a):}\quad
+Company A: mean $=7.75$, median $=7.95$.\\
+\hphantom{\textbf{Answer (a):}\quad}
+Company B: mean $=10.29$, median $=10.30$.
+\end{answerbox}
+
+\subsection*{Part (b) — Plot the data and describe any differences}
+
 \noindent
-Raising the curing temperature from \SI{20}{}{} to \SI{45}{\celsius} shifts the
-typical tensile strength \emph{up} (mean $2.130 \to 2.233$, median
-$2.125 \to 2.205$) but also makes the results \emph{more variable} (range roughly
-doubles, $0.27 \to 0.53$). So the higher curing temperature tends to produce
-stronger --- but less consistent --- rubber, supporting the idea that tensile
-strength is a function of curing temperature.
+\textbf{(b.1) Which dotplot correctly displays the data?}\\
+Four candidate dotplots are shown below, with
+\textcolor{blue}{$\circ$} = Company A and \textcolor{red}{$\times$} = Company B.
 
-\subsection*{Reference}
-Reading a \emph{comparative dotplot} and describing a distribution by its
-\textbf{center} and \textbf{spread} are the Chapter~1 descriptive-statistics
-ideas. The Chapter~1 lecture transcript develops the supporting numerical
-measures used in the interpretation above: measures of center (mean, median,
-mode) and measures of spread (range, variance, standard deviation).
-\hfill{\small[\textit{Chapter1\_transcripts.txt}]}
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+  \includegraphics[width=\linewidth]{q2_dotplot_a.png}
+  \caption*{\textbf{(a)}}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+  \includegraphics[width=\linewidth]{q2_dotplot_b.png}
+  \caption*{\textbf{(b)}}
+\end{minipage}
+
+\vspace{0.6em}
+\begin{minipage}{0.48\textwidth}\centering
+  \includegraphics[width=\linewidth]{q2_dotplot_c.png}
+  \caption*{\textbf{(c)}}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+  \includegraphics[width=\linewidth]{q2_dotplot_d.png}
+  \caption*{\textbf{(d)}}
+\end{minipage}
+\caption{The four candidate dotplots of spring flexibility.}
+\end{figure}
+
+\paragraph{Key features.}
+Company A ranges $6.5$–$9.1$; Company B ranges $9.6$–$11.1$. The correct plot must
+show (i) blue $\circ$ on the left and red $\times$ on the right with almost no
+overlap, and (ii) Company B's maximum $11.1$ as an \emph{isolated} red $\times$ to
+the right of its $10.1$–$10.5$ cluster (which has double stacks at $10.3$, $10.5$).
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{c p{0.62\textwidth} c}
+\toprule
+Plot & \multicolumn{1}{c}{What it shows} & Verdict \\
+\midrule
+(a) & reds stop at $\approx10.5$ (no isolated $11.1$); wrong triple-stack & \ding{55} \\
+(b) & blue and red intermixed across the whole axis & \ding{55} \\
+(c) & blue left, red right; isolated red at $11.1$; stacks at $10.3,10.5$ & \checkmark \\
+(d) & colors swapped (red on the left, blue on the right) & \ding{55} \\
+\bottomrule
+\end{tabular}
+\caption{Only plot (c) reproduces the separation and Company B's isolated maximum.}
+\end{table}
+
+\noindent
+Only \textbf{plot (c)} matches both features.
+
+\begin{answerbox}
+\textbf{Answer (b.1): Dot plot (c)} is correct. Company A's values (6.5 to 9.1)
+sit to the left and Company B's (9.6 to 11.1) to the right, with B's largest
+value, 11.1, isolated from its 10.1--10.5 cluster.
+\end{answerbox}
+
+\medskip
+\noindent
+\textbf{(b.2) Give your impression of any apparent differences. Choose the
+correct answer below.}
+\begin{enumerate}[label=\textbf{\Alph*.},leftmargin=2.2em,itemsep=3pt]
+  \item The rods from Company B have a lower measure of flexibility than the rods
+        from Company A, since the data points for Company A are farther to the
+        right on the line.
+  \item The rods from both companies have about the same flexibility, since the
+        data points for the two companies are mixed together.
+  \item The rods from Company B have a higher measure of flexibility than the rods
+        from Company A, since the data points for Company B are farther to the
+        right on the line.
+\end{enumerate}
+
+\noindent
+The dotplot and the means agree: Company B's marks sit entirely to the right of
+Company A's ($\bar{x}_B=10.29 > \bar{x}_A=7.75$), so Company B's rods are more
+flexible.
+
+\begin{answerbox}
+\textbf{Answer (b.2): C} --- Company B has a higher measure of flexibility than
+Company A, since Company B's data points are farther to the right on the line.
+\end{answerbox}
 
 %==============================================================================
-% Add Question 2 here as \section{...} when ready.
+\section{Flexibility of Springs --- Mean and Variance}
 %==============================================================================
+
+\subsection*{Problem}
+Same two-company setup, a \emph{new} sample of ten springs each. Compute the
+\textbf{mean} and \textbf{variance} in flexibility for both companies and decide
+whether flexibility appears to differ.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l *{10}{c}}
+\toprule
+\textbf{Company A} & 9.2 & 8.3 & 6.6 & 8.9 & 8.6 & 6.8 & 8.4 & 6.1 & 8.5 & 7.1 \\
+\textbf{Company B} & 10.7 & 10.5 & 9.8 & 9.9 & 9.7 & 9.6 & 10.7 & 10.8 & 9.9 & 9.6 \\
+\bottomrule
+\end{tabular}
+\caption{Flexibility of springs ($n=10$ per company).}
+\end{table}
+
+\subsection*{Solution}
+
+\paragraph{Means.}
+\[
+\bar{x}_A=\frac{78.5}{10}=7.8500,\qquad \bar{x}_B=\frac{101.2}{10}=10.1200 .
+\]
+
+\paragraph{Variances} (sample variance, $s^2=\tfrac{1}{n-1}\sum (x_i-\bar{x})^2$, $n-1=9$).
+\[
+s_A^2=\frac{10.7050}{9}=1.1894,\qquad s_B^2=\frac{2.1960}{9}=0.2440 .
+\]
+
+\begin{answerbox}
+\textbf{Answer:}\quad
+Company A: mean $=7.8500$, variance $=1.1894$.\\
+\hphantom{\textbf{Answer:}\quad}
+Company B: mean $=10.1200$, variance $=0.2440$.
+\end{answerbox}
+
+\noindent
+\textbf{Does flexibility differ?} \emph{Yes.} Company~B is both more flexible on
+average ($10.1200$ vs.\ $7.8500$) and far more consistent --- its variance
+($0.2440$) is about one-fifth of A's ($1.1894$).
+
+\medskip
+\noindent\footnotesize\emph{Note.} If population variance is wanted ($\div n$):
+$\sigma_A^2 = 10.7050/10 = 1.0705$, $\sigma_B^2 = 2.1960/10 = 0.2196$.
 
 \end{document}
