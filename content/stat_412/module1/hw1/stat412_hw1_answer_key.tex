@@ -399,19 +399,203 @@ s_A^2=\frac{10.7050}{9}=1.1894,\qquad s_B^2=\frac{2.1960}{9}=0.2440 .
 \]
 
 \begin{answerbox}
-\textbf{Answer:}\quad
+\textbf{Answer (mean \& variance):}\quad
 Company A: mean $=7.8500$, variance $=1.1894$.\\
-\hphantom{\textbf{Answer:}\quad}
+\hphantom{\textbf{Answer (mean \& variance):}\quad}
 Company B: mean $=10.1200$, variance $=0.2440$.
 \end{answerbox}
 
+\subsection*{Does flexibility differ? — complete the statement}
+
 \noindent
-\textbf{Does flexibility differ?} \emph{Yes.} Company~B is both more flexible on
-average ($10.1200$ vs.\ $7.8500$) and far more consistent --- its variance
-($0.2440$) is about one-fifth of A's ($1.1894$).
+The problem asks you to fill three dropdowns. Comparing the computed values:
+\[
+\bar{x}_A = 7.8500 \;<\; \bar{x}_B = 10.1200,
+\qquad
+s_A^2 = 1.1894 \;>\; s_B^2 = 0.2440 .
+\]
+
+\begin{answerbox}
+\textbf{Answer:} There \textbf{does appear} to be a difference in flexibility.
+Company A's sample mean is \textbf{smaller than} company B's sample mean, and
+company A's variance is \textbf{greater than} company B's variance.
+\end{answerbox}
+
+\noindent
+\emph{Interpretation.} Company~B's rods are more flexible on average \emph{and}
+more consistent (smaller variance); Company~A's are less flexible and more
+variable --- so the companies clearly differ.
 
 \medskip
 \noindent\footnotesize\emph{Note.} If population variance is wanted ($\div n$):
 $\sigma_A^2 = 10.7050/10 = 1.0705$, $\sigma_B^2 = 2.1960/10 = 0.2196$.
+
+%==============================================================================
+\section{Tensile Strength --- Standard Deviation by Temperature}
+%==============================================================================
+
+\subsection*{Problem}
+A new rubber tensile-strength study, $12$ specimens at each of \SI{20}{\celsius}
+and \SI{45}{\celsius}. Compute the sample standard deviation for each temperature
+and decide whether an increase in temperature influences the \emph{variability}.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l *{12}{c}}
+\toprule
+\textbf{\SI{20}{\celsius} (Low)}
+ & 2.05 & 2.11 & 2.29 & 2.04 & 2.23 & 2.04 & 2.08 & 2.15 & 2.06 & 2.11 & 2.18 & 2.01 \\
+\textbf{\SI{45}{\celsius} (High)}
+ & 2.42 & 2.17 & 2.46 & 2.04 & 2.39 & 2.08 & 1.97 & 2.45 & 2.09 & 2.45 & 2.28 & 2.07 \\
+\bottomrule
+\end{tabular}
+\caption{Tensile strengths (MPa), $n=12$ per temperature.}
+\end{table}
+
+\subsection*{Part (a) — Sample standard deviation for each group}
+
+\noindent
+Using $s=\sqrt{\dfrac{1}{n-1}\sum (x_i-\bar{x})^2}$ with $n=12$
+($\bar{x}_{\text{low}}=2.1125$, $\bar{x}_{\text{high}}=2.2392$):
+\[
+s_{\text{low}}=0.0853,\qquad s_{\text{high}}=0.1878
+\quad\text{(4 d.p.)}.
+\]
+
+\begin{answerbox}
+\textbf{Answer (a):}\quad
+$s_{\text{low}} = 0.0853$ MPa \qquad $s_{\text{high}} = 0.1878$ MPa.
+\end{answerbox}
+
+\noindent
+\textbf{Does temperature influence variability?} \emph{Yes.} The high-temperature
+standard deviation ($0.1878$) is more than double the low-temperature one
+($0.0853$), so an increase in curing temperature appears to \emph{increase} the
+variability in tensile strength.
+
+%-- Q4 parts (b)+ to be added when their prompts are available ----------------
+
+%==============================================================================
+\section{Smoking and Sleep Patterns}
+%==============================================================================
+
+\subsection*{Problem}
+Time (minutes) to fall asleep is recorded for smokers and nonsmokers. Complete
+parts (a)–(d).
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l *{12}{c}}
+\toprule
+\textbf{Smokers} ($n{=}11$)
+ & 69.3 & 56.0 & 22.1 & 47.6 & 53.2 & 48.1 & 34.4 & 60.2 & 43.8 & 23.2 & 13.8 & \\
+\textbf{Nonsmokers} ($n{=}12$)
+ & 28.6 & 25.1 & 26.4 & 34.9 & 29.8 & 38.5 & 30.2 & 30.6 & 31.8 & 41.6 & 21.1 & 37.9 \\
+\bottomrule
+\end{tabular}}
+\caption{Minutes to fall asleep.}
+\end{table}
+
+\subsection*{Part (a) — Sample mean for each group}
+\[
+\bar{x}_{\text{smokers}}=\frac{471.7}{11}=42.88,\qquad
+\bar{x}_{\text{nonsmokers}}=\frac{376.5}{12}=31.38
+\quad\text{(2 d.p.)}.
+\]
+
+\begin{answerbox}
+\textbf{Answer (a):}\quad
+Smokers: $42.88$ min \qquad Nonsmokers: $31.38$ min.
+\end{answerbox}
+
+\subsection*{Part (b) — Sample standard deviation for each group}
+\[
+s_{\text{smokers}}=\sqrt{\frac{\sum (x_i-42.88)^2}{10}}=17.50,\qquad
+s_{\text{nonsmokers}}=\sqrt{\frac{\sum (x_i-31.38)^2}{11}}=5.97
+\quad\text{(2 d.p.)}.
+\]
+
+\begin{answerbox}
+\textbf{Answer (b):}\quad
+Smokers: $s=17.50$ min \qquad Nonsmokers: $s=5.97$ min.
+\end{answerbox}
+
+\noindent
+Smokers not only take longer to fall asleep on average but are far more variable
+($s=17.50$ vs.\ $5.97$ minutes).
+
+%-- Q5 parts (c)-(d) to be added when their prompts are available -------------
+
+%==============================================================================
+\section{Teacher Salaries (Dollars per Pupil)}
+%==============================================================================
+
+\subsection*{Problem}
+Historical staff-salary data (\$/pupil) for $30$ schools. Complete parts (a)–(c).
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{*{10}{c}}
+\toprule
+3.94 & 2.91 & 2.82 & 2.83 & 3.05 & 1.77 & 2.46 & 3.12 & 2.36 & 2.07 \\
+2.73 & 2.57 & 2.76 & 2.70 & 3.66 & 3.82 & 3.33 & 2.04 & 2.89 & 2.85 \\
+3.24 & 2.44 & 2.09 & 3.73 & 3.07 & 3.53 & 2.30 & 2.59 & 3.59 & 3.34 \\
+\bottomrule
+\end{tabular}
+\caption{Staff salaries (\$/pupil), $n=30$.}
+\end{table}
+
+\subsection*{Part (a) — Sample mean and sample standard deviation}
+\[
+\bar{x}=\frac{86.60}{30}=2.8867,\qquad
+s=\sqrt{\frac{\sum (x_i-\bar{x})^2}{29}}=0.5688
+\quad\text{(4 d.p.)}.
+\]
+
+\begin{answerbox}
+\textbf{Answer (a):}\quad
+mean $=2.8867$ \qquad standard deviation $=0.5688$.
+\end{answerbox}
+
+\subsection*{Part (b) — Relative frequency histogram}
+
+\noindent
+Grouping the $30$ salaries into classes of width $0.5$ gives the relative
+frequencies below (computed and plotted in Python):
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l c c c c c}
+\toprule
+Class ($\$/$pupil) & $[1.5,2.0)$ & $[2.0,2.5)$ & $[2.5,3.0)$ & $[3.0,3.5)$ & $[3.5,4.0)$ \\
+\midrule
+Frequency           & 1      & 7      & 10     & 6      & 6 \\
+Relative frequency  & 0.0333 & 0.2333 & 0.3333 & 0.2000 & 0.2000 \\
+\bottomrule
+\end{tabular}
+\caption{Relative-frequency distribution of staff salaries.}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{q6_histogram.png}
+\caption{Relative frequency histogram (the correct choice). It is unimodal with
+its peak in the $[2.5,3.0)$ class, rising from a low $[1.5,2.0)$ bar and tapering
+to a flat right tail.}
+\end{figure}
+
+\begin{answerbox}
+\textbf{Answer (b):} Choose the histogram that is \textbf{unimodal with its tallest
+bar over $[2.5,3.0)$} (relative frequency $\approx0.33$), a short bar at
+$[1.5,2.0)$ ($\approx0.03$), and equal $0.20$ bars over $[3.0,3.5)$ and
+$[3.5,4.0)$ --- matching Figure~5 above.
+\end{answerbox}
+
+%-- Q6 part (c) to be added when its prompt is available ----------------------
 
 \end{document}
