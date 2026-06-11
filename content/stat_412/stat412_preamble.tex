@@ -1,0 +1,34 @@
+% Shared STAT 412 answer-key preamble (preamble ONLY — no \begin{document}).
+% Assemblers inline this into each homework's final .tex and set the title/header.
+% Question agents build-check a fragment by wrapping:
+%   \input{../stat412_preamble.tex}\begin{document}\input{_frag/qNN.tex}\end{document}
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue}
+
+\captionsetup{font=small,labelfont=bf}
+
+% --- answer box used to highlight the final answer of each question ----------
+\newtcolorbox{answerbox}{colback=Green!6,colframe=Green!55!black,
+  boxrule=0.8pt,arc=2pt,left=8pt,right=8pt,top=6pt,bottom=6pt}
+
+% --- running header (assembler overrides \lhead / title per homework) --------
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small STAT 412}
+\rhead{\small Answer Key}
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
