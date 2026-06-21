@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 6}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+The proportion of people who respond to a certain mail-order solicitation is a
+random variable $X$ having the following density function.
+\[
+f(x)=
+\begin{cases}
+\dfrac{2(x+3)}7,&0<x<1,\\
+0,&\text{elsewhere}.
+\end{cases}
+\]
+Find the variance of $X$.
+
+Calculate the variance, $\sigma^2$.
+
+The variance is \fbox{\strut\hspace{1.5em}}.
+\textit{(Type an integer or a simplified fraction.)}
+
+\section*{Work}
+\[
+E(X)=\int_0^1x\frac{2(x+3)}7\,dx
+=\frac27\left[\frac{x^3}{3}+\frac{3x^2}{2}\right]_0^1
+=\frac{11}{21},
+\]
+and
+\[
+E(X^2)=\int_0^1x^2\frac{2(x+3)}7\,dx
+=\frac27\left[\frac{x^4}{4}+x^3\right]_0^1
+=\frac5{14}.
+\]
+Hence
+\[
+\operatorname{Var}(X)
+=E(X^2)-[E(X)]^2
+=\frac5{14}-\left(\frac{11}{21}\right)^2
+=\frac{73}{882}.
+\]
+
+\finalanswer{$\displaystyle \operatorname{Var}(X)=\frac{73}{882}
+\approx0.0828$.}
+\end{document}

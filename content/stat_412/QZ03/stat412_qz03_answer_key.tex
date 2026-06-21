@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+
+\title{STAT 412 --- Quiz 3 Answer Key}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Source-status note.} Every question on the quiz is captured and
+answered from the seven screenshots. All answer fields were blank at capture
+time (this is a quiz to be solved), so these are computed values, each verified
+with Python. Q5 uses the incomplete gamma table; Q7 uses the standard-normal
+table.
+
+\begin{enumerate}[leftmargin=*,label=\textbf{\arabic*.}]
+\item \textbf{Variance and standard deviation of $X$
+[$f(x)=8(\tfrac12-x)$, $0<x<\tfrac12$]:}
+$\operatorname{Var}(X)=\dfrac{1}{72}$ and
+$\sigma_X=\dfrac{\sqrt2}{12}=\dfrac{1}{6\sqrt2}\approx0.1179$.
+
+\item \textbf{Fraction of loaves still sellable in 2 days:}
+$P(Y>2)=e^{-4/7}\approx 0.5647$.
+
+\item \textbf{Average profit per automobile:}
+$2000\cdot\dfrac{27}{19}=\dfrac{54000}{19}\approx \$2842$.
+
+\item \textbf{Probabilities for $f(x)=\tfrac{2(1+x)}{95}$, $6<x<11$:}
+(a) $P(X<10)=\dfrac{72}{95}$;
+(b) $P(7\le X<10)=\dfrac{57}{95}=\dfrac35$.
+
+\item \textbf{Probability fewer than 500 hours pass before the 6th failure}
+(gamma $\alpha=6$, $\beta=100$): $F(5;6)=0.384$.
+
+\item \textbf{Mean time to failure}
+[$f(x)=\tfrac{3}{1000}e^{-3x/1000}$]: $\dfrac{1000}{3}\approx 333.33$ hours.
+
+\item \textbf{Tire guarantee mileage (10th percentile):}
+$35{,}000+(-1.28)(2600)=31{,}672$ miles (about $31{,}668$ with unrounded $z$).
+\end{enumerate}
+
+\end{document}

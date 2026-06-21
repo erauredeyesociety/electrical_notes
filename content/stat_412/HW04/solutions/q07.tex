@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 7}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+$f(x,y)=0.5$ on $0<x\le y<2$ (and $0$ otherwise). Find the correlation
+coefficient $\rho_{XY}$.
+
+\section*{Setup}
+\[
+\rho_{XY}=\frac{\operatorname{Cov}(X,Y)}{\sigma_X\sigma_Y},\quad
+\operatorname{Cov}(X,Y)=E(XY)-E(X)E(Y),\quad
+\sigma^2=E(\cdot^2)-[E(\cdot)]^2 .
+\]
+For each fixed $y\in(0,2)$, $x$ runs over $(0,y)$.
+
+\section*{Work}
+\[
+E(X)=\int_0^2\!\!\int_0^y x(0.5)\,dx\,dy=\tfrac23,\qquad
+E(Y)=\int_0^2\!\!\int_0^y y(0.5)\,dx\,dy=\tfrac43 .
+\]
+\[
+E(X^2)=\tfrac23,\quad E(Y^2)=2\ \Rightarrow\
+\operatorname{Var}(X)=\tfrac23-\tfrac49=\tfrac29,\quad
+\operatorname{Var}(Y)=2-\tfrac{16}{9}=\tfrac29 .
+\]
+\[
+E(XY)=\int_0^2\!\!\int_0^y xy(0.5)\,dx\,dy=1,\qquad
+\operatorname{Cov}(X,Y)=1-\tfrac23\cdot\tfrac43=1-\tfrac89=\tfrac19 .
+\]
+\[
+\rho_{XY}=\frac{1/9}{\sqrt{(2/9)(2/9)}}=\frac{1/9}{2/9}=\frac12 .
+\]
+
+\finalanswer{$\rho_{XY}=\dfrac12$.}
+\end{document}

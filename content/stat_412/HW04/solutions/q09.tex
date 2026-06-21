@@ -1,0 +1,28 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 9}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+$X$ and $Y$ are independent with $\sigma_X^2=6$ and $\sigma_Y^2=9$. Find the
+variance of $Z=-8X+6Y-5$.
+
+\section*{Setup}
+For independent variables, variance of a linear combination uses the
+\emph{squares} of the coefficients, and an additive constant has no effect:
+\[
+\operatorname{Var}(aX+bY+c)=a^2\sigma_X^2+b^2\sigma_Y^2 .
+\]
+
+\section*{Work}
+\[
+\sigma_Z^2=(-8)^2(6)+(6)^2(9)=64(6)+36(9)=384+324=708 .
+\]
+
+\finalanswer{$\sigma_Z^2=708$.}
+\end{document}

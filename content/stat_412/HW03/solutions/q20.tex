@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 20}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+If a set of observations is normally distributed, what percent of these differ
+from the mean by
+
+(a) more than $1.4\sigma$?
+
+(b) less than $0.46\sigma$?
+
+Click here to view page 1 of the standard normal distribution table.
+
+Click here to view page 2 of the standard normal distribution table.
+
+(a) \fbox{\strut\hspace{1.5em}}\%
+
+\textit{(Round to two decimal places as needed.)}
+
+\section*{Work}
+After standardization and using symmetry,
+\[
+P(|Z|>1.4)=2P(Z>1.4)
+=2[1-\Phi(1.4)]
+=2(1-0.9192)=0.1616.
+\]
+Similarly,
+\[
+P(|Z|<0.46)=\Phi(0.46)-\Phi(-0.46)
+=2\Phi(0.46)-1
+=2(0.6772)-1=0.3544.
+\]
+
+\finalanswer{(a) $16.16\%$ \qquad (b) $35.44\%$.}
+\end{document}

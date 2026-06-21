@@ -1,0 +1,32 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 17}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+Given $X$ with standard deviation $\sigma_X$ and $Y=a+bX$, show that
+$\rho_{XY}=-1$ if $b<0$ and $\rho_{XY}=1$ if $b>0$.
+
+\section*{Setup}
+\[
+\rho_{XY}=\frac{\operatorname{Cov}(X,Y)}{\sigma_X\,\sigma_Y}.
+\]
+Use $\operatorname{Cov}(X,a+bX)=b\operatorname{Var}(X)=b\sigma_X^2$ and
+$\sigma_Y=\sqrt{\operatorname{Var}(a+bX)}=\sqrt{b^2\sigma_X^2}=|b|\sigma_X$.
+
+\section*{Work}
+\[
+\rho_{XY}=\frac{b\,\sigma_X^2}{\sigma_X\,(|b|\sigma_X)}
+=\frac{b\,\sigma_X^2}{|b|\,\sigma_X^2}=\frac{b}{|b|}.
+\]
+Hence $\rho_{XY}=\dfrac{b}{|b|}$, which equals $+1$ when $b>0$ and $-1$ when
+$b<0$.
+
+\finalanswer{$\rho_{XY}=\dfrac{b}{|b|}$ $\bigl(=+1$ if $b>0$, $-1$ if
+$b<0\bigr)$.}
+\end{document}

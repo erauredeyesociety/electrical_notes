@@ -1,0 +1,28 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 10}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+$X$ is the result of a 24-sided red die and $Y$ the result of a 24-sided green
+die. Find $E(X+Y)$.
+
+\section*{Setup}
+Each die is uniform on $1,2,\dots,24$, so its mean is the average of the first
+and last faces, $E=\dfrac{1+n}{2}$. Expectation is additive: $E(X+Y)=E(X)+E(Y)$.
+
+\section*{Work}
+\[
+E(X)=E(Y)=\frac{1+24}{2}=12.5 .
+\]
+\textbf{(a)} $E(X+Y)=12.5+12.5=25$.\qquad
+\textbf{(b)} $E(X-Y)=12.5-12.5=0$.
+
+\finalanswer{(a) $E(X+Y)=25$.\quad (b) $E(X-Y)=0$.
+\emph{Part (c) is pending (not visible).}}
+\end{document}

@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\title{STAT 412 Homework 2: Question 5}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\textbf{Problem.} In a certain city district, the need for money to buy drugs
+is stated as the reason for 77\% of all thefts. Find the probability that among
+the next 5 theft cases reported in this district,
+
+(a) exactly 2 resulted from the need for money to buy drugs.
+
+(b) at most 3 resulted from the need to buy drugs.
+
+(a) Find the probability that among the next 5 theft cases reported in this
+district, exactly 2 resulted from the need for money to buy drugs.
+
+\(P(X=2)=\boxed{\phantom{0.000}}\)
+
+(Round to three decimal places as needed.)
+
+\textbf{Solution.} Let \(X\sim\operatorname{Bin}(5,0.77)\).
+\[
+P(X=2)=\binom52(0.77)^2(0.23)^3=0.072138143\approx0.072.
+\]
+\[
+P(X\le3)=\sum_{x=0}^{3}\binom5x(0.77)^x(0.23)^{5-x}
+=0.3250616128\approx0.325.
+\]
+\[
+\boxed{\text{(a) }0.072\qquad\text{(b) }0.325}
+\]
+\end{document}

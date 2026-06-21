@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 5}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+$X=$ daily machine malfunctions ($1,2,3$), $Y=$ technician emergency calls, with
+joint distribution
+\[
+\begin{array}{c|ccc}
+ & x=1 & x=2 & x=3\\\hline
+y=1 & 0.05 & 0.05 & 0.10\\
+y=3 & 0.10 & 0.10 & 0.45\\
+y=5 & 0.00 & 0.10 & 0.05
+\end{array}
+\]
+Determine the covariance $\sigma_{XY}$.
+
+\section*{Setup}
+\[
+\sigma_{XY}=\operatorname{Cov}(X,Y)=E(XY)-E(X)\,E(Y),
+\]
+with $E(X)=\sum x\,g(x)$, $E(Y)=\sum y\,h(y)$, and
+$E(XY)=\sum_{x,y} xy\,f(x,y)$.
+
+\section*{Work}
+Marginals: $g(1)=0.15,\ g(2)=0.25,\ g(3)=0.60$ and
+$h(1)=0.20,\ h(3)=0.65,\ h(5)=0.15$. Hence
+\[
+E(X)=1(0.15)+2(0.25)+3(0.60)=2.45,\qquad
+E(Y)=1(0.20)+3(0.65)+5(0.15)=2.90 .
+\]
+\[
+E(XY)=\sum_{x,y}xy\,f(x,y)=7.15 .
+\]
+Therefore
+\[
+\sigma_{XY}=7.15-(2.45)(2.90)=7.15-7.105=0.045 .
+\]
+
+\finalanswer{$\sigma_{XY}=0.045=\dfrac{9}{200}$.}
+\end{document}

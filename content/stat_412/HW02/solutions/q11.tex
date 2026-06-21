@@ -1,0 +1,38 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\title{STAT 412 Homework 2: Question 11}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\textbf{Problem.} An inventory study determines that, on average, demands for a
+particular item at a warehouse are made 8 times per day.
+
+(a) What is the probability that on a given day this item is requested more
+than 4 times?
+
+(b) What is the probability that on a given day this item is not requested?
+
+Click here to view page 1 of the Poisson probability sums table.
+
+Click here to view page 2 of the Poisson probability sums table.
+
+(a) The probability that on a given day this item is requested more than 4
+times is \(\boxed{\phantom{0.0000}}\).
+
+(Round to four decimal places as needed.)
+
+\textbf{Solution.} Model \(X\) as Poisson with \(\lambda=8\).
+\[
+P(X>4)=1-P(X\le4)
+=1-\sum_{x=0}^{4}e^{-8}\frac{8^x}{x!}
+=0.9003675995\approx0.9004.
+\]
+\[
+P(X=0)=e^{-8}=0.0003354626\approx0.0003.
+\]
+\[
+\boxed{\text{(a) }0.9004\qquad\text{(b) }0.0003}
+\]
+\end{document}

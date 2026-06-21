@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 9}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+A bus arrives every 25 minutes at a bus stop. It is assumed that the waiting
+time for a particular individual is a random variable with a continuous
+uniform distribution.
+
+(a) What is the probability that the individual waits more than 12 minutes?
+
+(b) What is the probability that the individual waits between 4 and 12
+minutes?
+
+(a) The probability is \fbox{\strut\hspace{1.5em}}.
+
+\textit{(Simplify your answer.)}
+
+\section*{Work}
+The waiting time is $X\sim\operatorname{Uniform}(0,25)$. Therefore
+\[
+P(X>12)=\frac{25-12}{25}=\frac{13}{25}=0.52,
+\]
+and
+\[
+P(4<X<12)=\frac{12-4}{25}=\frac8{25}=0.32.
+\]
+
+\finalanswer{(a) $0.52$ \qquad (b) $0.32$.}
+\end{document}

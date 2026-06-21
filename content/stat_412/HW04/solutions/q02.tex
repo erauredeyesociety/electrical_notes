@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 2}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+$X$ and $Y$ have the joint distribution below. Find (a) the marginal
+distribution of $X$ and (b) the marginal distribution of $Y$.
+\[
+\begin{array}{c|cc}
+f(x,y) & x=2 & x=4\\\hline
+y=1 & 0.078 & 0.182\\
+y=3 & 0.147 & 0.343\\
+y=5 & 0.075 & 0.175
+\end{array}
+\]
+
+\section*{Setup}
+A marginal distribution is found by summing the joint probabilities over the
+other variable:
+\[
+g(x)=\sum_y f(x,y),\qquad h(y)=\sum_x f(x,y).
+\]
+
+\section*{Work}
+\textbf{(a) Marginal of $X$} (sum down each column):
+\[
+g(2)=0.078+0.147+0.075=0.30,\qquad
+g(4)=0.182+0.343+0.175=0.70 .
+\]
+\textbf{(b) Marginal of $Y$} (sum across each row):
+\[
+h(1)=0.078+0.182=0.26,\quad
+h(3)=0.147+0.343=0.49,\quad
+h(5)=0.075+0.175=0.25 .
+\]
+
+\finalanswer{(a) $g(2)=0.30,\ g(4)=0.70$ (so the choice listing $x=2,4$).\quad
+(b) $h(1)=0.26,\ h(3)=0.49,\ h(5)=0.25$.}
+\end{document}

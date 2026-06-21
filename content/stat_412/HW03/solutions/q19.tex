@@ -1,0 +1,37 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 19}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+Find the value of $z$ if the area under a standard normal curve (a) to the
+right of $z$ is 0.3121; (b) to the left of $z$ is 0.0853; (c) between 0 and
+$z$, with $z>0$, is 0.4884; and (d) between $-z$ and $z$, with $z>0$, is
+0.9328.
+
+Click here to view page 1 of the standard normal distribution table.
+
+Click here to view page 2 of the standard normal distribution table.
+
+(a) $z={}$\fbox{\strut\hspace{1.5em}}
+
+\textit{(Round to two decimal places as needed.)}
+
+\section*{Work}
+\begin{enumerate}
+\item[(a)] The left-tail area is $1-0.3121=0.6879$, and
+  $\Phi(0.49)=0.6879$, so $z=0.49$.
+\item[(b)] Since $\Phi(-1.37)=0.0853$, $z=-1.37$.
+\item[(c)] Here $\Phi(z)=0.5+0.4884=0.9884$, so $z=2.27$.
+\item[(d)] The total tail area is $1-0.9328=0.0672$, or $0.0336$ in each
+  tail. Thus $\Phi(z)=1-0.0336=0.9664$, so $z=1.83$.
+\end{enumerate}
+
+\finalanswer{(a) $0.49$ \quad (b) $-1.37$ \quad
+(c) $2.27$ \quad (d) $1.83$.}
+\end{document}

@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 3 --- Question 4}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+A continuous random variable $X$ that can assume values between $x=6$ and
+$x=11$ has density $f(x)=\dfrac{2(1+x)}{95}$. Find (a) $P(X<10)$ and
+(b) $P(7\le X<10)$.
+\textit{(Type an integer or a simplified fraction.)}
+
+\section*{Setup}
+For a continuous variable a probability is the \textbf{area under the density},
+i.e.\ a definite integral, $P(a<X<b)=\int_a^b f(x)\,dx$. The support is
+$6<x<11$, so the smallest value $X$ can take is $6$ (use that as the lower limit
+in part (a)). The antiderivative is
+\[
+\int \frac{2(1+x)}{95}\,dx=\frac{2}{95}\left(x+\frac{x^2}{2}\right).
+\]
+
+\section*{Work}
+\textbf{(a) $P(X<10)=P(6<X<10)$:}
+\[
+\frac{2}{95}\left[x+\frac{x^2}{2}\right]_6^{10}
+=\frac{2}{95}\big[(10+50)-(6+18)\big]
+=\frac{2}{95}(36)=\frac{72}{95}.
+\]
+
+\textbf{(b) $P(7\le X<10)$:}
+\[
+\frac{2}{95}\left[x+\frac{x^2}{2}\right]_7^{10}
+=\frac{2}{95}\big[(10+50)-(7+24.5)\big]
+=\frac{2}{95}(28.5)=\frac{57}{95}=\frac{3}{5}.
+\]
+
+\finalanswer{(a) $P(X<10)=\dfrac{72}{95}$.\qquad
+(b) $P(7\le X<10)=\dfrac{57}{95}=\dfrac35$.}
+\end{document}

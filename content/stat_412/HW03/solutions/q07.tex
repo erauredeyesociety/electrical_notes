@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 7}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+For a laboratory assignment, if the equipment is working, the density function
+of the observed outcome $X$ is as shown below. Find the variance and standard
+deviation of $X$.
+\[
+f(x)=
+\begin{cases}
+\dfrac18(4-x),&0<x<4,\\
+0,&\text{otherwise}.
+\end{cases}
+\]
+
+The variance of $X$ is \fbox{\strut\hspace{1.5em}}. The standard deviation of
+$X$ is \fbox{\strut\hspace{1.5em}}.
+
+\textit{(Simplify your answers. Type exact answers, using radicals as needed.)}
+
+\section*{Work}
+\[
+E(X)=\int_0^4x\frac{4-x}{8}\,dx=\frac43,
+\qquad
+E(X^2)=\int_0^4x^2\frac{4-x}{8}\,dx=\frac83.
+\]
+Therefore
+\[
+\operatorname{Var}(X)=\frac83-\left(\frac43\right)^2=\frac89,
+\]
+and
+\[
+\sigma_X=\sqrt{\operatorname{Var}(X)}
+=\sqrt{\frac89}=\frac{2\sqrt2}{3}.
+\]
+
+\finalanswer{$\displaystyle \operatorname{Var}(X)=\frac89$ and
+$\displaystyle \sigma_X=\frac{2\sqrt2}{3}$.}
+\end{document}

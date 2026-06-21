@@ -1,0 +1,38 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 15}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+For a box of chocolates, $X$ and $Y$ are the weights of creams and toffees with
+$f(x,y)=24xy$ on $0\le x,\ 0\le y,\ x+y\le 1$. Find the covariance between $X$
+and $Y$.
+
+\section*{Setup}
+\[
+\operatorname{Cov}(X,Y)=E(XY)-E(X)E(Y),
+\]
+integrating over the triangle $0\le x$, $0\le y$, $x+y\le1$ (so for fixed $x$,
+$y$ runs from $0$ to $1-x$).
+
+\section*{Work}
+\[
+E(X)=\int_0^1\!\!\int_0^{1-x} x\,(24xy)\,dy\,dx=\tfrac25,\qquad
+E(Y)=\tfrac25\ \text{(by symmetry)} .
+\]
+\[
+E(XY)=\int_0^1\!\!\int_0^{1-x} xy\,(24xy)\,dy\,dx=\tfrac{2}{15} .
+\]
+\[
+\operatorname{Cov}(X,Y)=\frac{2}{15}-\left(\frac25\right)\!\left(\frac25\right)
+=\frac{2}{15}-\frac{4}{25}=\frac{10-12}{75}=-\frac{2}{75}\approx-0.0267 .
+\]
+
+\finalanswer{$\operatorname{Cov}(X,Y)=-\dfrac{2}{75}\approx-0.0267$ (negative:
+more cream weight leaves less room for toffee).}
+\end{document}

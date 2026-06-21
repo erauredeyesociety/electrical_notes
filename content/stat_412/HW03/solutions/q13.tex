@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 13}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+The loaves of rye bread distributed to local stores by a certain bakery have an
+average length of 31 centimeters and a standard deviation of 2 centimeters.
+Assuming that the lengths are normally distributed, complete parts (a) through
+(c) below.
+
+Click here to view page 1 of the standard normal distribution table.
+
+Click here to view page 2 of the standard normal distribution table.
+
+(a) What is the probability that a randomly selected loaf is longer than 33.2
+centimeters? \textit{(Round to four decimal places.)}
+
+(b) What is the probability that a randomly selected loaf is between 30.2 and
+34.5 centimeters in length? \textit{(Round to four decimal places.)}
+
+(c) What is the probability that a randomly selected loaf is shorter than 26.5
+centimeters? \textit{(Round to four decimal places.)}
+
+\section*{Work}
+\[
+z=\frac{33.2-31}{2}=1.10,\qquad
+P(X>33.2)=1-\Phi(1.10)=1-0.8643=0.1357.
+\]
+
+For part (b),
+\[
+z_{30.2}=\frac{30.2-31}{2}=-0.40,\qquad
+z_{34.5}=\frac{34.5-31}{2}=1.75,
+\]
+\[
+P(30.2<X<34.5)=\Phi(1.75)-\Phi(-0.40)
+=0.9599-0.3446=0.6153.
+\]
+
+For part (c),
+\[
+z=\frac{26.5-31}{2}=-2.25,\qquad
+P(X<26.5)=\Phi(-2.25)=0.0122.
+\]
+
+\finalanswer{(a) $0.1357$; (b) $0.6153$; (c) $0.0122$.}
+\end{document}

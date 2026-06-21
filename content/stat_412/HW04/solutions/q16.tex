@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 16}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+$f(x,y)=\dfrac{64y}{5x^3}$ on $x>4,\ 2<y<3$ (and $0$ elsewhere). Compute the
+correlation coefficient $\rho_{XY}$.
+
+\section*{Setup}
+$\rho_{XY}=\dfrac{\operatorname{Cov}(X,Y)}{\sigma_X\sigma_Y}$. Before integrating,
+check independence: if the density \emph{factors} into a function of $x$ times a
+function of $y$ \emph{and} the support is a rectangle, then $X$ and $Y$ are
+independent, which forces $\operatorname{Cov}(X,Y)=0$ and hence $\rho_{XY}=0$.
+
+\section*{Work}
+The support $\{x>4\}\times\{2<y<3\}$ is a rectangle, and the density factors:
+\[
+f(x,y)=\underbrace{\frac{32}{x^3}}_{g(x),\ x>4}\cdot
+\underbrace{\frac{2y}{5}}_{h(y),\ 2<y<3},
+\]
+since $\dfrac{32}{x^3}\cdot\dfrac{2y}{5}=\dfrac{64y}{5x^3}=f(x,y)$, and each
+factor integrates to $1$ on its range. Therefore $X$ and $Y$ are independent, so
+\[
+\operatorname{Cov}(X,Y)=0\quad\Longrightarrow\quad \rho_{XY}=0 .
+\]
+
+\finalanswer{$\rho_{XY}=0$ ($X$ and $Y$ are independent).}
+\end{document}

@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 3 --- Question 3}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+If a dealer's profit, in units of \$2000, on a new automobile can be looked upon
+as a random variable $X$ with the density function below, find the average profit
+per automobile.
+\[
+f(x)=
+\begin{cases}
+\dfrac{2}{57}(11-x),&0<x<3,\\
+0,&\text{elsewhere.}
+\end{cases}
+\]
+\textit{(Type an integer or a decimal. Round to the nearest dollar as needed.)}
+
+\section*{Setup}
+``Average profit'' is the mean $\mu=E(X)=\int x\,f(x)\,dx$, taken over the
+support $0<x<3$. That mean comes out in the problem's units of \$2000, so the
+last step is to multiply by \$2000.
+
+\section*{Work}
+\textbf{Step 1 --- mean in units of \$2000.}
+\[
+E(X)=\int_0^3 x\cdot\frac{2}{57}(11-x)\,dx
+=\frac{2}{57}\int_0^3\left(11x-x^2\right)dx
+=\frac{2}{57}\left[\frac{11x^2}{2}-\frac{x^3}{3}\right]_0^3 .
+\]
+\[
+=\frac{2}{57}\left(\frac{99}{2}-9\right)
+=\frac{2}{57}\cdot\frac{81}{2}=\frac{27}{19}\approx1.421 .
+\]
+
+\textbf{Step 2 --- convert to dollars} (each unit is \$2000):
+\[
+2000\cdot\frac{27}{19}=\frac{54000}{19}\approx 2842.11\;\Rightarrow\;\$2842 .
+\]
+
+\finalanswer{Average profit $=2000\cdot\dfrac{27}{19}=\dfrac{54000}{19}
+\approx \$2842$.}
+\end{document}

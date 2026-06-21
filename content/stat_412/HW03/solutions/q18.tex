@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 18}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+The proportion $Y$ of the budget for a certain type of industrial company that
+is allotted to environmental and pollution control is coming under scrutiny. A
+data collection project determines that the distribution of these proportions
+is as shown. Complete parts (a) and (b).
+\[
+f(y)=
+\begin{cases}
+10(1-y)^9,&0\le y\le1,\\
+0,&\text{elsewhere}.
+\end{cases}
+\]
+
+(a) What is the mean proportion of the budget allocated to environmental and
+pollution control?
+
+\fbox{\strut\hspace{1.5em}} \textit{(Simplify your answer.)}
+
+(b) What is the probability that a randomly selected company allocated a
+proportion exceeding the population mean from part (a)? Round to four decimal
+places.
+
+\section*{Work}
+\[
+\begin{aligned}
+E(Y)
+&=\int_0^1y\,10(1-y)^9\,dy\\
+&=10\operatorname{B}(2,10)
+=10\frac{1!\,9!}{11!}
+=\frac1{11}.
+\end{aligned}
+\]
+
+For part (b),
+\[
+\begin{aligned}
+P\left(Y>\frac1{11}\right)
+&=\int_{1/11}^1 10(1-y)^9\,dy\\
+&=\left(\frac{10}{11}\right)^{10}
+\approx0.3855.
+\end{aligned}
+\]
+
+\finalanswer{(a) $\displaystyle E(Y)=\frac1{11}$;
+(b) $\displaystyle P\left(Y>\frac1{11}\right)=0.3855$.}
+\end{document}

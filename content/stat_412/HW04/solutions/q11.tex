@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 11}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+$X$ is the result of an 8-sided red die and $Y$ the result of an 8-sided green
+die. Find $\operatorname{Var}(4X-Y)$.
+
+\section*{Setup}
+A die is uniform on $1,\dots,n$, so $\operatorname{Var}=\dfrac{n^2-1}{12}$. The
+dice are independent, so
+$\operatorname{Var}(aX+bY)=a^2\operatorname{Var}(X)+b^2\operatorname{Var}(Y)$
+(coefficients squared; the sign of $-Y$ does not matter).
+
+\section*{Work}
+\[
+\operatorname{Var}(X)=\operatorname{Var}(Y)=\frac{8^2-1}{12}=\frac{63}{12}=5.25 .
+\]
+\[
+\textbf{(a)}\quad \operatorname{Var}(4X-Y)=4^2(5.25)+(-1)^2(5.25)=84+5.25=89.25 .
+\]
+\[
+\textbf{(b)}\quad \operatorname{Var}(X+3Y-5)=1^2(5.25)+3^2(5.25)=5.25+47.25=52.5 .
+\]
+(The constant $-5$ does not affect the variance.)
+
+\finalanswer{(a) $\operatorname{Var}(4X-Y)=89.25$.\quad
+(b) $\operatorname{Var}(X+3Y-5)=52.5$.}
+\end{document}

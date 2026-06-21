@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 12}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+A service facility has two lines; $X,Y$ are the proportions of time each is in
+use, with $f(x,y)=x^2+2y^2$ on $0\le x,y\le 1$. Determine whether $X$ and $Y$
+are independent.
+
+\section*{Setup}
+$X$ and $Y$ are independent iff $f(x,y)=g(x)\,h(y)$ for all $(x,y)$, where
+$g(x)=\int f\,dy$ and $h(y)=\int f\,dx$ are the marginals.
+
+\section*{Work}
+\[
+g(x)=\int_0^1 (x^2+2y^2)\,dy=x^2+\tfrac23,\qquad
+h(y)=\int_0^1 (x^2+2y^2)\,dx=\tfrac13+2y^2 .
+\]
+Their product,
+\[
+g(x)h(y)=\left(x^2+\tfrac23\right)\left(\tfrac13+2y^2\right),
+\]
+is not equal to $f(x,y)=x^2+2y^2$ (e.g.\ at $x=y=\tfrac12$,
+$g\,h=0.764\ne0.75=f$). Since $f(x,y)\ne g(x)h(y)$, \textbf{$X$ and $Y$ are not
+independent}.
+
+\finalanswer{$X$ and $Y$ are \textbf{not} independent, since $f(x,y)$ is
+\textbf{not} equal to the product $g(x)h(y)$ of the marginal densities.
+\emph{Parts (b)--(d) are pending (not visible).}}
+\end{document}

@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+
+\title{STAT 412 --- Homework 4 Answer Key}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Source-status note.} Answers come from the 17 screenshots plus
+pasted HTML for several questions (and the joint tables in \texttt{q2-2.png},
+\texttt{q5.md}, \texttt{q8.md}). Every numeric result was verified with Python.
+Still pending (prompts not yet captured): \textbf{Q1(b--d), Q10(c), Q12(b--d),
+Q14(c--d)}. Q12(a) is confirmed by the platform dropdowns. \textbf{Q6 requires
+the exact radical} $-\sqrt{30}/10$ (its decimal was rejected); where a prompt
+says ``exact'' or ``simplify,'' enter the fraction/radical, not a decimal.
+
+\begin{enumerate}[leftmargin=*,label=\textbf{\arabic*.}]
+\item \textbf{Joint pmf $f(x,y)=\tfrac{x+y}{126}$:}
+(a) $P(X\le 6,Y=6)=\dfrac{33}{126}=\dfrac{11}{42}\approx0.2619$.
+\textit{Parts (b)--(d) pending.}
+
+\item \textbf{Marginal distributions:}
+(a) $g(2)=0.30,\ g(4)=0.70$;\quad
+(b) $h(1)=0.26,\ h(3)=0.49,\ h(5)=0.25$.
+
+\item \textbf{Conditional probability:}
+$P(1<Y<4\mid X=2)=\dfrac58=0.625$.
+
+\item \textbf{Joint density $f=\tfrac34 x$:}
+(a) $X,Y$ are \textbf{not} independent ($f(x\mid y)=\tfrac{2x}{(2-y)^2}$ for
+$0<x<2-y$ involves $y$);\quad
+(b) $P(X>0.4\mid Y=0.6)=\dfrac{45}{49}\approx0.9184$.
+
+\item \textbf{Covariance (machine malfunctions vs.\ calls):}
+$\sigma_{XY}=0.045=\dfrac{9}{200}$.
+
+\item \textbf{Correlation (oranges vs.\ apples):}
+$\rho_{XY}=-\dfrac{\sqrt{30}}{10}\approx-0.5477$
+(enter the \textbf{exact radical}; the decimal $-0.5477$ was rejected).
+
+\item \textbf{Correlation, $f=0.5$ on $0<x\le y<2$:}
+$\rho_{XY}=\dfrac12$.
+
+\item \textbf{Independent variables:}
+(a) $E(9X-7Y)=3.8$;\quad (b) $E(XY)=E(X)E(Y)=(2.6)(2.8)=7.28$.
+
+\item \textbf{Variance of a linear combination:}
+$\sigma^2_{-8X+6Y-5}=64(6)+36(9)=708$.
+
+\item \textbf{Two 24-sided dice:}
+(a) $E(X+Y)=25$;\quad (b) $E(X-Y)=0$. \textit{Part (c) pending.}
+
+\item \textbf{Two 8-sided dice} (each $\operatorname{Var}=\tfrac{63}{12}=5.25$):
+(a) $\operatorname{Var}(4X-Y)=16(5.25)+5.25=89.25$;\quad
+(b) $\operatorname{Var}(X+3Y-5)=5.25+9(5.25)=52.5$.
+
+\item \textbf{Independence test, $f=x^2+2y^2$:}
+(a) $X,Y$ are \textbf{not} independent, since $f(x,y)$ \textbf{is not} equal to
+$g(x)h(y)$ (the marginal densities $g(x)=x^2+\tfrac23$, $h(y)=\tfrac13+2y^2$) ---
+matches the platform dropdowns. \textit{Parts (b)--(d) pending.}
+
+\item \textbf{Chebyshev (bulb life), symmetric:}
+at most $\dfrac{1}{2(4)^2}=\dfrac{1}{32}=3.125\%$ fail to last 660 hours.
+
+\item \textbf{Chebyshev, $\mu=4,\sigma^2=4$:}
+(a) $P(|X-4|\ge 3)\le \dfrac{4}{9}$;\quad
+(b) $P(|X-4|<3)\ge 1-\dfrac49=\dfrac59$. \textit{Parts (c)--(d) pending.}
+
+\item \textbf{Covariance (creams vs.\ toffees), $f=24xy$:}
+$\operatorname{Cov}(X,Y)=-\dfrac{2}{75}\approx-0.0267$.
+
+\item \textbf{Correlation, $f=\tfrac{64y}{5x^3}$:}
+$\rho_{XY}=0$ ($X$ and $Y$ are independent).
+
+\item \textbf{Correlation of $X$ and $Y=a+bX$:}
+$\rho_{XY}=\dfrac{b}{|b|}$ ($+1$ if $b>0$, $-1$ if $b<0$).
+\end{enumerate}
+
+\end{document}

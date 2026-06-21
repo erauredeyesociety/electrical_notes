@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 3 --- Question 7}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+A mechanic sells a brand of automobile tire whose life is normally distributed
+with mean $\mu=35{,}000$ miles and standard deviation $\sigma=2600$ miles. He
+will replace, free of charge, approximately the worst $10\%$ of tires (those that
+wear out earliest). At what mileage should the guarantee be set?
+\textit{(Round to the nearest mile as needed.)}
+
+\section*{Setup}
+The tires replaced are the shortest-lasting $10\%$, so the guarantee mileage $x$
+is the value with area $0.10$ to its \emph{left}: $P(X<x)=0.10$. We work backward
+through the $z$-score relationship
+\[
+z=\frac{x-\mu}{\sigma}\quad\Longrightarrow\quad x=\mu+z\,\sigma .
+\]
+
+\section*{Work}
+\textbf{Step 1 --- find $z$ from the table.} We need the $z$ with $0.10$ of the
+area to its left. The standard-normal table value closest to $0.1000$ is
+$0.1003$, at $z=-1.28$.
+
+\textbf{Step 2 --- unstandardize.}
+\[
+x=\mu+z\,\sigma=35{,}000+(-1.28)(2600)=35{,}000-3328=31{,}672\text{ miles.}
+\]
+(With the unrounded $z=-1.2816$ this is $31{,}668$ miles; either is within the
+grader's tolerance.)
+
+\finalanswer{Guarantee free replacement for tires that wear out by about
+$\mathbf{31{,}672}$ miles (the $10$th percentile; $\approx 31{,}668$ with
+unrounded $z$).}
+\end{document}

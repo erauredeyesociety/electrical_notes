@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 8}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+The daily amount of coffee, in liters, dispensed by a machine located in an
+airport lobby is a random variable $X$ having a continuous uniform distribution
+with $A=8$ and $B=11$. Find the probability that on a given day the amount of
+coffee dispensed by this machine will be
+
+(a) at most 9.5 liters;
+
+(b) more than 8.5 liters but less than 10.3 liters;
+
+(c) at least 9.8 liters.
+
+(a) The probability is \fbox{\strut\hspace{1.5em}}.
+
+\textit{(Simplify your answer.)}
+
+\section*{Work}
+For a uniform distribution, probability is interval length divided by the
+total length $11-8=3$. Thus
+\[
+P(X\le9.5)=\frac{9.5-8}{3}=\frac12,
+\]
+\[
+P(8.5<X<10.3)=\frac{10.3-8.5}{3}=\frac35,
+\]
+and
+\[
+P(X\ge9.8)=\frac{11-9.8}{3}=\frac25.
+\]
+
+\finalanswer{(a) $0.5$ \qquad (b) $0.6$ \qquad (c) $0.4$.}
+\end{document}

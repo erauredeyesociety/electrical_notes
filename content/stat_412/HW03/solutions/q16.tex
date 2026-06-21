@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 16}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+Based on extensive testing, it is determined by the manufacturer of a washing
+machine that the time $Y$ (in years) before a major repair is required is
+characterized by the probability density function.
+\[
+f(y)=
+\begin{cases}
+\dfrac18\exp\left(-\dfrac y8\right),&y\ge0,\\
+0,&y<0.
+\end{cases}
+\]
+
+(a) Critics would certainly consider the product a bargain if it is unlikely
+to require a major repair before the tenth year. Consider a probability of less
+than 0.35 to be unlikely. Comment on this by determining $P(Y>10)$.
+
+(b) What is the probability that a major repair occurs in the first year?
+
+(a) Critics would certainly consider the product a bargain if it is unlikely
+to require a major repair before the tenth year. Consider a probability of less
+than 0.35 to be unlikely. Comment on this by determining $P(Y>10)$.
+
+Critics \fbox{\strut\hspace{2.5em}} consider the product a bargain because
+$P(Y>10)={}$\fbox{\strut\hspace{1.5em}}.
+
+\textit{(Round to four decimal places as needed.)}
+
+\section*{Work}
+Here $Y$ is exponential with rate $\lambda=1/8$. Its survival probability is
+\[
+P(Y>10)=e^{-10/8}=e^{-1.25}\approx0.2865.
+\]
+The platform asks for the conclusion by comparing this displayed probability
+directly with $0.35$. Since $0.2865<0.35$, select \emph{would}. Also,
+\[
+P(Y\le1)=1-e^{-1/8}\approx0.1175.
+\]
+
+\finalanswer{(a) The critics \textbf{would} consider it a bargain because
+$P(Y>10)=0.2865<0.35$. \quad (b) $0.1175$.}
+\end{document}

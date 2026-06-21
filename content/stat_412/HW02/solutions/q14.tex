@@ -1,0 +1,37 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\title{STAT 412 Homework 2: Question 14}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\textbf{Problem.} A certain region of a country is, on average, hit by 8
+hurricanes a year.
+
+(a) What is the probability that the region will be hit by fewer than 7
+hurricanes in a given year?
+
+(b) What is the probability that the region will be hit by anywhere from 4 to
+6 hurricanes in a given year?
+
+Click here to view the table of Poisson probability sums.
+
+(a) The probability that the region will be hit by fewer than 7 hurricanes in
+a given year is \(\boxed{\phantom{0.0000}}\).
+
+(Round to four decimal places as needed.)
+
+\textbf{Solution.} Let \(X\sim\operatorname{Poisson}(8)\).
+\[
+P(X<7)=P(X\le6)=\sum_{x=0}^{6}e^{-8}\frac{8^x}{x!}
+=0.3133742775\approx0.3134.
+\]
+\[
+P(4\le X\le6)=\sum_{x=4}^{6}e^{-8}\frac{8^x}{x!}
+=0.2709941655\approx0.2710.
+\]
+\[
+\boxed{\text{(a) }0.3134\qquad\text{(b) }0.2710}
+\]
+\end{document}

@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 3}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+An important factor in solid missile fuel is the particle size distribution.
+Significant problems occur if the particle sizes are too large. From production
+data in the past, it has been determined that the particle size (in
+micrometers) distribution is characterized by the following function.
+\[
+f(x)=
+\begin{cases}
+6x^{-7},&x>1,\\
+0,&\text{elsewhere}.
+\end{cases}
+\]
+
+(a) Verify that this is a valid density function.
+
+(b) Evaluate $F(x)$.
+
+(c) What is the probability that a random particle from the manufactured fuel
+exceeds 2 micrometers?
+
+(a) The function $f(x)$ is a valid density function because
+$f(x)\ge 0$ for all $x\in\mathbb{R}$ and because
+\[
+\int_{-\infty}^{\infty}f(x)\,dx
+=\int_1^\infty6x^{-7}\,dx
+=\left(-x^{-6}\right)\Big|_1^\infty
+=1.
+\]
+
+\section*{Work}
+The function is nonnegative on all of $\mathbb{R}$ (it equals $6x^{-7}>0$ for
+$x>1$ and $0$ elsewhere), and
+\[
+\int_{-\infty}^{\infty}f(x)\,dx
+=\int_1^\infty6x^{-7}\,dx
+=\left[-x^{-6}\right]_1^\infty=1,
+\]
+so it is a valid density. (MyStatLab's accepted dropdowns are $f(x)\ge 0$ for
+all $x\in\mathbb{R}$; entering $f(x)>0$ for $x>1$ was marked wrong --- see
+\texttt{3-3.png}.) For $x>1$,
+\[
+F(x)=\int_1^x6t^{-7}\,dt=1-x^{-6}.
+\]
+Thus
+\[
+F(x)=
+\begin{cases}
+0,&x\le1,\\
+1-x^{-6},&x>1,
+\end{cases}
+\qquad
+P(X>2)=1-F(2)=2^{-6}=\frac1{64}=0.015625.
+\]
+
+\finalanswer{(a) Enter $f(x)\ge 0$ for all $x\in\mathbb{R}$, antiderivative
+$-x^{-6}$, and integral $1$.
+(b) $F(x)=0$ for $x\le1$ and $F(x)=1-x^{-6}$ for $x>1$.
+(c) $P(X>2)=1/64\approx0.0156$.}
+\end{document}

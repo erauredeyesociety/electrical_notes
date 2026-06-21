@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 3 --- Question 5}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+A certain type of device has an advertised failure rate of $0.01$ per hour. The
+failure rate is constant and the exponential distribution applies. What is the
+probability that less than 500 hours will elapse before 6 failures occur?
+(Use the incomplete gamma table.)
+\textit{(Round to three decimal places as needed.)}
+
+\section*{Setup}
+Failures arrive at a constant rate, so the \emph{waiting time between} successive
+failures is exponential. The \emph{total} waiting time $T$ until the
+\textbf{6th} failure is the sum of 6 such exponential waits, which is a
+\textbf{gamma} random variable with
+\[
+\text{shape }\alpha=6,\qquad
+\text{scale }\beta=\frac1{\lambda}=\frac1{0.01}=100\text{ hours.}
+\]
+($\beta$ is the mean time between failures.) We need $P(T<500)$.
+
+\section*{Work}
+The incomplete gamma table gives the cumulative value $F(x;\alpha)$ for the
+\emph{standard} gamma (scale $\beta=1$). For a general scale $\beta$,
+\[
+P(T<t)=F\!\left(\frac{t}{\beta};\,\alpha\right),
+\]
+so we standardize the time by dividing by $\beta$:
+\[
+\frac{t}{\beta}=\frac{500}{100}=5 .
+\]
+Reading the table at row $x=5$, column $\alpha=6$:
+\[
+P(T<500)=F(5;6)=0.384 .
+\]
+
+\finalanswer{$P(T<500)=F(5;6)=\mathbf{0.384}$.}
+\end{document}

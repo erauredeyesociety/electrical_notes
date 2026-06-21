@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 15}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+A certain type of device has an advertised failure rate of 0.00625 per hour.
+The failure rate is constant and the exponential distribution applies.
+
+(a) What is the mean time to failure?
+
+(b) What is the probability that 320 hours will pass before a failure is
+observed?
+
+(a) The mean time to failure is \fbox{\strut\hspace{1.5em}} hours.
+
+\textit{(Type an integer or a decimal. Do not round.)}
+
+\section*{Work}
+For an exponential random variable with rate $\lambda=0.00625$,
+\[
+E(X)=\frac1\lambda=\frac1{0.00625}=160\text{ hours}.
+\]
+Its right-tail probability is
+\[
+P(X>320)=e^{-\lambda(320)}
+=e^{-0.00625(320)}=e^{-2}\approx0.1353.
+\]
+
+\finalanswer{(a) $160$ hours \qquad (b) $0.1353$.}
+\end{document}

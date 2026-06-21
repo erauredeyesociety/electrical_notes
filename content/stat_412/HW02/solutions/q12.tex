@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\title{STAT 412 Homework 2: Question 12}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\textbf{Problem.} According to a study published by a group of University of
+Massachusetts sociologists, about 66.8\% of the 20 million persons in this
+country who take Valium are women. Assume this figure to be a valid estimate.
+
+(a) Find the probability that on a given day the sixth prescription written by
+a doctor for Valium is the first prescribing Valium for a woman.
+
+(b) Find the probability that on a given day the sixth prescription written by
+a doctor for Valium is the third prescribing Valium for a woman.
+
+(a) The probability that on a given day the sixth prescription written by a
+doctor for Valium is the first prescribing Valium for a woman is
+\(\boxed{\phantom{0.0000}}\).
+
+(Round to four decimal places as needed.)
+
+\textbf{Solution.} Let \(p=0.668\) and \(q=1-p=0.332\).
+
+(a) The first five prescriptions must be for men and the sixth for a woman:
+\[
+P=q^5p=(0.332)^5(0.668)=0.0026944298\approx0.0027.
+\]
+
+(b) Exactly two of the first five must be for women, and the sixth must be for a woman:
+\[
+P=\binom52p^2q^3p=\binom52(0.668)^3(0.332)^3
+=0.1090796256\approx0.1091.
+\]
+\[
+\boxed{\text{(a) }0.0027\qquad\text{(b) }0.1091}
+\]
+\end{document}

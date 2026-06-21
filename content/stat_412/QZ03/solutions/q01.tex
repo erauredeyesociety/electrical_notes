@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 3 --- Question 1}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+For a laboratory assignment, if the equipment is working, the density function of
+the observed outcome $X$ is shown below. Find the variance and standard deviation
+of $X$.
+\[
+f(x)=
+\begin{cases}
+8\left(\tfrac12-x\right),&0<x<\tfrac12,\\
+0,&\text{otherwise.}
+\end{cases}
+\]
+\textit{(Simplify your answers. Type exact answers, using radicals as needed.)}
+
+\section*{Setup}
+For a continuous random variable we use
+\[
+\mu=E(X)=\int_{-\infty}^{\infty}x\,f(x)\,dx,\qquad
+E(X^2)=\int_{-\infty}^{\infty}x^2\,f(x)\,dx,
+\]
+and then the shortcut for the variance
+\[
+\sigma^2=\operatorname{Var}(X)=E(X^2)-\mu^2,\qquad \sigma=\sqrt{\sigma^2}.
+\]
+The density is nonzero only on $0<x<\tfrac12$, so every integral runs from $0$
+to $\tfrac12$.
+
+\section*{Work}
+\textbf{Step 1 --- mean.}
+\[
+\mu=\int_0^{1/2}x\cdot 8\left(\tfrac12-x\right)dx
+=8\int_0^{1/2}\left(\tfrac{x}{2}-x^2\right)dx
+=8\left[\tfrac{x^2}{4}-\tfrac{x^3}{3}\right]_0^{1/2}
+=8\left(\tfrac1{16}-\tfrac1{24}\right)=\frac16 .
+\]
+
+\textbf{Step 2 --- second moment.}
+\[
+E(X^2)=\int_0^{1/2}x^2\cdot 8\left(\tfrac12-x\right)dx
+=8\left[\tfrac{x^3}{6}-\tfrac{x^4}{4}\right]_0^{1/2}
+=8\left(\tfrac1{48}-\tfrac1{64}\right)=\frac1{24}.
+\]
+
+\textbf{Step 3 --- variance and standard deviation.}
+\[
+\sigma^2=E(X^2)-\mu^2=\frac1{24}-\left(\frac16\right)^2
+=\frac1{24}-\frac1{36}=\frac{3-2}{72}=\frac1{72},
+\]
+\[
+\sigma=\sqrt{\tfrac1{72}}=\frac{1}{6\sqrt2}=\frac{\sqrt2}{12}\approx0.1179 .
+\]
+
+\finalanswer{Variance $\sigma^2=\dfrac1{72}$; standard deviation
+$\sigma=\dfrac{\sqrt2}{12}=\dfrac1{6\sqrt2}\approx0.1179$.}
+\end{document}

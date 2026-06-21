@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\title{STAT 412 Homework 2: Question 4}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\textbf{Problem.} The random variable \(X\), representing the number of errors
+per 100 lines of software code, has the following probability distribution.
+\[
+\begin{array}{c|ccccc}x&2&3&4&5&6\\\hline
+f(x)&0.25&0.3&0.04&0.01&0.4\end{array}
+\]
+Use the following theorem to determine the variance of the random variable \(X\).
+
+The variance of a random variable \(X\) is
+\(\sigma^2=E(X^2)-\mu^2\).
+
+The variance is \(\boxed{\phantom{0.00}}\). (Round to two decimal places as
+needed.)
+
+\textbf{Solution.}
+\[
+\mu=2(0.25)+3(0.30)+4(0.04)+5(0.01)+6(0.40)=4.01,
+\]
+\[
+E(X^2)=4(0.25)+9(0.30)+16(0.04)+25(0.01)+36(0.40)=18.99.
+\]
+\[
+\operatorname{Var}(X)=18.99-(4.01)^2=2.9099\approx2.91.
+\]
+\[
+\boxed{\sigma^2=2.91}
+\]
+\end{document}

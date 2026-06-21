@@ -1,0 +1,61 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\title{STAT 412 Homework 2: Question 13}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\textbf{Problem.} On average, 5 traffic accidents per month occur at a certain
+intersection. Complete parts (a) through (c) below.
+
+Click here to view the table of Poisson probability sums.
+
+(a) What is the probability that exactly 8 accidents will occur in any given
+month at this intersection?
+
+The probability that exactly 8 accidents will occur in any given month at this
+intersection is \(\boxed{\phantom{0.0000}}\).
+
+(Round to four decimal places as needed.)
+
+(b) What is the probability that fewer than 2 accidents will occur in any given
+month at this intersection?
+
+The probability that fewer than 2 accidents will occur in any given month at
+this intersection is \(\boxed{\phantom{0.0000}}\).
+
+(Round to four decimal places as needed.)
+
+(c) What is the probability that at least 5 accidents will occur in any given
+month at this intersection?
+
+The probability that at least 5 accidents will occur in any given month at this
+intersection is \(\boxed{\phantom{0.0000}}\).
+
+(Round to four decimal places as needed.)
+
+\textbf{Solution.} For \(X\sim\operatorname{Poisson}(5)\),
+\[
+P(X=8)=e^{-5}\frac{5^8}{8!}=0.0652780393\approx0.0653.
+\]
+
+For part (b),
+\[
+\begin{aligned}
+P(X<2)
+&=P(X=0)+P(X=1)\\
+&=e^{-5}+5e^{-5}\\
+&=6e^{-5}\approx0.0404.
+\end{aligned}
+\]
+
+For part (c),
+\[
+P(X\ge5)=1-P(X\le4)=1-0.4405=0.5595.
+\]
+\[
+\boxed{\text{(a) }0.0653\qquad\text{(b) }0.0404\qquad
+\text{(c) }0.5595}
+\]
+\end{document}

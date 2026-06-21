@@ -1,0 +1,38 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 3}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+Given $f(x,y)=\dfrac{8-x-y}{15}$ on $0<x<3,\ 3<y<5$ (and $0$ elsewhere), find
+$P(1<Y<4\mid X=2)$.
+
+\section*{Setup}
+A conditional density is the joint over the marginal,
+$f(y\mid x)=\dfrac{f(x,y)}{g(x)}$, where $g(x)=\int f(x,y)\,dy$. Then integrate
+$f(y\mid x{=}2)$ over the requested $y$-range (clipped to the support $3<y<5$).
+
+\section*{Work}
+\textbf{Marginal at $x=2$:}
+\[
+g(2)=\int_3^5 \frac{8-2-y}{15}\,dy=\frac{1}{15}\left[6y-\tfrac{y^2}{2}\right]_3^5
+=\frac{1}{15}\big(17.5-13.5\big)=\frac{4}{15}.
+\]
+\textbf{Conditional density:}
+\[
+f(y\mid x{=}2)=\frac{(6-y)/15}{4/15}=\frac{6-y}{4},\qquad 3<y<5 .
+\]
+\textbf{Probability} (since $3<y<5$, ``$1<Y<4$'' means $3<Y<4$):
+\[
+P(1<Y<4\mid X{=}2)=\int_3^4\frac{6-y}{4}\,dy
+=\frac14\left[6y-\tfrac{y^2}{2}\right]_3^4
+=\frac14(16-13.5)=\frac{2.5}{4}=\frac58 .
+\]
+
+\finalanswer{$P(1<Y<4\mid X=2)=\dfrac58=0.625$.}
+\end{document}

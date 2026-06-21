@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 5}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+A continuous random variable $X$ has the density function below. Find the
+expected value of $g(X)=e^{5X/6}$.
+\[
+f(x)=
+\begin{cases}
+e^{-x},&x>0,\\
+0,&\text{elsewhere}.
+\end{cases}
+\]
+
+The expected value of $g(X)=e^{5X/6}$ is
+\fbox{\strut\hspace{1.5em}}.
+
+\textit{(Simplify your answer.)}
+
+\section*{Work}
+Using the expectation formula for a function of a continuous random variable,
+\[
+\begin{aligned}
+E\left(e^{5X/6}\right)
+&=\int_0^\infty e^{5x/6}e^{-x}\,dx\\
+&=\int_0^\infty e^{-x/6}\,dx\\
+&=\left[-6e^{-x/6}\right]_0^\infty=6.
+\end{aligned}
+\]
+
+\finalanswer{$\boxed{6}$.}
+\end{document}

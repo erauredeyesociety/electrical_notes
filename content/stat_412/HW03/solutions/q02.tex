@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 2}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+The shelf life, in days, for bottles of a certain prescribed medicine is a
+random variable having the density function shown below. Find the probability
+that a bottle of this medicine will have a shelf life of (a) at least 600 days;
+(b) anywhere from 120 to 160 days.
+\[
+f(x)=
+\begin{cases}
+\dfrac{45{,}000}{(x+150)^3},&x>0,\\
+0,&\text{elsewhere}.
+\end{cases}
+\]
+
+(a) The probability of a shelf life of at least 600 days is
+\fbox{\strut\hspace{1.5em}}.
+
+\textit{(Type an integer or decimal rounded to three decimal places as needed.)}
+
+\section*{Work}
+For $a>0$,
+\[
+P(X\ge a)=\int_a^\infty\frac{45000}{(x+150)^3}\,dx
+=\left[-\frac{22500}{(x+150)^2}\right]_a^\infty
+=\frac{22500}{(a+150)^2}.
+\]
+Therefore
+\[
+P(X\ge600)=\frac{22500}{750^2}=0.040,
+\]
+and
+\[
+\begin{aligned}
+P(120\le X\le160)
+&=P(X\ge120)-P(X\ge160)\\
+&=\frac{22500}{270^2}-\frac{22500}{310^2}\\
+&\approx0.0746\approx0.075.
+\end{aligned}
+\]
+
+\finalanswer{(a) $0.040$ \qquad (b) $0.075$.}
+\end{document}

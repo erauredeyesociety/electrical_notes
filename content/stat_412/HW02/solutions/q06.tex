@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\title{STAT 412 Homework 2: Question 6}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\textbf{Problem.} In testing a certain kind of truck tire over rugged terrain,
+it is found that 25\% of the trucks fail to complete the test run without a
+blowout. Of the next 15 trucks tested, find the probability that (a) from 3 to
+6 have blowouts, (b) fewer than 4 have blowouts, and (c) more than 5 have
+blowouts.
+
+Click here to view page 1 of the table of binomial probability sums.
+
+Click here to view page 2 of the table of binomial probability sums.
+
+(a) The probability that from 3 to 6 trucks have blowouts is
+\(\boxed{\phantom{0.0000}}\).
+
+(Round to four decimal places as needed.)
+
+\textbf{Solution.} Let \(X\sim\operatorname{Bin}(15,0.25)\).
+\[
+P(3\le X\le6)=\sum_{x=3}^{6}\binom{15}{x}(0.25)^x(0.75)^{15-x}
+=0.7072918788\approx0.7073.
+\]
+\[
+P(X<4)=\sum_{x=0}^{3}\binom{15}{x}(0.25)^x(0.75)^{15-x}
+=0.4612868764\approx0.4613.
+\]
+\[
+P(X>5)=1-\sum_{x=0}^{5}\binom{15}{x}(0.25)^x(0.75)^{15-x}
+=0.1483680774\approx0.1484.
+\]
+\[
+\boxed{\text{(a) }0.7073\quad\text{(b) }0.4613\quad\text{(c) }0.1484}
+\]
+\end{document}

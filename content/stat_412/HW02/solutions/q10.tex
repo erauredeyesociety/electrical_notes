@@ -1,0 +1,29 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\title{STAT 412 Homework 2: Question 10}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\textbf{Problem.} A scientist inoculates mice, one at a time, with a disease
+germ until he finds 2 that have contracted the disease.
+
+If the probability of contracting the disease is \(\frac{1}{6}\), what is the
+probability that 7 mice are required?
+
+The probability that 7 mice are required is \(\boxed{\phantom{0.0000}}\).
+
+(Round to four decimal places as needed.)
+
+\textbf{Solution.} For the second case to occur on mouse 7, exactly one of the
+first six mice must contract the disease and mouse 7 must contract it:
+\[
+P=\binom61\left(\frac16\right)^1\left(\frac56\right)^5
+\left(\frac16\right)
+=\binom61\left(\frac16\right)^2\left(\frac56\right)^5.
+\]
+\[
+P=0.0669795953\approx\boxed{0.0670}.
+\]
+\end{document}

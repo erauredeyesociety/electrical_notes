@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 6}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+From a sack of 3 oranges, 2 apples, and 2 bananas, 6 pieces are selected at
+random. With $X=$ number of oranges and $Y=$ number of apples, find the
+correlation coefficient $\rho_{XY}$.
+
+\section*{Setup}
+\[
+\rho_{XY}=\frac{\operatorname{Cov}(X,Y)}{\sigma_X\,\sigma_Y},\qquad
+\operatorname{Cov}(X,Y)=E(XY)-E(X)E(Y).
+\]
+Choosing $6$ of the $7$ fruits, the joint law is multivariate hypergeometric:
+\[
+f(x,y)=\frac{\binom{3}{x}\binom{2}{y}\binom{2}{\,6-x-y\,}}{\binom{7}{6}} .
+\]
+
+\section*{Work}
+Carrying out the sums over the admissible cells gives
+\[
+E(X)=\tfrac{18}{7},\quad E(Y)=\tfrac{12}{7},\quad
+\operatorname{Var}(X)=\tfrac{12}{49},\quad \operatorname{Var}(Y)=\tfrac{10}{49},
+\quad \operatorname{Cov}(X,Y)=-\tfrac{6}{49}.
+\]
+Therefore
+\[
+\rho_{XY}=\frac{-6/49}{\sqrt{(12/49)(10/49)}}
+=\frac{-6}{\sqrt{120}}=\frac{-6}{2\sqrt{30}}=-\frac{3}{\sqrt{30}}
+=-\frac{\sqrt{30}}{10}\approx-0.5477 .
+\]
+
+\finalanswer{$\rho_{XY}=-\dfrac{\sqrt{30}}{10}\approx-0.5477$. \textbf{Enter the
+exact radical} $-\dfrac{\sqrt{30}}{10}$ --- MyStatLab rejected the decimal
+$-0.5477$ (the prompt asks for an exact answer).}
+\end{document}

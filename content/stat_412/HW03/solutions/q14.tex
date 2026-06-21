@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 14}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+A lawyer commutes daily from his suburban home to his midtown office. The
+average time for a one-way trip is 27 minutes, with a standard deviation of 4.3
+minutes. Assume the distribution of trip times to be normally distributed.
+Complete parts (a) through (e) below.
+
+Click here to view page 1 of the standard normal distribution table.
+
+Click here to view page 2 of the standard normal distribution table.
+
+(a) What is the probability that a trip will take at least $\frac12$ hour?
+\textit{(Round to four decimal places.)}
+
+(b) If the office opens at 9:00 A.M. and the lawyer leaves home at 8:45 A.M.,
+what percentage of the time is he late? \textit{(Round to two decimal places.)}
+
+(c) If he leaves the house at 8:35 A.M. and coffee is served at the office from
+8:50 A.M. until 9:00 A.M., what is the probability that he misses coffee?
+\textit{(Round to four decimal places.)}
+
+(d) Find the length of time above which we find the slowest 15\% of trips.
+\textit{(Round to three decimal places.)}
+
+(e) Find the probability that 2 of the next 3 trips will take at least
+$\frac12$ hour. \textit{(Round to four decimal places.)}
+
+\section*{Work}
+One-half hour is 30 minutes. Standardizing,
+\[
+z=\frac{30-27}{4.3}\approx0.70,\qquad
+P(X\ge30)=1-\Phi(0.70)=1-0.7580=0.2420.
+\]
+
+For part (b), he is late when the trip exceeds 15 minutes:
+\[
+z=\frac{15-27}{4.3}\approx-2.79,\qquad
+P(X>15)=1-\Phi(-2.79)=1-0.0026=0.9974\;\Rightarrow\;99.74\%.
+\]
+
+For part (c), leaving at 8:35 A.M.\ the coffee window 8:50--9:00 A.M.\ is
+$15$ to $25$ minutes into the trip. He gets coffee only when $15<X<25$, so he
+misses it otherwise:
+\[
+z_{15}=\frac{15-27}{4.3}\approx-2.79,\qquad
+z_{25}=\frac{25-27}{4.3}\approx-0.47,
+\]
+\[
+P(15<X<25)=\Phi(-0.47)-\Phi(-2.79)=0.3192-0.0026=0.3166,
+\]
+\[
+P(\text{misses coffee})=1-0.3166\approx0.6834.
+\]
+Using unrounded $z$-scores gives $0.6817$, which is the value MyStatLab recorded
+as correct, so report $0.6817$.
+
+For part (d), the slowest $15\%$ of trips are the longest ones, so we need the
+$85$th percentile $t$ with $P(T>t)=0.15$, i.e.\ $P(T\le t)=0.85$:
+\[
+z_{0.85}=1.0364,\qquad
+t=\mu+z_{0.85}\,\sigma=27+1.0364(4.3)=31.457\text{ minutes.}
+\]
+(The table value $z=1.04$ gives $27+1.04(4.3)=31.472$ minutes.)
+
+For part (e), each trip independently takes at least a half hour with
+probability $p=0.2420$ (from part (a)). With $n=3$ trips,
+\[
+P(X=2)=\binom{3}{2}p^2(1-p)=3(0.2420)^2(0.7580)\approx0.1332.
+\]
+(Using the exact $p=0.2427$ gives $0.1338$.)
+
+\finalanswer{(a) $0.2420$; (b) $99.74\%$; (c) $0.6817$;
+(d) $\approx 31.457$ minutes (table $z$: $31.472$);
+(e) $\approx 0.1332$.}
+\end{document}

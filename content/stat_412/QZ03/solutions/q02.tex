@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 3 --- Question 2}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+The shelf life of a product is a random variable that is related to consumer
+acceptance. The shelf life $Y$ in days of a certain bakery product has the
+density function below. What fraction of the loaves stocked today would you
+expect to be sellable 2 days from now?
+\[
+f(y)=
+\begin{cases}
+\dfrac27\,e^{-2y/7},&0\le y<\infty,\\
+0,&\text{elsewhere.}
+\end{cases}
+\]
+\textit{(Round to four decimal places as needed.)}
+
+\section*{Setup}
+This is an \textbf{exponential} density, $f(y)=\lambda e^{-\lambda y}$, with rate
+parameter $\lambda=\tfrac27$ per day (equivalently a mean shelf life of
+$\tfrac1\lambda=\tfrac72=3.5$ days). For an exponential variable the
+right-tail probability has the closed form
+\[
+P(Y>y)=e^{-\lambda y}.
+\]
+
+\section*{Work}
+A loaf stocked today is still sellable in 2 days exactly when its shelf life
+exceeds 2 days, so we want $P(Y>2)$:
+\[
+P(Y>2)=e^{-\lambda(2)}=e^{-(2/7)(2)}=e^{-4/7}\approx0.5647 .
+\]
+
+\finalanswer{$P(Y>2)=e^{-4/7}\approx 0.5647$ --- about $56.47\%$ of the loaves.}
+\end{document}

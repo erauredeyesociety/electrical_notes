@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 3 --- Question 6}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+The time to failure in hours of an important piece of electronic equipment used
+in a manufactured DVD player has the density below. Find the mean number of hours
+to failure of the component.
+\[
+f(x)=
+\begin{cases}
+\dfrac{3}{1000}\,e^{-3x/1000},&x\ge 0,\\
+0,&x<0.
+\end{cases}
+\]
+\textit{(Type an integer or a simplified fraction.)}
+
+\section*{Setup}
+This matches the \textbf{exponential} form $f(x)=\lambda e^{-\lambda x}$ with
+rate parameter
+\[
+\lambda=\frac{3}{1000}\text{ per hour.}
+\]
+For an exponential variable the rate is one over the mean ($\lambda=1/\mu$), so
+the mean is simply the reciprocal of the rate.
+
+\section*{Work}
+\[
+\mu=E(X)=\frac1\lambda=\frac{1}{3/1000}=\frac{1000}{3}\approx 333.33\text{ hours.}
+\]
+(Equivalently, $E(X)=\int_0^\infty x\,\tfrac{3}{1000}e^{-3x/1000}\,dx=\tfrac{1000}{3}$.)
+
+\finalanswer{Mean time to failure $=\dfrac{1000}{3}\approx 333.33$ hours.}
+\end{document}

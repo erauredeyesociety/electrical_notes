@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 3 --- Question 4}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+The density function of the continuous random variable $X$, the total number
+of hours, in units of 100 hours, that a family runs a vacuum cleaner over a
+period of one year, is given. Find the average number of hours per year that
+families run their vacuum cleaners.
+\[
+f(x)=
+\begin{cases}
+\dfrac95x,&0<x<\dfrac{\sqrt5}{3},\\[3pt]
+\dfrac{6\sqrt5}{5}-\dfrac95x,
+&\dfrac{\sqrt5}{3}\le x<\dfrac{2\sqrt5}{3},\\[3pt]
+0,&\text{elsewhere}.
+\end{cases}
+\]
+
+The average number of hours per year that families run their vacuum cleaners is
+\fbox{\strut\hspace{1.5em}} hours.
+
+\textit{(Round to the nearest whole number as needed.)}
+
+\section*{Work}
+This triangular density is symmetric about its peak at
+$x=\sqrt5/3$, so its mean is the center of symmetry:
+\[
+E(X)=\frac{\sqrt5}{3}.
+\]
+Since $X$ is measured in hundreds of hours,
+\[
+100E(X)=\frac{100\sqrt5}{3}\approx74.536\text{ hours}.
+\]
+
+\finalanswer{The average annual use is $\boxed{75\text{ hours}}$.}
+\end{document}

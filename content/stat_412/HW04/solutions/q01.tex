@@ -1,0 +1,29 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 1}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+Suppose the joint probability distribution of $X$ and $Y$ is
+$f(x,y)=\dfrac{x+y}{126}$ for $x=4,5,6,7$ and $y=4,5,6$. Find $P(X\le 6,Y=6)$.
+
+\section*{Setup}
+For a discrete joint distribution, a probability over a set of $(x,y)$ pairs is
+the \emph{sum} of $f(x,y)$ over those pairs. Here we fix $y=6$ and sum over
+$x=4,5,6$.
+
+\section*{Work}
+\[
+P(X\le 6,Y=6)=\sum_{x=4}^{6} f(x,6)
+=\frac{(4+6)+(5+6)+(6+6)}{126}
+=\frac{10+11+12}{126}=\frac{33}{126}=\frac{11}{42}\approx0.2619 .
+\]
+
+\finalanswer{$P(X\le 6,Y=6)=\dfrac{33}{126}=\dfrac{11}{42}\approx0.2619$.
+\emph{Parts (b)--(d) are pending (not visible in the screenshot).}}
+\end{document}

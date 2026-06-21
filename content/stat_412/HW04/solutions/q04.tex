@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 4}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+$f(x,y)=\dfrac34 x$ on $0<x<2,\ 0<y<2-x$ (and $0$ elsewhere).
+(a) Show $X$ and $Y$ are not independent. (b) Find $P(X>0.4\mid Y=0.6)$.
+
+\section*{Setup}
+$X$ and $Y$ are independent only if $f(x,y)=g(x)h(y)$ for all $(x,y)$. Here the
+support is the triangle $0<y<2-x$ --- the range of one variable depends on the
+other --- which already signals dependence; we confirm it through the
+conditional density $f(x\mid y)=f(x,y)/h(y)$.
+
+\section*{Work}
+\textbf{Marginal of $Y$:}
+\[
+h(y)=\int_0^{2-y}\tfrac34 x\,dx=\tfrac34\cdot\frac{(2-y)^2}{2}=\frac38(2-y)^2,
+\qquad 0<y<2 .
+\]
+\textbf{(a) Conditional of $X$ given $Y$:}
+\[
+f(x\mid y)=\frac{\tfrac34 x}{\tfrac38(2-y)^2}=\frac{2x}{(2-y)^2},
+\qquad 0<x<2-y .
+\]
+This depends on $y$, so $f(x\mid y)\ne g(x)$ and \textbf{$X$ and $Y$ are not
+independent}.
+
+\textbf{(b)} With $y=0.6$ the support is $0<x<1.4$ and
+$f(x\mid 0.6)=\dfrac{2x}{(1.4)^2}=\dfrac{2x}{1.96}$:
+\[
+P(X>0.4\mid Y{=}0.6)=\int_{0.4}^{1.4}\frac{2x}{1.96}\,dx
+=\frac{(1.4)^2-(0.4)^2}{1.96}=\frac{1.8}{1.96}=\frac{45}{49}\approx0.9184 .
+\]
+
+\finalanswer{(a) Not independent --- $f(x\mid y)=\dfrac{2x}{(2-y)^2}$ for
+$0<x<2-y$ involves $y$.\quad
+(b) $P(X>0.4\mid Y=0.6)=\dfrac{45}{49}\approx0.9184$.}
+\end{document}

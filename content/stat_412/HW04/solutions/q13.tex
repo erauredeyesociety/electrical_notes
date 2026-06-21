@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 4 --- Question 13}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Problem}
+A 100-watt bulb has mean life $\mu=900$ hours with standard deviation
+$\sigma=60$ hours. At most, what percentage of bulbs fail to last even 660
+hours? Assume the distribution is symmetric about the mean.
+
+\section*{Setup}
+Chebyshev's theorem bounds the \emph{two-sided} tail:
+$P(|X-\mu|\ge k\sigma)\le \dfrac{1}{k^2}$. ``Failing to last 660 hours'' means
+$X\le 660$, which is the \emph{lower} tail. Because the distribution is symmetric
+about the mean, each tail carries half of the two-sided bound:
+$P(X\le \mu-k\sigma)\le \dfrac{1}{2k^2}$.
+
+\section*{Work}
+First express $660$ in standard deviations below the mean:
+\[
+k=\frac{\mu-660}{\sigma}=\frac{900-660}{60}=\frac{240}{60}=4 .
+\]
+Then
+\[
+P(X\le 660)\le \frac{1}{2k^2}=\frac{1}{2(4)^2}=\frac{1}{32}=0.03125=3.125\% .
+\]
+
+\finalanswer{At most $\dfrac{1}{32}=3.125\%$ of the bulbs fail to last 660 hours.}
+\end{document}
