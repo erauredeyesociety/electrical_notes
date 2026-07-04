@@ -13,15 +13,19 @@
 \noindent\textbf{Source-status note.} Answers come from the 17 screenshots plus
 pasted HTML for several questions (and the joint tables in \texttt{q2-2.png},
 \texttt{q5.md}, \texttt{q8.md}). Every numeric result was verified with Python.
-Still pending (prompts not yet captured): \textbf{Q1(b--d), Q10(c), Q12(b--d),
-Q14(c--d)}. Q12(a) is confirmed by the platform dropdowns. \textbf{Q6 requires
+All currently supplied HW04 prompts are captured. Q1(a--c), Q12(a--c),
+Q14(a--c), and Q17's first four dropdowns were platform-confirmed. Other blank
+fields below were computed from their visible prompts.
+\textbf{Q6 requires
 the exact radical} $-\sqrt{30}/10$ (its decimal was rejected); where a prompt
 says ``exact'' or ``simplify,'' enter the fraction/radical, not a decimal.
 
 \begin{enumerate}[leftmargin=*,label=\textbf{\arabic*.}]
 \item \textbf{Joint pmf $f(x,y)=\tfrac{x+y}{126}$:}
-(a) $P(X\le 6,Y=6)=\dfrac{33}{126}=\dfrac{11}{42}\approx0.2619$.
-\textit{Parts (b)--(d) pending.}
+(a) $P(X\le 6,Y=6)=\dfrac{11}{42}$;\quad
+(b) $P(X>6,Y\le5)=\dfrac{23}{126}$;\quad
+(c) $P(X>Y)=\dfrac{11}{21}$;\quad
+(d) $P(X+Y=13)=\dfrac{13}{126}$.
 
 \item \textbf{Marginal distributions:}
 (a) $g(2)=0.30,\ g(4)=0.70$;\quad
@@ -31,9 +35,9 @@ says ``exact'' or ``simplify,'' enter the fraction/radical, not a decimal.
 $P(1<Y<4\mid X=2)=\dfrac58=0.625$.
 
 \item \textbf{Joint density $f=\tfrac34 x$:}
-(a) $X,Y$ are \textbf{not} independent ($f(x\mid y)=\tfrac{2x}{(2-y)^2}$ for
-$0<x<2-y$ involves $y$);\quad
-(b) $P(X>0.4\mid Y=0.6)=\dfrac{45}{49}\approx0.9184$.
+\textbf{Enter exactly:} (a) select \textbf{Choice A}, then type
+$f(x\mid y)=\dfrac{2x}{(2-y)^2}$ in Choice A's box;\quad
+(b) type $\dfrac{45}{49}\approx0.918367$.
 
 \item \textbf{Covariance (machine malfunctions vs.\ calls):}
 $\sigma_{XY}=0.045=\dfrac{9}{200}$.
@@ -52,7 +56,8 @@ $\rho_{XY}=\dfrac12$.
 $\sigma^2_{-8X+6Y-5}=64(6)+36(9)=708$.
 
 \item \textbf{Two 24-sided dice:}
-(a) $E(X+Y)=25$;\quad (b) $E(X-Y)=0$. \textit{Part (c) pending.}
+(a) $E(X+Y)=25$;\quad (b) $E(X-Y)=0$;\quad
+(c) $E(XY)=156.25$ \textit{(computed; field blank)}.
 
 \item \textbf{Two 8-sided dice} (each $\operatorname{Var}=\tfrac{63}{12}=5.25$):
 (a) $\operatorname{Var}(4X-Y)=16(5.25)+5.25=89.25$;\quad
@@ -61,14 +66,21 @@ $\sigma^2_{-8X+6Y-5}=64(6)+36(9)=708$.
 \item \textbf{Independence test, $f=x^2+2y^2$:}
 (a) $X,Y$ are \textbf{not} independent, since $f(x,y)$ \textbf{is not} equal to
 $g(x)h(y)$ (the marginal densities $g(x)=x^2+\tfrac23$, $h(y)=\tfrac13+2y^2$) ---
-matches the platform dropdowns. \textit{Parts (b)--(d) pending.}
+select \textbf{are not / is not / $g(x)h(y)$ / marginal distributions}.
+\quad (b) $E(X+Y)=\dfrac54$ and $E(XY)=\dfrac38$.
+\quad (c) $\operatorname{Var}(X)=\dfrac{59}{720}$,
+$\operatorname{Var}(Y)=\dfrac1{15}$, and
+$\operatorname{Cov}(X,Y)=-\dfrac1{72}$;\quad
+(d) $\operatorname{Var}(X+Y)=\dfrac{29}{240}$.
 
 \item \textbf{Chebyshev (bulb life), symmetric:}
 at most $\dfrac{1}{2(4)^2}=\dfrac{1}{32}=3.125\%$ fail to last 660 hours.
 
 \item \textbf{Chebyshev, $\mu=4,\sigma^2=4$:}
 (a) $P(|X-4|\ge 3)\le \dfrac{4}{9}$;\quad
-(b) $P(|X-4|<3)\ge 1-\dfrac49=\dfrac59$. \textit{Parts (c)--(d) pending.}
+(b) $P(|X-4|<3)\ge\dfrac59$;\quad
+(c) $P(-1<X<9)\ge\dfrac{21}{25}$;\quad
+(d) $c=10$.
 
 \item \textbf{Covariance (creams vs.\ toffees), $f=24xy$:}
 $\operatorname{Cov}(X,Y)=-\dfrac{2}{75}\approx-0.0267$.
@@ -77,7 +89,17 @@ $\operatorname{Cov}(X,Y)=-\dfrac{2}{75}\approx-0.0267$.
 $\rho_{XY}=0$ ($X$ and $Y$ are independent).
 
 \item \textbf{Correlation of $X$ and $Y=a+bX$:}
-$\rho_{XY}=\dfrac{b}{|b|}$ ($+1$ if $b>0$, $-1$ if $b<0$).
+select, in order:
+$\dfrac{\sigma_{XY}}{\sigma_X\sigma_Y}$;
+$E[(X-\mu_X)(Y-\mu_Y)]$;
+$b\sigma_X^2$;
+$\boxed{\sqrt{b^2\sigma_X^2}}$.
+The first four are platform-confirmed. For the final question select
+\textbf{Choice A},
+$\rho_{XY}=\dfrac{b}{|b|}$.
+For the final sign dropdowns select, in order,
+\textbf{negative / positive / positive / positive}.
+Thus $\rho_{XY}=-1$ if $b<0$ and $+1$ if $b>0$.
 \end{enumerate}
 
 \end{document}

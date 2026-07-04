@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 4 --- Question 3}
+\author{}\date{}
+\begin{document}\maketitle
+
+\section*{Problem}
+The density of $X$ is
+\[
+f(x)=
+\begin{cases}
+8(\tfrac12-x),&0<x<\tfrac12,\\
+0,&\text{otherwise}.
+\end{cases}
+\]
+Find the variance and standard deviation exactly.
+
+\section*{Work}
+\[
+ \begin{aligned}
+E(X)
+&=\int_0^{1/2}8x(\tfrac12-x)\,dx\\
+&=\int_0^{1/2}(4x-8x^2)\,dx\\
+&=\left[2x^2-\frac83x^3\right]_0^{1/2}\\
+&=\frac12-\frac13=\frac16.
+\end{aligned}
+\]
+\[
+\begin{aligned}
+E(X^2)
+&=\int_0^{1/2}8x^2(\tfrac12-x)\,dx\\
+&=\int_0^{1/2}(4x^2-8x^3)\,dx\\
+&=\left[\frac43x^3-2x^4\right]_0^{1/2}\\
+&=\frac16-\frac18=\frac1{24}.
+\end{aligned}
+\]
+Therefore
+\[
+\operatorname{Var}(X)=E(X^2)-[E(X)]^2
+=\frac1{24}-\frac1{36}
+=\frac{3-2}{72}=\frac1{72},
+\]
+and
+\[
+\sigma_X=\sqrt{\frac1{72}}=\frac{\sqrt2}{12}.
+\]
+
+\finalanswer{$\operatorname{Var}(X)=\dfrac1{72}$ and
+$\sigma_X=\dfrac{\sqrt2}{12}$.}
+\end{document}

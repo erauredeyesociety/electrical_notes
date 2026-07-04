@@ -10,23 +10,75 @@
 
 \section*{Problem}
 Given $X$ with standard deviation $\sigma_X$ and $Y=a+bX$, show that
-$\rho_{XY}=-1$ if $b<0$ and $\rho_{XY}=1$ if $b>0$.
+$\rho_{XY}=-1$ if $b<0$ and $\rho_{XY}=1$ if $b>0$. First select the general
+formula for the correlation coefficient.
+
+\section*{Exact Dropdown Selections}
+\begin{enumerate}
+\item $\dfrac{\sigma_{XY}}{\sigma_X\sigma_Y}$.
+\item $E[(X-\mu_X)(Y-\mu_Y)]$.
+\item $b\sigma_X^2$.
+\item $\sqrt{b^2\sigma_X^2}$ --- select this, not $b\sigma_X$.
+\item Select \textbf{Choice A}:
+$\rho_{XY}=\dfrac{b}{|b|}$.
+\item Final dropdowns, in order:
+\textbf{negative / positive / positive / positive}.
+\end{enumerate}
 
 \section*{Setup}
 \[
 \rho_{XY}=\frac{\operatorname{Cov}(X,Y)}{\sigma_X\,\sigma_Y}.
 \]
+In the notation used by the dropdown, this is
+\[
+\rho_{XY}=\frac{\sigma_{XY}}{\sigma_X\sigma_Y}.
+\]
 Use $\operatorname{Cov}(X,a+bX)=b\operatorname{Var}(X)=b\sigma_X^2$ and
-$\sigma_Y=\sqrt{\operatorname{Var}(a+bX)}=\sqrt{b^2\sigma_X^2}=|b|\sigma_X$.
+\[
+\operatorname{Var}(Y)=b^2\sigma_X^2,\qquad
+\sigma_Y=\sqrt{\operatorname{Var}(Y)}
+=\sqrt{b^2\sigma_X^2}=|b|\sigma_X.
+\]
+The absolute value is required because standard deviation cannot be negative.
 
 \section*{Work}
+For the covariance dropdown, choose the expression equivalent to
+\[
+\sigma_{XY}=E[(X-\mu_X)(Y-\mu_Y)]
+=E(XY)-\mu_X\mu_Y.
+\]
+The platform confirmed the first displayed form.
+
+Now use $Y=a+bX$:
+\[
+\begin{aligned}
+\sigma_{XY}
+&=\operatorname{Cov}(X,a+bX)\\
+&=\operatorname{Cov}(X,a)+b\operatorname{Cov}(X,X)\\
+&=b\sigma_X^2.
+\end{aligned}
+\]
+Also,
+\[
+\sigma_Y=|b|\sigma_X.
+\]
+Therefore
 \[
 \rho_{XY}=\frac{b\,\sigma_X^2}{\sigma_X\,(|b|\sigma_X)}
 =\frac{b\,\sigma_X^2}{|b|\,\sigma_X^2}=\frac{b}{|b|}.
 \]
-Hence $\rho_{XY}=\dfrac{b}{|b|}$, which equals $+1$ when $b>0$ and $-1$ when
-$b<0$.
+If $b<0$, then the numerator $b$ is negative while the denominator $|b|$ is
+positive, so $\rho_{XY}=-1$. If $b>0$, then both numerator and denominator are
+positive, so $\rho_{XY}=1$.
 
-\finalanswer{$\rho_{XY}=\dfrac{b}{|b|}$ $\bigl(=+1$ if $b>0$, $-1$ if
-$b<0\bigr)$.}
+\finalanswer{Select, in order:
+$\dfrac{\sigma_{XY}}{\sigma_X\sigma_Y}$;
+$E[(X-\mu_X)(Y-\mu_Y)]$;
+$b\sigma_X^2$;
+$\sqrt{b^2\sigma_X^2}$.
+Then select \textbf{Choice A},
+$\rho_{XY}=\dfrac{b}{|b|}$.
+For the final four dropdowns select
+\textbf{negative / positive / positive / positive}.
+Hence $\rho_{XY}=-1$ for $b<0$ and $+1$ for $b>0$.}
 \end{document}

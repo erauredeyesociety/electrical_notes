@@ -1,0 +1,32 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 4 --- Question 6}
+\author{}\date{}
+\begin{document}\maketitle
+
+\section*{Problem}
+The annual number of power failures $X$ has probabilities
+\[
+\begin{array}{c|cccc}
+x&0&1&2&3\\\hline
+P(X=x)&0.4&0.1&0.2&0.3
+\end{array}
+\]
+with $E(X)=1.4$ and $\operatorname{Var}(X)=1.64$. Find the mean and variance of
+$Z=7X+9$ without rounding.
+
+\section*{Work}
+Linearity of expectation gives
+\[
+E(Z)=E(7X+9)=7E(X)+9=7(1.4)+9=18.8.
+\]
+A constant does not affect variance:
+\[
+\operatorname{Var}(Z)=\operatorname{Var}(7X+9)
+=7^2\operatorname{Var}(X)=49(1.64)=80.36.
+\]
+
+\finalanswer{$E(Z)=18.8$ and $\sigma_Z^2=80.36$.}
+\end{document}

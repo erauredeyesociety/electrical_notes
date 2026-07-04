@@ -1,0 +1,65 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 4 --- Question 2}
+\author{}\date{}
+\begin{document}\maketitle
+
+\section*{Problem}
+Let $X$ and $Y$ be the proportions of Turkish and domestic tobacco in a blend,
+with
+\[
+f(x,y)=24xy,\qquad 0\le x\le1,\quad0\le y\le1,\quad x+y\le1,
+\]
+and zero elsewhere. Find (a) $P(X\ge4/9)$, (b) the marginal density of $Y$,
+and (c) $P(X<1/7\mid Y=3/4)$. For part (b), the displayed support choices are
+$0\le y\le1-x$, $x\le y\le1$, $x\le y\le1-x$, and $0\le y\le1$.
+
+\section*{Part (a)}
+For a fixed $x$, the support has $0\le y\le1-x$:
+\[
+\begin{aligned}
+P(X\ge4/9)
+&=\int_{4/9}^{1}\int_0^{1-x}24xy\,dy\,dx\\
+&=\int_{4/9}^{1}24x\left[\frac{y^2}{2}\right]_{0}^{1-x}dx\\
+&=\int_{4/9}^{1}12x(1-x)^2\,dx\\
+&=\int_{4/9}^{1}(12x-24x^2+12x^3)\,dx\\
+&=\left[6x^2-8x^3+3x^4\right]_{4/9}^{1}\\
+&=1-\frac{1312}{2187}\\
+&=\frac{875}{2187}.
+\end{aligned}
+\]
+\finalanswer{(a) $P(X\ge4/9)=\dfrac{875}{2187}$.}
+
+\section*{Part (b)}
+\[
+\begin{aligned}
+h(y)
+&=\int_0^{1-y}24xy\,dx\\
+&=24y\left[\frac{x^2}{2}\right]_{0}^{1-y}\\
+&=12y(1-y)^2,\qquad 0\le y\le1.
+\end{aligned}
+\]
+\finalanswer{(b) $h(y)=12y(1-y)^2$ for $0\le y\le1$, and $0$ elsewhere.}
+
+\section*{Part (c)}
+At $Y=3/4$, the support is $0\le x\le1/4$. The conditional density is
+\[
+h\left(\frac34\right)
+=12\left(\frac34\right)\left(\frac14\right)^2=\frac9{16},
+\]
+\[
+f(x\mid 3/4)
+=\frac{24x(3/4)}{9/16}
+=32x,\qquad0\le x\le\frac14.
+\]
+Thus
+\[
+P\left(X<\frac17\mid Y=\frac34\right)
+=\int_0^{1/7}32x\,dx
+=\left[16x^2\right]_0^{1/7}
+=\frac{16}{49}.
+\]
+\finalanswer{(c) $\dfrac{16}{49}$.}
+\end{document}

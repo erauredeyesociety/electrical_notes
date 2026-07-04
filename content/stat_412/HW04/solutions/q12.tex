@@ -10,8 +10,9 @@
 
 \section*{Problem}
 A service facility has two lines; $X,Y$ are the proportions of time each is in
-use, with $f(x,y)=x^2+2y^2$ on $0\le x,y\le 1$. Determine whether $X$ and $Y$
-are independent.
+use, with $f(x,y)=x^2+2y^2$ on $0\le x,y\le1$. Complete parts (a) through (d).
+Part (a) asks about independence, part (b) asks for $E(X+Y)$ and $E(XY)$,
+and part (c) asks for the two variances and covariance.
 
 \section*{Setup}
 $X$ and $Y$ are independent iff $f(x,y)=g(x)\,h(y)$ for all $(x,y)$, where
@@ -30,7 +31,49 @@ is not equal to $f(x,y)=x^2+2y^2$ (e.g.\ at $x=y=\tfrac12$,
 $g\,h=0.764\ne0.75=f$). Since $f(x,y)\ne g(x)h(y)$, \textbf{$X$ and $Y$ are not
 independent}.
 
-\finalanswer{$X$ and $Y$ are \textbf{not} independent, since $f(x,y)$ is
-\textbf{not} equal to the product $g(x)h(y)$ of the marginal densities.
-\emph{Parts (b)--(d) are pending (not visible).}}
+\textbf{Part (b).}
+\[
+E(X)=\int_0^1x\left(x^2+\tfrac23\right)dx=\frac{7}{12},
+\qquad
+E(Y)=\int_0^1y\left(\tfrac13+2y^2\right)dy=\frac23,
+\]
+so
+\[
+E(X+Y)=\frac{7}{12}+\frac23=\frac54.
+\]
+Also,
+\[
+E(XY)=\int_0^1\int_0^1xy(x^2+2y^2)\,dx\,dy
+=\frac18+\frac14=\frac38.
+\]
+
+\textbf{Part (c).}
+\[
+E(X^2)=\frac{19}{45},\qquad
+\operatorname{Var}(X)=\frac{19}{45}-\left(\frac7{12}\right)^2
+=\frac{59}{720}.
+\]
+\[
+E(Y^2)=\frac{23}{45},\qquad
+\operatorname{Var}(Y)=\frac{23}{45}-\left(\frac23\right)^2
+=\frac1{15}.
+\]
+\[
+\operatorname{Cov}(X,Y)
+=\frac38-\left(\frac7{12}\right)\left(\frac23\right)
+=-\frac1{72}.
+\]
+
+\finalanswer{(a) Select \textbf{are not / is not / $g(x)h(y)$ / marginal
+distributions}.\quad
+(b) Enter $E(X+Y)=\dfrac54$ and $E(XY)=\dfrac38$.
+(c) Enter $\dfrac{59}{720}$, $\dfrac1{15}$, and $-\dfrac1{72}$, in order.
+(d) Use
+\[
+\operatorname{Var}(X+Y)
+=\operatorname{Var}(X)+\operatorname{Var}(Y)
++2\operatorname{Cov}(X,Y)
+=\frac{29}{240}.
+\]
+Enter $\dfrac{29}{240}$, not the covariance $-\dfrac1{72}$.}
 \end{document}

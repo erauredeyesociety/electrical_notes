@@ -4,7 +4,9 @@ Applies to **every assignment folder** — homeworks (`HW01`, `HW02`, …) and
 quizzes (`QZ01`, `QZ02`, `QZ03`, …) alike. Read this before working any
 question. Throughout, `<DIR>` is the assignment folder (e.g. `HW03`, `QZ03`) and
 `<tag>` is its lowercase short name (e.g. `hw03`, `qz03`). The lessons here were
-learned building HW01–HW03; keep adding to it so each new assignment starts ahead.
+learned building HW01–HW04 and QZ03–QZ04; keep adding to it so each new
+assignment starts ahead. The reusable **method/formula** sections come first;
+the per-assignment **mapping** sections at the bottom are the running log.
 
 ## The two LaTeX deliverables (and how they differ)
 
@@ -101,6 +103,14 @@ problem, sometimes a grading screenshot. Expect this and plan for it.
   to see where the user actually pasted something new.
 - It writes an ignored snapshot to `<DIR>/.worklogs/material_snapshot.json`, so
   re-running surfaces only the delta. The `.worklogs` directories are git-ignored.
+- The inventory snapshot currently watches only **top-level assignment files**
+  (`qN.md`, screenshots, loose reference tables, answer-key files). It does
+  **not** report edits inside nested directories such as `<DIR>/solutions/`.
+  So "Changed files: none" means no new root-level material arrived; it does
+  not mean the worked LaTeX partials were untouched.
+- After editing nested worked solutions, run a quick local check yourself, e.g.
+  brace-balance over `<DIR>/solutions/q*.tex` plus `git diff --check`. If
+  `tectonic` is installed, also compile the changed standalone `.tex` files.
 - For an unknown problem with several parts, **transcribe the full part count
   from the header immediately** (e.g. "complete parts (a) through (e)") and stub
   the not-yet-visible parts as pending. Never invent a missing subpart; never
@@ -199,6 +209,12 @@ distilled from the transcripts:
 
 - **Probability $=$ area under the density** $=\int_a^b f(x)\,dx$; a single point
   has probability $0$, so $P(X<a)=P(X\le a)$.
+- For continuous integrals, show a **little algebra, not just the final
+  antiderivative**. Expand simple polynomials when useful, write the
+  antiderivative with limits, and show the key evaluated boundary value. Example
+  style: $\int 12x(1-x)^2dx=\int(12x-24x^2+12x^3)dx
+  =[6x^2-8x^3+3x^4]$. This keeps solutions "plain and simple" while still
+  showing enough work to debug an entry.
 - **Continuous mean/variance:** $\mu=E(X)=\int x f\,dx$, $E(X^2)=\int x^2 f\,dx$,
   then the shortcut $\operatorname{Var}=E(X^2)-\mu^2$, $\sigma=\sqrt{\operatorname{Var}}$.
 - **Exponential:** identify the rate $\lambda=1/\text{mean}$, then use the closed
@@ -212,6 +228,55 @@ distilled from the transcripts:
   for the $k$th event in a constant-rate (Poisson) process is gamma with shape
   $\alpha=k$ and scale $\beta=1/\lambda$ (mean gap). The incomplete-gamma table
   is for $\beta=1$, so enter it at $x/\beta$ and read $F(x/\beta;\alpha)$.
+
+## Joint distributions, covariance & Chebyshev (Chapter 4)
+
+Reusable formulas and traps distilled from HW04 and QZ04 (the joint-distribution
+chapter). Lead each worked partial with the relevant one, then plug in.
+
+- **Marginals** — sum/integrate *out the other variable*:
+  $g(x)=\sum_y f(x,y)$ or $\int f\,dy$; $h(y)=\sum_x f(x,y)$ or $\int f\,dx$.
+- **Conditional density** $f(x\mid y)=\dfrac{f(x,y)}{h(y)}$ — the joint over the
+  *marginal*, **not** the joint itself (HW04 Q4's wrong ``Choice C'' handed back
+  the joint $\tfrac34x$). That the conditional still depends on the conditioning
+  variable is exactly what proves dependence.
+- For conditional continuous probabilities, explicitly state the conditional
+  support and normalize the remaining variable. Constants involving fixed
+  conditioning values should cancel; do not carry irrelevant fixed constants
+  through a probability integral unless they help show the cancellation.
+- **Independence** iff $f(x,y)=g(x)\,h(y)$ for all $(x,y)$ **and** the support is
+  a rectangle (each range free of the other variable). A triangular support such
+  as $0<y<2-x$ already forces dependence.
+- **Factoring shortcut:** if $f$ factors as (function of $x$)(function of $y$)
+  on a rectangular support, then $X\perp Y$, so $\operatorname{Cov}=0$ and
+  $\rho=0$ — don't integrate (HW04 Q16, $f=\tfrac{64y}{5x^3}$).
+- **Covariance** $\sigma_{XY}=E(XY)-\mu_X\mu_Y$, with
+  $E(XY)=\sum\sum xy\,f$ or $\iint xy\,f$.
+- **$E(XY)=E(X)E(Y)$ only when $X\perp Y$** (HW04 Q8b, Q10c).
+- **Correlation** $\rho=\dfrac{\sigma_{XY}}{\sigma_X\sigma_Y}$. For $Y=a+bX$:
+  $\operatorname{Cov}(X,Y)=b\sigma_X^2$ and
+  $\sigma_Y=\sqrt{b^2\sigma_X^2}=|b|\sigma_X$ (use the absolute value, never
+  $b\sigma_X$ when $b<0$), so $\rho=\dfrac{b}{|b|}$ ($+1$ if $b>0$, $-1$ if $b<0$).
+- **Variance of a linear combination — the big trap:**
+  \[
+  \operatorname{Var}(aX+bY+c)=a^2\sigma_X^2+b^2\sigma_Y^2+2ab\,\sigma_{XY}.
+  \]
+  The additive constant $c$ drops out. If $X\perp Y$ the cross term is $0$
+  (so $\operatorname{Var}=a^2\sigma_X^2+b^2\sigma_Y^2$); if they are
+  **dependent you must keep $2ab\,\sigma_{XY}$**, signs included (HW04 Q12d:
+  $\operatorname{Var}(X+Y)=\operatorname{Var}X+\operatorname{Var}Y+2\operatorname{Cov}$,
+  $=\tfrac{29}{240}$, not the bare covariance $-\tfrac1{72}$).
+- **Discrete uniform on $1..n$** (an $n$-sided die): mean $\tfrac{n+1}{2}$,
+  variance $\tfrac{n^2-1}{12}$.
+- **Chebyshev** $P(|X-\mu|\ge k\sigma)\le\dfrac1{k^2}$ (useful only for $k>1$);
+  match a deviation $t$ via $t=k\sigma$.
+  - Complement is a **lower** bound: $P(|X-\mu|<t)\ge 1-\tfrac1{k^2}$ (HW04 Q14b).
+  - ``Find $c$ with $P(|X-\mu|\ge c)\le\alpha$'': solve
+    $\tfrac{\sigma^2}{c^2}=\alpha\Rightarrow c=\tfrac{\sigma}{\sqrt\alpha}$
+    (HW04 Q14d: $\tfrac{4}{c^2}=0.04\Rightarrow c=10$).
+  - **Stated ``symmetric about the mean'' ⇒ halve** the two-tail bound for a
+    one-tail question: $P(X\le\mu-k\sigma)\le\tfrac1{2k^2}$ (HW04 Q13 $=3.125\%$;
+    QZ04 Q8 $=12.5\%$).
 
 ## LaTeX gotchas (all confirmed)
 
@@ -273,6 +338,62 @@ distilled from the transcripts:
   the question number** before any prompt arrives (here `5.md`/`7.md` predicted
   Q5 gamma / Q7 normal, which the screenshots then confirmed).
 
+## QZ04 mapping (June 23, 2026 — complete, 9 questions)
+
+- QZ04 is a nine-question quiz on joint distributions, covariance, transformed
+  means/variances, continuous moments, conditional densities, and Chebyshev.
+  Layout: clean `q1.md`--`q9.md`,
+  standalone worked `solutions/q01.tex`--`q09.tex`, and the standalone concise
+  `stat412_qz04_answer_key.tex`.
+- The nine timestamped screenshots were normalized chronologically to
+  `1.png`--`9.png`; the capture order exactly matched Q1--Q9. Raw HTML in all
+  nine Markdown files supplied the accessible question text and choices, then
+  was removed after transcription.
+- Every field was blank, so all answers are computed and verified rather than
+  platform-confirmed.
+- A second-pass audit checked the solutions against the Chapter 3--4 course
+  transcripts and authoritative probability references, then independently
+  checked every joint/marginal/conditional density for normalization and every
+  nontrivial probability with both exact symbolic integration and numerical
+  quadrature. No answer values changed. The audit did restore all visible
+  multiple-choice distractors to Q2, Q5, Q7, and Q9 and their worked-solution
+  problem statements, because a standalone problem must preserve the complete
+  prompt rather than only the correct choice.
+- A later polish pass expanded the worked-solution integral steps in Q2, Q3,
+  Q4, Q5, Q7, and Q9: show the integrand expansion, the antiderivative with
+  limits, and the key fraction/decimal simplification. The answer-only key
+  intentionally stayed terse. Inventory showed no root-level changes because
+  nested `solutions/` files are outside the snapshot scope; brace-balance and
+  `git diff --check` passed.
+- Answers:
+  Q1 $\operatorname{Var}(-4X+6Y-8)=180$;
+  Q2 (a) $875/2187$, (b) $h(y)=12y(1-y)^2$ on $0\le y\le1$,
+  (c) $16/49$;
+  Q3 $\operatorname{Var}=1/72$, $\sigma=\sqrt2/12$;
+  Q4 Choice A, $E(Y)=9$, $E(Y^2)=247/3$, $\operatorname{Var}(Y)=4/3$;
+  Q5 Choice A with $f(x\mid y)=3x^2/(3-y)^3$,
+  $P(X>0.3\mid Y=1.7)=2170/2197\approx0.987711$;
+  Q6 $E(Z)=18.8$, $\operatorname{Var}(Z)=80.36$;
+  Q7 Choice A $g(x)=(10x+4)/9$, Choice B $h(y)=(8y+5)/9$,
+  $P(X<1/3)=17/81$;
+  Q8 symmetric Chebyshev lower-tail bound $12.5\%$;
+  Q9 Choice C $g(y,z)=6y^2z/25$, Choice C $h(y)=3y^2$,
+  (c) $91/900$, (d) $9/64$.
+- Q1 reinforces the dependent-variable variance formula:
+  \[
+  \operatorname{Var}(aX+bY+c)
+  =a^2\sigma_X^2+b^2\sigma_Y^2+2ab\sigma_{XY}.
+  \]
+  Keep the signs inside $2ab\sigma_{XY}$; here the covariance contribution is
+  negative.
+- Q8 again uses the course convention that a symmetric distribution halves the
+  two-tail Chebyshev bound. A cutoff two standard deviations below the mean
+  gives one-tail probability at most
+  $\tfrac12(1/2^2)=1/8=12.5\%$.
+- For a conditional continuous probability such as Q9(d), constants involving
+  the fixed conditioning values cancel. Normalize only the remaining
+  $x$-dependent kernel; here it is proportional to $x$ on $0<x<2$.
+
 ## HW04 mapping (June 20, 2026 — joint distributions, 17 questions)
 
 - HW04 is the **joint-distributions** chapter: marginals, conditionals,
@@ -285,9 +406,64 @@ distilled from the transcripts:
 - Pasted HTML later filled in several later parts. **Newly resolved:**
   Q8(b) $E(XY)=E(X)E(Y)=7.28$ (independent); Q10(b) $E(X-Y)=0$; Q11(b)
   $\operatorname{Var}(X+3Y-5)=5.25+9(5.25)=52.5$; Q12(a) confirmed by dropdowns
-  (``are not / is not / $g(x)h(y)$ / marginal densities''); Q14(b)
+  (``are not / is not / $g(x)h(y)$ / marginal distributions''; the functions
+  themselves are the marginal densities); Q14(b)
   $P(|X-4|<3)\ge 1-\tfrac49=\tfrac59$ (complement ⇒ Chebyshev gives a *lower*
-  bound). **Still pending:** Q1(b--d), Q10(c), Q12(b--d), Q14(c--d).
+  bound). That wave still lacked Q1(b--d), Q10(c), Q12(b--d), and Q14(c--d);
+  the next bullet records the later additions.
+- A later HTML wave resolved two more prompts: Q10(c) asks for $E(XY)$, giving
+  $E(X)E(Y)=12.5^2=156.25$ because the dice are independent; Q14(c) asks for
+  $P(-1<X<9)=P(|X-4|<5)\ge21/25$. Both fields were blank, so these are computed
+  but not platform-confirmed.
+- The June 23 HTML wave exposed Q1(b), Q12(b), Q14(d), and Q17's next proof
+  dropdown. Q1(b) is $P(X>6,Y\le5)=23/126$. Q12(b) gives
+  $E(X+Y)=5/4$ and $E(XY)=3/8$. Q14(d) solves
+  $4/c^2=0.04$, so $c=10$. The only still-uncaptured prompts are Q1(c)--(d)
+  and Q12(c)--(d) at that stage.
+- A subsequent June 23 wave platform-confirmed Q1(b) $=23/126$ and both Q12(b)
+  answers, $5/4$ and $3/8$. It exposed Q1(c), giving
+  $P(X>Y)=66/126=11/21$, and Q12(c), giving
+  $\operatorname{Var}(X)=59/720$, $\operatorname{Var}(Y)=1/15$, and
+  $\operatorname{Cov}(X,Y)=-1/72$. At that stage, only Q1(d) and Q12(d)
+  remained uncaptured.
+  Q4's new paste merely showed its blank part-(b) field.
+- The next wave platform-confirmed Q1(c) $=11/21$ and exposed Q1(d):
+  $P(X+Y=13)=f(7,6)=13/126$. Q1 is now complete. Q12's paste was only a
+  truncated repeat of part (a), so Q12(d) remains the sole uncaptured HW04
+  prompt.
+- The final captured Q12 part asks for $\operatorname{Var}(X+Y)$. The attempted
+  $-1/72$ was rejected because that is only the covariance. Include the cross
+  term:
+  \[
+  \operatorname{Var}(X+Y)=\frac{59}{720}+\frac1{15}
+  +2\left(-\frac1{72}\right)=\frac{29}{240}.
+  \]
+  Q12(a)--(c) are platform-confirmed, and all supplied HW04 prompts are now
+  captured.
+- Q4's HTML showed Choice C selected without a correct grade. That choice
+  confuses the joint density with the conditional density. The correct response
+  is Choice A with $f(x\mid y)=2x/(2-y)^2$.
+- Q17's first dropdown asks for the general formula
+  $\rho_{XY}=\sigma_{XY}/(\sigma_X\sigma_Y)$; only after substitution does it
+  reduce to $b/|b|$. Its next dropdown asks for covariance:
+  $\sigma_{XY}=E[(X-\mu_X)(Y-\mu_Y)]=E(XY)-\mu_X\mu_Y$. The HTML did not
+  preserve that dropdown's option list, so match whichever equivalent form is
+  shown. Then use $\sigma_{XY}=b\sigma_X^2$ and $\sigma_Y=|b|\sigma_X$.
+  A later incorrect-feedback hint emphasized the standard-deviation step:
+  first obtain $\operatorname{Var}(Y)=b^2\sigma_X^2$, then
+  $\sigma_Y=\sqrt{b^2\sigma_X^2}=|b|\sigma_X$. Never use $b\sigma_X$ when
+  $b<0$.
+  The full Q17 sequence is now visible: select
+  $\sigma_{XY}/(\sigma_X\sigma_Y)$,
+  $E[(X-\mu_X)(Y-\mu_Y)]$, $b\sigma_X^2$, and finally
+  $\boxed{\sqrt{b^2\sigma_X^2}}$. Although
+  $\sqrt{b^2\sigma_X^2}=|b|\sigma_X$ mathematically, the dropdown does not
+  offer the absolute-value form; simplify only after making the square-root
+  selection. All four formula selections were later platform-confirmed.
+  Q17's multiple-choice step is **Choice A**, $\rho_{XY}=b/|b|$.
+  Its last four sign dropdowns are, in order,
+  **negative / positive / positive / positive**: for $b<0$, $b$ is negative
+  but $|b|$ is positive; for $b>0$, both are positive.
 - **Q6 ``Try again'' was a format rejection, not a wrong value.** The decimal
   $-0.5477$ was rejected because the prompt says ``exact answer, using
   radicals''; the accepted form is $-\sqrt{30}/10$. The generic ``That's
@@ -310,11 +486,22 @@ distilled from the transcripts:
     (not $1/16$). The ``assume symmetric'' phrasing is the tell.
   - **A density that factors over a rectangular support ⇒ independent ⇒
     $\rho=0$** (Q16, $f=\tfrac{64y}{5x^3}$) --- don't grind through the integrals.
-- Answers (all Python-verified; fields were blank, so computed not confirmed):
-  Q1a $\tfrac{11}{42}$; Q2 $g=0.3/0.7$, $h=0.26/0.49/0.25$; Q3 $\tfrac58$;
+- Answers (all Python-verified; blank fields are computed, not confirmed):
+  Q1 (a) $\tfrac{11}{42}$, (b) $\tfrac{23}{126}$,
+  (c) $\tfrac{11}{21}$, (d) $\tfrac{13}{126}$;
+  Q2 $g=0.3/0.7$, $h=0.26/0.49/0.25$; Q3 $\tfrac58$;
   Q4 not-indep, $\tfrac{45}{49}$; Q5 $0.045$; Q6 $-\tfrac{\sqrt{30}}{10}$;
-  Q7 $\tfrac12$; Q8a $3.8$; Q9 $708$; Q10a $25$; Q11a $89.25$; Q12 not-indep;
-  Q13 $3.125\%$; Q14a $\le\tfrac49$; Q15 $-\tfrac2{75}$; Q16 $0$; Q17 $\tfrac{b}{|b|}$.
+  Q7 $\tfrac12$; Q8 (a) $3.8$, (b) $7.28$; Q9 $708$;
+  Q10 (a) $25$, (b) $0$, (c) $156.25$; Q11 (a) $89.25$, (b) $52.5$;
+  Q12 (a) not independent, (b) $\tfrac54,\tfrac38$,
+  (c) $\tfrac{59}{720},\tfrac1{15},-\tfrac1{72}$,
+  (d) $\tfrac{29}{240}$; Q13 $3.125\%$;
+  Q14 (a) $\le\tfrac49$, (b) $\ge\tfrac59$, (c) $\ge\tfrac{21}{25}$,
+  (d) $10$;
+  Q15 $-\tfrac2{75}$; Q16 $0$;
+  Q17 select $\tfrac{\sigma_{XY}}{\sigma_X\sigma_Y}$, then covariance
+  $E[(X-\mu_X)(Y-\mu_Y)]$ (or $E(XY)-\mu_X\mu_Y$), then
+  $\rho=\tfrac{b}{|b|}$.
 
 ## HW03 screenshot mapping (June 20, 2026 capture)
 

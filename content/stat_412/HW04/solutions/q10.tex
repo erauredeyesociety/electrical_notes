@@ -10,7 +10,7 @@
 
 \section*{Problem}
 $X$ is the result of a 24-sided red die and $Y$ the result of a 24-sided green
-die. Find $E(X+Y)$.
+die. Find (a) $E(X+Y)$, (b) $E(X-Y)$, and (c) $E(XY)$. Do not round.
 
 \section*{Setup}
 Each die is uniform on $1,2,\dots,24$, so its mean is the average of the first
@@ -23,6 +23,11 @@ E(X)=E(Y)=\frac{1+24}{2}=12.5 .
 \textbf{(a)} $E(X+Y)=12.5+12.5=25$.\qquad
 \textbf{(b)} $E(X-Y)=12.5-12.5=0$.
 
-\finalanswer{(a) $E(X+Y)=25$.\quad (b) $E(X-Y)=0$.
-\emph{Part (c) is pending (not visible).}}
+The dice are independent, so
+\[
+\textbf{(c)}\qquad E(XY)=E(X)E(Y)=(12.5)(12.5)=156.25.
+\]
+
+\finalanswer{(a) $E(X+Y)=25$; (b) $E(X-Y)=0$;
+(c) $E(XY)=156.25$ (computed; the field was blank).}
 \end{document}

@@ -1,0 +1,33 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 4 --- Question 1}
+\author{}\date{}
+\begin{document}\maketitle
+
+\section*{Problem}
+If $\sigma_X^2=3$, $\sigma_Y^2=9$, and $\sigma_{XY}=4$, where $X$ and $Y$
+are not independent, find the variance of $Z=-4X+6Y-8$.
+
+\section*{Setup}
+For dependent variables,
+\[
+\operatorname{Var}(aX+bY+c)
+=a^2\operatorname{Var}(X)+b^2\operatorname{Var}(Y)
++2ab\operatorname{Cov}(X,Y).
+\]
+The constant has no effect on variance.
+
+\section*{Work}
+\[
+\begin{aligned}
+\sigma_Z^2
+&=(-4)^2(3)+6^2(9)+2(-4)(6)(4)\\
+&=48+324-192\\
+&=180.
+\end{aligned}
+\]
+
+\finalanswer{$\sigma_Z^2=180$.}
+\end{document}

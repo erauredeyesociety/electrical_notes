@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 4 --- Question 4}
+\author{}\date{}
+\begin{document}\maketitle
+
+\section*{Problem}
+A carpet-cleaning machine delivers $Y$ gallons per minute with
+\[
+f(y)=\frac14,\qquad 7\le y\le11,
+\]
+and zero elsewhere. (a) Choose its graph. (b) Find $E(Y)$, $E(Y^2)$, and
+$\operatorname{Var}(Y)$.
+
+\section*{Part (a)}
+The density is constant at $1/4$ only between $7$ and $11$. Therefore the
+correct graph is the horizontal segment from $(7,0.25)$ to $(11,0.25)$.
+\finalanswer{(a) Choice A.}
+
+\section*{Part (b)}
+\[
+\begin{aligned}
+E(Y)
+&=\int_7^{11}y\left(\frac14\right)dy\\
+&=\frac14\left[\frac{y^2}{2}\right]_7^{11}\\
+&=\frac18(121-49)=9.
+\end{aligned}
+\]
+\[
+\begin{aligned}
+E(Y^2)
+&=\int_7^{11}y^2\left(\frac14\right)dy\\
+&=\frac14\left[\frac{y^3}{3}\right]_7^{11}\\
+&=\frac1{12}(1331-343)
+=\frac{988}{12}=\frac{247}{3}.
+\end{aligned}
+\]
+\[
+\operatorname{Var}(Y)=E(Y^2)-[E(Y)]^2
+=\frac{247}{3}-81
+=\frac{247-243}{3}=\frac43.
+\]
+\finalanswer{(b) $E(Y)=9$, $E(Y^2)=\dfrac{247}{3}$, and
+$\operatorname{Var}(Y)=\dfrac43$.}
+\end{document}

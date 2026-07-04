@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 4 --- Question 8}
+\author{}\date{}
+\begin{document}\maketitle
+
+\section*{Problem}
+A light bulb has mean life $700$ hours and standard deviation $50$ hours.
+At most what percentage fail to last $600$ hours? Assume the distribution is
+symmetric about the mean.
+
+\section*{Work}
+The cutoff is
+\[
+\frac{700-600}{50}=2
+\]
+standard deviations below the mean. Chebyshev gives
+\[
+P(|X-700|\ge100)\le\frac1{2^2}=\frac14.
+\]
+Because the distribution is symmetric, the lower tail is at most half of the
+two-tail bound:
+\[
+P(X\le600)\le\frac12\left(\frac14\right)=\frac18=12.5\%.
+\]
+
+\finalanswer{At most $12.5\%$; enter $12.5$.}
+\end{document}

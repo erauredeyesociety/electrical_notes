@@ -10,9 +10,11 @@
 
 \section*{Problem}
 Suppose the joint probability distribution of $X$ and $Y$ is
-$f(x,y)=\dfrac{x+y}{126}$ for $x=4,5,6,7$ and $y=4,5,6$. Find $P(X\le 6,Y=6)$.
+$f(x,y)=\dfrac{x+y}{126}$ for $x=4,5,6,7$ and $y=4,5,6$. The captured parts
+ask for (a) $P(X\le6,Y=6)$, (b) $P(X>6,Y\le5)$, (c) $P(X>Y)$, and
+(d) $P(X+Y=13)$.
 
-\section*{Setup}
+\section*{Part (a)}
 For a discrete joint distribution, a probability over a set of $(x,y)$ pairs is
 the \emph{sum} of $f(x,y)$ over those pairs. Here we fix $y=6$ and sum over
 $x=4,5,6$.
@@ -24,6 +26,30 @@ P(X\le 6,Y=6)=\sum_{x=4}^{6} f(x,6)
 =\frac{10+11+12}{126}=\frac{33}{126}=\frac{11}{42}\approx0.2619 .
 \]
 
-\finalanswer{$P(X\le 6,Y=6)=\dfrac{33}{126}=\dfrac{11}{42}\approx0.2619$.
-\emph{Parts (b)--(d) are pending (not visible in the screenshot).}}
+\section*{Part (b)}
+The condition $X>6$ leaves only $x=7$, and $Y\le5$ leaves $y=4,5$. Hence
+\[
+P(X>6,Y\le5)=f(7,4)+f(7,5)
+=\frac{7+4}{126}+\frac{7+5}{126}
+=\frac{23}{126}.
+\]
+
+\section*{Part (c)}
+The pairs satisfying $X>Y$ are
+$(5,4),(6,4),(6,5),(7,4),(7,5),(7,6)$. Thus
+\[
+P(X>Y)=\frac{9+10+11+11+12+13}{126}
+=\frac{66}{126}=\frac{11}{21}.
+\]
+
+\section*{Part (d)}
+The only support point satisfying $X+Y=13$ is $(7,6)$. Hence
+\[
+P(X+Y=13)=f(7,6)=\frac{13}{126}.
+\]
+
+\finalanswer{(a) Enter $\dfrac{11}{42}$.\quad
+(b) Enter $\dfrac{23}{126}$.\quad
+(c) Enter $\dfrac{11}{21}$.\quad
+(d) Enter $\dfrac{13}{126}$.}
 \end{document}

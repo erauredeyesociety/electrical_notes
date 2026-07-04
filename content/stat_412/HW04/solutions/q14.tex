@@ -10,7 +10,7 @@
 
 \section*{Problem}
 A random variable $X$ has mean $\mu=4$ and variance $\sigma^2=4$. Using
-Chebyshev's theorem, find $P(|X-4|\ge 3)$.
+Chebyshev's theorem, complete parts (a) through (d).
 
 \section*{Setup}
 Chebyshev: $P(|X-\mu|\ge k\sigma)\le \dfrac{1}{k^2}$. Match the deviation to a
@@ -27,7 +27,23 @@ k=\frac{3}{\sigma}=\frac{3}{2},\qquad
 P(|X-4|<3)=1-P(|X-4|\ge 3)\ \ge\ 1-\frac{4}{9}=\frac{5}{9} .
 \]
 
+\textbf{(c)} Since $-1<X<9$ is the same as $|X-4|<5$,
+\[
+k=\frac{5}{2},\qquad
+P(-1<X<9)=P(|X-4|<5)\ge1-\frac{1}{(5/2)^2}
+=1-\frac4{25}=\frac{21}{25}.
+\]
+
+\textbf{(d)} Chebyshev gives $P(|X-4|\ge c)\le4/c^2$. To make this upper
+bound $0.04=1/25$, solve
+\[
+\frac4{c^2}=\frac1{25}
+\quad\Longrightarrow\quad c^2=100
+\quad\Longrightarrow\quad c=10.
+\]
+
 \finalanswer{(a) $P(|X-4|\ge 3)\le \dfrac49$.\quad
 (b) $P(|X-4|<3)\ge \dfrac59$.
-\emph{Parts (c)--(d) are pending (not visible).}}
+(c) $P(-1<X<9)\ge\dfrac{21}{25}$.\quad
+(d) Enter $c=10$.}
 \end{document}

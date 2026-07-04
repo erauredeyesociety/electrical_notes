@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 4 --- Question 7}
+\author{}\date{}
+\begin{document}\maketitle
+
+\section*{Problem}
+Let $X,Y$ be the proportions of time that a drive-through and walk-in facility
+are in use, with
+\[
+f(x,y)=\frac29(5x+4y),\qquad0\le x\le1,\quad0\le y\le1.
+\]
+Find (a) the marginal of $X$, (b) the marginal of $Y$, and (c) $P(X<1/3)$.
+For each marginal, the platform asks the student to choose between the
+$g(x)$ form on $0\le x\le1$ and the $h(y)$ form on $0\le y\le1$.
+
+\section*{Part (a)}
+\[
+\begin{aligned}
+g(x)
+&=\int_0^1\frac29(5x+4y)\,dy\\
+&=\frac29\left[5xy+2y^2\right]_0^1\\
+&=\frac29(5x+2)
+=\frac{10x+4}{9}.
+\end{aligned}
+\]
+\finalanswer{(a) Select Choice A:
+$g(x)=\dfrac{10x+4}{9}$.}
+
+\section*{Part (b)}
+\[
+\begin{aligned}
+h(y)
+&=\int_0^1\frac29(5x+4y)\,dx\\
+&=\frac29\left[\frac52x^2+4xy\right]_0^1\\
+&=\frac29\left(\frac52+4y\right)
+=\frac{8y+5}{9}.
+\end{aligned}
+\]
+\finalanswer{(b) Select Choice B:
+$h(y)=\dfrac{8y+5}{9}$.}
+
+\section*{Part (c)}
+\[
+P(X<1/3)=\int_0^{1/3}\frac{10x+4}{9}\,dx
+=\left[\frac{5x^2+4x}{9}\right]_0^{1/3}
+=\frac{5/9+4/3}{9}
+=\frac{17}{81}.
+\]
+\finalanswer{(c) $\dfrac{17}{81}$.}
+\end{document}

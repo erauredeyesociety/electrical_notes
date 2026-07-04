@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 4 --- Question 5}
+\author{}\date{}
+\begin{document}\maketitle
+
+\section*{Problem}
+The joint density is
+\[
+f(x,y)=\frac4{27}x^2,\qquad0<x<3,\quad0<y<3-x,
+\]
+and zero elsewhere. (a) Show that $X,Y$ are not independent. (b) Find
+$P(X>0.3\mid Y=1.7)$, rounded to six decimals as needed.
+
+For part (a), the four displayed choices use $f(x\mid y)=f(x,y)/h(y)$ and
+state, respectively: (A) on $0<x<3-y$ it involves $y$; (B) on that support it
+is a function only of $x$; (C) on $0<y<3-x$ it involves $x$; or (D) on
+$0<x<3-y$ it is constant.
+
+\section*{Part (a)}
+First find the marginal of $Y$:
+\[
+h(y)=\int_0^{3-y}\frac4{27}x^2\,dx
+=\frac4{27}\left[\frac{x^3}{3}\right]_0^{3-y}
+=\frac4{81}(3-y)^3,\qquad0<y<3.
+\]
+Hence
+\[
+f(x\mid y)=\frac{f(x,y)}{h(y)}
+=\frac{3x^2}{(3-y)^3},\qquad0<x<3-y.
+\]
+This involves $y$, so the variables are not independent.
+\finalanswer{(a) Select Choice A and enter
+$\dfrac{3x^2}{(3-y)^3}$.}
+
+\section*{Part (b)}
+When $y=1.7$, the upper endpoint is $3-y=1.3$:
+\[
+\begin{aligned}
+P(X>0.3\mid Y=1.7)
+&=\int_{0.3}^{1.3}\frac{3x^2}{1.3^3}\,dx\\
+&=\frac{3}{1.3^3}\left[\frac{x^3}{3}\right]_{0.3}^{1.3}\\
+&=\frac{1.3^3-0.3^3}{1.3^3}\\
+&=\frac{2.197-0.027}{2.197}\\
+&=\frac{2170}{2197}\approx0.987711.
+\end{aligned}
+\]
+\finalanswer{(b) $\dfrac{2170}{2197}\approx0.987711$.}
+\end{document}
