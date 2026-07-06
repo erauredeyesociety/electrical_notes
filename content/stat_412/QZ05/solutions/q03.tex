@@ -1,0 +1,38 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 5 --- Question 3}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Terrier heights have mean $71$ cm and standard deviation $11$ cm. Poodle
+heights have mean $27$ cm and standard deviation $5$ cm. Find the probability
+that the mean of $64$ terriers exceeds the mean of $100$ poodles by at most
+$44.2$ cm.
+
+\section*{Work}
+Let $D=\bar X_T-\bar X_P$, where $T$ denotes terriers and $P$ denotes poodles.
+The mean difference is
+\[
+\mu_D=71-27=44.
+\]
+Because the two samples are independent, the variance of the difference is the
+sum of the sampling variances:
+\[
+\operatorname{Var}(D)=\frac{11^2}{64}+\frac{5^2}{100}.
+\]
+So
+\[
+\sigma_D=\sqrt{\frac{11^2}{64}+\frac{5^2}{100}}
+\approx\sqrt{1.890625+0.25}
+\approx1.4631.
+\]
+We need $P(D\le44.2)$:
+\[
+z=\frac{44.2-44}{1.4631}=\frac{0.2}{1.4631}\approx0.14.
+\]
+From the standard-normal table, $\Phi(0.14)=0.5557$.
+
+\finalanswer{$0.5557$}
+\end{document}

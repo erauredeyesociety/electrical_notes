@@ -1,0 +1,27 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 5}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+The GPAs are
+\[
+2.5,3.5,3.4,2.9,1.7,2.1,2.9,1.8,2.6,2.5,
+2.7,2.4,3.2,2.5,1.9,2.4,3.6,2.3,2.5,3.5.
+\]
+Calculate the sample standard deviation.
+
+\section*{Work}
+For sample data,
+\[
+s=\sqrt{\frac{\sum (x_i-\bar x)^2}{n-1}}.
+\]
+Here $n=20$, $\bar x=2.665$, and $\sum (x_i-\bar x)^2\approx6.1695$, so
+\[
+s=\sqrt{\frac{6.1695}{19}}\approx0.5698\approx0.57.
+\]
+
+\finalanswer{$s\approx0.57$.}
+\end{document}

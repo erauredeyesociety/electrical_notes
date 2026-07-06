@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 16}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Freshman aptitude scores have $\mu=540$ and $\sigma=50$. Two groups of sizes
+$72$ and $50$ are selected. Find the probability their sample means differ by
+(a) more than $15$ points and (b) an amount between $2$ and $6$ points.
+
+\section*{Work}
+For $D=\bar X_1-\bar X_2$,
+\[
+\mu_D=0,\qquad
+\sigma_D=\sqrt{\frac{50^2}{72}+\frac{50^2}{50}}\approx9.2045.
+\]
+For part (a),
+\[
+z=\frac{15}{9.2045}\approx1.63,
+\]
+so
+\[
+P(|D|>15)=2P(Z>1.63)=2(1-0.9484)=0.1032.
+\]
+For part (b),
+\[
+z_1=\frac{2}{9.2045}\approx0.22,\qquad
+z_2=\frac{6}{9.2045}\approx0.65.
+\]
+Thus
+\[
+P(2<|D|<6)=2[\Phi(0.65)-\Phi(0.22)]
+=2(0.7422-0.5871)=0.3102.
+\]
+
+\finalanswer{(a) $0.1032$; (b) $0.3102$.}
+\end{document}

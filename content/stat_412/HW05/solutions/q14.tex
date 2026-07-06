@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 14}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Sample 1 has $n_1=36$, $\mu_1=80$, $\sigma_1=3$. Sample 2 has $n_2=81$,
+$\mu_2=65$, $\sigma_2=5$. Find the probability that
+$\bar X_1-\bar X_2$ is at least $13.7$ but less than $15.6$, measured to the
+nearest tenth.
+
+\section*{Work}
+\[
+\mu_{\bar X_1-\bar X_2}=80-65=15,
+\]
+and
+\[
+\sigma_{\bar X_1-\bar X_2}
+=\sqrt{\frac{3^2}{36}+\frac{5^2}{81}}
+\approx0.7474.
+\]
+Because differences are measured to the nearest tenth, use $13.65$ and $15.55$:
+\[
+z_1=\frac{13.65-15}{0.7474}\approx-1.81,\qquad
+z_2=\frac{15.55-15}{0.7474}\approx0.74.
+\]
+From the z-table,
+\[
+P=0.7704-0.0351=0.7353.
+\]
+
+\finalanswer{$0.7353$.}
+\end{document}

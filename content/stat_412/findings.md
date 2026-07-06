@@ -4,9 +4,9 @@ Applies to **every assignment folder** — homeworks (`HW01`, `HW02`, …) and
 quizzes (`QZ01`, `QZ02`, `QZ03`, …) alike. Read this before working any
 question. Throughout, `<DIR>` is the assignment folder (e.g. `HW03`, `QZ03`) and
 `<tag>` is its lowercase short name (e.g. `hw03`, `qz03`). The lessons here were
-learned building HW01–HW04 and QZ03–QZ04; keep adding to it so each new
-assignment starts ahead. The reusable **method/formula** sections come first;
-the per-assignment **mapping** sections at the bottom are the running log.
+learned building HW01–HW05 and QZ03–QZ04; keep adding only reusable lessons so
+each new assignment starts ahead. Per-assignment maps, answer lists, and status
+logs belong inside the assignment folder, not in this global playbook.
 
 ## The two LaTeX deliverables (and how they differ)
 
@@ -73,6 +73,10 @@ substitute an unlabeled number or a broader related classification.
   and gives no value; treat it as "re-verify," not as an answer source.
 - When the question is **only a PNG**, read the image and transcribe the prompt +
   data by eye; then verify any numbers you'll compute with a quick Python check.
+- If OCR is available, use it as the first pass for screenshot-only prompts:
+  `tesseract N.png tmp/ocr_N --psm 6`. Treat OCR as a draft, not truth; compare
+  against the image for numbers, inequalities, and rounding instructions before
+  writing `qN.md`.
 - Multi-screenshot questions: filenames like `qN-a.png … qN-d.png` (answer
   options) or `qN-1.png/qN-2.png` (prompt continued / data table). Read them all.
 - Number-only names are also supported: `N.png`, `N-2.png`, `N-3.png`, etc.
@@ -137,8 +141,8 @@ several turns later, or as a screenshot/pasted HTML. When that happens:
   an incomplete-gamma table ⇒ a **gamma-distribution** problem; a standard-normal
   table ⇒ a **normal** problem; a cumulative-Poisson table ⇒ a **Poisson**
   problem; binomial sums ⇒ a **binomial** problem.
-- Note in the assignment's mapping section which question each loose table feeds,
-  and that the matching `qN.md` prompt is still awaited.
+- Note in the assignment-local status file which question each loose table
+  feeds, and that the matching `qN.md` prompt is still awaited.
 - Once the prompt arrives, build the usual three artifacts (`qN.md`, the worked
   partial, the answer-key entry) and cite the reference table as a source.
 
@@ -167,6 +171,25 @@ values and **replace the HTML with clean Markdown** — same as for homeworks.
   even without its screenshots. Relative-freq histogram class width 0.5 fit the
   teacher-salary data.
 
+## Project folders (Word/Excel deliverables)
+
+For larger projects such as `MD5_project`, preserve the instructor's original
+Word and Excel files. Do **not** edit the downloaded `.docx`/`.xlsx` directly
+from Codex; use exported CSVs, Markdown instructions, helper scripts, and
+`tmp/` scratch outputs instead. The student can later copy formulas, tables,
+and charts into the official Excel/Word submission files.
+
+- Convert instructions into a faithful `project_instructions.md`.
+- Create a practical `project_setup_summary.md` with deliverables, formulas,
+  interpretation notes, and next actions.
+- If Python helps, make scripts read-only with respect to original files and
+  write generated samples, summaries, and charts only under `tmp/`.
+- Add `tmp/.gitignore` (`*`, `!.gitignore`) so generated project previews stay
+  disposable.
+- If the Word and Canvas/HTML instructions disagree, prefer the clearer Canvas
+  wording when it is consistent with the project context, and document the
+  discrepancy.
+
 ## Stats conventions
 
 - "Variance"/"standard deviation" of a sample = **sample** formula (÷ n−1) unless
@@ -183,6 +206,14 @@ values and **replace the HTML with clean Markdown** — same as for homeworks.
   when a screenshot shows a graded value, report that; otherwise give the table
   value and note the exact one. Never "fix" the sheet over a last-digit
   difference without re-checking with rounded $z$ first.
+- For inverse-normal or sample-size questions that still link the standard
+  normal table, choose the nearest table cutoff unless a graded screenshot
+  confirms an exact-calculator value. Example pattern: central probability
+  $0.975$ gives upper area $0.9875$, table value $z=2.24$.
+- When sample means/measurements are **recorded to the nearest tenth**, use
+  class boundaries for probability ranges: inclusive $177.1$ to $179.7$ becomes
+  $177.05$ to $179.75$; ``below $177.0$'' means recorded values $176.9$ or
+  lower, so use cutoff $176.95$.
 - When MyStatLab marks an entered answer wrong, suspect a user typo before
   re-deriving (happened once: 2.3 vs 2.233).
 - **When a prompt says ``type an exact answer''/``using radicals''/``simplify,''
@@ -313,252 +344,13 @@ chapter). Lead each worked partial with the relevant one, then plug in.
 - Never invent a cropped or missing subpart. Add a plainly labeled pending note
   and record which continuation screenshot is still needed.
 
-## QZ03 mapping (June 20, 2026 — complete, 7 questions)
+## Assignment-local status notes
 
-- QZ03 is a **quiz** (Q1--Q7). Layout: `q1.md`--`q7.md` clean prompts,
-  `QZ03/solutions/q01.tex`--`q07.tex` worked partials,
-  `QZ03/stat412_qz03_answer_key.tex` standalone answer-only sheet.
-- The original screenshots arrived as seven timestamped grabs; they were
-  normalized to `1.png`--`7.png` in question order. The capture order matched
-  question order, **confirmed by the reference tables**: the 5th grab is the
-  gamma problem (matches `5.md`) and the 7th is the normal problem (`7.md`).
-- Reference tables: `5.md` = Incomplete Gamma Function (cumulative $F(x;\alpha)$
-  for $\beta=1$; rows $x$, columns $\alpha=1\ldots10$ — enter at $x/\beta$);
-  `7.md` = standard-normal table.
-- All seven fields were blank (a quiz to solve), so every answer is computed and
-  Python-verified, not platform-confirmed. Answers:
-  Q1 $\operatorname{Var}=\tfrac1{72}$, $\sigma=\tfrac{\sqrt2}{12}$;
-  Q2 $P(Y>2)=e^{-4/7}\approx0.5647$;
-  Q3 $2000\cdot\tfrac{27}{19}\approx\$2842$;
-  Q4 (a) $\tfrac{72}{95}$, (b) $\tfrac{57}{95}=\tfrac35$;
-  Q5 gamma $\alpha=6,\beta=100$, $P(T<500)=F(5;6)=0.384$;
-  Q6 exponential mean $\tfrac{1000}{3}\approx333.33$ hr;
-  Q7 normal $10$th percentile $35000+(-1.28)(2600)=31{,}672$ mi (exact $z$: $31{,}668$).
-- Lesson reinforced: **a loose reference table pins the question type and even
-  the question number** before any prompt arrives (here `5.md`/`7.md` predicted
-  Q5 gamma / Q7 normal, which the screenshots then confirmed).
+Keep `findings.md` as the durable playbook: conventions, formulas, traps, and
+workflow rules that apply across assignments. Do **not** turn it into a map of
+every homework/quiz or a running answer list.
 
-## QZ04 mapping (June 23, 2026 — complete, 9 questions)
-
-- QZ04 is a nine-question quiz on joint distributions, covariance, transformed
-  means/variances, continuous moments, conditional densities, and Chebyshev.
-  Layout: clean `q1.md`--`q9.md`,
-  standalone worked `solutions/q01.tex`--`q09.tex`, and the standalone concise
-  `stat412_qz04_answer_key.tex`.
-- The nine timestamped screenshots were normalized chronologically to
-  `1.png`--`9.png`; the capture order exactly matched Q1--Q9. Raw HTML in all
-  nine Markdown files supplied the accessible question text and choices, then
-  was removed after transcription.
-- Every field was blank, so all answers are computed and verified rather than
-  platform-confirmed.
-- A second-pass audit checked the solutions against the Chapter 3--4 course
-  transcripts and authoritative probability references, then independently
-  checked every joint/marginal/conditional density for normalization and every
-  nontrivial probability with both exact symbolic integration and numerical
-  quadrature. No answer values changed. The audit did restore all visible
-  multiple-choice distractors to Q2, Q5, Q7, and Q9 and their worked-solution
-  problem statements, because a standalone problem must preserve the complete
-  prompt rather than only the correct choice.
-- A later polish pass expanded the worked-solution integral steps in Q2, Q3,
-  Q4, Q5, Q7, and Q9: show the integrand expansion, the antiderivative with
-  limits, and the key fraction/decimal simplification. The answer-only key
-  intentionally stayed terse. Inventory showed no root-level changes because
-  nested `solutions/` files are outside the snapshot scope; brace-balance and
-  `git diff --check` passed.
-- Answers:
-  Q1 $\operatorname{Var}(-4X+6Y-8)=180$;
-  Q2 (a) $875/2187$, (b) $h(y)=12y(1-y)^2$ on $0\le y\le1$,
-  (c) $16/49$;
-  Q3 $\operatorname{Var}=1/72$, $\sigma=\sqrt2/12$;
-  Q4 Choice A, $E(Y)=9$, $E(Y^2)=247/3$, $\operatorname{Var}(Y)=4/3$;
-  Q5 Choice A with $f(x\mid y)=3x^2/(3-y)^3$,
-  $P(X>0.3\mid Y=1.7)=2170/2197\approx0.987711$;
-  Q6 $E(Z)=18.8$, $\operatorname{Var}(Z)=80.36$;
-  Q7 Choice A $g(x)=(10x+4)/9$, Choice B $h(y)=(8y+5)/9$,
-  $P(X<1/3)=17/81$;
-  Q8 symmetric Chebyshev lower-tail bound $12.5\%$;
-  Q9 Choice C $g(y,z)=6y^2z/25$, Choice C $h(y)=3y^2$,
-  (c) $91/900$, (d) $9/64$.
-- Q1 reinforces the dependent-variable variance formula:
-  \[
-  \operatorname{Var}(aX+bY+c)
-  =a^2\sigma_X^2+b^2\sigma_Y^2+2ab\sigma_{XY}.
-  \]
-  Keep the signs inside $2ab\sigma_{XY}$; here the covariance contribution is
-  negative.
-- Q8 again uses the course convention that a symmetric distribution halves the
-  two-tail Chebyshev bound. A cutoff two standard deviations below the mean
-  gives one-tail probability at most
-  $\tfrac12(1/2^2)=1/8=12.5\%$.
-- For a conditional continuous probability such as Q9(d), constants involving
-  the fixed conditioning values cancel. Normalize only the remaining
-  $x$-dependent kernel; here it is proportional to $x$ on $0<x<2$.
-
-## HW04 mapping (June 20, 2026 — joint distributions, 17 questions)
-
-- HW04 is the **joint-distributions** chapter: marginals, conditionals,
-  independence, covariance, correlation, expectation/variance of linear
-  combinations, and Chebyshev.
-- 17 timestamped screenshots, normalized to `1.png`--`17.png` in chronological =
-  question order. Labeled extras the user supplied: `q2-2.png` (the joint table
-  for Q2), and `q5.md` / `q8.md` (joint tables the user typed for Q5 and Q8 ---
-  these were expanded into the full `q5.md`/`q8.md` prompts, table preserved).
-- Pasted HTML later filled in several later parts. **Newly resolved:**
-  Q8(b) $E(XY)=E(X)E(Y)=7.28$ (independent); Q10(b) $E(X-Y)=0$; Q11(b)
-  $\operatorname{Var}(X+3Y-5)=5.25+9(5.25)=52.5$; Q12(a) confirmed by dropdowns
-  (``are not / is not / $g(x)h(y)$ / marginal distributions''; the functions
-  themselves are the marginal densities); Q14(b)
-  $P(|X-4|<3)\ge 1-\tfrac49=\tfrac59$ (complement ⇒ Chebyshev gives a *lower*
-  bound). That wave still lacked Q1(b--d), Q10(c), Q12(b--d), and Q14(c--d);
-  the next bullet records the later additions.
-- A later HTML wave resolved two more prompts: Q10(c) asks for $E(XY)$, giving
-  $E(X)E(Y)=12.5^2=156.25$ because the dice are independent; Q14(c) asks for
-  $P(-1<X<9)=P(|X-4|<5)\ge21/25$. Both fields were blank, so these are computed
-  but not platform-confirmed.
-- The June 23 HTML wave exposed Q1(b), Q12(b), Q14(d), and Q17's next proof
-  dropdown. Q1(b) is $P(X>6,Y\le5)=23/126$. Q12(b) gives
-  $E(X+Y)=5/4$ and $E(XY)=3/8$. Q14(d) solves
-  $4/c^2=0.04$, so $c=10$. The only still-uncaptured prompts are Q1(c)--(d)
-  and Q12(c)--(d) at that stage.
-- A subsequent June 23 wave platform-confirmed Q1(b) $=23/126$ and both Q12(b)
-  answers, $5/4$ and $3/8$. It exposed Q1(c), giving
-  $P(X>Y)=66/126=11/21$, and Q12(c), giving
-  $\operatorname{Var}(X)=59/720$, $\operatorname{Var}(Y)=1/15$, and
-  $\operatorname{Cov}(X,Y)=-1/72$. At that stage, only Q1(d) and Q12(d)
-  remained uncaptured.
-  Q4's new paste merely showed its blank part-(b) field.
-- The next wave platform-confirmed Q1(c) $=11/21$ and exposed Q1(d):
-  $P(X+Y=13)=f(7,6)=13/126$. Q1 is now complete. Q12's paste was only a
-  truncated repeat of part (a), so Q12(d) remains the sole uncaptured HW04
-  prompt.
-- The final captured Q12 part asks for $\operatorname{Var}(X+Y)$. The attempted
-  $-1/72$ was rejected because that is only the covariance. Include the cross
-  term:
-  \[
-  \operatorname{Var}(X+Y)=\frac{59}{720}+\frac1{15}
-  +2\left(-\frac1{72}\right)=\frac{29}{240}.
-  \]
-  Q12(a)--(c) are platform-confirmed, and all supplied HW04 prompts are now
-  captured.
-- Q4's HTML showed Choice C selected without a correct grade. That choice
-  confuses the joint density with the conditional density. The correct response
-  is Choice A with $f(x\mid y)=2x/(2-y)^2$.
-- Q17's first dropdown asks for the general formula
-  $\rho_{XY}=\sigma_{XY}/(\sigma_X\sigma_Y)$; only after substitution does it
-  reduce to $b/|b|$. Its next dropdown asks for covariance:
-  $\sigma_{XY}=E[(X-\mu_X)(Y-\mu_Y)]=E(XY)-\mu_X\mu_Y$. The HTML did not
-  preserve that dropdown's option list, so match whichever equivalent form is
-  shown. Then use $\sigma_{XY}=b\sigma_X^2$ and $\sigma_Y=|b|\sigma_X$.
-  A later incorrect-feedback hint emphasized the standard-deviation step:
-  first obtain $\operatorname{Var}(Y)=b^2\sigma_X^2$, then
-  $\sigma_Y=\sqrt{b^2\sigma_X^2}=|b|\sigma_X$. Never use $b\sigma_X$ when
-  $b<0$.
-  The full Q17 sequence is now visible: select
-  $\sigma_{XY}/(\sigma_X\sigma_Y)$,
-  $E[(X-\mu_X)(Y-\mu_Y)]$, $b\sigma_X^2$, and finally
-  $\boxed{\sqrt{b^2\sigma_X^2}}$. Although
-  $\sqrt{b^2\sigma_X^2}=|b|\sigma_X$ mathematically, the dropdown does not
-  offer the absolute-value form; simplify only after making the square-root
-  selection. All four formula selections were later platform-confirmed.
-  Q17's multiple-choice step is **Choice A**, $\rho_{XY}=b/|b|$.
-  Its last four sign dropdowns are, in order,
-  **negative / positive / positive / positive**: for $b<0$, $b$ is negative
-  but $|b|$ is positive; for $b>0$, both are positive.
-- **Q6 ``Try again'' was a format rejection, not a wrong value.** The decimal
-  $-0.5477$ was rejected because the prompt says ``exact answer, using
-  radicals''; the accepted form is $-\sqrt{30}/10$. The generic ``That's
-  incorrect'' dialogs on Q1, Q4, Q15 likewise carried no values (they restate
-  definitions) --- the computed answers were right; enter them as exact
-  fractions.
-- Q6's on-screen joint table is behind an icon (not captured) but is fully
-  determined by the multivariate hypergeometric (3 oranges, 2 apples, 2 bananas,
-  choose 6).
-- Core formulas used: marginal $g(x)=\sum_y/\int f$; conditional
-  $f(y\mid x)=f(x,y)/g(x)$; independence iff $f=g(x)h(y)$ on a rectangular
-  support; $\operatorname{Cov}=E(XY)-E(X)E(Y)$;
-  $\rho=\operatorname{Cov}/(\sigma_X\sigma_Y)$;
-  $\operatorname{Var}(aX+bY+c)=a^2\sigma_X^2+b^2\sigma_Y^2$ (independent);
-  discrete uniform on $1..n$ has variance $\tfrac{n^2-1}{12}$; Chebyshev
-  $P(|X-\mu|\ge k\sigma)\le 1/k^2$.
-- Two judgment calls worth remembering:
-  - **Q13 Chebyshev with a stated ``symmetric'' assumption ⇒ halve the bound.**
-    660 hrs is $4\sigma$ below; one-tail $\le \tfrac{1}{2k^2}=\tfrac1{32}=3.125\%$
-    (not $1/16$). The ``assume symmetric'' phrasing is the tell.
-  - **A density that factors over a rectangular support ⇒ independent ⇒
-    $\rho=0$** (Q16, $f=\tfrac{64y}{5x^3}$) --- don't grind through the integrals.
-- Answers (all Python-verified; blank fields are computed, not confirmed):
-  Q1 (a) $\tfrac{11}{42}$, (b) $\tfrac{23}{126}$,
-  (c) $\tfrac{11}{21}$, (d) $\tfrac{13}{126}$;
-  Q2 $g=0.3/0.7$, $h=0.26/0.49/0.25$; Q3 $\tfrac58$;
-  Q4 not-indep, $\tfrac{45}{49}$; Q5 $0.045$; Q6 $-\tfrac{\sqrt{30}}{10}$;
-  Q7 $\tfrac12$; Q8 (a) $3.8$, (b) $7.28$; Q9 $708$;
-  Q10 (a) $25$, (b) $0$, (c) $156.25$; Q11 (a) $89.25$, (b) $52.5$;
-  Q12 (a) not independent, (b) $\tfrac54,\tfrac38$,
-  (c) $\tfrac{59}{720},\tfrac1{15},-\tfrac1{72}$,
-  (d) $\tfrac{29}{240}$; Q13 $3.125\%$;
-  Q14 (a) $\le\tfrac49$, (b) $\ge\tfrac59$, (c) $\ge\tfrac{21}{25}$,
-  (d) $10$;
-  Q15 $-\tfrac2{75}$; Q16 $0$;
-  Q17 select $\tfrac{\sigma_{XY}}{\sigma_X\sigma_Y}$, then covariance
-  $E[(X-\mu_X)(Y-\mu_Y)]$ (or $E(XY)-\mu_X\mu_Y$), then
-  $\rho=\tfrac{b}{|b|}$.
-
-## HW03 screenshot mapping (June 20, 2026 capture)
-
-- The normalized original wave is `1.png` through `20.png`.
-- Continuation screenshots currently include `3-2.png`, `3-3.png`, `11-2.png`,
-  `13-2.png`, `14-2.png`, and `18-2.png`.
-- `3-3.png` is **grading feedback**, not a new prompt: MyStatLab accepted
-  $f(x)\ge0$ for all $x\in\mathbb{R}$ on Q3(a) and rejected $f(x)>0$ for $x>1$.
-  Always re-read a grading screenshot before trusting a $>$/$\ge$ or domain
-  blank.
-- Q13 is now complete: parts (a)--(c) are all captured. Q13(c) (shorter than
-  26.5 cm) computes to $0.0122$.
-- Q14 is a **five-part** problem (a)--(e), all now captured. Q14(c) (misses
-  coffee) $=1-P(15<T<25)$; MyStatLab recorded $0.6817$ (exact) as correct, so
-  report $0.6817$ (table-rounded $0.6834$ is the alternative). Q14(d) (slowest
-  15\% = 85th percentile) $=27+z_{0.85}(4.3)$: exact $z=1.0364\Rightarrow 31.457$
-  min (table $z=1.04\Rightarrow 31.472$). Q14(e) is binomial: each trip
-  independently takes $\ge\tfrac12$ hr with $p=0.2420$ (part a), so
-  $P(2\text{ of }3)=\binom32(0.2420)^2(0.7580)\approx0.1332$. (d) and (e) had
-  blank fields, so not yet platform-confirmed.
-- Q11 is complete (a)--(e). Q11(c) (beta parameters of $f(y)=12(1-y)^{11}$):
-  matching $\tfrac{1}{B(\alpha,\beta)}y^{\alpha-1}(1-y)^{\beta-1}$ gives
-  $\alpha=1$, $\beta=12$ --- **graded correct**. Q11(d) (beta mean)
-  $=\tfrac1{13}\approx0.0769$. Q11(e) (beta variance, round to **six** d.p.)
-  $=\tfrac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}=\tfrac{12}{2366}
-  \approx0.005072$. (d) and (e) had blank fields, so not yet platform-confirmed.
-- **All HW03 prompts (Q1--Q20, every part) are now captured.** No prompts remain
-  pending.
-- A pasted "That's incorrect" feedback dialog (seen earlier on Q14) is only
-  MyStatLab's generic z-table explanation --- it names no part and gives no
-  value. Treat it as a signal to re-verify method/rounding, not as an answer
-  source. (Q14(c) was later confirmed correct at $0.6817$ anyway.)
-- When a screenshot header says "complete parts (a) through (e)," transcribe the
-  full part count even if only some parts are visible; do not silently shorten
-  it to the visible subset (Q14 was wrongly recorded as (a)--(c)).
-- For HW03 Q16, MyStatLab's displayed conclusion compares the requested
-  $P(Y>10)$ directly with the stated $0.35$ threshold. Use the platform-expected
-  dropdown answer ``would'' with $P(Y>10)=0.2865$, even though the prose about a
-  repair \emph{before} ten years is conceptually awkward.
-- HW03 uses `q1.md` through `q20.md` for clean prompts and
-  `solutions/q01.tex` through `solutions/q20.tex` for standalone worked
-  solutions. `HW03/stat412_hw03_answer_key.tex` is the standalone answer-only
-  sheet.
-
-## HW02 screenshot mapping (June 20, 2026 capture)
-
-- The normalized original wave is `1.png` through `17.png`.
-- `13-2.png` is continuation material for Question 13.
-- Supplemental files `11.md`, `13.md`, and `14.md` contain cumulative Poisson
-  tables. The original large table transcriptions formerly stored in `q6.md`
-  and `q8.md` were reference data; the clean `q6.md` and `q8.md` now contain
-  the actual problem prompts.
-- Question 13 is now complete: parts (a)--(c) are all captured (the part (c)
-  prompt arrived as pasted HTML). Q13(c) (at least 5 accidents, Poisson
-  $\lambda=5$) computes to $P(X\ge5)=1-0.4405=0.5595$; its MyStatLab field was
-  still blank, so it is not yet platform-confirmed.
-- HW02 uses `q1.md` through `q17.md` for clean prompts and
-  `solutions/q01.tex` through `solutions/q17.tex` for standalone worked
-  solutions. `HW02/stat412_hw02_answer_key.tex` is the standalone answer-only
-  sheet.
+When an individual assignment needs a log, put that note in the assignment
+folder itself, for example `<DIR>/status.md` or `<DIR>/.worklogs/notes.md`.
+The global findings file should only receive a new note when the lesson is
+likely to matter again.

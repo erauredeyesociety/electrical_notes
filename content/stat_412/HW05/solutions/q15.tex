@@ -1,0 +1,33 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 15}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Terrier heights have $\mu_T=72$, $\sigma_T=10$, $n_T=64$. Poodle heights have
+$\mu_P=27$, $\sigma_P=4$, $n_P=100$. Find
+$P(\bar X_T-\bar X_P\le44.2)$.
+
+\section*{Work}
+\[
+\mu_{\bar X_T-\bar X_P}=72-27=45,
+\]
+and
+\[
+\sigma_{\bar X_T-\bar X_P}
+=\sqrt{\frac{10^2}{64}+\frac{4^2}{100}}
+\approx1.3124.
+\]
+Then
+\[
+z=\frac{44.2-45}{1.3124}\approx-0.61.
+\]
+From the z-table,
+\[
+P(Z\le-0.61)=0.2709.
+\]
+
+\finalanswer{$0.2709$.}
+\end{document}

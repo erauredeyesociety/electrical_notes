@@ -1,0 +1,33 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 5 --- Question 4}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+A machine makes resistors with mean resistance $40$ ohms and standard deviation
+$3$ ohms. Find the probability that a random sample of $36$ resistors has
+combined resistance more than $1476$ ohms.
+
+\section*{Work}
+Let $S=X_1+\cdots+X_{36}$ be the combined resistance. For a sum of independent
+resistors, means add and variances add:
+\[
+\mu_S=36(40)=1440.
+\]
+The variance of one resistor is $3^2=9$, so
+\[
+\operatorname{Var}(S)=36(9)=324,\qquad \sigma_S=\sqrt{324}=18.
+\]
+Then
+\[
+z=\frac{1476-1440}{18}=2.00.
+\]
+So
+\[
+P(S>1476)=P(Z>2.00)=1-0.9772=0.0228.
+\]
+
+\finalanswer{$0.0228$}
+\end{document}

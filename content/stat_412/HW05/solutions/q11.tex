@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 11}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+The distribution is
+\[
+\begin{array}{c|cccc}
+x&3&4&5&6\\ \hline
+P(X=x)&0.1&0.3&0.4&0.2
+\end{array}
+\]
+Part (a) asks for the mean and variance of $X$. Part (b) asks for the mean and
+variance of $\bar X$ for random samples of $64$ cherry puffs. Part (c) asks
+for the probability that the average number of cherries in $64$ cherry puffs is
+less than $4.9$.
+
+\section*{Work}
+\[
+\mu=E(X)=3(0.1)+4(0.3)+5(0.4)+6(0.2)=4.7.
+\]
+Also,
+\[
+E(X^2)=9(0.1)+16(0.3)+25(0.4)+36(0.2)=22.9.
+\]
+Therefore
+\[
+\sigma^2=E(X^2)-\mu^2=22.9-(4.7)^2=0.81.
+\]
+For sample means with $n=64$,
+\[
+\mu_{\bar X}=\mu=4.7,\qquad
+\sigma_{\bar X}^2=\frac{\sigma^2}{n}=\frac{0.81}{64}=0.01265625.
+\]
+Thus
+\[
+\sigma_{\bar X}=\sqrt{0.01265625}=0.1125.
+\]
+For part (c),
+\[
+z=\frac{4.9-4.7}{0.1125}\approx 1.78.
+\]
+From the z-table,
+\[
+P(\bar X<4.9)\approx \Phi(1.78)=0.9625.
+\]
+
+\finalanswer{(a) $\mu=4.7$ and $\sigma^2=0.81$.
+(b) $\mu_{\bar X}=4.7$ and $\sigma_{\bar X}^2=0.01265625$.
+(c) $P(\bar X<4.9)\approx0.9625$.}
+\end{document}

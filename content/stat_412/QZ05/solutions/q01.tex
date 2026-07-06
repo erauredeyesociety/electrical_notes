@@ -1,0 +1,57 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 5 --- Question 1}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+The mean score for freshmen on an aptitude test is $560$, with standard
+deviation $60$. Two independent groups of sizes $48$ and $60$ are selected.
+Find the probability that the two sample means differ by (a) more than $17$
+points and (b) an amount between $4$ and $9$ points.
+
+\section*{Work}
+Let $D=\bar X_1-\bar X_2$. Since both groups come from the same population,
+the expected difference in sample means is $0$:
+\[
+\mu_D=E(\bar X_1-\bar X_2)=560-560=0.
+\]
+For independent samples, variances add:
+\[
+\operatorname{Var}(D)=\operatorname{Var}(\bar X_1)+\operatorname{Var}(\bar X_2)
+=\frac{60^2}{48}+\frac{60^2}{60}.
+\]
+Therefore
+\[
+\sigma_D=\sqrt{\frac{60^2}{48}+\frac{60^2}{60}}
+=\sqrt{75+60}=\sqrt{135}\approx 11.619.
+\]
+For part (a), ``differ by more than $17$'' means $|D|>17$:
+\[
+z=\frac{17}{11.619}\approx1.46.
+\]
+Because the normal distribution is symmetric,
+\[
+P(|D|>17)=P(D<-17)+P(D>17)=2P(Z>1.46).
+\]
+Using the standard-normal table, $\Phi(1.46)=0.9279$, so
+\[
+2P(Z>1.46)=2(1-0.9279)=2(0.0721)=0.1442.
+\]
+For part (b),
+\[
+P(4<|D|<9)=2\left[P\left(Z<\frac9{11.619}\right)
+-P\left(Z<\frac4{11.619}\right)\right].
+\]
+The z-scores are
+\[
+\frac4{11.619}\approx0.34,\qquad \frac9{11.619}\approx0.77.
+\]
+From the table, $\Phi(0.77)=0.7794$ and $\Phi(0.34)=0.6331$, so
+\[
+2(0.7794-0.6331)=0.2926.
+\]
+
+\finalanswer{(a) $0.1442$ \quad (b) $0.2926$}
+\end{document}

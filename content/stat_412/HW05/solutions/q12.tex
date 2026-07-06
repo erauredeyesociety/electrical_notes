@@ -1,0 +1,28 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 12}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Electrical resistors have mean $41$ ohms and standard deviation $3$ ohms. Find
+the probability that the combined resistance of a random sample of $36$
+resistors is more than $1494$ ohms.
+
+\section*{Work}
+Let $S$ be the sum of the 36 resistances. Then
+\[
+\mu_S=36(41)=1476,\qquad \sigma_S=\sqrt{36}(3)=18.
+\]
+Thus
+\[
+z=\frac{1494-1476}{18}=1.00.
+\]
+Using the z-table,
+\[
+P(S>1494)=P(Z>1.00)=1-0.8413=0.1587.
+\]
+
+\finalanswer{$0.1587$.}
+\end{document}

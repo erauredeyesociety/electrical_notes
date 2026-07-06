@@ -1,0 +1,25 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 6}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Samples of size $64$ are drawn from a normal population with $\mu=50$ and
+$\sigma=12$. Find the probability that $\bar X$ falls from
+$\mu_{\bar X}-1.3\sigma_{\bar X}$ to $\mu_{\bar X}-0.2\sigma_{\bar X}$.
+
+\section*{Work}
+Since the interval is already written in standard-error units,
+\[
+P(\mu_{\bar X}-1.3\sigma_{\bar X}<\bar X<\mu_{\bar X}-0.2\sigma_{\bar X})
+=P(-1.3<Z<-0.2).
+\]
+Using the standard normal table,
+\[
+P(-1.3<Z<-0.2)=\Phi(-0.2)-\Phi(-1.3)=0.4207-0.0968=0.3239.
+\]
+
+\finalanswer{$0.3239$.}
+\end{document}

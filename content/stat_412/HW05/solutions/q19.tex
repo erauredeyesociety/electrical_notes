@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 19}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Alloy A and alloy B each have known standard deviation $5$ tons, with samples of
+size $50$ from each. Part (a) asks for
+$P(\bar X_A-\bar X_B>3\mid \mu_A=\mu_B)$.
+Part (b) asks whether these data strongly support alloy A.
+
+\section*{Work}
+Let $D=\bar X_A-\bar X_B$. If $\mu_A=\mu_B$, then
+\[
+\mu_D=0,
+\qquad
+\sigma_D=\sqrt{\frac{5^2}{50}+\frac{5^2}{50}}
+=\sqrt{1}=1.
+\]
+Thus
+\[
+z=\frac{3-0}{1}=3.
+\]
+From the z-table,
+\[
+P(D>3)=P(Z>3)=1-0.9987=0.0013.
+\]
+This probability is negligible, so the observed sample difference would be very
+unlikely if the population means were equal.
+
+\finalanswer{(a) $0.0013$.
+(b) Select: probability \textbf{is} negligible; the experiment \textbf{supports} alloy A.}
+\end{document}

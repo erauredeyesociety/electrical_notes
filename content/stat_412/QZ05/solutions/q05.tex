@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 5 --- Question 5}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Student heights are approximately normal with mean $172.1$ cm and standard
+deviation $6.8$ cm. Suppose $200$ random samples of size $25$ are drawn, and
+the sample means are recorded to the nearest tenth. Complete parts (a)--(c).
+
+\section*{Work}
+(a) For the sampling distribution of a sample mean,
+\[
+\mu_{\bar X}=172.1,\qquad
+\sigma_{\bar X}=\frac{6.8}{\sqrt{25}}=1.36.
+\]
+This $1.36$ is the standard error.
+
+(b) Since sample means are recorded to the nearest tenth and the interval is
+inclusive, the recorded values $169.7$ through $173.2$ correspond to the
+continuous interval $169.65$ through $173.25$. Use those boundaries:
+\[
+z_1=\frac{169.65-172.1}{1.36}=\frac{-2.45}{1.36}\approx-1.80,
+\]
+\[
+z_2=\frac{173.25-172.1}{1.36}=\frac{1.15}{1.36}\approx0.85.
+\]
+From the z-table, $\Phi(0.85)=0.8023$ and $\Phi(-1.80)=0.0359$.
+Thus
+\[
+P(169.7\le\bar X\le173.2)\approx0.8023-0.0359=0.7664.
+\]
+The expected count is
+\[
+200(0.7664)=153.28\approx153.
+\]
+(c) ``Below $169.5$'' means the recorded sample mean is less than $169.5$.
+Since values are rounded to the nearest tenth, the largest recorded value below
+$169.5$ is $169.4$, whose upper boundary is $169.45$. Use cutoff $169.45$:
+\[
+z=\frac{169.45-172.1}{1.36}=\frac{-2.65}{1.36}\approx-1.95.
+\]
+From the z-table, $\Phi(-1.95)=0.0256$.
+Therefore
+\[
+P(\bar X<169.45)\approx0.0256,\qquad
+200(0.0256)=5.12\approx5.
+\]
+
+\finalanswer{(a) $\mu_{\bar X}=172.1$, $\sigma_{\bar X}=1.36$;
+(b) $153$ sample means; (c) $5$ sample means.}
+\end{document}

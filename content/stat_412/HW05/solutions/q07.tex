@@ -1,0 +1,29 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 7}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For samples of size $49$, the standard deviation of $\bar X$ is $4$. How large
+must $n$ become to reduce the standard deviation of $\bar X$ to $3.5$?
+
+\section*{Work}
+The standard error has form $\sigma_{\bar X}=\sigma/\sqrt n$. First recover the
+population standard deviation:
+\[
+4=\frac{\sigma}{\sqrt{49}}=\frac{\sigma}{7}
+\quad\Rightarrow\quad \sigma=28.
+\]
+Now solve
+\[
+3.5=\frac{28}{\sqrt n}
+\quad\Rightarrow\quad
+\sqrt n=8
+\quad\Rightarrow\quad
+n=64.
+\]
+
+\finalanswer{$n=64$.}
+\end{document}

@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 5 --- Question 9}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Tread-wear data, in kilometers:
+\[
+61000,\ 52000,\ 69000,\ 44000,\ 59000,\ 54000,\ 62000,\ 68000,\ 53000,\ 67000.
+\]
+First divide each observation by $500$ and subtract $125$. Find the variance of
+the transformed data, then use it to find the standard deviation of the
+original data.
+
+\section*{Work}
+Let
+\[
+Y=\frac{X}{500}-125.
+\]
+The transformed values are
+\[
+-3,\ -21,\ 13,\ -37,\ -7,\ -17,\ -1,\ 11,\ -19,\ 9.
+\]
+The sample variance of these transformed values is
+\[
+s_Y^2=263.511.
+\]
+The units of $s_Y^2$ are transformed-units squared. They are not kilometers or
+square kilometers yet, because the data have been rescaled and shifted.
+
+The transformation is
+\[
+Y=\frac{1}{500}X-125.
+\]
+Subtracting $125$ does not change variance. Multiplying by $\frac1{500}$ makes
+the variance $\left(\frac1{500}\right)^2$ times as large:
+\[
+s_Y^2=\left(\frac1{500}\right)^2s_X^2.
+\]
+Solving for the original variance gives
+\[
+s_X^2=500^2s_Y^2.
+\]
+The standard deviation is the square root of the original variance:
+\[
+s_X=\sqrt{s_X^2}=\sqrt{500^2s_Y^2}
+=500\sqrt{s_Y^2}.
+\]
+Thus the multiple-choice wording ``multiply by \_\_, then find the square root''
+should use $500^2=250000$ in the blank:
+\[
+s_X=\sqrt{263.511(250000)}
+=8116.5\approx8117.
+\]
+Because this is a standard deviation, the final units are kilometers, not
+square kilometers. Square kilometers would be the unit for the original
+variance $s_X^2$.
+
+\finalanswer{Transformed variance $=263.511$; choose B: multiply by
+$500^2=250000$, then find the square root; standard deviation $=8117$ km.}
+\end{document}

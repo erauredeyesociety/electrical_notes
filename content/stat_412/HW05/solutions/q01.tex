@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 1}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Find the mean, median, and mode for the sample of sick days:
+\[
+9,\ 16,\ 13,\ 10,\ 4,\ 68,\ 20,\ 9,\ 14.
+\]
+Which value appears to be the best measure of the center? Complete the
+comparison sentence:
+\[
+\text{Since the mean is \_\_\_ the median is \_\_\_ and the mode is \_\_\_
+most of the data values, the \_\_\_ appears to be the best measure of center.}
+\]
+
+\section*{Work}
+\[
+\bar x=\frac{9+16+13+10+4+68+20+9+14}{9}
+=\frac{163}{9}=18.11.
+\]
+Sorted data:
+\[
+4,\ 9,\ 9,\ 10,\ 13,\ 14,\ 16,\ 20,\ 68.
+\]
+The middle value is $13$, so the median is $13$. The value occurring most often
+is $9$, so the mode is $9$ (not $68$; $68$ occurs only once).
+
+Since $68$ is a large high outlier, it pulls the mean upward. Thus the mean
+$18.11$ is greater than the median $13$. The mode $9$ is less than most of the
+data values, so it is also not the best summary of the center. The median is
+the best measure here because it is resistant to the high outlier.
+
+\finalanswer{Mean $=18.11$; median $=13$; mode $=9$. Dropdowns:
+\emph{greater than}, \emph{less than}, \emph{median}.}
+\end{document}

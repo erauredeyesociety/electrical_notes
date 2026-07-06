@@ -1,0 +1,27 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 4}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+The tar contents, in milligrams, are
+\[
+11.6,11.4,8.6,13.8,12.4,14.6,12.3,9.7.
+\]
+Find the mean and variance.
+
+\section*{Work}
+\[
+\bar x=\frac{11.6+11.4+8.6+13.8+12.4+14.6+12.3+9.7}{8}
+=11.80.
+\]
+Because the brands were selected at random, use the sample variance:
+\[
+s^2=\frac{\sum (x_i-\bar x)^2}{n-1}
+=\frac{27.3}{7}=3.90.
+\]
+
+\finalanswer{(a) $\bar x=11.80$ mg; (b) $s^2=3.90$.}
+\end{document}

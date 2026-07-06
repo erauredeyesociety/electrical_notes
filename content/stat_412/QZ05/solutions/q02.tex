@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 5 --- Question 2}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Drive-through bank teller time has mean $\mu=9.6$ minutes and standard
+deviation $\sigma=4.0$ minutes. For a random sample of $64$ customers, find
+the probability that the sample mean is (a) at most $8.5$, (b) more than
+$10.4$, and (c) at least $9.6$ but less than $10.6$ minutes.
+
+\section*{Work}
+For a sample mean, the mean stays the same and the standard deviation becomes
+the standard error:
+\[
+\mu_{\bar X}=9.6,\qquad \sigma_{\bar X}=\frac{4.0}{\sqrt{64}}=0.5.
+\]
+(a)
+\[
+z=\frac{8.5-9.6}{0.5}=\frac{-1.1}{0.5}=-2.20.
+\]
+Thus
+\[
+P(\bar X\le8.5)=P(Z\le-2.20)=0.0139.
+\]
+(b)
+\[
+z=\frac{10.4-9.6}{0.5}=\frac{0.8}{0.5}=1.60.
+\]
+From the table, $\Phi(1.60)=0.9452$, so
+\[
+P(\bar X>10.4)=P(Z>1.60)=1-0.9452=0.0548.
+\]
+(c)
+\[
+z_1=\frac{9.6-9.6}{0.5}=0,\qquad
+z_2=\frac{10.6-9.6}{0.5}=2.00.
+\]
+Thus
+\[
+P(9.6\le\bar X<10.6)=0.9772-0.5000=0.4772.
+\]
+
+\finalanswer{(a) $0.0139$ \quad (b) $0.0548$ \quad (c) $0.4772$}
+\end{document}

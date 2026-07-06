@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 10}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Student heights are approximately normal with $\mu=178.7$ cm and
+$\sigma=6.2$ cm. Random samples of size $25$ are drawn. Part (a) asks for the
+mean and standard deviation of the sampling distribution of $\bar X$. Part (b)
+asks for the expected number, out of 300 sample means recorded to the nearest
+tenth, that fall between $177.1$ and $179.7$ cm inclusive. Part (c) asks for
+the expected number of sample means falling below $177.0$ cm.
+
+\section*{Work}
+For the sampling distribution of a sample mean,
+\[
+\mu_{\bar X}=\mu=178.7,
+\qquad
+\sigma_{\bar X}=\frac{\sigma}{\sqrt n}
+=\frac{6.2}{\sqrt{25}}=\frac{6.2}{5}=1.24.
+\]
+Because the means are recorded to the nearest tenth and the interval is
+inclusive, use the continuity-corrected endpoints $177.05$ and $179.75$:
+\[
+z_1=\frac{177.05-178.7}{1.24}\approx -1.33,\qquad
+z_2=\frac{179.75-178.7}{1.24}\approx 0.85.
+\]
+From the z-table,
+\[
+P(177.1\le \bar X\le 179.7)
+\approx \Phi(0.85)-\Phi(-1.33)
+=0.8023-0.0918=0.7105.
+\]
+The expected number is
+\[
+300(0.7105)=213.15\approx 213.
+\]
+
+For part (c), because the sample means are recorded to the nearest tenth,
+``below $177.0$'' means recorded values of $176.9$ or lower. Use the class
+boundary $176.95$:
+\[
+z=\frac{176.95-178.7}{1.24}\approx -1.41.
+\]
+From the z-table,
+\[
+P(\bar X<176.95)\approx \Phi(-1.41)=0.0793.
+\]
+Therefore the expected number is
+\[
+300(0.0793)=23.79\approx 24.
+\]
+
+\finalanswer{(a) $\mu_{\bar X}=178.7$ and $\sigma_{\bar X}=1.24$.
+(b) Expected number $\approx 213$. (c) Expected number $\approx 24$.}
+\end{document}

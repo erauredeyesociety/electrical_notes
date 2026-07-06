@@ -1,0 +1,32 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 8}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+A thread has mean tensile strength $80.5$ kg and standard deviation $5.4$ kg.
+How is the variance of the sample mean changed when the sample size is
+(a) increased from $36$ to $324$ and (b) decreased from $900$ to $81$?
+
+\section*{Work}
+\[
+\operatorname{Var}(\bar X)=\frac{\sigma^2}{n}
+=\frac{5.4^2}{n}=\frac{29.16}{n}.
+\]
+For part (a),
+\[
+n=36:\ \frac{29.16}{36}=0.81,\qquad
+n=324:\ \frac{29.16}{324}=0.09.
+\]
+Both are variances, so both units are $\text{kg}^2$.
+For part (b),
+\[
+n=900:\ \frac{29.16}{900}=0.0324,\qquad
+n=81:\ \frac{29.16}{81}=0.36.
+\]
+
+\finalanswer{(a) The variance decreases from $0.81\text{ kg}^2$ to $0.09\text{ kg}^2$.
+(b) The variance increases from $0.0324\text{ kg}^2$ to $0.36\text{ kg}^2$.}
+\end{document}

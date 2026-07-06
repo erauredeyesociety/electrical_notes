@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 5 --- Question 6}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Rivet breaking strength has mean $6500$ psi and standard deviation $200$ psi.
+For sample means, answer (a) for $n=64$, and (b) find $n$ so that
+$P(6470<\bar X<6530)=0.90$.
+
+\section*{Work}
+(a) With $n=64$,
+\[
+\sigma_{\bar X}=\frac{200}{\sqrt{64}}=25.
+\]
+The endpoints are
+\[
+z_1=\frac{6440-6500}{25}=-2.40,\qquad
+z_2=\frac{6560-6500}{25}=2.40.
+\]
+So
+\[
+P(6440<\bar X<6560)=0.9918-0.0082=0.9836.
+\]
+(b) The interval $6470$ to $6530$ is centered at the population mean $6500$ and
+has half-width $30$:
+\[
+6470=6500-30,\qquad 6530=6500+30.
+\]
+For central probability $0.90$, the two tails total $0.10$, so each tail is
+$0.05$. The upper cumulative area is $0.95$, whose normal cutoff is
+$z\approx1.645$.
+
+We want the endpoint $6530$ to be $1.645$ standard errors above the mean:
+\[
+30=1.645\left(\frac{200}{\sqrt n}\right).
+\]
+Thus
+\[
+\sqrt n=\frac{1.645(200)}{30},\qquad
+n=\left(\frac{1.645(200)}{30}\right)^2\approx120.27.
+\]
+Round up, so $n=121$.
+
+\finalanswer{(a) $0.9836$ \quad (b) $n=121$}
+\end{document}

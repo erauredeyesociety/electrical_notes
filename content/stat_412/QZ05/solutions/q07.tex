@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Quiz 5 --- Question 7}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+The wait times are
+\[
+7,\ 11,\ 10,\ 3,\ 19,\ 11,\ 3,\ 11,\ 3,\ 6.
+\]
+Find the mean, median, and mode.
+
+\section*{Work}
+There are $n=10$ observations. Add them:
+\[
+7+11+10+3+19+11+3+11+3+6=84.
+\]
+\[
+\bar x=\frac{7+11+10+3+19+11+3+11+3+6}{10}
+=\frac{84}{10}=8.40.
+\]
+Sorted data:
+\[
+3,\ 3,\ 3,\ 6,\ 7,\ 10,\ 11,\ 11,\ 11,\ 19.
+\]
+The median is the average of the 5th and 6th values:
+\[
+\tilde x=\frac{7+10}{2}=8.50.
+\]
+For the mode, count repeated values:
+\[
+3\text{ appears 3 times},\qquad 11\text{ appears 3 times}.
+\]
+No other value appears as often, so there is more than one mode.
+
+\finalanswer{Mean $=8.40$; median $=8.50$; choose ``more than one mode,'' modes
+$3,11$.}
+\end{document}

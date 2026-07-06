@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 3}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+The waiting times are
+\[
+5,7,7,8,13,7,16,15,15,15.
+\]
+Treating the data as a random sample, find the range and standard deviation.
+
+\section*{Work}
+The range is
+\[
+R=\max-\min=16-5=11.
+\]
+For the sample standard deviation,
+\[
+s=\sqrt{\frac{\sum (x_i-\bar x)^2}{n-1}}.
+\]
+Here $\bar x=10.8$ and $\sum (x_i-\bar x)^2=169.6$, so
+\[
+s=\sqrt{\frac{169.6}{9}}\approx4.34.
+\]
+
+\finalanswer{(a) $R=11$; (b) $s\approx4.34$.}
+\end{document}

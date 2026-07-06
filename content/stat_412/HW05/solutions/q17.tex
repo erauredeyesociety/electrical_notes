@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 17}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Two box-filling machines have product-weight variance $\sigma^2=5$. Samples of
+size $64$ are taken from each machine. Part (a) asks for
+$P(\bar X_B-\bar X_A\ge0.3)$ assuming $\mu_A=\mu_B$.
+Part (b) asks whether this strongly supports different population means.
+
+\section*{Work}
+Let $D=\bar X_B-\bar X_A$. Under $\mu_A=\mu_B$,
+\[
+\mu_D=0,
+\qquad
+\sigma_D=\sqrt{\frac{5}{64}+\frac{5}{64}}
+=\sqrt{\frac{10}{64}}\approx0.3953.
+\]
+Then
+\[
+z=\frac{0.3-0}{0.3953}\approx0.76.
+\]
+Using the z-table,
+\[
+P(D\ge0.3)=P(Z\ge0.76)=1-0.7764=0.2236.
+\]
+This probability is not negligible, so this sample difference is not especially
+surprising when the population means are equal.
+
+\finalanswer{(a) $0.2236$.
+(b) Select: probability \textbf{is not} negligible; the experiments \textbf{do not} support the conjecture.}
+\end{document}

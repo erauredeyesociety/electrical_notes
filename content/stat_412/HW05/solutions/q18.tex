@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 5 --- Question 18}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+The government limit is $7260$ ppm. A process is sampled $25$ times; historical
+standard deviation is $\sigma=140$ ppm. Part (a) asks for the probability that
+the sample average would exceed the limit if the population mean equals the
+limit.
+Part (b) asks for $P(\bar X\ge7344\mid \mu=7260)$ and the conclusion.
+
+\section*{Work}
+If $\mu=7260$, then
+\[
+\mu_{\bar X}=7260,\qquad
+\sigma_{\bar X}=\frac{140}{\sqrt{25}}=28.
+\]
+The threshold is exactly the mean:
+\[
+z=\frac{7260-7260}{28}=0.
+\]
+Therefore
+\[
+P(\bar X>7260)=P(Z>0)=0.5000.
+\]
+For the observed sample mean,
+\[
+z=\frac{7344-7260}{140/\sqrt{25}}=\frac{84}{28}=3.00.
+\]
+Therefore
+\[
+P(\bar X\ge7344\mid \mu=7260)=P(Z\ge3.00)=1-0.9987=0.0013.
+\]
+This probability is negligible, so the observed $\bar x=7344$ is evidence that
+the population mean exceeds the government limit.
+
+\finalanswer{(a) $0.5000$.
+(b) $0.0013$; select \textbf{is} negligible and $\bar x$ \textbf{is} evidence.}
+\end{document}
