@@ -1,0 +1,25 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 1}
+
+\textbf{Problem.} A study says running increases percent resting metabolic rate (RMR) in older women. For 25 elderly women runners, the mean RMR was \(34.5\%\) higher than for 25 sedentary elderly women. The standard deviations were \(10.3\%\) and \(10.2\%\). Assume normal populations with equal variances. Test whether runners have significantly higher mean RMR.
+
+\textbf{Solution.}
+\[
+H_0:\mu_1-\mu_2=0,\qquad H_1:\mu_1-\mu_2>0.
+\]
+\[
+s_p=\sqrt{\frac{(25-1)(10.3)^2+(25-1)(10.2)^2}{25+25-2}}=10.2501.
+\]
+\[
+t=\frac{34.5-0}{10.2501\sqrt{1/25+1/25}}=11.90,\qquad df=48.
+\]
+The right-tail P-value is essentially \(0\), so \(p\approx0.000\).
+
+\[
+\boxed{\text{Reject }H_0. \text{ Runners have significantly higher mean RMR.}}
+\]
+\end{document}

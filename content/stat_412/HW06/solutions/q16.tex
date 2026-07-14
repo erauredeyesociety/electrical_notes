@@ -1,0 +1,22 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 16}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Find $\chi^2_L$ and $\chi^2_R$ for $c=0.99$ and $n=28$.
+\section*{Work}
+The degrees of freedom are
+\[
+df=n-1=27.
+\]
+For $c=0.99$, $\alpha=0.01$, so each tail has area $\alpha/2=0.005$. The left and right chi-square critical values are
+\[
+\chi^2_L=\chi^2_{0.005,27}\approx11.808,
+\qquad
+\chi^2_R=\chi^2_{0.995,27}\approx49.645.
+\]
+\finalanswer{$\chi^2_L=11.808$, $\chi^2_R=49.645$}
+\end{document}

@@ -1,0 +1,57 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 12}
+
+\subsection*{Problem}
+
+\begin{quote}
+It is claimed that automobiles are driven on average more than 18,000 kilometers per year. To test this claim, 110 randomly selected automobile owners are asked to keep a record of the kilometers they travel. Would you agree with this claim if the random sample showed an average of 18,330 kilometers and a standard deviation of 3700 kilometers? Use a P-value in your conclusion.
+\end{quote}
+
+\subsection*{Solution}
+
+The claim is ``more than 18,000,'' so the alternative is right-tailed:
+\[
+H_0:\mu=18000,\qquad H_a:\mu>18000.
+\]
+This corresponds to choice D.
+
+The population standard deviation is not given, so use a one-sample $t$ statistic:
+\[
+t=\frac{\bar{x}-\mu_0}{s/\sqrt{n}}
+  =\frac{18330-18000}{3700/\sqrt{110}}.
+\]
+
+Compute the denominator:
+\[
+\frac{3700}{\sqrt{110}}\approx 352.78.
+\]
+Then
+\[
+t=\frac{330}{352.78}\approx 0.93542.
+\]
+
+Rounded to two decimals, the test statistic is
+\[
+t=0.94.
+\]
+
+With $df=109$, the right-tail P-value is about
+\[
+P(T_{109}>0.93542)\approx 0.176.
+\]
+
+Since the P-value is large, do not reject $H_0$. The sample mean is above 18,000, but not by enough to statistically support the ``more than 18,000'' claim.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Choice D: $H_0:\mu=18000$; $H_a:\mu>18000$. Test statistic $t=0.94$; P-value $\approx0.176$. Do not reject $H_0$; there is not enough evidence to agree with the claim.
+\end{minipage}}
+
+\end{document}

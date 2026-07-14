@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 19}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For the 10 reserve-capacity values, construct 99\% confidence intervals for $\sigma^2$ and $\sigma$.
+\section*{Work}
+The sample variance is
+\[
+s^2\approx0.04636,\qquad df=9.
+\]
+For 99\%, use $\alpha=0.01$ and the chi-square interval:
+\[
+\frac{9s^2}{\chi^2_R}<\sigma^2<\frac{9s^2}{\chi^2_L}.
+\]
+This gives
+\[
+0.0177<\sigma^2<0.2405,
+\]
+or rounded,
+\[
+0.018<\sigma^2<0.240.
+\]
+Taking square roots gives
+\[
+0.133<\sigma<0.490.
+\]
+The correct interpretation for part (a) is choice B: with 99\% confidence, the population variance is between 0.018 and 0.240. Be careful to enter the upper endpoint as 0.240, not 24.
+
+If asked to interpret the standard-deviation interval, use the matching 99\% confidence statement that the population standard deviation is between 0.133 and 0.490 hours.
+
+\finalanswer{Variance CI $(0.018,0.240)$; variance interpretation choice B with between-values $0.018$ and $0.240$; SD CI $(0.133,0.490)$.}
+\end{document}

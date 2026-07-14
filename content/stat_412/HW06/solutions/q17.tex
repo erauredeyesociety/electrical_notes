@@ -1,0 +1,28 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 17}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For $c=0.95$, $s^2=5.76$, and $n=26$, construct confidence intervals for $\sigma^2$ and $\sigma$.
+\section*{Work}
+Use $df=25$. For a normal population,
+\[
+\frac{(n-1)s^2}{\chi^2_R}<\sigma^2<\frac{(n-1)s^2}{\chi^2_L}.
+\]
+Using 95\% chi-square critical values with $df=25$ gives
+\[
+3.54<\sigma^2<10.98.
+\]
+Take square roots for the standard deviation interval:
+\[
+\sqrt{3.54}<\sigma<\sqrt{10.98},
+\]
+so
+\[
+1.88<\sigma<3.31.
+\]
+\finalanswer{Variance CI $(3.54,10.98)$; SD CI $(1.88,3.31)$.}
+\end{document}

@@ -1,0 +1,25 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 6}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For $n=26$, $\bar x=31.7$, $s=7.2$, construct an 80\% $t$ confidence interval for the mean commute time.
+\section*{Work}
+Use $df=25$ and
+\[
+\bar x\pm t_{\alpha/2,25}\frac{s}{\sqrt n}.
+\]
+For 80\%, $t_{\alpha/2,25}\approx1.316$:
+\[
+E=1.316\frac{7.2}{\sqrt{26}}\approx1.86.
+\]
+Thus
+\[
+31.7\pm1.86=(29.84,33.56)\approx(29.8,33.6).
+\]
+The margin of error is $E\approx1.9$ minutes. The correct interpretation is choice C: with 80\% confidence, it can be said that the population mean commute time is between the bounds of the confidence interval.
+\finalanswer{CI $(29.8,33.6)$ minutes; margin of error $\approx1.9$ minutes; interpretation choice C.}
+\end{document}

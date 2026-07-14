@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 13}
+
+\textbf{Problem.} For stretching and injury, the observed table is:
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Result & Stretched & Not stretched\\
+\midrule
+Injury & 23 & 25\\
+No injury & 222 & 197\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Solution.}
+Row totals are \(48\) and \(419\). Column totals are \(245\) and \(222\). Grand total is \(467\).
+
+Expected counts use
+\[
+E_{ij}=\frac{(\text{row total})(\text{column total})}{467}.
+\]
+\[
+E_{\text{injury, stretched}}=\frac{48(245)}{467}=25.18,\quad
+E_{\text{injury, not}}=\frac{48(222)}{467}=22.82.
+\]
+\[
+E_{\text{no injury, stretched}}=\frac{419(245)}{467}=219.82,\quad
+E_{\text{no injury, not}}=\frac{419(222)}{467}=199.18.
+\]
+
+\[
+\boxed{
+\begin{array}{c|cc}
+ & \text{Stretched} & \text{Not stretched}\\ \hline
+\text{Injury} & 25.18 & 22.82\\
+\text{No injury} & 219.82 & 199.18
+\end{array}}
+\]
+\end{document}

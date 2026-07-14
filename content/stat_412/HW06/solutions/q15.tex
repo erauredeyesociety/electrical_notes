@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 15}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+In a survey of $2549$ adults, $1321$ say they have made a New Year's resolution. Construct 90\% and 95\% confidence intervals for the population proportion.
+\section*{Work}
+\[
+\hat p=\frac{1321}{2549}\approx0.5182.
+\]
+For 90\%, $z=1.645$:
+\[
+E\approx1.645\sqrt{\frac{0.5182(0.4818)}{2549}}\approx0.0163,
+\]
+so
+\[
+(0.5020,0.5345)\approx(0.502,0.535).
+\]
+For 95\%, $z=1.960$:
+\[
+E\approx0.0194,\qquad (0.4988,0.5376)\approx(0.499,0.538).
+\]
+
+The interpretation is about the population proportion: with the given confidence, the population proportion of adults who say they have made a New Year's resolution is between the endpoints. The 95\% interval is wider because it uses a larger critical value.
+
+\finalanswer{90\% CI $(0.502,0.535)$; 95\% CI $(0.499,0.538)$. Fill-ins: population proportion; between the endpoints. The 95\% interval is wider.}
+\end{document}

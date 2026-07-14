@@ -1,0 +1,32 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 12}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+In a survey of $2029$ adults, $717$ made a New Year's resolution to eat healthier. Construct 90\% and 95\% confidence intervals for the population proportion.
+\section*{Work}
+\[
+\hat p=\frac{717}{2029}\approx0.3534.
+\]
+For a proportion,
+\[
+\hat p\pm z_{\alpha/2}\sqrt{\frac{\hat p(1-\hat p)}{n}}.
+\]
+For 90\%, $z=1.645$:
+\[
+E\approx1.645\sqrt{\frac{0.3534(0.6466)}{2029}}\approx0.0175,
+\]
+so the interval is
+\[
+(0.3359,0.3708)\approx(0.336,0.371).
+\]
+For 95\%, $z=1.960$:
+\[
+E\approx0.0208,\qquad (0.3326,0.3742)\approx(0.333,0.374).
+\]
+The interpretation uses the population proportion, not the sample proportion: with the given confidence, the population proportion is between the endpoints of the interval. The 95\% interval is wider because it uses a larger critical value than the 90\% interval.
+\finalanswer{90\% CI $(0.336,0.371)$; 95\% CI $(0.333,0.374)$. Fill-ins: population proportion; between the endpoints. The 95\% interval is wider.}
+\end{document}

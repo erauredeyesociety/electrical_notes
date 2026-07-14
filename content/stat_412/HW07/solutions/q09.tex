@@ -1,0 +1,49 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 9}
+
+\subsection*{Problem}
+
+\begin{quote}
+A marketing expert for a pasta-making company believes that 40\% of pasta lovers prefer lasagna. If 12 out of 20 pasta lovers choose lasagna over other pastas, what can be concluded about the expert's claim? Use a 0.08 level of significance.
+\end{quote}
+
+\subsection*{Solution}
+
+The expert's claim is an equality claim about the proportion:
+\[
+H_0:p=0.4.
+\]
+Because the question asks what can be concluded about the claim, without saying specifically above or below, use a two-sided alternative:
+\[
+H_a:p\ne0.4.
+\]
+This is choice C.
+
+Let $X$ be the number of pasta lovers in the sample who choose lasagna. Under the null hypothesis,
+\[
+X\sim\operatorname{Binomial}(n=20,p=0.4).
+\]
+So the platform entries for the binomial model are $p=0.4$ and $n=20$.
+
+The observed value is $x=12$. For the two-sided exact binomial P-value:
+\[
+P(X\ge12)+P(X\le4)
+\approx 0.0565+0.0510
+=0.1075.
+\]
+
+Since $0.1075>0.08$, do not reject $H_0$.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Choice C: $H_0:p=0.4$; $H_a:p\ne0.4$. Test statistic/model: $X\sim\operatorname{Binomial}(n=20,p=0.4)$. P-value $\approx0.1075$; do not reject $H_0$.
+\end{minipage}}
+
+\end{document}

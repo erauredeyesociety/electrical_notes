@@ -1,0 +1,35 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 14}
+
+\textbf{Problem.} Dog malaria-detection results:
+\[
+\begin{array}{c|cc}
+ & \text{Malaria present} & \text{Malaria not present}\\ \hline
+\text{Dog correct} & 123 & 131\\
+\text{Dog wrong} & 52 & 14
+\end{array}
+\]
+Find the chi-square statistic, P-value, and conclusion.
+
+\textbf{Solution.}
+\[
+H_0:\text{dog correctness and malaria presence are independent.}
+\]
+\[
+H_1:\text{dog correctness and malaria presence are not independent.}
+\]
+Using expected counts from row and column totals,
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}=19.49,\qquad df=(2-1)(2-1)=1.
+\]
+The P-value is \(p\approx0.000010\), so rounded to three decimals, \(p=0.000\).
+
+\[
+\boxed{\text{Reject }H_0.}
+\]
+There is sufficient evidence that correctness and malaria presence are not independent.
+\end{document}

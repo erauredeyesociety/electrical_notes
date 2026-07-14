@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 16}
+
+\textbf{Problem.} Tennis challenge results:
+\[
+\begin{array}{c|cc}
+ & \text{Successful} & \text{Unsuccessful}\\ \hline
+\text{Men} & 246 & 556\\
+\text{Women} & 475 & 680
+\end{array}
+\]
+
+\textbf{Solution.}
+\[
+H_0:\text{gender and challenge result are independent},\qquad
+H_1:\text{they are not independent}.
+\]
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}=22.22,\qquad df=1.
+\]
+The P-value is approximately \(0.000\), so reject \(H_0\).
+
+\[
+\boxed{\text{Gender and challenge result are not independent.}}
+\]
+\end{document}

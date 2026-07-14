@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 18}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For the 17 bolt diameters, construct 95\% confidence intervals for $\sigma^2$ and $\sigma$.
+\section*{Work}
+The sample variance from the 17 diameters is
+\[
+s^2\approx0.07698,\qquad df=16.
+\]
+Use
+\[
+\frac{(n-1)s^2}{\chi^2_R}<\sigma^2<\frac{(n-1)s^2}{\chi^2_L}.
+\]
+Substituting the 95\% chi-square critical values for $df=16$ gives
+\[
+0.0427<\sigma^2<0.1783,
+\]
+or rounded,
+\[
+0.043<\sigma^2<0.178.
+\]
+Taking square roots:
+\[
+0.207<\sigma<0.422.
+\]
+The correct interpretation for part (a), the variance interval, is choice D: with 95\% confidence, the population variance is between 0.043 and 0.178.
+
+For part (b), the standard-deviation interval, choose the statement that uses 95\% confidence and says the population standard deviation is between the two endpoints. That is choice C with values 0.207 and 0.422. A raw HTML dump showed choice D selected, but that option says 5\% confidence, so it is not the correct interpretation.
+
+\finalanswer{Variance CI $(0.043,0.178)$; variance interpretation choice D. SD CI $(0.207,0.422)$; SD interpretation choice C with values 0.207 and 0.422.}
+\end{document}

@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 11}
+
+\subsection*{Problem}
+
+\begin{quote}
+In the American Heart Association journal \textit{Hypertension}, researchers report that individuals who practice Transcendental Meditation (TM) lower their blood pressure significantly. If a random sample of 240 male TM practitioners meditate for 10.5 hours per week with a standard deviation of 2.22 hours, does that suggest that, on average, men who use TM meditate more than 10 hours per week? Quote a P-value in your conclusion.
+\end{quote}
+
+\subsection*{Solution}
+
+The phrase ``more than 10 hours'' tells us the alternative is right-tailed:
+\[
+H_0:\mu=10,\qquad H_1:\mu>10.
+\]
+So the $H_0$ dropdown is ``equals,'' and the $H_1$ dropdown is ``greater than.'' This is not a ``not equal'' test.
+
+Because the sample standard deviation is used, use a $t$ statistic:
+\[
+t=\frac{\bar{x}-\mu_0}{s/\sqrt{n}}
+  =\frac{10.5-10}{2.22/\sqrt{240}}
+  \approx 3.4892.
+\]
+
+With $df=240-1=239$, the right-tail P-value is
+\[
+P(T_{239}>3.4892)\approx 0.0003.
+\]
+If the platform asks for three decimals, enter $0.000$.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+$H_0:\mu=10$; $H_1:\mu>10$. Test statistic $t=3.49$. P-value $\approx0.0003$; reject $H_0$. There is sufficient evidence that male TM practitioners meditate more than 10 hours per week on average.
+\end{minipage}}
+
+\end{document}

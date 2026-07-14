@@ -196,6 +196,12 @@ and charts into the official Excel/Word submission files.
   the prompt says population. Note the population value too if ambiguous.
 - Round exactly as the prompt states (2 d.p., 4 d.p., …). Verify every numeric
   answer with Python before writing it.
+- For hypothesis-test multiple choice, let the **claim wording choose the
+  alternative**, and keep equality in the null. "Changed" or "different" means
+  two-sided; "less than/fewer than/below" means left-tailed; "more than/greater
+  than/over" means right-tailed. MyStatLab often lists logically backwards
+  choices, so choose the option whose null contains equality and whose
+  alternative matches the claim.
 - **Normal-distribution problems: report z-table rounding, but MyStatLab grades
   with a tolerance band that accepts either the table value or the exact CDF.**
   Round each $z$ to two decimals and use the printed table value as the default

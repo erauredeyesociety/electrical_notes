@@ -1,0 +1,24 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 13}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+In a survey of $3183$ adults, $1420$ say they have started paying bills online in the last year. Construct a 99\% confidence interval for the population proportion.
+\section*{Work}
+\[
+\hat p=\frac{1420}{3183}\approx0.4461.
+\]
+For 99\%, $z_{\alpha/2}\approx2.576$:
+\[
+E=2.576\sqrt{\frac{0.4461(1-0.4461)}{3183}}\approx0.0227.
+\]
+Thus
+\[
+0.4461\pm0.0227=(0.4234,0.4688)\approx(0.423,0.469).
+\]
+The correct interpretation is that, with 99\% confidence, the population proportion of adults who say they have started paying bills online in the last year is between the endpoints.
+\finalanswer{$(0.423,0.469)$; interpretation choice B.}
+\end{document}

@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 15}
+
+\subsection*{Problem}
+
+\begin{quote}
+According to a study in a previous year, 54.0\% of households nationwide used natural gas for heating during a year. Recently, a survey of 3,500 randomly selected households showed that 55.0\% used natural gas. Use a 0.05 significance level to test the claim that the 54.0\% national rate has changed.
+
+Formulate the null and alternative hypotheses.
+
+Choices: A. H0:p=0.54, Ha:p>0.54. B. H0:p=0.54, Ha:p<0.54. C. H0:p=0.54, Ha:p != 0.54. D. H0:p != 0.54, Ha:p=0.54.
+\end{quote}
+
+\subsection*{Solution}
+
+The claim says the rate has changed, so use a two-sided alternative. z=(0.55-0.54)/sqrt(0.54(0.46)/3500)=1.1870. The two-sided P-value is about 0.235, which is greater than 0.05. Therefore the visible data do not reject H0. If the platform says to reject H0, then a later screenshot likely has a different sample percentage or asks a different decision.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Choice C: H0: p=0.54; Ha: p != 0.54. z=1.19; P-value about 0.235, so do not reject H0 from the visible 55.0\% data.
+\end{minipage}}
+
+\end{document}

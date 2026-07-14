@@ -1,0 +1,38 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 15}
+
+\textbf{Problem.} Guilty plea table:
+\[
+\begin{array}{c|cc}
+ & \text{Guilty plea} & \text{Not guilty plea}\\ \hline
+\text{Sent to prison} & 423 & 59\\
+\text{Not sent to prison} & 549 & 13
+\end{array}
+\]
+
+\textbf{Solution.}
+\[
+H_0:\text{plea and prison sentence are independent},\qquad
+H_1:\text{they are not independent}.
+\]
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}=39.83,\qquad df=1.
+\]
+The P-value is approximately \(0.000\), so reject \(H_0\).
+
+For context:
+\[
+P(\text{prison}\mid\text{guilty plea})=\frac{423}{423+549}=0.435,
+\]
+\[
+P(\text{prison}\mid\text{not guilty plea})=\frac{59}{59+13}=0.819.
+\]
+
+\[
+\boxed{\text{Plea and prison sentence are not independent.}}
+\]
+\end{document}

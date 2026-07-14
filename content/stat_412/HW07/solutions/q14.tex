@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 14}
+
+\subsection*{Problem}
+
+\begin{quote}
+One study, based on responses from 1,011 randomly selected teenagers, concluded that 42\% of teenagers cite grades as their greatest source of pressure. Use a 0.05 significance level to test the claim that fewer than half of all teenagers in the population feel that grades are their greatest source of pressure.
+\end{quote}
+
+\subsection*{Solution}
+
+The claim is ``fewer than half,'' so this is a left-tailed one-proportion test:
+\[
+H_0:p=0.5,\qquad H_a:p<0.5.
+\]
+This is choice D.
+
+The sample proportion is $\hat{p}=0.42$. The test statistic is
+\[
+z=\frac{\hat{p}-p_0}{\sqrt{p_0(1-p_0)/n}}
+  =\frac{0.42-0.50}{\sqrt{0.5(0.5)/1011}}
+  \approx -5.0874.
+\]
+
+Rounded to two decimals:
+\[
+z=-5.09.
+\]
+
+The left-tail P-value is essentially 0, so reject $H_0$ at $\alpha=0.05$.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Choice D for hypotheses. Test statistic $z=-5.09$. Reject $H_0$. Correct conclusion choice: A, there is sufficient evidence to support the claim that fewer than half of all teenagers feel that grades are the greatest source of pressure.
+\end{minipage}}
+
+\end{document}

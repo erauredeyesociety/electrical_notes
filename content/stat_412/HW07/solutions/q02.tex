@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 2}
+
+\subsection*{Problem}
+
+\begin{quote}
+The proportion of adults living in a small town who are college graduates is estimated to be $p=0.4$. To test this hypothesis, a random sample of 15 adults is selected. If the number of college graduates in the sample is anywhere from 3 to 9, we shall not reject the null hypothesis that $p=0.4$; otherwise, we shall conclude that $p\ne0.4$.
+\end{quote}
+
+\subsection*{Solution}
+
+Let $X$ be the number of college graduates in the sample. The rule says not to reject when
+\[
+3\le X\le 9,
+\]
+so the rejection region is
+\[
+X\le2 \quad\text{or}\quad X\ge10.
+\]
+
+\textbf{Part (a).} When $p=0.4$, $X\sim\operatorname{Binomial}(15,0.4)$, so
+\[
+\alpha=P(X\le2)+P(X\ge10)\approx 0.0609.
+\]
+
+\textbf{Part (b).} The type II error probability is the probability of failing to reject when the alternative value of $p$ is true:
+\[
+\beta=P(3\le X\le9).
+\]
+
+For $p=0.3$,
+\[
+\beta=P(3\le X\le9),\quad X\sim\operatorname{Binomial}(15,0.3)
+      \approx 0.8695.
+\]
+
+For $p=0.5$,
+\[
+\beta=P(3\le X\le9),\quad X\sim\operatorname{Binomial}(15,0.5)
+      \approx 0.8454.
+\]
+
+\textbf{Part (c).} If the question asks for power, use $1-\beta$:
+\[
+1-0.8695=0.1305,\qquad 1-0.8454=0.1546.
+\]
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+$\alpha=0.0609$. For $p=0.3$, $\beta=0.8695$ and power $=0.1305$. For $p=0.5$, $\beta=0.8454$ and power $=0.1546$.
+\end{minipage}}
+
+\end{document}

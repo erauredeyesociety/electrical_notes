@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 18}
+
+\subsection*{Problem}
+
+\begin{quote}
+Find the P-value that corresponds to the given standard score, and determine whether to reject the null hypothesis at the 0.01 significance level. Is the alternative hypothesis supported?
+
+$z=2.6$ for $H_0:\mu=149$ pounds and $H_a:\mu\ne149$ pounds.
+\end{quote}
+
+\subsection*{Solution}
+
+The alternative is two-sided, so use both tails:
+\[
+P\text{-value}=2P(Z>2.6).
+\]
+
+From the standard normal distribution,
+\[
+P(Z>2.6)\approx 0.00466.
+\]
+Therefore,
+\[
+P\text{-value}\approx 2(0.00466)=0.0093.
+\]
+
+Since $0.0093\le0.01$, reject $H_0$. The alternative hypothesis is supported.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+P-value $=0.0093$. Correct conclusion choice: B; reject $H_0$ and the alternative hypothesis is supported.
+\end{minipage}}
+
+\end{document}

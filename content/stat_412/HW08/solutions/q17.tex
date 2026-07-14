@@ -1,0 +1,26 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 17}
+
+\textbf{Problem.} Homicide counts by month are \(39,31,45,39,47,50,48,50,50,42,38,38\). Test whether homicides are uniformly distributed across the months.
+
+\textbf{Solution.}
+\[
+H_0:\text{uniform by month},\qquad H_1:\text{not uniform by month}.
+\]
+\[
+n=517,\qquad E=\frac{517}{12}=43.0833.
+\]
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}=9.72,\qquad df=12-1=11.
+\]
+The P-value is \(0.555\).
+
+\[
+\boxed{\text{Do not reject }H_0.}
+\]
+There is not sufficient evidence that homicides occur more often in some months than others.
+\end{document}

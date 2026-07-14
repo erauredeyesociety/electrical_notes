@@ -1,0 +1,32 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 9}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For the 20 dissolved-organic-carbon values, find (a) the sample mean, (b) the sample standard deviation, and (c) a 98\% confidence interval for the population mean.
+\section*{Work}
+Add the 20 observations and divide by 20:
+\[
+\bar x=\frac{347.13}{20}=17.3565\approx17.36.
+\]
+For the sample standard deviation,
+\[
+s=\sqrt{\frac{\sum (x_i-\bar x)^2}{n-1}}\approx8.0102\approx8.01.
+\]
+For part (c), use a $t$ interval because $\sigma$ is unknown and the population is assumed normal. With $df=19$ and 98\% confidence,
+\[
+t_{0.01,19}\approx2.539.
+\]
+The margin of error is
+\[
+E=2.539\frac{8.0102}{\sqrt{20}}\approx4.55.
+\]
+Thus
+\[
+17.3565\pm4.5486=(12.8079,21.9051)\approx(12.81,21.91).
+\]
+\finalanswer{(a) $\bar x=17.36$ mg/L; (b) $s=8.01$ mg/L; (c) 98\% CI $(12.81,21.91)$.}
+\end{document}

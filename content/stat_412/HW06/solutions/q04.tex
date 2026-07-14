@@ -1,0 +1,17 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 4}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+Describe how increasing confidence level, sample size, or population standard deviation changes the width of a confidence interval.
+\section*{Work}
+For a mean with known $\sigma$, the margin of error is
+\[
+E=z_{\alpha/2}\frac{\sigma}{\sqrt n}.
+\]
+Increasing confidence increases $z_{\alpha/2}$, so the interval gets wider. Increasing $n$ increases the denominator, so the interval gets narrower. Increasing $\sigma$ increases the numerator, so the interval gets wider.
+\finalanswer{(a) increases; (b) decreases; (c) increases.}
+\end{document}

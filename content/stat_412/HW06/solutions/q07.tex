@@ -1,0 +1,24 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 7}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For $n=11$, $\bar x=416$, $s=190$, find the margin of error and 90\% $t$ confidence interval for the mean cell-phone retail price.
+\section*{Work}
+Use $df=10$ and $t_{0.05,10}\approx1.812$:
+\[
+E=1.812\frac{190}{\sqrt{11}}\approx103.83.
+\]
+Then
+\[
+416\pm103.83=(312.17,519.83).
+\]
+With 90\% confidence, the population mean full retail price of cell phones is between the interval endpoints.
+
+For the interpretation, choose the statement about the population mean, not individual phones and not the percentage of sample means. That is choice C with the fill-in 90.
+
+\finalanswer{$E=103.83$ dollars; unit: dollars; 90\% CI $(312.17,519.83)$. Interpretation choice C with fill-in 90.}
+\end{document}

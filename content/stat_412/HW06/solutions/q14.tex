@@ -1,0 +1,24 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 14}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+In a survey of $688$ adults who started bachelor's degree programs six years ago, $382$ now have a bachelor's degree. Construct a 90\% confidence interval for the population proportion.
+\section*{Work}
+\[
+\hat p=\frac{382}{688}\approx0.5552.
+\]
+For 90\%, $z_{\alpha/2}=1.645$:
+\[
+E=1.645\sqrt{\frac{0.5552(1-0.5552)}{688}}\approx0.0312.
+\]
+So
+\[
+0.5552\pm0.0312=(0.5241,0.5864)\approx(0.524,0.586).
+\]
+The correct interpretation is that, with 90\% confidence, the population proportion of adults who started bachelor's degree programs six years ago who now have a bachelor's degree is between the endpoints.
+\finalanswer{$(0.524,0.586)$; interpretation choice C.}
+\end{document}

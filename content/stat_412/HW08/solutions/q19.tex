@@ -1,0 +1,27 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 19}
+
+\textbf{Problem.} Birth counts by day are Sunday 44, Monday 60, Tuesday 57, Wednesday 59, Thursday 57, Friday 55, Saturday 36. Test whether births occur with equal frequency across days of the week.
+
+\textbf{Solution.}
+\[
+H_0:\text{births occur equally often by day},\qquad
+H_1:\text{births do not occur equally often by day}.
+\]
+\[
+n=368,\qquad E=\frac{368}{7}=52.5714.
+\]
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}=9.32,\qquad df=7-1=6.
+\]
+The P-value is \(0.157\).
+
+\[
+\boxed{\text{At }\alpha=0.01,\ \text{do not reject }H_0.}
+\]
+There is not sufficient evidence that births are unevenly distributed across the week.
+\end{document}

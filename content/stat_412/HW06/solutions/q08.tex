@@ -1,0 +1,21 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 8}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For $n=4$, $\bar x=75$, $s=14$, construct a 99\% $t$ confidence interval for mean repair cost.
+\section*{Work}
+Use $df=3$ and $t_{0.005,3}\approx5.841$:
+\[
+E=5.841\frac{14}{\sqrt4}=40.89.
+\]
+Thus
+\[
+75\pm40.89=(34.11,115.89).
+\]
+The correct interpretation is that, with 99\% confidence, the population mean repair cost is between the bounds of the confidence interval.
+\finalanswer{$(34.11,115.89)$; interpretation choice D.}
+\end{document}

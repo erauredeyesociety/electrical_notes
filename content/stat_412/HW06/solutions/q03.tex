@@ -1,0 +1,33 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 3}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For $n=59$, $\bar x=82.38^\circ$F, and known $\sigma=13.78^\circ$F, construct 90\% and 95\% confidence intervals for $\mu$.
+\section*{Work}
+Since $\sigma$ is known, use
+\[
+\bar x\pm z_{\alpha/2}\frac{\sigma}{\sqrt n}.
+\]
+For 90\%, $z_{\alpha/2}=1.645$:
+\[
+E=1.645\frac{13.78}{\sqrt{59}}\approx2.95,
+\]
+so
+\[
+82.38\pm2.95=(79.43,85.33).
+\]
+For 95\%, $z_{\alpha/2}=1.960$:
+\[
+E=1.960\frac{13.78}{\sqrt{59}}\approx3.52,
+\]
+so
+\[
+82.38\pm3.52=(78.86,85.90).
+\]
+The 95\% interval is wider because the higher confidence level uses the larger critical value. The correct interpretation is choice B: you can be 90\% confident that the population mean record high temperature is between the bounds of the 90\% confidence interval, and 95\% confident for the 95\% interval.
+\finalanswer{90\% CI $(79.43,85.33)$; 95\% CI $(78.86,85.90)$. The 95\% interval is wider. Interpretation choice B.}
+\end{document}

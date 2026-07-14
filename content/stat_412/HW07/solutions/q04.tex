@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 4}
+
+\subsection*{Problem}
+
+\begin{quote}
+A research report claims that mice with an average life span of 32 months will live to be about 41 months old when 40\% of the calories in their diet are replaced by vitamins and protein. Is there any reason to believe that $\mu<41$ if 68 mice that are placed on this diet have an average life of 40 months with a standard deviation of 3.4 months? Use a P-value in your conclusion.
+\end{quote}
+
+\subsection*{Solution}
+
+The question asks whether there is reason to believe $\mu<41$, so the alternative is left-tailed:
+\[
+H_0:\mu=41,\qquad H_a:\mu<41.
+\]
+This is choice E.
+
+Using the visible screenshot values,
+\[
+t=\frac{\bar{x}-\mu_0}{s/\sqrt{n}}
+  =\frac{40-41}{3.4/\sqrt{68}}
+  \approx -2.4254.
+\]
+Rounded to two decimals:
+\[
+t=-2.43.
+\]
+
+With $df=67$, the left-tail P-value is about $0.009$. The raw platform dump showed $-2.43$ marked incorrect and a P-value range of $0.005\le P<0.0075$, which is inconsistent with the visible screenshot values. If the platform still rejects this, recapture the prompt because one of the displayed values may have changed.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Choice E: $H_0:\mu=41$; $H_a:\mu<41$. From the visible data, $t=-2.43$ and P-value $\approx0.009$.
+\end{minipage}}
+
+\end{document}

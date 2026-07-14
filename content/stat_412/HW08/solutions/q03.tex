@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 3}
+
+\textbf{Problem.} Film times are:
+
+Company 1: \(105,86,95,99,84\). Company 2: \(89,156,103,141,98,79,112\). Test whether company 2 exceeds company 1 by 10 minutes against the alternative that the difference is less than 10. Use unequal variances and \(\alpha=0.05\).
+
+\textbf{Solution.}
+\[
+H_0:\mu_2-\mu_1=10,\qquad H_1:\mu_2-\mu_1<10.
+\]
+From the data,
+\[
+\bar{x}_1=93.80,\quad s_1=8.81,\qquad \bar{x}_2=111.14,\quad s_2=27.89.
+\]
+\[
+t=\frac{(\bar{x}_2-\bar{x}_1)-10}{\sqrt{s_1^2/5+s_2^2/7}}
+=\frac{(111.14-93.80)-10}{\sqrt{8.81^2/5+27.89^2/7}}
+=0.65.
+\]
+Welch's degrees of freedom are \(df\approx7.57\). The left-tail P-value is \(0.733\).
+
+\[
+\boxed{\text{Do not reject }H_0. \text{ There is not enough evidence that the difference is less than 10.}}
+\]
+\end{document}

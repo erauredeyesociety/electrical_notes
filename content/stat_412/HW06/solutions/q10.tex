@@ -1,0 +1,23 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 10}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For $n=43$, $\bar x=28.2$, $s=6.14$, decide whether to use normal, $t$, or neither for a 90\% CI.
+\section*{Work}
+The sample is random and $n=43\ge30$, so the sampling distribution is approximately normal. The population standard deviation $\sigma$ is unknown; we only have $s=6.14$. Therefore use a $t$ distribution.
+
+If the CI is needed, use $df=42$:
+\[
+E=t_{0.05,42}\frac{6.14}{\sqrt{43}}\approx1.57,
+\]
+so
+\[
+28.2\pm1.57=(26.63,29.77).
+\]
+With 90\% confidence, the population mean BMI is between the bounds of the confidence interval.
+\finalanswer{Choice B: use a $t$-distribution. 90\% CI $(26.63,29.77)$. Interpretation choice A.}
+\end{document}

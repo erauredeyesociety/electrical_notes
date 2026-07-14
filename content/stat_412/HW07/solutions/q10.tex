@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 10}
+
+\subsection*{Problem}
+
+\begin{quote}
+Aflatoxins produced by mold on peanut crops must be monitored. A sample of 49 batches of peanuts reveals levels of 24.36 ppm, on average, with a variance of 4.35 ppm. Test the hypothesis that $\sigma^2=4.1$ ppm against the alternative that $\sigma^2\ne4.1$ ppm. Use a P-value in your conclusion.
+\end{quote}
+
+\subsection*{Solution}
+
+Use a chi-square test for the variance:
+\[
+H_0:\sigma^2=4.1,\qquad H_a:\sigma^2\ne4.1.
+\]
+
+The test statistic is
+\[
+\chi^2=\frac{(n-1)s^2}{\sigma_0^2}
+      =\frac{48(4.35)}{4.1}
+      \approx 50.9268.
+\]
+Rounded to two decimals:
+\[
+\chi^2=50.93.
+\]
+
+The degrees of freedom are
+\[
+df=n-1=48.
+\]
+
+Because the alternative is two-sided, the P-value is twice the smaller chi-square tail area. The platform-confirmed rounded value is
+\[
+P\text{-value}=0.718.
+\]
+
+Since $0.718>0.05$, the result is not significant.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+$\chi^2=50.93$; P-value $=0.718$. The test statistic is not significant at the 0.05 level. Fail to reject $H_0$; there is not sufficient evidence that $\sigma^2\ne4.1$.
+\end{minipage}}
+
+\end{document}

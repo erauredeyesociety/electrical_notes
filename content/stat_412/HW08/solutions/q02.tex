@@ -1,0 +1,25 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 2}
+
+\textbf{Problem.} Brand A and Brand B tire wear are compared using \(n_1=n_2=12\). Brand A has \(\bar{x}_1=38400,\ s_1=5200\). Brand B has \(\bar{x}_2=39700,\ s_2=5800\). Assume equal variances and test whether average wear differs.
+
+\textbf{Solution.}
+\[
+H_0:\mu_1-\mu_2=0,\qquad H_1:\mu_1-\mu_2\ne0.
+\]
+\[
+s_p=\sqrt{\frac{11(5200)^2+11(5800)^2}{22}}=5508.18.
+\]
+\[
+t=\frac{38400-39700}{5508.18\sqrt{1/12+1/12}}=-0.58,\qquad df=22.
+\]
+The two-tailed P-value is \(0.569\).
+
+\[
+\boxed{\text{Do not reject }H_0. \text{ There is not enough evidence of different mean wear.}}
+\]
+\end{document}

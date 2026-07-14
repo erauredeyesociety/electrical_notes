@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 6}
+
+\subsection*{Problem}
+
+\begin{quote}
+The average height of females in the freshman class of a certain college has historically been 162.8 centimeters with a standard deviation of 6.8 centimeters. Is there reason to believe that there has been a change in the average height if a random sample of 48 females in the present freshman class has an average height of 165.8 centimeters? Use a P-value in your conclusion. Assume the standard deviation remains the same.
+\end{quote}
+
+\subsection*{Solution}
+
+The word ``changed'' makes this a two-tailed test:
+\[
+H_0:\mu=162.8,\qquad H_1:\mu\ne162.8.
+\]
+
+Since the population standard deviation is assumed known, use a $z$ statistic:
+\[
+z=\frac{\bar{x}-\mu_0}{\sigma/\sqrt{n}}
+  =\frac{165.8-162.8}{6.8/\sqrt{48}}
+  \approx 3.0566.
+\]
+
+Rounded to two decimals, the test statistic is
+\[
+z=3.06.
+\]
+
+The P-value is two-tailed:
+\[
+P\text{-value}=2P(Z>3.0566)\approx 0.0022389.
+\]
+
+The platform prompt says to round the P-value to three decimal places, so enter
+\[
+0.002.
+\]
+The value $0.0022$ is the four-decimal version, but it is not rounded to the requested three decimals.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+$H_0:\mu=162.8$; $H_1:\mu\ne162.8$. Test statistic $z=3.06$. P-value $=0.002$ to three decimals. Reject $H_0$; there is sufficient evidence that the mean height has changed.
+\end{minipage}}
+
+\end{document}

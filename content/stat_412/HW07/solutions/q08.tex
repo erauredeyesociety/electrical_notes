@@ -1,0 +1,28 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 HW07 --- Question 8}
+
+\subsection*{Problem}
+
+\begin{quote}
+A manufacturer claims that the average tensile strength of thread A exceeds the average tensile strength of thread B by at least 12 kilograms. Researchers wish to test this claim using a 0.1 level of significance. How large should the samples be if the power of the test is to be 0.99 when the true difference between thread types A and B is 6 kilograms? The population standard deviation for thread A is 6.28 kilograms and the population standard deviation for thread B is 5.68 kilograms.
+
+Find the minimum sample size required. Round up to the nearest whole number.
+\end{quote}
+
+\subsection*{Solution}
+
+Test H0: mu\_A-mu\_B >= 12 against a lower alternative. The distance to detect is 12-6=6 kg. With alpha=0.10 and power=0.99, n=[(z\_0.90+z\_0.99)\textasciicircum{}2(sigma\_A\textasciicircum{}2+sigma\_B\textasciicircum{}2)]/6\textasciicircum{}2 = [(1.2816+2.3263)\textasciicircum{}2(6.28\textasciicircum{}2+5.68\textasciicircum{}2)]/36 = 25.93, so round up to 26.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Minimum sample size per group n=26.
+\end{minipage}}
+
+\end{document}

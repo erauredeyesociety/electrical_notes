@@ -1,0 +1,25 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 20}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For $n=60$, $\bar x=182.7$ cm, and $s=6.9$ cm, construct a 98\% confidence interval for the mean height and state the possible error.
+\section*{Work}
+The population standard deviation is not given, so use a $t$ interval with
+\[
+df=60-1=59.
+\]
+For 98\%, $t_{\alpha/2,59}\approx2.391$:
+\[
+E=2.391\frac{6.9}{\sqrt{60}}\approx2.13.
+\]
+Thus
+\[
+182.7\pm2.13=(180.57,184.83).
+\]
+The margin of error is the possible size of the error when estimating $\mu$ by $\bar x$.
+\finalanswer{$180.57<\mu<184.83$; fill-ins: $\bar x$ is used as an estimate for $\mu$; with 98\% confidence, the error is at most $2.13$ cm.}
+\end{document}

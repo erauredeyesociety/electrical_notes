@@ -1,0 +1,25 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW08 Question 9}
+
+\textbf{Problem.} Independent samples of size 400 are selected from two populations. Sample 1 has \(\bar{x}_1=5315,\ s_1=157\). Sample 2 has \(\bar{x}_2=5275,\ s_2=199\). Find a 95\% confidence interval for \(\mu_1-\mu_2\), rounded to one decimal place.
+
+\textbf{Solution.}
+\[
+\bar{x}_1-\bar{x}_2=5315-5275=40.
+\]
+\[
+SE=\sqrt{\frac{157^2}{400}+\frac{199^2}{400}}=12.6738.
+\]
+Using \(z_{0.025}=1.96\),
+\[
+40\pm1.96(12.6738)=40\pm24.8406.
+\]
+\[
+\boxed{(15.2,\ 64.8)}.
+\]
+We are 95\% confident that \(\mu_1-\mu_2\) is between 15.2 and 64.8.
+\end{document}

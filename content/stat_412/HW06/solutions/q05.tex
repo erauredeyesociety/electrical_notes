@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\newcommand{\finalanswer}[1]{\par\medskip\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Answer:} #1}}}
+\title{STAT 412 Homework 6 --- Question 5}
+\author{}\date{}
+\begin{document}\maketitle
+\section*{Problem}
+For the 16 stock prices with known $\sigma=2.73$, construct 90\% and 99\% confidence intervals for $\mu$.
+\section*{Work}
+The sample mean is
+\[
+\bar x=\frac{\sum x_i}{16}=19.989375\approx19.99.
+\]
+Use $\bar x\pm z_{\alpha/2}\sigma/\sqrt n$.
+For 90\%, $z=1.645$:
+\[
+E=1.645\frac{2.73}{\sqrt{16}}\approx1.12,
+\quad
+19.989375\pm1.1226=(18.87,21.11).
+\]
+For 99\%, $z=2.576$:
+\[
+E=2.576\frac{2.73}{4}\approx1.76,
+\quad
+19.989375\pm1.7580=(18.23,21.75).
+\]
+The correct interpretation is the confidence-interval interpretation: with 90\% confidence, the population mean closing stock price is between the 90\% interval endpoints; with 99\% confidence, it is between the 99\% interval endpoints. The 99\% confidence interval is wider because a higher confidence level uses a larger critical value.
+\finalanswer{90\% CI $(18.87,21.11)$; 99\% CI $(18.23,21.75)$. Interpretation choice B. The 99\% interval is wider.}
+\end{document}
