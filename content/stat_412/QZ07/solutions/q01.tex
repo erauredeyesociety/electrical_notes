@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ07 --- Question 1}
+
+\subsection*{Problem}
+
+The average height of females in the freshman class of a certain college has historically been 162.2 centimeters with a standard deviation of 6.7 centimeters. Is there reason to believe that there has been a change in the average height if a random sample of 60 females in the present freshman class has an average height of 164.3 centimeters? Use a P-value in your conclusion. Assume the standard deviation remains the same.
+
+\subsection*{Solution}
+
+The claim is that the mean has changed, so this is a two-tailed test:
+\[
+H_0:\mu=162.2,\qquad H_1:\mu\ne162.2.
+\]
+
+Because the population standard deviation is known, use a $z$ test:
+\[
+z=\frac{\bar{x}-\mu_0}{\sigma/\sqrt{n}}
+=\frac{164.3-162.2}{6.7/\sqrt{60}}
+=2.43.
+\]
+
+The two-tailed P-value is
+\[
+P=2P(Z\ge 2.43)\approx 0.015.
+\]
+
+Since the P-value is small, reject $H_0$ for significance levels greater than 0.015.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+$H_0:\mu=162.2$, $H_1:\mu\ne162.2$; $z=2.43$; P-value $=0.015$. Reject $H_0$. There is sufficient evidence that the average height has changed.
+\end{minipage}}
+
+\end{document}

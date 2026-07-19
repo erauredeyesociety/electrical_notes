@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ07 --- Question 7}
+
+\subsection*{Problem}
+
+In a study of 799 randomly selected medical malpractice lawsuits, 509 were dropped or dismissed. Test the claim that most medical malpractice lawsuits are dropped or dismissed. Use the P-value method and the normal distribution as an approximation to the binomial distribution.
+
+\subsection*{Solution}
+
+The word ``most'' means more than half, so
+\[
+H_0:p=0.5,\qquad H_a:p>0.5.
+\]
+This is choice B.
+
+The sample proportion is
+\[
+\widehat{p}=\frac{509}{799}=0.6370.
+\]
+
+The one-proportion test statistic is
+\[
+z=\frac{\widehat{p}-p_0}{\sqrt{p_0(1-p_0)/n}}
+=\frac{0.6370-0.5}{\sqrt{0.5(0.5)/799}}
+=7.75.
+\]
+
+This is a right-tailed test:
+\[
+P=P(Z\ge 7.75)\approx 0.000.
+\]
+
+Since the P-value is less than or equal to the significance level, reject $H_0$.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Hypotheses: choice B. $z=7.75$; P-value $=0.000$. Conclusion about $H_0$: choice B. Final conclusion: choice D.
+\end{minipage}}
+
+\end{document}

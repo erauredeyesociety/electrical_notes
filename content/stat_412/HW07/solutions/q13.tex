@@ -13,6 +13,14 @@
 One research study of illegal drug use among 12- to 17-year-olds reported a decrease in use from 11.4\% in 1997 to 9.7\% now. Suppose a survey in a large high school reveals that, in a random sample of 1,050 students, 99 report using illegal drugs. Use a 0.05 significance level to test the principal's claim that illegal drug use in her school is below the current national average.
 \end{quote}
 
+The conclusion choices include:
+\begin{enumerate}
+\item[A.] Do not reject $H_0$; sufficient evidence to support the claim.
+\item[B.] Reject $H_0$; insufficient evidence to support the claim.
+\item[C.] Do not reject $H_0$; insufficient evidence to support the claim.
+\item[D.] Reject $H_0$; sufficient evidence to support the claim.
+\end{enumerate}
+
 \subsection*{Solution}
 
 The principal's claim is ``below the current national average,'' so this is a left-tailed test:
@@ -34,19 +42,19 @@ z=\frac{\hat{p}-p_0}{\sqrt{p_0(1-p_0)/n}}
 \]
 which rounds to $-0.30$.
 
-If the platform first rounds $\hat p$ to three decimals, then $\hat p=0.094$, and
-\[
-z=\frac{0.094-0.097}{\sqrt{0.097(0.903)/1050}}
-  \approx -0.32846,
-\]
-which rounds to $-0.33$. Use $-0.33$ if the platform rejected $-0.30$.
+The platform-confirmed test statistic is $z=-0.30$.
 
-Either statistic leads to a large P-value, so do not reject $H_0$.
+The P-value for the found statistic is
+\[
+P(Z<-0.30)=0.3821.
+\]
+
+Since $0.3821>0.05$, do not reject $H_0$. The correct conclusion choice is C.
 
 \subsection*{Final Answer}
 
 \fbox{\begin{minipage}{0.94\linewidth}
-Choice D: $H_0:p=0.097$; $H_a:p<0.097$. Exact calculation gives $z=-0.30$; if the platform rejected that, enter $z=-0.33$ from rounded $\hat p=0.094$. Do not reject $H_0$.
+Choice D: $H_0:p=0.097$; $H_a:p<0.097$. $z=-0.30$; P-value $=0.3821$. Do not reject $H_0$; conclusion choice C.
 \end{minipage}}
 
 \end{document}

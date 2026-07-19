@@ -13,6 +13,8 @@
 It is claimed that automobiles are driven on average more than 18,000 kilometers per year. To test this claim, 110 randomly selected automobile owners are asked to keep a record of the kilometers they travel. Would you agree with this claim if the random sample showed an average of 18,330 kilometers and a standard deviation of 3700 kilometers? Use a P-value in your conclusion.
 \end{quote}
 
+The conclusion portion asks whether to reject $H_0$, whether there is or is not sufficient evidence to agree with the claim, and whether $H_0$ would be rejected for significance levels greater or less than the P-value.
+
 \subsection*{Solution}
 
 The claim is ``more than 18,000,'' so the alternative is right-tailed:
@@ -43,15 +45,19 @@ t=0.94.
 
 With $df=109$, the right-tail P-value is about
 \[
-P(T_{109}>0.93542)\approx 0.176.
+P(T_{109}>0.93542)\approx 0.1758.
+\]
+Using the t table, this is approximately in the range
+\[
+0.15<P\text{-value}<0.20.
 \]
 
-Since the P-value is large, do not reject $H_0$. The sample mean is above 18,000, but not by enough to statistically support the ``more than 18,000'' claim.
+Since the P-value is large, do not reject $H_0$. The sample mean is above 18,000, but not by enough to statistically support the ``more than 18,000'' claim. In general, reject $H_0$ for significance levels greater than the P-value.
 
 \subsection*{Final Answer}
 
 \fbox{\begin{minipage}{0.94\linewidth}
-Choice D: $H_0:\mu=18000$; $H_a:\mu>18000$. Test statistic $t=0.94$; P-value $\approx0.176$. Do not reject $H_0$; there is not enough evidence to agree with the claim.
+Choice D: $H_0:\mu=18000$; $H_a:\mu>18000$. Test statistic $t=0.94$; P-value $\approx0.176$ (table range $0.15<P<0.20$). Do not reject $H_0$; there is not sufficient evidence to agree with the claim. Reject for significance levels greater than the P-value.
 \end{minipage}}
 
 \end{document}

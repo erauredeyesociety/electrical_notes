@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ07 --- Question 2}
+
+\subsection*{Problem}
+
+A soft-drink machine dispenses amounts that are approximately normal with mean 190 milliliters and standard deviation 12 milliliters. A sample of 9 drinks is taken. If $181<\bar{x}<199$, the machine is considered satisfactory; otherwise, the owner concludes that $\mu\ne190$. Find the type I error probability when $\mu=190$ and the type II error probability when $\mu=178$.
+
+\subsection*{Solution}
+
+The standard error is
+\[
+\sigma_{\bar{x}}=\frac{12}{\sqrt{9}}=4.
+\]
+
+For a type I error, assume $\mu=190$ and find the probability of falling outside the acceptable interval:
+\[
+\alpha=P(\bar{x}\le181)+P(\bar{x}\ge199).
+\]
+\[
+z_1=\frac{181-190}{4}=-2.25,\qquad z_2=\frac{199-190}{4}=2.25.
+\]
+\[
+\alpha=2P(Z\le -2.25)\approx 2(0.0122)=0.0244.
+\]
+
+For a type II error when $\mu=178$, find the probability of staying inside the acceptable interval:
+\[
+\beta=P(181<\bar{x}<199\mid \mu=178).
+\]
+\[
+z_1=\frac{181-178}{4}=0.75,\qquad z_2=\frac{199-178}{4}=5.25.
+\]
+\[
+\beta=P(0.75<Z<5.25)\approx 1-0.7734=0.2266.
+\]
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+(a) Type I error probability $=0.0244$. \quad (b) Type II error probability when $\mu=178$ is $0.2266$.
+\end{minipage}}
+
+\end{document}

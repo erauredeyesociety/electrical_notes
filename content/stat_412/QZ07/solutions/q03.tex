@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ07 --- Question 3}
+
+\subsection*{Problem}
+
+Illegal drug use among 12- to 17-year-olds is currently reported as 9.7\%. In a random sample of 1,056 students at a large high school, 98 report using illegal drugs. Use $\alpha=0.05$ to test the principal's claim that illegal drug use in her school is below the current national average.
+
+\subsection*{Solution}
+
+The claim is ``below,'' so use a left-tailed one-proportion test:
+\[
+H_0:p=0.097,\qquad H_a:p<0.097.
+\]
+
+The sample proportion is
+\[
+\widehat{p}=\frac{98}{1056}=0.0928.
+\]
+
+The test statistic is
+\[
+z=\frac{\widehat{p}-p_0}{\sqrt{p_0(1-p_0)/n}}
+=\frac{0.0928-0.097}{\sqrt{0.097(0.903)/1056}}
+=-0.46.
+\]
+
+The left-tailed P-value is
+\[
+P=P(Z\le -0.46)\approx 0.3225.
+\]
+
+Since $0.3225>0.05$, do not reject $H_0$.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Hypotheses: choice B. $z=-0.46$, P-value $=0.3225$. Conclusion: choice C; do not reject $H_0$. There is insufficient evidence to support the principal's claim.
+\end{minipage}}
+
+\end{document}

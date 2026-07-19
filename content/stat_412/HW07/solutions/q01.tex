@@ -15,26 +15,21 @@ Suppose that an allergist wishes to test the hypothesis that at least 31\% of th
 
 \subsection*{Solution}
 
-The claim is ``at least 31\%,'' so put that in the null hypothesis:
-\[
-H_0:p\ge0.31,\qquad H_a:p<0.31.
-\]
+The platform wording treats the tested claim as ``31\% or more.'' A type I error means concluding the claim is true when it is actually false:
 
-A type I error rejects a true null hypothesis. Here, that means concluding the alternative-side statement when the null-side statement is actually true:
-
-\[
-\text{conclude }p<0.31\quad\text{when actually }p\ge0.31.
-\]
-
-A type II error fails to reject a false null hypothesis. In the platform wording, this is phrased as concluding the null-side statement when the alternative-side statement is actually true:
 \[
 \text{conclude }p\ge0.31\quad\text{when actually }p<0.31.
+\]
+
+A type II error means missing the claim when it is actually true:
+\[
+\text{conclude }p<0.31\quad\text{when actually }p\ge0.31.
 \]
 
 \subsection*{Final Answer}
 
 \fbox{\begin{minipage}{0.94\linewidth}
-Type I: conclude less than 31\% are allergic when actually 31\% or more are allergic. Type II: conclude 31\% or more are allergic when actually less than 31\% are allergic.
+Type I: conclude 31\% or more are allergic when actually less than 31\% are allergic. Type II: conclude less than 31\% are allergic when actually 31\% or more are allergic.
 \end{minipage}}
 
 \end{document}

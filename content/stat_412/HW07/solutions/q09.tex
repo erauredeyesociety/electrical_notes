@@ -10,8 +10,16 @@
 \subsection*{Problem}
 
 \begin{quote}
-A marketing expert for a pasta-making company believes that 40\% of pasta lovers prefer lasagna. If 12 out of 20 pasta lovers choose lasagna over other pastas, what can be concluded about the expert's claim? Use a 0.08 level of significance.
+A marketing expert for a pasta-making company believes that 40\% of pasta lovers prefer lasagna. If 12 out of 20 pasta lovers choose lasagna over other pastas, what can be concluded about the expert's claim? Use a 0.05 level of significance.
 \end{quote}
+
+The conclusion choices include:
+\begin{enumerate}
+\item[A.] Reject $H_0$ and conclude that there is sufficient evidence that the percentage is not 40\%.
+\item[B.] Do not reject $H_0$ and conclude that there is not sufficient evidence that the percentage is not 40\%.
+\item[C.] Do not reject $H_0$ and conclude that there is sufficient evidence that the percentage is not 40\%.
+\item[D.] Reject $H_0$ and conclude that there is not sufficient evidence that the percentage is not 40\%.
+\end{enumerate}
 
 \subsection*{Solution}
 
@@ -31,19 +39,19 @@ X\sim\operatorname{Binomial}(n=20,p=0.4).
 \]
 So the platform entries for the binomial model are $p=0.4$ and $n=20$.
 
-The observed value is $x=12$. For the two-sided exact binomial P-value:
+The observed value is $x=12$. MyStatLab's feedback uses the doubled one-tail exact-binomial rule for a two-sided test. Since $x=12$ is greater than $np_0=8$,
 \[
-P(X\ge12)+P(X\le4)
-\approx 0.0565+0.0510
-=0.1075.
+P\text{-value}=2P(X\ge12)
+=2(0.056526367)
+\approx 0.1131.
 \]
 
-Since $0.1075>0.08$, do not reject $H_0$.
+Since $0.1131>0.05$, do not reject $H_0$. The correct conclusion choice is B.
 
 \subsection*{Final Answer}
 
 \fbox{\begin{minipage}{0.94\linewidth}
-Choice C: $H_0:p=0.4$; $H_a:p\ne0.4$. Test statistic/model: $X\sim\operatorname{Binomial}(n=20,p=0.4)$. P-value $\approx0.1075$; do not reject $H_0$.
+Choice C: $H_0:p=0.4$; $H_a:p\ne0.4$. Test statistic/model: $X\sim\operatorname{Binomial}(n=20,p=0.4)$. P-value $\approx0.1131$; do not reject $H_0$ at $\alpha=0.05$. Conclusion choice B.
 \end{minipage}}
 
 \end{document}

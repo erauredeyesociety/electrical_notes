@@ -32,12 +32,17 @@ Rounded to two decimals:
 t=-2.43.
 \]
 
-With $df=67$, the left-tail P-value is about $0.009$. The raw platform dump showed $-2.43$ marked incorrect and a P-value range of $0.005\le P<0.0075$, which is inconsistent with the visible screenshot values. If the platform still rejects this, recapture the prompt because one of the displayed values may have changed.
+With $df=67$, the exact left-tail P-value is about $0.009$. From the t table, this falls in the range
+\[
+0.0075<P\text{-value}<0.01.
+\]
+
+Because the P-value is less than $0.05$, reject $H_0$.
 
 \subsection*{Final Answer}
 
 \fbox{\begin{minipage}{0.94\linewidth}
-Choice E: $H_0:\mu=41$; $H_a:\mu<41$. From the visible data, $t=-2.43$ and P-value $\approx0.009$.
+Choice E: $H_0:\mu=41$; $H_a:\mu<41$. $t=-2.43$; $0.0075<P\text{-value}<0.01$ (exact about 0.009). Reject $H_0$; there is sufficient evidence that the mice will live to be less than 41 months old.
 \end{minipage}}
 
 \end{document}

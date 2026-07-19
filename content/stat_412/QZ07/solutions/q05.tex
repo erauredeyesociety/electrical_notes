@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ07 --- Question 5}
+
+\subsection*{Problem}
+
+A sample of 49 batches of peanuts has mean aflatoxin level 24.74 ppm and variance 4.25 ppm$^2$. Test
+\[
+H_0:\sigma^2=4.2
+\]
+against
+\[
+H_a:\sigma^2\ne4.2.
+\]
+Use a P-value in the conclusion.
+
+\subsection*{Solution}
+
+For a variance test,
+\[
+\chi^2=\frac{(n-1)s^2}{\sigma_0^2}.
+\]
+
+Substitute $n=49$, $s^2=4.25$, and $\sigma_0^2=4.2$:
+\[
+\chi^2=\frac{48(4.25)}{4.2}=48.57.
+\]
+
+With $df=48$, the two-tailed P-value is
+\[
+P\approx 0.900.
+\]
+
+Since $0.900>0.05$, the result is not significant at the 0.05 level.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+$\chi^2=48.57$; P-value $=0.900$. The test statistic is not significant at the 0.05 level. Do not reject $H_0$; there is not sufficient evidence that $\sigma^2\ne4.2$.
+\end{minipage}}
+
+\end{document}
