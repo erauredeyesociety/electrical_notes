@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 10}
+
+\subsection*{Solution}
+
+\[
+H_0:\text{gender and whether a call is overturned are independent.}
+\]
+\[
+H_1:\text{gender and whether a call is overturned are not independent.}
+\]
+
+Expected counts:
+\[
+E=\frac{(\text{row total})(\text{column total})}{\text{grand total}}.
+\]
+For example, the expected count for men with successful challenges is
+\[
+E=\frac{976(720)}{2402}=292.556.
+\]
+\[
+\begin{array}{c|cc}
+ & \text{Successful} & \text{Unsuccessful}\\ \hline
+\text{Men} & 292.556 & 683.444\\
+\text{Women} & 427.444 & 998.556
+\end{array}
+\]
+
+The chi-square statistic is
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}=10.988.
+\]
+For a \(2\times2\) table,
+\[
+df=(2-1)(2-1)=1.
+\]
+
+\[
+\chi^2=10.988,\qquad df=1,\qquad p=0.0009.
+\]
+
+Since \(p<0.05\), reject \(H_0\). There is sufficient evidence to reject the claim of independence.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+\(\chi^2=10.988\), \(p=0.0009\). Reject \(H_0\); gender and challenge result are not independent.
+\end{minipage}}
+
+\end{document}

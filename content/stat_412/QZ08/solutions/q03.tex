@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 3}
+
+\subsection*{Solution}
+
+\[
+H_0:\text{the observed frequencies agree with the expected proportions.}
+\]
+\[
+H_1:\text{at least one observed frequency does not agree with the expected proportions.}
+\]
+
+Expected counts:
+\[
+95\left(\frac{2}{16},\frac{4}{16},\frac{5}{16},\frac{5}{16}\right)
+=(11.875,23.750,29.688,29.688).
+\]
+
+The chi-square statistic is
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}.
+\]
+Substituting the four observed counts,
+\[
+\chi^2=
+\frac{(19-11.875)^2}{11.875}
++\frac{(18-23.750)^2}{23.750}
++\frac{(21-29.688)^2}{29.688}
++\frac{(37-29.688)^2}{29.688}
+=10.011.
+\]
+With \(4\) categories,
+\[
+df=4-1=3.
+\]
+
+\[
+\chi^2=10.011,\qquad df=3,\qquad p=0.0185.
+\]
+
+Since \(p<0.05\), reject \(H_0\).
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+\(\chi^2=10.011\), \(p=0.0185\). Reject \(H_0\); there is sufficient evidence to reject the claim that the actual numbers fit the expected distribution.
+\end{minipage}}
+
+\end{document}

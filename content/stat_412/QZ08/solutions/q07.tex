@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 7}
+
+\subsection*{Solution}
+
+\[
+H_0:\text{gender and eye color are independent traits.}
+\]
+\[
+H_1:\text{gender and eye color are not independent traits.}
+\]
+
+Expected counts:
+\[
+E=\frac{(\text{row total})(\text{column total})}{\text{grand total}}.
+\]
+For example, the expected count for male students with blue eyes is
+\[
+E=\frac{912(737)}{2037}=329.97.
+\]
+\[
+\begin{array}{c|cccc}
+ & \text{Blue} & \text{Brown} & \text{Green} & \text{Hazel}\\ \hline
+\text{Male} & 329.97 & 286.09 & 142.82 & 153.12\\
+\text{Female} & 407.03 & 352.91 & 176.18 & 188.88
+\end{array}
+\]
+
+The chi-square statistic adds the contribution from each cell:
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}=12.67.
+\]
+The degrees of freedom are
+\[
+df=(2-1)(4-1)=3.
+\]
+
+\[
+\chi^2=12.67,\qquad df=3,\qquad p=0.005.
+\]
+
+Since \(p<0.01\), reject \(H_0\).
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Expected table:
+\[
+\begin{array}{l}
+\text{Male: }329.97,286.09,142.82,153.12\\
+\text{Female: }407.03,352.91,176.18,188.88
+\end{array}
+\]
+\(\chi^2=12.67\), \(p=0.005\). Reject \(H_0\).
+\end{minipage}}
+
+\end{document}

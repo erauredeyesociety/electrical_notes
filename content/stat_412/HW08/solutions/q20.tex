@@ -15,16 +15,43 @@ H_0:\text{texting while driving and driving after drinking alcohol are independe
 H_1:\text{texting while driving and driving after drinking alcohol are not independent.}
 \]
 
-\textbf{Pending data.} The screenshot only shows the icon for the survey-results table. Once the observed counts are visible, compute expected counts with
+\textbf{Observed counts.} Let the columns be driving when drinking alcohol: yes/no.
+\[
+\begin{array}{c|cc|c}
+ & \text{Yes} & \text{No} & \text{Total}\\ \hline
+\text{Texted while driving} & 725 & 3024 & 3749\\
+\text{No texting while driving} & 159 & 4563 & 4722\\ \hline
+\text{Total} & 884 & 7587 & 8471
+\end{array}
+\]
+
+\textbf{Expected counts.} Compute expected counts with
 \[
 E_{ij}=\frac{(\text{row total})(\text{column total})}{\text{grand total}}
 \]
-and test with
+which gives
 \[
-\chi^2=\sum\frac{(O-E)^2}{E}.
+\begin{array}{c|cc}
+ & \text{Yes} & \text{No}\\ \hline
+\text{Texted while driving} & 391.231 & 3357.769\\
+\text{No texting while driving} & 492.769 & 4229.231
+\end{array}
 \]
 
+\textbf{Test statistic and conclusion.}
 \[
-\boxed{\text{Pending hidden survey-results contingency table.}}
+\chi^2=\sum\frac{(O-E)^2}{E}=570.3387,\qquad df=1.
+\]
+\[
+p=P(\chi^2_1\ge570.3387)\approx4.74\times10^{-126}.
+\]
+For platform entry, this rounds to \(0.000\) to three decimal places or \(0.0000\) to four decimal places.
+Since \(p<0.05\), reject \(H_0\). Texting while driving and driving after drinking alcohol are not independent.
+
+\[
+\boxed{\chi^2=570.34,\quad df=1,\quad p\approx0;\ \text{reject }H_0.}
+\]
+\[
+\boxed{\text{Platform entries: }\chi^2=570.34,\quad P\text{-value}=0.000.}
 \]
 \end{document}

@@ -16,12 +16,37 @@ H_a:\text{teenagers' distribution is different from parents' distribution.}
 \]
 The claim is \(H_a\).
 
-\textbf{Pending data.} The parent pie-chart proportions are not visible. Once provided, use \(E_i=200p_i\) and
+\textbf{Solution.} Using the parent pie-chart proportions
+\[
+(0.52,0.29,0.08,0.07,0.04),
+\]
+the expected counts are
+\[
+200(0.52,0.29,0.08,0.07,0.04)=(104,58,16,14,8).
+\]
 \[
 \chi^2=\sum\frac{(O_i-E_i)^2}{E_i}.
 \]
+\[
+\chi^2
+=\frac{(88-104)^2}{104}
++\frac{(60-58)^2}{58}
++\frac{(35-16)^2}{16}
++\frac{(15-14)^2}{14}
++\frac{(2-8)^2}{8}
+=29.664.
+\]
+\[
+df=5-1=4,\qquad p=P(\chi^2_4\ge29.664)\approx0.0000.
+\]
+Since \(p<0.01\), reject \(H_0\). There is sufficient evidence to support the economist's claim.
+
+Platform conclusion dropdowns:
+\[
+\boxed{\text{Reject};\quad \text{is};\quad \text{is different for teenagers and parents.}}
+\]
 
 \[
-\boxed{\text{Pending hidden parent pie-chart distribution.}}
+\boxed{\chi^2=29.664,\quad df=4,\quad p\approx0;\ \text{reject }H_0.}
 \]
 \end{document}

@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 4}
+
+\subsection*{Solution}
+
+\[
+H_0:\text{wins occur with equal frequency in the different post positions.}
+\]
+\[
+H_1:\text{at least one post position has a different frequency of wins.}
+\]
+
+The observed counts sum to \(115\), so each expected count is \(11.5\).
+
+The goodness-of-fit statistic is
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}.
+\]
+For the ten post positions,
+\[
+\chi^2=
+\frac{(19-11.5)^2}{11.5}
++\frac{(13-11.5)^2}{11.5}
++\cdots
++\frac{(10-11.5)^2}{11.5}
+=12.043.
+\]
+There are \(10\) categories, so
+\[
+df=10-1=9.
+\]
+
+\[
+\chi^2=12.043,\qquad df=9,\qquad p=0.2109.
+\]
+
+Since \(p>0.05\), fail to reject \(H_0\). Based on this test, bettors should not consider post position.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+\(\chi^2=12.043\), \(p=0.2109\). Fail to reject \(H_0\). No, bettors should not consider post position based on this result.
+\end{minipage}}
+
+\end{document}

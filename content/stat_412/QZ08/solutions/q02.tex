@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 2}
+
+\subsection*{Solution}
+
+For the 147 female heights,
+\[
+\bar{x}=161.6875,\qquad s=7.4838.
+\]
+
+Using the normal model based on the sample mean and sample standard deviation,
+\[
+z=\frac{x-\bar{x}}{s}.
+\]
+For example, the first cutoff gives
+\[
+z=\frac{156.05-161.6875}{7.4838}\approx -0.75,
+\]
+so the first class probability is about \(0.2256\). Multiplying each probability by \(n=147\) gives the expected frequencies.
+
+\[
+\begin{array}{lrrr}
+\toprule
+\text{Height class} & O & \text{Probability} & E\\
+\midrule
+<156.05 & 32 & 0.2256 & 33.17\\
+156.05\text{--}162.15 & 40 & 0.2990 & 43.95\\
+162.15\text{--}168.25 & 47 & 0.2851 & 41.91\\
+>168.25 & 28 & 0.1903 & 27.97\\
+\bottomrule
+\end{array}
+\]
+
+\[
+H_0:\text{each observed frequency equals its expected frequency.}
+\]
+\[
+H_1:\text{at least one observed frequency differs from its expected frequency.}
+\]
+
+Because \(\mu\) and \(\sigma\) are estimated from the sample,
+\[
+df=4-1-2=1.
+\]
+
+The test statistic is
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}
+=\frac{(32-33.17)^2}{33.17}
++\frac{(40-43.95)^2}{43.95}
++\frac{(47-41.91)^2}{41.91}
++\frac{(28-27.97)^2}{27.97}
+=1.02.
+\]
+
+\[
+\chi^2=1.02,\qquad p=0.314.
+\]
+
+Since \(p>0.10\), fail to reject \(H_0\). The goodness-of-fit test does not give sufficient evidence against normality.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Observed counts: \(32,40,47,28\). Expected counts: \(33.17,43.95,41.91,27.97\). \(\chi^2=1.02\), \(p=0.314\). Fail to reject \(H_0\).
+\end{minipage}}
+
+\end{document}

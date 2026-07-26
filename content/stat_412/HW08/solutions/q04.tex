@@ -12,13 +12,30 @@
 H_0:\mu_1-\mu_2=0,\qquad H_1:\mu_1-\mu_2\ne0.
 \]
 
-\textbf{Pending data.} The screenshot only shows the icon for the data table. Once the two samples are provided, use
+\textbf{Data summary.} For nonsmokers,
+\[
+n_1=23,\qquad \bar{x}_1=0.9309,\qquad s_1=0.2059.
+\]
+For smokers,
+\[
+n_2=7,\qquad \bar{x}_2=0.9757,\qquad s_2=0.4228.
+\]
+
+\textbf{Test statistic.} Using Welch's two-sample test,
 \[
 t=\frac{(\bar{x}_1-\bar{x}_2)-0}{\sqrt{s_1^2/n_1+s_2^2/n_2}}
+  =\frac{0.9309-0.9757}{\sqrt{0.2059^2/23+0.4228^2/7}}
+  =-0.271.
 \]
-with Welch's degrees of freedom.
+The Welch degrees of freedom are \(df\approx6.89\).
+
+\textbf{P-value and conclusion.} Since this is a two-tailed test,
+\[
+p=2P(T_{6.89}\ge |{-0.271}|)\approx0.794.
+\]
+The P-value is large, so we fail to reject \(H_0\). There is not sufficient evidence to conclude that the mean plasma ascorbic acid levels differ between nonsmokers and smokers.
 
 \[
-\boxed{\text{Pending hidden plasma ascorbic acid data.}}
+\boxed{t=-0.271,\quad df\approx6.89,\quad p\approx0.794;\ \text{do not reject }H_0.}
 \]
 \end{document}

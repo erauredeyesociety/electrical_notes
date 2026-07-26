@@ -65,24 +65,64 @@ x2 = np.array([89, 156, 103, 141, 98, 79, 112], dtype=float)
 m1, m2 = x1.mean(), x2.mean()
 s1, s2 = x1.std(ddof=1), x2.std(ddof=1)
 se = math.sqrt(s1**2 / len(x1) + s2**2 / len(x2))
-t = ((m2 - m1) - 10) / se
+t = ((m1 - m2) - (-10)) / se
 df = (s1**2 / len(x1) + s2**2 / len(x2)) ** 2 / (
     (s1**2 / len(x1)) ** 2 / (len(x1) - 1) + (s2**2 / len(x2)) ** 2 / (len(x2) - 1)
 )
-p = stats.t.cdf(t, df)
-print(f"Q3: means=({m1:.4f},{m2:.4f}), s=({s1:.4f},{s2:.4f}), t={t:.4f}, df={df:.4f}, left-tail p={p:.6g}")
+p = stats.t.sf(t, df)
+print(f"Q3: means=({m1:.4f},{m2:.4f}), s=({s1:.4f},{s2:.4f}), platform t={t:.4f}, df={df:.4f}, right-tail p={p:.6g}")
+
+q4_nonsmokers = [
+    0.97,
+    0.72,
+    1.00,
+    0.81,
+    0.62,
+    1.32,
+    1.24,
+    0.99,
+    0.90,
+    0.74,
+    0.88,
+    0.94,
+    1.16,
+    0.86,
+    0.85,
+    0.58,
+    0.64,
+    0.98,
+    1.09,
+    0.92,
+    0.78,
+    1.24,
+    1.18,
+]
+q4_smokers = [0.48, 0.71, 0.68, 1.18, 1.36, 0.78, 1.64]
+m1, m2, s1, s2, t, df, p = welch_t(q4_nonsmokers, q4_smokers)
+print(f"Q4: n=({len(q4_nonsmokers)},{len(q4_smokers)}), means=({m1:.4f},{m2:.4f}), s=({s1:.4f},{s2:.4f}), t={t:.4f}, df={df:.4f}, p={p:.6g}")
+
+q5_station1 = [5030, 13700, 10730, 11400, 860, 2200, 4250, 15040, 4980, 8130, 26850, 17660, 22800, 1130, 1690]
+q5_station2 = [2800, 4670, 6890, 7720, 7030, 7330, 2810, 1330, 3320, 1230, 2190]
+m1, m2, s1, s2, t, df, p = welch_t(q5_station1, q5_station2)
+print(f"Q5: n=({len(q5_station1)},{len(q5_station2)}), means=({m1:.4f},{m2:.4f}), s=({s1:.4f},{s2:.4f}), t={t:.4f}, df={df:.4f}, p={p:.6g}")
 
 se = math.sqrt(157**2 / 400 + 199**2 / 400)
 ci = (40 - 1.96 * se, 40 + 1.96 * se)
-print(f"Q9: SE={se:.4f}, 95% z CI=({ci[0]:.4f},{ci[1]:.4f})")
+z = 40 / se
+p = 2 * stats.norm.sf(abs(z))
+print(f"Q9: SE={se:.4f}, 95% z CI=({ci[0]:.4f},{ci[1]:.4f}), z={z:.4f}, p={p:.6g}")
+z = (40 - 26) / se
+p = 2 * stats.norm.sf(abs(z))
+print(f"Q9 part d: H0 diff=26, z={z:.4f}, p={p:.6g}")
 
-for name, obs in [
-    ("Q11", [304, 316, 296, 286]),
-    ("Q17", [39, 31, 45, 39, 47, 50, 48, 50, 50, 42, 38, 38]),
-    ("Q18", [20, 19, 22, 36]),
-    ("Q19", [44, 60, 57, 59, 57, 55, 36]),
+for name, obs, props in [
+    ("Q10", [42, 17, 25, 49, 41, 165, 150], [0.12, 0.02, 0.03, 0.14, 0.10, 0.31, 0.28]),
+    ("Q11", [304, 316, 296, 286], None),
+    ("Q12", [88, 60, 35, 15, 2], [0.52, 0.29, 0.08, 0.07, 0.04]),
+    ("Q17", [39, 31, 45, 39, 47, 50, 48, 50, 50, 42, 38, 38], None),
+    ("Q18", [20, 19, 22, 36], [0.125, 0.25, 0.3125, 0.3125]),
+    ("Q19", [44, 60, 57, 59, 57, 55, 36], None),
 ]:
-    props = [0.125, 0.25, 0.3125, 0.3125] if name == "Q18" else None
     chi, df, p, exp = chisq_gof(obs, props)
     print(f"{name}: chi={chi:.6f}, df={df}, p={p:.6g}, exp={np.round(exp,4).tolist()}")
 
@@ -90,9 +130,11 @@ chi, df, p, exp = chisq_ind([[23, 25], [222, 197]])
 print(f"Q13 expected: {np.round(exp,4).tolist()}")
 
 for name, obs in [
+    ("Q6", [[15, 28], [28, 19]]),
     ("Q14", [[123, 131], [52, 14]]),
     ("Q15", [[423, 59], [549, 13]]),
     ("Q16", [[246, 556], [475, 680]]),
+    ("Q20", [[725, 3024], [159, 4563]]),
 ]:
     chi, df, p, exp = chisq_ind(obs)
     print(f"{name}: chi={chi:.6f}, df={df}, p={p:.6g}, exp={np.round(exp,4).tolist()}")

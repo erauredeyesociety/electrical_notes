@@ -1,0 +1,24 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW09 Question 2}
+
+\textbf{Problem.} Less than two years married: \(251/300\) planned children. Five years or longer: \(308/400\). Test whether the first proportion is higher.
+
+\[
+H_0:p_1=p_2,\qquad H_a:p_1>p_2.
+\]
+\[
+\hat p_1=0.8367,\quad \hat p_2=0.7700,\quad \hat p=\frac{559}{700}=0.7986.
+\]
+\[
+z=\frac{0.8367-0.7700}{\sqrt{0.7986(0.2014)(1/300+1/400)}}=2.18.
+\]
+Right-tailed \(p=0.0148<0.05\), so reject \(H_0\). There is sufficient evidence to reject equality of the two proportions, so it can be concluded that the proportion is higher for wives married less than two years.
+
+\[
+\boxed{\text{Choice A; }z=2.18,\ p=0.0148;\ \text{sufficient evidence }p_1>p_2.}
+\]
+\end{document}

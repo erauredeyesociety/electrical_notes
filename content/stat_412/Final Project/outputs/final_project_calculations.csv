@@ -1,0 +1,22 @@
+section,item,value,excel_formula_or_method
+sample,sample_size,250,=COUNT(M2:M251)
+section_1_mean_ci,point_estimate_mean,4.7,=AVERAGE(M2:M251)
+section_1_mean_ci,sample_stdev,42.4,=STDEV.S(M2:M251)
+section_1_mean_ci,margin_of_error,5.3,"=CONFIDENCE.T(0.05, STDEV.S(M2:M251), COUNT(M2:M251))"
+section_1_mean_ci,lower_limit,-0.5,
+section_1_mean_ci,upper_limit,10.0,
+section_2_prop_ci,late_count_arr_delay_gt_10,61,"=COUNTIF(M2:M251,"">10"")"
+section_2_prop_ci,point_estimate_late_proportion,24.4%,"=COUNTIF(M2:M251,"">10"")/COUNT(M2:M251)"
+section_2_prop_ci,margin_of_error,5.3%,=1.96*SQRT(phat*(1-phat)/250)
+section_2_prop_ci,lower_limit,19.1%,
+section_2_prop_ci,upper_limit,29.7%,
+section_3_mean_test,hypotheses,H0: mu >= 8; H1: mu < 8,
+section_3_mean_test,test_statistic_t,-1.2,=(AVERAGE(M2:M251)-8)/(STDEV.S(M2:M251)/SQRT(COUNT(M2:M251)))
+section_3_mean_test,df,249,
+section_3_mean_test,p_value,0.1124,"=T.DIST(t_statistic,249,TRUE)"
+section_3_mean_test,decision,do not reject H0,
+section_4_prop_test,hypotheses,H0: p >= 0.28; H1: p < 0.28,
+section_4_prop_test,test_statistic_z,-1.3,=(phat-0.28)/SQRT(0.28*(1-0.28)/250)
+section_4_prop_test,p_value,0.1024,"=NORM.S.DIST(z_statistic,TRUE)"
+section_4_prop_test,decision,do not reject H0,
+section_5_two_sample,status,pending: provide first/last initials or airline codes,

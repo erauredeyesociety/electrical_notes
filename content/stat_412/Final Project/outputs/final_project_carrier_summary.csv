@@ -1,0 +1,7 @@
+UNIQUE_CARRIER,AIRLINE_NAME,n,mean_arr_delay,stdev_arr_delay,late_count_arr_delay_gt_10,late_percent_arr_delay_gt_10
+AA,American Airlines,46,-1.0,21.2,10,21.7%
+B6,JetBlue Airways,39,9.6,43.7,13,33.3%
+DL,Delta Air Lines,43,11.6,64.6,9,20.9%
+NK,Spirit Airlines,42,1.6,24.6,12,28.6%
+UA,United Airlines,38,-1.2,55.1,4,10.5%
+WN,Southwest Airlines,42,8.0,29.1,13,31.0%

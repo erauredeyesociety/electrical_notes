@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 8}
+
+\subsection*{Solution}
+
+Let Brand A be population 1 and Brand B be population 2.
+
+\[
+H_0:\mu_1-\mu_2=0,\qquad H_1:\mu_1-\mu_2\ne0.
+\]
+
+With \(n_1=n_2=12\), \(\bar{x}_1=38100\), \(\bar{x}_2=40100\), \(s_1=5000\), and \(s_2=5900\), the pooled standard deviation is
+\[
+s_p=\sqrt{\frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}}
+=\sqrt{\frac{11(5000)^2+11(5900)^2}{22}}
+=5468.55.
+\]
+
+\[
+t=\frac{38100-40100}{5468.55\sqrt{1/12+1/12}}=-0.90.
+\]
+The degrees of freedom for the pooled test are
+\[
+df=n_1+n_2-2=22.
+\]
+
+The exact two-tailed P-value is \(0.380\), so the table range is
+\[
+0.3<P\text{-value}<0.4.
+\]
+
+Do not reject \(H_0\). There is insufficient evidence of a difference in average wear.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+\(H_0:\mu_1-\mu_2=0\), \(H_1:\mu_1-\mu_2\ne0\). \(t=-0.90\). \(0.3<P\text{-value}<0.4\). Do not reject \(H_0\).
+\end{minipage}}
+
+\end{document}

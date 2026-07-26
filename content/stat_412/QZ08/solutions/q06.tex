@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 6}
+
+\subsection*{Solution}
+
+\[
+H_0:\text{whether a subject lies is independent of the polygraph indication.}
+\]
+\[
+H_1:\text{whether a subject lies is not independent of the polygraph indication.}
+\]
+
+Expected counts:
+\[
+E=\frac{(\text{row total})(\text{column total})}{\text{grand total}}.
+\]
+For example, for ``indicated lie'' and ``did not lie,''
+\[
+E=\frac{64(22)}{80}=17.6.
+\]
+\[
+\begin{array}{c|cc}
+ & \text{Did not lie} & \text{Lied}\\ \hline
+\text{Indicated lie} & 17.6 & 46.4\\
+\text{Indicated no lie} & 4.4 & 11.6
+\end{array}
+\]
+
+Then
+\[
+\chi^2=\sum\frac{(O-E)^2}{E}
+=\frac{(15-17.6)^2}{17.6}
++\frac{(49-46.4)^2}{46.4}
++\frac{(7-4.4)^2}{4.4}
++\frac{(9-11.6)^2}{11.6}
+=2.649.
+\]
+For a \(2\times2\) table,
+\[
+df=(2-1)(2-1)=1.
+\]
+
+\[
+\chi^2=2.649,\qquad df=1,\qquad p=0.1036.
+\]
+
+Since \(p>0.05\), fail to reject \(H_0\). The results do not suggest that polygraphs are effective in distinguishing between truth and lies.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+Expected table: \(17.6,46.4; 4.4,11.6\). \(\chi^2=2.649\), \(p=0.1036\). Fail to reject \(H_0\); no, the results do not suggest effectiveness.
+\end{minipage}}
+
+\end{document}

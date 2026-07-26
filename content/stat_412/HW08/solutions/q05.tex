@@ -12,12 +12,30 @@
 H_0:\mu_1-\mu_2=0,\qquad H_1:\mu_1-\mu_2\ne0.
 \]
 
-\textbf{Pending data.} The screenshot only shows the icon for the organism-density data table. Once the station data are available, compute the Welch statistic
+\textbf{Data summary.} For station 1,
 \[
-t=\frac{\bar{x}_1-\bar{x}_2}{\sqrt{s_1^2/n_1+s_2^2/n_2}}.
+n_1=15,\qquad \bar{x}_1=9763.33,\qquad s_1=8131.75.
+\]
+For station 2,
+\[
+n_2=11,\qquad \bar{x}_2=4301.82,\qquad s_2=2516.02.
 \]
 
+\textbf{Test statistic.} Using Welch's two-sample test,
 \[
-\boxed{\text{Pending hidden organism-density data.}}
+t=\frac{\bar{x}_1-\bar{x}_2}{\sqrt{s_1^2/n_1+s_2^2/n_2}}
+  =\frac{9763.33-4301.82}{\sqrt{8131.75^2/15+2516.02^2/11}}
+  =2.446.
+\]
+The Welch degrees of freedom are \(df\approx17.48\).
+
+\textbf{P-value and conclusion.} For the two-tailed test,
+\[
+p=2P(T_{17.48}\ge 2.446)\approx0.0253.
+\]
+Since \(p<0.05\), reject \(H_0\). The average densities at the two stations are not equal.
+
+\[
+\boxed{t=2.446,\quad df\approx17.48,\quad p\approx0.0253;\ \text{reject }H_0.}
 \]
 \end{document}

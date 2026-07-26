@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 9}
+
+\subsection*{Solution}
+
+\[
+H_0:\mu_1=\mu_2,\qquad H_1:\mu_1\ne\mu_2.
+\]
+
+Using Welch's test,
+\[
+\text{SE}=\sqrt{\frac{0.91^2}{35}+\frac{0.56^2}{39}}=0.1780,
+\]
+\[
+t=\frac{2.32-2.62}{0.1780}=-1.68.
+\]
+The Welch degrees of freedom are
+\[
+df\approx55.32.
+\]
+\[
+p=0.098.
+\]
+
+Since \(p>0.01\), fail to reject \(H_0\).
+
+The 99\% confidence interval for \(\mu_1-\mu_2\) is
+\[
+(\bar{x}_1-\bar{x}_2)\pm t^*SE.
+\]
+Using \(t^*\approx2.669\) with \(df\approx55.32\),
+\[
+-0.30\pm 2.669(0.1780)=(-0.775,0.175).
+\]
+\[
+-0.775<\mu_1-\mu_2<0.175.
+\]
+The interval contains 0, so it supports the hypothesis-test conclusion.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+\(t=-1.68\), \(p=0.098\). Fail to reject \(H_0\). CI blanks: lower \(-0.775\), upper \(0.175\). 99\% CI: \((-0.775,0.175)\).
+\end{minipage}}
+
+\end{document}

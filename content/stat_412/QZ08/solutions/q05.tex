@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 5}
+
+\subsection*{Solution}
+
+Let \(\mu_1\) be the mean tip percentage with no candy and \(\mu_2\) be the mean tip percentage with two candies.
+
+\[
+H_0:\mu_1=\mu_2,\qquad H_1:\mu_1<\mu_2.
+\]
+
+Using Welch's test,
+\[
+\text{SE}=\sqrt{\frac{1.46^2}{25}+\frac{2.34^2}{25}}=0.5518,
+\]
+\[
+t=\frac{18.14-20.58}{0.5518}=-4.42.
+\]
+The Welch degrees of freedom are
+\[
+df\approx40.23.
+\]
+\[
+p\approx0.000.
+\]
+
+Since \(p<0.01\), reject \(H_0\). There is sufficient evidence that giving candy results in greater tips.
+
+A confidence interval suitable for the one-tailed \(\alpha=0.01\) test is the 98\% two-sided interval:
+\[
+(\bar{x}_1-\bar{x}_2)\pm t^*SE.
+\]
+Using \(t^*\approx2.423\) with \(df\approx40.23\),
+\[
+-2.44\pm 2.423(0.5518)=(-3.78,-1.10).
+\]
+\[
+-3.78<\mu_1-\mu_2<-1.10.
+\]
+Because the entire interval is less than 0, it supports the hypothesis-test conclusion.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+\(t=-4.42\), \(p=0.000\). Reject \(H_0\). CI blanks: lower \(-3.78\), upper \(-1.10\). The 98\% CI is \((-3.78,-1.10)\), which supports the conclusion.
+\end{minipage}}
+
+\end{document}

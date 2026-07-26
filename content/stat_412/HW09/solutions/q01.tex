@@ -1,0 +1,27 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW09 Question 1}
+
+\textbf{Problem.} Urban residents: \(53\) of \(80\) favor the nuclear plant. Suburban residents: \(59\) of \(100\) favor it. Test whether the proportions differ.
+
+\[
+H_0:p_1=p_2,\qquad H_a:p_1\ne p_2.
+\]
+
+\[
+\hat p_1=\frac{53}{80}=0.6625,\quad \hat p_2=\frac{59}{100}=0.5900,\quad
+\hat p=\frac{112}{180}=0.6222.
+\]
+\[
+z=\frac{\hat p_1-\hat p_2}{\sqrt{\hat p(1-\hat p)(1/n_1+1/n_2)}}=
+\frac{0.6625-0.5900}{\sqrt{0.6222(0.3778)(1/80+1/100)}}=1.00.
+\]
+Two-tailed \(p=0.3188\). Since the P-value is greater than ordinary significance levels such as \(0.05\), fail to reject \(H_0\). There is not a significant difference between the urban and suburban proportions. In general, \(H_0\) would be rejected only for significance levels greater than the P-value.
+
+\[
+\boxed{\text{Choice E; }z=1.00,\ p=0.3188;\ \text{not enough evidence of a difference.}}
+\]
+\end{document}

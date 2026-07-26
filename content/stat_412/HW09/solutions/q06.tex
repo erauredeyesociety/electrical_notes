@@ -1,0 +1,28 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{HW09 Question 6}
+
+\textbf{Problem.} Not wearing seat belts: \(31/2876\) killed. Wearing seat belts: \(17/7647\) killed. Test whether seat belts reduce fatalities at \(\alpha=0.01\).
+
+\[
+H_0:p_1=p_2,\qquad H_a:p_1>p_2.
+\]
+\[
+\hat p_1=0.01078,\quad \hat p_2=0.00222,\quad z=5.80,\quad p\approx0.0000.
+\]
+Since the P-value is less than \(\alpha=0.01\), reject \(H_0\). There is sufficient evidence to support the claim that the fatality rate is higher for those not wearing seat belts.
+
+For the right-tailed test at \(\alpha=0.01\), an appropriate 98\% CI is
+\[
+0.0039 < p_1-p_2 < 0.0132.
+\]
+Since the interval is entirely above 0, the confidence-interval method also supports the claim.
+Platform CI dropdowns: do not include; not equal; only positive; higher.
+
+\[
+\boxed{\text{Choice D; reject }H_0;\ \text{seat belts appear effective in reducing fatalities.}}
+\]
+\end{document}

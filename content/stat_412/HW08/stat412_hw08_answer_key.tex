@@ -11,26 +11,26 @@
 \end{center}
 
 \begin{enumerate}[leftmargin=*]
-\item \(H_0:\mu_1-\mu_2=0,\ H_1:\mu_1-\mu_2>0\). \(t=11.90\), \(df=48\), \(p\approx0.000\). Reject \(H_0\); runners have significantly higher mean RMR.
-\item \(H_0:\mu_1-\mu_2=0,\ H_1:\mu_1-\mu_2\ne0\). \(t=-0.58\), \(df=22\), \(p=0.569\). Do not reject \(H_0\).
-\item \(H_0:\mu_2-\mu_1=10,\ H_1:\mu_2-\mu_1<10\). \(t=0.65\), \(df\approx7.57\), \(p=0.733\). Do not reject \(H_0\).
-\item Pending hidden plasma-ascorbic-acid data. Hypotheses: \(H_0:\mu_1-\mu_2=0,\ H_1:\mu_1-\mu_2\ne0\).
-\item Pending hidden organism-density data. Hypotheses: \(H_0:\mu_1-\mu_2=0,\ H_1:\mu_1-\mu_2\ne0\).
-\item Pending hidden contingency table. \(H_0\): TV time and gender are independent. \(H_1\): they are not independent.
-\item 95\% CI: \((-0.60,\ 7.95)\). Since \(0\) is inside the interval and \(p=0.086>0.05\), there is not sufficient evidence of different mean FNE scores.
-\item Parameter: \(\mu_1-\mu_2\), the difference between population mean test scores for students using educational software and students not using it. Parts (b)--(c) pending.
-\item 95\% CI for \(\mu_1-\mu_2\): \((15.2,\ 64.8)\).
-\item Pending hidden pie-chart distribution. \(H_0\): same as pie chart. \(H_a\): different from pie chart; this is the claim.
-\item \(H_0\): uniform by season. \(H_1\): not uniform. \(\chi^2=1.61\), \(df=3\), \(p=0.658\). Do not reject \(H_0\).
-\item Pending hidden parent pie-chart distribution. \(H_0\): teenagers' distribution equals parents' distribution. \(H_a\): different; this is the claim.
+\item Dropdowns: \(H_0:\mu_1-\mu_2=0,\ H_1:\mu_1-\mu_2>0\). \(t=11.90\), \(df=48\), \(p\approx0.000\) (smallest P-value range). Reject \(H_0\); sufficient evidence runners have higher mean RMR.
+\item Dropdowns: \(H_0:\mu_1-\mu_2=0,\ H_1:\mu_1-\mu_2\ne0\). \(t=-0.58\), \(df=22\), \(p=0.569\); select \(0.4<P\text{-value}<0.6\). Do not reject \(H_0\); insufficient evidence of a difference.
+\item Platform dropdowns use \(\mu_1-\mu_2\): \(H_0:\mu_1-\mu_2=-10,\ H_1:\mu_1-\mu_2>-10\). \(t=-0.65\), \(df\approx7.57\), \(p=0.733\). Do not reject \(H_0\); insufficient evidence that the excess is less than 10 minutes.
+\item Dropdowns: \(H_0:\mu_1-\mu_2=0,\ H_1:\mu_1-\mu_2\ne0\). Welch test: \(t=-0.27\), \(df\approx6.89\), \(p=0.794\). Do not reject \(H_0\); not sufficient evidence that mean plasma ascorbic acid levels differ.
+\item Dropdowns: \(H_0:\mu_1-\mu_2=0,\ H_1:\mu_1-\mu_2\ne0\). Welch test: \(t=2.45\), \(df\approx17.48\), \(p=0.0253\). Reject \(H_0\); average densities are not equal.
+\item Dropdowns: \(H_0\): TV time is independent of gender. \(H_1\): TV time is dependent/not independent of gender. \(\chi^2=5.49\), \(df=1\), \(p=0.0192\). At \(\alpha=0.01\), fail to reject \(H_0\); insufficient evidence of dependence.
+\item 95\% CI: \((-0.60,\ 7.95)\). Assumptions part: select A, C, and D. Additional part: yes, the assumptions are reasonably satisfied.
+\item Parameter dropdown: \(\mu_1-\mu_2\), software group minus no-software group. Hypothesis dropdowns: \(H_0:\mu_1-\mu_2=0,\ H_a:\mu_1-\mu_2>0\). Part (c): Yes; there was a difference; P-value is small; reject \(H_0\); side with the research group.
+\item 95\% CI for \(\mu_1-\mu_2\): \((15.2,\ 64.8)\). Interpretation choice C. Test against 0: \(z=3.16\), \(p=0.0016\), reject \(H_0\). Added test \(H_0:\mu_1-\mu_2=26,\ H_a:\mu_1-\mu_2\ne26\): \(z=1.10\), \(p=0.269\), fail to reject \(H_0\). Comparison choice B. Assumptions choice D.
+\item Dropdowns: \(H_0\): delivery-day distribution is as shown in the pie chart. \(H_a\): it differs; this is the claim. Expected proportions \(0.12,0.02,0.03,0.14,0.10,0.31,0.28\). \(\chi^2=26.589\), \(df=6\), \(p=0.000\) to three decimals; reject \(H_0\).
+\item Dropdowns: \(H_0\): homicide-season distribution is uniform. \(H_a\): it is not uniform; this is the claim. \(\chi^2=1.607\), \(df=3\), \(p=0.658\). Fail to reject \(H_0\); there is not enough evidence to reject the claim that the distribution is uniformly distributed.
+\item Dropdowns: \(H_0\): teenagers' opinion distribution is the same as parents' distribution. \(H_a\): it differs; this is the claim. Using parent proportions \(0.52,0.29,0.08,0.07,0.04\), \(\chi^2=29.664\), \(df=4\), \(p\approx0.0000\). Conclusion dropdowns: Reject; is; is different for teenagers and parents.
 \item Marginal totals: rows \(48,419\); columns \(245,222\); total \(467\). Expected frequencies: \(25.18,\ 22.82,\ 219.82,\ 199.18\).
-\item \(\chi^2=19.49\), \(df=1\), \(p\approx0.000\). Reject \(H_0\); not independent.
-\item \(\chi^2=39.83\), \(df=1\), \(p\approx0.000\). Reject \(H_0\); plea and prison sentence are not independent.
-\item \(\chi^2=22.22\), \(df=1\), \(p\approx0.000\). Reject \(H_0\); gender and challenge result are not independent.
-\item \(H_0\): uniform by month. \(H_1\): not uniform. \(\chi^2=9.72\), \(df=11\), \(p=0.555\). Do not reject \(H_0\).
-\item \(\chi^2=9.60\), \(df=3\), \(p=0.022\). At \(\alpha=0.05\), reject \(H_0\); the actual distribution does not fit the expected proportions.
-\item \(H_0\): births occur equally often by day. \(H_1\): not equally often. \(\chi^2=9.32\), \(df=6\), \(p=0.157\). At \(\alpha=0.01\), do not reject \(H_0\).
-\item Pending hidden contingency table. \(H_0\): texting while driving and driving after drinking alcohol are independent. \(H_1\): they are not independent.
+\item \(\chi^2=19.49\), \(df=1\), \(p\approx0.000\). Reject \(H_0\); not independent. Part (b) dropdown: No; rejection alone does not imply dogs are good identifiers because an association could be in the wrong direction.
+\item Hypothesis choice C. \(\chi^2=39.83\), \(df=1\), \(p\approx0.000\). Reject \(H_0\); plea and prison sentence are not independent. Final conclusion choice C.
+\item Hypothesis choice B. \(\chi^2=22.22\), \(df=1\), \(p\approx0.000\). Reject \(H_0\); gender and challenge result are not independent. Final conclusion choice D.
+\item Dropdowns: \(H_0\): homicides occur with the same frequency in each month. \(H_a\): homicides do not occur with the same frequency in each month. \(\chi^2=9.723\), \(df=11\), \(p=0.555\). Fail to reject \(H_0\). Final conclusion choice C. Additional interpretation choice A.
+\item Dropdowns: \(H_0\): actual game counts fit the expected proportions. \(H_1\): they do not fit. \(\chi^2=9.598\), \(df=3\), \(p=0.0223\). At \(\alpha=0.05\), reject \(H_0\); final conclusion choice B.
+\item Dropdowns: \(H_0\): births occur equally often by day. \(H_1\): not equally often. \(\chi^2=9.315\), \(df=6\), \(p=0.1566\) if four decimals. At \(\alpha=0.01\), fail to reject \(H_0\). Explanation choice A.
+\item Dropdowns: \(H_0\): texting while driving and driving after drinking alcohol are independent. \(H_1\): they are dependent/not independent. If the current table is correct, \(\chi^2=570.34\) rounded to two decimals, \(df=1\), \(p=0.000\) to three decimals. Reject \(H_0\).
 \end{enumerate}
 
 \end{document}

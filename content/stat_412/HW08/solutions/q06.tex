@@ -15,16 +15,39 @@ H_0:\text{TV time and gender are independent.}
 H_1:\text{TV time and gender are not independent.}
 \]
 
-\textbf{Pending data.} The screenshot only shows the icon for the contingency table. Once the observed counts are available, compute expected counts by
+\textbf{Observed counts.}
+\[
+\begin{array}{c|cc|c}
+ & \text{Male} & \text{Female} & \text{Total}\\ \hline
+\text{Over 25 hours} & 15 & 28 & 43\\
+\text{Under 25 hours} & 28 & 19 & 47\\ \hline
+\text{Total} & 43 & 47 & 90
+\end{array}
+\]
+
+\textbf{Expected counts.} Compute expected counts by
 \[
 E_{ij}=\frac{(\text{row total})(\text{column total})}{\text{grand total}}
 \]
-and then
+which gives
 \[
-\chi^2=\sum \frac{(O-E)^2}{E}.
+\begin{array}{c|cc}
+ & \text{Male} & \text{Female}\\ \hline
+\text{Over 25 hours} & 20.544 & 22.456\\
+\text{Under 25 hours} & 22.456 & 24.544
+\end{array}
 \]
 
+\textbf{Test statistic and conclusion.}
 \[
-\boxed{\text{Pending hidden contingency table.}}
+\chi^2=\sum \frac{(O-E)^2}{E}=5.487,\qquad df=(2-1)(2-1)=1.
+\]
+\[
+p=P(\chi^2_1\ge5.487)\approx0.0192.
+\]
+Since \(p>0.01\), fail to reject \(H_0\). There is not sufficient evidence at the 0.01 level to conclude that TV time and gender are dependent.
+
+\[
+\boxed{\chi^2=5.487,\quad df=1,\quad p\approx0.0192;\ \text{do not reject }H_0.}
 \]
 \end{document}

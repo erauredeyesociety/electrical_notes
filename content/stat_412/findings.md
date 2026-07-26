@@ -122,6 +122,19 @@ problem, sometimes a grading screenshot. Expect this and plan for it.
 - A value computed while its MyStatLab field was still blank is
   **computed-but-not-platform-confirmed** — label it so in all three artifacts
   and call it out to the user, so they re-check it on entry.
+- A pasted downstream blank field, such as "Determine the P-value" with an empty
+  input, is **not enough by itself** to solve a part. For goodness-of-fit or
+  chi-square tests, do not compute a P-value from a previously rejected statistic
+  or guessed hidden distribution. Record the required upstream input (accepted
+  \(x^2\), expected proportions, or popup table) and leave the field pending
+  until that data is visible.
+- For two-proportion tests, if a mathematically correct signed statistic is
+  rejected, re-check the platform's **success category and subtraction order**
+  before trying more rounding. Some prompts are worded so the screenshot order
+  and the platform's accepted entry may effectively use the complementary event
+  or opposite difference. Record both the raw signed calculation and the
+  platform-accepted orientation so later parts (P-value and confidence interval)
+  stay internally consistent.
 
 ## Reference tables vs. question prompts (and "data-before-prompt")
 

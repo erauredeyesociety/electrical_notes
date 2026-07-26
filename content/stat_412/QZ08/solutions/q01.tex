@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\section*{STAT 412 QZ08 --- Question 1}
+
+\subsection*{Solution}
+
+\[
+H_0:\text{births occur with the same frequency on the different days.}
+\]
+\[
+H_1:\text{at least one day has a different frequency of births.}
+\]
+
+Observed counts are \(36,61,65,55,57,58,43\), with total \(375\). The expected count for each day is \(375/7=53.571\).
+
+For a goodness-of-fit test,
+\[
+\chi^2=\sum \frac{(O-E)^2}{E}.
+\]
+Here each expected count is the same, so
+\[
+\chi^2=
+\frac{(36-53.571)^2}{53.571}
++\frac{(61-53.571)^2}{53.571}
++\cdots
++\frac{(43-53.571)^2}{53.571}
+=11.941.
+\]
+There are \(7\) categories, so
+\[
+df=7-1=6.
+\]
+
+\[
+\chi^2=11.941,\qquad df=6,\qquad p=0.0633.
+\]
+
+Since \(p>0.01\), fail to reject \(H_0\). The apparent lower weekend frequencies can be explained by induced or Caesarean-section births being scheduled during the week whenever possible.
+
+\subsection*{Final Answer}
+
+\fbox{\begin{minipage}{0.94\linewidth}
+\(\chi^2=11.941\), \(p=0.0633\). Fail to reject \(H_0\). Weekend births may be lower because scheduled births are often planned for weekdays.
+\end{minipage}}
+
+\end{document}

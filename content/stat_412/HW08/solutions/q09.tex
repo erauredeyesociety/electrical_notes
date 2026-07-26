@@ -21,5 +21,53 @@ Using \(z_{0.025}=1.96\),
 \[
 \boxed{(15.2,\ 64.8)}.
 \]
-We are 95\% confident that \(\mu_1-\mu_2\) is between 15.2 and 64.8.
+Interpretation choice C: We are 95\% confident that the difference between the population means falls in the confidence interval. In context, \(\mu_1-\mu_2\) is between 15.2 and 64.8.
+
+\textbf{Hypothesis test.}
+\[
+H_0:\mu_1-\mu_2=0,\qquad H_a:\mu_1-\mu_2\ne0,\qquad \alpha=0.05.
+\]
+\[
+z=\frac{5315-5275}{\sqrt{157^2/400+199^2/400}}
+=\frac{40}{12.6738}=3.16.
+\]
+The two-tailed P-value is
+\[
+p=2P(Z\ge3.156)\approx0.0016.
+\]
+Because \(p<0.05\), reject \(H_0\). There is sufficient evidence that the two population means are different.
+
+\[
+\boxed{z=3.16,\quad p=0.0016,\quad \text{reject }H_0.}
+\]
+
+\textbf{Part (d): test against a difference of 26.} The added prompt asks to test
+\[
+H_0:\mu_1-\mu_2=26,\qquad H_a:\mu_1-\mu_2\ne26,
+\]
+using \(\alpha=0.05\). The observed sample difference is still \(40\), so
+\[
+z=\frac{40-26}{12.6738}=1.10.
+\]
+The two-tailed P-value is
+\[
+p=2P(Z\ge1.1046)\approx0.2693.
+\]
+Since \(p>0.05\), fail to reject \(H_0\). This differs from the earlier test against 0: the data showed evidence that the difference is not 0, but not enough evidence that the difference is different from 26.
+
+\[
+\boxed{z=1.10,\quad p=0.269,\quad \text{fail to reject }H_0.}
+\]
+
+\textbf{Comparison choice.} The test against 0 rejects, so part (b)/(c) supported that the means are different. The test against 26 fails to reject, so in the platform's wording it supported that the difference is 26.
+\[
+\boxed{\text{Choice B.}}
+\]
+
+\textbf{Assumptions.} The procedures for independent-samples inference require
+the two samples to be independent random samples. With \(n_1=n_2=400\), the
+large sample sizes justify the normal approximation for \(\bar{x}_1-\bar{x}_2\).
+\[
+\boxed{\text{Choice D: the two samples are independent random samples.}}
+\]
 \end{document}

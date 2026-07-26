@@ -7,3 +7,7 @@ content/stat_412/**/.worklogs/
 content/stat_412/**/tmp/
 content/stat_412/**/__pycache__/
 content/stat_412/**/*.pyc
+content/stat_412/HW*/*.pdf
+content/stat_412/HW*/**/*.pdf
+content/stat_412/QZ*/*.pdf
+content/stat_412/QZ*/**/*.pdf
