@@ -1,0 +1,137 @@
+% CESC 410L lab report.
+%
+% NOTE TO WHOEVER EDITS THIS: keep this file free of references to any
+% tooling, scripts or repository paths. It is a submitted document. Build and
+% packaging instructions belong in reference_docs/report_guide.md, not here.
+% Comment-only lines are stripped at package time as a backstop, but do not
+% rely on that.
+
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}     % equations
+\usepackage{graphicx}             % \includegraphics
+\usepackage{booktabs}             % clean tables
+\usepackage{listings}             % code snippets
+\usepackage{xcolor}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{caption}
+
+% Code style: Courier New equivalent at 10pt, per the CEC 320 template's
+% "code in Courier New 12, single spacing". Light background, no dark blocks --
+% reports may be printed.
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!8},
+  showstringspaces=false,
+  captionpos=b,
+  language=Python,
+}
+
+\title{CESC 410L --- Lab NN: \textit{Title}}
+\author{Name(s) \\ Section NN}
+\date{Lab start: MM/DD/YYYY \\ Report date: MM/DD/YYYY}
+
+\begin{document}
+\maketitle
+
+%======================================================================
+\section{Introduction}
+%======================================================================
+
+What the lab asks for, in your own words, and why. Include any preparation
+or background reading. Keep it short.
+
+%======================================================================
+\section{Narrative}
+%======================================================================
+
+How the procedure differed for you: modifications, problems, bugs, and how
+they were resolved. Research done to fix something belongs here.
+
+This is where deviations from the handout go. It is a graded section, and a
+real debugging story is exactly what it asks for --- take it from the
+\textbf{Deviations} table in \texttt{labNN/README.md}.
+
+%======================================================================
+\section{Artifacts}
+%======================================================================
+
+Only code you added, modified, or commented on. Name the source file above
+each snippet.
+
+\begin{lstlisting}[caption={\texttt{sinusoids.py} --- example}]
+def plot_one_sinusoid_td_fd(Am, Fr, Ph, ...):
+    # Take the DFT of the sampled signal, shifting zero frequency
+    # to the centre so the spectrum plots symmetrically about 0 Hz.
+    X_s = np.fft.fft(x_s)
+    X_F = np.abs(np.fft.fftshift(X_s))
+\end{lstlisting}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs/lab0_sinusoids_fig1.png}
+  \caption{Single sinusoid, $A=1$, $f=4$\,Hz, $\phi=\pi/4$. Sparse samples
+           (dots) over the dense waveform (line), with the magnitude
+           spectrum below.}
+  \label{fig:one-sinusoid}
+\end{figure}
+
+Refer to figures by number, as in Figure~\ref{fig:one-sinusoid}. Avoid dark
+backgrounds in screenshots --- reports may be printed.
+
+%======================================================================
+\section{Discussion and Results}
+%======================================================================
+
+What you learned and how it applies later. Then, explicitly:
+
+\subsection*{Handout questions}
+
+Handouts bury questions between code blocks and they are graded. Answer each
+one here.
+
+\begin{enumerate}
+  \item \textbf{Q.} \textit{question} \\
+        \textbf{A.} answer
+\end{enumerate}
+
+\subsection*{Results}
+
+Summarise. Where a result rests on an equation, state it --- this is why the
+report is in \LaTeX{}. For a sampled sinusoid
+%
+\begin{equation}
+  x[n] = A\cos\!\left(2\pi \frac{f}{f_s} n + \phi\right),
+  \qquad n = 0,\dots,N-1,
+  \label{eq:sampled-sinusoid}
+\end{equation}
+%
+the discrete Fourier transform is
+%
+\begin{equation}
+  X[k] = \sum_{n=0}^{N-1} x[n]\, e^{-j 2\pi k n / N},
+  \qquad k = 0,\dots,N-1,
+  \label{eq:dft}
+\end{equation}
+%
+so a real sinusoid whose frequency falls on a bin centre produces two lines,
+at $\pm f$, each of magnitude $AN/2$.
+
+\begin{table}[h]
+  \centering
+  \caption{Signal parameters.}
+  \begin{tabular}{lrrr}
+    \toprule
+    Component & $A$ & $f$ (Hz) & $\phi$ (rad) \\
+    \midrule
+    1 & 1.0 & 4  & $\pi/4$ \\
+    2 & 0.5 & 8  & $\pi/3$ \\
+    3 & 0.2 & 12 & $\pi/9$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\end{document}

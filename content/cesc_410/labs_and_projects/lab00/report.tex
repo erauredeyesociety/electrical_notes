@@ -1,0 +1,52 @@
+% CESC 410L -- Lab 0. Figures only, per the handout.
+
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+
+\setlength{\parindent}{0pt}
+
+\title{CESC 410L --- Lab 0\\[0.3em]
+       \large Getting Started with Python Programming for DSP}
+\author{Gatlin Nelson}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+Base frequency $\mathrm{Freq\_1} = 4$\,Hz, from seed \texttt{myID = 6127}.
+
+In every figure the upper panel shows the sparse samples (dots) over the dense
+waveform (line); the lower panel shows the magnitude spectrum, annotated with
+the complex DFT value at each peak.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.72\textwidth]{figs/lab0_sinusoids_fig1.png}
+  \caption{Single sinusoid. $A = 1$, $f = 4$\,Hz, $\phi = \pi/4$.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.72\textwidth]{figs/lab0_sinusoids_fig2.png}
+  \caption{Single sinusoid. $A = 0.5$, $f = 8$\,Hz, $\phi = \pi/3$.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.72\textwidth]{figs/lab0_sinusoids_fig3.png}
+  \caption{Superposition of the two sinusoids above, summed as signals.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.72\textwidth]{figs/lab0_sinusoids_fig4.png}
+  \caption{Superposition of three sinusoids built from parameter vectors:
+           $A = [1,\ 0.5,\ 0.2]$, $f = [4,\ 8,\ 12]$\,Hz,
+           $\phi = [\pi/4,\ \pi/3,\ \pi/9]$.}
+\end{figure}
+
+\end{document}
