@@ -11,3 +11,6 @@ content/stat_412/HW*/*.pdf
 content/stat_412/HW*/**/*.pdf
 content/stat_412/QZ*/*.pdf
 content/stat_412/QZ*/**/*.pdf
+
+# Scratch — safe to delete at any time
+/tmp/

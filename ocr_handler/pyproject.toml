@@ -1,0 +1,31 @@
+[project]
+name = "ocr-handler"
+version = "0.1.0"
+description = "Turn lecture PDFs into Markdown or LaTeX, keeping equations as text and figures as images."
+readme = "docs/README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "typer",
+    "pillow",
+    "numpy",
+    "scipy",
+    "pymupdf>=1.28.2",
+]
+
+[project.scripts]
+ocr-handler = "ocr_handler.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.8,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+# The system has ROS 2 on PYTHONPATH, whose pytest plugins fail to import and
+# break collection. This project needs none of them.
+addopts = "-q"
+testpaths = ["tests/persistent"]

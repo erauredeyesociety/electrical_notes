@@ -1,0 +1,69 @@
+# ocr_handler
+#
+# This project downloads MODEL WEIGHTS. Nothing downloaded, generated, or
+# rendered belongs in git. Source and docs only.
+
+# --- Virtual environment --------------------------------------------------
+# 271 MB with pymupdf/numpy/scipy; will exceed 3 GB once torch and a model
+# land. Rebuilt by `uv sync` from the committed uv.lock.
+.venv/
+venv/
+env/
+
+# --- Model weights and caches ---------------------------------------------
+# UniMERNet-Base is ~1.3 GB, SmolDocling ~500 MB, Unlimited-OCR 6.2 GB bf16 /
+# 2.6 GB NF4. A single accidental commit of any of these is unrecoverable
+# without rewriting history.
+*.safetensors
+*.gguf
+*.onnx
+*.pt
+*.pth
+*.ckpt
+*.bin
+!**/site-packages/**          # (unreachable — .venv/ already ignored; kept as intent)
+
+models/
+weights/
+checkpoints/
+.cache/
+huggingface/
+hf_cache/
+torch_cache/
+*.nf4/                        # locally quantised model dumps
+
+# --- Generated output -----------------------------------------------------
+# tmp/ is the scratch output directory. Renders, crops, masks, extracted ink.
+# All reproducible from the source PDFs.
+tmp/
+out/
+output/
+
+# --- Python ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# --- Tooling caches -------------------------------------------------------
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# --- Editors / OS ---------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+
+# --- Deliberately NOT ignored ---------------------------------------------
+# uv.lock        -> commit; it is what makes the environment reproducible
+# pyproject.toml -> commit
+# docs/          -> commit; the research is the most valuable artifact here
+# src/, tests/   -> commit
