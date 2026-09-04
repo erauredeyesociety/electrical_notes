@@ -1,0 +1,140 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc410_macros.tex}
+
+\begin{document}
+
+\problemheaderlo{1}{LO01}{20 pts, 5 pts each}{Phasor form of voltage sources}
+
+\subsection*{Problem statement}
+
+Find the phasor form expression of the following voltage sources.
+\begin{enumerate}
+  \item $x_a(t) = 10\sin(\omega t + \pi/12)$
+  \item $x_b(t) = 15\cos(\omega t + \pi/12)$
+  \item $x_c(t) = -12\sin(\omega t - \pi/12)$
+  \item $x_d(t) = -8\cos(\omega t - \pi/12)$
+\end{enumerate}
+
+\subsection*{Approach}
+
+A phasor represents a sinusoid of known frequency $\omega$ by just its
+amplitude and phase, dropping the $e^{j\omega t}$ that every term in a
+single-frequency problem shares. The standard form is a \emph{cosine} with
+\emph{positive} amplitude:
+\begin{equation}
+  x(t) = A\cos(\omega t + \phi), \qquad A > 0
+  \;\;\Longleftrightarrow\;\;
+  \mathbf{X} = \phasor{A}{\phi}.
+  \label{eq:phasor-def}
+\end{equation}
+
+So each part reduces to rewriting the given signal in that form. Two
+conversions do all the work:
+\begin{align}
+  \sin\theta &= \cos\!\left(\theta - \tfrac{\pi}{2}\right)
+    && \text{sine lags cosine by } 90^\circ \label{eq:sin2cos}\\
+  -\cos\theta &= \cos(\theta \pm \pi)
+    && \text{a sign flip is a } 180^\circ \text{ phase shift} \label{eq:negcos}
+\end{align}
+
+Equation~\eqref{eq:negcos} is the one to be careful with: a negative amplitude
+is not allowed in \eqref{eq:phasor-def}, so it must be absorbed into the phase.
+
+\subsection*{Work}
+
+\paragraph{1. $x_a(t) = 10\sin(\omega t + \pi/12)$.}
+Apply \eqref{eq:sin2cos} directly:
+\begin{align}
+  x_a(t) &= 10\sin\!\left(\omega t + \tfrac{\pi}{12}\right) \\
+         &= 10\cos\!\left(\omega t + \tfrac{\pi}{12} - \tfrac{\pi}{2}\right).
+\end{align}
+Combining the phase over a common denominator of 12, and using
+$\pi/2 = 6\pi/12$:
+\begin{equation}
+  \tfrac{\pi}{12} - \tfrac{6\pi}{12} = -\tfrac{5\pi}{12}.
+\end{equation}
+The amplitude is already positive, so this is standard form.
+\[
+  \mathbf{X}_a = \phasor{10}{-\tfrac{5\pi}{12}}
+  \qquad \left(-\tfrac{5\pi}{12} = -75^\circ\right).
+\]
+
+\paragraph{2. $x_b(t) = 15\cos(\omega t + \pi/12)$.}
+Already a cosine with positive amplitude — nothing to convert.
+\[
+  \mathbf{X}_b = \phasor{15}{\tfrac{\pi}{12}}
+  \qquad \left(\tfrac{\pi}{12} = 15^\circ\right).
+\]
+
+\paragraph{3. $x_c(t) = -12\sin(\omega t - \pi/12)$.}
+Two things to fix: it is a sine, and the amplitude is negative. Convert the
+sine first with \eqref{eq:sin2cos}:
+\begin{align}
+  x_c(t) &= -12\cos\!\left(\omega t - \tfrac{\pi}{12} - \tfrac{\pi}{2}\right)
+          = -12\cos\!\left(\omega t - \tfrac{7\pi}{12}\right),
+\end{align}
+using $-\tfrac{\pi}{12} - \tfrac{6\pi}{12} = -\tfrac{7\pi}{12}$.
+
+Now absorb the minus sign with \eqref{eq:negcos}. Adding $\pi = 12\pi/12$:
+\begin{equation}
+  -12\cos\!\left(\omega t - \tfrac{7\pi}{12}\right)
+   = 12\cos\!\left(\omega t - \tfrac{7\pi}{12} + \pi\right)
+   = 12\cos\!\left(\omega t + \tfrac{5\pi}{12}\right).
+\end{equation}
+\[
+  \mathbf{X}_c = \phasor{12}{\tfrac{5\pi}{12}}
+  \qquad \left(\tfrac{5\pi}{12} = 75^\circ\right).
+\]
+
+\paragraph{4. $x_d(t) = -8\cos(\omega t - \pi/12)$.}
+Already a cosine, so only the negative amplitude needs absorbing. Here it is
+tidier to \emph{subtract} $\pi$, which keeps the result inside $(-\pi, \pi]$:
+\begin{equation}
+  -8\cos\!\left(\omega t - \tfrac{\pi}{12}\right)
+   = 8\cos\!\left(\omega t - \tfrac{\pi}{12} - \pi\right)
+   = 8\cos\!\left(\omega t - \tfrac{13\pi}{12}\right).
+\end{equation}
+That phase is outside the principal range, so add $2\pi$:
+\begin{equation}
+  -\tfrac{13\pi}{12} + \tfrac{24\pi}{12} = \tfrac{11\pi}{12}.
+\end{equation}
+\[
+  \mathbf{X}_d = \phasor{8}{\tfrac{11\pi}{12}}
+  \qquad \left(\tfrac{11\pi}{12} = 165^\circ\right).
+\]
+
+\subsection*{Check}
+
+Each result is verified by evaluating both the original signal and its phasor
+reconstruction at $\omega t = 0$, where $x(0) = A\cos\phi$.
+
+\begin{center}
+\begin{tabular}{clrr}
+  \toprule
+  Part & Original at $\omega t = 0$ & Value & $A\cos\phi$ \\
+  \midrule
+  a & $10\sin(\pi/12)$   & $2.5882$   & $10\cos(-75^\circ) = 2.5882$ \\
+  b & $15\cos(\pi/12)$   & $14.4889$  & $15\cos(15^\circ) = 14.4889$ \\
+  c & $-12\sin(-\pi/12)$ & $3.1058$   & $12\cos(75^\circ) = 3.1058$ \\
+  d & $-8\cos(-\pi/12)$  & $-7.7274$  & $8\cos(165^\circ) = -7.7274$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+All four agree. Note this check alone cannot distinguish $\phi$ from $-\phi$,
+since cosine is even; the sign of the phase is fixed by the derivation, and
+part~(d)'s negative value additionally confirms its phase lies in the second
+quadrant.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\begin{align*}
+  \mathbf{X}_a &= \phasor{10}{-5\pi/12} = \phasor{10}{-75^\circ} \\
+  \mathbf{X}_b &= \phasor{15}{\pi/12}   = \phasor{15}{15^\circ}  \\
+  \mathbf{X}_c &= \phasor{12}{5\pi/12}  = \phasor{12}{75^\circ}  \\
+  \mathbf{X}_d &= \phasor{8}{11\pi/12}  = \phasor{8}{165^\circ}
+\end{align*}
+\end{answerbox}
+
+\end{document}

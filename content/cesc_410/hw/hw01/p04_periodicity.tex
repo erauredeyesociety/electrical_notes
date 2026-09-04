@@ -1,0 +1,143 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc410_macros.tex}
+
+\begin{document}
+
+\problemheaderlo{4}{LO03}{20 pts, 5 pts each}{Periodicity of DT complex exponentials}
+
+\subsection*{Problem statement}
+
+Determine whether each of the following signals is periodic. For those that are
+periodic, determine their fundamental period.
+\begin{enumerate}
+  \item $x_a[n] = e^{j(\pi n/8)}$
+  \item $x_b[n] = e^{j(7\pi n/9)}$
+  \item $x_c[n] = n\,e^{j(\pi n/8)}$
+  \item $x_d[n] = e^{j(\pi n/\sqrt{8})}$
+\end{enumerate}
+
+\subsection*{Approach}
+
+This is the classic place where discrete time behaves differently from
+continuous time. In CT, $e^{j\omega_0 t}$ is periodic for \emph{every}
+$\omega_0$. In DT it is not, because the period $N$ must be an \emph{integer} —
+there is no sample at $n = 16.7$.
+
+A signal is periodic with period $N$ if $x[n+N] = x[n]$ for all $n$, with $N$ a
+positive integer. For $x[n] = e^{j\omega_0 n}$:
+\begin{equation}
+  e^{j\omega_0 (n+N)} = e^{j\omega_0 n} e^{j\omega_0 N} = e^{j\omega_0 n}
+  \quad\Longleftrightarrow\quad
+  e^{j\omega_0 N} = 1
+  \quad\Longleftrightarrow\quad
+  \omega_0 N = 2\pi k
+\end{equation}
+for some integer $k$. Rearranging gives the test:
+\begin{equation}
+  \boxed{\;\frac{\omega_0}{2\pi} = \frac{k}{N} \;\text{must be RATIONAL}\;}
+  \label{eq:rational-test}
+\end{equation}
+
+So the whole problem is: compute $\omega_0/2\pi$ and ask whether it is a ratio of
+integers. If it is, reduce $k/N$ to lowest terms — the reduced denominator is the
+\textbf{fundamental} period $N_0$, the smallest one that works.
+
+\subsection*{Work}
+
+\paragraph{1. $x_a[n] = e^{j(\pi n/8)}$.}
+Here $\omega_0 = \pi/8$, so
+\begin{equation}
+  \frac{\omega_0}{2\pi} = \frac{\pi/8}{2\pi} = \frac{1}{16}.
+\end{equation}
+Rational, and already in lowest terms ($\gcd(1,16) = 1$). Therefore $k = 1$,
+$N_0 = 16$.
+
+Verifying against $\omega_0 N = 2\pi k$ directly:
+$\left(\frac{\pi}{8}\right)(16) = 2\pi$ \checkmark\ — one full revolution after
+16 samples. \textbf{Periodic, $N_0 = 16$.}
+
+\paragraph{2. $x_b[n] = e^{j(7\pi n/9)}$.}
+Here $\omega_0 = 7\pi/9$, so
+\begin{equation}
+  \frac{\omega_0}{2\pi} = \frac{7\pi/9}{2\pi} = \frac{7}{18}.
+\end{equation}
+Rational. Since $\gcd(7,18) = 1$ the fraction is already reduced, so $k = 7$ and
+$N_0 = 18$.
+
+The role of $k$ is worth stating: the signal does \emph{not} complete one
+revolution in 18 samples, it completes \emph{seven}, and 18 is simply the
+smallest sample count after which it lands back exactly where it started.
+Checking: $\left(\frac{7\pi}{9}\right)(18) = 14\pi = 2\pi(7)$ \checkmark.
+
+Note that no smaller $N$ works — e.g. $N = 9$ gives $7\pi$, an odd multiple of
+$\pi$, which is $-1$, not $+1$. \textbf{Periodic, $N_0 = 18$.}
+
+\paragraph{3. $x_c[n] = n\,e^{j(\pi n/8)}$.}
+The exponential factor is exactly $x_a[n]$, which \emph{is} periodic with
+$N = 16$. But the signal now carries a growing envelope $n$, and that destroys
+periodicity. Testing the definition directly:
+\begin{align}
+  x_c[n+16] &= (n+16)\,e^{j\pi(n+16)/8}
+             = (n+16)\,e^{j\pi n/8}\,\underbrace{e^{j2\pi}}_{=\,1}
+             = (n+16)\,e^{j\pi n/8},
+\end{align}
+which equals $x_c[n] = n\,e^{j\pi n/8}$ only if $n + 16 = n$ — impossible. The
+same argument rules out every candidate $N$, since $n+N \ne n$ for any $N > 0$.
+
+More generally, $|x_c[n]| = |n|$ grows without bound, and a periodic signal must
+have bounded, repeating magnitude. \textbf{Not periodic.}
+
+\paragraph{4. $x_d[n] = e^{j(\pi n/\sqrt{8})}$.}
+Here $\omega_0 = \pi/\sqrt{8}$, so
+\begin{equation}
+  \frac{\omega_0}{2\pi} = \frac{\pi/\sqrt{8}}{2\pi} = \frac{1}{2\sqrt{8}}
+    = \frac{1}{4\sqrt{2}} = \frac{\sqrt{2}}{8} \approx 0.1767766953\ldots
+\end{equation}
+Since $\sqrt{2}$ is irrational, $\sqrt{2}/8$ is irrational, so by
+\eqref{eq:rational-test} no integer $N$ can satisfy $\omega_0 N = 2\pi k$.
+
+This is the trap the problem is built around: $\pi/\sqrt{8}$ looks almost
+identical to $\pi/8$ from part 1, and the signal certainly \emph{looks}
+oscillatory — it just never repeats \emph{exactly}. It comes close: $N = 68$
+gives $\omega_0 N / 2\pi = 12.02$, near an integer but not equal to one, and no
+$N$ ever hits exactly. \textbf{Not periodic.}
+
+\subsection*{Check}
+
+A brute-force search for the smallest $N \le 10{,}000$ satisfying
+$\omega_0 N = 2\pi k$ to within $10^{-9}$:
+
+\begin{center}
+\begin{tabular}{clcc}
+  \toprule
+  Part & $\omega_0/2\pi$ & Rational? & smallest $N$ found \\
+  \midrule
+  a & $0.0625000000 = 1/16$ & yes & $16$ \\
+  b & $0.3888888889 = 7/18$ & yes & $18$ \\
+  d & $0.1767766953 = \sqrt{2}/8$ & no & none \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+For part (c), evaluating the definition: $x_c[1] = 0.9239 + j0.3827$ while
+$x_c[17] = 15.7060 + j6.5056$ — the phase repeats after 16 samples but the
+magnitude does not, confirming the envelope is what breaks it.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\begin{center}
+\begin{tabular}{clll}
+  \toprule
+  & Signal & Periodic? & Fundamental period \\
+  \midrule
+  1 & $x_a[n] = e^{j(\pi n/8)}$        & \textbf{Yes} & $N_0 = 16$ \\
+  2 & $x_b[n] = e^{j(7\pi n/9)}$       & \textbf{Yes} & $N_0 = 18$ \\
+  3 & $x_c[n] = n\,e^{j(\pi n/8)}$     & \textbf{No}  & --- (envelope $n$ grows) \\
+  4 & $x_d[n] = e^{j(\pi n/\sqrt{8})}$ & \textbf{No}  & --- ($\omega_0/2\pi$ irrational) \\
+  \bottomrule
+\end{tabular}
+\end{center}
+\end{answerbox}
+
+\end{document}

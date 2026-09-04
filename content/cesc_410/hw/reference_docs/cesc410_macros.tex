@@ -1,0 +1,61 @@
+% ─────────────────────────────────────────────────────────────────────────────
+% CESC 410 course-specific macros. Inputted AFTER the shared preamble:
+%
+%   \input{../../../../docs/latex/coursework_preamble.tex}
+%   \input{../reference_docs/cesc410_macros.tex}
+%   \begin{document}
+%
+% ONLY things that mean something in DSP go here. The document class, the
+% package set, \answerbox, \srcref, \extref, the trap callout, \problemheader
+% and the page style are identical across courses and live in the shared
+% preamble — do not redefine them here.
+%
+% Build-check one problem in isolation, or the whole assignment:
+%   docs/latex/build_tex.sh content/cesc_410/hw/hw01/p01_phasor_form.tex
+%   docs/latex/build_tex.sh content/cesc_410/hw/hw01
+% ─────────────────────────────────────────────────────────────────────────────
+
+% Fills the running head defined by the shared preamble.
+\renewcommand{\coursename}{CESC 410}
+
+% --- DSP notation -----------------------------------------------------------
+% Defined once so every problem writes the same symbols. The course uses a
+% cursive w for omega on the board; we render omega throughout.
+% DTFT. Takes the SYMBOL so \dtft{Y} gives Y(e^{jw}); previously it declared an
+% argument and then ignored it, so \dtft{Y} silently printed X(e^{jw}) -- the
+% wrong signal, with no error. Unused in HW1, so nothing rendered was affected.
+\newcommand{\dtft}[1]{#1\!\left(e^{j\omega}\right)}
+\newcommand{\ztr}[1]{\mathcal{Z}\!\left\{#1\right\}}    % z-transform
+\newcommand{\conv}{\ast}                                % convolution
+\newcommand{\Real}{\operatorname{Re}}
+\newcommand{\Imag}{\operatorname{Im}}
+% Magnitude / angle. The \mathord wrapper matters: \angle is a mathord, so a
+% following "-" would be parsed as a BINARY minus and typeset as "10 /_ - 75",
+% with spacing on both sides. Wrapping starts a fresh math list, making the
+% sign unary: "10 /_ -75".
+\newcommand{\phasor}[2]{#1\,\angle\,\mathord{#2}}
+\newcommand{\ustep}{u}                                  % unit step u[n]
+\DeclareMathOperator{\sinc}{sinc}
+
+% --- stem plot helper -------------------------------------------------------
+% \stemplot{-2}{5}{{0,1},{1,-0.7},{2,0.5}}   % xmin, xmax, {n,value} pairs
+% Matches the plotting format the lecture notes use: open circles on stems,
+% zero line drawn through.
+\newcommand{\stemplot}[4][]{%
+  \begin{tikzpicture}[baseline]
+    \begin{axis}[
+      width=0.62\textwidth, height=4.4cm,
+      xmin=#2-0.6, xmax=#3+0.6,
+      axis lines=middle, xlabel={$n$}, ylabel={$x[n]$},
+      % Park the y-label at the top-left corner of the axis box. With
+      % `axis lines=middle` its default position is mid-height ON the y-axis,
+      % where a full-height stem at n=0 runs straight through it.
+      ylabel style={at={(current axis.north west)}, anchor=south west},
+      xtick={#2,...,#3}, tick label style={font=\scriptsize},
+      ymajorgrids=false, enlarge y limits=0.25,
+      #1
+    ]
+      \addplot+[ycomb, mark=o, mark options={fill=white}, thick] coordinates {#4};
+    \end{axis}
+  \end{tikzpicture}%
+}

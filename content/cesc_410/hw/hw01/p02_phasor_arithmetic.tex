@@ -1,0 +1,129 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc410_macros.tex}
+
+\begin{document}
+
+\problemheaderlo{2}{LO01}{10 pts, 5 pts each}{Phasor arithmetic}
+
+\subsection*{Problem statement}
+
+Consider the signals of the previous problem. Find the following using the
+phasor technique:
+\begin{enumerate}
+  \item $x_a(t) + x_b(t)$
+  \item $x_b(t) - x_c(t)$
+\end{enumerate}
+
+\subsection*{Approach}
+
+This is the reason phasors exist. Adding two sinusoids of the same frequency in
+the time domain requires trigonometric identities; adding their phasors is
+ordinary complex arithmetic. The procedure is always the same three steps:
+
+\begin{enumerate}
+  \item Convert each phasor from polar to rectangular form,
+    $\phasor{A}{\phi} \to A\cos\phi + jA\sin\phi$.
+  \item Add or subtract the rectangular components.
+  \item Convert back to polar, $\phasor{\sqrt{\Real^2+\Imag^2}}{\operatorname{atan2}(\Imag,\Real)}$.
+\end{enumerate}
+
+The phasors come straight from Problem 1:
+\begin{equation}
+  \mathbf{X}_a = \phasor{10}{-75^\circ}, \qquad
+  \mathbf{X}_b = \phasor{15}{15^\circ},  \qquad
+  \mathbf{X}_c = \phasor{12}{75^\circ}.
+\end{equation}
+
+This works \emph{only} because all three share the same $\omega$. Sinusoids at
+different frequencies cannot be combined this way.
+
+\subsection*{Work}
+
+\paragraph{1. $x_a(t) + x_b(t)$.}
+To rectangular form:
+\begin{align}
+  \mathbf{X}_a &= 10\cos(-75^\circ) + j\,10\sin(-75^\circ)
+                = 2.5882 - j\,9.6593, \\
+  \mathbf{X}_b &= 15\cos(15^\circ)  + j\,15\sin(15^\circ)
+                = 14.4889 + j\,3.8823.
+\end{align}
+Add componentwise:
+\begin{equation}
+  \mathbf{X}_a + \mathbf{X}_b = (2.5882 + 14.4889) + j(-9.6593 + 3.8823)
+                              = 17.0771 - j\,5.7770.
+\end{equation}
+Back to polar:
+\begin{align}
+  |\mathbf{X}| &= \sqrt{17.0771^2 + 5.7770^2} = \sqrt{325} = 18.0278, \\
+  \angle\mathbf{X} &= \arctan\!\left(\frac{-5.7770}{17.0771}\right) = -18.69^\circ .
+\end{align}
+
+There is a shortcut worth noticing. The two phases differ by exactly
+$15^\circ - (-75^\circ) = 90^\circ$, so the phasors are \emph{orthogonal} and the
+magnitude follows from Pythagoras without any component arithmetic:
+\begin{equation}
+  |\mathbf{X}_a + \mathbf{X}_b| = \sqrt{10^2 + 15^2} = \sqrt{325} = 5\sqrt{13},
+\end{equation}
+with the angle measured from $\mathbf{X}_a$:
+$-75^\circ + \arctan(15/10) = -75^\circ + 56.31^\circ = -18.69^\circ$. Same answer,
+and it shows the result is exact rather than a rounded decimal.
+
+\paragraph{2. $x_b(t) - x_c(t)$.}
+To rectangular form:
+\begin{align}
+  \mathbf{X}_b &= 14.4889 + j\,3.8823, \\
+  \mathbf{X}_c &= 12\cos(75^\circ) + j\,12\sin(75^\circ) = 3.1058 + j\,11.5911.
+\end{align}
+Subtract componentwise:
+\begin{equation}
+  \mathbf{X}_b - \mathbf{X}_c = (14.4889 - 3.1058) + j(3.8823 - 11.5911)
+                              = 11.3831 - j\,7.7088.
+\end{equation}
+Back to polar:
+\begin{align}
+  |\mathbf{X}| &= \sqrt{11.3831^2 + 7.7088^2} = \sqrt{189} = 13.7477, \\
+  \angle\mathbf{X} &= \arctan\!\left(\frac{-7.7088}{11.3831}\right) = -34.11^\circ .
+\end{align}
+
+Here the phases differ by $60^\circ$, so the law of cosines gives the exact
+magnitude:
+\begin{equation}
+  |\mathbf{X}_b - \mathbf{X}_c|^2 = 15^2 + 12^2 - 2(15)(12)\cos 60^\circ
+    = 369 - 180 = 189,
+\end{equation}
+so $|\mathbf{X}| = \sqrt{189} = 3\sqrt{21}$.
+
+\subsection*{Check}
+
+Converting back to the time domain and evaluating at $\omega t = 0$, where
+$x(0) = A\cos\phi$, must reproduce the sum of the originals at $t = 0$:
+
+\begin{center}
+\begin{tabular}{lrr}
+  \toprule
+  & From the originals & From the phasor \\
+  \midrule
+  $x_a(0) + x_b(0)$ & $2.5882 + 14.4889 = 17.0771$ & $18.0278\cos(-18.69^\circ) = 17.0771$ \\
+  $x_b(0) - x_c(0)$ & $14.4889 - 3.1058 = 11.3831$ & $13.7477\cos(-34.11^\circ) = 11.3831$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+Both agree. Note that this check verifies the \emph{real part} only; the exact
+magnitudes $\sqrt{325}$ and $\sqrt{189}$ derived geometrically above confirm the
+rest independently.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\begin{align*}
+  x_a(t) + x_b(t) &\;\longleftrightarrow\; \phasor{5\sqrt{13}}{-18.69^\circ}
+    = \phasor{18.03}{-18.69^\circ} \\[2pt]
+  &\quad\Rightarrow\; 18.03\cos(\omega t - 18.69^\circ) \\[6pt]
+  x_b(t) - x_c(t) &\;\longleftrightarrow\; \phasor{3\sqrt{21}}{-34.11^\circ}
+    = \phasor{13.75}{-34.11^\circ} \\[2pt]
+  &\quad\Rightarrow\; 13.75\cos(\omega t - 34.11^\circ)
+\end{align*}
+\end{answerbox}
+
+\end{document}

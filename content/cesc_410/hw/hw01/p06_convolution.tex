@@ -1,0 +1,151 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc410_macros.tex}
+
+\begin{document}
+
+\problemheaderlo{6}{LO05}{20 pts total}{Convolution by flip, slide, and sum}
+
+\vspace{-6pt}
+\begin{center}
+{\footnotesize\itshape The handout labels this problem ``Prob 1'' a second time.
+It is the sixth and final problem; numbered 6 here so the files stay ordered.}
+\end{center}
+\vspace{4pt}
+
+\subsection*{Problem statement}
+
+Assume $x[n] = a^n \ustep[n]$. Calculate the convolution
+$y[n] = x[n] \conv x[n]$ using the flip, slide, and sum method.
+
+\subsection*{Approach}
+
+The convolution sum is
+\begin{equation}
+  y[n] = \sum_{k=-\infty}^{\infty} x[k]\,x[n-k].
+  \label{eq:convsum}
+\end{equation}
+The three named steps map onto \eqref{eq:convsum} directly, and the whole
+difficulty of the problem is in step two:
+
+\begin{enumerate}
+  \item \textbf{Flip.} Replace the dummy index: $x[k] \to x[-k]$, the second copy
+    reversed about $k = 0$.
+  \item \textbf{Slide.} Shift the flipped copy by $n$, giving $x[n-k]$. Now find,
+    \emph{as a function of $n$}, the range of $k$ where the two signals overlap.
+    This is where the limits of summation come from.
+  \item \textbf{Sum.} Add the products over that overlap.
+\end{enumerate}
+
+Because $\ustep[n]$ makes the signal one-sided, the overlap region is finite and
+the sum is a closed form.
+
+\subsection*{Work}
+
+\paragraph{Step 1 --- Flip.}
+Write both factors of \eqref{eq:convsum} explicitly, keeping every unit step:
+\begin{equation}
+  y[n] = \sum_{k=-\infty}^{\infty}
+         \underbrace{a^{k}\,\ustep[k]}_{x[k]} \;
+         \underbrace{a^{\,n-k}\,\ustep[n-k]}_{x[n-k]} .
+  \label{eq:expanded}
+\end{equation}
+The stationary copy is $x[k] = a^k\ustep[k]$; the flipped-and-slid copy is
+$x[n-k] = a^{n-k}\ustep[n-k]$.
+
+\paragraph{Step 2 --- Slide, and read off the limits.}
+The unit steps decide which terms survive. They are the whole game:
+\begin{align}
+  \ustep[k]   &\ne 0 \iff k \ge 0    && \text{left edge of the overlap} \\
+  \ustep[n-k] &\ne 0 \iff n - k \ge 0 \iff k \le n && \text{right edge}
+\end{align}
+Both must hold, so the summand is nonzero only for
+\begin{equation}
+  0 \le k \le n.
+\end{equation}
+
+This range is nonempty only when $n \ge 0$. That gives the two cases:
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  Case & Overlap & Result \\
+  \midrule
+  $n < 0$   & none ($0 \le k \le n$ is empty) & $y[n] = 0$ \\
+  $n \ge 0$ & $k = 0, 1, \ldots, n$ \quad($n+1$ terms) & sum below \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+The $n < 0$ case is the expected one: the flipped copy has been slid so far left
+that it no longer touches the stationary copy at all.
+
+\paragraph{Step 3 --- Sum.}
+For $n \ge 0$, substitute the finite limits into \eqref{eq:expanded}:
+\begin{align}
+  y[n] &= \sum_{k=0}^{n} a^{k}\,a^{\,n-k}.
+\end{align}
+Now the key simplification — combine the exponents \emph{before} summing:
+\begin{equation}
+  a^{k}\,a^{\,n-k} = a^{\,k + n - k} = a^{\,n},
+\end{equation}
+which is \textbf{independent of the summation variable $k$}. Every term in the
+sum is the same, so the sum is just that term repeated once per value of $k$:
+\begin{equation}
+  y[n] = \sum_{k=0}^{n} a^{n} = a^{n} \sum_{k=0}^{n} 1 = (n+1)\,a^{n}.
+\end{equation}
+The count is $n+1$, not $n$, because $k$ runs inclusively from $0$ to $n$.
+
+Combining both cases with a unit step:
+\begin{equation}
+  y[n] = (n+1)\,a^{n}\,\ustep[n].
+\end{equation}
+
+Note this is \emph{not} a geometric series — the usual
+$\sum a^k = \frac{1-a^{N}}{1-a}$ never appears, and there is no $a \ne 1$
+restriction, because the $k$-dependence cancelled exactly. That cancellation is
+special to convolving $a^n\ustep[n]$ with itself.
+
+\subsection*{Check}
+
+\paragraph{Direct evaluation of the first few samples.}
+Computing \eqref{eq:convsum} by hand and comparing with $(n+1)a^n$:
+
+\begin{center}
+\begin{tabular}{clll}
+  \toprule
+  $n$ & Terms $\sum_{k=0}^{n} a^k a^{n-k}$ & Sum & $(n+1)a^n$ \\
+  \midrule
+  $0$ & $a^0a^0$                             & $1$      & $(1)a^0 = 1$ \checkmark \\
+  $1$ & $a^0a^1 + a^1a^0$                    & $2a$     & $(2)a^1 = 2a$ \checkmark \\
+  $2$ & $a^0a^2 + a^1a^1 + a^2a^0$           & $3a^2$   & $(3)a^2$ \checkmark \\
+  $3$ & $a^0a^3 + a^1a^2 + a^2a^1 + a^3a^0$  & $4a^3$   & $(4)a^3$ \checkmark \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Numerical verification.}
+Convolving the sequence numerically for $0 \le n < 40$ and comparing against
+$(n+1)a^n$ gives a maximum absolute error of $0$ for $a = 0.5$ and $a = 2$, and
+$1.1 \times 10^{-16}$ (one unit in the last place, i.e.\ floating-point rounding
+only) for $a = -0.7$. The result holds for $|a| < 1$, $|a| > 1$, and negative
+$a$ alike, as the derivation implies — nothing in it assumed convergence.
+
+\paragraph{Sanity of the shape.} $y[n]$ is the product of a growing linear
+factor $(n+1)$ and the original exponential $a^n$. For $|a| < 1$ the exponential
+wins and $y[n] \to 0$; for $|a| > 1$ it diverges. Convolution also adds
+supports: $x[n]$ starts at $n = 0$, so $y[n]$ starts at $0 + 0 = 0$ \checkmark.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\begin{equation*}
+  y[n] = x[n] \conv x[n] = (n+1)\,a^{n}\,\ustep[n]
+  \qquad\text{i.e.}\qquad
+  y[n] = \begin{cases}
+    (n+1)a^{n}, & n \ge 0 \\
+    0,          & n < 0
+  \end{cases}
+\end{equation*}
+\end{answerbox}
+
+\end{document}

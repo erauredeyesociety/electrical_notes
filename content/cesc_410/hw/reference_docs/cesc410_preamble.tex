@@ -1,0 +1,26 @@
+% ─────────────────────────────────────────────────────────────────────────────
+% SUPERSEDED — do not \input this file. It is kept only so an old checkout or a
+% stale reference points somewhere that explains itself.
+%
+% This file used to be a complete standalone preamble. It was split in two:
+%
+%   docs/latex/coursework_preamble.tex          the SHARED half —
+%       documentclass, packages, answerbox, trap, \srcref, \extref,
+%       \problemheader / \problemheaderlo, \coursename, fancyhdr page style.
+%
+%   reference_docs/cesc410_macros.tex           the CESC 410 half —
+%       \renewcommand{\coursename}{CESC 410}, the DSP notation
+%       (\dtft \ztr \conv \Real \Imag \phasor \ustep \sinc) and \stemplot.
+%
+% A per-problem file now starts:
+%   \input{../../../../docs/latex/coursework_preamble.tex}
+%   \input{../reference_docs/cesc410_macros.tex}
+%   \begin{document}
+%
+% One rename came with the split: the 4-argument header that carries a learning
+% outcome is now \problemheaderlo{n}{LO}{pts}{title}. The shared
+% \problemheader takes three arguments, for courses that state no LO. The
+% rendered output of \problemheaderlo is identical to the old \problemheader.
+%
+% Build-check: docs/latex/build_tex.sh content/cesc_410/hw/hw01
+% ─────────────────────────────────────────────────────────────────────────────

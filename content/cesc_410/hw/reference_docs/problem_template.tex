@@ -1,0 +1,48 @@
+% CESC 410 -- one problem, standalone.
+% Copy to hwNN/pNN_<slug>.tex. Build-check it alone with:
+%   docs/latex/build_tex.sh content/cesc_410/hw/hwNN/pNN_<slug>.tex
+% Keep tooling references out of anything that might be submitted.
+
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc410_macros.tex}
+
+\begin{document}
+
+% \problemheaderlo{number}{LO}{points}{title}  -- 4-arg form, courses with LOs
+% \problemheader{number}{points}{title}       -- 3-arg form, courses without
+\problemheaderlo{N}{LO0N}{XX pts}{Short descriptive title}
+
+\subsection*{Problem statement}
+
+Restate it verbatim, so the file stands alone without the assignment PDF.
+
+\subsection*{Approach}
+
+One short paragraph: which method, and why it is the right one here. Name the
+lecture or LO it comes from if that is not obvious.
+
+\subsection*{Work}
+
+Every step. The reader is learning the method, not checking an answer they
+already have. Do not skip algebra because it is routine -- routine to whom?
+
+\begin{align}
+  x(t) &= A\cos(\omega t + \phi) \\
+       &= \Real\!\left\{ A e^{j\phi} e^{j\omega t} \right\}
+\end{align}
+
+Explain what each non-obvious step does and why it is allowed.
+
+\subsection*{Check}
+
+Verify independently where possible -- a limiting case, a substitution back
+into the original, a units check, or a numeric spot-check. State what was
+checked and what it confirmed.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+The final result, and nothing else. This is what the solutions document lifts.
+\end{answerbox}
+
+\end{document}

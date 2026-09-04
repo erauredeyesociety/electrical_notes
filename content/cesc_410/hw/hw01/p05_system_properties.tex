@@ -1,0 +1,207 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc410_macros.tex}
+
+\begin{document}
+
+\problemheaderlo{5}{LO04}{40 pts total, 2 pts each}{Linearity, time invariance, causality, BIBO stability}
+
+\subsection*{Problem statement}
+
+Determine if each of the systems below is (1) linear, (2) time-invariant,
+(3) causal, and (4) BIBO stable. \emph{(No procedure is needed if you know how
+to perform them.)}
+\begin{enumerate}
+  \item $T_a(x[n]) = n\,x[n]$
+  \item $T_b(x[n]) = a\,x[n] + c$, where $a$ and $c$ are constants
+  \item $T_c(x[n]) = x[n+1] + x[n-1]$
+  \item $T_d(x[n]) = x[n]\,x[n+1]$
+  \item $T_e(x[n]) = e^{x[n-1]}$
+\end{enumerate}
+
+\subsection*{Approach}
+
+Four independent tests, applied to each system. The handout says no procedure is
+required, but the work is shown here because a single counterexample is what
+actually settles each ``no'' — asserting it is not the same as proving it.
+
+\paragraph{Linearity} requires both additivity and homogeneity, tested together
+via superposition:
+\begin{equation}
+  T\{\alpha x_1[n] + \beta x_2[n]\} \overset{?}{=} \alpha T\{x_1[n]\} + \beta T\{x_2[n]\}.
+  \label{eq:lin}
+\end{equation}
+A fast necessary condition: a linear system must map the zero input to the zero
+output. If $T\{0\} \ne 0$, it is not linear, no further work needed.
+
+\paragraph{Time invariance} requires that delaying the input delays the output by
+the same amount and does nothing else. Compare
+\begin{equation}
+  y_1[n] = T\{x[n-n_0]\}
+  \quad\text{against}\quad
+  y_2[n] = y[n-n_0] = \big(T\{x[n]\}\big)\big|_{n \to n-n_0}.
+  \label{eq:ti}
+\end{equation}
+The classic failure is a coefficient in $n$ that does \emph{not} get shifted,
+because it belongs to the system rather than to the signal.
+
+\paragraph{Causality} requires $y[n]$ to depend only on $x[m]$ for $m \le n$.
+Any appearance of $x[n+1]$ or later is disqualifying.
+
+\paragraph{BIBO stability} requires that every bounded input produce a bounded
+output: if $|x[n]| \le B < \infty$ for all $n$, then $|y[n]| \le M < \infty$.
+
+\subsection*{Work}
+
+\paragraph{1. $T_a(x[n]) = n\,x[n]$.}
+
+\emph{Linear — YES.}
+\begin{equation}
+  T\{\alpha x_1 + \beta x_2\} = n\big(\alpha x_1[n] + \beta x_2[n]\big)
+    = \alpha\,\underbrace{n x_1[n]}_{T\{x_1\}} + \beta\,\underbrace{n x_2[n]}_{T\{x_2\}}. \checkmark
+\end{equation}
+
+\emph{Time-invariant — NO.} The multiplier $n$ is a property of the system, not
+of the signal, so it does not travel with a shift:
+\begin{align}
+  T\{x[n-n_0]\} &= n\,x[n-n_0], \\
+  y[n-n_0]      &= (n-n_0)\,x[n-n_0].
+\end{align}
+These differ by $n_0 x[n-n_0] \ne 0$. Concretely, with $x[n] = \delta[n]$ and
+$n_0 = 1$: $T\{\delta[n-1]\} = n\delta[n-1] = \delta[n-1]$ (value 1 at $n=1$),
+while $y[n-1] = (n-1)\delta[n-1] = 0$ everywhere. A nonzero signal versus the
+zero signal — not time-invariant.
+
+\emph{Causal — YES.} $y[n]$ uses only $x[n]$, the present sample.
+
+\emph{BIBO stable — NO.} Take the bounded input $x[n] = 1$ for all $n$, so
+$B = 1$. Then $y[n] = n$, which grows without bound. The gain $n$ is unbounded
+over $n$, so no finite $M$ exists.
+
+\paragraph{2. $T_b(x[n]) = a\,x[n] + c$.}
+
+\emph{Linear — NO} (for $c \ne 0$). This is \emph{affine}, not linear. The zero
+input gives $T\{0\} = c \ne 0$, which already fails. Via superposition:
+\begin{align}
+  T\{\alpha x_1 + \beta x_2\} &= a(\alpha x_1 + \beta x_2) + c, \\
+  \alpha T\{x_1\} + \beta T\{x_2\} &= a\alpha x_1 + a\beta x_2 + (\alpha + \beta)c,
+\end{align}
+which agree only when $(\alpha+\beta)c = c$, i.e.\ only for special $\alpha,\beta$
+— not for all. \textbf{If $c = 0$ the system is linear}; the answer below assumes
+$c \ne 0$, since otherwise the constant would not have been mentioned.
+
+\emph{Time-invariant — YES.} Both $a$ and $c$ are constants, carrying no
+dependence on $n$:
+\begin{equation}
+  T\{x[n-n_0]\} = a\,x[n-n_0] + c = y[n-n_0]. \checkmark
+\end{equation}
+
+\emph{Causal — YES.} Only $x[n]$ is used.
+
+\emph{BIBO stable — YES.} If $|x[n]| \le B$ then by the triangle inequality
+\begin{equation}
+  |y[n]| \le |a|\,|x[n]| + |c| \le |a|B + |c| < \infty,
+\end{equation}
+a finite bound independent of $n$.
+
+\paragraph{3. $T_c(x[n]) = x[n+1] + x[n-1]$.}
+
+\emph{Linear — YES.} A sum of shifted inputs with constant coefficients:
+\begin{equation}
+  T\{\alpha x_1 + \beta x_2\}
+    = \alpha x_1[n+1] + \beta x_2[n+1] + \alpha x_1[n-1] + \beta x_2[n-1]
+    = \alpha T\{x_1\} + \beta T\{x_2\}. \checkmark
+\end{equation}
+
+\emph{Time-invariant — YES.} The shifts are by constants, so
+\begin{equation}
+  T\{x[n-n_0]\} = x[n-n_0+1] + x[n-n_0-1] = y[n-n_0]. \checkmark
+\end{equation}
+
+\emph{Causal — NO.} $y[n]$ depends on $x[n+1]$, one sample into the future. At
+$n = 0$ the output needs $x[1]$, which has not arrived yet.
+
+\emph{BIBO stable — YES.} If $|x[n]| \le B$ then
+$|y[n]| \le |x[n+1]| + |x[n-1]| \le 2B < \infty$.
+
+\paragraph{4. $T_d(x[n]) = x[n]\,x[n+1]$.}
+
+\emph{Linear — NO.} The input appears multiplied by itself, so scaling the input
+by $\alpha$ scales the output by $\alpha^2$:
+\begin{equation}
+  T\{\alpha x[n]\} = (\alpha x[n])(\alpha x[n+1]) = \alpha^2\,T\{x[n]\}
+    \ne \alpha\,T\{x[n]\}
+\end{equation}
+unless $\alpha \in \{0,1\}$. Homogeneity fails, so the system is nonlinear.
+
+\emph{Time-invariant — YES.} No explicit $n$ appears as a coefficient:
+\begin{equation}
+  T\{x[n-n_0]\} = x[n-n_0]\,x[n-n_0+1] = y[n-n_0]. \checkmark
+\end{equation}
+Nonlinear and time-invariant are independent properties — a system can be either
+without the other.
+
+\emph{Causal — NO.} $x[n+1]$ is a future value.
+
+\emph{BIBO stable — YES.} If $|x[n]| \le B$ then
+$|y[n]| = |x[n]|\,|x[n+1]| \le B^2 < \infty$. A finite bound squared is still
+finite.
+
+\paragraph{5. $T_e(x[n]) = e^{x[n-1]}$.}
+
+\emph{Linear — NO.} The exponential is nonlinear. Immediately,
+$T\{0\} = e^0 = 1 \ne 0$, which fails the zero-input test. Explicitly,
+$e^{x_1 + x_2} = e^{x_1}e^{x_2} \ne e^{x_1} + e^{x_2}$ in general.
+
+\emph{Time-invariant — YES.} The delay is by a constant and the nonlinearity is
+memoryless in form:
+\begin{equation}
+  T\{x[n-n_0]\} = e^{x[n-n_0-1]} = y[n-n_0]. \checkmark
+\end{equation}
+
+\emph{Causal — YES.} $y[n]$ depends on $x[n-1]$, a past sample only.
+
+\emph{BIBO stable — YES.} If $|x[n]| \le B$ then $-B \le x[n-1] \le B$, and since
+$e^{(\cdot)}$ is monotonically increasing,
+\begin{equation}
+  0 < e^{-B} \le |y[n]| = e^{x[n-1]} \le e^{B} < \infty .
+\end{equation}
+The bound $e^B$ is large but finite, which is all stability requires.
+
+\subsection*{Check}
+
+Two structural observations that catch a mis-filled table:
+
+\begin{itemize}
+  \item \textbf{Only $T_a$ is unstable.} It is the only system whose gain depends
+    on $n$ without bound; every other system has coefficients bounded over $n$,
+    so a bounded input cannot escape.
+  \item \textbf{Exactly the systems containing $x[n+1]$ are non-causal} — $T_c$
+    and $T_d$. Causality is decidable by inspection of the indices alone.
+\end{itemize}
+
+Cross-checking linearity against the zero-input test: $T_b\{0\} = c \ne 0$,
+$T_e\{0\} = 1 \ne 0$ — both correctly marked nonlinear. $T_a\{0\} = 0$,
+$T_c\{0\} = 0$, $T_d\{0\} = 0$, consistent with their entries (necessary, not
+sufficient, but no contradiction).
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\begin{center}
+\begin{tabular}{clcccc}
+  \toprule
+  & System & Linear & Time-invariant & Causal & BIBO stable \\
+  \midrule
+  1 & $T_a = n\,x[n]$          & \textbf{Yes} & \textbf{No}  & \textbf{Yes} & \textbf{No}  \\
+  2 & $T_b = a\,x[n] + c$      & \textbf{No}$^\dagger$ & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
+  3 & $T_c = x[n+1] + x[n-1]$  & \textbf{Yes} & \textbf{Yes} & \textbf{No}  & \textbf{Yes} \\
+  4 & $T_d = x[n]\,x[n+1]$     & \textbf{No}  & \textbf{Yes} & \textbf{No}  & \textbf{Yes} \\
+  5 & $T_e = e^{x[n-1]}$       & \textbf{No}  & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
+  \bottomrule
+\end{tabular}
+\end{center}
+\vspace{2pt}
+{\footnotesize $^\dagger$ Affine, not linear, for $c \ne 0$. If $c = 0$ it is linear.}
+\end{answerbox}
+
+\end{document}

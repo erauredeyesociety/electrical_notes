@@ -1,0 +1,181 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc410_macros.tex}
+
+\begin{document}
+
+\problemheaderlo{3}{LO02}{20 pts, 5 pts each}{Plotting DT signal transformations}
+
+\subsection*{Problem statement}
+
+Consider the following DT signal
+\begin{equation}
+  x[n] =
+  \begin{cases}
+    \cos\!\left(\dfrac{\pi}{6}n\right), & 0 \le n \le 3 \\[8pt]
+    0, & \text{otherwise}
+  \end{cases}
+  \label{eq:xn}
+\end{equation}
+Plot the signal and its variations using the plotting format shown in the class
+notes:
+\begin{enumerate}
+  \item $x[n]$
+  \item $x[n-2]$
+  \item $x[-n]$ \quad {\small(flip concept, LO 5)}
+  \item $x[2-n]$
+\end{enumerate}
+
+\subsection*{Approach}
+
+Every one of these is the same signal with its \emph{index} rewritten, so the
+safest method is to tabulate the four nonzero samples once and then ask, for
+each transformation, \emph{which output index reproduces each original sample}.
+
+From \eqref{eq:xn}, the signal is nonzero only at $n = 0,1,2,3$:
+
+\begin{center}
+\begin{tabular}{ccc}
+  \toprule
+  $n$ & $\cos(\pi n/6)$ & value \\
+  \midrule
+  $0$ & $\cos 0$        & $1$ \\
+  $1$ & $\cos(\pi/6)$   & $\sqrt{3}/2 \approx 0.866$ \\
+  $2$ & $\cos(\pi/3)$   & $1/2 = 0.5$ \\
+  $3$ & $\cos(\pi/2)$   & $0$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+Note $x[3] = 0$ exactly. It is still \emph{in} the support of the signal, but it
+plots as a stem of zero height, so the visible nonzero samples are only three.
+
+The two rules needed:
+\begin{align}
+  x[n - n_0] &: \text{shift RIGHT by } n_0 \text{ (delay)} \label{eq:shift}\\
+  x[-n]      &: \text{FLIP about } n = 0 \label{eq:flip}
+\end{align}
+
+The reliable way to handle a combined case like $x[2-n]$ is to substitute rather
+than reason about ``flip then shift'' verbally, where it is easy to shift the
+wrong direction. If $y[n] = x[2-n]$, then $y[n]$ takes the value $x[m]$ where
+$m = 2-n$, i.e. $n = 2-m$. So each original sample at index $m$ lands at output
+index $2-m$.
+
+\subsection*{Work}
+
+\paragraph{1. $x[n]$.}
+The signal as given: samples $1$, $0.866$, $0.5$, $0$ at $n = 0,1,2,3$.
+
+\begin{center}
+\stemplot{-4}{6}{(-4,0)(-3,0)(-2,0)(-1,0)(0,1)(1,0.866)(2,0.5)(3,0)(4,0)(5,0)(6,0)}
+\end{center}
+
+\paragraph{2. $x[n-2]$.}
+By \eqref{eq:shift} this delays the signal by two samples: whatever was at index
+$m$ moves to $m+2$. Support moves from $[0,3]$ to $[2,5]$.
+
+\begin{center}
+\begin{tabular}{ccc}
+  \toprule
+  original $m$ & value & lands at $n = m+2$ \\
+  \midrule
+  $0$ & $1$     & $2$ \\
+  $1$ & $0.866$ & $3$ \\
+  $2$ & $0.5$   & $4$ \\
+  $3$ & $0$     & $5$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\stemplot{-4}{6}{(-4,0)(-3,0)(-2,0)(-1,0)(0,0)(1,0)(2,1)(3,0.866)(4,0.5)(5,0)(6,0)}
+\end{center}
+
+\paragraph{3. $x[-n]$.}
+By \eqref{eq:flip}, sample at index $m$ lands at $-m$. Support moves from
+$[0,3]$ to $[-3,0]$.
+
+\begin{center}
+\begin{tabular}{ccc}
+  \toprule
+  original $m$ & value & lands at $n = -m$ \\
+  \midrule
+  $0$ & $1$     & $0$  \\
+  $1$ & $0.866$ & $-1$ \\
+  $2$ & $0.5$   & $-2$ \\
+  $3$ & $0$     & $-3$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\stemplot{-6}{4}{(-6,0)(-5,0)(-4,0)(-3,0)(-2,0.5)(-1,0.866)(0,1)(1,0)(2,0)(3,0)(4,0)}
+\end{center}
+
+\paragraph{4. $x[2-n]$.}
+Using the substitution above, sample at index $m$ lands at $n = 2-m$. Support
+moves from $[0,3]$ to $[-1,2]$.
+
+\begin{center}
+\begin{tabular}{ccc}
+  \toprule
+  original $m$ & value & lands at $n = 2-m$ \\
+  \midrule
+  $0$ & $1$     & $2$  \\
+  $1$ & $0.866$ & $1$  \\
+  $2$ & $0.5$   & $0$  \\
+  $3$ & $0$     & $-1$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\stemplot{-5}{5}{(-5,0)(-4,0)(-3,0)(-2,0)(-1,0)(0,0.5)(1,0.866)(2,1)(3,0)(4,0)(5,0)}
+\end{center}
+
+Equivalently, $x[2-n] = x[-(n-2)]$: flip first (part 3), then delay the
+\emph{flipped} signal by 2. Checking against part 3, whose support was
+$[-3,0]$: delaying by 2 gives $[-1,2]$, which matches.
+
+\subsection*{Check}
+
+Verify one sample of each transform directly from the definition, rather than
+trusting the tables:
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  Transform & Direct evaluation & Plot \\
+  \midrule
+  $x[n-2]$ at $n=2$  & $x[0] = 1$        & $1$ \checkmark \\
+  $x[-n]$  at $n=-1$ & $x[1] = 0.866$    & $0.866$ \checkmark \\
+  $x[2-n]$ at $n=0$  & $x[2] = 0.5$      & $0.5$ \checkmark \\
+  $x[2-n]$ at $n=2$  & $x[0] = 1$        & $1$ \checkmark \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+A further structural check: a flip preserves the number of samples and reverses
+their order, while a shift preserves order. Parts 3 and 4 both read
+$0,\,0.5,\,0.866,\,1$ left to right — reversed relative to parts 1 and 2, as a
+flip requires. Parts 1 and 2 both read $1,\,0.866,\,0.5,\,0$.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+All four are the same four samples $\{1,\ 0.866,\ 0.5,\ 0\}$ relocated:
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  Signal & Support & Samples (left to right) \\
+  \midrule
+  $x[n]$    & $0 \le n \le 3$   & $1,\ 0.866,\ 0.5,\ 0$ \\
+  $x[n-2]$  & $2 \le n \le 5$   & $1,\ 0.866,\ 0.5,\ 0$ \\
+  $x[-n]$   & $-3 \le n \le 0$  & $0,\ 0.5,\ 0.866,\ 1$ \\
+  $x[2-n]$  & $-1 \le n \le 2$  & $0,\ 0.5,\ 0.866,\ 1$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+\end{answerbox}
+
+\end{document}
