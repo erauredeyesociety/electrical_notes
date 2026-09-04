@@ -1,6 +1,37 @@
 #!/bin/bash
 
-# Fix LaTeX rendering issues in markdown files
+# Fix LaTeX rendering issues in markdown files.
+#
+# ⚠ DESTRUCTIVE AND UNSCOPED. Every step below is `find . -name "*.md"` piped
+# into `perl -i` — an IN-PLACE rewrite of every markdown file at or below the
+# CURRENT WORKING DIRECTORY, with no backup and no dry run.
+#
+# Run from the repo root today it would rewrite ~750 .md files across all 15
+# course folders, docs/, ocr_handler/docs/ and docs-rag/ — including the twelve
+# older courses that are explicitly frozen (docs/directives/coursework-solutions.md).
+#
+# The guard below makes that accident impossible without meaning it. It does NOT
+# change what the script does when you do mean it:
+#
+#     ./scripts/refactor_standard_equations.sh --yes-rewrite-in-place
+#
+# Prefer running it from the ONE folder you want rewritten, not the repo root.
+# Added 2026-09-04 after an audit flagged it; the transformations are untouched.
+
+if [[ "${1:-}" != "--yes-rewrite-in-place" ]]; then
+    cat >&2 <<EOF
+REFUSING TO RUN — this rewrites every *.md at or below $(pwd) in place.
+
+  files that would be touched: $(find . -type f -name '*.md' 2>/dev/null | wc -l)
+
+There is no backup and no dry run. If that is genuinely what you want:
+
+    $0 --yes-rewrite-in-place
+
+Safer: cd into the single folder you want changed first.
+EOF
+    exit 2
+fi
 
 # --- Step 1: Remove problematic $ symbols around comparison operators in math mode ---
 find . -type f -name "*.md" | while read -r file; do

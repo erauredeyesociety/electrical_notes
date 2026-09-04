@@ -1,0 +1,103 @@
+% ─────────────────────────────────────────────────────────────────────────────
+% SHARED coursework preamble — every course inputs THIS.
+%
+% PREAMBLE ONLY. No \begin{document}, no course-specific notation.
+%
+% Course-specific macros live beside the assignment, in
+%   content/<course>/<kind>/reference_docs/<course>_macros.tex
+% which is inputted AFTER this file. That split is the point: the page style,
+% the answer box, and the problem header are identical everywhere, so they are
+% defined once; \conv and \ustep mean something in DSP and nothing in a
+% networks course, so they are not.
+%
+% A per-problem file therefore starts:
+%   \input{../../../../docs/latex/coursework_preamble.tex}
+%   \input{../reference_docs/cesc470_macros.tex}
+%   \begin{document}
+%
+% Build-check one file, or a whole assignment:
+%   docs/latex/build_tex.sh content/cesc_470/hw/hw01/p01_five_components.tex
+%   docs/latex/build_tex.sh content/cesc_470/hw/hw01
+%
+% Doctrine: docs/directives/coursework-solutions.md
+% ─────────────────────────────────────────────────────────────────────────────
+
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{siunitx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[colorlinks=true, allcolors=NavyBlue]{hyperref}
+
+\captionsetup{font=small, labelfont=bf}
+\setlist[enumerate]{itemsep=2pt, topsep=4pt}
+\setlist[itemize]{itemsep=2pt, topsep=4pt}
+
+% --- final-answer box -------------------------------------------------------
+% Every problem file ends with its result in one of these. The condensed
+% solutions document is assembled by lifting exactly these.
+\newtcolorbox{answerbox}[1][]{
+  colback=Green!6, colframe=Green!55!black,
+  boxrule=0.6pt, arc=2pt, left=6pt, right=6pt, top=4pt, bottom=4pt,
+  #1
+}
+
+% --- citation to course material --------------------------------------------
+% \cite{Module 01, PDF p55}  ->  a small italic parenthetical.
+% Solutions cite the SLIDE/PAGE a formula came from so a grader (or a future
+% reader) can check the claim against what was actually taught. See the
+% directive: every non-obvious step carries one.
+\newcommand{\srcref}[1]{{\small\itshape(#1)}}
+
+% --- a step that came from OUTSIDE the course materials ---------------------
+% Used only where the course is genuinely silent and the problem asks for
+% outside research. Marked visually so it is never mistaken for lecture content.
+\newcommand{\extref}[1]{{\small\itshape\color{Sepia}[external: #1]}}
+
+% --- callout for the trap in a problem --------------------------------------
+\newtcolorbox{trap}[1][]{
+  colback=BurntOrange!7, colframe=BurntOrange!70!black,
+  boxrule=0.6pt, arc=2pt, left=6pt, right=6pt, top=4pt, bottom=4pt,
+  fonttitle=\bfseries, title=Watch out, #1
+}
+
+% --- per-problem header -----------------------------------------------------
+% \problemheader{8}{15 pts}{Target clock rate}
+% The optional 4-argument form carries a learning outcome where the course
+% states one (CESC 410 does; CESC 470's HW1 does not).
+\newcommand{\problemheader}[3]{%
+  \begin{center}\large\bfseries
+    Problem #1 \quad\normalsize\mdseries(#2)\\[2pt]
+    \large\bfseries #3
+  \end{center}
+  \vspace{2pt}\hrule\vspace{8pt}
+}
+\newcommand{\problemheaderlo}[4]{%
+  \begin{center}\large\bfseries
+    Problem #1 \quad\normalsize\mdseries(#2, #3)\\[2pt]
+    \large\bfseries #4
+  \end{center}
+  \vspace{2pt}\hrule\vspace{8pt}
+}
+
+% Course name in the running head. Defined BEFORE \lhead references it, and
+% \renewcommand'd by each course's macros file (inputted after this one).
+\providecommand{\coursename}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small\coursename}
+\rhead{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
