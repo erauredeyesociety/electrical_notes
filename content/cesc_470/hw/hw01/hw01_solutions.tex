@@ -1,0 +1,175 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+% CONDENSED ANSWER SHEET. Final answers only -- no derivations.
+% Assembled by lifting the answerbox from each per-problem file:
+%   p01_five_components  p02_von_neumann_tradeoff  p03_instruction_encodings
+%   p04_architecture_vs_organization  p05_same_isa_different_org
+%   p06_isa_components  p07_arm_vs_x86  p08_target_clock_rate
+%   p09_cpi_and_execution_time  p10_amdahl_speedup
+% Doctrine: docs/directives/coursework-solutions.md
+
+\title{\vspace{-1.5cm}CESC 470 --- Homework 1 Solutions\\
+       {\large Computer Architecture}}
+\author{}
+\date{Fall 2026 \quad\textbullet\quad Due 9/13/2026 \quad\textbullet\quad 100 points}
+
+\begin{document}
+\maketitle
+\vspace{-1.0cm}
+
+%---------------------------------------------------------------------------
+\section*{1. Five classic components \normalsize(5 pts)}
+
+\begin{enumerate}[nosep, leftmargin=1.6em]
+  \item \textbf{Control unit} — fetches and decodes instructions, issues the
+    control signals that execute them.
+  \item \textbf{Datapath} — the ALU and registers; performs the computation.
+  \item \textbf{Memory} — stores both program and data.
+  \item \textbf{Input} — brings data into the machine.
+  \item \textbf{Output} — sends results out.
+\end{enumerate}
+Control unit $+$ datapath $=$ the \textbf{CPU}; all five joined by a common
+address/data/control \textbf{bus}.
+
+%---------------------------------------------------------------------------
+\section*{2. Von Neumann trade-off \normalsize(10 pts)}
+
+\textbf{Advantage — general-purpose reprogrammability.} Instructions are bit
+sequences in ordinary read/write memory, so programs are \emph{loaded} rather
+than wired in, and programs (compilers, assemblers, loaders) can write other
+programs.
+
+\textbf{Disadvantage — the von Neumann bottleneck.} Instructions and data share
+one memory and one bus, so instruction fetch competes with data access every
+cycle and memory bandwidth caps performance regardless of CPU speed. Writable
+instruction memory also lets code be overwritten or data executed. The
+\emph{Harvard} architecture avoids this with separate memories, losing the
+flexibility above.
+
+%---------------------------------------------------------------------------
+\section*{3. Unique 32-bit instructions \normalsize(5 pts)}
+
+$$2^{32} = 4{,}294{,}967{,}296 \approx 4.29\times10^{9}$$
+Each of the 32 bit positions independently takes 2 values. This is an
+\emph{upper bound} on bit patterns; a real ISA splits the 32 bits into opcode
+and operand fields, so far fewer distinct \emph{operations} are encoded.
+
+%---------------------------------------------------------------------------
+\section*{4. Architecture vs organization \normalsize(10 pts)}
+
+\textbf{Architecture tells you \emph{what} a computer does; organization tells
+you \emph{how} it does it.}
+
+\textbf{Architecture} $=$ \textbf{ISA $+$ hardware organization}. The ISA is the
+abstract, programmer-visible programming model — instruction set, register set,
+addressing modes — and the assembly language embodies it.
+
+\textbf{Organization} (today: \emph{microarchitecture}) is the implementation of
+an ISA: pipeline depth, caches, clock rate, buses. Any ISA admits many
+organizations, and vendors change the organization every generation while
+holding the ISA constant.
+
+\emph{Test:} if a program can \textbf{detect} it, architecture; if it only
+changes how \textbf{fast} the same program runs, organization.
+
+%---------------------------------------------------------------------------
+\section*{5. Same ISA, different organizations \normalsize(5 pts)}
+
+A \textbf{desktop and a laptop x86-64 processor}. Both implement the same ISA, so
+both run the \emph{same compiled binary} with identical results. Their
+organizations differ — clock rate, core count, cache sizes, pipeline width,
+power budget — and the program can detect the difference only as \emph{run
+time}.
+
+%---------------------------------------------------------------------------
+\section*{6. Three components of an ISA \normalsize(3 pts)}
+
+\begin{enumerate}[nosep, leftmargin=1.6em]
+  \item \textbf{Instruction set (opcodes)} — the operations and their encodings.
+  \item \textbf{Organization of storage / register set} — number, width, purpose
+    of programmer-visible registers.
+  \item \textbf{Addressing modes} — how an instruction names its operand.
+\end{enumerate}
+{\small(Also valid: data types; instruction encoding; program-visible exception
+handling. All are \emph{programmer-visible} — caches and clock rate are
+organization, not ISA.)}
+
+%---------------------------------------------------------------------------
+\section*{7. ARM vs x86 \normalsize(25 pts)}
+
+\begin{center}
+% Middle column at 3.0cm hyphenated "Power con-sumption" / "Decode com-plexity";
+% 3.9cm fits both on one line. Last column reduced to keep the total width.
+\begin{tabular}{@{}p{0.5cm}p{3.9cm}p{10.3cm}@{}}
+  \toprule
+  \multicolumn{3}{@{}l}{\textbf{ARM}} \\
+  \midrule
+  $+$ & \textbf{Power consumption}
+      & Fixed-width, regular RISC encoding keeps the decoder small and simple,
+        so less energy per instruction. Hence its dominance in battery-powered
+        devices, where performance-per-watt is the metric. \\
+  $-$ & \textbf{Compatibility}
+      & The large body of existing desktop/server software was compiled for
+        x86 and must be recompiled or emulated (Rosetta 2, Windows-on-ARM),
+        costing performance and risking edge cases. \\
+  \midrule
+  \multicolumn{3}{@{}l}{\textbf{x86}} \\
+  \midrule
+  $+$ & \textbf{Compatibility}
+      & Binary compatibility maintained since the 8086 (1978); decades-old
+        software still runs on current processors — decisive for legacy and
+        closed-source codebases. \\
+  $-$ & \textbf{Decode complexity / power}
+      & Variable-length instructions (1--15 bytes) mean instruction $n+1$'s
+        start is unknown until $n$ is decoded. Parallel decode needs
+        substantial extra logic, and cores translate to internal micro-ops —
+        transistors and power spent servicing a legacy encoding that cannot be
+        dropped without losing the advantage above. \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+{\small\textbf{Caveat:} raw performance is governed mainly by \emph{organization}
+(pipeline, caches, process node), not the ISA. The durable ISA-level differences
+are decode complexity and energy per instruction.}
+
+%---------------------------------------------------------------------------
+\section*{8. Target clock rate for Computer B \normalsize(15 pts)}
+
+\begin{align*}
+  \cycles^{A} &= 18\ \text{s} \times 600\ \text{MHz} = 1.08\times10^{10} \\
+  \cycles^{B} &= 1.5 \times 1.08\times10^{10} = 1.62\times10^{10}
+     \qquad \CPUtime^{B} = \tfrac{18}{2} = 9\ \text{s} \\
+  \clockrate^{B} &= \frac{1.62\times10^{10}}{9\ \text{s}}
+     = \mathbf{1.8\ \text{GHz}}
+\end{align*}
+Equivalently $600\ \text{MHz} \times 1.5 \times 2$ — the clock must cover
+\emph{both} the $2\times$ speed target and the $1.5\times$ cycle penalty.
+\emph{(1.2 GHz is the trap: it ignores the extra cycles.)}
+
+%---------------------------------------------------------------------------
+\section*{9. Average CPI and execution time \normalsize(12 pts)}
+
+\textbf{(a)} $\;\CPI = (0.40)(1) + (0.40)(2) + (0.20)(3) = 0.4+0.8+0.6
+  = \mathbf{1.8}$ cycles/instruction.
+
+\textbf{(b)} $\;\CPUtime = \IC \times \CPI \times \cycletime
+  = (10^{6})(1.8)(1\ \text{ns}) = 1.8\times10^{6}\ \text{ns}
+  = \mathbf{1.8\ \text{ms}}$.
+
+%---------------------------------------------------------------------------
+\section*{10. Amdahl's law \normalsize(10 pts)}
+
+$$\CPUtime^{\text{new}} = 0.20 + \frac{0.80}{10} = 0.28
+\qquad\Longrightarrow\qquad
+\speedup = \frac{1}{0.28} = \mathbf{3.57\times}$$
+
+\textbf{Theoretical ceiling} (infinitely fast FP): $\;\speedup_{\max}
+= 1/0.20 = \mathbf{5\times}$.
+
+{\small The stated $10\times$ improvement achieves 3.57 of the 5 possible in the
+limit. \emph{``Maximum possible'' is ambiguous} — 3.57$\times$ answers the
+improvement given; 5$\times$ is the ceiling. Both are stated.}
+
+\end{document}

@@ -1,0 +1,88 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{1}{5 pts}{The five classic components of a computer}
+
+\subsection*{Problem statement}
+
+Define the five classic components of a computer.
+
+\subsection*{Approach}
+
+Straight from the course diagram \srcref{Module 01, PDF p13, slide 6}, titled
+``The five classic components of a computer''. The problem says \emph{define},
+not \emph{list}, so each needs a sentence of what it does — the point split is
+one per component.
+
+\subsection*{Work}
+
+The slide draws the CPU as a dashed box containing two of the five, with the
+other three outside it, all joined by a common bus:
+
+\begin{center}
+\begin{tabular}{llp{7.6cm}}
+  \toprule
+  \# & Component & What it does \\
+  \midrule
+  1 & \textbf{Control unit} & Directs the operation of the other components.
+      It fetches each instruction, decodes it, and issues the control signals
+      that make the datapath, memory, and I/O carry it out. Inside the CPU. \\
+  2 & \textbf{Datapath} & Performs the actual work on data. Contains the
+      \emph{arithmetic logic unit} (ALU), which computes, and the
+      \emph{registers}, which hold operands and results. Inside the CPU. \\
+  3 & \textbf{Memory} & Stores \emph{both} the program and the data
+      \srcref{PDF p13, ``Program and Data''}. Instructions are fetched from
+      here; operands are read from and written back to it. \\
+  4 & \textbf{Input} & Brings data into the machine from the outside world
+      (keyboard, sensor, network). \\
+  5 & \textbf{Output} & Sends results out of the machine (display, actuator,
+      network). \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+Two structural points the diagram makes, worth stating because they are what
+the five-component model is \emph{for}:
+
+\begin{itemize}
+  \item \textbf{Control unit $+$ datapath $=$ the CPU} (the central processing
+    unit). The slide groups them inside one box. So ``five components'' and
+    ``CPU, memory, input, output'' describe the same machine at two levels.
+  \item All five communicate over a \textbf{common bus} carrying
+    \emph{address}, \emph{data}, and \emph{control} lines
+    \srcref{PDF p13}. The bus is the interconnect, not a sixth component.
+\end{itemize}
+
+\begin{trap}
+Input and output are \textbf{two} components, not one ``I/O''. Merging them
+gives four, and the question asks for five. Equally, the ALU and the registers
+are parts \emph{of} the datapath, not components in their own right — counting
+them separately also breaks the model.
+\end{trap}
+
+\subsection*{Check}
+
+The count is five, matching the slide title. Each of the five appears as a
+distinct labelled block in the PDF p13 diagram: \emph{Control Unit},
+\emph{Datapath} (enclosing \emph{Arithmetic logic unit (ALU)} and
+\emph{Registers}), \emph{Memory}, \emph{Input}, \emph{Output}.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\begin{enumerate}[nosep]
+  \item \textbf{Control unit} — fetches and decodes instructions and issues the
+    control signals that execute them.
+  \item \textbf{Datapath} — the ALU and registers; performs the computation.
+  \item \textbf{Memory} — stores both program and data.
+  \item \textbf{Input} — brings data into the machine.
+  \item \textbf{Output} — sends results out of the machine.
+\end{enumerate}
+\vspace{2pt}
+The control unit and datapath together form the \textbf{CPU}; all five are
+joined by a common address/data/control \textbf{bus}.
+\end{answerbox}
+
+\end{document}

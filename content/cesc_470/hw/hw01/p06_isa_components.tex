@@ -1,0 +1,104 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{6}{3 pts}{Three components included in an ISA}
+
+\subsection*{Problem statement}
+
+List three important components included in an ISA.
+
+\subsection*{Approach}
+
+The course gives an explicit six-item list \srcref{Module 01, PDF p23, slide 11},
+introduced as ``ISA Includes''. Three points for three items, so one mark each —
+the task is to pick three and say what each contributes. Answering from the
+slide rather than from memory matters here: the list is specific, and a
+plausible-sounding item that is not on it (``clock rate'', ``cache size'') is an
+\emph{organization} property, not an ISA one.
+
+\subsection*{Work}
+
+The complete list from the slide, for reference:
+
+\begin{center}
+\begin{tabular}{ll}
+  \toprule
+  \multicolumn{2}{l}{\textbf{ISA includes} \srcref{PDF p23, slide 11}} \\
+  \midrule
+  1 & Organization of storage \\
+  2 & Data types \\
+  3 & Encoding and representing instructions \\
+  4 & Instruction set (i.e., opcodes) \\
+  5 & Modes of addressing data items/instructions \\
+  6 & Program visible exception handling \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+Three, with what each one fixes:
+
+\paragraph{1. Instruction set (the opcodes).}
+The set of operations the machine can perform, and the binary opcode that names
+each. This is the most visible part of the ISA — it is what a compiler targets
+and what the assembly language spells out, since ``the computer's assembly
+language embodies its ISA'' \srcref{PDF p29, slide 15}.
+
+\paragraph{2. Organization of storage — the register set.}
+How many programmer-visible registers exist, how wide they are, and what each is
+for. The review slide lists ``the computer's register set'' among the ISA's
+concerns \srcref{PDF p29}. This is architectural because a program names
+registers explicitly; adding one changes what programs can be written.
+
+\paragraph{3. Modes of addressing data items and instructions.}
+How an instruction specifies \emph{where} its operand lives — an immediate
+constant, a register, a memory address computed from a base and offset, and so
+on. Also listed among the ISA's concerns on PDF p29.
+
+Any three of the six are acceptable; the other three are \textbf{data types}
+(what widths and formats the machine operates on — integers of various sizes,
+floating point), \textbf{encoding and representing instructions} (how the fields
+are packed into the instruction word — the constraint behind Problem 3's
+$2^{32}$ bound), and \textbf{program-visible exception handling}.
+
+\begin{trap}
+Everything in the ISA is \textbf{visible to the program}. Note the qualifier the
+slide puts on the last item: ``\emph{program visible} exception handling''.
+Caches, pipeline depth, clock rate, and branch predictors are \textbf{not} in
+the ISA — they are organization \srcref{PDF p31, slide 16}. Listing one of
+those answers a different question.
+\end{trap}
+
+\subsection*{Check}
+
+Each of the three passes the Problem 4 visibility test — a program can detect
+all of them, because it names opcodes, names registers, and encodes addressing
+modes directly in its instructions. Change any one and existing binaries stop
+working, which is the defining property of an architectural feature. Consistent
+with the ISA definition on PDF p23: ``all the information necessary to write a
+machine language program''.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+Any three of the six the course lists \srcref{PDF p23}; for example:
+
+\begin{enumerate}[nosep]
+  \item \textbf{Instruction set (opcodes)} — the operations the machine can
+    perform and their binary encodings.
+  \item \textbf{Organization of storage / the register set} — how many
+    programmer-visible registers there are, their width and purpose.
+  \item \textbf{Addressing modes} — how an instruction specifies where its
+    operand is (immediate, register, base $+$ offset, \ldots).
+\end{enumerate}
+
+The remaining three: \textbf{data types}, \textbf{instruction encoding}, and
+\textbf{program-visible exception handling}.
+
+\medskip
+All are \emph{programmer-visible}. Caches, pipeline depth, and clock rate are
+\textbf{organization}, not ISA.
+\end{answerbox}
+
+\end{document}

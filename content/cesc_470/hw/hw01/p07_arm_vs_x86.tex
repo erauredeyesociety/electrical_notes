@@ -1,0 +1,179 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{7}{25 pts}{ARM vs x86 --- advantages and disadvantages}
+
+\subsection*{Problem statement}
+
+ARM and x86 are two widely used ISAs. Research and compare one advantage and one
+disadvantage of each in terms of performance, power consumption, or
+compatibility.
+
+\subsection*{Approach}
+
+This is the only problem on the assignment that asks for outside research, and
+it carries a quarter of the marks. The course names both ISAs
+\srcref{Module 01, PDF p25, slide 12} but does not compare them, so the
+substance must come from outside — marked with \extref{} throughout, per the
+citation policy, so lecture content and external claims stay distinguishable.
+
+Structure it as the question asks: for **each** ISA, one advantage and one
+disadvantage, each tied to one of the three named axes (performance, power,
+compatibility). Four claims, argued rather than asserted.
+
+The organising idea is the historical design split, which explains every point
+below:
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  & \textbf{ARM} & \textbf{x86} \\
+  \midrule
+  Design lineage    & RISC — reduced instruction set & CISC — complex instruction set \\
+  Instruction width & fixed (32-bit, or 16/32 in Thumb) & \textbf{variable}, 1--15 bytes \\
+  Original target   & embedded, battery-powered & desktop performance \\
+  Business model    & licensed IP, many implementers & implemented by Intel and AMD \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\extref{ARM Ltd., \emph{ARM Architecture Reference Manual}; Intel,
+\emph{Intel 64 and IA-32 Architectures Software Developer's Manual}, Vol.~2}
+
+\subsection*{Work}
+
+\subsubsection*{ARM}
+
+\paragraph{Advantage --- power efficiency (power consumption).}
+ARM's fixed-width, regularly-encoded instructions make the \emph{decoder} small
+and simple: the processor knows where each instruction begins without first
+decoding the previous one, so it can fetch and decode several in parallel with
+little logic. Fewer transistors switching per instruction means less energy per
+instruction.
+
+This is why ARM dominates battery-powered devices, and why the design point
+matters more than any single benchmark: performance-per-watt, not peak
+performance, is the metric a phone or a laptop is judged on. It is also the
+reason ARM parts scale down to microcontrollers drawing milliwatts, a range x86
+does not serve.
+
+\extref{Furber, \emph{ARM System-on-Chip Architecture}, 2nd ed., Addison-Wesley}
+
+\paragraph{Disadvantage --- software compatibility and ecosystem fragmentation.}
+Decades of desktop, server, and professional software was compiled for x86.
+Running it on ARM requires recompilation (needs source) or binary translation
+(costs performance and can break edge cases). Apple's Rosetta 2 and Microsoft's
+x86-on-ARM emulation both demonstrate the transition is possible \emph{and} that
+it is a real cost, not a free one.
+
+A second compatibility wrinkle is specific to ARM's licensing model: because
+many vendors implement the architecture, ARM systems have historically lacked a
+single standardised platform/boot interface of the kind PCs have, so an OS image
+often has to be built per device. \extref{Arm SystemReady / SBSA programme
+documentation} Note this is a \emph{platform} issue rather than an ISA one
+strictly speaking, but it is a genuine compatibility cost of the ecosystem.
+
+\subsubsection*{x86}
+
+\paragraph{Advantage --- backward compatibility (compatibility).}
+x86 has maintained binary compatibility since the 8086 in 1978. Software
+compiled decades ago still runs on current processors. For enterprises with
+large bodies of legacy or closed-source software this is worth more than any
+efficiency gain, because the alternative is rewriting or abandoning working
+systems.
+
+This is exactly the trade-off the course names as the value of the ISA
+abstraction \srcref{PDF p25, slide 12}: ``advantage: different implementations
+of the same architecture'' — x86 is the extreme case, with the same architecture
+implemented across nearly fifty years of organizations.
+
+\paragraph{Disadvantage --- decoding complexity, and the power cost of it (power / performance).}
+x86 instructions are \textbf{variable length}, from 1 to 15 bytes. A decoder
+cannot know where instruction $n+1$ starts until it has decoded instruction $n$,
+which makes parallel decode genuinely hard and forces significant extra logic
+(length pre-decode, complex multi-way decoders, micro-op caches). Modern x86
+cores internally translate these instructions into RISC-like micro-operations —
+an entire extra pipeline stage that exists purely to service the legacy
+encoding.
+
+That decode machinery costs transistors and power on every instruction, which is
+the same conclusion the course draws in general terms when it explains why the
+ISA abstraction can hurt: it ``sometimes prevents using new innovations''
+\srcref{PDF p25, slide 12}. x86 cannot drop the legacy encoding without breaking
+the compatibility that is its main advantage.
+
+\extref{Intel SDM Vol.~2 (instruction encoding); Hennessy \& Patterson,
+\emph{Computer Architecture: A Quantitative Approach}, App.~A on ISA design}
+
+\begin{trap}
+\textbf{Do not overstate the ISA's role in performance.} It is tempting to
+conclude ``RISC is faster'' or ``CISC is slower''. Measured performance is
+dominated by \emph{organization} — pipeline depth, cache hierarchy, issue width,
+process node — not by the ISA \srcref{PDF p31, slide 16}. High-performance x86
+and high-performance ARM parts are competitive with each other; the durable ISA
+differences are in \emph{decode complexity} and \emph{energy per instruction},
+which is why the answer above is framed that way rather than as raw speed.
+\end{trap}
+
+\subsection*{Check}
+
+Each of the four claims is tied to one of the three axes the question names, and
+each traces to the same root cause, which is the sign the comparison is coherent
+rather than a list of assorted facts:
+
+\begin{center}
+\begin{tabular}{llll}
+  \toprule
+  ISA & & Axis & Root cause \\
+  \midrule
+  ARM & advantage    & power         & fixed-width encoding $\to$ simple decoder \\
+  ARM & disadvantage & compatibility & later arrival to the desktop/server software base \\
+  x86 & advantage    & compatibility & unbroken binary compatibility since 1978 \\
+  x86 & disadvantage & power / perf  & variable-length encoding $\to$ complex decoder \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+Note the symmetry: each ISA's advantage is the direct cause of the other's
+disadvantage. ARM's simple encoding buys efficiency but no legacy base; x86's
+legacy base is preserved by an encoding that costs efficiency. That is a
+trade-off, not a ranking — which is what the question is really testing.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\textbf{ARM}
+\begin{itemize}[nosep, leftmargin=1.4em]
+  \item \textbf{Advantage --- power consumption.} Fixed-width, regular RISC
+    encoding keeps the instruction decoder small and simple, so less energy is
+    spent per instruction. This is why ARM dominates battery-powered devices,
+    where performance-per-watt is the metric that matters.
+  \item \textbf{Disadvantage --- compatibility.} The large body of existing
+    desktop/server software was compiled for x86 and must be recompiled or
+    emulated (Rosetta 2, Windows-on-ARM), which costs performance and can break
+    edge cases.
+\end{itemize}
+
+\medskip
+\textbf{x86}
+\begin{itemize}[nosep, leftmargin=1.4em]
+  \item \textbf{Advantage --- compatibility.} Binary compatibility maintained
+    since the 8086 (1978): decades-old software still runs on current
+    processors, which is decisive for legacy and closed-source codebases.
+  \item \textbf{Disadvantage --- decode complexity and its power cost.}
+    Variable-length instructions (1--15 bytes) mean the start of instruction
+    $n+1$ is unknown until instruction $n$ is decoded. Parallel decode therefore
+    needs substantial extra logic, and cores must translate to internal
+    micro-operations — transistors and power spent servicing a legacy encoding
+    that cannot be dropped without losing the compatibility above.
+\end{itemize}
+
+\medskip
+\textbf{Caveat:} raw performance is governed mainly by \emph{organization}
+(pipeline, caches, process node), not by the ISA \srcref{PDF p31}. The durable
+ISA-level differences are decode complexity and energy per instruction.
+\end{answerbox}
+
+\end{document}

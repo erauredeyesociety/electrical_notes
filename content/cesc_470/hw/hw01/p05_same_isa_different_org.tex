@@ -1,0 +1,130 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{5}{5 pts}{Same ISA, different organizations}
+
+\subsection*{Problem statement}
+
+Give an example of a situation where two machines share the same ISA but have
+different organizations.
+
+\subsection*{Approach}
+
+Problem 4 established the principle; this asks for a concrete instance of it.
+The course states that the situation is not merely possible but routine
+\srcref{Module 01, PDF p31, slide 16}:
+
+\begin{quote}
+``Any given ISA can have many different organizations\ldots\ Computer
+manufacturers regularly modify the architecture of a processor while keeping its
+ISA essentially constant.''
+\end{quote}
+
+and names candidate ISAs \srcref{PDF p25, slide 12}: ``IA-64, IA-32, PowerPC,
+MIPS, SPARC, ARM, and others — \emph{all are multi-sourced, with different
+implementations for the same ISA}.''
+
+A good answer names the shared ISA, names two implementations, and says what
+differs — the last part being what shows the concept was understood.
+
+\subsection*{Work}
+
+\paragraph{Example — two x86-64 processors: a desktop CPU and a laptop CPU.}
+
+Both implement the **same ISA** (x86-64), so both execute the identical
+compiled binary — the same opcodes, the same 16 general-purpose registers, the
+same addressing modes. Neither the program nor the compiler needs to know which
+one it is running on.
+
+Their **organizations** differ substantially:
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  Organization choice & Desktop part & Mobile part \\
+  \midrule
+  Clock rate      & high (e.g. 4--5 GHz)     & lower, to fit a power budget \\
+  Core count      & many                     & fewer \\
+  Cache hierarchy & large L3                 & smaller L3 \\
+  Pipeline / issue width & aggressive        & narrower, for efficiency \\
+  Power target    & $\sim$100 W and up       & $\sim$15 W \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+Consequence, and the point of the example: the same program runs correctly on
+both and produces identical results, but takes different amounts of time. That
+is precisely the architecture/organization split from Problem 4 — the ISA fixes
+\emph{what} is computed, the organization fixes \emph{how fast}.
+
+\paragraph{A second example, from within the course.}
+The CPI comparison the module sets up \srcref{PDF p73, slide 40} is exactly this
+scenario stated abstractly:
+
+\begin{quote}
+``Suppose we have \emph{two implementations of the same instruction set
+architecture} (ISA). Machine A has a clock cycle time of 10 ns and a CPI of 2.0;
+machine B has a clock cycle time of 20 ns and a CPI of 1.2.''
+\end{quote}
+
+Different cycle times and different CPIs are organizational differences; the
+shared ISA is what makes the comparison meaningful at all. Because the ISA is
+identical and the program is the same, the \textbf{instruction count is
+identical}, so it cancels and the comparison reduces to
+$\CPI \times \cycletime$.
+
+\paragraph{Other valid answers.}
+Any of these earns the marks, provided the ISA is named and the organizational
+difference is stated:
+
+\begin{itemize}
+  \item \textbf{ARM} — a Cortex-A78 (deep out-of-order pipeline, phone-class
+    performance) and a Cortex-A55 (short in-order pipeline, efficiency-class),
+    both implementing ARMv8-A and often on the \emph{same chip} in a
+    big.LITTLE configuration. The OS migrates a thread between them mid-run,
+    which only works because the ISA is shared.
+  \item \textbf{x86-64 across vendors} — an Intel and an AMD processor run the
+    same binaries via the same ISA with entirely independent microarchitectures.
+    This is the ``multi-sourced'' property the slide highlights.
+  \item Successive generations of one product line, where the ISA is held
+    constant and the microarchitecture is redesigned.
+\end{itemize}
+
+\begin{trap}
+The two machines must share the ISA \emph{and} differ in implementation. ``An
+Intel CPU and an ARM CPU'' fails the first condition — those are different ISAs
+and cannot run each other's binaries. ``Two identical CPUs at different clock
+settings'' is a weak answer: name a structural difference, not just a frequency.
+\end{trap}
+
+\subsection*{Check}
+
+Apply the Problem 4 test: can a program \emph{detect} the difference? On the
+desktop-vs-laptop pair, a correct program produces identical output on both, and
+differs only in run time — so the difference is organizational, as claimed. If
+instead one part supported an instruction the other lacked, the binary would
+fault, and the difference would be architectural. The example is on the right
+side of the line.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\textbf{A desktop and a laptop x86-64 processor.} Both implement the same ISA —
+identical instructions, registers, and addressing modes — so both run the
+\emph{same compiled binary} and produce identical results.
+
+\medskip
+Their \textbf{organizations} differ: clock rate, core count, cache sizes,
+pipeline width, and power budget. The program cannot detect any of it except
+through \emph{how long it takes}.
+
+\medskip
+The course's own instance of this: ``two implementations of the same ISA'' with
+different cycle times (10 ns vs 20 ns) and different CPIs (2.0 vs 1.2)
+\srcref{PDF p73}. Because the ISA is shared, the instruction count is identical
+and cancels from the comparison.
+\end{answerbox}
+
+\end{document}

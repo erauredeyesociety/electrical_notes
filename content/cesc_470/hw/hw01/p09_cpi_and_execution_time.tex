@@ -1,0 +1,143 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{9}{12 pts (a: 5, b: 7)}{Average CPI and execution time}
+
+\subsection*{Problem statement}
+
+A program has the following instruction mix:
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  Class & Share of instructions & Cycles per instruction \\
+  \midrule
+  A & 40\% & 1 \\
+  B & 40\% & 2 \\
+  C & 20\% & 3 \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the average CPI. \hfill (5 points)
+  \item If the machine's clock cycle time is 1 ns, calculate the total execution
+    time for 1 million instructions. \hfill (7 points)
+\end{enumerate}
+
+\subsection*{Approach}
+
+This is the course's CPI Example II \srcref{Module 01, PDF p75--76, slides
+42--43} in percentage form rather than instruction counts. Average CPI is the
+\emph{weighted mean} of the per-class costs:
+\begin{equation}
+  \CPI_{\text{avg}} = \sum_{i} f_i \times \CPI_i,
+  \qquad f_i = \text{fraction of instructions in class } i,
+  \label{eq:cpiavg}
+\end{equation}
+which is the fractional form of the slide's
+$\CPI = (\text{total cycles})/(\text{instruction count})$.
+
+Part (b) is then the full performance equation \srcref{PDF p55, slide 32},
+in the three-factor form:
+\begin{equation}
+  \CPUtime = \IC \times \CPI \times \cycletime.
+  \label{eq:three}
+\end{equation}
+
+Note the fractions are given as percentages, so no instruction count is needed
+for (a) --- weights are relative. Part (b) supplies the count.
+
+\subsection*{Work}
+
+\subsubsection*{(a) Average CPI}
+
+Convert percentages to fractions and apply \eqref{eq:cpiavg}:
+\begin{align}
+  \CPI_{\text{avg}} &= (0.40)(1) + (0.40)(2) + (0.20)(3) \\
+                    &= 0.40 + 0.80 + 0.60 \\
+                    &= \mathbf{1.8\ \text{cycles/instruction.}}
+\end{align}
+
+Sanity on the weights: $0.40 + 0.40 + 0.20 = 1.00$ \checkmark --- they must sum
+to 1, or the mix is not fully specified.
+
+\paragraph{Equivalent route, per the slide's method.}
+The slide works with counts rather than fractions \srcref{PDF p76, slide 43}.
+Taking any convenient total, say 10 instructions (4 of A, 4 of B, 2 of C):
+\begin{equation}
+  \text{cycles} = (4)(1) + (4)(2) + (2)(3) = 4 + 8 + 6 = 18,
+  \qquad \CPI = \frac{18}{10} = 1.8 \checkmark
+\end{equation}
+The answer is independent of the total chosen, which is what makes the
+percentage form legitimate.
+
+\subsubsection*{(b) Execution time for $10^{6}$ instructions}
+
+Substitute into \eqref{eq:three} with $\IC = 1{,}000{,}000$,
+$\CPI = 1.8$, $\cycletime = 1\ \text{ns} = 1\times10^{-9}\ \text{s}$:
+\begin{align}
+  \CPUtime &= \IC \times \CPI \times \cycletime \\
+           &= (1\times10^{6}) \times 1.8 \times (1\times10^{-9}\ \text{s}) \\
+           &= 1.8\times10^{-3}\ \text{s} \\
+           &= \mathbf{1.8\ \text{ms.}}
+\end{align}
+
+Working it in two visible stages, which is what ``show your work'' wants here:
+\begin{align}
+  \text{total cycles} &= \IC \times \CPI = 10^{6} \times 1.8
+                       = 1.8\times10^{6}\ \text{cycles}, \\
+  \CPUtime &= 1.8\times10^{6}\ \text{cycles} \times 1\ \text{ns/cycle}
+            = 1.8\times10^{6}\ \text{ns} = 1.8\ \text{ms.}
+\end{align}
+
+\begin{trap}
+$\cycletime = 1$ ns means the \emph{clock rate is 1 GHz}, not 1 MHz --- the two
+are reciprocals \srcref{PDF p54, slide 31}. Inverting this gives an answer off
+by $10^{6}$. Also note the answer is 1.8 \emph{milli}seconds: $10^{6}$
+instructions at $10^{-9}$ s per cycle is $10^{-3}$ s, not seconds.
+\end{trap}
+
+\subsection*{Check}
+
+\paragraph{Independent route for (b), via clock rate.}
+$\cycletime = 1$ ns $\Rightarrow \clockrate = 1/(1\times10^{-9}) = 10^{9}$ Hz
+$= 1$ GHz. Then, using $\CPUtime = \cycles/\clockrate$:
+\begin{equation}
+  \CPUtime = \frac{1.8\times10^{6}\ \text{cycles}}{1\times10^{9}\ \text{cycles/s}}
+           = 1.8\times10^{-3}\ \text{s} \checkmark
+\end{equation}
+The same answer without ever multiplying by $\cycletime$ directly.
+
+\paragraph{Bounds check on the CPI.}
+The per-class costs run from 1 to 3 cycles, so any weighted average \emph{must}
+lie in $[1, 3]$. $1.8$ does. Moreover, since the mix is weighted toward the
+cheaper classes (80\% of instructions cost 1 or 2 cycles), the average should sit
+below the midpoint of 2 --- and $1.8 < 2$ \checkmark.
+
+\paragraph{Units.}
+$$\underbrace{[\text{instructions}]}_{\IC} \times
+  \underbrace{\left[\tfrac{\text{cycles}}{\text{instruction}}\right]}_{\CPI} \times
+  \underbrace{\left[\tfrac{\text{seconds}}{\text{cycle}}\right]}_{\cycletime}
+  = [\text{seconds}] \checkmark$$
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\textbf{(a)} $\;\CPI_{\text{avg}} = (0.40)(1) + (0.40)(2) + (0.20)(3)
+  = 0.4 + 0.8 + 0.6 = \mathbf{1.8}$ cycles/instruction.
+
+\medskip
+\textbf{(b)} $\;\CPUtime = \IC \times \CPI \times \cycletime
+  = (10^{6})(1.8)(1\ \text{ns})
+  = 1.8\times10^{6}\ \text{ns} = \mathbf{1.8\ \text{ms}}
+  \;(= 1.8\times10^{-3}\ \text{s})$.
+
+\medskip
+{\small Equivalently: total cycles $= 10^{6} \times 1.8 = 1.8\times10^{6}$; at
+1 ns per cycle (a 1 GHz clock) that is 1.8 ms.}
+\end{answerbox}
+
+\end{document}

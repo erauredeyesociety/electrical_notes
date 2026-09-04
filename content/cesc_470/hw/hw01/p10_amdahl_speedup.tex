@@ -1,0 +1,133 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{10}{10 pts}{Amdahl's law --- speedup from a $10\times$ FP improvement}
+
+\subsection*{Problem statement}
+
+A program spends 80\% of its time performing floating-point operations. If
+floating-point performance is improved by a factor of 10, what is the maximum
+possible speedup?
+
+\subsection*{Approach}
+
+Amdahl's law, in the form the course states it \srcref{Module 01, PDF p86,
+slide 49}:
+
+\begin{quote}
+``Speed up overall $=$ Execution Time Unaffected $+$ ( Execution Time Affected
+$/$ Amount of Improvement )''
+\end{quote}
+
+which, read as the slide's worked example uses it, gives the \emph{new
+execution time}:
+\begin{equation}
+  \CPUtime^{\text{new}} = \amdahl{T_{\text{unaffected}}}{T_{\text{affected}}}{n},
+  \qquad
+  \speedup = \frac{\CPUtime^{\text{old}}}{\CPUtime^{\text{new}}}.
+  \label{eq:amdahl}
+\end{equation}
+
+No absolute run time is given, only a percentage, so normalise the original time
+to $1$. Then $T_{\text{affected}} = 0.8$ and $T_{\text{unaffected}} = 0.2$, and
+the speedup comes out dimensionless — which it must, being a ratio.
+
+\subsection*{Work}
+
+\paragraph{Step 1 --- split the time.}
+Take $\CPUtime^{\text{old}} = 1$ (any unit; the ratio is what matters).
+\begin{align}
+  T_{\text{affected}}   &= 0.80 \quad\text{(floating point)} \\
+  T_{\text{unaffected}} &= 1 - 0.80 = 0.20 \quad\text{(everything else)}
+\end{align}
+
+\paragraph{Step 2 --- apply the improvement.}
+Only the affected part is divided by $n = 10$; the rest is untouched. That
+asymmetry is the entire content of Amdahl's law:
+\begin{align}
+  \CPUtime^{\text{new}} &= 0.20 + \frac{0.80}{10} \\
+                        &= 0.20 + 0.08 \\
+                        &= 0.28.
+\end{align}
+
+\paragraph{Step 3 --- form the speedup.}
+\begin{equation}
+  \speedup = \frac{\CPUtime^{\text{old}}}{\CPUtime^{\text{new}}}
+           = \frac{1}{0.28}
+           = \mathbf{3.571\ldots \approx 3.57\times.}
+\end{equation}
+
+\paragraph{Step 4 --- the ceiling, which is what ``maximum possible'' probes.}
+Even with \emph{infinitely} fast floating point ($n \to \infty$), the $0.20$
+never goes away:
+\begin{equation}
+  \speedup_{\max} = \lim_{n\to\infty} \frac{1}{0.20 + \dfrac{0.80}{n}}
+                  = \frac{1}{0.20} = 5\times.
+\end{equation}
+So $3.57\times$ of a possible $5\times$ — a $10\times$ improvement to 80\% of the
+work buys about 71\% of the benefit that infinite improvement would.
+
+This mirrors the course's own example exactly \srcref{PDF p87, slide 50}, where
+a program of 100 s with 80 s of multiply can be made $4\times$ faster (needing
+$n = 16$) but \textbf{cannot} be made $5\times$ faster at any $n$ — the same
+$1/0.20 = 5$ ceiling appearing as an impossibility rather than a limit.
+
+\begin{trap}
+\textbf{The question is ambiguous, and the two readings give different numbers.}
+\begin{itemize}[nosep]
+  \item ``What speedup results from the stated $10\times$ improvement?''
+    $\Rightarrow \mathbf{3.57\times}$
+  \item ``What is the maximum speedup obtainable by improving this part at all?''
+    $\Rightarrow \mathbf{5\times}$
+\end{itemize}
+Since the problem supplies a specific factor of 10, \textbf{3.57$\times$ is the
+answer to give}, with the $5\times$ ceiling stated alongside it. Giving only
+$5\times$ ignores the data provided; giving only $3.57\times$ misses what
+``maximum possible'' is pointing at. Present both.
+\end{trap}
+
+\subsection*{Check}
+
+\paragraph{Concrete numbers instead of fractions.}
+Suppose the program takes 100 s: 80 s floating point, 20 s other. After a
+$10\times$ FP improvement the FP work takes $80/10 = 8$ s, so
+\begin{equation}
+  \CPUtime^{\text{new}} = 20 + 8 = 28\ \text{s},
+  \qquad \speedup = \frac{100}{28} = 3.571 \checkmark
+\end{equation}
+matching the normalised calculation, and confirming the normalisation was safe.
+
+\paragraph{Bounds.}
+$1 < 3.57 < 5$. It must exceed 1 (the change helps) and stay below the $1/0.2 = 5$
+ceiling (the unaffected 20\% is irreducible) \checkmark.
+
+\paragraph{Where the remaining time goes.}
+After the improvement, the 28 s splits as 20 s unaffected and 8 s floating point
+--- so the \emph{unaffected} portion has grown from 20\% to $20/28 \approx 71\%$
+of run time. Further FP optimisation would now buy very little, which is the
+practical lesson: Amdahl's law is why the course's design principle is
+\emph{make the common case fast} \srcref{PDF p86, slide 49} --- and why the
+common case shifts once you have optimised it.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+With $T_{\text{affected}} = 0.80$, $T_{\text{unaffected}} = 0.20$, $n = 10$:
+$$\CPUtime^{\text{new}} = 0.20 + \frac{0.80}{10} = 0.28
+\qquad\Longrightarrow\qquad
+\speedup = \frac{1}{0.28} = \mathbf{3.57\times}$$
+
+\medskip
+\textbf{Theoretical ceiling:} even with infinitely fast floating point, the
+untouched 20\% remains, so
+$$\speedup_{\max} = \frac{1}{0.20} = \mathbf{5\times}$$
+
+\medskip
+{\small The $10\times$ improvement therefore achieves $3.57$ of the $5\times$
+that is possible in the limit. Give \textbf{3.57$\times$} as the answer to the
+stated improvement, and note the \textbf{5$\times$} ceiling.}
+\end{answerbox}
+
+\end{document}

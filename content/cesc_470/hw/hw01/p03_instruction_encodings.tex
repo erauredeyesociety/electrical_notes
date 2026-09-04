@@ -1,0 +1,79 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{3}{5 pts}{How many instructions fit in 32 bits}
+
+\subsection*{Problem statement}
+
+Machine code instructions are stored as bit sequences. If an instruction is 32
+bits wide, how many unique instructions can be represented?
+
+\subsection*{Approach}
+
+The premise is the course's own framing of machine code
+\srcref{Module 01, PDF p16, slide 7}:
+
+\begin{quote}
+``Each machine code instruction consists of a pattern of `1' and `0s' which
+determine operation/action to be performed.''
+\end{quote}
+
+So the question is purely combinatorial: how many distinct patterns of 32
+binary digits exist? Each of the 32 bit positions is an independent choice
+between two values, so by the multiplication principle the count is $2$
+multiplied by itself 32 times.
+
+\subsection*{Work}
+
+With $b$ bits, each position independently takes one of 2 values:
+\begin{equation}
+  \underbrace{2 \times 2 \times \cdots \times 2}_{b \text{ factors}} = 2^{b}.
+\end{equation}
+
+For $b = 32$:
+\begin{equation}
+  2^{32} = 4{,}294{,}967{,}296 \approx 4.29 \times 10^{9}.
+\end{equation}
+
+A convenient way to evaluate it without a calculator, using $2^{10} = 1024
+\approx 10^{3}$:
+\begin{equation}
+  2^{32} = 2^{2} \times 2^{30} = 4 \times (2^{10})^{3}
+         = 4 \times 1024^{3} = 4{,}294{,}967{,}296.
+\end{equation}
+In the usual binary shorthand this is $4\,\text{Gi}$ — about 4.3 billion.
+
+\begin{trap}
+$2^{32}$, not $32^{2}$ and not $2 \times 32$. The exponent is the number of bit
+\emph{positions}; the base is the number of values \emph{per} position.
+\end{trap}
+
+\paragraph{What this bound actually means in practice.}
+$2^{32}$ is the number of distinct 32-bit \emph{patterns} — the absolute ceiling
+on encodable instructions. A real ISA never gets close, because the 32 bits are
+partitioned into fields: an opcode, register specifiers, and immediate values
+\srcref{PDF p23, slide 11 — ``Encoding and representing instructions''}. For
+example, if 6 bits are spent on the opcode, only $2^{6} = 64$ distinct
+operations are encodable, and the remaining 26 bits carry operands. So the
+answer to the question as asked is $2^{32}$ \emph{bit patterns}, which is an
+upper bound on, not an estimate of, an ISA's instruction count.
+
+\subsection*{Check}
+
+Dimensional sanity: 32 bits is 4 bytes, and 4 bytes is exactly the size of an
+unsigned 32-bit integer, whose range is $0$ to $2^{32}-1$ — that is $2^{32}$
+distinct values, matching. Independently computed: $2^{32} = 4{,}294{,}967{,}296$.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+$$2^{32} = 4{,}294{,}967{,}296 \approx 4.29\times10^{9} \text{ unique instructions.}$$
+Each of the 32 bit positions independently takes 2 values, giving $2^{32}$
+distinct patterns. This is an \emph{upper bound}: a real ISA divides the 32 bits
+into opcode and operand fields, so far fewer distinct \emph{operations} are
+actually encoded.
+\end{answerbox}
+
+\end{document}

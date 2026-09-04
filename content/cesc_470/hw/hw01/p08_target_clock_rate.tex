@@ -1,0 +1,122 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{8}{15 pts}{Target clock rate for Computer B}
+
+\subsection*{Problem statement}
+
+A program runs in 18 seconds on Computer A with a 600 MHz clock. Computer B's
+performance (in terms of execution time) is 2 times better than Computer A.
+Given that Computer B requires $1.5\times$ more cycles per program, what clock
+rate must Computer B target? \emph{(Show your work.)}
+
+\subsection*{Approach}
+
+This is the course's worked example \srcref{Module 01, PDF p67, slide 36} with
+different numbers, so the method is the one taught there. The governing relation
+is the performance equation \srcref{PDF p55--56, slide 32}:
+\begin{equation}
+  \frac{\text{seconds}}{\text{program}}
+  = \frac{\text{cycles}}{\text{program}} \times \frac{\text{seconds}}{\text{cycle}}
+  \qquad\Longleftrightarrow\qquad
+  \CPUtime = \frac{\cycles}{\clockrate}.
+  \label{eq:perf}
+\end{equation}
+
+The clock rate is not given for B and cannot be found directly, so the route is
+through the \emph{cycle count}, which is the quantity that links the two
+machines:
+
+\begin{enumerate}
+  \item Find $\cycles^{A}$ from A's known time and clock rate.
+  \item Scale it by $1.5$ to get $\cycles^{B}$.
+  \item Find $\CPUtime^{B}$ from ``2 times better''.
+  \item Divide to get $\clockrate^{B}$.
+\end{enumerate}
+
+\subsection*{Work}
+
+\paragraph{Step 1 --- cycles on A.}
+Rearranging \eqref{eq:perf}, $\cycles = \CPUtime \times \clockrate$:
+\begin{align}
+  \cycles^{A} &= 18\ \text{s} \times 600\times10^{6}\ \text{Hz} \\
+              &= 1.08\times10^{10}\ \text{cycles.}
+\end{align}
+Units check: $\text{s} \times \text{cycles/s} = \text{cycles}$ \checkmark
+
+\paragraph{Step 2 --- cycles on B.}
+B ``requires $1.5\times$ more cycles per program'' for the same program:
+\begin{equation}
+  \cycles^{B} = 1.5 \times \cycles^{A}
+              = 1.5 \times 1.08\times10^{10}
+              = 1.62\times10^{10}\ \text{cycles.}
+\end{equation}
+
+\paragraph{Step 3 --- execution time on B.}
+``Performance 2 times better, in terms of execution time'' means the program
+must run in \emph{half} the time — performance is the reciprocal of execution
+time:
+\begin{equation}
+  \CPUtime^{B} = \frac{\CPUtime^{A}}{2} = \frac{18\ \text{s}}{2} = 9\ \text{s.}
+\end{equation}
+
+\paragraph{Step 4 --- required clock rate.}
+From \eqref{eq:perf}:
+\begin{align}
+  \clockrate^{B} &= \frac{\cycles^{B}}{\CPUtime^{B}}
+                  = \frac{1.62\times10^{10}\ \text{cycles}}{9\ \text{s}} \\
+                 &= 1.8\times10^{9}\ \text{Hz}
+                  = \mathbf{1.8\ \text{GHz}.}
+\end{align}
+
+\begin{trap}
+The naive answer is $600\ \text{MHz} \times 2 = 1.2$ GHz --- doubling the clock
+because the machine must be twice as fast. That is \textbf{wrong}: it ignores
+the $1.5\times$ cycle penalty. B must overcome \emph{both} the $2\times$ speed
+target \emph{and} the extra cycles, so the rate scales by $2 \times 1.5 = 3$:
+$$600\ \text{MHz} \times 3 = 1.8\ \text{GHz.}$$
+The course's version of this example makes the same point --- the redesign that
+raises the clock is precisely what forces the extra cycles \srcref{PDF p67}.
+\end{trap}
+
+\subsection*{Check}
+
+\paragraph{Independent route --- ratios only, no absolute cycle counts.}
+Combining the two requirements directly:
+\begin{equation}
+  \clockrate^{B}
+    = \clockrate^{A} \times \underbrace{\frac{\cycles^{B}}{\cycles^{A}}}_{1.5}
+                     \times \underbrace{\frac{\CPUtime^{A}}{\CPUtime^{B}}}_{2}
+    = 600\ \text{MHz} \times 1.5 \times 2 = 1.8\ \text{GHz.}
+\end{equation}
+Same answer by a route that never computes $1.08\times10^{10}$, so an arithmetic
+slip in Step 1 could not have propagated.
+
+\paragraph{Substitute back.}
+Running B at 1.8 GHz with $1.62\times10^{10}$ cycles:
+\begin{equation}
+  \CPUtime^{B} = \frac{1.62\times10^{10}}{1.8\times10^{9}} = 9\ \text{s} \checkmark
+\end{equation}
+which is half of A's 18 s, as required.
+
+\paragraph{Sanity.} $1.8 > 1.2$, as it must be: B is handicapped by needing more
+cycles, so it needs a \emph{higher} clock than the naive doubling.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+$$\cycles^{A} = 18\ \text{s} \times 600\ \text{MHz} = 1.08\times10^{10}$$
+$$\cycles^{B} = 1.5 \times 1.08\times10^{10} = 1.62\times10^{10}
+  \qquad \CPUtime^{B} = \tfrac{18}{2} = 9\ \text{s}$$
+$$\clockrate^{B} = \frac{1.62\times10^{10}}{9\ \text{s}}
+  = \mathbf{1.8\times10^{9}\ \text{Hz} = 1.8\ \text{GHz}}$$
+
+\medskip
+Equivalently $\clockrate^{B} = 600\ \text{MHz} \times 1.5 \times 2$: the clock
+must cover \emph{both} the $2\times$ speed target and the $1.5\times$ cycle
+penalty. (1.2 GHz is the trap answer — it ignores the extra cycles.)
+\end{answerbox}
+
+\end{document}

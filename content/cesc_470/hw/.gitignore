@@ -1,0 +1,16 @@
+# Build products. Every PDF here is regenerated from the .tex sources by
+# docs/latex/build_tex.sh. The instructor's assignment PDF is the exception --
+# it is source material and cannot be regenerated.
+
+*.pdf
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# --- Deliberately NOT ignored -------------------------------------------
+!HW*.pdf
+!hw*/HW*.pdf

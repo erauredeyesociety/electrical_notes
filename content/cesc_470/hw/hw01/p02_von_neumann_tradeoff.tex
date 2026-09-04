@@ -1,0 +1,109 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{2}{10 pts}{The stored-program trade-off}
+
+\subsection*{Problem statement}
+
+Programs and data are both stored in memory in a Von Neumann machine. Discuss
+one advantage and one disadvantage of this design.
+
+\subsection*{Approach}
+
+The premise is the defining property of the stored-program computer
+\srcref{Module 01, PDF p16--17, slide 7}:
+
+\begin{quote}
+``Program (instructions) are bit sequences, \emph{just like data}\ldots\
+Programs are stored in memory and are called machine code instructions —
+\emph{to be read and written just like data}.''
+\end{quote}
+
+Ten points for two items, so one advantage and one disadvantage, each argued
+rather than merely named. The productive way to find both: ask what follows
+from instructions being *indistinguishable from data*, since that single fact
+is simultaneously the design's power and its weakness.
+
+\subsection*{Work}
+
+\paragraph{Advantage — programs can be treated as data, so the machine is general-purpose.}
+
+Because instructions live in the same read/write memory as data, a program can
+be \emph{loaded} rather than wired in. Consequences:
+
+\begin{itemize}
+  \item \textbf{The machine is reprogrammable without rewiring.} Running a
+    different program means writing different bits into memory. Contrast the
+    fixed-function alternative, where changing behaviour means changing
+    hardware.
+  \item \textbf{Programs can generate and modify programs.} Compilers,
+    assemblers, linkers, and loaders are all ordinary programs whose
+    \emph{output is instructions}. This is only possible because instructions
+    are writable data \srcref{PDF p16}.
+  \item \textbf{One memory serves both}, so storage is allocated where it is
+    needed instead of being split between two fixed pools.
+\end{itemize}
+
+This is what makes the design the basis of essentially every general-purpose
+computer, and why the course frames the ISA as ``the mapping of machine code
+instructions to CPU operations'' \srcref{PDF p16} — a mapping over *stored*
+bit patterns.
+
+\paragraph{Disadvantage — one memory, one bus: the von Neumann bottleneck.}
+
+The same slide shows a single \emph{Memory} block reached over a common bus
+\srcref{PDF p13, p17}. Since instructions and data share it:
+
+\begin{itemize}
+  \item \textbf{Instruction fetch and data access compete for the same path.}
+    Every fetch--decode--execute cycle \srcref{PDF p16} must fetch an
+    instruction \emph{and} usually touch an operand, so the memory interface is
+    used at least twice per instruction and becomes the throughput limit. The
+    CPU can be made faster without the program running faster — the classic
+    \emph{von Neumann bottleneck}.
+  \item \textbf{A secondary, security-flavoured consequence:} because
+    instructions are writable, data can be executed and code can be overwritten.
+    A buffer overflow that writes past a data array can plant bytes that are
+    later fetched \emph{as instructions}. A machine that physically separated
+    the two could not do this.
+\end{itemize}
+
+The named alternative is the \textbf{Harvard} architecture, with separate
+instruction and data memories and separate buses — which relieves the
+bottleneck at the cost of the flexibility described above. Note the course
+slide's own figure shows both framings: PDF p16 draws ``Program memory'' and
+``Data memory'' separately, while p17 draws a single ``Memory''.
+
+\begin{trap}
+Answer the question that was asked. The advantage/disadvantage must both follow
+from \emph{storing programs and data together} — not from unrelated properties
+of computers. ``It's fast'' or ``it uses electricity'' scores nothing.
+\end{trap}
+
+\subsection*{Check}
+
+Both points trace to the same premise, which is the sign they are really about
+this design: instructions being ordinary memory contents is exactly what buys
+reprogrammability \emph{and} exactly what forces the shared memory path. A good
+answer to this question should have that symmetry.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\textbf{Advantage — general-purpose reprogrammability.} Instructions are bit
+sequences stored in ordinary read/write memory, so a new program is *loaded*
+rather than wired in, and programs (compilers, assemblers, loaders) can write
+other programs. One memory also serves both needs flexibly.
+
+\medskip
+\textbf{Disadvantage — the von Neumann bottleneck.} Instructions and data share
+one memory and one bus, so instruction fetch competes with data access on every
+cycle and memory bandwidth caps performance regardless of CPU speed. Writable
+instruction memory additionally allows code to be overwritten or data to be
+executed. The Harvard architecture avoids this with separate memories and buses,
+trading away the flexibility above.
+\end{answerbox}
+
+\end{document}

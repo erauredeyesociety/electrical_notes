@@ -1,0 +1,131 @@
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../reference_docs/cesc470_macros.tex}
+
+\begin{document}
+
+\problemheader{4}{10 pts}{Computer architecture vs computer organization}
+
+\subsection*{Problem statement}
+
+What is the difference between computer architecture and computer organization?
+
+\subsection*{Approach}
+
+The course states both definitions on dedicated review slides
+\srcref{Module 01, PDF p29 and p31, slides 15--16}, and gives the distinction in
+one line, which is the sentence to build the answer around:
+
+\begin{quote}
+``Architecture tells you \emph{what} a computer does and organization tells you
+\emph{how} it does it.'' \srcref{PDF p31, slide 16}
+\end{quote}
+
+Ten points, so the definitions alone are not enough — the answer should give
+each side, the relationship between them, and why the distinction is useful.
+
+\subsection*{Work}
+
+\paragraph{Computer architecture — the \emph{what}.}
+From the review slide \srcref{PDF p29, slide 15}:
+
+\begin{itemize}
+  \item A computer architecture $=$ \textbf{ISA $+$ hardware organization}.
+  \item An \textbf{ISA defines the programming model} of a computer.
+  \item An ISA is an \textbf{abstract entity}, because it does not consider the
+    specific design or implementation of a computer.
+  \item It is concerned with the \textbf{register set, instruction set, and
+    addressing modes}.
+  \item The computer's \textbf{assembly language embodies its ISA}.
+\end{itemize}
+
+So the architecture is the programmer-visible contract: what instructions exist,
+what registers they operate on, how memory is addressed. It is what you must
+know to write a machine-language program \srcref{PDF p23, slide 11}, and
+nothing more.
+
+\paragraph{Computer organization — the \emph{how}.}
+From the companion slide \srcref{PDF p31, slide 16}:
+
+\begin{itemize}
+  \item Organization is concerned with the \textbf{implementation of an ISA}.
+  \item \textbf{Any given ISA can have many different organizations.}
+  \item Manufacturers \textbf{regularly modify the architecture of a processor
+    while keeping its ISA essentially constant}.
+  \item Today a computer's organization is often called its
+    \textbf{microarchitecture}.
+\end{itemize}
+
+Organization covers the choices invisible to the programmer: pipeline depth,
+cache sizes and hierarchy, how many instructions issue per cycle, branch
+prediction, the width of internal buses, clock rate.
+
+\paragraph{The relationship.}
+The two are not parallel categories — one contains the other. Per PDF p29,
+\emph{architecture $=$ ISA $+$ organization}. The ISA is the abstract interface;
+the organization is one concrete realisation of it; the architecture is the
+whole machine.
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  & \textbf{ISA / architecture} & \textbf{Organization / microarchitecture} \\
+  \midrule
+  Question answered & \emph{What} does it do? & \emph{How} does it do it? \\
+  Nature            & Abstract, a specification & Concrete, an implementation \\
+  Visible to        & The programmer / compiler & Nobody, by design \\
+  Includes          & Instruction set, registers, addressing modes & Pipeline, caches, clock rate, buses \\
+  Changes           & Rarely (breaks binaries) & Every product generation \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Why the distinction matters.}
+This is the abstraction that lets an ecosystem exist \srcref{PDF p25, slide 12}:
+because the ISA is fixed, ``different implementations of the same architecture''
+can all run the same binaries, so software outlives hardware and vendors compete
+on organization. The slide names the cost too — the abstraction ``sometimes
+prevents using new innovations,'' because a change that would break the ISA
+breaks every existing program.
+
+\begin{trap}
+Do not say organization is ``the physical parts'' and architecture ``the
+design''. Both are design. The dividing line is \textbf{visibility to the
+programmer}: if a program can detect it, it is architecture; if it only affects
+how fast the same program runs, it is organization.
+\end{trap}
+
+\subsection*{Check}
+
+Test the definition against a case: two chips run the identical binary, but one
+has a 32 KB L1 cache and the other 64 KB. The program cannot observe the
+difference except in speed $\Rightarrow$ cache size is \emph{organization}. Now
+suppose one chip adds a new instruction: a program using it will not run on the
+other $\Rightarrow$ the instruction set is \emph{architecture}. Both classify as
+the definitions require, and this is exactly the situation Problem 5 asks for.
+
+\subsection*{Answer}
+
+\begin{answerbox}
+\textbf{Architecture tells you \emph{what} a computer does; organization tells
+you \emph{how} it does it} \srcref{PDF p31}.
+
+\medskip
+\textbf{Computer architecture} $=$ \textbf{ISA $+$ hardware organization}
+\srcref{PDF p29}. The \textbf{ISA} is the abstract, programmer-visible
+programming model — instruction set, register set, and addressing modes — and
+the assembly language embodies it. It is abstract because it says nothing about
+implementation.
+
+\medskip
+\textbf{Computer organization} (today: \textbf{microarchitecture}) is the
+\emph{implementation} of an ISA — pipeline depth, caches, clock rate, internal
+buses. \textbf{Any given ISA can have many organizations}, and manufacturers
+change the organization every generation while holding the ISA constant so
+existing binaries keep running.
+
+\medskip
+The practical test: if a program can \emph{detect} it, it is architecture; if it
+only changes how \emph{fast} the same program runs, it is organization.
+\end{answerbox}
+
+\end{document}

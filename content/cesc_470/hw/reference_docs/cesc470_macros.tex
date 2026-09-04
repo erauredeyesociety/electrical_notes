@@ -1,0 +1,21 @@
+% CESC 470 Computer Architecture — course-specific macros ONLY.
+%
+% Inputted AFTER docs/latex/coursework_preamble.tex, which carries everything
+% shared (answerbox, problemheader, srcref, page style). Put nothing general
+% here: if another course would want it, it belongs in the shared preamble.
+
+\renewcommand{\coursename}{CESC 470}
+
+% --- performance-equation notation ------------------------------------------
+% The course writes these in words on the slides; these render them compactly
+% and, more importantly, IDENTICALLY across every problem file.
+\newcommand{\CPUtime}{T_{\mathrm{CPU}}}
+\newcommand{\IC}{\mathrm{IC}}                    % instruction count
+\newcommand{\CPI}{\mathrm{CPI}}
+\newcommand{\cycletime}{t_{\mathrm{cycle}}}
+\newcommand{\clockrate}{f_{\mathrm{clk}}}
+\newcommand{\cycles}{N_{\mathrm{cycles}}}
+\newcommand{\speedup}{S}
+
+% Amdahl's law, in the form the slides state it (Module 01, PDF p86, slide 49).
+\newcommand{\amdahl}[3]{#1 + \dfrac{#2}{#3}}
