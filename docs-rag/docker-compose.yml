@@ -1,0 +1,377 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CONSUMER COMPOSE (multi-KB, IMAGE MODE) — generated template
+# ══════════════════════════════════════════════════════════════════════════════
+# CONSUMER copy of the PROVEN multi-KB topology (the live docs-rag-exudeai stack:
+# ONE postgres service with per-KB LOGICAL databases) with the api/frontend
+# `build:` stanzas swapped for pre-built `image:` refs. Carries NO application
+# source. Multi-KB is only distributable in IMAGE MODE: Dockerfile.multi-kb is
+# EXCLUDED from the code-export allowlist (CONSUMER_MANIFEST), so a consumer
+# consumes a pre-built image built by `rag build` on the same host.
+#
+# Image tag: pin via RAG_IMAGE_TAG in .env (default `latest`; prefer an explicit
+# version — LOCAL-daemon tags move on rebuild/prune).
+#   api      -> rag-bootstrap-api-multikb:${RAG_IMAGE_TAG:-latest}  (internal :8000)
+#   frontend -> rag-bootstrap-frontend:${RAG_IMAGE_TAG:-latest}     (internal :80)
+#
+# CONFIG PATH (multi-KB REQUIRES an external config):
+#   `./config.yaml:/src/config/config.yaml:ro` is KEPT below. The image builds
+#   from app/Dockerfile.multi-kb (WORKDIR /src, `COPY . ./app/`), so
+#   app/config_manager.py resolves PACKAGE_ROOT=/src and the canonical config is
+#   `/src/config/config.yaml` (default_config_path()). Mounting elsewhere leaves
+#   the multi-KB gateway inactive → /api/v2/health 503. See IMAGE_CONTRACT.md.
+#   The image bakes NO KB state — config.yaml is the ONLY source of the KB list.
+#
+# Scaffolded by `rag new-consumer --mode multikb`. Edit config.yaml for the
+# KB list and .env for identity/ports; do NOT hand-edit the service topology.
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# SECURITY MODEL: Single Port Exposure
+# ─────────────────────────────────────
+# This configuration exposes ONLY ONE PORT to the host machine (default: 10000).
+# All other services (postgres, redis, api) communicate internally via Docker
+# network and are NOT accessible from the host.
+#
+# TOPOLOGY: ONE postgres, per-KB LOGICAL databases
+# ────────────────────────────────────────────────
+# A single `postgres` service holds every KB as its own logical database named
+# ragdb_<kb> (the `primary` KB reuses the v1 database `ragdb`). The KB registry
+# auto-creates each ragdb_<kb> at api startup. The pgvector-into-template1 init
+# hook below installs the `vector` type into template1 so every later-created KB
+# database inherits it (without it, adding a 2nd KB fails with
+# `type "vector" does not exist`). This mirrors the live docs-rag-exudeai stack.
+#
+# MEMORY CAPS (fleet-resource hardening, 2026-07-04)
+# ───────────────────────────────────────────────────
+# Every service carries deploy.resources.limits.memory (honored by
+# `docker compose` v2 without swarm), env-overridable:
+#   api       RAG_API_MEM_LIMIT       (default 512m)
+#   postgres  RAG_PG_MEM_LIMIT        (default 1g)
+#   redis     RAG_REDIS_MEM_LIMIT     (default 256m)  + --maxmemory
+#             RAG_REDIS_MAXMEMORY     (default 192mb, allkeys-lru)
+#   frontend  RAG_FRONTEND_MEM_LIMIT  (default 128m)
+# ══════════════════════════════════════════════════════════════════════════════
+
+services:
+  # ────────────────────────────────────────────────────────────────────────────
+  # Init Service - Creates data directories on first startup
+  # ────────────────────────────────────────────────────────────────────────────
+  init:
+    image: busybox:latest
+    # container_name intentionally OMITTED. Docker Compose auto-names containers
+    # <COMPOSE_PROJECT_NAME>-<service>-N. A HARDCODED container_name is GLOBAL and
+    # collides the instant a second RAG instance exists on the same host. Set a
+    # unique COMPOSE_PROJECT_NAME in .env per instance instead (see .env.example).
+    command: |
+      sh -c '
+        echo "Creating data directories..."
+        mkdir -p /data/postgres
+        mkdir -p /data/redis
+        mkdir -p /data/cache/embeddings
+        mkdir -p /data/logs
+        mkdir -p /data/exports
+        mkdir -p /data/registry
+        mkdir -p /data/docs
+        mkdir -p /data/docs/archive
+        chmod -R 777 /data
+        echo "Data directories initialized."
+      '
+    volumes:
+      # DIRECT-PATH deployment: bind the instance data root straight from
+      # RAG_DATA_ROOT so every data volume (postgres/redis/cache/logs/docs) lands
+      # UNDER RAG_DATA_ROOT — no local ./data/docker/ layer on the home/root disk.
+      # `rag new-consumer --data-root <drive>` sets RAG_DATA_ROOT + every
+      # RAG_*_VOLUME under it; the fallback keeps the template portable when unset.
+      - ${RAG_DATA_ROOT:-./data}:/data
+    restart: "no"
+    # One-shot mkdir/chmod job — tiny fixed cap, no knob needed.
+    deploy:
+      resources:
+        limits:
+          memory: 64m
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # PostgreSQL with pgvector - Vector Storage + Metadata (ONE instance, N logical DBs)
+  # ────────────────────────────────────────────────────────────────────────────
+  # NO PORTS EXPOSED - Internal network access only
+  # Data stored in: ${RAG_POSTGRES_VOLUME} (direct bind under RAG_DATA_ROOT;
+  # default ./data/postgres when unset — the BIGGEST volume, kept off the home disk)
+  postgres:
+    image: pgvector/pgvector:pg16
+    # container_name auto: <COMPOSE_PROJECT_NAME>-postgres-N (see init note)
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    # Multi-KB connection budget: each KB opens its own pool + the v1 engine pool.
+    # Raise from the pg default (100) so many KBs fit. Overridable via .env.
+    command: ["-c", "max_connections=${RAG_PG_MAX_CONNECTIONS:-200}"]
+    environment:
+      POSTGRES_DB: ragdb
+      POSTGRES_USER: raguser
+      # Overridable via .env (default preserved so `docker compose config`
+      # renders identically when POSTGRES_PASSWORD is unset). Rotate it by
+      # setting POSTGRES_PASSWORD in .env — MUST match the api env below.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ragpass}
+    volumes:
+      # DIRECT-PATH bind (matches .env RAG_POSTGRES_VOLUME=<data-root>/postgres).
+      # The postgres DB is the LARGEST volume — it MUST live under RAG_DATA_ROOT,
+      # never on a local ./data/docker path. Fallback keeps the template portable.
+      - ${RAG_POSTGRES_VOLUME:-./data/postgres}:/var/lib/postgresql/data
+    # initdb hook (fires ONLY on an empty postgres volume): install pgvector into
+    # template1 so KB databases created LATER (the registry auto-creates ragdb_<kb>
+    # at api startup) inherit the `vector` type. Delivered inline via the top-level
+    # `configs:` block below so the consumer dir needs no extra source file.
+    configs:
+      - source: pgvector_template1_init
+        target: /docker-entrypoint-initdb.d/01_template1_pgvector.sql
+        mode: 0444
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U raguser -d ragdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rag-net
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: ${RAG_PG_MEM_LIMIT:-1g}
+    # IMPORTANT: No "ports:" section - postgres:5432 is NOT exposed to host
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Redis - Embedding Cache
+  # ────────────────────────────────────────────────────────────────────────────
+  # NO PORTS EXPOSED - Internal network access only
+  # Data stored in: ${RAG_REDIS_VOLUME} (direct bind under RAG_DATA_ROOT;
+  # default ./data/redis when unset)
+  redis:
+    image: redis:7-alpine
+    # container_name auto: <COMPOSE_PROJECT_NAME>-redis-N (see init note)
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    # Bounded cache (fleet-resource hardening): maxmemory keeps the DATASET
+    # bounded (LRU eviction — this is a cache); the container mem limit below is
+    # the hard OS-level backstop.
+    command:
+      [
+        "redis-server",
+        "--maxmemory", "${RAG_REDIS_MAXMEMORY:-192mb}",
+        "--maxmemory-policy", "allkeys-lru",
+      ]
+    volumes:
+      # DIRECT-PATH bind (matches .env RAG_REDIS_VOLUME=<data-root>/redis). Under
+      # RAG_DATA_ROOT with everything else — never on a local ./data/docker path.
+      - ${RAG_REDIS_VOLUME:-./data/redis}:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rag-net
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: ${RAG_REDIS_MEM_LIMIT:-256m}
+    # IMPORTANT: No "ports:" section - redis:6379 is NOT exposed to host
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # FastAPI Backend - Multi-KB RAG System (/api/v2 gateway)
+  # ────────────────────────────────────────────────────────────────────────────
+  # NO PORTS EXPOSED - Accessed via nginx reverse proxy only
+  api:
+    image: rag-bootstrap-api-multikb:${RAG_IMAGE_TAG:-latest}
+    # container_name auto: <COMPOSE_PROJECT_NAME>-api-N (see init note)
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    # Load ALL .env vars so any config knob set there reaches the container without
+    # a matching `environment:` entry (prevents a new RAG_* knob being forgotten
+    # here). The explicit block below overrides per-key; unknown env is ignored.
+    env_file:
+      - .env
+    environment:
+      # v1 engine DB connection (init_db + the `primary` KB's logical DB `ragdb`).
+      # REQUIRED: without POSTGRES_HOST the app defaults to localhost inside the
+      # container and init_db() crash-loops (ConnectionRefusedError). Points at
+      # the single `postgres` service; per-KB logical DBs are resolved from
+      # config.yaml (kb_defaults.host: postgres). MUST match the postgres env.
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ragdb
+      POSTGRES_USER: raguser
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ragpass}
+      REDIS_URL: redis://redis:6379/0
+      # Embedding defaults — canonical triple: nomic-embed-text / 768 / ollama.
+      # These fallbacks apply on bare `docker compose up` with no generated .env
+      # and MUST stay in sync with .env.example, config.yaml, and app/config.py.
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-nomic-embed-text}
+      EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-768}
+      # Embedding-weights pin. EMPTY = UNPINNED = fully inert: no request is
+      # issued and nothing is logged (app/embedding_provenance.py). Mapped here
+      # only so that arming it is a one-line .env edit rather than a compose
+      # edit — a pin set in .env with no mapping and no env_file silently never
+      # reaches the container, which is the 'pin that was never armed' failure.
+      # To arm, see docs/reference/CONFIGURATION.md.
+      EMBEDDING_MODEL_DIGEST: ${EMBEDDING_MODEL_DIGEST:-}
+      EMBEDDING_BACKEND: ${EMBEDDING_BACKEND:-ollama}
+      CHUNK_SIZE: ${CHUNK_SIZE:-512}
+      CHUNK_OVERLAP: ${CHUNK_OVERLAP:-50}
+      # Ollama endpoint — EXTERNAL host Ollama (no ollama container in compose).
+      # HARD PREREQUISITE: Ollama reachable at OLLAMA_BASE_URL with the embedding
+      # model pulled (`ollama pull nomic-embed-text`); `rag doctor`
+      # preflights both. Point at a remote server via OLLAMA_BASE_URL in .env.
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      LLM_MODEL: ${LLM_MODEL:-llama3.2:3b}
+      LLM_TEMPERATURE: ${LLM_TEMPERATURE:-0.3}
+      LLM_TIMEOUT: ${LLM_TIMEOUT:-300}
+      RAG_TOP_K: ${RAG_TOP_K:-5}
+      # 0.6, not 0.7: nomic-embed compresses cosines into ~0.50-0.81, so a
+      # 0.7 floor discards relevant hits. See docs/reference/RETRIEVAL_QUALITY.md §1.4.
+      RAG_MIN_SIMILARITY: ${RAG_MIN_SIMILARITY:-0.6}
+      # --- 0.5.0 observability / metrics (default-off) ---
+      RAG_METRICS_ENABLED: ${RAG_METRICS_ENABLED:-false}
+      RAG_METRICS_SLOW_MS: ${RAG_METRICS_SLOW_MS:-2000}
+      RAG_METRICS_SLOW_MAX: ${RAG_METRICS_SLOW_MAX:-100}
+      RAG_METRICS_SAMPLE_WINDOW: ${RAG_METRICS_SAMPLE_WINDOW:-1024}
+      RAG_METRICS_LOG_QUERY_TEXT: ${RAG_METRICS_LOG_QUERY_TEXT:-false}
+      # --- 0.5.0 semantic answer-cache (default-off; retrieve-then-verify) ---
+      RAG_SEMANTIC_CACHE_ENABLED: ${RAG_SEMANTIC_CACHE_ENABLED:-false}
+      RAG_SEMANTIC_CACHE_THRESHOLD: ${RAG_SEMANTIC_CACHE_THRESHOLD:-0.97}
+      RAG_SEMANTIC_CACHE_EVIDENCE_JACCARD: ${RAG_SEMANTIC_CACHE_EVIDENCE_JACCARD:-0.8}
+      RAG_SEMANTIC_CACHE_TTL: ${RAG_SEMANTIC_CACHE_TTL:-86400}
+      RAG_SEMANTIC_CACHE_MAX_ENTRIES: ${RAG_SEMANTIC_CACHE_MAX_ENTRIES:-1000}
+      RAG_SEMANTIC_CACHE_SLIDING_TTL: ${RAG_SEMANTIC_CACHE_SLIDING_TTL:-false}
+      # --- 0.5.0 office ingestion (docx/xlsx/pptx) ---
+      RAG_OFFICE_XLSX_MAX_ROWS: ${RAG_OFFICE_XLSX_MAX_ROWS:-10000}
+      PROJECT_NAME: ${PROJECT_NAME:-rag-bootstrap-multikb}
+      # Auto-Ingest Watcher Configuration — DEFAULT OFF (opt-in).
+      # Fleet lesson (2026-07-04): each stack's watcher consumes one inotify
+      # instance; 5+ template-derived stacks exhausted the per-user
+      # fs.inotify.max_user_instances cap (128). Explicit ingest / periodic
+      # reconcile is the primary flow; set WATCHER_ENABLED=true only on
+      # single-instance hosts. Keep in sync with app/config.py and .env.example.
+      WATCHER_ENABLED: ${WATCHER_ENABLED:-false}
+      WATCHER_WATCH_DIR: ${WATCHER_WATCH_DIR:-/data/docs}
+      WATCHER_POLL_INTERVAL: ${WATCHER_POLL_INTERVAL:-5}
+      WATCHER_MAX_RETRIES: ${WATCHER_MAX_RETRIES:-3}
+      WATCHER_RETRY_DELAY: ${WATCHER_RETRY_DELAY:-2}
+      # Post-ingest archiving is OPT-IN (app/watcher.py reads this from the
+      # CONTAINER env): off (default — never touch source files) | copy | move.
+      WATCHER_ARCHIVE_MODE: ${WATCHER_ARCHIVE_MODE:-off}
+      # Same-path docs root + ingest-root guard (app/main.py reads BOTH from
+      # the CONTAINER env). DOCS_PATH should match the same-path :ro mount below
+      # so stored citation filepaths stay host-openable. DEFAULT-ON: DOCS_PATH
+      # falls back to the same ${PWD}/data/docs root as the :ro mount below, so
+      # the guard is ACTIVE out of the box (run compose from the repo root).
+      # Override DOCS_PATH in .env to point at your real docs root, or set
+      # RAG_INGEST_ROOT_GUARD=off to allow arbitrary container paths.
+      DOCS_PATH: ${DOCS_PATH:-${PWD}/data/docs}
+      RAG_INGEST_ROOT_GUARD: ${RAG_INGEST_ROOT_GUARD:-on}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Watch directory for auto-ingest (mount from host or external volume)
+      - ${RAG_DOCS_VOLUME:-./data/docs}:/data/docs
+      # Same-path READ-ONLY docs mount (host-openable citations) — DEFAULT-ON.
+      # The container sees the docs root at the SAME absolute path as the host,
+      # so filepaths stored at ingest time (and returned in search citations)
+      # open directly on the host. To opt out, point DOCS_PATH at any empty
+      # absolute directory. Mount is :ro — never a write path.
+      - ${DOCS_PATH:-${PWD}/data/docs}:${DOCS_PATH:-${PWD}/data/docs}:ro
+      # Multi-KB config: the image copies only app/ (PACKAGE_ROOT=/src), so
+      # config.yaml — the ONE switch that turns the /api/v2 multi-KB gateway on
+      # (knowledge_bases stanza) — MUST be mounted at the canonical in-container
+      # location app/config_manager.py resolves (/src/config/config.yaml).
+      - ./config.yaml:/src/config/config.yaml:ro
+      # Optional: Cache volumes for performance
+      - ${RAG_CACHE_VOLUME:-./data/cache}:/data/cache
+      # Optional: Logs volume for debugging
+      - ${RAG_LOGS_VOLUME:-./data/logs}:/data/logs
+    networks:
+      - rag-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v2/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    # Memory cap (fleet-resource hardening; see MEMORY CAPS header note)
+    deploy:
+      resources:
+        limits:
+          memory: ${RAG_API_MEM_LIMIT:-512m}
+    # IMPORTANT: No "ports:" section - api:8000 is NOT exposed to host
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Nginx Frontend - Web UI + Reverse Proxy
+  # ────────────────────────────────────────────────────────────────────────────
+  # ONLY PORT EXPOSED - Single entry point for all services
+  frontend:
+    image: rag-bootstrap-frontend:${RAG_IMAGE_TAG:-latest}
+    # container_name auto: <COMPOSE_PROJECT_NAME>-frontend-N (see init note)
+    ports:
+      # Bind to localhost ONLY for security (not 0.0.0.0)
+      # Format: "127.0.0.1:HOST_PORT:CONTAINER_PORT"
+      # Change RAG_PORT in .env to customize (default: 10000 = RAG_PORT_BASE+0).
+      - "127.0.0.1:${RAG_PORT:-10000}:80"
+    depends_on:
+      - api
+    networks:
+      - rag-net
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: ${RAG_FRONTEND_MEM_LIMIT:-128m}
+    # This service proxies /api/* requests to api:8000 internally
+    # Access at: http://localhost:${RAG_PORT}
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Configs — inline files mounted into containers (no extra source in the dir)
+# ══════════════════════════════════════════════════════════════════════════════
+# pgvector-into-template1 initdb hook (see postgres.configs above). Mirrors the
+# live docs-rag-exudeai scripts/init/01_template1_pgvector.sql, delivered inline
+# so an image-mode consumer needs no on-disk init script. Runs ONCE, on an empty
+# postgres volume, via the postgres image's /docker-entrypoint-initdb.d handler.
+configs:
+  pgvector_template1_init:
+    content: |
+      -- initdb hook (runs ONCE, on an empty postgres volume).
+      -- Install pgvector into template1 so every database created AFTER initdb
+      -- inherits the `vector` type. The multi-KB registry auto-creates the
+      -- ragdb_<kb> logical databases at api startup and runs create_all BEFORE
+      -- issuing CREATE EXTENSION — without this hook, create_all on a fresh KB
+      -- database fails with `type "vector" does not exist`.
+      \connect template1
+      CREATE EXTENSION IF NOT EXISTS vector;
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Volume Configuration (Bind Mounts) — DIRECT-PATH under RAG_DATA_ROOT
+# ══════════════════════════════════════════════════════════════════════════════
+# All data binds straight from RAG_DATA_ROOT (this instance's roomy drive) — NO
+# local ./data/docker layer on the home/root disk. Each source is set explicitly
+# in .env by `rag new-consumer --data-root`:
+#   ${RAG_POSTGRES_VOLUME}   -> PostgreSQL database files (all KB logical DBs; biggest volume)
+#   ${RAG_REDIS_VOLUME}      -> Redis persistence
+#   ${RAG_CACHE_VOLUME}      -> Embedding cache files
+#   ${RAG_LOGS_VOLUME}       -> Application logs
+#   ${RAG_DOCS_VOLUME}       -> Watcher drop zone / docs
+# Every source falls back to a ./data/<name> relative path so the template stays
+# portable. No named volumes are used - all bind mounts are inline in services.
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Docker Network Configuration
+# ══════════════════════════════════════════════════════════════════════════════
+# All services communicate via this isolated Docker bridge network.
+# Customize the network name via RAG_NETWORK_NAME in .env.
+# This allows multiple RAG instances to run simultaneously without conflicts.
+networks:
+  rag-net:
+    name: ${RAG_NETWORK_NAME:-rag-multikb}
+    driver: bridge

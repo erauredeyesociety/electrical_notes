@@ -1,0 +1,6 @@
+# Tunnel state — local to this machine and this boot. Never committed.
+.rh-port
+.rh-tunnel.pid
+.rh-tunnel.local
+.ollama-tunnel.pid
+.ollama-tunnel.local

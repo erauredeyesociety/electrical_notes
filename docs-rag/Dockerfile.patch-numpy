@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Local patch image for rag-bootstrap-api-multikb 0.8.3.
+#
+# WHY THIS EXISTS: the stock multi-KB image CANNOT START. app/similarity_report.py
+# line 32 does an unconditional top-level `import numpy as np`, and numpy is NOT
+# in app/requirements.txt (it appears only in the optional requirements-rerank.txt
+# and requirements-benchmark.txt). Import chain:
+#   main.py -> admin_api.py -> doc_health.py -> similarity_report.py -> numpy
+# so uvicorn dies with ModuleNotFoundError and the api container restart-loops.
+#
+# Verified on THIS image, 2026-09-04, not assumed:
+#   $ docker run --rm --entrypoint python rag-bootstrap-api-multikb:0.8.3 \
+#       -c "import app.main"
+#   ModuleNotFoundError: No module named 'numpy'
+#
+# This is the same defect ~/sys301_minesweeper/docs-rag/Dockerfile.patch-numpy
+# documents for the single-KB image at the same version; the multi-KB image
+# shares app/requirements.txt, so it inherits the bug.
+#
+# We may not edit ~/exudeai/rag-bootstrap, so the one missing dependency is
+# added in a derived image. numpy is pinned <2 to match the pin the upstream
+# template itself uses in requirements-rerank.txt.
+#
+# Build:
+#   docker build -t rag-bootstrap-api-multikb:0.8.3-en -f Dockerfile.patch-numpy .
+#
+# DELETE THIS FILE once upstream adds numpy to app/requirements.txt: rebuild with
+# `rag build --multikb-only` and set RAG_IMAGE_TAG back to the plain version.
+# ─────────────────────────────────────────────────────────────────────────────
+FROM rag-bootstrap-api-multikb:0.8.3
+
+# No USER switch: the base image runs as root and defines no unprivileged user
+# (verified: `id` -> uid=0(root), and /etc/passwd has no appuser). Adding a
+# USER line here would fail the build.
+RUN pip install --no-cache-dir "numpy<2"

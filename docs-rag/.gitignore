@@ -1,0 +1,21 @@
+# Config-safety net: never commit the real secret-bearing .env or regenerable
+# data. Only .env.example (redacted) is tracked; reconstruct .env from it and set
+# a fresh POSTGRES_PASSWORD (e.g. `openssl rand -hex 24`).
+.env
+.env.*
+!.env.example
+data/
+*.bak
+*.pre-*
+
+# Generated corpus: .tex converted to .md for ingestion (~3.5 MB, 355 files).
+# Fully regenerable with ./prepare_corpus.py; the .tex sources are tracked.
+corpus/
+
+# Tunnel state (port_forwards/.gitignore covers the rest)
+*.pid
+
+# Python bytecode. `rag new-consumer` ships client/ and ops/ as .py; running
+# them locally leaves __pycache__ behind, which would otherwise be committed.
+__pycache__/
+*.py[cod]
