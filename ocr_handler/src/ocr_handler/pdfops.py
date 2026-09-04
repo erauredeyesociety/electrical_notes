@@ -15,7 +15,11 @@ from pathlib import Path
 # and should never be sent to a recognition model. Measured on real lectures:
 # born-digital LaTeX pages run ~1500 chars/page, handwriting-scan pages ~140
 # (headers and footers only).
-TEXT_LAYER_MIN_CHARS = 400
+# Single source of truth for "is this page's text layer usable?".
+# Defined in textlayer.py and re-exported here: two independent 400s is exactly
+# the divergence this project exists to eliminate, and having it inside the
+# project would be the worst version of it.
+from .textlayer import SPARSE_CHARS as TEXT_LAYER_MIN_CHARS  # noqa: F401
 
 
 @dataclass
