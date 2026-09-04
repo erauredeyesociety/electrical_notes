@@ -1,0 +1,26 @@
+% CPSC 462 Computer Networks — course-specific macros ONLY.
+%
+% Inputted AFTER docs/latex/coursework_preamble.tex, which carries everything
+% shared (answerbox, trap, problemheader, \srcref, \extref, page style).
+% Put nothing general here: if another course would want it, it belongs in the
+% shared preamble.
+%
+% Doctrine: docs/directives/coursework-solutions.md
+
+\renewcommand{\coursename}{CPSC 462}
+
+% --- networking notation ----------------------------------------------------
+% Kept deliberately small. Add a macro when a second problem needs the same
+% notation -- not in anticipation.
+\newcommand{\Mbps}{\,\mathrm{Mb/s}}
+\newcommand{\kbps}{\,\mathrm{kb/s}}
+\newcommand{\ms}{\,\mathrm{ms}}
+\newcommand{\RTT}{\mathrm{RTT}}
+\newcommand{\dtrans}{d_{\mathrm{trans}}}   % transmission delay
+\newcommand{\dprop}{d_{\mathrm{prop}}}     % propagation delay
+\newcommand{\dproc}{d_{\mathrm{proc}}}     % processing delay
+\newcommand{\dqueue}{d_{\mathrm{queue}}}   % queuing delay
+\newcommand{\dnodal}{d_{\mathrm{nodal}}}   % total nodal delay
+
+% Protocol / header field, so packet formats render consistently.
+\newcommand{\field}[1]{\texttt{#1}}

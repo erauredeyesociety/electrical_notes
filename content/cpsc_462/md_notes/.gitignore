@@ -1,0 +1,6 @@
+# Images pulled out of the source .docx by tools/extract_notes.py. ~1.9 MB and
+# fully regenerable, so they stay out of git -- the .md files beside them are
+# small, greppable, and worth tracking.
+#
+# Regenerate:  tools/extract_notes.py --force
+media/
