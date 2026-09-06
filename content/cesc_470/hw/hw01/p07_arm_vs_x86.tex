@@ -1,5 +1,5 @@
 \input{../../../../docs/latex/coursework_preamble.tex}
-\input{../reference_docs/cesc470_macros.tex}
+\input{../../reference_docs/cesc470_macros.tex}
 
 \begin{document}
 
@@ -16,10 +16,10 @@ compatibility.
 This is the only problem on the assignment that asks for outside research, and
 it carries a quarter of the marks. The course names both ISAs
 \srcref{Module 01, PDF p25, slide 12} but does not compare them, so the
-substance must come from outside — marked with \extref{} throughout, per the
+substance must come from outside — marked as external throughout, per the
 citation policy, so lecture content and external claims stay distinguishable.
 
-Structure it as the question asks: for **each** ISA, one advantage and one
+Structure it as the question asks: for \textbf{each} ISA, one advantage and one
 disadvantage, each tied to one of the three named axes (performance, power,
 compatibility). Four claims, argued rather than asserted.
 
@@ -47,11 +47,12 @@ below:
 \subsubsection*{ARM}
 
 \paragraph{Advantage --- power efficiency (power consumption).}
+{\sloppy
 ARM's fixed-width, regularly-encoded instructions make the \emph{decoder} small
 and simple: the processor knows where each instruction begins without first
 decoding the previous one, so it can fetch and decode several in parallel with
 little logic. Fewer transistors switching per instruction means less energy per
-instruction.
+instruction.\par}
 
 This is why ARM dominates battery-powered devices, and why the design point
 matters more than any single benchmark: performance-per-watt, not peak

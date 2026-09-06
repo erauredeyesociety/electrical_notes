@@ -1,5 +1,5 @@
 \input{../../../../docs/latex/coursework_preamble.tex}
-\input{../reference_docs/cesc470_macros.tex}
+\input{../../reference_docs/cesc470_macros.tex}
 
 \begin{document}
 
@@ -23,7 +23,7 @@ Programs are stored in memory and are called machine code instructions —
 
 Ten points for two items, so one advantage and one disadvantage, each argued
 rather than merely named. The productive way to find both: ask what follows
-from instructions being *indistinguishable from data*, since that single fact
+from instructions being \emph{indistinguishable from data}, since that single fact
 is simultaneously the design's power and its weakness.
 
 \subsection*{Work}
@@ -48,7 +48,7 @@ be \emph{loaded} rather than wired in. Consequences:
 
 This is what makes the design the basis of essentially every general-purpose
 computer, and why the course frames the ISA as ``the mapping of machine code
-instructions to CPU operations'' \srcref{PDF p16} — a mapping over *stored*
+instructions to CPU operations'' \srcref{PDF p16} — a mapping over \emph{stored}
 bit patterns.
 
 \paragraph{Disadvantage — one memory, one bus: the von Neumann bottleneck.}
@@ -93,7 +93,7 @@ answer to this question should have that symmetry.
 
 \begin{answerbox}
 \textbf{Advantage — general-purpose reprogrammability.} Instructions are bit
-sequences stored in ordinary read/write memory, so a new program is *loaded*
+sequences stored in ordinary read/write memory, so a new program is \emph{loaded}
 rather than wired in, and programs (compilers, assemblers, loaders) can write
 other programs. One memory also serves both needs flexibly.
 

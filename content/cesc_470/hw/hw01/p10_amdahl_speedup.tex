@@ -1,5 +1,5 @@
 \input{../../../../docs/latex/coursework_preamble.tex}
-\input{../reference_docs/cesc470_macros.tex}
+\input{../../reference_docs/cesc470_macros.tex}
 
 \begin{document}
 
@@ -56,7 +56,7 @@ asymmetry is the entire content of Amdahl's law:
 \begin{equation}
   \speedup = \frac{\CPUtime^{\text{old}}}{\CPUtime^{\text{new}}}
            = \frac{1}{0.28}
-           = \mathbf{3.571\ldots \approx 3.57\times.}
+           = \mathbf{3.571\ldots \approx 3.57{\times}}.
 \end{equation}
 
 \paragraph{Step 4 --- the ceiling, which is what ``maximum possible'' probes.}
@@ -64,7 +64,7 @@ Even with \emph{infinitely} fast floating point ($n \to \infty$), the $0.20$
 never goes away:
 \begin{equation}
   \speedup_{\max} = \lim_{n\to\infty} \frac{1}{0.20 + \dfrac{0.80}{n}}
-                  = \frac{1}{0.20} = 5\times.
+                  = \frac{1}{0.20} = 5{\times}.
 \end{equation}
 So $3.57\times$ of a possible $5\times$ — a $10\times$ improvement to 80\% of the
 work buys about 71\% of the benefit that infinite improvement would.

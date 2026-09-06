@@ -1,0 +1,39 @@
+# CPSC 462 — build products only. ONE file at course level, not one per kind:
+# hw/, qz/ and exam/ have identical needs and three copies drift.
+#
+# Verify any change to this file with:  git check-ignore -v <path>
+
+# --- LaTeX intermediates -----------------------------------------------------
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# --- flattened self-contained copies for Overleaf ----------------------------
+# Generated output. The .tex sources beside them are tracked.
+overleaf/
+
+# --- compiled PDFs -----------------------------------------------------------
+# Named for what WE build, not "*.pdf" with negations for what we don't.
+#
+# build_tex.sh writes <basename>.pdf beside each .tex, and every .tex in an
+# assignment folder is either pNN_<slug>.tex or <kind>NN_solutions.tex. So these
+# two patterns are exactly our build products and nothing else.
+#
+# A blanket "*.pdf" plus "!HW*.pdf" negations was the old rule, and it fails the
+# wrong way: it silently untracks any instructor handout whose name was not
+# guessed in advance -- and this course's handouts are named "Lab 0",
+# "Introduction to Wireshark", "Hands on", none of which match HW*. Source
+# material going missing is worse than a stray build product showing up in
+# git status, so the rule is a whitelist of our own output.
+p[0-9][0-9]_*.pdf
+*_solutions.pdf
+
+# NOT ignored, deliberately:
+#   class_materials/*.pdf   instructor slide decks and syllabus -- source
+#   hw*/,qz*/,exam*/ *.pdf  the instructor's assignment handout -- source
+#   *.pcapng, *.pcap        packet captures this course may ship -- source,
+#                           not a build product; keep them with the solution

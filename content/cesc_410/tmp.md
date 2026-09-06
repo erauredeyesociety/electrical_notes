@@ -93,3 +93,64 @@ ship tutorials from text layer right now, and spawn parallel workflwos to work o
 
 
 ok great, now i want to get /home/devel/electrical_notes/content/cesc_470/hw/HW1.pdf completely done make sure to include fully worked step by step solution partial latex files and then have the completed solutions latex file make snese? so for homework, quizes, and exams for all courses i want worke step by step solutions for each problem with citations and then use those partials to make the quick condensed answers docuemtn, pelase update ./docs in the docs folder perhaps also apply a ~/llm-project-bootstrap/PROMPTS.md "catch up" pormpts for this repo so that the docs folder is modernized, and you don't have to worry about going back into older courses and redoing the HW and quized and tests. please only apply this new doctrine to the cesc_470, the cesc_410, the cpsc_462 courses those are the newset courses and then courses in the future will also need this doctrine applied to them, make sense? please ask questions as needed and spawn multiple workflows to get everything done.
+
+
+
+
+"""
+No PDF
+This compile didn’t produce a PDF. This can happen if:
+There is an unrecoverable LaTeX error. If there are LaTeX errors shown below or in the raw logs, please try to fix them and compile again.
+The document environment contains no content. If it’s empty, please add some content and compile again.
+This project contains a file called output.pdf. If that file exists, please rename it and compile again.
+LaTeX Error: File `../../../../docs/latex/coursework_preamble.tex' not found.
+‪./main.tex, 1‬
+The compiler cannot find the file you want to include. Make sure that you have uploaded the file and specified the file location correctly.
+Learn more
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: tex)
+
+Enter file name: 
+! Emergency stop.
+<read *> 
+         
+l.1 ..../../../docs/latex/coursework_preamble.tex}
+                                                  ^^M
+*** (cannot \read from terminal in nonstop modes)
+
+"""
+
+yeah i have to upload the preamble to my overleaf project, but even then it would be complicated, so just have a bash script htat adds preamble as needed automaticaly when you are making a new latex file for something or another. and please update all relevant documenation about all this
+
+
+ok i dont' want to git commit right now, i want all the cesc_4120, cpsc 462, and cesc 470 assignments/quizes docs all fixed and updated so that the latex also works. make sense? spawn multiple agents and workflows to get thigns done faster.
+
+
+
+please spawn multiple agents and workflows to get all the classes done in parallel? why wait? also cpsc 462 doesn't have any assignemtns right now otheriwse continue.
+
+
+also ollama should never be running on my CPU, it should only be running on my GPU, and then also if the ERAU vpn is up, thne you cannot run the qwen models locally as well to compensate for the docs rag, just tell me the ERAU VPN is down as needed. i just got the erau vpn back up. so get ollama stopped on my cpu and ban ollama scrtips from ever running models on my cpu, only my gpu is allowed make senss? and update this for ~/skytracker_v2 as well.
+
+
+"""
+the 26% CPU is the server's tokenization/HTTP overhead, not model inference.
+"""
+
+so then just never run ollama locally on the err0r machine and upate doccumenatino as needed for both this project and the skytracker_v2 project otheriwse continue
+
+
+ok well lets just have you spawn multiple workflows and see how far you get with mroe research and looking into other really good OCR systems, or perhaps image models for ollama/vllm/huggingface make sense? i cannot use models over 20B i think or whatever fits on the skytracekr rtx 5000 GPU is what we have to work with, and then i am unsure if models under 5B are any good but you are welcome to try them out. perhpas don't worry about outsourcing to skytracker just yet, just try the OCR systems that exist already without using ollama or vlllmm or huggingface, but if it gets to the point we need to start looking at those i will address it then make sense? so please make sure to follow llm project bootstrap doctrine as well to go full steam ahead for the ocr_handler child project.
+
+anything else you can get done for the ocr_handler? if so please try to contine full steam ahead and adhere to llm project bootstrap doctrine and spawn multiple workflwos for research and more
+
+
+
+
+great. so please get all relevatn documentation updated so that all findings are current and lessons learned are recorded. would this be a good point to apply the ~/llm-project-bootstrap/PROMPTS.md "save progress" prompt for electrical_notes and then teh ocr_handler child project itself? if so then please do that we need to know what to continue forward with as well.
+
+
+also for the ocr handler, you are ahdereing to llm project bootstrap doctrine and trying to not reinvent the wheel right? otherwise continue.
+
+
+/home/devel/electrical_notes/ocr_handler/tests/fixtures needs to be git ignored otherwise continue full steam and spawn multiple agents and workflwos to help with research and more. and there might be multiple OCR methods perhpas you want a module for each or soemthing? i really want to set you up for success to make as much progress as fast as possible with this ocr child project and keep following llm proejct bootstrap discipline.

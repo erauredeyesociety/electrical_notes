@@ -1,6 +1,7 @@
-# Claude entry point — CPSC 462 homework
+# Claude entry point — CPSC 462
 
-**Trigger:** *"`hwNN/` now exists with the assignment in it, work it."*
+**Trigger:** *"`hwNN/` (or `qzNN/`, `examNN/`) now exists with the assignment in
+it, work it."*
 
 **Read [`docs/directives/coursework-solutions.md`](../../../docs/directives/coursework-solutions.md) first.**
 That is the doctrine — the two-document rule, the citation rule, the verification
@@ -9,9 +10,10 @@ not repeated here.
 
 This file carries **only what is specific to CPSC 462.**
 
-> **Nothing has been assigned yet.** This folder is scaffolding: the macros file
-> and `.gitignore` are in place and smoke-tested, so the first assignment can be
-> worked immediately.
+> **Nothing has been assigned yet.** This is scaffolding. It was proved end to
+> end on 2026-09-05 with throwaway `hw99/`, `qz99/` and `exam99/` folders —
+> scaffolded, built, flattened, and every flattened file compiled standalone
+> with `tectonic` — then deleted. The first assignment can be worked immediately.
 
 ---
 
@@ -21,6 +23,38 @@ This file carries **only what is specific to CPSC 462.**
 
 Syllabus: [`../class_materials/CS 462 Syllabus_Fall26.pdf`](<../class_materials/CS 462 Syllabus_Fall26.pdf>)
 → extracted at [`../md_notes/cs_462_syllabus_fall26.md`](../md_notes/cs_462_syllabus_fall26.md)
+
+Three graded written kinds, all under the same doctrine:
+
+| Kind | Folder | Weight | Notes |
+| --- | --- | --- | --- |
+| Assignments | `hw/hwNN/` | 30% | the instructor calls them **"Hands on"** and **"Lab N"** — don't expect a file named `HW1.pdf` |
+| Quizzes | [`../qz/qzNN/`](../qz/README.md) | 10% | named by **topic**, not numbered — record which topic in the folder's `README.md` |
+| Examinations | [`../exam/examNN/`](../exam/README.md) | 30% | Exam 1 9/30/26, Exam 2 11/6/26; each covers material since the previous exam |
+
+There is also a Final Report (20%) and Class Participation (10%).
+
+---
+
+## Layout — the macros live at course level
+
+```text
+content/cpsc_462/
+├── reference_docs/       ← cpsc462_macros.tex + findings.md — ONE copy, shared
+├── hw/    prompt.md   hwNN/
+├── qz/    qzNN/
+├── exam/  examNN/
+├── class_materials/      source PDF / DOCX / PPTX
+├── md_notes/             Markdown extraction of the above — cite THIS
+├── tools/                extract_notes.py, check_links.py
+└── .gitignore            ONE file, course-wide
+```
+
+**Do not put a second `*_macros.tex` anywhere under this course.** `new_tex.sh`
+walks up from the assignment folder and takes the *nearest* match, so a second
+file would let `hw/` and `qz/` silently compile against different notation. The
+reasoning, and why the file is not under `hw/`, is in
+[`../reference_docs/findings.md`](../reference_docs/findings.md) §1.
 
 ---
 
@@ -33,14 +67,19 @@ figures; citing them means the citation is greppable.
 
 | Notes | Source | Quality |
 | --- | --- | --- |
-| [`introduction_to_wireshark.md`](../md_notes/introduction_to_wireshark.md) | `.docx` | ✅ full, 7 figures |
+| [`introduction_to_wireshark.md`](../md_notes/introduction_to_wireshark.md) | `.docx` | ✅ full, 8 figures |
 | [`application_layer.md`](../md_notes/application_layer.md) | 106-slide PDF | ✅ 453 ch/slide |
 | [`cs_462_syllabus_fall26.md`](../md_notes/cs_462_syllabus_fall26.md) | `.docx` | ✅ full |
 | [`introduction_cpsc_462.md`](../md_notes/introduction_cpsc_462.md) | 85-slide PDF | ⚠ 396 ch/slide — picture-heavy |
 | [`intro_and_syllabus.md`](../md_notes/intro_and_syllabus.md) | 6-slide PDF | ⚠ 99 ch/slide — almost all images |
 
 The two ⚠ decks carry little text. **Open the original PDF for their diagrams**
-rather than citing a page you have not seen.
+rather than citing a page you have not seen — the delay slides are in the
+picture-heavy one.
+
+**For these two decks the PDF page and the printed slide number agree** (footer
+reads `Introduction: 1-N` / `Application Layer: 2-N`), unlike the doctrine's
+usual warning. Verified over every page; re-check it for each new deck.
 
 Re-extract after new material lands:
 
@@ -53,16 +92,29 @@ content/cpsc_462/tools/extract_notes.py --list   # show the plan, change nothing
 
 ## Macros
 
-Shared preamble plus [`reference_docs/cpsc462_macros.tex`](reference_docs/cpsc462_macros.tex):
+Shared preamble plus
+[`../reference_docs/cpsc462_macros.tex`](../reference_docs/cpsc462_macros.tex):
 
-| Macro | For |
-| --- | --- |
-| `\dnodal` `\dproc` `\dqueue` `\dtrans` `\dprop` | the four delay components and their sum |
-| `\Mbps` `\kbps` `\ms` `\RTT` | link rates and times |
-| `\field{TTL}` | a protocol header field |
+| Macro | For | Evidence |
+| --- | --- | --- |
+| `\dnodal` `\dproc` `\dqueue` `\dtrans` `\dprop` | the four delay components and their sum | `Introduction CPSC 462.pdf` p50–51 |
+| `\RTT` | round-trip time, used as a coefficient (`2\RTT`) | `Application Layer.pdf` p29 |
+| `\Mbps` | link rate the way the slides write it, `Mb/s` | `Introduction CPSC 462.pdf` p33 |
+| `\field{TTL}` | a header field or a Wireshark display filter | `introduction_to_wireshark.md` |
 
 Kept deliberately small — **add a macro when a second problem needs the same
-notation, not in anticipation.**
+notation, not in anticipation.** `\kbps` and `\ms` were removed on 2026-09-05 for
+want of a user; see [`../reference_docs/findings.md`](../reference_docs/findings.md) §3
+for what was considered and rejected.
+
+**Units:** siunitx is already loaded by the shared preamble, so write
+`\SI{0.1}{\milli\second}`. Only hand-roll a unit macro where siunitx's output
+disagrees with the course's own notation — which is why `\Mbps` exists and `\ms`
+does not.
+
+**Watch the overloaded `d`:** on p51 it is both the delay symbol (`\dprop`) and
+the physical link length (`\dprop = d/s`). The course does this; be explicit
+rather than inventing a different symbol.
 
 CPSC 462 assignments are not known to state learning outcomes, so use the
 three-argument `\problemheader{n}{pts}{title}`. Switch to `\problemheaderlo` if
@@ -72,14 +124,58 @@ an assignment does state them.
 
 ## Watch for
 
-**This course may ship packet captures or code**, unlike the pure-paper courses.
-The directive says homework rarely needs a zip — check that assumption here
-before relying on it. A `.pcapng` referenced by a solution is source material,
-not a build product: keep it, and add a `.gitignore` negation if needed.
+**This course ships packet captures and hands-on labs**, unlike the pure-paper
+courses. A `.pcapng` referenced by a solution is source material, not a build
+product: keep it beside the solution. [`../.gitignore`](../.gitignore) already
+tracks it — the ignore rules name *our* build products (`pNN_*.pdf`,
+`*_solutions.pdf`, `overleaf/`, LaTeX intermediates) rather than blanket-ignoring
+`*.pdf`, so an instructor handout with an unguessable name is kept by default.
+
+Verify any ignore change with `git check-ignore -v <path>`, never by eye.
+
+---
+
+## Overleaf
+
+**Never paste a source file into Overleaf** — its relative `\input` climbs above
+the project root and cannot resolve there. Flatten first:
+
+```sh
+docs/latex/flatten_tex.sh content/cpsc_462/hw/hw01
+#   -> content/cpsc_462/hw/hw01/overleaf/*.tex   (self-contained, gitignored)
+```
+
+Scaffold new files rather than hand-writing the `\input` lines. `new_tex.sh`
+computes both the `../` depth and the macros path, for any of the three kinds:
+
+```sh
+mkdir -p content/cpsc_462/hw/hw01
+docs/latex/new_tex.sh content/cpsc_462/hw/hw01 3 some-slug --pts "10 pts"
+docs/latex/new_tex.sh content/cpsc_462/hw/hw01 --solutions
+docs/latex/build_tex.sh content/cpsc_462/hw/hw01
+```
+
+Detail: [`docs/latex/INDEX.md`](../../../docs/latex/INDEX.md)
+
+---
+
+## Before handing anything back
+
+```sh
+docs/latex/build_tex.sh content/cpsc_462/<kind>/<kind>NN     # every file builds
+docs/latex/flatten_tex.sh content/cpsc_462/<kind>/<kind>NN   # Overleaf copies
+content/cpsc_462/tools/check_links.py                        # every link resolves
+```
+
+A build that succeeds is not a document that is correct — render at least one
+page to PNG and look at it. `check_links.py` also flags a Markdown link whose
+target contains a space or parenthesis but is not wrapped in angle brackets;
+several class-materials filenames contain spaces, so write
+`[x](<../class_materials/CS 462 Syllabus_Fall26.pdf>)`.
 
 ---
 
 ## Human-only
 
-Everything in the directive's Human-only table. Submission form is
-**unconfirmed** — no assignment has been seen yet.
+Everything in the directive's Human-only table, and **all git mutations**.
+Submission form is **unconfirmed** — no assignment has been seen yet.

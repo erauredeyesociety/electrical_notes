@@ -16,7 +16,7 @@ tools/extract_notes.py --list             # show the plan, change nothing
 
 | Notes | Source used | Text quality |
 | --- | --- | --- |
-| [`introduction_to_wireshark.md`](introduction_to_wireshark.md) | `.docx` | ✅ **Full** — 19 KB, 7 figures extracted |
+| [`introduction_to_wireshark.md`](introduction_to_wireshark.md) | `.docx` | ✅ **Full** — 19 KB, 8 figures extracted |
 | [`application_layer.md`](application_layer.md) | `.pdf` (106 slides) | ✅ Good — 50 KB, 453 ch/slide |
 | [`cs_462_syllabus_fall26.md`](cs_462_syllabus_fall26.md) | `.docx` | ✅ Full — 10 KB |
 | [`introduction_cpsc_462.md`](introduction_cpsc_462.md) | `.pdf` (85 slides) | ⚠ 396 ch/slide — picture-heavy |
@@ -30,7 +30,7 @@ PDF for the diagrams.** They are flagged, not silently truncated.
 
 [`introduction_to_wireshark.md`](introduction_to_wireshark.md) is the lab
 walkthrough and the most complete document here — it came from the `.docx`, so
-it kept its formatting and its 7 figures. It covers packet-sniffer structure,
+it kept its formatting and its 8 figures. It covers packet-sniffer structure,
 the capture library, the packet analyzer, and the HTTP capture exercise.
 
 ---

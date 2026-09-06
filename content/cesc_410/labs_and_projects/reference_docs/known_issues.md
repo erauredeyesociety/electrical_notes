@@ -206,6 +206,59 @@ Layer 3 is the one that actually enforces it; 1 and 2 just keep it tidy.
 
 ---
 
+## KI-10 · `report_template.tex` did not build — it pointed at a figure that is never there
+
+**Seen in:** `reference_docs/report_template.tex` · **Status:** fixed
+
+**Symptom.** Build-checking the template failed outright:
+
+```
+Unable to load picture or PDF file 'figs/lab0_sinusoids_fig1.png'
+```
+
+**Cause.** The template's example figure named a real path from `lab00` — but
+the template does not live in `lab00`, and `figs/` is gitignored everywhere, so
+the file is absent on any fresh checkout regardless of folder. A template that
+cannot be build-checked is a template nobody notices has rotted.
+
+**Fix.** The example figure is wrapped in `\IfFileExists` with a visible
+placeholder box as the fallback, so the skeleton compiles with no figures at
+all and uses your figure once it exists. Both report files also gained
+`\graphicspath{{./}{../}}` so a copy of the document one folder down still
+resolves `figs/`.
+
+**How to catch it.** Build the template itself, not only the reports written
+from it. It is a document; treat it like one.
+
+---
+
+## KI-11 · A flattened report must never be packaged
+
+**Seen in:** auditing the Overleaf outputs, 2026-09-05 · **Status:** expected — documented, not fixable here
+
+**Symptom.** A report flattened for Overleaf opens with:
+
+```latex
+% Generated from content/cesc_410/labs_and_projects/lab00/report.tex -- edit that, not this.
+```
+
+That line matches both `reference_docs` and `labs_and_projects` in the
+submission guard's pattern, so packaging a flattened copy is refused —
+[KI-09](#ki-09--tooling-references-leaked-into-a-submitted-report) firing
+exactly as designed, on a file the flattener wrote itself.
+
+**Cause.** The flattener stamps its source path into every output. It lives
+under the shared `docs/` tree, which this course does not own.
+
+**Fix.** None needed. A report has no `\input` and needs no flattening. The
+`overleaf/` copies exist only for pasting into Overleaf and are gitignored;
+**the submission path is always `labNN/report.tex`.**
+
+**How to catch it.** The guard already catches it, before the zip exists. That
+is the point of having it.
+
+---
+
 ## Template
 
 ```markdown

@@ -144,7 +144,7 @@ Each figure: sparse samples as dots over the dense waveform (top), magnitude spe
 
 | # | Change | Why |
 | --- | --- | --- |
-| 1 | `plt.figure(1)` → `plt.figure()` in `plot_one_sinusoid_td_fd` | **Bug fix.** The function is called twice; pyplot returns the *same* Figure for a repeated number, so `fig1 is fig2` was `True`, the second call drew on top of the first, and both saved figures were one overplotted image (95410 bytes each, 4 lines instead of 2). Full write-up: [KI-01](../reference_docs/known_issues.md#ki-01--repeated-pltfigurenn-silently-overplots--figures-come-out-identical) |
+| 1 | `plt.figure(1)` → `plt.figure()` in `plot_one_sinusoid_td_fd` | **Bug fix.** The function is called twice; pyplot returns the *same* Figure for a repeated number, so `fig1 is fig2` was `True`, the second call drew on top of the first, and both saved figures were one overplotted image (95410 bytes each, 4 lines instead of 2). Full write-up: [KI-01](../reference_docs/known_issues.md#ki-01--repeated-pltfiguren-silently-overplots--figures-come-out-identical) |
 | 2 | Save `.png` alongside `.svg` in `recipes.py` | The deliverable is a screenshot of each figure and SVG does not paste reliably into a report. Handout saves SVG only. |
 
 Both are marked in the source with `DEVIATION FROM HANDOUT:` comments.

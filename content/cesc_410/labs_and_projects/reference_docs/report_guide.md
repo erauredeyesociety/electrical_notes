@@ -60,13 +60,46 @@ Two options. **LaTeX is preferred when the lab involves real math** — which is
 | --- | --- | --- |
 | Source | `labNN/report.md` | `labNN/report.tex` |
 | Math | fenced `$…$`, renders inconsistently | native, unambiguous |
-| Overleaf | no | **paste and go** |
+| Overleaf | no | **paste and go** — the report has no `\input` to resolve |
 | Figures | relative links | `\includegraphics` |
 | Check it builds | — | `tools/render_reports.sh labNN` |
 
 > **Keep reports free of tooling references.** A report is a submitted document; nothing in it should name a script, a flag or a repository path. Build and packaging instructions live in this guide, not in the `.tex`. Packaging strips LaTeX comment-only lines and then **refuses to build the zip** if any tooling reference survives — see [KI-09](known_issues.md#ki-09--tooling-references-leaked-into-a-submitted-report).
 
 Start from [`report_template.tex`](report_template.tex) — a complete standalone document with the four sections, a worked equation, a code listing and a figure already wired up.
+
+### The report keeps its own preamble — deliberately
+
+The homework side of this course shares one preamble across every problem file.
+**Lab reports do not, and must not.** The reasons, in order of weight:
+
+1. **A handed-in `.tex` has to compile wherever the reader puts it.** A shared
+   preamble is reached by a relative path that resolves only at one exact depth
+   inside this repository. Packaging copies `report.tex` into a staging folder;
+   at that point the path is dead and the TA's copy does not build.
+2. **The packaging guard would reject it.** The guard scans every `.tex` about
+   to ship for repository paths, and an `\input` of a course macros file is a
+   *non-comment* line — comment stripping cannot save it, so the zip is refused.
+   Confirmed by running the guard against exactly that line.
+3. **Different document shape.** A report is prose and figures under a title
+   block. It wants no running head, no answer box, no problem header — which is
+   most of what a solutions preamble exists to provide — and it does need
+   `listings`, which that preamble does not load.
+
+The overlap is four `\usepackage` lines, a margin and a `captionsetup`. That is
+the whole cost, and both `report_template.tex` and `lab00/report.tex` carry a
+header comment saying so, so the duplication is not mistaken for an oversight.
+
+### The figure in the template is guarded
+
+`figs/` is gitignored, so a fresh copy of the template has no figures and used
+to fail to build on a missing image. The template now wraps its example figure
+in `\IfFileExists` and falls back to a visible placeholder box, so the skeleton
+compiles before you have generated anything. Drop the guard and keep the plain
+`\includegraphics` line once your own figure is in place.
+
+Both report files also set `\graphicspath{{./}{../}}`, so a copy of the document
+sitting one folder down still finds `figs/`.
 
 ```sh
 cp reference_docs/report_template.tex lab01/report.tex
@@ -75,6 +108,19 @@ tools/render_reports.sh lab01
 ```
 
 **`tools/render_reports.sh` is the only script that renders.** `make_submission.sh --figures` calls it rather than invoking tectonic itself, so rendering behaviour lives in one place.
+
+> Use it rather than the shared homework build-checker. That one **deletes the
+> PDF** unless asked not to, which is the opposite of what a report wants.
+
+### If you flatten a report for Overleaf
+
+A report needs no flattening — it has no `\input`. Flattening one anyway
+produces a byte-identical render (verified on `lab00`: 4 pages, same extracted
+text, same four images) and lands in `labNN/overleaf/`, which is gitignored.
+
+⚠ **Never package a flattened copy.** The flattener writes the source path into
+the file's header, and the submission guard refuses to build a zip containing a
+repository path. The submission path is always `labNN/report.tex`.
 
 **PDFs are kept, not deleted.** They are gitignored (`report*.pdf`), so the built report is on hand without a rebuild and still never enters the repo. The `.tex` remains the source you paste into Overleaf; the PDF is what a reader opens.
 

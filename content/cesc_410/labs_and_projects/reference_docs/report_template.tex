@@ -5,6 +5,21 @@
 % packaging instructions belong in reference_docs/report_guide.md, not here.
 % Comment-only lines are stripped at package time as a backstop, but do not
 % rely on that.
+%
+% DELIBERATE EXCEPTION: a lab report keeps its OWN preamble and does not
+% \input the shared coursework preamble the homework solutions use. Three
+% reasons, in order of weight:
+%   1. A handed-in .tex has to compile wherever the reader puts it. A shared
+%      preamble is reached by a relative path that resolves only at one exact
+%      depth inside this repository, so the submitted copy would not build.
+%   2. The packaging check rejects a repository path on a non-comment line,
+%      and an \input of the course macros file is exactly that.
+%   3. A report is prose plus figures under a title block. It wants no running
+%      head, no answer box and no problem header -- which is most of what the
+%      shared preamble exists to provide. It also needs listings, which the
+%      shared preamble does not load.
+% The overlap is four package lines, a margin and a captionsetup. That is the
+% whole price, and it buys a document that stands on its own anywhere.
 
 \documentclass[11pt]{article}
 
@@ -16,6 +31,10 @@
 \usepackage{xcolor}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{caption}
+
+% Look for figures beside this file first, then one level up. The second entry
+% lets a copy of this document sitting in a subfolder still find figs/.
+\graphicspath{{./}{../}}
 
 % Code style: Courier New equivalent at 10pt, per the CEC 320 template's
 % "code in Courier New 12, single spacing". Light background, no dark blocks --
@@ -70,9 +89,16 @@ def plot_one_sinusoid_td_fd(Am, Fr, Ph, ...):
     X_F = np.abs(np.fft.fftshift(X_s))
 \end{lstlisting}
 
+% Figures are generated into figs/ and are not stored alongside this
+% template, so the guard below lets the skeleton compile before any figure
+% exists. Once your own figure is in place it is used instead. Drop the guard
+% and keep only the \includegraphics line when you fill this in.
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.8\textwidth]{figs/lab0_sinusoids_fig1.png}
+  \IfFileExists{figs/lab0_sinusoids_fig1.png}
+    {\includegraphics[width=0.8\textwidth]{figs/lab0_sinusoids_fig1.png}}
+    {\fbox{\parbox[c][0.3\textwidth][c]{0.78\textwidth}{\centering\itshape
+       figure placeholder --- replace with your own generated figure}}}
   \caption{Single sinusoid, $A=1$, $f=4$\,Hz, $\phi=\pi/4$. Sparse samples
            (dots) over the dense waveform (line), with the magnitude
            spectrum below.}

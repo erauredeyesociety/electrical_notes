@@ -6,9 +6,18 @@ Six problems. Each has its own `.tex` with full step-by-step work;
 [`hw01_solutions.tex`](hw01_solutions.tex) is the condensed answers-only version.
 
 ```sh
-../tools/build_tex.sh hw01              # build-check everything
-../tools/build_tex.sh hw01 --keep       # ...and keep the PDFs
+# from the REPO ROOT; the shared tooling takes repo-relative paths
+docs/latex/build_tex.sh  content/cesc_410/hw/hw01           # build-check everything
+docs/latex/build_tex.sh  content/cesc_410/hw/hw01 --keep    # ...and keep the PDFs
+docs/latex/flatten_tex.sh content/cesc_410/hw/hw01          # self-contained Overleaf copies
 ```
+
+All seven files build, and all seven flatten to `hw01/overleaf/` and compile
+standalone from there — verified by running `tectonic` on each flattened copy,
+not just by flattening successfully. `overleaf/` is gitignored and regenerable.
+
+`../tools/build_tex.sh hw01` still works and takes paths relative to
+`content/cesc_410/hw/`, but the shared checker is the one to use.
 
 ---
 

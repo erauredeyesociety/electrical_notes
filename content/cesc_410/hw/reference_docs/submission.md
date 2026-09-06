@@ -23,11 +23,40 @@
 
 ## Producing the PDF
 
+Run from the **repo root**; paths are repo-relative:
+
 ```sh
-tools/build_tex.sh hw01 --keep      # keeps the PDFs
+docs/latex/build_tex.sh content/cesc_410/hw/hw01 --keep     # keeps the PDFs
 ```
 
+`../tools/build_tex.sh hw01 --keep` still works and takes paths relative to
+`content/cesc_410/hw/`, but the shared checker is the one to prefer — it is the
+same script every course uses, so a fix lands everywhere at once.
+
 For a single combined document, build `hw01_solutions.tex`, or make a wrapper that `\include`s each problem file.
+
+## If the deliverable goes through Overleaf
+
+**Never paste a source file in.** Its `\input` climbs above the project root and
+cannot resolve there. Flatten first:
+
+```sh
+docs/latex/flatten_tex.sh content/cesc_410/hw/hw01
+#   -> content/cesc_410/hw/hw01/overleaf/*.tex   (gitignored, regenerable)
+```
+
+Each output is self-contained: paste or upload one and it needs no other file.
+Verified for HW1 — all seven flattened copies compile on their own.
+
+Two things to know before handing a flattened copy to anyone:
+
+- The flattener writes a two-line header naming the **source path it came
+  from**. That is a repository path in a document that may be submitted. Delete
+  those two comment lines from anything you hand in. (It never renders — a
+  LaTeX comment does not reach the PDF — so this only matters if the `.tex`
+  itself is the deliverable.)
+- **Edit the source, never the flattened copy.** `overleaf/` is overwritten on
+  the next run.
 
 **Check any submitted `.tex` or PDF carries no tooling references** — no script names, flags, or repository paths. Same rule as the labs ([`../../labs_and_projects/reference_docs/code_separation.md`](../../labs_and_projects/reference_docs/code_separation.md)).
 

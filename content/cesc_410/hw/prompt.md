@@ -2,6 +2,10 @@
 
 **Trigger:** *"`hwNN/` now exists with the assignment in it, work it."*
 
+Same file governs **quizzes and exams** — `qz/qzNN/` and `exam/examN/` use an
+identical structure. One extra step applies to them: see
+[Quizzes and exams](#quizzes-and-exams).
+
 Read this, then the docs it points at, then work. Stop only for [Human-only](#human-only).
 
 Sibling setup for the lab course: [`../labs_and_projects/prompt.md`](../labs_and_projects/prompt.md). Same instructor, same conventions — but **homework is LaTeX, not Markdown**, and usually involves no code and no zip.
@@ -58,7 +62,7 @@ CESC 410 macros, then builds by itself, so a broken problem is found where it br
 
 ```latex
 \input{../../../../docs/latex/coursework_preamble.tex}
-\input{../reference_docs/cesc410_macros.tex}
+\input{../../reference_docs/cesc410_macros.tex}
 \begin{document}
 ```
 
@@ -110,6 +114,11 @@ End with the result in an `answerbox`. That is what the solutions document lifts
 docs/latex/build_tex.sh content/cesc_410/hw/hwNN
 ```
 
+Pointed at `reference_docs/` instead, it reports **two expected failures** —
+`cesc410_macros.tex` and `cesc410_preamble.tex` are preamble fragments with no
+`\begin{document}` and cannot compile alone. That is what makes them
+fragments. Do not "fix" them. Only `problem_template.tex` builds there.
+
 **A document that compiles is not a document that is correct.** `OK` says
 nothing about layout: it did not catch the y-label being drawn straight through
 the tallest stem, or `\angle -75°` rendering as a subtraction. Render to PNG and
@@ -133,6 +142,61 @@ What is done, what is blocked, and everything from [Human-only](#human-only).
 
 ---
 
+## Overleaf
+
+**Never paste a source file into Overleaf** — its relative `\input` climbs above
+the project root and cannot resolve there. Flatten first:
+
+```sh
+docs/latex/flatten_tex.sh content/cesc_410/hw/hw02
+#   -> content/cesc_410/hw/hw02/overleaf/*.tex   (self-contained, gitignored)
+```
+
+**Then compile what it wrote.** Flattening only proves no `\input` survived; it
+does not build the output, so those are two different claims:
+
+```sh
+cd content/cesc_410/hw/hw02/overleaf && for f in *.tex; do tectonic "$f"; done
+```
+
+The output carries a two-line header naming the source path. It never reaches
+the PDF, but delete it if the `.tex` itself is the deliverable
+([HW-10](reference_docs/findings.md#hw-10--the-flattener-stamps-the-source-path-into-its-own-output)).
+
+Scaffold new files rather than hand-writing the `\input` lines:
+
+```sh
+docs/latex/new_tex.sh content/cesc_410/hw/hw02 3 some-slug --pts "10 pts" --lo LO01
+```
+
+Detail: [`docs/latex/INDEX.md`](../../../docs/latex/INDEX.md)
+
+---
+
+## Quizzes and exams
+
+Same doctrine, same two-document rule, same five-section problem file. A quiz
+lives at `content/cesc_410/qz/qzNN/`, an exam at `content/cesc_410/exam/examN/`.
+
+**CESC 410 has exactly one macros file and all three kinds share it.** Do not
+create `qz/reference_docs/` — a second `*_macros.tex` for one course lets `hw/`
+and `qz/` diverge silently, and `new_tex.sh` warns about it by name.
+
+`new_tex.sh` **cannot** scaffold a quiz today: its search for the macros file
+does not reach a sibling kind's folder, so it exits without writing anything.
+Copy the template and correct the one `\input` line instead:
+
+```latex
+\input{../../../../docs/latex/coursework_preamble.tex}
+\input{../../reference_docs/cesc410_macros.tex}
+```
+
+Full recipe, and the open layout question behind it:
+[`reference_docs/hw_workflow.md`](reference_docs/hw_workflow.md#quizzes-and-exams) ·
+[HW-11](reference_docs/findings.md#hw-11--new_texsh-cannot-reach-a-sibling-kinds-macros-file).
+
+---
+
 ## Human-only
 
 | Task | Why |
@@ -152,6 +216,7 @@ What is done, what is blocked, and everything from [Human-only](#human-only).
 - **Never cite a lecture you have not read.** `course_text.py --grep` first; `NO-TEXT` documents are not searchable.
 - **Homework rarely ships code or a zip** — unlike the labs. Check before assuming.
 - PDFs are build products: gitignored, rebuilt by `docs/latex/build_tex.sh`.
+- `overleaf/` is generated output, gitignored at any depth. **Edit the source, never the flattened copy** — it is overwritten on the next run.
 
 ---
 

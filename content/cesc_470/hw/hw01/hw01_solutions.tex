@@ -1,5 +1,5 @@
 \input{../../../../docs/latex/coursework_preamble.tex}
-\input{../reference_docs/cesc470_macros.tex}
+\input{../../reference_docs/cesc470_macros.tex}
 
 % CONDENSED ANSWER SHEET. Final answers only -- no derivations.
 % Assembled by lifting the answerbox from each per-problem file:
@@ -101,7 +101,9 @@ organization, not ISA.)}
 \begin{center}
 % Middle column at 3.0cm hyphenated "Power con-sumption" / "Decode com-plexity";
 % 3.9cm fits both on one line. Last column reduced to keep the total width.
-\begin{tabular}{@{}p{0.5cm}p{3.9cm}p{10.3cm}@{}}
+% Both text columns are ragged right: justifying them stretched "Decode
+% complexity" across the cell and hyphenated "performance-per-watt".
+\begin{tabular}{@{}p{0.5cm}>{\raggedright\arraybackslash}p{3.9cm}>{\raggedright\arraybackslash}p{10.3cm}@{}}
   \toprule
   \multicolumn{3}{@{}l}{\textbf{ARM}} \\
   \midrule
@@ -154,7 +156,7 @@ Equivalently $600\ \text{MHz} \times 1.5 \times 2$ — the clock must cover
 \textbf{(a)} $\;\CPI = (0.40)(1) + (0.40)(2) + (0.20)(3) = 0.4+0.8+0.6
   = \mathbf{1.8}$ cycles/instruction.
 
-\textbf{(b)} $\;\CPUtime = \IC \times \CPI \times \cycletime
+\noindent\textbf{(b)} $\;\CPUtime = \IC \times \CPI \times \cycletime
   = (10^{6})(1.8)(1\ \text{ns}) = 1.8\times10^{6}\ \text{ns}
   = \mathbf{1.8\ \text{ms}}$.
 

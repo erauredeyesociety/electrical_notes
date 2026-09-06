@@ -1,4 +1,16 @@
 % CESC 410L -- Lab 0. Figures only, per the handout.
+%
+% DELIBERATE EXCEPTION: this report carries its own preamble rather than
+% sharing the one the homework solutions use. In order of weight:
+%   1. A handed-in .tex has to compile wherever the reader puts it. A shared
+%      preamble is reached by a relative path that resolves only at this
+%      file's exact depth, so the submitted copy would not build.
+%   2. The packaging check rejects a repository path on a non-comment line,
+%      and an \input of the course macros is exactly that.
+%   3. A report is prose plus figures under a title block. It wants no running
+%      head, no answer box and no problem header -- which is most of what the
+%      shared preamble exists to provide.
+% The overlap is four package lines and a margin. That is the whole price.
 
 \documentclass[11pt]{article}
 
@@ -6,6 +18,10 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{float}
+
+% Look for figures beside this file first, then one level up. The second entry
+% lets a copy of this document sitting in a subfolder still find figs/.
+\graphicspath{{./}{../}}
 
 \setlength{\parindent}{0pt}
 

@@ -7,11 +7,13 @@ Ten problems. Each has its own `.tex` with full step-by-step work and citations;
 
 ```sh
 # from the repo root — paths are repo-relative
-docs/latex/build_tex.sh content/cesc_470/hw/hw01           # build-check all
-docs/latex/build_tex.sh content/cesc_470/hw/hw01 --keep    # ...and keep the PDFs
+docs/latex/build_tex.sh   content/cesc_470/hw/hw01           # build-check all 11
+docs/latex/build_tex.sh   content/cesc_470/hw/hw01 --keep    # ...and keep the PDFs
+docs/latex/flatten_tex.sh content/cesc_470/hw/hw01           # -> overleaf/ (gitignored)
 ```
 
-Doctrine: [`docs/directives/coursework-solutions.md`](../../../../docs/directives/coursework-solutions.md)
+Doctrine: [`docs/directives/coursework-solutions.md`](../../../../docs/directives/coursework-solutions.md) ·
+course traps: [`../../reference_docs/findings.md`](../../reference_docs/findings.md)
 
 ---
 
@@ -55,18 +57,41 @@ $5+10+5+10+5+3+25+15+12+10 = 100$.
 
 ## Verification
 
-Every quantitative answer was recomputed independently, not just re-derived:
+**Numbers — recomputed from the handout in Python, not re-read from the `.tex`**
+(2026-09-05). Every quantitative answer agreed, each by at least two independent
+routes:
 
-- **Q3** — $2^{32} = 4{,}294{,}967{,}296$, cross-checked as $4 \times 1024^3$.
-- **Q8** — two independent routes agree on 1.8 GHz: absolute cycle counts
-  ($1.08\times10^{10} \to 1.62\times10^{10}$, ÷ 9 s), and pure ratios
-  ($600\,\text{MHz} \times 1.5 \times 2$). Substituting back gives exactly 9 s.
-  The naive 1.2 GHz is recorded as the trap.
-- **Q9** — CPI 1.8 confirmed two ways (fractional weights; and counts, 18/10).
-  Execution time confirmed via cycle time *and* via clock rate (1 GHz). Bounds
-  check: CPI must lie in $[1,3]$ and below 2 given the mix — 1.8 does.
-- **Q10** — 3.5714× confirmed with concrete numbers (100 s → 28 s) as well as
-  normalised fractions; ceiling $1/0.2 = 5$ verified as the $n\to\infty$ limit.
+| # | Independent routes | Agrees |
+| --- | --- | --- |
+| 3 | $2^{32}$ direct; and $4 \times 1024^{3}$; range of a `uint32` | ✅ 4,294,967,296 |
+| 8 | absolute cycles ($1.08{\times}10^{10} \to 1.62{\times}10^{10}$, ÷ 9 s); pure ratios ($600\ \text{MHz} \times 1.5 \times 2$); back-substitution returns exactly 9 s | ✅ 1.8 GHz |
+| 9 | fractional weights; integer counts (18/10); explicit $10^{6}$-instruction mix; and via clock rate (1 GHz) | ✅ CPI 1.8, 1.8 ms |
+| 10 | normalised fractions; concrete 100 s → 28 s; ceiling as the numerical $n\to\infty$ limit | ✅ 3.5714×, 5× |
+
+Bounds held too: CPI must lie in $[1,3]$ and below 2 given the mix (1.8 does);
+speedup must satisfy $1 < S < 5$ (3.57 does). The naive **1.2 GHz** for Q8 is
+recorded as the trap — it ignores the $1.5\times$ cycle penalty.
+
+**Citations — spot-checked against the deck.** The six pages carrying the load
+(PDF p13, 23, 29, 31, 55, 86) were opened and matched to their printed slide
+numbers (6, 11, 15, 16, 32, 49). Offset is PDF page − 7 for this deck.
+
+**Documents — built, flattened, compiled standalone, and looked at.**
+
+| Check | Result |
+| --- | --- |
+| `build_tex.sh` on all 11 `.tex` | 11/11 OK |
+| `flatten_tex.sh` → `overleaf/` | 11/11, no surviving `\input` |
+| `tectonic` on each of the 11 flattened copies | **11/11 compile standalone** |
+| Repo paths / script names in the flattened output | none |
+| Overfull / underfull boxes | **0 / 0** |
+| Pages rendered to PNG and inspected | page 1 of all 10 problem files, every page of p04/p07/p10, all 3 solutions pages |
+
+Six layout and markup defects were found by *looking* that the build had passed
+silently — Markdown asterisks printing literally, an empty `[external: ]`
+citation, a table 45.7 pt past the right margin, a stretched table cell, a
+dangling `×`, and a swallowed space. All fixed; none touched an answer.
+Detail: [`../../reference_docs/findings.md`](../../reference_docs/findings.md).
 
 ---
 
@@ -85,11 +110,23 @@ only 3.57× misses what "maximum possible" points at. See
 
 ## Q7 is the only problem needing outside sources
 
-It says *"Research and compare…"*, so the course materials are genuinely silent.
-External claims are marked with `\extref{}`, which renders in a different colour
-so they are never confused with lecture content. Everything else cites
+It says *"Research and compare…"*, so the course materials are genuinely silent —
+and it is worth 25 of the 100 points. External claims are marked with
+`\extref{}`, which renders in a different colour so they are never confused with
+lecture content. Everything else cites
 [`../../Module 01 Introduction to computer technology & ISA (1).pdf`](<../../Module 01 Introduction to computer technology & ISA (1).pdf>)
 by PDF page and slide number.
+
+## Two handout typos, restated rather than reproduced
+
+- The header reads **"CEC 470"**; the syllabus says **CESC 470** throughout.
+- Q8 reads *"Given that **Computer** requires 1.5× more cycles"* — it must mean
+  **Computer B**, since A's cycle count is derived from its own given time and
+  clock rate. [`p08_target_clock_rate.tex`](p08_target_clock_rate.tex) states
+  "Computer B".
+
+Neither changes what is being asked, so neither is flagged on the face of the
+document.
 
 ---
 
@@ -100,3 +137,7 @@ syllabus states homework *"must be typed and converted to pdf for submission"*
 ([`../../cesc_470.pdf`](../../cesc_470.pdf)), so a single PDF to Canvas is the
 likely form. Confirm whether the per-problem work is submitted or only the
 solutions document before turning anything in.
+
+For Overleaf, upload from [`overleaf/`](overleaf/) — never a source file, whose
+relative `\input` cannot resolve above an Overleaf project root. That folder is
+generated output and gitignored; edit the sources, then re-flatten.

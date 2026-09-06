@@ -70,7 +70,7 @@ it is the only cheap check that catches a dropped problem.
   10 ∠ −75°       right
 ```
 
-**Fixed in `reference_docs/cesc410_macros.tex`.** `\phasor` wraps its second
+**Fixed in `../reference_docs/cesc410_macros.tex`.** `\phasor` wraps its second
 argument in `\mathord{}`, which starts a fresh math list so the sign is unary.
 Use `\phasor{10}{-75^\circ}` and it comes out right; do not hand-write `\angle`
 in problem files.
@@ -126,7 +126,7 @@ With `axis lines=middle`, pgfplots centres the y-label at mid-height **on the
 y-axis**, which is exactly where a full-height stem at $n = 0$ is drawn. The
 label and the tallest sample overlap.
 
-**Fixed in `reference_docs/cesc410_macros.tex`** by anchoring the label to the
+**Fixed in `../reference_docs/cesc410_macros.tex`** by anchoring the label to the
 axis box corner:
 
 ```latex
@@ -160,4 +160,125 @@ gitignore has a negation; "it looks right" is not a check.
 
 ---
 
-**Related:** [`hw_workflow.md`](hw_workflow.md) · [`../prompt.md`](../prompt.md) · [`submission.md`](submission.md)
+## HW-08 — `build_tex.sh <folder>` also tries to build the preamble fragments
+
+**Found:** auditing every `.tex` in the course, 2026-09-05.
+
+`build_tex.sh` builds **every** `.tex` in a folder it is pointed at. Pointed at
+`reference_docs/`, that includes two files that are not documents:
+
+```
+reference_docs/cesc410_macros.tex     FAIL  Command \coursename undefined
+reference_docs/cesc410_preamble.tex   FAIL  no legal \end found
+reference_docs/problem_template.tex   OK
+```
+
+Both failures are **correct**. `cesc410_macros.tex` `\renewcommand`s
+`\coursename`, which the shared preamble must have `\providecommand`ed first,
+and it has no `\begin{document}`; `cesc410_preamble.tex` is a comment-only
+tombstone. A fragment that compiled alone would not be a fragment.
+
+**Rule: do not "fix" a fragment by making it build.** Build the template by
+name, and read a folder-level FAIL against the list above before believing it.
+
+---
+
+## HW-09 — A flattened file that flattens is not a flattened file that compiles
+
+**Found:** auditing the Overleaf outputs, 2026-09-05.
+
+`flatten_tex.sh` guarantees exactly one thing: no `\input` survived. It never
+builds what it wrote, so "flattened OK" and "compiles in Overleaf" are separate
+claims and only one of them was being checked.
+
+**Check both:**
+
+```sh
+docs/latex/flatten_tex.sh content/cesc_410/hw/hw01
+cd content/cesc_410/hw/hw01/overleaf && for f in *.tex; do tectonic "$f"; done
+```
+
+Result on 2026-09-05: all 7 HW1 outputs compiled, plus
+`reference_docs/problem_template.tex`. Nothing needed fixing — but nothing had
+been *verified* either.
+
+**Generalises past LaTeX:** a generator that validates its own output against a
+weaker property than the one you care about will pass forever while shipping
+broken artifacts.
+
+---
+
+## HW-10 — The flattener used to stamp a repo path into its output ✅ FIXED
+
+**Found:** grepping the flattened copies for tooling references, 2026-09-05.
+**Fixed:** same day, in `docs/latex/flatten_tex.sh`.
+
+Flattened files used to open with a second line naming the full source path
+(`content/cesc_410/labs_and_projects/lab00/report.tex`) — a repository path in a
+document that might be submitted, emitted by the tool that enforces the
+no-tooling-references rule everywhere else. The header now carries only the
+**basename**, which locates the source without naming a path.
+
+**⚠ The original write-up of this finding overstated the consequence**, and the
+correction is the useful part:
+
+> "Lab reports: blocking. The lab packaging guard scans `.tex` for tooling
+> references and refuses to build the zip."
+
+**That was wrong on two independent counts.** Both were tested, not reasoned
+about:
+
+1. **The strip runs BEFORE the guard.** `make_submission.sh` pipes the staged
+   `report.tex` through `strip_comments.py` (which removes comment-only lines),
+   and only *then* runs `find_tooling_refs` on the result. The header was a
+   comment-only line, so it never reached the guard. Verified by running the
+   project's own `strip_tex` + `find_tooling_refs` in that order: **CLEAN**.
+2. **The packager never sees the flattened copy anyway.** It copies
+   `$LAB/report.tex` — the source — into the staging folder. `overleaf/` is not
+   in the packaged set.
+
+So packaging was never blocked. The path in the header was still worth removing,
+which is why it was, but the finding as first written would have sent a future
+session chasing a failure that could not occur.
+
+**The transferable lesson: check the ORDER of a pipeline's stages before
+concluding one of them rejects your input.** "A guard matches this pattern" is
+not the same as "the guard sees this text."
+
+---
+
+## HW-11 — `new_tex.sh` cannot reach a sibling kind's macros file
+
+**Found:** working out how a `qz01/` would be scaffolded, 2026-09-05.
+
+The scaffolder walks up from the target folder running
+`find <ancestor> -maxdepth 2 -path '*/reference_docs/*_macros.tex'`. From
+`content/cesc_410/qz/qz01` that sees `qz/reference_docs/` and
+`content/cesc_410/reference_docs/` — but **not** `hw/reference_docs/`, which
+sits three levels below the common ancestor. It exits 1 before writing a file:
+
+```text
+error: no reference_docs/*_macros.tex found at or above content/cesc_410/qz/qz01.
+```
+
+**The tempting fix is the wrong one.** Creating
+`qz/reference_docs/cesc410_macros.tex` makes the scaffolder work and triggers
+this, correctly:
+
+```text
+WARNING: 2 macros files for course 'cesc_410':
+         Two files means hw/ and qz/ can silently diverge.
+```
+
+Two macros files for one course is a silent-wrong-answer bug: `hw/` and `qz/`
+compile against different notation and nothing errors.
+
+**So: one macros file per course, and a quiz reaches across to it** —
+`\input{../../reference_docs/cesc410_macros.tex}` — copying
+`problem_template.tex` rather than scaffolding. Verified end to end on a
+throwaway `qz99/`: built, flattened, and the flattened copies compiled with the
+DSP macros inlined. Detail: [`hw_workflow.md`](hw_workflow.md#quizzes-and-exams).
+
+---
+
+**Related:** [`hw_workflow.md`](hw_workflow.md) · [`../prompt.md`](../prompt.md) · [`submission.md`](submission.md) · [`../hw01/README.md`](../hw01/README.md)

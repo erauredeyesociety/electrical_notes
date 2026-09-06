@@ -1,0 +1,52 @@
+% CPSC 462 Computer Networks — course-specific macros ONLY.
+%
+% Inputted AFTER docs/latex/coursework_preamble.tex, which carries everything
+% shared (answerbox, trap, problemheader, \srcref, \extref, page style).
+% Put nothing general here: if another course would want it, it belongs in the
+% shared preamble.
+%
+% ONE file for the whole course, at course level rather than under hw/. The
+% syllabus grades homework, quizzes AND two exams, so hw/, qz/ and exam/ are
+% siblings; a macros file inside any one of them would either be unreachable
+% from the other two or get copied and drift.
+%
+% Doctrine: docs/directives/coursework-solutions.md
+
+\renewcommand{\coursename}{CPSC 462}
+
+% --- packet delay -----------------------------------------------------------
+% The course's own notation, copied off the slide rather than invented:
+%   dnodal = dproc + dqueue + dtrans + dprop     Introduction, PDF p50, slide 1-50
+%   dtrans = L/R,  dprop = d/s                   Introduction, PDF p51, slide 1-51
+% The slide sets an italic d with upright subscripts, which is what these give.
+\newcommand{\dnodal}{d_{\mathrm{nodal}}}
+\newcommand{\dproc}{d_{\mathrm{proc}}}
+\newcommand{\dqueue}{d_{\mathrm{queue}}}
+\newcommand{\dtrans}{d_{\mathrm{trans}}}
+\newcommand{\dprop}{d_{\mathrm{prop}}}
+
+% Round-trip time. Upright, because the slides treat it as a name and use it as
+% a coefficient -- "non-persistent HTTP response time = 2RTT + file
+% transmission time".                       Application Layer, PDF p29, slide 2-29
+\newcommand{\RTT}{\mathrm{RTT}}
+
+% --- link rate --------------------------------------------------------------
+% The decks write "R = 100 Mb/s" (Introduction, PDF p33, slide 1-33). siunitx is
+% loaded by the shared preamble, but \unit{\mega\bit\per\second} renders as
+% "Mbit s^{-1}", which is not what this course writes. Hence one shorthand.
+\newcommand{\Mbps}{\,\mathrm{Mb/s}}
+
+% --- protocol / packet header field -----------------------------------------
+% \field{Dest Port}, \field{TTL}, \field{http.request.method}. A packet-analysis
+% course names fields and display filters constantly, and they must not be
+% mistaken for prose or for a variable.
+\newcommand{\field}[1]{\texttt{#1}}
+
+% Kept deliberately small. Add a macro when a SECOND problem needs the same
+% notation -- not in anticipation.
+%
+% Removed 2026-09-05 for want of a user (see reference_docs/findings.md):
+%   \kbps  "kb/s" and "kbps" appear nowhere in the course notes. The nearest
+%          hit is "L = 10 Kbits", which is a quantity of bits, not a rate.
+%   \ms    a generic unit shorthand, not networks notation, and siunitx already
+%          renders \unit{\milli\second} as "ms" correctly.
