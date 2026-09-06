@@ -67,3 +67,15 @@ htmlcov/
 # pyproject.toml -> commit
 # docs/          -> commit; the research is the most valuable artifact here
 # src/, tests/   -> commit
+
+# Test fixtures. Operator's call, 2026-09-06.
+#
+# ⚠ WHAT IS IN HERE IS NOT REGENERABLE BY RUNNING ANYTHING. ground_truth/ holds 236 rows of
+# HAND-LABELLED pages -- labels.csv (161) and shred_sweep_labels.csv (75) -- produced by reading
+# rendered pages one at a time. They are the evidence behind the shipped precision/recall numbers
+# (strict precision 93.1%, recall 68.2%; see docs/findings/recall-was-a-symbol-test-not-a-run-length.md).
+# 120 KB, all text, no binaries.
+#
+# Being ignored means `git clean -fdx` deletes them permanently. To keep a copy under version
+# control without un-ignoring the folder:  git add -f tests/fixtures/ground_truth/*.csv
+tests/fixtures/

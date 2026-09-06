@@ -3,6 +3,20 @@
 Everything here is deterministic and cheap. Run it before reaching for any
 model -- most pages need no recognition at all, and this module is what proves
 which ones those are.
+
+**Classification lives in `textlayer.py` and nowhere else.** This module used
+to carry a second implementation of it, on a second PDF library: poppler's
+`pdftotext` + `pdfimages` behind subprocess, with its own 400-char threshold.
+Two libraries answering one question is the exact divergence this project
+exists to end, and ADR-0001 said so. `inspect` / `inspect_all` / `page_count` /
+`page_text` / `producer` are now thin views over `textlayer.extract`, so there
+is one classifier, on PyMuPDF, with one threshold.
+
+What that convergence CHANGED is measured, not assumed:
+docs/findings/one-classifier-2026-09-06.md.
+
+`render` is the one poppler call left, and it is deliberate -- see its
+docstring. Removing it is roadmap M4, not M2.
 """
 
 from __future__ import annotations
@@ -11,10 +25,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-# A page with more than this many extracted characters has a usable text layer
-# and should never be sent to a recognition model. Measured on real lectures:
-# born-digital LaTeX pages run ~1500 chars/page, handwriting-scan pages ~140
-# (headers and footers only).
+from . import textlayer
 # Single source of truth for "is this page's text layer usable?".
 # Defined in textlayer.py and re-exported here: two independent 400s is exactly
 # the divergence this project exists to eliminate, and having it inside the
@@ -30,14 +41,24 @@ class PageInfo:
     chars: int
     images: int
     has_text_layer: bool
+    drawings: int | None = None       # vector paths; None = not measured
+    drawn_images: int | None = None   # images painted from a Form XObject
 
     @property
     def kind(self) -> str:
-        """Route the page. This decides whether a model is needed at all."""
+        """Route the page. This decides whether a model is needed at all.
+
+        `blank` means *nothing is on this page*, so all three counts have to
+        agree. Measured 2026-09-06: testing `images` alone called 405 pages
+        blank that carry vector content -- one of them 1,837 paths and 8.9%
+        non-white pixels -- and one more that carries an image `get_images()`
+        cannot see. See `textlayer.PageText.skip_reason`.
+        """
         if self.has_text_layer:
             return "text"          # extract directly, no model
-        if self.images:
-            return "image"         # figures present, needs crop + recognition
+        if self.images or self.drawings or self.drawn_images:
+            return "image"         # content is in pixels or vector paths:
+            #                        needs render + crop + recognition
         return "blank"
 
 
@@ -50,11 +71,17 @@ def _run(cmd: list[str]) -> str:
         return ""
 
 
+def _open(pdf: Path):
+    import pymupdf
+    return pymupdf.open(pdf)
+
+
 def page_count(pdf: Path) -> int:
-    for line in _run(["pdfinfo", str(pdf)]).splitlines():
-        if line.startswith("Pages:"):
-            return int(line.split()[1])
-    return 0
+    doc = _open(pdf)
+    try:
+        return doc.page_count
+    finally:
+        doc.close()
 
 
 def producer(pdf: Path) -> str:
@@ -64,32 +91,41 @@ def producer(pdf: Path) -> str:
     recompiled one -- 'PDF Annotator' means real ink was added, while a
     pdfTeX/Ghostscript producer on both files means the source was rebuilt.
     """
-    for line in _run(["pdfinfo", str(pdf)]).splitlines():
-        if line.startswith("Producer:"):
-            return line.split(":", 1)[1].strip()
-    return ""
+    doc = _open(pdf)
+    try:
+        return (doc.metadata or {}).get("producer") or ""
+    finally:
+        doc.close()
 
 
 def page_text(pdf: Path, page: int) -> str:
-    return _run(["pdftotext", "-f", str(page), "-l", str(page), str(pdf), "-"])
+    """One page's text layer. `page` is 1-based."""
+    pages = textlayer.extract(pdf, [page]).pages
+    return pages[0].text if pages else ""
+
+
+def _info(p: textlayer.PageText) -> PageInfo:
+    """One `textlayer` page record, as this module's routing view of it."""
+    return PageInfo(
+        number=p.page,
+        chars=p.chars,
+        images=p.images,
+        has_text_layer=not p.needs_ocr,
+        drawings=p.drawings,
+        drawn_images=p.drawn_images,
+    )
 
 
 def inspect(pdf: Path, page: int) -> PageInfo:
     """Classify one page without rendering it."""
-    text = page_text(pdf, page)
-    listing = _run(["pdfimages", "-list", "-f", str(page), "-l", str(page), str(pdf)])
-    images = max(0, len(listing.splitlines()) - 2)   # two header rows
-    chars = len(text.strip())
-    return PageInfo(
-        number=page,
-        chars=chars,
-        images=images,
-        has_text_layer=chars >= TEXT_LAYER_MIN_CHARS,
-    )
+    pages = textlayer.extract(pdf, [page]).pages
+    if not pages:
+        raise IndexError(f"{pdf}: no page {page}")
+    return _info(pages[0])
 
 
 def inspect_all(pdf: Path) -> list[PageInfo]:
-    return [inspect(pdf, p) for p in range(1, page_count(pdf) + 1)]
+    return [_info(p) for p in textlayer.extract(pdf).pages]
 
 
 def render(pdf: Path, page: int, out_dir: Path, dpi: int = 200) -> Path:
@@ -97,6 +133,15 @@ def render(pdf: Path, page: int, out_dir: Path, dpi: int = 200) -> Path:
 
     200 dpi is the default because it is where handwritten subscripts became
     reliably readable in testing; 150 lost them, 300 only cost time.
+
+    STILL POPPLER, on purpose. ADR-0001 wants this on PyMuPDF too, but the two
+    renderers differ on 6.66% of pixels from antialiasing alone, and the ink
+    path's constants are calibrated against THESE pixels: `ink.red_mask` on
+    this file yields a count the floor pins to 7,000-9,500, and `merge_px=64`
+    is a pixel distance measured at 200 dpi. Swapping the renderer without
+    re-sweeping both would move numbers the regression floor is guarding.
+    That re-sweep is roadmap M4, which serves the 2-document ink path; M2 is
+    the 430-document classifier and this is not on it.
     """
     out_dir.mkdir(parents=True, exist_ok=True)
     stem = out_dir / f"p{page:03d}"

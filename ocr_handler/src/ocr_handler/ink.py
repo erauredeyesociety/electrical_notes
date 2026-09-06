@@ -64,6 +64,21 @@ def dark_mask(png: Path) -> np.ndarray:
     return (a[:, :, 0] < DARK_MAX) & (a[:, :, 1] < DARK_MAX) & (a[:, :, 2] < DARK_MAX)
 
 
+def page_and_masks(png: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """The page plus both masks, from a single decode.
+
+    `red_mask` and `dark_mask` each re-open the file. Anything that wants the
+    pixels and both masks -- `crops.prepare` does, to composite ink over a
+    clean background and to measure the distance to neighbouring content --
+    would otherwise decode the same PNG three times.
+    """
+    a = _load(png)
+    r, g, b = a[:, :, 0], a[:, :, 1], a[:, :, 2]
+    red = (r > RED_MIN) & (r - g > RED_MARGIN) & (r - b > RED_MARGIN)
+    dark = (r < DARK_MAX) & (g < DARK_MAX) & (b < DARK_MAX)
+    return a.astype("uint8"), red, dark
+
+
 def diff_mask(base_png: Path, annotated_png: Path, tol: int = 40) -> np.ndarray:
     """Pixels present in the annotated render but not the base one.
 
@@ -143,7 +158,13 @@ def _reading_order(regs: list[Region]) -> list[Region]:
 
 
 def crop(png: Path, region: Region, out_path: Path, pad: int = 12) -> Path:
-    """Write one region to its own image file."""
+    """Write one region to its own image file.
+
+    A fixed pad, which is safe on this project's fixture page but is not a rule:
+    padding costs nothing until the crop touches the next thing on the page, and
+    then the answer is lost outright (`crops.py`). Prefer `crops.prepare`, which
+    measures that distance per side instead of assuming 12 px of clearance.
+    """
     im = Image.open(png)
     x0 = max(0, region.x0 - pad)
     y0 = max(0, region.y0 - pad)
