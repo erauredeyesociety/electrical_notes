@@ -14,3 +14,14 @@ content/stat_412/QZ*/**/*.pdf
 
 # Scratch — safe to delete at any time
 /tmp/
+
+# Virtual environments -- re-creatable, never committed. Removed 2026-09-06 in a
+# bloat cleanup that took the working tree from 4.3 GB to 804 MB; these were
+# 552 MB of it. Restore with `uv sync` (ocr_handler) or the lab's own setup step.
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+
+# pg_dump snapshots taken by docs-rag/purge_stale.sh before each delete.
+.purge_backups/
