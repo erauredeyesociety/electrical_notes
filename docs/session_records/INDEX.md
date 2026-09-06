@@ -5,10 +5,29 @@ Records rotate to [../archives/session_records/](../archives/session_records/IND
 
 | Date | Session | Outcome |
 | --- | --- | --- |
+| [2026-09-06](./2026-09-06_rag-staleness-and-lessons.md) | The RAG index only grows; lessons distilled | A live correctness defect found in docs-rag — a re-ingest inserts rather than replaces, so **28 stale documents / 145 chunks were live in search**, including superseded homework solutions. Purged, made executable as `purge_stale.sh`, verified against a restored backup. `lessons_learned/` filled in both trees. M2 confirmed complete. |
 | [2026-09-04](./2026-09-04_catch-up.md) | First bootstrap of the root `docs/` tree | Scope, roadmap, todo, README, five directives and eleven indexes created. Ten drift items found, none acted on outside `docs/`. |
 
-> **A convention disagreement worth settling once, for both trees.** This folder follows
-> `~/llm-project-bootstrap/guides/PROJECT_SETUP.md` — live records here, rotated to `archives/` when
-> stale. The child project [`ocr_handler/docs/`](../../ocr_handler/docs/session_records/INDEX.md) has an
-> empty `session_records/` and its one record written straight into `archives/session_records/`, and its
-> own INDEX flags the same inconsistency. The two trees currently disagree. Operator call.
+---
+
+## ✅ The `session_records/` vs `archives/session_records/` question — settled 2026-09-06
+
+Both trees flagged this as an open operator call. It is **resolved in favour of this folder**, and the
+disagreement turns out to sit in the bootstrap itself, not in our projects:
+
+| Bootstrap document | Says |
+| --- | --- |
+| `guides/DOCUMENTATION_STANDARDS.md` line 35, 252–253 | live records in `docs/session_records/`, **rotating into** `archives/session_records/` |
+| `PROMPTS.md` § Save Progress | write directly into `docs/archives/session_records/` |
+
+The lifecycle version wins on two grounds: the Save Progress prompt **names
+`DOCUMENTATION_STANDARDS.md` as its own reference** for archives structure, and writing straight to
+`archives/` makes the word meaningless — nothing would ever be live.
+
+**Applied to both trees.** This project was already correct. The child project
+[`ocr_handler/`](../../ocr_handler/docs/session_records/INDEX.md) now writes here too; its 2026-09-02
+record stays in `archives/` where it legitimately rotated to.
+
+> ⚠ **Upstream:** `~/llm-project-bootstrap/PROMPTS.md` § Save Progress steps 1–2 contradict its own
+> cited guide. Worth fixing there so the next project does not re-derive this. Operator call — that repo
+> is outside this one's scope.

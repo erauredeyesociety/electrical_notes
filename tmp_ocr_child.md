@@ -1,3 +1,22 @@
+> ## ⚠ CORRECTION 2026-09-06 — the "7 `/Ink` objects" claim below is WRONG
+>
+> Claims 2 and the "Ink objects | 7" row are **disproven**. Measured across all three annotated
+> lectures: **0 `/Subtype/Ink` objects**, and 6 / 36 / 14 raster XObjects respectively. The `/Ink`
+> keys this note counted are **opaque base64 blobs inside vendor `/Private` dictionaries** — PDF
+> Annotator's own serialisation — not PDF ink annotations. The handwriting is **pixels, not geometry**,
+> and `"Needs OCR? No — it is vector ink"` inverts the actual answer.
+>
+> This mattered: the contradiction between this note and a later measurement sat open as a blocker on
+> milestone M4 for days, because only one of the two could be the right extraction path. It is the
+> raster path.
+>
+> One related correction, same measurement: `dsp-lctr1-…-plw.pdf` carries **no handwriting at all** —
+> its 21 annotations are 14 FreeText, 1 Highlight and 6 Line, and its red pixels are an arrow.
+>
+> Evidence: `ocr_handler/docs/findings/mask-separability-by-stratum-2026-09-06.md`.
+> Everything else in this note is left exactly as written — it is a dated operator note, not a
+> maintained document.
+
 # Scoping notes — lecture PDF extraction (prospective child project)
 
 > **Status: discussion document. Nothing built.** Placed in the `electrical_notes` root deliberately — it is about work that should *leave* this repo.

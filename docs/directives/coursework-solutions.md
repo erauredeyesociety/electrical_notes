@@ -44,28 +44,107 @@ opens the document:
 
 ```latex
 \input{../../../../docs/latex/coursework_preamble.tex}
-\input{../reference_docs/<course>_macros.tex}
+\input{../../reference_docs/<course>_macros.tex}
 
 \begin{document}
 ```
 
-Four `../` reaches the repo root from `content/<course>/<kind>/<kind>NN/`.
+Four `../` reaches the repo root from `content/<course>/<kind>/<kind>NN/`; two
+reach the course root, where the macros live (see below).
+
+**Do not count those `../` by hand — scaffold with `new_tex.sh`**, which derives
+both paths from the target folder.
 
 | File | Holds | Rule |
 | --- | --- | --- |
 | [`docs/latex/coursework_preamble.tex`](../latex/coursework_preamble.tex) | packages, `answerbox`, `trap`, `\srcref`, `\extref`, `\problemheader`, page style | **shared by every course** |
-| `content/<course>/<kind>/reference_docs/<course>_macros.tex` | only course-specific notation | `\conv` means something in DSP and nothing in networks |
+| `content/<course>/reference_docs/<course>_macros.tex` | only course-specific notation | **one per course**, shared by `hw`, `qz` and `exam` |
 
 **If another course would want a macro, it belongs in the shared preamble.**
 Duplicating shared setup per course is how three preambles drift apart.
 
-Build-check with the shared script, using repo-relative paths:
+### One macros file per COURSE, not per kind
+
+Notation is a property of the subject, not of the assignment kind: `\conv` means
+the same thing on a homework, a quiz, and an exam. So the macros file lives at
+**course level** and all three kinds reference it.
+
+```text
+content/<course>/
+├── reference_docs/<course>_macros.tex     ← ONE, shared by all kinds
+├── hw/hw01/pNN_*.tex                      → ../../reference_docs/<course>_macros.tex
+├── qz/qz01/pNN_*.tex                      → ../../reference_docs/<course>_macros.tex
+└── exam/exam01/pNN_*.tex                  → ../../reference_docs/<course>_macros.tex
+```
+
+> ⚠ **Macros under `hw/` are UNREACHABLE from a sibling kind — a quiz cannot be
+> scaffolded at all.** This is a hard blocker, not untidiness.
+>
+> `new_tex.sh` walks up from the assignment folder running
+> `find <probe> -maxdepth 2 -path '*/reference_docs/*_macros.tex'`. From
+> `qz/qz01` the walk reaches the course root, where `hw/reference_docs/…` sits
+> **three** levels down — past `-maxdepth 2`. The scaffolder exits with
+> *"no reference_docs/\*_macros.tex found"* and writes nothing. Verified.
+>
+> At course level the file is two levels down, inside the limit, and all three
+> kinds resolve `../../reference_docs/<course>_macros.tex`.
+>
+> **Two copies is worse than one in the wrong place.** The walk takes the
+> *nearest*, so `hw/` and `qz/` would compile against different notation with no
+> error anywhere. `new_tex.sh` warns if it finds more than one.
+>
+> Courses that predate this rule may still have macros under `hw/`. That is
+> tolerable while a course has only homework; it **must** be moved up before a
+> `qz/` or `exam/` folder is added.
+
+### Don't write those two lines by hand
+
+The `../` count depends on nesting depth and the macros file is named per
+course. **Scaffold instead** — it computes both from the target path, and the
+result builds immediately:
+
+```sh
+docs/latex/new_tex.sh content/cesc_470/hw/hw02 3 clock-rate --pts "15 pts"
+docs/latex/new_tex.sh content/cesc_410/hw/hw02 1 phasors --pts "20 pts" --lo LO01
+docs/latex/new_tex.sh content/cesc_470/hw/hw02 --solutions
+```
+
+`--lo` only for courses that state learning outcomes (CESC 410 does; CESC 470
+does not).
+
+### Build-check
 
 ```sh
 docs/latex/build_tex.sh content/cesc_470/hw/hw01                # whole assignment
 docs/latex/build_tex.sh content/cesc_470/hw/hw01/p08_clock.tex  # one problem
 docs/latex/build_tex.sh content/cesc_470/hw/hw01 --keep         # keep the PDFs
 ```
+
+---
+
+## ⚠ Overleaf needs a flattened copy — never paste the source
+
+An Overleaf project is **self-contained**, so a relative `\input` climbing above
+the project root **cannot** resolve. Pasting a source file straight in fails:
+
+```text
+LaTeX Error: File `../../../../docs/latex/coursework_preamble.tex' not found.
+```
+
+Uploading the preamble by hand works, but must be redone per project and
+re-synced whenever the shared file changes. Flatten instead:
+
+```sh
+docs/latex/flatten_tex.sh content/cesc_470/hw/hw01
+#   -> content/cesc_470/hw/hw01/overleaf/*.tex   (gitignored, regenerable)
+```
+
+Each output is standalone. It also **strips comment-only lines naming tooling**,
+satisfying the no-tooling-references rule below, and **fails loudly if any
+`\input` survives** rather than shipping a file that breaks in Overleaf.
+
+**Edit the source, never the flattened copy** — `overleaf/` is generated output
+and is overwritten on the next run.
 
 ---
 
@@ -211,8 +290,28 @@ d = pymupdf.open("hw01/p03.pdf"); d[0].get_pixmap(dpi=110).save("/tmp/p.png")
 - **LaTeX only for solution content.** No Markdown working. `README.md` per
   assignment is tracking metadata, not solutions.
 - **PDFs are build products** — gitignored, rebuilt by `build_tex.sh`. The
-  instructor's assignment PDF is *source material*, not a build product: keep it
-  (`!HW*.pdf`-style negation, verified with `git check-ignore -v`).
+  instructor's assignment PDF is *source material*: keep it.
+
+  ⚠ **Ignore OUR OUTPUT by name; never blanket-ignore `*.pdf` and try to
+  negate the handouts back.** A guessed negation fails silently and loses source
+  material that cannot be regenerated:
+
+  ```gitignore
+  # WRONG — drops any handout whose name you did not predict
+  *.pdf
+  !HW*.pdf
+
+  # RIGHT — ignore only what we generate; everything else is kept
+  p[0-9][0-9]_*.pdf
+  *_solutions.pdf
+  overleaf/
+  ```
+
+  CPSC 462's handouts are named *"Lab 0"*, *"Introduction to Wireshark"*,
+  *"Hands on"* — **none match `HW*`**, so the negation form would have untracked
+  all of them without a word. Our build products have predictable names; the
+  instructor's files do not. Verify with `git check-ignore -v <path>`, which
+  names the exact rule that matched — "it looks right" is not a check.
 - **No tooling references in submitted documents** — no script names, flags, or
   repo paths.
 - Homework rarely ships code or a zip, unlike the labs. Check before assuming.

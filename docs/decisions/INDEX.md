@@ -19,3 +19,5 @@ Writing them up is [../roadmap.md](../roadmap.md) work; they are named here so t
 [`ocr_handler/docs/decisions/INDEX.md`](../../ocr_handler/docs/decisions/INDEX.md) — five accepted ADRs
 covering the PDF library, the imaging stack, text-layer-first, the deferred engine choice, and a
 reopened intermediate representation.
+- [0001 — Publishing and git are not this project's concern](0001-publishing-and-git-are-not-a-concern.md) — the operator stated it explicitly and it kept being re-raised. Agents read and interrogate git; **they never mutate it**. Publishing status is not a gate on any work here.
+- [0002 — No Ollama on err0r; remote instances only](0002-no-local-ollama-on-err0r.md) — Ollama does not run on this machine, CPU or GPU. Models live on `:11435` / `:11436`. If no tunnel is up, say so; never start a local server to compensate.

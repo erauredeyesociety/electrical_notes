@@ -1,45 +1,44 @@
 # TODO — single source of truth
 
-> Last updated: 2026-09-04 · **MODE: bootstrap → maintenance**
+> Last updated: 2026-09-06 · **MODE: maintenance**
 > Index, not an essay. Detail lives behind the links.
 
 ## CURRENT STATE
 
-**The root `docs/` tree exists for the first time.** `electrical_notes` had never been bootstrapped;
-`docs/` was an empty eleven-folder skeleton this morning. It now carries [scope.md](./scope.md),
-[roadmap.md](./roadmap.md), this file, [README.md](./README.md), six directives and an `INDEX.md` in every
-subfolder but [`latex/`](./latex/). Full account: [DRIFT_REPORT.md](./DRIFT_REPORT.md).
+**Governance exists and is now populated.** [scope.md](./scope.md), [roadmap.md](./roadmap.md), this
+file, six directives, two ADRs in [decisions/](./decisions/INDEX.md), and — as of 2026-09-06 —
+[lessons_learned/lessons.md](./lessons_learned/lessons.md), which had been an empty folder flagged as a
+gap since bootstrap. Origin: [DRIFT_REPORT.md](./DRIFT_REPORT.md).
 
-**Nothing outside `docs/` was touched.** No file under `content/`, `ocr_handler/`, `docs-rag/` or
-`docs/latex/` was created, moved, edited or deleted. Everything the drift report recommends is a
-proposal awaiting the operator.
+**M2 is complete.** `content/cesc_470/hw/prompt.md`, `content/cpsc_462/hw/prompt.md` and
+`docs/latex/INDEX.md` all exist — written by an earlier pass and never marked done.
 
-**The coursework doctrine landed today too** —
-[directives/coursework-solutions.md](./directives/coursework-solutions.md) plus
-[`docs/latex/`](./latex/). Another writer migrated `content/` to it **concurrently with this pass**:
-all 7 `cesc_410` and 11 `cesc_470` problem files now input the shared preamble, and the superseded
-course-local preamble is a documented tombstone. [DRIFT_REPORT.md](./DRIFT_REPORT.md) § 2 was rewritten
-at 16:26 to match what is actually on disk.
+**The coursework doctrine is live across the three newest courses** (`cesc_410`, `cesc_470`,
+`cpsc_462`) — [directives/coursework-solutions.md](./directives/coursework-solutions.md) plus
+[`docs/latex/`](./latex/). Older courses are deliberately out of scope.
+
+**docs-rag serves 16 per-course knowledge bases**, all healthy. A correctness defect was found and
+closed 2026-09-06: **a re-ingest inserts rather than replaces**, so 28 stale documents / 145 chunks —
+including superseded homework solutions — were live in search.
+[`docs-rag/purge_stale.sh`](../docs-rag/purge_stale.sh) is now a required step in
+[`docs-rag/RUN.md`](../docs-rag/RUN.md).
+
+Last session: [session_records/2026-09-06_rag-staleness-and-lessons.md](./session_records/2026-09-06_rag-staleness-and-lessons.md).
 
 ## NEXT ACTION
 
-**Give `cesc_470` and `cpsc_462` an entry point — [roadmap.md](./roadmap.md) § M2, detail in
-[DRIFT_REPORT.md](./DRIFT_REPORT.md) § 2.**
+**Make the RAG's LaTeX-derived chunks carry content — [`docs-rag/`](../docs-rag/).** Cheap, measurable,
+and it degrades every answer sourced from coursework today:
 
-`content/cesc_470/hw/hw01/` holds **eleven written problem files and a solutions document**, and
-`content/cesc_470/hw/` has no `prompt.md`, no `findings.md`, no `submission.md` — only
-`reference_docs/cesc470_macros.tex`. `content/cpsc_462/hw/` is the same, with nothing written yet. An
-agent entering through the course folder, which is exactly how `content/cesc_410/hw/prompt.md` is
-designed to be entered, finds nothing.
+1. **Strip the `\input` preamble block in `prepare_corpus.py`** before conversion. A converted `.md`
+   currently spends its first chunk on `\input{../../../../docs/latex/coursework_preamble.tex}`
+   boilerplate that matches nothing.
+2. **Re-examine `chunk_size` 256/50** — inherited unexamined, and LaTeX tables and `aligned`
+   environments exceed it.
+3. Then purge and re-ingest — in that order ([`docs-rag/RUN.md`](../docs-rag/RUN.md)).
 
-1. **Write `content/cesc_470/hw/prompt.md`** — short. Point at
-   [directives/coursework-solutions.md](./directives/coursework-solutions.md) as the authority; name only
-   what is course-specific. **Do not clone `cesc_410`'s 149 lines**; most of it is now shared and a copy
-   will drift.
-2. **Same for `content/cpsc_462/hw/`.**
-3. **A `submission.md` per doctrine course.**
-   `content/cesc_410/hw/reference_docs/submission.md` is marked unconfirmed and carries four questions
-   for the instructor. The other two courses have not asked them.
+Then [roadmap.md](./roadmap.md) § M3 (loose root `.md`, operator moves) and § M4 (`scripts/check.sh`,
+pin `hugo-version`).
 
 ## Blocked / awaiting operator
 
@@ -54,32 +53,30 @@ Highest-impact first:
 
 ## Known issues
 
-- **`content/cesc_470/hw/` and `content/cpsc_462/hw/` have no `prompt.md`.** The two newest doctrine
-  courses are the least documented; `cesc_470` already has eleven written problem files.
-  [DRIFT_REPORT.md](./DRIFT_REPORT.md) § 2.
 - **`scripts/refactor_standard_equations.sh` is a destructive, undocumented, repo-wide in-place rewrite.**
   Running it today would rewrite twelve frozen course folders. § 5.
-- **`docs-rag` cannot ingest `.tex` and fails silently** — it warns, indexes zero files, and reports
-  success ([`docs-rag/FINDINGS.md`](../docs-rag/FINDINGS.md) F-01). Any RAG answer sourced from LaTeX
-  coursework is unreliable until this is fixed. The workaround needs `pandoc -f latex+raw_tex`; plain
-  `-f latex` discards exactly the custom-macro content the answers live in.
-- **`ocr_handler/src/ocr_handler/textlayer.py` is untracked** — the module its shipped CLI depends on
-  exists on disk only. Flagged in that project's own todo; repeated here because it is one `git clean`
-  from gone.
-- **49 uncommitted paths** at 16:26, including all of `docs/` and all 417 files of `docs-rag/`.
+- **docs-rag re-ingest is not idempotent** — it inserts rather than replaces, and exclusions are not
+  retroactive, so the index only grows ([`docs-rag/FINDINGS.md`](../docs-rag/FINDINGS.md) F-06).
+  `purge_stale.sh` closes it, but it must actually be run.
+- **LaTeX-derived chunks open with `\input` boilerplate** that matches nothing — a wasted chunk per
+  converted problem file at `chunk_size` 256.
+- **Four `ocr_handler` modules are untracked** — `crops.py`, `latex_repair.py`, `structure.py`,
+  `validity.py`, plus `tools/` and `tests/fixtures/`. `textlayer.py` is now tracked. Repeated here
+  because they are one `git clean` from gone. **Git is human-only** — reported, never resolved.
+- **Many uncommitted paths across the repo.** Git is human-only — the state is reported, never resolved.
   Git is human-only — the count is reported, never resolved.
 - **`.github/workflows/pages.yml` runs `git submodule update`** against a repo with no `.gitmodules`.
   Harmless no-op, misleading to read.
 
 ## Doctrine gaps
 
-- [`docs/latex/`](./latex/) has no `INDEX.md` — the one folder this pass could not write into.
-- `docs/lessons_learned/` is empty. Three lessons are already earned and only need distilling —
-  [lessons_learned/INDEX.md](./lessons_learned/INDEX.md), [roadmap.md](./roadmap.md) § M6.
-- `docs/decisions/` is empty. The retrofit boundary and the shared-toolchain choice were both real
-  decisions made today and are recorded only in prose —
-  [decisions/INDEX.md](./decisions/INDEX.md).
-- `docs-rag/` is a child project with no bootstrap and no git tracking. § 9.
+- `docs-rag/` is a child project with no bootstrap and no git tracking. [DRIFT_REPORT.md](./DRIFT_REPORT.md) § 9.
+  It now carries `FINDINGS.md`, `RUN.md` and `purge_stale.sh`, but not the doctrine tree.
+
+**Closed 2026-09-06:** ~~`docs/latex/` has no `INDEX.md`~~ · ~~`lessons_learned/` is empty~~ (14 lessons
+written) · ~~`decisions/` is empty~~ (two ADRs) · ~~the `session_records/` vs `archives/` convention is
+unsettled~~ ([session_records/INDEX.md](./session_records/INDEX.md) — the contradiction was in the
+bootstrap, not here).
 
 ---
 

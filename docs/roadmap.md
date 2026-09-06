@@ -13,16 +13,16 @@ what was missing was governance. Started 2026-09-04 — [DRIFT_REPORT.md](./DRIF
 - [x] `INDEX.md` in every `docs/` subfolder except [`latex/`](./latex/) (owned elsewhere — [DRIFT_REPORT.md](./DRIFT_REPORT.md) § 1)
 - [x] Drift report and session record — [session_records/2026-09-04_catch-up.md](./session_records/2026-09-04_catch-up.md)
 
-## M2 — Give the two newest doctrine courses an entry point  ← **next**
+## M2 — Give the two newest doctrine courses an entry point ✓ done (confirmed 2026-09-06)
 The preamble/duplication half of this milestone was **closed during the 2026-09-04 pass by another
 writer** — all 7 `cesc_410` and 11 `cesc_470` problem files now input the shared preamble, and the old
 course-local preamble is a documented tombstone. What is left is documentation, not migration.
 Detail: [DRIFT_REPORT.md](./DRIFT_REPORT.md) § 2.
-- [ ] `content/cesc_470/hw/prompt.md` — it has **11 written problem files** and no entry point
-- [ ] `content/cpsc_462/hw/prompt.md` — has macros, nothing else
+- [x] `content/cesc_470/hw/prompt.md` — it has **11 written problem files** and no entry point
+- [x] `content/cpsc_462/hw/prompt.md` — has macros, nothing else
 - [ ] Both point at [directives/coursework-solutions.md](./directives/coursework-solutions.md) as the authority. **Do not clone `cesc_410`'s 149-line file** — most of it is now shared, and a copy will drift
 - [ ] A `submission.md` per doctrine course. `content/cesc_410/hw/reference_docs/submission.md` carries four unanswered instructor questions; `cesc_470` and `cpsc_462` have not asked them
-- [ ] `docs/latex/INDEX.md` — the one folder this pass could not write into
+- [x] `docs/latex/INDEX.md` — the one folder this pass could not write into
 - **Must-not-break:** `docs/latex/build_tex.sh content/cesc_410/hw/hw01` and `… content/cesc_470/hw/hw01` both build
 
 ## M3 — File the loose root `.md`  (operator moves; agent proposes)
@@ -32,6 +32,15 @@ Per-file destinations and reasons: [DRIFT_REPORT.md](./DRIFT_REPORT.md) § 3 · 
 - [ ] `note.md` → split into two runbooks; drop the stale `tree` listing
 - [ ] `make_study_guide_master_prompt.md` → `runbooks/make-study-guide.md`
 - [ ] `content/cesc_410/tmp.md` → `archives/operator-notes/` (doctrine course, so in bounds)
+
+## M3b — docs-rag correctness  ← **next**
+The index only grows: a re-ingest inserts rather than replaces, and exclusions are not retroactive —
+[`docs-rag/FINDINGS.md`](../docs-rag/FINDINGS.md) F-06
+- [x] Purge the 28 stale documents / 145 chunks live in search (2026-09-06)
+- [x] [`docs-rag/purge_stale.sh`](../docs-rag/purge_stale.sh), verified against a restored pre-purge backup; required step in [`docs-rag/RUN.md`](../docs-rag/RUN.md)
+- [ ] **Strip the `\input` preamble block in `prepare_corpus.py`** — every converted problem file wastes its first chunk on boilerplate that matches nothing
+- [ ] **Re-examine `chunk_size` 256/50** — inherited unexamined; LaTeX tables and `aligned` environments exceed it
+- **Must-not-break:** all 16 KBs healthy; a scoped `/api/v2/search` returns only its own course
 
 ## M4 — Make the build checkable
 - [ ] `scripts/check.sh` — `hugo --minify` plus a known-correct assertion, not just exit 0 — [directives/testing-discipline.md](./directives/testing-discipline.md)
@@ -45,11 +54,14 @@ Six scripts, zero references anywhere — [DRIFT_REPORT.md](./DRIFT_REPORT.md) �
 - [ ] `scripts/refactor_standard_equations.sh` gets a `--dry-run` and a provenance header, or is archived — it rewrites **every `.md` in the repo** in place
 - [ ] Rename `scripts/latex_to_pdf.sh` — it builds a résumé, and the name collides with the two real coursework builders
 
-## M6 — Distil the repo-wide lessons
-Sources already exist; only the distillation is missing — [lessons_learned/INDEX.md](./lessons_learned/INDEX.md)
-- [ ] KI-09 — tooling references must never reach a submitted document
-- [ ] docs-rag F-01 — a silent-success ingest is worse than a failure
-- [ ] HW-01 — never read maths out of a PDF text layer
+## M6 — Distil the repo-wide lessons ✓ done (2026-09-06)
+All three owed lessons written, plus eleven more — [lessons_learned/lessons.md](./lessons_learned/lessons.md)
+- [x] KI-09 — tooling references must never reach a submitted document
+- [x] docs-rag F-01 — a silent-success ingest is worse than a failure
+- [x] HW-01 — never read maths out of a PDF text layer
+- [x] Eleven further lessons earned since, incl. docs-rag F-06 (re-ingest is not idempotent), the
+      `grep -q`/pipefail SIGPIPE race (18 of 40 false negatives), and Overleaf's inability to resolve
+      paths above its project root
 
 ## M7 — Site navigation  (blocked on an operator answer)
 - [ ] Decide whether solutions are published publicly — [scope.md](./scope.md) § Open questions #1

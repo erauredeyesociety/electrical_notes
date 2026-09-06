@@ -21,8 +21,8 @@ Four such files are still in the root today — see [../DRIFT_REPORT.md](../DRIF
 
 - **Three doc trees, and they do not mix.** Root `docs/` governs the repo as a whole.
   `ocr_handler/docs/` and `docs-rag/` govern their own child projects. **Per-course** `reference_docs/`
-  folders (`content/cesc_410/hw/reference_docs/`,
-  `content/cesc_410/labs_and_projects/reference_docs/`, `content/cesc_470/hw/reference_docs/`) hold
+  folders (`content/<course>/reference_docs/` for the shared macros;
+  `content/cesc_410/labs_and_projects/reference_docs/` for lab-specific material) hold
   course-local material — templates, macros, submission rules — and stay there because they ship
   alongside the coursework they serve. Never copy between trees; **cite by path**.
 - **Never the repository root.** The only permitted root `.md` is `README.md`. `tmp*.md` is tolerated by

@@ -3,16 +3,18 @@
 %
 % PREAMBLE ONLY. No \begin{document}, no course-specific notation.
 %
-% Course-specific macros live beside the assignment, in
-%   content/<course>/<kind>/reference_docs/<course>_macros.tex
-% which is inputted AFTER this file. That split is the point: the page style,
-% the answer box, and the problem header are identical everywhere, so they are
-% defined once; \conv and \ustep mean something in DSP and nothing in a
-% networks course, so they are not.
+% Course-specific macros live at COURSE level, in
+%   content/<course>/reference_docs/<course>_macros.tex
+% which is inputted AFTER this file. ONE per course, shared by hw/qz/exam --
+% macros under a single kind are unreachable from a sibling kind.
+%
+% That split is the point: the page style, the answer box, and the problem
+% header are identical everywhere, so they are defined once; \conv and \ustep
+% mean something in DSP and nothing in a networks course, so they are not.
 %
 % A per-problem file therefore starts:
 %   \input{../../../../docs/latex/coursework_preamble.tex}
-%   \input{../reference_docs/cesc470_macros.tex}
+%   \input{../../reference_docs/cesc470_macros.tex}
 %   \begin{document}
 %
 % Build-check one file, or a whole assignment:
