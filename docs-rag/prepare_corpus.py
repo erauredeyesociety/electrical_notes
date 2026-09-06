@@ -53,10 +53,18 @@ EXCLUDE_DIRS = {
     ".venv", "venv", "env", "__pycache__", ".obsidian", ".worklogs", "tmp",
     "node_modules", ".git", "public", "resources", "_vendor", ".pytest_cache",
     ".ruff_cache", "figs", ".ipynb_checkpoints",
+    # Self-contained Overleaf exports: the preamble is inlined but the body
+    # prose is byte-for-byte the parent .tex, so converting both puts the same
+    # passage in the index twice. The md5 dedupe pass cannot see it -- the
+    # inlined preamble makes the files differ. config.yaml excludes "overleaf/"
+    # as well, so the duplicates are dropped whether they reach corpus/ or not.
+    "overleaf",
 }
 
 # Courses too small to warrant their own knowledge base; folded into `misc`.
-MISC_COURSES = {"cs_420", "cesc_470"}
+# cesc_470 was promoted OUT of misc (it has its own KB); keeping it here only
+# made the per-course report print a misleading "-> misc" tag.
+MISC_COURSES = {"cs_420"}
 
 PANDOC_ARGS = ["-f", "latex+raw_tex", "-t", "markdown", "--wrap=none"]
 

@@ -20,11 +20,31 @@ curl -sf -X POST http://127.0.0.1:10120/api/v1/search \
   -H 'Content-Type: application/json' -d '{"query":"...","limit":5}'
 ```
 
+**To scope a query to one course, use v2 and the `kb` field:**
+```sh
+curl -sf -X POST http://127.0.0.1:10120/api/v2/search \
+  -H 'Content-Type: application/json' -d '{"query":"...","kb":"cesc_470","limit":5}'
+```
+The parameter name differs by endpoint — `/api/search` and `/api/v1/search` take
+**`corpus`**, `/api/v2/search` takes **`kb`**. An unrecognised field is **silently
+ignored** and the query runs unscoped, returning other courses' documents. That
+looks like broken per-course routing; it is a wrong field name. See FINDINGS.md § F-06.
+
 ## Ingest / index (per KB, inside the api container)
 ```sh
+python3 prepare_corpus.py                      # .tex -> corpus/<course>/*.md
 docker compose run --rm --no-deps -v "$PWD/ops:/src/scripts:ro" \
   api python /src/scripts/ingest_kb.py --kb <name>
+./purge_stale.sh                               # REQUIRED — see below
 ```
+
+⚠ **`purge_stale.sh` is not optional.** Re-ingest is **not idempotent**: it
+inserts a *new* row when a file's content has changed and leaves the old one
+indexed, embeddings intact, so a corrected document competes in search with the
+version it corrected. It also does not remove rows for files that were deleted or
+newly excluded — adding a pattern to `config.yaml` never affects what is already
+in the index. `--dry-run` reports without deleting; the real run `pg_dump`s each
+database into `.purge_backups/` first. Full measurement: FINDINGS.md § F-06.
 
 ## Relocate data to a roomier disk (SAFE; run from THIS dir)
 Moves this instance's data volumes (RAG_*_VOLUME) to a new root, verifies the

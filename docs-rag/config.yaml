@@ -56,6 +56,11 @@ ingestion:
     - "resources/"
     - ".pytest_cache/"
     - "figs/"
+    - "overleaf/"        # self-contained Overleaf copies: preamble inlined,
+                         # body prose byte-for-byte the parent .tex. 21 files
+                         # under cesc_410/ and cesc_470/. Indexing both returns
+                         # the same passage twice; the md5 pass cannot catch it
+                         # because the inlined preamble makes the bytes differ.
     - "*.zip"             # 33 archives, 119 MB
     - "*.so"
     - "*.png"
@@ -177,18 +182,28 @@ ingestion:
     - '*homework/older_hw/hw3-dcde--gpio-bitwise-prob-26-01.pdf'
     - '*homework/older_hw/hw3-dcde--gpio-bitwise-soln-26-01.pdf'
     - '*hw/hw01/hw01_solutions.pdf'
+    - '*hw/hw01/hw01_solutions.pdf'
+    - '*hw/hw01/p01_five_components.pdf'
     - '*hw/hw01/p01_phasor_form.pdf'
     - '*hw/hw01/p02_phasor_arithmetic.pdf'
+    - '*hw/hw01/p02_von_neumann_tradeoff.pdf'
+    - '*hw/hw01/p03_instruction_encodings.pdf'
     - '*hw/hw01/p03_signal_transformations.pdf'
+    - '*hw/hw01/p04_architecture_vs_organization.pdf'
     - '*hw/hw01/p04_periodicity.pdf'
+    - '*hw/hw01/p05_same_isa_different_org.pdf'
     - '*hw/hw01/p05_system_properties.pdf'
     - '*hw/hw01/p06_convolution.pdf'
+    - '*hw/hw01/p06_isa_components.pdf'
+    - '*hw/hw01/p07_arm_vs_x86.pdf'
+    - '*hw/hw01/p08_target_clock_rate.pdf'
+    - '*hw/hw01/p09_cpi_and_execution_time.pdf'
+    - '*hw/hw01/p10_amdahl_speedup.pdf'
     - '*hw_practice_problems/hw-chapter01.pdf'
     - '*hw_practice_problems/hw-lctr12-15.pdf'
     - '*hw_practice_problems/hw-lctr19-21.pdf'
     - '*hw_practice_problems/lctr22-exercise-solutions.pdf'
     - '*hw_practice_problems/lctr23-exercise-solutions.pdf'
-    - '*labs_and_projects/lab00/report.pdf'
     - '*quizes/quiz3/hw6-fcfe--c-n-asm-programming-prob-26-02 (1).pdf'
     - '*quizes/quiz3/hw6-fcfe--c-n-asm-programming-soln-26-02.pdf'
     - '*quizes/quiz3/hw7-fgfi--shift-n-logic-prob-26-03 (1).pdf'
@@ -369,8 +384,10 @@ knowledge_bases:
     # twice (verified: a packet-sniffer query returned the .pdf and its .md
     # twin as separate hits). The md is the better copy — it came from the
     # .docx with headings and figures intact.
+    # corpus/cpsc_462 carries the hw/exam/qz .tex converted to .md.
     ingest_dirs:
       - /home/devel/electrical_notes/content/cpsc_462/md_notes
+      - /home/devel/electrical_notes/docs-rag/corpus/cpsc_462
     extensions: *exts
     exclude: *ex
 
@@ -382,9 +399,12 @@ knowledge_bases:
     # transcripts preserve the instructor's exact wording. The source PDFs are
     # NOT indexed — pdf_transcripts/ already carries their whole text layer, so
     # adding them would return the same passage twice.
+    # corpus/cesc_470 carries hw/hw01's worked .tex solutions converted to .md.
+    # Without it the entire HW01 answer key is invisible to the KB.
     ingest_dirs:
       - /home/devel/electrical_notes/content/cesc_470/md_notes
       - /home/devel/electrical_notes/content/cesc_470/pdf_transcripts
+      - /home/devel/electrical_notes/docs-rag/corpus/cesc_470
     extensions: *exts
     exclude: *ex
 

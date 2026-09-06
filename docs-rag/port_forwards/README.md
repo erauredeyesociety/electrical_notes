@@ -1,15 +1,23 @@
 # Port forwards
 
-Tunnels this repo's tooling depends on. **Run `./status-all.sh` before assuming anything is reachable.**
+Tunnels this repo's tooling depends on. **Run `./status-all.sh` before assuming
+anything is reachable.**
+
+## ⚠ err0r runs NO local Ollama
+
+Operator decision, 2026-09-05 — see
+[`../../docs/decisions/0002-no-local-ollama-on-err0r.md`](../../docs/decisions/0002-no-local-ollama-on-err0r.md).
+Models live on remote hosts and reach us through these tunnels. **A local
+embedding model is not an exception.**
+
+If no tunnel is up, **say so** — do not start a local server to compensate.
+That fallback is what makes the machine unusable.
 
 ```sh
-./status-all.sh              # is everything actually usable?
-./rh-tunnel.sh restart       # repair ResearchHub
-./ollama-tunnel.sh restart   # repair pwnstar Ollama
-./ollama-tunnel.sh models    # what pwnstar can run
+./skytracker-ollama-tunnel.sh up      # THE DEFAULT — nomic-embed-text + qwen3:14b
+./ollama-guard.sh                     # is anything violating the rule?
+./status-all.sh                       # everything at once
 ```
-
-`status-all.sh` exits 0 only when every check passes, so it is scriptable.
 
 ---
 
@@ -23,16 +31,21 @@ decoy forward to the remote Redis port made `nc -z` succeed while `status` still
 
 ---
 
-## Three Ollama daemons — do not confuse them
+## Two remote Ollamas — do not confuse them
 
-This is the trap. All three answer `/api/tags` with HTTP 200, so a naive health check passes against
-whichever one happens to be listening, and queries silently hit the wrong machine.
+Both answer `/api/tags` with HTTP 200, so a naive health check passes against
+whichever happens to be listening and queries silently hit the wrong machine.
+Each script asserts a **sentinel model** only its host carries.
 
 | Port | Host | Models | Use it for |
 | --- | --- | --- | --- |
-| `11434` | **local** (this machine) | `nomic-embed-text` only | Embeddings. **No generation model at all.** |
-| `11435` | skytracker `155.31.130.52` | `nomic-embed-text`, `qwen3:14b` | Owned by skytracker's stack — see below |
-| `11436` | **pwnstar** `10.231.80.91` | `qwen3.5:9b` (vision), `qwen3:4b`, `qwen3:1.7b`, `llama3.2:3b`, `all-minilm`, `nomic-embed-text` | Generation, and the only **vision** model — but see the warning below |
+| `11435` | **skytracker** `155.31.130.52` | `nomic-embed-text`, `qwen3:14b` | **THE DEFAULT.** Embeddings + generation for docs-rag. Needs the ERAU VPN. |
+| `11436` | pwnstar `10.231.80.91` | `qwen3.5:9b` (vision), `qwen3:4b`, `qwen3:1.7b`, `llama3.2:3b`, `all-minilm`, `nomic-embed-text` | The only **vision** model — but see the warning below |
+| ~~`11434`~~ | ~~local~~ | — | **Nothing. err0r runs no Ollama.** |
+
+`docs-rag/.env` points at `host.docker.internal:11435`. Measured after the
+switch: the stack went from `degraded / llm:false` (local had no generation
+model) to **`healthy / llm:true`**, so moving off local made it strictly better.
 
 ### ⚠ pwnstar is NOT a bigger GPU
 
@@ -64,17 +77,34 @@ ssh devel@10.231.80.91 'nvidia-smi --query-gpu=name,memory.total,memory.used --f
 only pwnstar has. A 200 from the wrong daemon is reported **STALE**, not WORKING. Verified by pointing
 the probe at local Ollama: it returned rc=2 (wrong-Ollama) rather than passing.
 
-The script also refuses to bind `11434` outright, since a tunnel there would shadow local Ollama.
+### `:11435` — the default, and the two-bind trap
 
-> **`:11435` is not ours.** It was established by skytracker's tooling
-> (`ssh … -L 11435:localhost:11434 -L 172.17.0.1:11435:… skytracker-dev@155.31.130.52`) and is bound
-> to the Docker bridge for containers. `ollama-tunnel.sh` will not touch it — it picks the next free
-> port instead, which is why ours landed on **11436**. Do not kill it to "free up" 11435.
+`skytracker-ollama-tunnel.sh` owns this one. It opens **two** forwards, and the
+second is the one people forget:
 
-### Why `11436` and not `11435`
+```sh
+-L 11435:localhost:11434                # for processes on this host
+-L 172.17.0.1:11435:localhost:11434     # for CONTAINERS
+```
 
-`ollama-tunnel.sh up` auto-bumps when its preferred port is taken, and says so. The port actually in
-use is the first field of `.ollama-tunnel.local`:
+docs-rag runs in Docker and reaches the host as `host.docker.internal`, which
+resolves to the Docker bridge. **A tunnel bound only to `127.0.0.1` is invisible
+from inside a container** — the stack comes up, embedding calls fail, and the
+ingest reports zero documents with no obvious cause. Verify from a container's
+point of view, not just the host's:
+
+```sh
+docker run --rm --add-host=host.docker.internal:host-gateway curlimages/curl \
+  -s http://host.docker.internal:11435/api/tags | head -c 120
+```
+
+Its sentinel is `qwen3:14b`, which only skytracker carries.
+
+### Why `ollama-tunnel.sh` lands on `11436`
+
+It auto-bumps when its preferred port is taken and says so; `:11435` is normally
+held by the skytracker tunnel. The port actually in use is the first field of
+`.ollama-tunnel.local`:
 
 ```sh
 P=$(cut -d' ' -f1 .ollama-tunnel.local)
@@ -92,6 +122,18 @@ Exit codes name the fault: `3` TUNNEL_DOWN · `4` REMOTE_UNHEALTHY (ResearchHub 
 the tunnel*) · `5` QUERY_FAILED.
 
 Known broken server-side: `/api/integration/kb/search` returns HTTP 500. Not our machine, not our bug.
+
+### What its corpus is actually good for — measured 2026-09-06
+
+Ranked results are **not uniformly relevant**, and the difference is by topic, not by phrasing:
+
+| Query axis | Result |
+| --- | --- |
+| Models, papers, benchmarks | **Strong.** "handwritten mathematical expression recognition open models" returned Uni-MuMER, MathWriting, OmniHandwritingOCR, two HMER surveys and a bidirectionally-trained-transformer paper — 13 hits, nearly all on-topic |
+| Software tooling / engineering practice | **Noisy.** "detecting corrupted PDF text layer extraction" returned gold-trading forum threads and Windows support pages; only 2 of 10 hits were software at all |
+
+So: use it for the **model and paper axis**, and corroborate anything it says about tooling. A thin
+result on a tooling question is weak evidence of no prior art, not proof of it.
 
 ---
 
@@ -114,9 +156,9 @@ Known broken server-side: `/api/integration/kb/search` returns HTTP 500. Not our
 
 ## State files (gitignored)
 
-`.rh-port` · `.rh-tunnel.pid` · `.rh-tunnel.local` · `.ollama-tunnel.pid` · `.ollama-tunnel.local`
+`.rh-port` · `.rh-tunnel.pid` · `.rh-tunnel.local` · `.ollama-tunnel.pid` · `.ollama-tunnel.local` · `.skytracker-ollama.pid`
 
 ---
 
 **Source:** adapted from `~/sys301_minesweeper/scripts/`, whose runbook carries the full verification
-record. `ollama-tunnel.sh` and `status-all.sh` are new here.
+record. `ollama-tunnel.sh`, `skytracker-ollama-tunnel.sh`, `ollama-guard.sh` and `status-all.sh` are new here.

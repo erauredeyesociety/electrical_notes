@@ -3,7 +3,9 @@
 Investigation of `~/exudeai/rag-bootstrap` for a per-course knowledge base over
 this repo. **Two findings change the design; read those first.**
 
-Status: **not yet built.** Port forwards are up ([`port_forwards/`](port_forwards/)).
+Status: **built and serving** — 16 per-course KBs, all healthy. Port forwards are up
+([`port_forwards/`](port_forwards/)). F-06 below was found *after* building and is
+operational, not a design finding: re-read it before every re-ingest.
 
 ---
 
@@ -150,6 +152,83 @@ merge, or pass a subdirectory.
 
 Established: instance at `<project>/docs-rag/`, `DOCS_PATH` = project root,
 data root off on a roomier disk, `config.yaml` tracked, `.env` gitignored.
+
+---
+
+---
+
+## ⚠ F-06 — The index only ever GROWS. Re-ingest does not replace, and exclusions are not retroactive
+
+**Found 2026-09-06, in production, on `ragdb_cesc_410` and `ragdb_cesc_470`.**
+
+A re-ingest **inserts a new `documents` row when a file's content has changed**
+and leaves the old row in place. It also never removes rows for files that have
+since been deleted or newly excluded. The consequence is that the index
+accumulates superseded content indefinitely, and **the stale chunks keep their
+embeddings, so they stay live in search.**
+
+Measured on one file, `corpus/cesc_410/hw/hw01/p01_phasor_form.md`:
+
+| row | created | content_hash | chunks | embedded |
+| --- | --- | --- | ---: | ---: |
+| 152 | 2026-09-05 21:01 | `0dbdcfc5…` | 3 | 3 |
+| 173 | 2026-09-06 15:33 | `df6081a2…` | 3 | 3 |
+
+Same path, different hash, **both retrievable**. A homework solution corrected
+on the 6th competes in search with the uncorrected version from the 5th, and
+nothing in the response marks which is which.
+
+### Two symptoms, one cause
+
+| Symptom | Count | Why |
+| --- | ---: | --- |
+| Same filepath indexed twice | 12 (cesc_410), 11 (cesc_470) | content changed between ingests; insert, not upsert |
+| `overleaf/` files indexed despite being excluded | 5 (cesc_410) | all created 09-05 21:03, **before** the exclude was added |
+
+Both were confined to cesc_410 and cesc_470 — the only two courses with the
+`.tex` → `.md` prepare step and the Overleaf flatten step, i.e. the only ones
+whose files were regenerated after first ingest. The other 13 KBs measured zero.
+
+**The `overleaf/` pattern is not broken.** `_is_excluded`
+(`app/ingestion.py:1046`) documents `"name/"` as a directory pattern matching
+any path component, and it works — the 09-06 ingest correctly skipped those
+files. Adding an exclusion simply has no effect on what is already indexed. This
+is worth stating because the obvious diagnosis (bad glob) is wrong and would
+send you to edit a config that is already correct.
+
+### Cleanup, as applied
+
+`pg_dump` both databases first. Then, per KB, in one transaction: select the
+doomed ids (every row but the newest per `filepath`, unioned with anything under
+`/overleaf/`), delete their `chunks`, then delete the `documents`.
+
+Removed **28 documents / 145 chunks**: cesc_410 61 → 44 docs (423 → 319 chunks),
+cesc_470 28 → 17 docs (135 → 94 chunks). Post-checks: 0 duplicate filepaths, 0
+overleaf rows, and a scoped `/api/v2/search` on each KB returns only that
+course's files.
+
+### Operational rule
+
+> **Purge before re-ingesting anything that has been regenerated.** Re-ingest
+> alone is not idempotent. Any workflow that rebuilds `corpus/` — which is every
+> run of `prepare_corpus.py` — must be followed by a purge, or the KB will serve
+> two answers to the same question and prefer neither.
+
+Verify with, per KB:
+
+```sql
+SELECT count(*) FROM (SELECT filepath FROM documents GROUP BY filepath HAVING count(*)>1) t;
+```
+
+Non-zero means stale rows are live.
+
+### Also worth knowing: the search parameter differs by endpoint
+
+`/api/search` and `/api/v1/search` take **`corpus`**; `/api/v2/search` takes
+**`kb`**. Passing `knowledge_base`, or passing `kb` to v1, is **silently
+ignored** — the request succeeds and searches unscoped, returning other courses'
+documents. That looks exactly like broken per-course routing and is not. Use
+`/api/v2/search` with `kb` for per-course queries.
 
 ---
 

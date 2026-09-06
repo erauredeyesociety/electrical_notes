@@ -19,3 +19,6 @@ corpus/
 # them locally leaves __pycache__ behind, which would otherwise be committed.
 __pycache__/
 *.py[cod]
+
+# pg_dump snapshots taken by purge_stale.sh before each delete (multi-MB)
+.purge_backups/
