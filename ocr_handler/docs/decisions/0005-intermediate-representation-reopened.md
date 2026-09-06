@@ -22,7 +22,7 @@ now has to hold *two* variants of the same page plus the evidence for preferring
 
 | Option | For | Against |
 | --- | --- | --- |
-| `<|det|>` tagged string | matches one candidate engine's native output; resolution-independent bboxes | a string format needing a parser; owes its selection to an unvetted source; no obvious place for two variants + agreement metrics |
+| `<\|det\|>` tagged string | matches one candidate engine's native output; resolution-independent bboxes | a string format needing a parser; owes its selection to an unvetted source; no obvious place for two variants + agreement metrics |
 | **JSONL, one record per page** | greppable, streamable, trivially holds both variants, `chosen` and `reason`; no parser | not any engine's native output — needs a small adapter per engine |
 
 Recommended: **JSONL**, schema proposed in [plans/text-layer-first.md](../plans/text-layer-first.md) § 4.

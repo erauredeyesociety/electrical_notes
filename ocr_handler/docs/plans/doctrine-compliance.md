@@ -27,19 +27,36 @@ test floor. Six of eleven `docs/` subfolders were empty placeholders; this pass 
 
 - [ ] **`src/ocr_handler/textlayer.py` is untracked by git.** `git ls-files` does not list it. The
       centralized extractor's core module exists on disk only. *(Git is human-only — propose, don't run.)*
-- [ ] **The shipped CLI has zero test coverage.** `cli.py` imports only `textlayer`; the 7-test floor
-      imports only `pdfops` and `ink`. The floor protects the path the CLI does not use.
-      → `tests/persistent/`, four tests specified in [text-layer-first.md](./text-layer-first.md) § 9
-- [ ] **Two live classifiers for one concept.** `pdfops.TEXT_LAYER_MIN_CHARS = 400` (poppler) and
-      `textlayer.SPARSE_CHARS = 400` (PyMuPDF). Violates [ADR-0001](../decisions/0001-pymupdf-is-the-only-pdf-library.md)
-      and is exactly the divergence this project exists to remove.
+- [x] **The shipped CLI has zero test coverage.** ~~`cli.py` imports only `textlayer`; the 7-test floor
+      imports only `pdfops` and `ink`.~~ **Closed 2026-09-06.** 142 tests; all four tests specified in
+      [text-layer-first.md](./text-layer-first.md) § 9 exist, plus the convergence guards, and every one
+      of the 22 new tests builds its own PDF in-process.
+- [x] **Two live classifiers for one concept.** ~~`pdfops.TEXT_LAYER_MIN_CHARS = 400` (poppler) and
+      `textlayer.SPARSE_CHARS = 400` (PyMuPDF).~~ **Closed 2026-09-06** — `pdfops` is a view over
+      `textlayer` and spawns no poppler process on the classification path. It changed 428 of 7,187
+      pages; the decomposition is [../findings/one-classifier-2026-09-06.md](../findings/one-classifier-2026-09-06.md).
+      Two floor tests now guard it, one of which monkeypatches `pdfops._run` to explode.
+      [ADR-0001](../decisions/0001-pymupdf-is-the-only-pdf-library.md) is satisfied except for
+      `pdfops.render()`, deferred to M4 with its reason in the docstring.
 - [ ] **The S2 success fixture is not in the repository.** `scope.md` points at
       `/home/devel/electrical_notes/tmp/page5_transcript.md`; `tmp/` is gitignored in both repos. One
       `rm -rf` from unverifiable. Move it under `tests/fixtures/` or `docs/`.
+- [ ] **Five modules exceed the ~300-line cap** — `structure.py` 462 · **`cli.py` 432** · `validity.py`
+      428 · `latex_repair.py` 327 · `crops.py` 308.
+      [../directives/code-discipline.md](../directives/code-discipline.md) line 3: *"past that it is
+      doing two jobs and nobody re-reads it."* **`cli.py` grew 359 → 432 on 2026-09-06 when `extract`
+      landed** — reported rather than absorbed. The seam is real: `check`'s reading-input parsing
+      (`_record`, `_parse_crop`, `_load_readings`, `_diff_spans`, `_Row`, `_readings_verdict`) has
+      nothing to do with PDFs and would move to its own module, taking `cli.py` under the cap. **The
+      axis is an operator call** — three modules are in the same state and each has a different plausible
+      split, so splitting one of them mid-milestone is the unrequested restructuring
+      [../directives/scope-discipline.md](../directives/scope-discipline.md) warns about.
+      Modules added in M2 are inside the cap: `emit.py` 263, `pdfops.py` 169, `recognize.py` 58,
+      `textlayer.py` 252.
 - [ ] **`test_reading_order_bands_before_columns` asserts on `ink._reading_order`, a private function.**
       Doctrine: behaviour-level only, so refactors don't churn the floor. Route it through `ink.regions`.
-- [ ] **5 of 7 floor tests skip without the course PDFs.** Only two run on a clean machine, and both are
-      `ink` unit tests. Add at least one synthetic-PDF test that always runs.
+- [x] **5 of 7 floor tests skip without the course PDFs.** ~~Only two run on a clean machine.~~
+      **Closed** — of 142 tests only the 5 original `pdfops`/`ink` ones need the lectures.
 
 ## C · Open — doctrine artifacts still missing
 

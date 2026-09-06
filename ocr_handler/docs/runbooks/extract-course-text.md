@@ -1,8 +1,9 @@
 # Extracting a course's text
 
-**What works today.** Two commands exist: `inspect` and `text`. `extract --mode ...` is designed
-([../plans/text-layer-first.md](../plans/text-layer-first.md)) but **not built** — there is no OCR path yet,
-so everything below reads text layers only.
+**What works today.** `inspect` and `extract` (plus `check`, which reads model output rather than PDFs).
+`extract --mode text` is the default and is the whole of what runs: **the three OCR modes refuse**, because
+the engine is deliberately unchosen ([../decisions/0004-engine-choice-deferred-decide-by-head-to-head.md](../decisions/0004-engine-choice-deferred-decide-by-head-to-head.md)).
+Everything below reads text layers only.
 
 ```sh
 cd /home/devel/electrical_notes/ocr_handler
@@ -37,11 +38,26 @@ Read it as:
 ## 2 · Extract
 
 ```sh
-uv run ocr-handler text FILE.pdf                     # to stdout
-uv run ocr-handler text FILE.pdf -o out/             # writes out/<slug>.md
-uv run ocr-handler text FILE.pdf -o out/ -f txt      # plain text, for grep
-uv run ocr-handler text FILE.pdf -p 1-10,15          # selected pages
+uv run ocr-handler extract FILE.pdf                     # to stdout, --mode text
+uv run ocr-handler extract FILE.pdf -o out/             # writes out/<slug>.md
+uv run ocr-handler extract FILE.pdf -o out/ -f txt      # plain text, for grep
+uv run ocr-handler extract FILE.pdf -o out/ -f tex      # LaTeX FRAGMENT — \input it
+uv run ocr-handler extract FILE.pdf -o out/ -f json     # out/<slug>.pages.jsonl, one record per page
+uv run ocr-handler extract FILE.pdf -p 1-10,15          # selected pages
 ```
+
+All four formats are views of one intermediate, so they cannot disagree. `-f tex` is a fragment with no
+preamble and needs a Unicode engine (lualatex/xelatex + `unicode-math`); its own header comment says so.
+
+### The modes
+
+```sh
+uv run ocr-handler extract FILE.pdf --mode auto      # OCR only the pages the text layer failed on
+```
+
+`--mode ocr` and `--mode both` always exit **1**. `--mode auto` exits 1 too *unless* no page needs a
+model, which is 232 of 448 documents — for those it is the complete answer and it says how many pages it
+skipped as blank. None of the three ever returns an empty result as if it had succeeded.
 
 The Markdown carries a header stating the page count, chars/page, which pages have no text layer, and any
 letter-spacing warning. **Do not strip that header** — it is the only place a downstream reader learns
@@ -53,13 +69,14 @@ There is no batch mode yet (roadmap M6). Until then:
 
 ```sh
 find ../content/cec_320 -name '*.pdf' -print0 \
-  | xargs -0 -I{} uv run ocr-handler text "{}" -o /tmp/cec320_text/
+  | xargs -0 -I{} uv run ocr-handler extract "{}" -o /tmp/cec320_text/
 ```
 
 ## 4 · Re-run the corpus census
 
-Regenerates the numbers in [../findings/corpus-census-2026-09-04.md](../findings/corpus-census-2026-09-04.md).
-Takes a couple of minutes over 430 PDFs.
+Regenerates the numbers in [../findings/corpus-census-2026-09-04.md](../findings/corpus-census-2026-09-04.md)
+and [../findings/one-classifier-2026-09-06.md](../findings/one-classifier-2026-09-06.md).
+Takes about half a minute over 448 PDFs.
 
 ```sh
 uv run python - <<'PY'
@@ -74,14 +91,19 @@ for p in sorted(root.rglob("*.pdf")):
     docs[d.verdict] += 1
     for pg in d.pages: pages[pg.verdict] += 1
 print(dict(docs)); print(dict(pages))
+# blank pages (never render these) and the pages OCR would actually be aimed at:
+#   sum(len(d.blank_pages)) -> 24      sum(len(d.ocr_candidates)) -> 2,329
 PY
 ```
 
-## Coming change — the command will be renamed
+## Done — the command was renamed
 
-`ocr-handler text` becomes `ocr-handler extract --mode text` in M2. Nothing calls it yet, so the rename is
-free now and expensive later. **Do not wire a course script to `text`** — wait for `extract`, or expect to
-update it.
+`ocr-handler text` **is now** `ocr-handler extract --mode text` (2026-09-06). `text` was removed, not
+aliased. Nothing outside these docs called it, and byte-stability was proven before the rename: 48
+captured runs and all 448 corpus documents produce identical output.
+
+`inspect` was **not** renamed and is a published surface — `content/cesc_470/`, `docs-rag/README.md` and
+`docs/directives/coursework-solutions.md` all call it.
 
 ---
 

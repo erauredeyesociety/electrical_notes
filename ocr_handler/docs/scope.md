@@ -93,7 +93,7 @@ Deliberate exclusions. Re-opening one needs an ADR in [decisions/](./decisions/I
 | **Re-typesetting whole documents** | yes | The aim is extraction, not reproducing the instructor's layout. |
 | **Handwriting recognition for prose** | yes | Only *mathematics* has to survive as text. Prose annotation can stay an image. |
 | **Anything over ~300 lines in one module** | yes | Past that it is doing two jobs; split it. |
-| **More than five CLI verbs** | yes | `inspect`, `extract`, `version` today. New capability arrives as a *mode or format value*, not a new verb. See § A note on the CLI. |
+| **More than five CLI verbs** | yes | `inspect`, `extract`, `check`, `version` today — four of five. `text` **became** `extract --mode text` on 2026-09-06 and was removed rather than aliased, so the rename cost no verb. New capability arrives as a *mode or format value*, not a new verb. `check` was added 2026-09-06 for equation-reading validity and repair; it takes a recorded model output rather than a PDF, so it could not be a `--mode` of `extract` — recorded as a scope call for the operator in [plans/latex-repair-and-validity.md](./plans/latex-repair-and-validity.md) § 7.1. See § A note on the CLI. |
 | **A document database, search index, or web viewer** | maybe later | Out of the extractor's job. The notes site consumes the output; it is not this tool. |
 | **Non-PDF inputs** (`.docx`, `.pptx`) | maybe later | `content/cpsc_462/tools/extract_notes.py` handles `.docx` via pandoc. Absorbing that is a real question, not a design goal — see § Open decisions #6. |
 
@@ -138,7 +138,10 @@ Two criteria, because there are two problems.
 **S1 — the extractor (Problem A).** `ocr-handler extract` reproduces, unattended, the output that
 the three per-course scripts produce today, for every document each of them handles, and those
 scripts are deleted. The verdict it reports agrees with a human's reading on a labelled sample.
-*Currently unmet: no test covers `textlayer.py`, and no labelled sample exists.*
+*Currently unmet: the three scripts still exist and parity is unproven. What now holds: `textlayer.py`
+and the CLI are covered by 142 tests, a 161-page labelled sample exists
+([findings/ground-truth-sample.md](./findings/ground-truth-sample.md)), and `extract --mode text`'s
+output bytes are pinned by a golden master and verified across all 448 corpus documents.*
 
 **S2 — the annotated lecture (Problem B).** The tool reproduces, unattended, the transcript of one
 known page — two stem plots cropped, and three equations recovered as LaTeX including the two
@@ -165,13 +168,19 @@ These are named rather than invented. Each blocks or re-shapes something concret
    nothing is ever written where it was not asked for.
 3. **Is 400 chars/page the right `sparse` gate?** It classifies 1,736 pages (24%) as sparse. A
    diagram-heavy slide with 200 real characters is not broken. Needs a labelled sample of ~50 pages
-   before the number is trusted or moved.
+   before the number is trusted or moved. **Sharpened 2026-09-06:** converging the two classifiers moved
+   35 pages across this gate purely because two PDF libraries count whitespace differently, 24 of them
+   within 20 characters of 400. That is the gate's sensitivity, measured —
+   [findings/one-classifier-2026-09-06.md](./findings/one-classifier-2026-09-06.md).
 4. **Does `ocr_handler` physically leave `electrical_notes`?** The operator has settled that it is a
    child project under bootstrap doctrine. Whether it *moves* is separate — the tests reach into
    `../content/` for fixtures, and the parent repo is 625 MB.
 5. **Is the structured intermediate a file format or in-memory only?** It becomes user-visible the
    moment `--mode both` writes a comparison. Proposal in
-   [plans/text-layer-first.md](./plans/text-layer-first.md) § Intermediate.
+   [plans/text-layer-first.md](./plans/text-layer-first.md) § Intermediate. **Partly forced 2026-09-06:**
+   `extract -f json` writes `<slug>.pages.jsonl`, so it is a file format — but **only the text variant**,
+   which no engine's native format was ever a candidate for. The `<|det|>`-versus-JSONL question
+   ([decisions/0005](./decisions/0005-intermediate-representation-reopened.md)) is untouched and still open.
 6. **Does this absorb non-PDF inputs?** `.docx` via pandoc is what `cpsc_462` needs. If "the ONE
    text extractor for every course" means *every source type*, that is a larger project than the
    blacklist currently allows.

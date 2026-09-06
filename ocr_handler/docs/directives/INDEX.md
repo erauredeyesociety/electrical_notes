@@ -15,6 +15,7 @@ Three tiers — load down only when the tier above lacks the depth you need:
 | [testing-discipline.md](./testing-discipline.md) | Tiny behaviour-level floor — **and it must cover the path the CLI uses** |
 | [documentation-discipline.md](./documentation-discipline.md) | Right doc, right folder; INTERNAL vs EXTERNAL; supersede in place |
 | [question-discipline.md](./question-discipline.md) | Batch the operator's open calls; never guess; git is human-only |
+| [gpu-discipline.md](./gpu-discipline.md) | **Never run Ollama locally on err0r.** One model at a time behind an flock; cap CPU threads BEFORE importing torch or numpy; a GPU-pinned job still deserialises weights on the CPU |
 
 Referenced from [../scope.md](../scope.md) and [../roadmap.md](../roadmap.md) so every session loads them
 just-in-time.

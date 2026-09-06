@@ -28,4 +28,14 @@ tools (`pdftotext`, `pdfinfo`, `pdfimages`, `pdftoppm`) already used by `pdfops.
 - `pdfops.py` still shells out to poppler and still carries its own 400-char classifier. **Two libraries
   and two classifiers are live simultaneously** — this ADR is not satisfied until that is fixed
   ([roadmap.md](../roadmap.md) M2).
+
+  **Outcome, 2026-09-06 (appended, not a rewrite).** Done for the classifier: `inspect`, `inspect_all`,
+  `page_count`, `page_text` and `producer` are views over `textlayer.extract`, and no poppler process is
+  spawned on that path. It moved **428 of 7,187 corpus pages** — decomposed in
+  [../findings/one-classifier-2026-09-06.md](../findings/one-classifier-2026-09-06.md), which also
+  confirms this ADR's central claim from a second direction: on `ps160/midterm_03/...` page 3, poppler
+  reflows `CV = f / 2R` into `CV =\n\nf\nR\n2` where PyMuPDF keeps it together.
+  `pdfops.render()` remains poppler on purpose — the ink path's `red_mask` band (7,000–9,500 px) and
+  `merge_px = 64` are calibrated against poppler's pixels, and the renderers differ on 6.66% of them.
+  Re-sweeping those is M4.
 - Poppler CLI stays a legitimate *diagnostic* tool at a terminal; it just isn't a dependency.

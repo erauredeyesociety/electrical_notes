@@ -7,8 +7,9 @@ Built for a specific hard case: DSP lecture notes that are handwritten, exported
 live in red ink by the instructor. It generalises to any PDF where some pages have a text layer and some
 do not — which, measured, is most of them.
 
-**Status:** early. The non-ML backbone works and `ocr-handler inspect` / `text` are usable today. The OCR
-half is unbuilt and its engine is deliberately unchosen — [`roadmap.md`](roadmap.md).
+**Status:** early. The non-ML backbone works and `ocr-handler inspect` / `extract` / `check` are usable
+today. The OCR half is unbuilt and its engine is deliberately unchosen — [`roadmap.md`](roadmap.md).
+`extract --mode ocr|both|auto` refuses and says why rather than quietly returning the text layer.
 
 ---
 
@@ -23,11 +24,16 @@ Measured across `electrical_notes/content/` — **430 PDFs, 7,146 pages**
 | --- | ---: | ---: |
 | Text layer already adequate | 4,790 | **67%** |
 | Sparse — some content is in pixels | 1,736 | 24% |
-| Empty — 482 of these have no images either, so there is nothing to recover | 620 | 8.7% |
+| Empty — of these, **24** carry nothing at all and are the only pages worth skipping outright | 620 | 8.7% |
 
 Half of all documents (214 / 430) need no OCR anywhere. Routing on that before touching a GPU is the
 difference between a fast tool and a slow one — and on those pages, extraction is *more* accurate than
 any model. **The router is the product.**
+
+**A page with no images is not a blank page.** An earlier figure put 482 pages in the "nothing to
+recover" bucket by counting images alone. 405 of them are full of *vector* content — one is 0
+characters, 0 images, **1,837 vector paths** and 8.9% non-white pixels. The real number is 24
+([`findings/one-classifier-2026-09-06.md`](findings/one-classifier-2026-09-06.md)).
 
 Lecture PDFs fall into three kinds:
 
@@ -50,8 +56,15 @@ text run. Detected and reported, never silently repaired: collapsing the spaces 
 ```sh
 uv sync
 uv run ocr-handler inspect FILE.pdf        # is OCR even needed? free, no GPU
-uv run ocr-handler text    FILE.pdf -o out/
+uv run ocr-handler extract FILE.pdf -o out/               # --mode text, the default
+uv run ocr-handler extract FILE.pdf -f tex|txt|json       # one intermediate, four views
+uv run ocr-handler check   READINGS.json  # is a model's LaTeX reading trustworthy? free, no GPU
 ```
+
+`check` reads a recorded equation-model output — a harness `results.json`, a file holding one
+expression, or stdin — and reports a seven-detector roll-call plus what LaTeX repair *would* change.
+It rewrites nothing unless asked with `--repair`. Contract and measurements:
+[`plans/latex-repair-and-validity.md`](plans/latex-repair-and-validity.md) § 7.
 
 Procedures: [`runbooks/extract-course-text.md`](runbooks/extract-course-text.md) ·
 [`runbooks/testing.md`](runbooks/testing.md)
@@ -60,18 +73,24 @@ Procedures: [`runbooks/extract-course-text.md`](runbooks/extract-course-text.md)
 
 ```
 src/ocr_handler/
-├── textlayer.py  text-layer extraction + per-page verdict     no ML   ← the CLI's engine
-├── cli.py        inspect / text                               no ML
-├── pdfops.py     inspect / classify / render / pair (poppler)  no ML   ← to be folded into textlayer
+├── textlayer.py  text-layer extraction + per-page verdict     no ML   ← THE classifier
+├── structure.py  four faithfulness detectors                  no ML
+├── emit.py       Markdown / text / LaTeX / JSONL views         no ML
+├── cli.py        inspect / extract / check / version           no ML
+├── pdfops.py     routing view over textlayer; render + pair    no ML   ← only render is poppler
 ├── ink.py        colour + difference separation, crop regions  no ML
-├── emit.py       Markdown / text / LaTeX output               (pending, M2)
-└── recognize.py  region → LaTeX behind one interface          (pending, M3)
+├── crops.py      mask-first region crops                       no ML
+├── validity.py   eight detectors over a model's LaTeX          no ML
+├── latex_repair.py  conservative syntax repair                 no ML
+└── recognize.py  page → text behind one interface             (refuses until M3)
 docs/             scope, roadmap, plans, decisions, findings, research
-tests/persistent/ regression floor — 7 tests
+tests/persistent/ regression floor — 142 tests
 tmp/              scratch output — gitignored
 ```
 
-Each module stays **under 300 lines**. If one grows past that, it is doing two jobs.
+Each module should stay **under 300 lines** — past that it is doing two jobs. **Five currently do not**
+(`structure.py` 462, `cli.py` 432, `validity.py` 428, `latex_repair.py` 327, `crops.py` 308); each is
+tracked with its seam in [`plans/doctrine-compliance.md`](plans/doctrine-compliance.md).
 
 ## Conventions
 

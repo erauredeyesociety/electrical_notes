@@ -56,6 +56,12 @@ Zero documents failed to open.
 Of the 2,356 non-`ok` pages: **1,874 have embedded images** (content is present, in pixels — OCR can
 recover it) and **482 have none** (nothing to recover; OCR would return nothing).
 
+> ⚠ **Corrected 2026-09-06.** "No images" is not "nothing to recover": **405 of those 482 carry vector
+> content**, one of them 1,837 paths across 8.9% of the page. The real
+> nothing-to-recover set is **24 pages**. This paragraph's numbers are left as measured on 2026-09-04;
+> the routing rule they fed is superseded by
+> [one-classifier-2026-09-06.md](./one-classifier-2026-09-06.md).
+
 ### By course
 
 | Course | sufficient | partial | required |
@@ -106,6 +112,8 @@ therefore the natural evaluation set for `--mode both`.
    was sequenced first; it is now sequenced after. → [../roadmap.md](../roadmap.md)
 2. **The blank-page rule is measurable, not a guess.** 482 pages have no text and no images. `--mode auto`
    must skip them before rendering. → [../plans/text-layer-first.md](../plans/text-layer-first.md) § 2
+   ⚠ **Superseded 2026-09-06 — 482 is not the skip set.** Counting drawings as well as images puts it at
+   **24**. See the caveat below and [one-classifier-2026-09-06.md](./one-classifier-2026-09-06.md).
 3. **The genuine OCR need is ps160, not cesc_410.** An earlier scoping note asked whether courses other
    than cesc_410 had material that truly needs OCR. Answer: **yes — ps160 scanned textbook chapters**,
    plus `ae318` and parts of `cec_315`.
@@ -121,6 +129,8 @@ therefore the natural evaluation set for `--mode both`.
 - The census does not count vector drawings, only embedded images. A page of pure vector figure with no
   raster image and no text would land in the "482 blank" bucket incorrectly.
   **`--mode auto` must count drawings as well as images before it trusts that rule.**
+  → **RESOLVED 2026-09-06, and the caveat was right: 405 of the 483 are vector content.** The blank-page
+  figure is **24**, not 482. [one-classifier-2026-09-06.md](./one-classifier-2026-09-06.md)
 
 ---
 
