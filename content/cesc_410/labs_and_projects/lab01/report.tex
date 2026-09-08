@@ -1,0 +1,386 @@
+% CESC 410L lab report.
+%
+% NOTE TO WHOEVER EDITS THIS: keep this file free of references to any
+% tooling, scripts or repository paths. It is a submitted document. Build and
+% packaging instructions belong in reference_docs/report_guide.md, not here.
+% Comment-only lines are stripped at package time as a backstop, but do not
+% rely on that.
+%
+% DELIBERATE EXCEPTION: a lab report keeps its OWN preamble and does not
+% \input the shared coursework preamble the homework solutions use. Three
+% reasons, in order of weight:
+%   1. A handed-in .tex has to compile wherever the reader puts it. A shared
+%      preamble is reached by a relative path that resolves only at one exact
+%      depth inside this repository, so the submitted copy would not build.
+%   2. The packaging check rejects a repository path on a non-comment line,
+%      and an \input of the course macros file is exactly that.
+%   3. A report is prose plus figures under a title block. It wants no running
+%      head, no answer box and no problem header -- which is most of what the
+%      shared preamble exists to provide. It also needs listings, which the
+%      shared preamble does not load.
+% The overlap is four package lines, a margin and a captionsetup. That is the
+% whole price, and it buys a document that stands on its own anywhere.
+
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}     % equations
+\usepackage{graphicx}             % \includegraphics
+\usepackage{booktabs}             % clean tables
+\usepackage{listings}             % code snippets
+\usepackage{xcolor}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{caption}
+
+% Look for figures beside this file first, then one level up. The second entry
+% lets a copy of this document sitting in a subfolder still find figs/.
+\graphicspath{{./}{../}}
+
+% Code style: Courier New equivalent at 10pt, per the CEC 320 template's
+% "code in Courier New 12, single spacing". Light background, no dark blocks --
+% reports may be printed.
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!8},
+  showstringspaces=false,
+  captionpos=b,
+  language=Python,
+}
+
+\title{CESC 410L --- Lab 1: \textit{Exploring Audio Signals in Python}}
+\author{Gatlin Nelson \\ Section 01}
+\date{Lab start: 09/08/2026 \\ Report date: 09/08/2026}
+
+\begin{document}
+\maketitle
+
+%======================================================================
+\section{Introduction}
+%======================================================================
+
+This lab moves from the sinusoids Lab 0 generated in memory to audio read from
+a file. The task is to extend the shared \texttt{dsp26} package with a
+\texttt{play-plot-audio} command that opens a WAV file, plays it, reports its
+header properties, and presents it in both the time and frequency domains: the
+full waveform, a zoomed window, and a spectrogram drawn on linear, logarithmic
+and mel frequency axes. A second task extends the command so the zoom window
+can be chosen from the command line rather than hard-coded.
+
+The motivation is that a spectrogram makes visible what a waveform hides. A
+waveform shows only how loud the signal is over time; the same ten seconds
+viewed as a spectrogram shows which frequencies carry that energy and how they
+move, which is the representation the rest of the course builds on.
+
+The file supplied for the first two tasks turns out not to be a recording at
+all. It is ten seconds of mono audio at 16\,kHz whose entire content is two
+steady sinusoids added together, and that makes it a better teaching signal
+than a recording would have been: the interference between the two is visible
+directly in the zoomed waveform, and Section~\ref{sec:results} works out the
+rate of it from the two frequencies alone.
+
+%======================================================================
+\section{Narrative}
+%======================================================================
+
+The handout code was transcribed as given and needed four changes, all forced
+by running the lab from a terminal rather than clicking through it.
+
+\textbf{The plotting helpers had to return their figures.} As written,
+\texttt{plot\_audio\_sig\_in\_td} and \texttt{plot\_audio\_sig\_in\_fd} end in
+\texttt{plt.show()} and return nothing. Under a desktop that is enough, because
+the window is the artifact. Run without a display, \texttt{plt.show()} does
+nothing at all, so the figure is created, never drawn, and discarded with no
+handle to save it from. Returning the \texttt{Figure} makes the same code work
+both ways.
+
+\textbf{The audio player blocked the run indefinitely.} The handout calls
+\texttt{play\_audio()} unconditionally. It opens a Tk window and waits inside
+\texttt{mainloop()} until a human closes it, which is correct for the graded
+demonstration and fatal for an unattended run. The first attempt at a guard
+tested whether a display existed --- and that was wrong in an instructive way.
+The machine \emph{did} have a display, so the guard passed, a window opened
+with nobody watching, and the command produced no output and never exited. The
+symptom is easy to misread as a hang in the signal processing.
+
+The fix was to stop asking whether a window \emph{could} open and start asking
+whether one \emph{should}. Batch runs already set the non-interactive plotting
+backend, so that is the signal the guard now reads. Interactively nothing
+changes: the player opens exactly as the handout describes.
+
+\textbf{Figures are written to disk, in two formats.} An option was added to
+save the five figures rather than only display them, mirroring Lab 0. Both PNG
+and vector copies are written; the report needs the former.
+
+\textbf{A default had to be chosen deliberately.} The programming task asks for
+the new options to carry the same defaults as the plotting function, which are
+``start at zero'' and ``run to the end of the file''. Applied literally with no
+further thought, a run with no arguments makes the zoomed figure an exact copy
+of the full-waveform figure, and the handout's own 0.4--1.4\,s view becomes
+unreachable without typing it. The options are declared with the required
+defaults; when \emph{neither} is supplied the handout's window is used, so the
+default output still matches the handout while any explicit window is honoured.
+
+One check is worth recording. Two saved figures with the same byte size are a
+symptom, not a coincidence --- it is what over-plotting into a reused figure
+looks like. All five outputs were confirmed to differ in both size and
+checksum before being accepted.
+
+%======================================================================
+\section{Artifacts}
+%======================================================================
+
+The command definition, with the two options added by the programming task:
+
+\begin{lstlisting}[caption={\texttt{app\_cli.py} --- the new start and end options}]
+@app.command()
+def play_plot_audio(
+    path_name: str = typer.Option(
+        "", "--path-name",
+        help="Optional output path name for loading an audio file."),
+    start_s: float = typer.Option(
+        0.0, "--start-s",
+        help="Start time in seconds for the zoomed waveform figure."),
+    end_s: float = typer.Option(
+        None, "--end-s",
+        help="End time in seconds for the zoomed waveform figure."),
+):
+    """Play and plot audio signal."""
+    play_plot_audio_(path_name=path_name, start_s=start_s, end_s=end_s)
+\end{lstlisting}
+
+\begin{lstlisting}[caption={\texttt{recipes.py} --- choosing the zoom window}]
+# Honour whatever the caller asked for, and fall back to the handout's
+# window only when neither bound was given.
+if start_s == 0.0 and end_s is None:
+    zoom_start, zoom_end = HANDOUT_ZOOM_S      # (0.4, 1.4)
+else:
+    zoom_start, zoom_end = start_s, end_s
+
+fig1 = plot_audio_sig_in_td(audio, sample_rate)
+fig2 = plot_audio_sig_in_td(audio, sample_rate, zoom_start, zoom_end)
+\end{lstlisting}
+
+\textbf{How the options work.} Each \texttt{typer.Option} maps a Python
+parameter to a command-line flag: the first argument is the default used when
+the flag is absent, the second is the flag's spelling, and the annotated type
+drives both conversion and validation, so \texttt{--start-s 0.5} arrives as the
+float \texttt{0.5} and a non-numeric value is rejected before any code runs.
+The help strings become the text of \texttt{--help}. The command function is a
+thin shell: it parses, then hands the values to
+\texttt{play\_plot\_audio\_}, which passes them to
+\texttt{plot\_audio\_sig\_in\_td} as its \texttt{start\_s} and \texttt{end\_s}
+arguments. No plotting code changed --- the function already accepted an
+arbitrary window, so the task was to expose it, not to implement it.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs/lab1_audio_fig2_waveform_zoom.png}
+  \caption{Waveform zoomed to the handout's 0.4--1.4\,s window. This is the
+           sum of two steady sinusoids seen close up: a fast carrier of
+           essentially constant frequency, wrapped in an envelope that swells
+           to the full $\pm 1.0$ and collapses back to nothing at a regular
+           rate. The window is exactly one second wide and holds 114 of these
+           lobes. Section~\ref{sec:results} derives that number from the two
+           tone frequencies. Nothing about the picture changes over the rest
+           of the file --- the pattern shown here simply repeats for the full
+           ten seconds.}
+  \label{fig:zoom}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs/lab1_audio_fig4_spec_log.png}
+  \caption{Spectrogram on a logarithmic frequency axis. The signal is two
+           horizontal lines and nothing else: components at 440\,Hz and
+           554\,Hz, level for the full ten seconds, with no harmonics stacked
+           above them, no onset and no quiet column anywhere. The logarithmic
+           axis is what makes the pair legible --- their 114\,Hz of separation
+           is under 1.5\% of a linear 0--8\,kHz axis, on which both would sit
+           in the bottom few percent of the plot as a single thick band. The
+           fine vertical ribbing is not in the audio; it is treated in
+           Section~\ref{sec:results}.}
+  \label{fig:speclog}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs_music/lab1_audio_prog_zoom_0.5_1.5.png}
+  \caption{The programming task: the same command with
+           \texttt{start\_s}~$=0.5$ and \texttt{end\_s}~$=1.5$, an arbitrary
+           window the original code could not select from the command line.
+           Taken from the music clip the experimental task calls for, so its
+           envelope is a dense mix that never repeats, rather than the strict
+           periodicity of Figure~\ref{fig:zoom}.}
+  \label{fig:prog}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs_music/lab1_audio_fig5_spec_mel.png}
+  \caption{Experimental task: the mel spectrogram of a ten-second excerpt of
+           commercially produced music, converted to mono at 16\,kHz. Where
+           Figure~\ref{fig:speclog} is two bare lines in an otherwise empty
+           plane, this one is occupied nearly everywhere: several instruments
+           sound at once and their harmonics fill the range up to the dark
+           band at the top edge, with percussion appearing as vertical
+           transients cutting across every band.}
+  \label{fig:music}
+\end{figure}
+
+%======================================================================
+\section{Discussion and Results}
+\label{sec:results}
+%======================================================================
+
+\subsection*{Handout questions}
+
+\begin{enumerate}
+  \item \textbf{Q.} \textit{What do the three frequency-axis formats show that
+        the others do not?} \\
+        \textbf{A.} All three are the same short-time Fourier transform and
+        differ only in how the frequency axis is mapped. Writing the transform
+        explicitly,
+        \begin{equation}
+          X(m, k) = \sum_{n=0}^{N-1} x[n + mH]\, w[n]\,
+                    e^{-j 2 \pi k n / N},
+          \label{eq:stft}
+        \end{equation}
+        with window length $N$, hop $H$ and window $w$. A linear axis spaces
+        the bins $k$ evenly, which spreads the top octave across half the plot
+        and crushes everything below a kilohertz into a sliver at the bottom.
+        A logarithmic axis gives equal distance to equal frequency
+        \emph{ratios}: octaves become evenly spaced and the low end is
+        expanded, which is exactly why the two components of
+        Figure~\ref{fig:speclog} are separable there and would not be on a
+        linear axis. The same warping works against a harmonic series, whose
+        members are evenly spaced on a linear axis and bunch progressively
+        tighter as they climb a logarithmic one. A mel axis warps the scale to
+        approximate human pitch perception, roughly linear below 1\,kHz and
+        logarithmic above.
+
+  \item \textbf{Q.} \textit{Why load the file at its own sample rate?} \\
+        \textbf{A.} The loader resamples to a fixed default unless told
+        otherwise. Left alone, the rate printed from the file header and the
+        rate labelling the spectrogram axes would describe different signals,
+        and every frequency read off the figure would be wrong by the ratio
+        between them.
+\end{enumerate}
+
+\subsection*{Results}
+
+With $N = 400$ samples and $H = 160$ at a 16\,kHz sampling rate, each frame of
+Equation~\ref{eq:stft} spans
+\[
+  \frac{N}{f_s} = \frac{400}{16000} = 25\,\text{ms},
+  \qquad
+  \frac{H}{f_s} = \frac{160}{16000} = 10\,\text{ms}
+\]
+between successive frames. This is the standard framing for speech, and the
+choice is a direct trade: the 25\,ms window sets the frequency resolution at
+$f_s/N = 40$\,Hz, while the 10\,ms hop sets how sharply an onset can be located
+in time. Widening the window sharpens the frequency detail and smears the
+onsets; narrowing it does the reverse.
+
+Forty hertz is what makes the supplied file legible at all, since its two
+components are 114\,Hz apart and so survive as two lines rather than one. The
+margin is smaller than it looks. A Hann window of $N = 400$ samples has a main
+lobe $4 f_s / N = 160$\,Hz wide from null to null --- wider than the separation
+being resolved --- so the two peaks only just stay distinct, and the trough
+between them falls a mere 9\,dB below their tops. Halving the window would
+close that trough entirely and the two tones would merge into one.
+
+The transform is taken with a 512-point FFT over a 400-sample window, so the
+window is zero-padded to the next power of two. This interpolates the spectrum
+onto a finer grid without adding information: it makes the display smoother,
+not the resolution better, which remains $f_s/N$.
+
+\subsection*{Beats: the supplied file is two tones, and the zoom shows it}
+
+The default file is not a recording. Two sinusoids fitted to it account for
+essentially all of its energy, at
+\[
+  f_1 = 440.0\ \text{Hz}, \qquad f_2 = 554.4\ \text{Hz},
+\]
+equal in amplitude and constant for the entire ten seconds. Their ratio is
+$f_2/f_1 = 1.2599$, which is $2^{4/12}$ to five figures --- four semitones, a
+major third, an A and the C\# above it. That the amplitude never varies is why
+the whole-file waveform is a featureless block: correct output, not a plotting
+failure.
+
+What makes the pair worth plotting is what their sum does. Applying the
+sum-to-product identity to two unit cosines,
+\begin{equation}
+  \cos(2\pi f_1 t) + \cos(2\pi f_2 t)
+    = 2 \cos\!\left(2\pi \tfrac{f_1 + f_2}{2} t\right)
+        \cos\!\left(2\pi \tfrac{f_1 - f_2}{2} t\right),
+  \label{eq:beat}
+\end{equation}
+which recasts a sum of two tones as a single tone multiplied by a slow one.
+The fast factor sits at the mean frequency,
+\[
+  \frac{f_1 + f_2}{2} = \frac{440.0 + 554.4}{2} = 497.2\ \text{Hz},
+\]
+and that is the pitch actually heard --- a note that is present in neither
+component. The slow factor, at the half-difference
+$(f_2 - f_1)/2 = 57.2$\,Hz, is too low to hear as a pitch and instead acts as
+the envelope of the fast one.
+
+The rate of the visible lobes is the point where care is needed. The envelope
+is the \emph{magnitude} of that slow cosine, and taking the magnitude folds
+its negative half up, halving its period: the envelope reaches zero twice per
+cycle of the $(f_1 - f_2)/2$ cosine. The lobes therefore arrive at the full
+difference frequency,
+\[
+  |f_2 - f_1| = 554.4 - 440.0 = 114.4\ \text{Hz},
+\]
+not at the 57.2\,Hz of the factor in Equation~\ref{eq:beat}. Checked against
+Figure~\ref{fig:zoom}, whose window is exactly one second wide: the envelope
+passes through 114 nulls across it. This is the Lab 0 material made audible
+and visible at once --- two sinusoids that were added, never multiplied,
+producing an amplitude modulation that no single one of them contains.
+
+\subsection*{The spectrogram's own sampling rate, aliasing}
+
+Figure~\ref{fig:speclog} carries a fine vertical ribbing across its lower
+bands, and it is the sampling theorem appearing in a place one does not look
+for it. The spectrogram advances one frame every $H/f_s = 10$\,ms, so as a
+picture of how the signal changes over time it is itself a sampled signal, at
+100 frames per second. The envelope it is trying to depict repeats at
+114.4\,Hz, which is above that frame rate's own Nyquist limit of 50\,Hz. It
+therefore cannot be represented and is aliased down to
+\[
+  |114.4 - 100| = 14.4\ \text{Hz},
+\]
+which is the rate of the ribbing. Measured frame by frame on the transform
+itself, the 500\,Hz bin swings 14\,dB at 14.3\,Hz, matching the prediction.
+The ribbing is not in the audio and would disappear under a shorter hop; it is
+the display's sampling rate beating against the signal, in a figure whose
+purpose is to teach sampling.
+
+\subsection*{A sampling artefact visible in the music spectrogram}
+
+Figure~\ref{fig:music} shows a dark horizontal band along its top edge that the
+figures of the supplied file do not have --- they have no energy up there to
+band-limit in the first place --- and it is a direct illustration of the
+sampling theorem rather than a defect. The source recording is a 44.1\,kHz
+stereo file
+carrying content up to about 16\,kHz. Converting it to the 16\,kHz mono the
+task specifies moves the Nyquist frequency to
+\[
+  f_N = \frac{f_s}{2} = \frac{16000}{2} = 8000\ \text{Hz},
+\]
+so every component above 8\,kHz must be removed before resampling --- if it
+were not, those components would alias down and appear as false low
+frequencies. Measured on the converted clip, energy falls away above
+approximately 7.8\,kHz, and the dark band spanning roughly 7.8--8.0\,kHz is
+the transition region of the anti-aliasing filter: the price paid, in bandwidth,
+for a filter that cannot be infinitely sharp.
+
+The practical result is that the same five figures can now be produced either
+interactively or unattended, and the zoom window is a parameter rather than a
+constant --- so examining a different second of audio is a command-line
+argument instead of an edit and a re-run.
+
+\end{document}

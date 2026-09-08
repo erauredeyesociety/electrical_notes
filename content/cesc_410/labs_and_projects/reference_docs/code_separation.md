@@ -84,7 +84,31 @@ A marked, justified fix reads as engineering. An unexplained rewrite reads as no
 
 ## Tools
 
-Run from `labs_and_projects/`.
+Run from `/home/devel/electrical_notes/content/cesc_410/labs_and_projects/`.
+
+### Who runs what
+
+**Every tool here is the agent's to run.** None of them needs a human, and none of them should ever
+appear in a *Needs a human* list — if one does, the hand-off is wrong. The human's jobs — fetching from
+Canvas, screenshots, the live demo, approving the report, uploading, and confirming what the lab wants
+(H1–H6 in [`lab_template.md`](lab_template.md)) — sit *around* the tools, not inside them.
+
+| Step | Who | Why |
+| --- | --- | --- |
+| `check_inputs.py`, `check_artifacts.py` | **LLM** | plain commands |
+| `strip_comments.py`, `make_submission.sh` | **LLM** | plain commands; the printed manifest is the check |
+| `render_reports.sh` | **LLM** | tectonic is installed and needs no display |
+| Generating figures (`MPLBACKEND=Agg`) | **LLM** | headless save is a supported path, not a workaround |
+| Converting a supplied audio file to the shape a lab wants | **LLM** | [KI-16](known_issues.md#ki-16--no-ffmpeg-on-this-machine-yt-dlp--x-fails-convert-with-librosa) |
+| Setting `myID` | **LLM** | the value is on file — [`submission_requirements.md`](submission_requirements.md#student-id) |
+| Downloading from Canvas | **HUMAN** | `Credentialed` |
+| Screenshotting a running window | **HUMAN** | `Capture` — but only the capture; the figures are already generated |
+| Live demo | **HUMAN** | `Policy` |
+| Uploading to Canvas | **HUMAN** | `Credentialed` |
+
+Full reason vocabulary and the block format each human row expands into:
+[`human-task-instructions.md`](../../../../docs/directives/human-task-instructions.md), with the
+recurring blocks pre-written in [`lab_template.md`](lab_template.md).
 
 ### `tools/check_artifacts.py`
 
@@ -100,12 +124,21 @@ Exit code 0 if clean, 1 if anything is suspicious.
 
 Scans every markdown file for links to files that are not on disk, and separates *never downloaded* (needs a human on Canvas) from *moved* (stale link, harmless). **Run before starting a lab.**
 
+⚠ **A clean result does not mean nothing is missing.** It reads *Markdown links* only; a path built in Python is invisible to it — [KI-12](known_issues.md#ki-12--check_inputspy-cannot-see-an-input-referenced-from-python). Grep the lab code for hard-coded paths as well, and put anything you find in the lab README's **Inputs** table by hand with its own *Blocks* entry.
+
 ```sh
 uv run --project dsp26 python tools/check_inputs.py         # whole tree
 uv run --project dsp26 python tools/check_inputs.py lab01   # one folder
 ```
 
 Exit code 1 only when something is genuinely absent.
+
+⚠ **The folder form produces false alarms, so never use it as a human's proof that a download
+landed.** With a folder argument the tool builds its "what is on disk" index from that folder alone,
+so a file living elsewhere in the repo is reported as never downloaded. Verified 2026-09-08:
+`check_inputs.py lab00` reports `py-pkg-1c-uv-cs.md` as `NOT ON DISK` and exits 1, while the whole-tree
+run correctly files it under `PRESENT ELSEWHERE` and exits 0. To prove a specific file arrived, check
+that file: `ls -l <absolute path>`.
 
 ### `tools/make_submission.sh`
 
@@ -121,6 +154,16 @@ It prints what it included. **Check that list before submitting.**
 ### `tools/strip_comments.py`
 
 Removes comments and docstrings for submission, keeping `DEVIATION FROM HANDOUT` blocks. Uses `tokenize`, not regex, so a `#` inside a string is safe. Verifies its own output by AST comparison and refuses to emit code it changed. Normally invoked via `make_submission.sh` rather than directly — see [`submission_requirements.md`](submission_requirements.md).
+
+**It is not executable and not on `PATH`.** To run it by hand, go through the project interpreter;
+`tools/strip_comments.py <file>` on its own gives `Permission denied`:
+
+```sh
+uv run --project dsp26 python tools/strip_comments.py <file>.py
+```
+
+Same for `check_inputs.py`, `check_artifacts.py` and `make_test_audio.py`. The two `.sh` scripts *are*
+executable and run directly.
 
 ### `tools/render_reports.sh`
 

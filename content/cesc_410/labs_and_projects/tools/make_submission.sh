@@ -200,6 +200,39 @@ if [[ $STRIP_ALL -eq 1 ]]; then
     echo "         Modified handout code is shipping with no disclosure."
     echo
 fi
+# COMPOSITION REPORT. A file list tells you what is in the zip; it does not tell
+# you what the zip mostly IS. Lab 1's was 93% uv.lock and 1.8% the PREVIOUS
+# lab's code, against 4.3% of the work being graded -- and the list above looked
+# perfectly reasonable. See docs/directives/coursework-solutions.md, section
+# "Read the handout's own deliverables section before deciding what to submit".
+echo "What this archive actually consists of:"
+unzip -l "$OUT" | awk -v lab="$LAB" '
+    NR>3 && NF>=4 && $1 ~ /^[0-9]+$/ {
+        size=$1; path=$4; total+=size
+        if (path ~ /uv\.lock$/)              key="uv.lock (dependency lockfile)"
+        else if (path ~ /lab[0-9]+_/) {
+            n=path; sub(/.*\/lab/,"lab",n); sub(/\/.*/,"",n); key=n "/"
+        }
+        else                                 key="project scaffolding"
+        b[key]+=size
+    }
+    END {
+        # Largest share first, TOTAL last. Sorting outside awk put TOTAL in the
+        # middle, which buried the number the report exists to show.
+        n = 0
+        for (k in b) { keys[++n] = k }
+        for (i = 1; i < n; i++)
+            for (j = i+1; j <= n; j++)
+                if (b[keys[j]] > b[keys[i]]) { tmp=keys[i]; keys[i]=keys[j]; keys[j]=tmp }
+        for (i = 1; i <= n; i++)
+            printf "  %-34s %9d B  %5.1f%%\n", keys[i], b[keys[i]], 100*b[keys[i]]/total
+        printf "  %-34s %9d B\n", "TOTAL", total
+    }' 
+echo
+echo "⚠ If most of this is not the work being graded, ask whether it should ship at all."
+echo
 echo "Check the list above: lab code only -- no .venv, no tools/, no caches."
-echo "Then confirm this lab actually wants code submitted:"
+echo "Then confirm this lab actually wants code submitted. READ THE HANDOUT'S OWN"
+echo "deliverables section -- not the task descriptions, the submission list:"
+echo "  grep -inE 'submit|deliverab|artifact' <labNN>/<handout>.md"
 echo "  reference_docs/submission_requirements.md"

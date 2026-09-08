@@ -158,6 +158,19 @@ Always marked, always explaining what the handout had and what broke:
 
 See [`code_separation.md`](code_separation.md#deviations-from-the-handout).
 
+**Do not wait for permission to make the fix.** Whether to *keep* a deviation is a human judgment call;
+whether to make it is not. Fix it, mark it, log it in the lab README, and hand the decision over as a
+block that says what the handout had, what broke, what you changed it to, and — the part usually left
+out — **whether the handout's version runs at all.** A deviation that fixes a crash is a different
+decision from one that changes how a figure looks, and the human cannot tell which they are being asked
+about unless you say. The block format is `H8` in [`../prompt.md`](../prompt.md#human-only); the
+standard behind it is [`human-task-instructions.md`](../../../../docs/directives/human-task-instructions.md).
+
+**The marker phrase is load-bearing.** Only write `DEVIATION FROM HANDOUT` in a `#` comment in the file
+that actually deviates. Naming it in a docstring — even to point at a deviation elsewhere — aborts
+packaging, because docstrings are stripped and the guard counts the phrase before and after
+([KI-14](known_issues.md#ki-14--naming-deviation-from-handout-in-a-docstring-aborts-packaging)).
+
 ---
 
 ## What not to do

@@ -15,7 +15,8 @@
 #
 # Every per-problem file is standalone (it inputs the shared preamble, then the
 # course macros -- docs/latex/coursework_preamble.tex plus
-# reference_docs/cesc410_macros.tex), so any
+# content/cesc_410/reference_docs/cesc410_macros.tex, which is at the COURSE
+# level, NOT under hw/ -- it moved there so qz/ and exam/ reach it too), so any
 # one of them can be checked without building the whole assignment. That is the
 # point of the fragment layout: a broken problem is found where it broke.
 

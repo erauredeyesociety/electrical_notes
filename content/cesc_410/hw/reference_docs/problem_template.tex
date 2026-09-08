@@ -1,7 +1,40 @@
+% OVERLEAF WILL NOT BUILD THIS FILE. It \inputs docs/latex/coursework_preamble.tex by a
+% relative path that climbs above the project root (so does reference_docs/cesc410_macros.tex),
+% and an Overleaf project is self-contained: "File `../../../../docs/latex/coursework_preamble.tex' not found."
+% Upload /home/devel/electrical_notes/content/cesc_410/hw/reference_docs/overleaf/problem_template.tex instead -- docs/latex/flatten_tex.sh writes it.
+% Edit THIS file, never that generated copy -- docs/latex/flatten_tex.sh overwrites it. Regenerate with:
+%   docs/latex/flatten_tex.sh content/cesc_410/hw/reference_docs   (run from /home/devel/electrical_notes)
+
 % CESC 410 -- one problem, standalone.
-% Copy to hwNN/pNN_<slug>.tex. Build-check it alone with:
+%
+% PREFER THE SCAFFOLDER over copying this file -- it computes the two \input
+% paths from the target's depth instead of trusting a ../ count, and it works
+% for qz/ and exam/ too. From the REPO ROOT, /home/devel/electrical_notes:
+%   mkdir -p content/cesc_410/hw/hwNN          # new_tex.sh will not create it
+%   docs/latex/new_tex.sh content/cesc_410/hw/hwNN 1 <slug> --pts "20 pts" --lo LO01
+%
+% Copying this file by hand also works. Copy to hwNN/pNN_<slug>.tex -- the two
+% \input lines below are already correct for that depth -- then build-check it
+% on its own, again from the repo root:
 %   docs/latex/build_tex.sh content/cesc_410/hw/hwNN/pNN_<slug>.tex
+% build_tex.sh DELETES the PDF unless you add --keep.
+% Then edit the OVERLEAF block above so it names the copy, not this template.
+% (new_tex.sh writes that block correctly by itself -- one more reason to use it.)
+%
 % Keep tooling references out of anything that might be submitted.
+%
+% THIS FILE IS THE GRADED ARTIFACT. The course info (Submission of Work, 8.6)
+% requires: PDF only, US Letter, 1-inch margins, and "all necessary
+% intermediate steps". Letter and the margins come from the shared preamble --
+% do NOT add your own \geometry here. The steps are the Work section below,
+% and they are the reason this file exists rather than the answers-only one.
+%
+% One thing this template deliberately does NOT carry: the AI-use disclosure
+% that Class Policies 11.1 requires ("if you use AI tools for your assignment,
+% you should clearly indicate it"). That is a statement about your own work and
+% is the human's to write. Decide it once per assignment -- see the
+% reference_docs/submission.md human tasks -- and add one line under the
+% problem header.
 
 \input{../../../../docs/latex/coursework_preamble.tex}
 \input{../../reference_docs/cesc410_macros.tex}
@@ -25,6 +58,9 @@ lecture or LO it comes from if that is not obvious.
 
 Every step. The reader is learning the method, not checking an answer they
 already have. Do not skip algebra because it is routine -- routine to whom?
+This is also the grading requirement, not only a house style: ``show all
+necessary intermediate steps'', and ``all the variables used must be clearly
+defined''.
 
 \begin{align}
   x(t) &= A\cos(\omega t + \phi) \\

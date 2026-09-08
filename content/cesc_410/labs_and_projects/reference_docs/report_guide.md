@@ -1,6 +1,8 @@
 # Lab report guide
 
-> ⚠ **The structure below is carried over from CEC 320 (same instructor, Dr. Jianhua Liu) and has *not* been confirmed against a CESC 410L template.** No report template has been posted for this course yet. Confirm with the TA at the first lab meeting and correct this file. Everything else here holds regardless.
+> ⚠ **The structure below is carried over from CEC 320 (same instructor, Dr. Jianhua Liu) and has *not* been confirmed against a CESC 410L template.** No report template has been posted for this course yet.
+>
+> **To settle it —** *Why human: **Judgment**.* **WHERE:** ask the TA at the start of a lab meeting (LB 373, Sec 1 Tue / Sec 2 Fri, 5:15–8:15 pm), and check Canvas **Files** and the **Syllabus** page yourself first. **WHAT:** ask whether a CESC 410L report template exists and whether the four-section structure below is what they mark against. **VERIFY:** correct this file and mark question 2 in [`submission_requirements.md`](submission_requirements.md#questions-to-ask) as settled, quoting the TA's wording. **IF UNANSWERED:** use the four sections below as-is and say in the report's Introduction that the CEC 320 structure was followed. **BLOCKS:** nothing — the report gets written either way, and only its section headings would change. Everything else in this file holds regardless.
 
 A lab report is **not** the same document as `labNN/README.md`:
 
@@ -35,6 +37,31 @@ Only code you **added, modified, or commented on**. Not the whole file.
 - Caption each one: `Code Snippet 1 — sinusoids.py`.
 - Number figures and refer to them by number.
 - **Avoid dark backgrounds in screenshots.** Reports may be printed; CEC 320's template asked for this explicitly and it presumably still applies.
+
+**Saved figures are not screenshots, and both are wanted.** The PNGs in `labNN/figs/` are generated
+headlessly and go in with `\includegraphics` — that is automatable and already done. A *screenshot* of
+the window (or of `dsp26 --help`) shows the program running, and that capture is human work
+([`lab_template.md`](lab_template.md) block H2).
+
+This machine can take them: it has a display (`DISPLAY=:1`, 1920×1080, X11) and ImageMagick's
+`import` (6.9.11-60). **No screenshot GUI is installed** — no `gnome-screenshot`, `scrot`, `flameshot`
+or `spectacle` — so use `import` and do not go hunting for a menu item:
+
+```sh
+SHOTS=/home/devel/electrical_notes/content/cesc_410/labs_and_projects/labNN/shots
+mkdir -p "$SHOTS"
+import -window root "$SHOTS/01_whole_screen.png"    # whole screen, immediate
+import              "$SHOTS/02_one_window.png"      # crosshair; click the window you want
+```
+
+Check what you got — `file shots/*.png` should report the window's size and **not** `1-bit grayscale`,
+which is what an empty desktop captures as.
+
+⚠ **Run the program in a *second* terminal, without `MPLBACKEND=Agg`.** Without it no window ever
+opens ([KI-02](known_issues.md#ki-02--pltshow-does-nothing-headless)); with the windows open, the run
+**blocks** until you close them — the audio player sits in `mainloop()` waiting for a click on
+**Exit** ([KI-13](known_issues.md#ki-13--a-gui-window-opened-during-an-unattended-run-and-blocked-it-forever)) — so the terminal that launched it cannot also run `import`. The full two-terminal
+recipe is block H2 in [`lab_template.md`](lab_template.md).
 
 Formatting from the CEC 320 template — confirm it carries over:
 
@@ -101,11 +128,18 @@ compiles before you have generated anything. Drop the guard and keep the plain
 Both report files also set `\graphicspath{{./}{../}}`, so a copy of the document
 sitting one folder down still finds `figs/`.
 
+From `/home/devel/electrical_notes/content/cesc_410/labs_and_projects/`:
+
 ```sh
-cp reference_docs/report_template.tex lab01/report.tex
+cp -n reference_docs/report_template.tex labNN/report.tex   # -n: never clobber an existing report
 # ...write it...
-tools/render_reports.sh lab01
+tools/render_reports.sh labNN
 ```
+
+**`-n` is not decoration.** `lab00/` and `lab01/` already hold finished reports; a plain `cp` over one
+of those silently destroys it, and `report*.pdf` and `*.zip` being gitignored means git will not have
+your back. If `cp -n` prints nothing and the file is unchanged, a report is already there — that is the
+answer, not a failure.
 
 **`tools/render_reports.sh` is the only script that renders.** `make_submission.sh --figures` calls it rather than invoking tectonic itself, so rendering behaviour lives in one place.
 
@@ -126,7 +160,7 @@ repository path. The submission path is always `labNN/report.tex`.
 
 Rendering uses **tectonic**, already installed — self-contained, no TeX Live, fetches packages on demand. First run needs network.
 
-*If you would rather write Markdown and convert, that needs pandoc (`sudo apt install pandoc`), which is **not** installed. Authoring `.tex` directly avoids a conversion step and a dependency, which is why the template is LaTeX.*
+*If you would rather write Markdown and convert, `pandoc` **is** installed (2.9.2.1, `/usr/bin/pandoc`) — the earlier note in these docs saying otherwise was wrong, verified 2026-09-08. Authoring `.tex` directly still avoids a conversion step, which is why the template is LaTeX, but nobody needs to `apt install` anything to take the Markdown route.*
 
 **Equations come from the code.** The commenting standard ([`code_commenting.md`](code_commenting.md#math)) puts the governing equation in each function's docstring in LaTeX-ish notation — so the report's `equation` blocks are close to copy-paste from source you already wrote.
 

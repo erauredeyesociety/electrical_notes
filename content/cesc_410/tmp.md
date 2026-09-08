@@ -154,3 +154,32 @@ also for the ocr handler, you are ahdereing to llm project bootstrap doctrine an
 
 
 /home/devel/electrical_notes/ocr_handler/tests/fixtures needs to be git ignored otherwise continue full steam and spawn multiple agents and workflwos to help with research and more. and there might be multiple OCR methods perhpas you want a module for each or soemthing? i really want to set you up for success to make as much progress as fast as possible with this ocr child project and keep following llm proejct bootstrap discipline.
+
+
+
+
+why is there a "test tone". wav gui popping up ? i don't want any GUI at all i just want scripts and code that works. or is it part of the lab? again your documetnaiton shoud tell you to let the human know what they are needed for, and claude gets everything done that it can without the human involved, so just like the cec_320 courses labs, get as much done without the human as needed and just tell the human what they are needed fore. make snes? do you need me to press play or something?
+
+
+ok well i dont' see a .wav on canvas, perhaps we might get it later? pelase be much more specific when telling hte human what to do, like look at the lessons learned from cec 320 labs and stuff and be able to apply it ot the reference docs in al lthe new classes or the core reference docs make sense?
+
+
+
+
+
+/home/devel/electrical_notes/content/cesc_410/labs_and_projects/lab01/Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster).mp3
+
+work with this as needed, if you need to make a 15 second clip of it then make a python script to do that and whatever else you need, just keep this source good and make whatever clones or dereivatives as you need.
+
+
+
+
+brooo my dude claude man. i just added some more files into the cesc 410 lab01 folder including tmp.html which is an annoucnemtn from the lab TA giving probably thecontext you were looking for earlier. thanks please get on it and spawn more agetns as needed to sorta redo the whole lab make sense? let me know if you have questions.
+
+
+also i can just take the dame screenshot if needed i just want to get this wrapped up, yo uhave all the context for this lab01 just get it done and adher e to the documenatnio standards make sense? and then just make the submission exactly how they want it, if you want to include the latex rendered pdf that is fine but don't include the raw latex flie.
+
+do really upload /home/devel/electrical_notes/content/cesc_410/labs_and_projects/lab01/dsp26-lab01-nelson-gatlin.zip? this seems to have some python proejct bloat files or seomthing that don'e need to be included? what exactly does the lab pdf say for deliverables?
+
+
+ok so we need to apllly an ~/llm-project-bootstrap/PROMPTS.md "save progress" prompt to get all documents up to date then give me the git commands to save make senes?

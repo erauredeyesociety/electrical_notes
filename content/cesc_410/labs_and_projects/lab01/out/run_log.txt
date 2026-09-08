@@ -1,0 +1,10 @@
+The basic frequency is 4.0 Hz.
+MPLBACKEND=Agg -- batch run, skipping the audio player window. Run without it under a desktop session to hear the file.
+
+Detailed properties of lab01/test_tone.wav ------------------
+Number of channels: 1
+Sample width (bytes): 2
+Frame rate (sample rate): 16000
+Number of frames: 160000
+Duration (seconds): 10.0
+Figures Saved in lab01

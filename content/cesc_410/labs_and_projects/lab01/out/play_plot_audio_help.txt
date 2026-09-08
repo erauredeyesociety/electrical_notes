@@ -1,0 +1,23 @@
+The basic frequency is 4.0 Hz.
+                                                                                
+ Usage: dsp26 play-plot-audio [OPTIONS]                                         
+                                                                                
+ Play and plot audio signal. Use --path-name to load audio file from.           
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --path-name          <str>    Optional output path name for loading an audio │
+│                               file. If set, the specified audio file will be │
+│                               loaded.                                        │
+│ --start-s            <float>  Start time in seconds for the zoomed waveform  │
+│                               figure. Defaults to 0.0, matching              │
+│                               plot_audio_sig_in_td.                          │
+│                               [default: 0.0]                                 │
+│ --end-s              <float>  End time in seconds for the zoomed waveform    │
+│                               figure. Defaults to the end of the file,       │
+│                               matching plot_audio_sig_in_td.                 │
+│ --folder-name        <str>    Optional output folder name for saving         │
+│                               generated plots. If set, plots will be written │
+│                               under <folder-name>/figs.                      │
+│ --help                        Show this message and exit.                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
+

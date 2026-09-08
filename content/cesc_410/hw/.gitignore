@@ -23,3 +23,8 @@ overleaf/
 
 __pycache__/
 *.py[cod]
+
+# The combined per-problem PDF assembled for submission (pdfunite of p01..pNN).
+# Build product: regenerate with build_tex.sh --keep + pdfunite. Named by
+# assignment and student, e.g. hw01-nelson-gatlin.pdf.
+hw[0-9][0-9]-*.pdf

@@ -1,0 +1,20 @@
+The basic frequency is 4.0 Hz.
+                                                                                
+ Usage: dsp26 [OPTIONS] COMMAND [ARGS]...                                       
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --version                                                                    │
+│ --install-completion          Install completion for the current shell.      │
+│ --show-completion             Show completion for the current shell, to copy │
+│                               it or customize the installation.              │
+│ --help                        Show this message and exit.                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ plot-sinusoids-td-fd  Plot time-domain waveform and frequency-domain         │
+│                       spectrum of sinusoids.                                 │
+│                       Use --folder-name to save figures to                   │
+│                       <folder-name>/figs.                                    │
+│ play-plot-audio       Play and plot audio signal.                            │
+│                       Use --path-name to load audio file from.               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+

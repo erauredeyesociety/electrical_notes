@@ -13,6 +13,12 @@ The single rule that shapes everything:
 
 Mixing them ruins both. A solutions document with derivations is unusable for checking; a problem file without them is unusable for learning.
 
+**The per-problem file is the graded artifact**, and that is not a style
+preference: the course info requires *"Use correct approach and show all
+necessary intermediate steps"* (§ 8.6). The solutions document is an internal
+check aid — see
+[`submission.md`](submission.md#what-this-settles-about-our-two-documents).
+
 ## Why one file per problem
 
 - **It build-checks alone.** A LaTeX error is located at the problem, not somewhere in a 12-problem document.
@@ -49,13 +55,22 @@ hw01/
 
 ## Grounding work in the course
 
+⚠ **`course_text.py` is not at the repo root** — it is in `tools/` under
+`content/cesc_410/hw/`, unlike `build_tex.sh`. Run it from there:
+
 ```sh
+cd /home/devel/electrical_notes/content/cesc_410/hw
 tools/course_text.py --grep "convolution"
 tools/course_text.py --list
 tools/course_text.py --dump /tmp/coursetext
 ```
 
-Searches lectures, labs, and handouts in one command. **21 of 25 documents have a usable text layer; 4 do not** — the handwritten lecture PDFs, flagged `NO-TEXT`.
+Searches lectures, labs, handouts, and the `.md`/`.tex` alongside them in one
+command. **`--list` prints the totals itself — read them off the command, not
+off this page.** The number grows every time material lands. On 2026-09-08 it
+printed `64 documents, 60 with a usable text layer`; the four `NO-TEXT` were
+three handwritten lecture PDFs (`f26_lctr02` ×2, `f26_lctr03`) plus our own
+near-empty `labs_and_projects/lab00/report.pdf`.
 
 > Not being able to search a document is not permission to guess what it says. Read the PDF, or use `ocr_handler`, or state the gap in the problem file.
 
@@ -83,6 +98,7 @@ Add a macro rather than redefining notation in one file — DSP notation to
 The shared build-checker takes **repo-relative** paths and is run from the repo root:
 
 ```sh
+cd /home/devel/electrical_notes
 docs/latex/build_tex.sh content/cesc_410/hw/hw01/p01_phasor_form.tex   # one
 docs/latex/build_tex.sh content/cesc_410/hw/hw01                        # all
 docs/latex/build_tex.sh content/cesc_410/hw/hw01 --keep                 # keep PDFs
@@ -94,22 +110,31 @@ It is the same script every course runs, so a fix to it lands everywhere.
 
 PDFs are deleted by default and gitignored — they are build products.
 
-### ⚠ Pointing it at `reference_docs/` reports two failures, by design
+### ⚠ Pointing it at a `reference_docs/` reports one failure, by design
 
-`build_tex.sh` builds **every** `.tex` in a folder, and two of the three files
-in `reference_docs/` are **fragments, not documents**:
+`build_tex.sh` builds **every** `.tex` at the top level of the folder it is
+given. There are **two different `reference_docs/`** in play and each contains
+exactly one fragment, so each reports exactly **one** FAIL — verified
+2026-09-08:
 
-| File | Standalone build | Why |
-| --- | --- | --- |
-| `problem_template.tex` | ✅ OK | a real document — it is the skeleton you copy |
-| `cesc410_macros.tex` | ❌ `Command \coursename undefined` | preamble fragment; `\renewcommand{\coursename}` needs the shared preamble loaded first, and there is no `\begin{document}` |
-| `cesc410_preamble.tex` | ❌ `no legal \end found` | comment-only tombstone; superseded, do not `\input` it |
+| Folder | File | Standalone build | Why |
+| --- | --- | --- | --- |
+| `content/cesc_410/hw/reference_docs` | `problem_template.tex` | ✅ OK | a real document — it is the skeleton you copy |
+| `content/cesc_410/hw/reference_docs` | `cesc410_preamble.tex` | ❌ `no legal \end found` | comment-only tombstone; superseded, do not `\input` it |
+| `content/cesc_410/reference_docs` | `cesc410_macros.tex` | ❌ `Command \coursename undefined` | preamble fragment; `\renewcommand{\coursename}` needs the shared preamble loaded first, and there is no `\begin{document}` |
 
-That is correct behaviour, not a bug to fix — a fragment without
+⚠ **`cesc410_macros.tex` is not under `hw/`.** It moved to the course level so
+`new_tex.sh` could reach it from `qz/` and `exam/` too — see
+[HW-11](findings.md#hw-11--new_texsh-could-not-reach-a-sibling-kinds-macros-file--fixed).
+If you see two FAILs from one folder, or a doc claiming there should be, that
+doc predates the move.
+
+Both failures are correct behaviour, not bugs to fix — a fragment without
 `\begin{document}` **cannot** compile, and that is exactly what lets it be
 `\input` by a file that has one. Build the template by name instead:
 
 ```sh
+cd /home/devel/electrical_notes
 docs/latex/build_tex.sh content/cesc_410/hw/reference_docs/problem_template.tex
 ```
 
@@ -133,26 +158,47 @@ the copy.**
 only guarantees no `\input` survived; it does not build what it wrote. Check it:
 
 ```sh
-docs/latex/flatten_tex.sh content/cesc_410/hw/hw01
-cd content/cesc_410/hw/hw01/overleaf && for f in *.tex; do tectonic "$f"; done
+cd /home/devel/electrical_notes && docs/latex/flatten_tex.sh content/cesc_410/hw/hw01
+cd /home/devel/electrical_notes/content/cesc_410/hw/hw01/overleaf
+for f in *.tex; do tectonic "$f" >/dev/null && echo "$f OK" || echo "$f FAIL"; done
+rm -f *.pdf     # the check is the exit status, not the output
 ```
 
-Status: **all seven HW1 files flatten and compile standalone**, and so does
-`reference_docs/problem_template.tex`.
+Status, re-checked 2026-09-08: **all seven HW1 files flatten and compile
+standalone**, and so does `reference_docs/problem_template.tex`.
 
 Two caveats:
 
-- The flattener stamps a two-line header into every output naming the **source
-  path**. Harmless here — a LaTeX comment never reaches the PDF — but delete
-  those lines if the `.tex` itself is what gets handed in.
+- The flattener stamps a two-line header into every output. It names the source
+  **basename only** — no repository path; that was
+  [fixed](findings.md#hw-10--the-flattener-used-to-stamp-a-repo-path-into-its-output--fixed)
+  and re-checked 2026-09-08:
+
+  ```text
+  % Self-contained: preamble inlined, no external \input.
+  % Generated copy of p01_phasor_form.tex -- edit the original, not this.
+  ```
+
+  A LaTeX comment never reaches the PDF, so this matters only if the `.tex`
+  itself is handed in — in which case delete the two lines, since even a
+  basename names one of our files.
+- **The flattened copy is the one to hand over, not the source.** The source's
+  first two lines are `\input{../../../../docs/latex/...}` and
+  `\input{../../reference_docs/...}` — repository paths, inside the file. The
+  flattened copy has none:
+  `grep -nE 'docs/latex|reference_docs|/home/' overleaf/*.tex` returns nothing.
 - `overleaf/` is gitignored at any depth, so `hw01/overleaf/` and
   `reference_docs/overleaf/` are both covered by the one rule.
 
 ## Starting a new file
 
-Do not hand-write the two `\input` lines — the `../` count depends on depth:
+Do not hand-write the two `\input` lines — the `../` count depends on depth.
+**`new_tex.sh` refuses to create the folder** (`error: no such folder ...
+(create it first)`), so `mkdir` first:
 
 ```sh
+cd /home/devel/electrical_notes
+mkdir -p content/cesc_410/hw/hw02
 docs/latex/new_tex.sh content/cesc_410/hw/hw02 1 phasors --pts "20 pts" --lo LO01
 docs/latex/new_tex.sh content/cesc_410/hw/hw02 --solutions
 ```
@@ -178,51 +224,93 @@ WARNING: 2 macros files for course 'cesc_410':
          Two files means hw/ and qz/ can silently diverge.
 ```
 
-A quiz file therefore reaches across to `hw/`:
+A quiz file therefore reaches the **course-level** `reference_docs/`, the same
+folder `hw/` reaches — the two `..` land on `content/cesc_410/`, not on `hw/`:
 
 ```latex
 \input{../../../../docs/latex/coursework_preamble.tex}   % 4 up: qz/qz01 -> root
-\input{../../reference_docs/cesc410_macros.tex}          % course level
+\input{../../reference_docs/cesc410_macros.tex}          % 2 up: course level
 \begin{document}
 ```
 
-### ⚠ `new_tex.sh` cannot scaffold that line — copy the template instead
+Absolute, so there is nothing to count:
+`/home/devel/electrical_notes/content/cesc_410/reference_docs/cesc410_macros.tex`.
 
-The scaffolder walks **up** from the target folder looking for
-`*/reference_docs/*_macros.tex`, two levels deep at each step. From
-`content/cesc_410/qz/qz01` that reaches `qz/reference_docs/` and
-`content/cesc_410/reference_docs/`, but **not** `hw/reference_docs/` — a
-sibling kind is three levels down from the common ancestor. It exits before
-writing anything:
+### ✅ `new_tex.sh` scaffolds a quiz correctly — re-verified 2026-09-08
+
+**This section used to say the opposite. It was true, and it is no longer.** The
+scaffolder walks **up** from the target folder looking for
+`*/reference_docs/*_macros.tex`, two levels deep at each step. When the macros
+file lived at `content/cesc_410/hw/reference_docs/`, that walk could not see it
+from `content/cesc_410/qz/qz01` — a sibling kind is three levels down from the
+common ancestor — and it exited without writing anything.
+
+**The macros file has since moved up to the course level**, which is where the
+walk *does* reach it. There is exactly one per current course:
 
 ```text
-error: no reference_docs/*_macros.tex found at or above content/cesc_410/qz/qz01.
+content/cesc_410/reference_docs/cesc410_macros.tex
+content/cesc_470/reference_docs/cesc470_macros.tex
+content/cpsc_462/reference_docs/cpsc462_macros.tex
 ```
 
-So for a quiz or an exam, copy the template and correct the one line:
+**Verified end to end 2026-09-08** on a throwaway `content/cesc_410/qz/qz99/`
+(created, exercised, deleted):
 
 ```sh
-mkdir -p content/cesc_410/qz/qz01
-cp content/cesc_410/hw/reference_docs/problem_template.tex \
-   content/cesc_410/qz/qz01/p01_<slug>.tex
-# the macros \input is ../../reference_docs/cesc410_macros.tex, same as hw
-docs/latex/build_tex.sh   content/cesc_410/qz/qz01
-docs/latex/flatten_tex.sh content/cesc_410/qz/qz01
+cd /home/devel/electrical_notes
+mkdir -p content/cesc_410/qz/qz99
+docs/latex/new_tex.sh   content/cesc_410/qz/qz99 1 phasors --pts "20 pts" --lo LO01
+docs/latex/new_tex.sh   content/cesc_410/qz/qz99 --solutions
+docs/latex/build_tex.sh content/cesc_410/qz/qz99
+docs/latex/flatten_tex.sh content/cesc_410/qz/qz99
 ```
 
-**Verified end to end** on a throwaway `qz99/` (since deleted): a problem file
-and a solutions document both built, both flattened, and both flattened copies
-compiled standalone with the DSP macros correctly inlined.
+`new_tex.sh` reported the paths it resolved, and they are the right ones:
 
-`qz/` will also need its own `.gitignore`, or the `hw/` one copied — the
-existing rules are scoped to `hw/` and do not reach a sibling folder.
+```text
+created content/cesc_410/qz/qz99/p01_phasors.tex
+  preamble: ../../../../docs/latex/coursework_preamble.tex  (4 levels up)
+  macros:   ../../reference_docs/cesc410_macros.tex
+```
 
-> **Open question for the human.** The directive puts the macros file at
-> `content/<course>/<kind>/reference_docs/`, and that is where CESC 410's is.
-> `new_tex.sh` names `content/<course>/reference_docs/` instead. Moving it up
-> one level would let the scaffolder serve `hw/`, `qz/` and `exam/` alike — but
-> it is a layout change across three courses, and the shared docs point at the
-> current path. Flagged, not decided.
+Both files built (`All build.`), both flattened, and both flattened copies
+compiled standalone under `tectonic`. **So scaffold a quiz; do not hand-copy the
+template.** Copying still works if you prefer it, and the `\input` lines are the
+same two shown above.
+
+### One thing a new `qz/` still needs
+
+`qz/` will need its own `.gitignore`, or `hw/`'s copied — the existing rules are
+scoped to `hw/` and do not reach a sibling folder:
+
+| Source (FROM) | Destination (TO) |
+| --- | --- |
+| `/home/devel/electrical_notes/content/cesc_410/hw/.gitignore` | `/home/devel/electrical_notes/content/cesc_410/qz/.gitignore` |
+
+Then check it by rule number rather than by eye —
+`git check-ignore -v content/cesc_410/qz/qz01/p01_slug.pdf` must name the line
+that matched ([HW-07](findings.md#hw-07--build-products-vs-source-material-in-one-folder)).
+
+### ✅ Resolved — the macros-file layout question
+
+This document used to close on an open question: the doctrine put the macros
+file at `content/<course>/<kind>/reference_docs/` while `new_tex.sh` looked at
+`content/<course>/reference_docs/`, and moving it was *"flagged, not decided."*
+
+**It was decided and done.** All three current courses now keep one macros file
+at the course level, which is what the scaffolder expects:
+
+```sh
+find content -name '*_macros.tex'
+#   content/cesc_410/reference_docs/cesc410_macros.tex
+#   content/cesc_470/reference_docs/cesc470_macros.tex
+#   content/cpsc_462/reference_docs/cpsc462_macros.tex
+```
+
+Nothing is open here and nobody needs to be asked. Recorded so it is not
+re-raised — and so the *"copy the template, the scaffolder cannot help you"*
+workaround above is not resurrected from an old copy of this file.
 
 ---
 
