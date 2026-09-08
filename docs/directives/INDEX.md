@@ -14,6 +14,7 @@ Three tiers — load down only when the tier above lacks the depth you need:
 | [roadmap-and-plans.md](./roadmap-and-plans.md) | Lean roadmap about the *repo*, not the coursework; tactical detail in `docs/plans/` |
 | [testing-discipline.md](./testing-discipline.md) | The floor here is **three build checks**, not a unit-test suite; child-project floors are real and protected |
 | [question-discipline.md](./question-discipline.md) | Batch the operator's calls; never retrofit or move coursework unasked; git is human-only |
+| [human-task-instructions.md](./human-task-instructions.md) | **Telling the human what to do.** Classify and justify every human task; absolute paths; WHERE/WHAT/VERIFY/IF-ABSENT/BLOCKS; do their homework first; a fallback for every blocking input |
 
 Referenced from [../scope.md](../scope.md) and [../roadmap.md](../roadmap.md) so every session loads them
 just-in-time.

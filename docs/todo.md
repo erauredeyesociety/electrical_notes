@@ -1,44 +1,38 @@
 # TODO — single source of truth
 
-> Last updated: 2026-09-06 · **MODE: maintenance**
+> Last updated: 2026-09-08 · **MODE: maintenance**
 > Index, not an essay. Detail lives behind the links.
 
 ## CURRENT STATE
 
-**Governance exists and is now populated.** [scope.md](./scope.md), [roadmap.md](./roadmap.md), this
-file, six directives, two ADRs in [decisions/](./decisions/INDEX.md), and — as of 2026-09-06 —
-[lessons_learned/lessons.md](./lessons_learned/lessons.md), which had been an empty folder flagged as a
-gap since bootstrap. Origin: [DRIFT_REPORT.md](./DRIFT_REPORT.md).
+**Governance is populated and now has an enforcement layer.**
+[directives/](./directives/INDEX.md) gained
+[human-task-instructions.md](./directives/human-task-instructions.md) — how a task handed to the human
+must be written — and the LaTeX toolchain gained `flatten_tex.sh --check`, which catches a stale
+Overleaf copy before it is uploaded.
+[lessons_learned/lessons.md](./lessons_learned/lessons.md) carries 15 lessons.
 
-**M2 is complete.** `content/cesc_470/hw/prompt.md`, `content/cpsc_462/hw/prompt.md` and
-`docs/latex/INDEX.md` all exist — written by an earlier pass and never marked done.
+**CESC 410L Lab 1 is complete and demoed.** Submission is one file,
+`content/cesc_410/labs_and_projects/lab01/lab01-artifacts-nelson-gatlin.pdf`; only the Canvas upload
+remains. CESC 470 and CPSC 462 have no labs yet but now inherit the standard.
 
-**The coursework doctrine is live across the three newest courses** (`cesc_410`, `cesc_470`,
-`cpsc_462`) — [directives/coursework-solutions.md](./directives/coursework-solutions.md) plus
-[`docs/latex/`](./latex/). Older courses are deliberately out of scope.
+**docs-rag serves 16 per-course KBs**, all healthy; `purge_stale.sh` is a required step after any
+re-ingest. **ResearchHub is down** — pwnstar unreachable, not a VPN or wifi fault.
 
-**docs-rag serves 16 per-course knowledge bases**, all healthy. A correctness defect was found and
-closed 2026-09-06: **a re-ingest inserts rather than replaces**, so 28 stale documents / 145 chunks —
-including superseded homework solutions — were live in search.
-[`docs-rag/purge_stale.sh`](../docs-rag/purge_stale.sh) is now a required step in
-[`docs-rag/RUN.md`](../docs-rag/RUN.md).
-
-Last session: [session_records/2026-09-06_rag-staleness-and-lessons.md](./session_records/2026-09-06_rag-staleness-and-lessons.md).
+Last session: [session_records/2026-09-08_lab01-and-the-human-task-standard.md](./session_records/2026-09-08_lab01-and-the-human-task-standard.md).
 
 ## NEXT ACTION
 
-**Make the RAG's LaTeX-derived chunks carry content — [`docs-rag/`](../docs-rag/).** Cheap, measurable,
-and it degrades every answer sourced from coursework today:
+**1. Upload Lab 1** — `content/cesc_410/labs_and_projects/lab01/lab01-artifacts-nelson-gatlin.pdf`,
+one file, due a week from assignment. The demo is signed off. Nothing else about this lab is open.
 
-1. **Strip the `\input` preamble block in `prepare_corpus.py`** before conversion. A converted `.md`
-   currently spends its first chunk on `\input{../../../../docs/latex/coursework_preamble.tex}`
-   boilerplate that matches nothing.
-2. **Re-examine `chunk_size` 256/50** — inherited unexamined, and LaTeX tables and `aligned`
-   environments exceed it.
-3. Then purge and re-ingest — in that order ([`docs-rag/RUN.md`](../docs-rag/RUN.md)).
+**2. Then the docs-rag chunking work** carried over from 2026-09-06 and still not done:
+strip the `\input` preamble block in `prepare_corpus.py` (every converted problem file wastes its
+first chunk on boilerplate), then re-examine `chunk_size` 256/50. Purge and re-ingest, in that order
+([`docs-rag/RUN.md`](../docs-rag/RUN.md)).
 
-Then [roadmap.md](./roadmap.md) § M3 (loose root `.md`, operator moves) and § M4 (`scripts/check.sh`,
-pin `hugo-version`).
+**3. Then [roadmap.md](./roadmap.md) § M3** (loose root `.md`, operator moves) and § M4
+(`scripts/check.sh`, pin `hugo-version`).
 
 ## Blocked / awaiting operator
 

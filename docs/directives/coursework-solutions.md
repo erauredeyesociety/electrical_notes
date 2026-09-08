@@ -143,10 +143,143 @@ Each output is standalone. It also **strips comment-only lines naming tooling**,
 satisfying the no-tooling-references rule below, and **fails loudly if any
 `\input` survives** rather than shipping a file that breaks in Overleaf.
 
+**"Standalone" means no other `.tex` — it does not mean no other file.** Two
+limits, both now announced by the tool rather than discovered in Overleaf:
+
+| Case | What the flattener does | What you must do |
+| --- | --- | --- |
+| Source has `\includegraphics` | prints `NOTE` listing every image, and drops the "needs no other file" claim from its summary | upload the image files alongside the `.tex` |
+| Source is a fragment — no `\begin{document}`, e.g. a `_macros.tex` or a tombstone | skips it, and deletes any copy an earlier run left in `overleaf/` | nothing: a fragment is not a document and has nothing to upload |
+
+**Verify the copy is current before you upload it.** A stale flattened copy is
+the silent failure: it compiles, it looks right, and it is not your work.
+
+```sh
+docs/latex/flatten_tex.sh --check                  # whole corpus; exit 3 if anything is stale
+```
+
+Compares content, not timestamps. `build_tex.sh` runs it automatically for any
+directory with an `overleaf/` beside it. Detail:
+[`../latex/INDEX.md`](../latex/INDEX.md) § *A stale copy fails SILENTLY*.
+
 **Edit the source, never the flattened copy** — `overleaf/` is generated output
 and is overwritten on the next run.
 
+### The warning goes IN the file — this section is not where it fails
+
+Everything above was already written down, and the upload still failed **twice**.
+Nothing above is wrong; it is in the wrong place. At the moment the mistake is
+made, the operator has one thing in front of them — the `.tex` they just opened
+— and this directive is not it. A 19-file audit at the time of the second
+failure found the state that made it inevitable:
+
+| | Count |
+| --- | --- |
+| Source `.tex` under `cesc_410` + `cesc_470` beginning with `\input` | 19 |
+| …of those, containing the word "Overleaf" anywhere | **0** |
+
+**Knowledge that is not where the hand is, is not available.** So:
+
+> **Every source `.tex` that `\input`s the shared preamble opens with an OVERLEAF
+> marker block, above the `\input` lines, before anything else.**
+
+It is six comment lines and it states five things — the shape
+[human-task-instructions.md](./human-task-instructions.md) Rule 3 requires,
+compressed to fit at the top of a graded document:
+
+| # | Element | In the block |
+| --- | --- | --- |
+| 1 | **WHAT WILL HAPPEN** | this file will not build on Overleaf |
+| 2 | **WHY** | a relative `\input` climbs above the project root; a project is self-contained |
+| 3 | **WHERE INSTEAD** | the flattened copy, by **absolute** path (Rule 2) |
+| 4 | **WHICH ONE TO EDIT** | this one — `overleaf/` is generated and gets overwritten |
+| 5 | **HOW TO REMAKE IT** | the `flatten_tex.sh` line, with the directory to run it from |
+
+The canonical text, as `new_tex.sh` emits it (`p08` of CESC 470 HW 1 shown):
+
+```latex
+% OVERLEAF WILL NOT BUILD THIS FILE. It \inputs docs/latex/coursework_preamble.tex by a
+% relative path that climbs above the project root (so does reference_docs/cesc470_macros.tex),
+% and an Overleaf project is self-contained: "File `../../../../docs/latex/coursework_preamble.tex' not found."
+% Upload /home/devel/electrical_notes/content/cesc_470/hw/hw01/overleaf/p08_target_clock_rate.tex instead -- docs/latex/flatten_tex.sh writes it.
+% Edit THIS file, never that generated copy -- docs/latex/flatten_tex.sh overwrites it. Regenerate with:
+%   docs/latex/flatten_tex.sh content/cesc_470/hw/hw01   (run from /home/devel/electrical_notes)
+```
+
+Three rules for rewording it:
+
+- **First line starts with `OVERLEAF`.** That word is the sentinel both scripts
+  match on (`^\s*%.*OVERLEAF`). Lose it and the tooling stops seeing the marker.
+- **Every line must name Overleaf, a script, or a repo path.** `flatten_tex.sh`
+  drops matching comment lines **one at a time**, so a line that matches nothing
+  survives into the flattened copy — where this warning is not merely a tooling
+  reference but *false*, that copy being the one that does compile. Check it:
+
+  ```sh
+  docs/latex/flatten_tex.sh content/cesc_470/hw/hw01
+  grep -i overleaf content/cesc_470/hw/hw01/overleaf/*.tex   # expect no output
+  ```
+
+- **It is comments only.** Rebuild and confirm the PDF is byte-identical;
+  `SOURCE_DATE_EPOCH=1600000000 tectonic <file>.tex` builds reproducibly, so
+  `cmp` against a pre-edit build is an exact check, not an eyeball one.
+
+### What the tooling does about it
+
+| Tool | Behaviour |
+| --- | --- |
+| `new_tex.sh` | Emits the marker in every file it scaffolds, with that file's own paths filled in. **This is the prevention** — hand-copying the template is the fallback route, not the main one. |
+| `flatten_tex.sh` | Strips the marker from the copy, and **warns** (non-fatal, exit status unchanged) for any source with `\input` and no marker. Run it over an assignment to find unmarked files. |
+| `problem_template.tex` | Carries the marker, and tells a hand-copier to re-point it at the new filename. |
+
+Deliberately **not** done: `build_tex.sh` does not check for the marker. It is
+the hot-path tool, run many times per file during authoring, and someone
+build-checking a file locally is not the person about to upload one. The check
+belongs on the sweep tool, where it fires once per assignment.
+
 ---
+
+## ⚠ Read the handout's own deliverables section before deciding what to submit
+
+**WHEN the handout names its deliverables, that list IS the deliverable. Do not add to it.**
+
+Over-submitting feels like a safe hedge and is not. It is only safe when the handout is *silent*.
+When it is explicit, extra files are noise the grader did not ask for — and can actively misrepresent
+your work.
+
+### The incident
+
+CESC 410L Lab 1's `submission_requirements.md` had the lab's row as *"content still unconfirmed"* and
+applied the standard over-submit default: *"produce and submit all three... costs one extra upload and
+nothing else."* Reasonable while unknown.
+
+**But the handout was not silent.** Its § Submission says, in full:
+
+> *"Submit a single PDF file containing all the artifacts collected from the tasks above."*
+
+One file. The word "zip" appears nowhere in it, and the Programming task asks for a *Code Snippet* —
+code printed **inside** the PDF, which it already was. The handout had been read for the *tasks* and
+never for the *deliverables list*.
+
+Had the code archive gone up alongside it, the TA would have received:
+
+| in the "code" zip | share |
+| --- | ---: |
+| `uv.lock` — a dependency lockfile | **93.0%** |
+| `lab0_sinusoids/` — the *previous* lab's code | 1.8% |
+| `lab1_audio_sig/` — the work actually being graded | **4.3%** |
+
+Caught by the operator asking *"this seems to have some python project bloat, what exactly does the
+lab pdf say for deliverables?"* — which is the question this section exists to make routine.
+
+### The rule
+
+1. **Before submitting, re-read the handout's deliverables section specifically.** Reading it for the
+   tasks is not the same pass. Grep it: `grep -inE 'submit|deliverab|artifact' <handout>.md`
+2. **If it is explicit, follow it exactly** — no additions, however harmless they feel.
+3. **If it is silent, over-submitting is the right default**, and only then.
+4. **Look inside any bundle before you send it.** A "code" archive that is 93% lockfile is not code.
+   `unzip -l` takes two seconds.
 
 ## Structure of a problem file
 

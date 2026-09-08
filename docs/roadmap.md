@@ -25,6 +25,16 @@ Detail: [DRIFT_REPORT.md](./DRIFT_REPORT.md) § 2.
 - [x] `docs/latex/INDEX.md` — the one folder this pass could not write into
 - **Must-not-break:** `docs/latex/build_tex.sh content/cesc_410/hw/hw01` and `… content/cesc_470/hw/hw01` both build
 
+## M2b — Coursework delivery standard ✓ done (2026-09-08)
+Driven by two live failures: an operator sent to Canvas for a file that was not there, and a source
+`.tex` uploaded to Overleaf that cannot build there.
+- [x] [directives/human-task-instructions.md](./directives/human-task-instructions.md) — reason-coded human tasks, absolute paths, WHERE/WHAT/VERIFY/IF-ABSENT/BLOCKS, do-the-homework-first
+- [x] All **19** source `.tex` across cesc_410/cesc_470 carry an Overleaf marker in their own first six lines; `new_tex.sh` writes it, `flatten_tex.sh` warns without it
+- [x] `flatten_tex.sh --check` — content-compare, not timestamps; catches STALE / MISSING / ORPHAN; run automatically by `build_tex.sh`
+- [x] `make_submission.sh` prints an archive **composition** report — a "code" zip that is 93% lockfile now says so
+- [x] Repo-wide rule: **read the handout's own deliverables section**; over-submitting is a default for silence, not a policy
+- [x] CESC 410L Lab 1 delivered and demoed — one file to upload
+- **Must-not-break:** every flattened copy builds standalone; comment-only markers never change rendered output (both checked by measurement)
 ## M3 — File the loose root `.md`  (operator moves; agent proposes)
 Per-file destinations and reasons: [DRIFT_REPORT.md](./DRIFT_REPORT.md) § 3 · [scope.md](./scope.md) § Open questions #2
 - [ ] `tmp_ocr_child.md` → `ocr_handler/docs/findings/` — holds the `/Ink`-object measurement that one side of an open `ocr_handler` contradiction depends on
@@ -32,6 +42,7 @@ Per-file destinations and reasons: [DRIFT_REPORT.md](./DRIFT_REPORT.md) § 3 · 
 - [ ] `note.md` → split into two runbooks; drop the stale `tree` listing
 - [ ] `make_study_guide_master_prompt.md` → `runbooks/make-study-guide.md`
 - [ ] `content/cesc_410/tmp.md` → `archives/operator-notes/` (doctrine course, so in bounds)
+
 
 ## M3b — docs-rag correctness  ← **next**
 The index only grows: a re-ingest inserts rather than replaces, and exclusions are not retroactive —

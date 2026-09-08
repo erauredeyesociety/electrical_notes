@@ -19,6 +19,14 @@
 # Writes <dir>/pNN_<slug>.tex from the five-section template, and refuses to
 # overwrite an existing file.
 #
+# Every file it writes OPENS WITH AN OVERLEAF MARKER -- six comment lines above
+# the \input lines saying this file cannot be uploaded, naming the flattened
+# copy that can, and giving the command that regenerates it. That is the fix for
+# this repo's most-repeated mistake, and it belongs here rather than only in the
+# doctrine: the person about to upload has the .tex open, not the doctrine.
+# flatten_tex.sh strips the marker from the copy and warns about a source
+# missing one.
+#
 # For Overleaf, flatten afterwards -- a relative \input above the project root
 # cannot resolve there:  docs/latex/flatten_tex.sh <dir>
 
@@ -33,7 +41,7 @@ while [[ $# -gt 0 ]]; do
         --lo)    LO="$2"; shift 2 ;;
         --title) TITLE="$2"; shift 2 ;;
         --solutions) SOLUTIONS=1; shift ;;
-        -h|--help) sed -n '2,26p' "$0"; exit 0 ;;
+        -h|--help) sed -n '2,31p' "$0"; exit 0 ;;
         -*) echo "unknown option: $1" >&2; exit 2 ;;
         *)  if   [[ -z "$DIR"  ]]; then DIR="${1%/}"
             elif [[ -z "$NUM"  ]]; then NUM="$1"
@@ -119,8 +127,38 @@ fi
 
 [[ -e "$DEST" ]] && { echo "error: $DEST already exists -- refusing to overwrite" >&2; exit 1; }
 
+# --- the OVERLEAF marker ------------------------------------------------------
+# Emitted at the very top of every scaffolded file, above the \input lines,
+# because that is the only place the person who needs it will be looking.
+#
+# The failure it prevents has happened twice: open the obvious .tex in the
+# obvious folder, upload it to Overleaf, get "File ... not found". The rule was
+# written down both times -- in docs/directives/coursework-solutions.md, which
+# nobody has open at the moment they are dragging a file into a browser.
+# Knowledge that is not where the hand is, is not available.
+#
+# Every line names Overleaf or a repo path ON PURPOSE: flatten_tex.sh drops
+# comment-only lines matching its TOOLING_RE one at a time, so a line without a
+# match would survive into the flattened copy -- where this warning is not just
+# a tooling reference but FALSE, that copy being the one that does build there.
+# Keep it that way if you reword this, and check with:
+#     docs/latex/flatten_tex.sh <dir> && grep -i overleaf <dir>/overleaf/*.tex
+#
+# Paths are absolute where a human is expected to act on them (Rule 2,
+# docs/directives/human-task-instructions.md); the flatten command is anchored
+# by naming the directory it must be run from.
+OVERLEAF_ABS="${ROOT}/${DIR}/overleaf/$(basename "$DEST")"
+MARKER="% OVERLEAF WILL NOT BUILD THIS FILE. It \\inputs docs/latex/coursework_preamble.tex by a
+% relative path that climbs above the project root (so does ${MACROS_REL}),
+% and an Overleaf project is self-contained: \"File \`${PREAMBLE}' not found.\"
+% Upload ${OVERLEAF_ABS} instead -- docs/latex/flatten_tex.sh writes it.
+% Edit THIS file, never that generated copy -- docs/latex/flatten_tex.sh overwrites it. Regenerate with:
+%   docs/latex/flatten_tex.sh ${DIR}   (run from ${ROOT})"
+
 if [[ $SOLUTIONS -eq 1 ]]; then
     cat > "$DEST" <<EOF
+${MARKER}
+
 \\input{${PREAMBLE}}
 \\input{${MACROS_REL}}
 
@@ -145,6 +183,8 @@ TODO -- lift the answerbox contents from p01.
 EOF
 else
     cat > "$DEST" <<EOF
+${MARKER}
+
 \\input{${PREAMBLE}}
 \\input{${MACROS_REL}}
 

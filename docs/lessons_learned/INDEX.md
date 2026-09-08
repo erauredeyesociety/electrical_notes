@@ -5,7 +5,7 @@ specific failure that earned it. A [finding](../findings/INDEX.md) that hardens 
 
 | File | Covers |
 | --- | --- |
-| [lessons.md](./lessons.md) | 14 lessons in four groups — **Coursework and LaTeX** (never read maths from a text layer; no tooling references in a submission; Overleaf cannot resolve paths above its root; ignore what you generate, not what you predict) · **docs-rag** (a silent success; re-ingest is not idempotent; exclusions are not retroactive; the search parameter differs by endpoint) · **Shell and operations** (`grep -q` under pipefail; bind the docker bridge too; check the base image's user) · **Repo governance** (write the ADR; report git state, never resolve it) |
+| [lessons.md](./lessons.md) | 15 lessons in four groups — **Coursework and LaTeX** (never read maths from a text layer; **submit exactly what the handout names**; inspect a bundle before sending it; no tooling references in a submission; Overleaf cannot resolve paths above its root; ignore what you generate, not what you predict) · **docs-rag** (a silent success; re-ingest is not idempotent; exclusions are not retroactive; the search parameter differs by endpoint) · **Shell and operations** (`grep -q` under pipefail; bind the docker bridge too; check the base image's user) · **Repo governance** (write the ADR; report git state, never resolve it) |
 
 This file tracks the **repo and its toolchain**. Lessons about the OCR pipeline live in the child
 project: [`ocr_handler/docs/lessons_learned/`](../../ocr_handler/docs/lessons_learned/INDEX.md).

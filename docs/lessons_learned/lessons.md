@@ -39,6 +39,22 @@ This file tracks the **repo and its toolchain**. Lessons about the OCR pipeline 
   `p[0-9][0-9]_*.pdf`, `*_solutions.pdf`, `overleaf/`. Source:
   [../directives/coursework-solutions.md](../directives/coursework-solutions.md)
 
+- **WHEN a handout names its deliverables, DON'T add to the list as a hedge — submit exactly what it
+  names — BECAUSE over-submitting is only safe when the handout is SILENT.** CESC 410L Lab 1's
+  submission notes had the lab marked "content still unconfirmed" and applied the over-submit default
+  ("costs one extra upload and nothing else"). The handout was not unconfirmed: its § Submission reads
+  *"Submit a single PDF file containing all the artifacts collected from the tasks above."* It had been
+  read for the tasks and never for the deliverables list. The code archive that would have gone up
+  beside it was **93% `uv.lock`** and **1.8% the previous lab's code**, against 4.3% of the work being
+  graded. Caught by the operator asking what the PDF actually said. (2026-09-08)
+  Source: [../directives/coursework-solutions.md](../directives/coursework-solutions.md) § Read the handout's own deliverables section
+
+- **WHEN you are about to submit a bundle, DON'T trust its name — list its contents — BECAUSE a
+  "code" archive can be almost entirely something else.** `unzip -l` takes two seconds and would have
+  shown that 93% of a 300 KB "code" zip was a dependency lockfile. The same check applies to any
+  generated archive: what a packager produces is what its rules say, not what its filename implies.
+  (2026-09-08)
+
 ---
 
 ## docs-rag
