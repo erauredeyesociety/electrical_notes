@@ -17,10 +17,19 @@ Sibling course under the same doctrine, worth reading:
 is 88 pages. The triage tool grades it:
 
 ```text
+Module 01 Introduction to computer technology & ISA (1).pdf: 88 pages, 22,062 chars (251/page)
 verdict: ocr-partial
   ok 26   sparse 48   empty 14
-  ! letter-spacing artefacts detected (one glyph per text run)
+  pages needing OCR: 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 22, 24, 26, 27, 28, 30, 32, 33, 35, 39, 40, 41, 42 (+32 more)
+  ! structure-suspect-partial: 6/88 pages  (letter-spaced 1  shredded-lines 1  vertical-letter-spaced 0  unmapped-glyphs 4)
+    pages: 1, 52, 53, 54, 55, 56
 ```
+
+That block is the tool's literal output, re-run 2026-09-08 — quote it, do not paraphrase
+it, because the phrasing is what a future reader will grep for. Note what the last two
+lines actually say: the letter-spacing artefact is flagged on **one** page, not deck-wide,
+and four more pages carry unmapped glyphs. Six pages are structure-suspect in total, and
+they are named.
 
 **62 of 88 pages are flagged `sparse` or `empty`** (48 + 14). That is where the
 number comes from, and it is *not* the same claim as "62 pages are image-only":
@@ -37,10 +46,14 @@ assuming a cited page cannot be read when it can. PDF p13, the five-components
 diagram, is flagged `sparse` yet its text layer still holds *Control Unit*,
 *Datapath*, *Arithmetic logic unit*, *Registers*, *Memory*, *Input*, *Output*.
 
-**The real hazard is the letter-spacing artefact.** The deck emits one glyph per
-text run, so extracted words arrive split and word-boundary greps miss them.
-With the doctrine's standing rule — never transcribe an equation from a text
-layer — treat extraction as a *locator*, never as a reader.
+**The real hazard is the structure-suspect set, and it is only six pages: 1, 52, 53, 54,
+55, 56.** On the letter-spaced one the deck emits one glyph per text run (`C o m p u t e
+r`), so extracted words arrive split and word-boundary greps miss them; on the
+unmapped-glyph ones a big delimiter or Greek letter reaches the reader as an empty box
+while still being visible in the page image. Neither is repaired by OCR — the characters
+are present, the *layout* is what was lost. With the doctrine's standing rule — never
+transcribe an equation from a text layer — treat extraction as a *locator*, never as a
+reader, and open the page image for anything on that list of six.
 
 **Verified, and reusable.** The deck prints its own slide numbers bottom-right,
 and every HW1 citation matches:
@@ -402,7 +415,9 @@ that is the claim to check.
 
 ---
 
-**Related:** [`cesc470_macros.tex`](cesc470_macros.tex) ·
+**Related:** [`human_tasks.md`](human_tasks.md) — the human-facing hand-offs, with the
+Canvas course id and the searches already done ·
+[`cesc470_macros.tex`](cesc470_macros.tex) ·
 [`../hw/prompt.md`](../hw/prompt.md) ·
 [`../hw/hw01/README.md`](../hw/hw01/README.md) ·
 [`../qz/README.md`](../qz/README.md) ·

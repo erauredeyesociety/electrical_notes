@@ -7,6 +7,15 @@ That is the doctrine — the two-document rule, the citation rule, the verificat
 rule, the per-assignment checklist. It is shared by every course under the
 doctrine and is not repeated here.
 
+**Before writing anything that starts "the human needs to…", read
+[`docs/directives/human-task-instructions.md`](../../../docs/directives/human-task-instructions.md)**
+— classify the task and give it a reason, absolute paths, and all five of
+WHERE / WHAT / VERIFY / IF-ABSENT / BLOCKS. This course's live hand-offs, with the
+Canvas course id, the instructor's address and the searches already done, are in
+[`../reference_docs/human_tasks.md`](../reference_docs/human_tasks.md).
+
+**Tooling you already have — do not rebuild it.** The shared LaTeX toolchain (`new_tex.sh` to scaffold a problem file with the `\input` depth computed, `build_tex.sh` to build-check, `flatten_tex.sh` to produce the Overleaf copy **and `--check` that it is still current**) is listed with worked commands in [`../reference_docs/shared_tools.md`](../reference_docs/shared_tools.md). It is bash under `docs/latex/`, shared by every course.
+
 This file carries **only what is specific to CESC 470.** Traps that have already
 cost time are in [`../reference_docs/findings.md`](../reference_docs/findings.md);
 read it before the first citation and before the first table.
@@ -47,12 +56,14 @@ citations. Re-derive it per deck; it is not a course-wide constant.
 `ok 26 / sparse 48 / empty 14` — so **62 of 88 pages are flagged sparse or
 empty**, of which only 7 have essentially no text at all. Most "sparse" pages
 still carry their diagram labels, so the flag is a prompt to look, not proof the
-page is unreadable. The deck also has **letter-spacing artefacts** (one glyph per
-text run), which break word-boundary greps. Check before citing a page you have
-not seen:
+page is unreadable. Separately, the tool flags **six structure-suspect pages —
+1, 52, 53, 54, 55, 56**: one is letter-spaced (one glyph per text run, which
+breaks word-boundary greps), one has shredded lines, four carry unmapped glyphs.
+Open the page image for those six rather than trusting extraction. Check before
+citing a page you have not seen:
 
 ```sh
-cd ocr_handler && uv run ocr-handler inspect \
+cd /home/devel/electrical_notes/ocr_handler && uv run ocr-handler inspect \
   "../content/cesc_470/Module 01 Introduction to computer technology & ISA (1).pdf"
 ```
 
@@ -164,9 +175,24 @@ Detail: [`docs/latex/INDEX.md`](../../../docs/latex/INDEX.md)
 
 ## Human-only
 
-Everything in the directive's Human-only table, plus:
+**The full register, written to the standard, is
+[`../reference_docs/human_tasks.md`](../reference_docs/human_tasks.md)** — every task
+there names a reason, a place, a check, a fallback and what it blocks. This is the
+index, not a second copy.
 
-| Task | Why |
-| --- | --- |
-| **Confirming submission form** | The syllabus says "typed, converted to PDF". Whether that means the solutions document alone or the per-problem files too is **unconfirmed**. |
-| **Confirming the quiz PDF naming** | The course-level `.gitignore` whitelists *our* build products rather than guessing the instructor's filenames, so nothing needs adjusting — but confirm with `git check-ignore -v` the first time a real quiz handout lands. |
+| # | Task | Why human | Where it happens |
+| --- | --- | --- | --- |
+| H1 | Confirm what to upload for HW1, then upload it — **due 9/13/2026** | `Credentialed` + `Judgment` — the syllabus fixes the format ("typed, converted to pdf") but never the *count*, and `HW1.pdf` says nothing about submission | Canvas course **208698** → Assignments → Homework 1 |
+| H2 | Bring the homework/quiz schedule into the repo | `Credentialed` — syllabus p6 promises it *"will be provided later"*; it has not appeared | Canvas 208698 → Syllabus tab, then Announcements |
+| H3 | Fetch Module 02+ decks as they are posted | `Credentialed` | Canvas 208698 → Modules |
+| H4 | Fetch the next handout (HW2 or the first quiz) | `Credentialed` | Canvas 208698 → Assignments / Quizzes |
+| H5 | Raise the Q10 wording with the instructor — **optional** | `Judgment` — already handled by answering both readings on the face of the document | `lis14@erau.edu`, or MWF 11:00 in Lehman 369 |
+
+Plus everything in the directive's own Human-only table, and **all git mutations**.
+
+**Not human, though it looks it:** deriving a new deck's PDF-page → printed-slide offset,
+and checking that an oddly-named handout survives `.gitignore` — both are automatable and
+the second is already verified. Do not hand either over.
+
+**No TA exists in this course.** The syllabus names none, so "ask the TA" is not a
+fallback here; the instructor is the only route.

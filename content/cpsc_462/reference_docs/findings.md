@@ -201,6 +201,43 @@ From [`../md_notes/cs_462_syllabus_fall26.md`](../md_notes/cs_462_syllabus_fall2
 
 ---
 
-**Related:** [`../hw/prompt.md`](../hw/prompt.md) ·
+## 8. The packet capture is automatable — only *reading* it is not
+
+**Found:** 2026-09-08, working out what a Wireshark hands-on would actually hand to a
+human.
+
+A Wireshark lab reads as one indivisible GUI procedure, and the handout writes it that
+way: *"Start up the Wireshark software … select the Capture pull down menu …"*. Handing
+that over whole would have moved the entire lab onto the operator. It splits:
+
+| Half | Verdict | Why |
+| --- | --- | --- |
+| **Recording** the packets | **AUTOMATABLE** | `dumpcap` on this machine carries `cap_net_admin,cap_net_raw=eip` and the account is in group `wireshark` — headless, no `sudo`, no window |
+| **Reading** the packets | `Capture`, human | the graded artefact is the expanded HTTP tree in the detail pane, and `tshark` is **not installed**, so nothing here can decode a frame |
+
+Verified by capturing on `lo` with a BPF filter — four pings plus one HTTP request in,
+eight ICMP frames out, the HTTP filtered away:
+
+```text
+Capturing on 'Loopback: lo'
+Packets: 2 Packets: 6 Packets: 8 Packets captured: 8
+Packets received/dropped on interface 'Loopback: lo': 8/0 (100.0%)
+```
+
+Two traps make a *correct* capture look empty, and both cost an hour if unwritten: the
+browser silently upgrades the lab URL to HTTPS so no plain `GET` appears (the handout's
+own fix uses `curl --http1.1`, and its command has a typo — `INTRO-wireshark-ile1.html`,
+missing the `f`), and a live VPN puts the traffic on `tun0` while the capture watches
+`wlo1`.
+
+**Generalises:** the same shape as CESC 410's `MPLBACKEND=Agg` — a task is not human
+because it *ends* in a window; it is human only for the part that *is* the window. The
+operational detail is in [`human_tasks.md`](human_tasks.md) § H3.
+
+---
+
+**Related:** [`human_tasks.md`](human_tasks.md) — the human-facing hand-offs, with the
+office-hour conflict, the capture interfaces and the searches already done ·
+[`../hw/prompt.md`](../hw/prompt.md) ·
 [`cpsc462_macros.tex`](cpsc462_macros.tex) ·
 [`../../../docs/latex/INDEX.md`](../../../docs/latex/INDEX.md)

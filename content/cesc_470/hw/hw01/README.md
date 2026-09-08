@@ -6,11 +6,20 @@ Ten problems. Each has its own `.tex` with full step-by-step work and citations;
 [`hw01_solutions.tex`](hw01_solutions.tex) is the condensed answers-only version.
 
 ```sh
-# from the repo root — paths are repo-relative
+cd /home/devel/electrical_notes      # every path below is relative to the repo root
 docs/latex/build_tex.sh   content/cesc_470/hw/hw01           # build-check all 11
 docs/latex/build_tex.sh   content/cesc_470/hw/hw01 --keep    # ...and keep the PDFs
 docs/latex/flatten_tex.sh content/cesc_470/hw/hw01           # -> overleaf/ (gitignored)
 ```
+
+> ### ⚠ Uploading to Overleaf? Upload from [`overleaf/`](overleaf/), never a `.tex` above.
+>
+> A source `.tex` in this folder **cannot** build in Overleaf and fails with
+> ``LaTeX Error: File `../../../../docs/latex/coursework_preamble.tex' not found.``
+> The upload-ready twin of each one sits in
+> `/home/devel/electrical_notes/content/cesc_470/hw/hw01/overleaf/`, same filename.
+> Full steps, including what to do when that folder is empty or stale:
+> [**§ Overleaf**](#overleaf) below.
 
 Doctrine: [`docs/directives/coursework-solutions.md`](../../../../docs/directives/coursework-solutions.md) ·
 course traps: [`../../reference_docs/findings.md`](../../reference_docs/findings.md)
@@ -84,6 +93,8 @@ numbers (6, 11, 15, 16, 32, 49). Offset is PDF page − 7 for this deck.
 | `flatten_tex.sh` → `overleaf/` | 11/11, no surviving `\input` |
 | `tectonic` on each of the 11 flattened copies | **11/11 compile standalone** |
 | Repo paths / script names in the flattened output | none |
+| `% OVERLEAF` marker block on every source `.tex` | **11/11** — and stripped from **11/11** flattened copies |
+| PDFs rebuilt after the marker was added (2026-09-08) | **pixel-identical** to the pre-marker build, 11/11 — rebuilt from `git show HEAD:`, same page count, same `pdftotext` output, same `pdftoppm` page renders. (PDF *bytes* always differ: `tectonic` stamps a fresh `CreationDate` on every run, so two builds of one unedited file differ in 60 bytes.) |
 | Overfull / underfull boxes | **0 / 0** |
 | Pages rendered to PNG and inspected | page 1 of all 10 problem files, every page of p04/p07/p10, all 3 solutions pages |
 
@@ -130,14 +141,127 @@ document.
 
 ---
 
-## Submission
+## Submission — **human, due 9/13/2026**
 
-**Unconfirmed — human-only.** No code and no zip for this assignment. The
-syllabus states homework *"must be typed and converted to pdf for submission"*
-([`../../cesc_470.pdf`](../../cesc_470.pdf)), so a single PDF to Canvas is the
-likely form. Confirm whether the per-problem work is submitted or only the
-solutions document before turning anything in.
+**Why human:** `Credentialed` (Canvas login) **and** `Judgment` (the syllabus fixes the
+format but not the file count). Full write-up:
+[`../../reference_docs/human_tasks.md`](../../reference_docs/human_tasks.md) § H1.
 
-For Overleaf, upload from [`overleaf/`](overleaf/) — never a source file, whose
-relative `\input` cannot resolve above an Overleaf project root. That folder is
-generated output and gitignored; edit the sources, then re-flatten.
+**Already checked, do not repeat.** The syllabus' only submission sentence is
+*"All homework must be typed and converted to pdf for submission"*
+([`../../cesc_470.pdf`](../../cesc_470.pdf) p5) — a format, not a count. All three pages
+of [`HW1.pdf`](HW1.pdf) were rendered and searched for `submit`, `Canvas`, `upload` and
+`pdf`: the only such line is `Total: 100 points   Due Date: 9/13/2026`. No code, no zip.
+
+**WHERE.** `https://erau.instructure.com/courses/208698` → **Assignments** →
+**Homework 1**. Read the *Submission Details* block and any rubric — that page overrides
+the syllabus. (The course id comes from the print footer of the syllabus PDF; it has
+never been opened from this machine.)
+
+**WHAT.** Build first, then upload:
+
+```sh
+cd /home/devel/electrical_notes
+docs/latex/build_tex.sh content/cesc_470/hw/hw01 --keep
+```
+
+| Source (FROM) | Destination (TO) |
+| --- | --- |
+| `/home/devel/electrical_notes/content/cesc_470/hw/hw01/hw01_solutions.pdf` | Canvas 208698 → Assignments → Homework 1 → **Submit Assignment** |
+| `/home/devel/electrical_notes/content/cesc_470/hw/hw01/p01_five_components.pdf` … `p10_amdahl_speedup.pdf` | the same upload, **only if** the Canvas page asks for per-problem files |
+
+**VERIFY.** `ls -l /home/devel/electrical_notes/content/cesc_470/hw/hw01/*.pdf` shows
+**12** files — the handout `HW1.pdf` plus the eleven build products
+(`hw01_solutions.pdf`, `p01_…`–`p10_…`) freshly timestamped; and the Canvas assignment
+page shows **Submitted!** with a timestamp. No timestamp means it did not go through.
+
+**IF CANVAS DOES NOT SAY WHICH FILES.** Check Modules, then Announcements; then email
+`lis14@erau.edu` or ask at MWF 11:00 in Lehman 369 — there is no TA in this course.
+**Fallback if no answer arrives by 9/13:** upload **both**, solutions document first, and
+say so in the submission comment. **If the widget has no "Add Another File" button** it is
+a single-file assignment — upload `hw01_solutions.pdf` alone, which is the complete
+assignment, and say the per-problem PDFs are available on request. ⚠ Do not wait past the
+deadline for a reply — syllabus p6: 20% off within 3 days, **not accepted at all** after 3.
+
+**BLOCKS.** Only the upload. All eleven documents are built, flattened, verified
+numerically and inspected visually (§ Verification above).
+
+---
+
+## Overleaf
+
+**Upload from [`overleaf/`](overleaf/) — never one of the `.tex` files in this
+folder.** A source `.tex` cannot compile in Overleaf: it `\input`s the shared
+preamble by a relative path that climbs above the project root, and an Overleaf
+project is self-contained. Uploading one fails every time, with:
+
+```text
+LaTeX Error: File `../../../../docs/latex/coursework_preamble.tex' not found.
+```
+
+That error has now been hit twice, so every source in this folder opens with a
+six-line `% OVERLEAF WILL NOT BUILD THIS FILE` comment saying so on sight, and
+`flatten_tex.sh` warns about any source that lacks it.
+
+**WHERE.** On disk:
+`/home/devel/electrical_notes/content/cesc_470/hw/hw01/overleaf/` — a subfolder
+of this one, holding a flattened twin of every source under the **same
+filename**. In the browser: your Overleaf project → **Upload** (or **New File
+→ Upload**).
+
+**WHAT.** One document or all eleven — they are independent, and none of them
+needs any other file.
+
+| Source (FROM) | Destination (TO) |
+| --- | --- |
+| `/home/devel/electrical_notes/content/cesc_470/hw/hw01/overleaf/hw01_solutions.tex` | Overleaf project → **Upload**, then set it as the **Main document** |
+| `/home/devel/electrical_notes/content/cesc_470/hw/hw01/overleaf/p01_five_components.tex` … `p10_amdahl_speedup.tex` | the same project — only if the per-problem write-ups are wanted too |
+
+Upload nothing else. No preamble, no `cesc470_macros.tex`, no figures: the
+flattener inlined all of it.
+
+**VERIFY.** In Overleaf, **Recompile** — a PDF appears and the log contains no
+`File ... not found`. `hw01_solutions.tex` renders **3 pages**; `p01`–`p10`
+render 2–3 pages each. The same check without a browser, which is what actually
+proves it (run 2026-09-08, 11/11 passed):
+
+```sh
+rm -rf /tmp/ol && mkdir -p /tmp/ol
+cp /home/devel/electrical_notes/content/cesc_470/hw/hw01/overleaf/*.tex /tmp/ol/
+cd /tmp/ol && for f in *.tex; do timeout 180 tectonic "$f" || echo "FAILED: $f"; done
+```
+
+Expected: eleven PDFs, no `FAILED` line. `/tmp/ol` sits outside the repo and has
+no route to the shared preamble, so whatever compiles there compiles in Overleaf.
+
+**IF `overleaf/` IS EMPTY, MISSING, OR STALE.** It is **gitignored and fully
+regenerable** — a fresh clone will not have it, and that is not a fault. Rebuild
+it from the repo root:
+
+```sh
+cd /home/devel/electrical_notes
+docs/latex/flatten_tex.sh content/cesc_470/hw/hw01
+```
+
+Expected: eleven `->` rows, then `Self-contained copies in:
+content/cesc_470/hw/hw01/overleaf`, with no `FAIL` and no `WARN`. A `FAIL` row
+means an `\input` survived — do not upload that file; fix the source and re-run.
+
+Staleness is the quieter risk (edit a source, forget to re-flatten, upload
+yesterday's answers). Check before every upload:
+
+```sh
+cd /home/devel/electrical_notes/content/cesc_470/hw/hw01
+for f in *.tex; do [ "overleaf/$f" -nt "$f" ] || echo "STALE: $f"; done
+```
+
+Silence means every twin is newer than its source. Any `STALE:` line — or a
+missing twin, which also prints `STALE:` — means re-flatten before uploading.
+
+**Edit the source, never the copy.** `overleaf/*.tex` is generated output,
+overwritten wholesale on the next `flatten_tex.sh` run. An edit made there is
+lost silently and never reaches the graded PDF.
+
+**BLOCKS.** Overleaf only. The Canvas submission above uses the locally built
+PDFs and never touches `overleaf/`; `build_tex.sh`, the answers, and every check
+in § Verification work without that folder existing.

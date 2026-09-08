@@ -8,6 +8,16 @@ That is the doctrine — the two-document rule, the citation rule, the verificat
 rule, the per-assignment checklist. Shared by every course under the doctrine and
 not repeated here.
 
+**Before writing anything that starts "the human needs to…", read
+[`docs/directives/human-task-instructions.md`](../../../docs/directives/human-task-instructions.md)**
+— classify the task and give it a reason, absolute paths, and all five of
+WHERE / WHAT / VERIFY / IF-ABSENT / BLOCKS. This course's live hand-offs, with the
+instructor's office hours, the capture interfaces on this machine and the searches
+already done, are in
+[`../reference_docs/human_tasks.md`](../reference_docs/human_tasks.md).
+
+**Tooling you already have — do not rebuild it.** The shared LaTeX toolchain (`new_tex.sh` to scaffold a problem file with the `\input` depth computed, `build_tex.sh` to build-check, `flatten_tex.sh` to produce the Overleaf copy **and `--check` that it is still current**) is listed with worked commands in [`../reference_docs/shared_tools.md`](../reference_docs/shared_tools.md). It is bash under `docs/latex/`, shared by every course.
+
 This file carries **only what is specific to CPSC 462.**
 
 > **Nothing has been assigned yet.** This is scaffolding. It was proved end to
@@ -133,6 +143,36 @@ tracks it — the ignore rules name *our* build products (`pNN_*.pdf`,
 
 Verify any ignore change with `git check-ignore -v <path>`, never by eye.
 
+### The capture is not a human task — only reading it is
+
+A Wireshark lab *looks* like one indivisible GUI job. It is two, and only the second
+needs a person. **Do not hand the whole thing over.**
+
+`dumpcap` — the capture engine Wireshark itself drives — is installed here with
+`cap_net_admin,cap_net_raw=eip`, and this account is in group `wireshark`, so a capture
+runs **headless and without `sudo`**:
+
+```sh
+cd /home/devel/electrical_notes
+mkdir -p content/cpsc_462/hw/hw01          # dumpcap will NOT create it; -w fails without this
+ip route get 128.119.245.12                # gaia — whatever it prints after `dev` is the -i
+dumpcap -i wlo1 -f "host gaia.cs.umass.edu" -a duration:30 \
+        -w content/cpsc_462/hw/hw01/intro_http.pcapng
+capinfos content/cpsc_462/hw/hw01/intro_http.pcapng     # packets, duration, encapsulation
+```
+
+The `-f` is a **capture** filter (BPF), not a display filter, and it is not optional:
+an unfiltered capture on `wlo1` records everyone else's traffic too.
+
+What genuinely needs a human is the *view* — the expanded HTTP tree, the Dest Port
+field, the screenshots. That half, and the two traps that make a good capture look
+empty (the browser's silent HTTPS upgrade; a live VPN putting the traffic on `tun0`),
+are in [`../reference_docs/human_tasks.md`](../reference_docs/human_tasks.md) § H3.
+
+⚠ **`tshark` is not installed on this machine** (`dumpcap`, `capinfos`, `editcap` are).
+So packets can be recorded and summarised here, but not decoded — which is why the
+analysis half is currently human at all. `sudo apt install tshark` retires it.
+
 ---
 
 ## Overleaf
@@ -177,5 +217,27 @@ several class-materials filenames contain spaces, so write
 
 ## Human-only
 
-Everything in the directive's Human-only table, and **all git mutations**.
-Submission form is **unconfirmed** — no assignment has been seen yet.
+**The full register, written to the standard, is
+[`../reference_docs/human_tasks.md`](../reference_docs/human_tasks.md)** — every task
+there names a reason, a place, a check, a fallback and what it blocks. This is the
+index, not a second copy.
+
+| # | Task | Why human | Where it happens |
+| --- | --- | --- | --- |
+| H1 | Fetch the "Hands on" / "Lab N" handout when one is assigned | `Credentialed` — and **never search for `HW`**; this instructor's handouts are named by topic | Canvas → Assignments / Modules / Files |
+| H2 | **Find the Canvas course id** and record it | `Credentialed` — the syllabus is a `.docx` and leaks no URL, so nothing on disk knows it | `erau.instructure.com` → Dashboard → the CS 462 card |
+| H3b | Read the capture in the Wireshark window and answer from it | `Capture` — the recording half (H3a) is automatable and must be done first | the GUI, on a `.pcapng` `dumpcap` already produced |
+| H4 | Screenshots for the report | `Capture` | the same window |
+| H5 | `sudo apt install tshark` | `Policy` — needs root; retires the whole `Capture` class above | any terminal |
+| H6 | Confirm the submission form for the first assignment | `Credentialed` + `Judgment` — the syllabus never says what to submit, not even a file type | Canvas → the Hands-on item |
+| H7 | Record which topic each `qzNN` is | `Judgment` — quizzes are named, not numbered | `qzNN/README.md` |
+
+Plus everything in the directive's own Human-only table, and **all git mutations**.
+
+**Not human, though it looks it:** running the packet capture (H3a — headless `dumpcap`,
+no `sudo`), and checking that a `.pcapng` or an oddly-named handout survives
+`.gitignore` (verified 2026-09-08). Do not hand either over.
+
+**No TA exists in this course** — the syllabus prints a TA block with four empty fields.
+The instructor is the only route: `sultanr1@erau.edu`, LB 355. ⚠ Use the **1–2pm** office
+hour, not the 11am one: CESC 470 meets MWF 11:00–11:50 and conflicts with it.
